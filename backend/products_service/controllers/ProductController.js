@@ -8,7 +8,7 @@ const moveFile = require("move-file");
 const fs = require("fs");
 const QRCode = require("qrcode");
 const uniqid = require("uniqid");
-const symbology = require("symbology");
+// const symbology = require("symbology");
 const array = require("lodash/array");
 
 // Define font files
@@ -23,7 +23,6 @@ const fonts = {
 
 const PdfPrinter = require("pdfmake");
 const printer = new PdfPrinter(fonts); //helper file to prepare responses.
-const checkToken = require("../middlewares/middleware").checkToken;
 const auth = require("../middlewares/jwt");
 
 const apiResponse = require("../helpers/apiResponse");
@@ -46,15 +45,9 @@ exports.getProducts = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< ProductService < ProductController < getProducts : token verifed successfully"
-          );
           permission_request = {
             role: req.user.role,
-            permissionRequired: "viewProductList",
+            permissionRequired: ["viewProductList"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -65,25 +58,13 @@ exports.getProducts = [
                 products
               );
             } else {
-              return apiResponse.unauthorizedResponse(
+              return apiResponse.forbiddenResponse(
                 res,
                 "Sorry! User does not have enough Permissions"
               );
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ProductService < ProductController < getProducts : user is not authenticated"
-          );
-          return apiResponse.unauthorizedResponse(res, "Auth failed");
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ProductService < ProductController < getProducts : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -93,15 +74,9 @@ exports.getProductsByCategory = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< ProductService < ProductController < getProductsByCategory : token verifed successfully"
-          );
           permission_request = {
             role: req.user.role,
-            permissionRequired: "viewProductList",
+            permissionRequired: ["viewProductList"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -112,26 +87,14 @@ exports.getProductsByCategory = [
                 products
               );
             } else {
-              return apiResponse.unauthorizedResponse(
+              return apiResponse.forbiddenResponse(
                 res,
                 "Sorry! User does not have enough Permissions"
               );
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ProductService < ProductController < getProductsByCategory : user is not authenticated"
-          );
-          return apiResponse.unauthorizedResponse(res, "Auth failed");
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ProductService < ProductController < getProductsByCategory : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -140,15 +103,9 @@ exports.getProductInfo = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< ProductService < ProductController < getProducts : token verifed successfully"
-          );
           permission_request = {
-            result: req.user.role,
-            permissionRequired: "viewProductInfo",
+            role: req.user.role,
+            permissionRequired: ["viewProductInfo"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -159,20 +116,12 @@ exports.getProductInfo = [
                 product
               );
             } else {
-              return apiResponse.unauthorizedResponse(
+              return apiResponse.forbiddenResponse(
                 res,
                 "Sorry! User does not have enough Permission"
               );
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ProductService < ProductController < getProducts : user is not authenticated"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
       logger.log(
         "error",
@@ -181,20 +130,15 @@ exports.getProductInfo = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
-  //   console.log(req.query.id);
-  // const product = await ProductModel.findOne({id:req.query.id});
-  // res.json({ data: product});}
 ];
 
 exports.addMultipleProducts = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
           permission_request = {
-            result: req.user.role,
-            permissionRequired: "addNewProduct",
+            role: req.user.role,
+            permissionRequired: ["addNewProduct"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -258,15 +202,11 @@ exports.addMultipleProducts = [
                 );
               }
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, "Sorry! User does not have enough Permissions");
             }
           });
-        } else {
-          return apiResponse.ErrorResponse(res, "User not authenticated");
-        }
-      });
     } catch (e) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -297,26 +237,15 @@ exports.addProduct = [
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         // Display sanitized values/errors messages.
-        logger.log(
-          "error",
-          "<<<<< ProductService < ProductController < addProduct : Validation Error: product must be specified"
-        );
         return apiResponse.validationErrorWithData(
           res,
           "Validation Error.",
           errors.array()
         );
       }
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< ProductService < ProductController < addProduct : token verifed successfully"
-          );
-
           permission_request = {
-            result: req.user.role,
-            permissionRequired: "addNewProduct",
+            role: req.user.role,
+            permissionRequired: ["addNewProduct"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -369,39 +298,26 @@ exports.addProduct = [
                 return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, "Sorry! User does not have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ProductService < ProductController < addProduct : user is not authenticated"
-          );
-          return apiResponse.ErrorResponse(res, "User not authenticated");
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ProductService < ProductController < addProduct : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
 
-exports.uploadImage = async function (req, res) {
-  checkToken(req, res, async (result) => {
-    if (result.success) {
+exports.uploadImage = [ 
+  auth,
+  async (req, res) => {
+    try {
       permission_request = {
-        result: req.user.role,
-        permissionRequired: "addProduct",
+        role: req.user.role,
+        permissionRequired: ["addNewProduct"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          const { data } = result;
-          const { username } = data;
-          try {
+          const { username } = req.user;
             console.log("file", req.files);
             console.log("body", req.body);
             const { index } = req.body;
@@ -409,23 +325,17 @@ exports.uploadImage = async function (req, res) {
             if (!fs.existsSync(dir)) {
               fs.mkdir(dir, { recursive: true }, (err) => {});
             }
-
             await moveFile(req.files[0].path, `${dir}/photo.png`);
-            console.log("The file has been moved");
-            res.json("Success");
-          } catch (e) {
-            console.log("error in image upload", e);
-            res.status(403).json(e);
-          }
+            return apiResponse.successResponse(res, "Success");
         } else {
-          res.json("Sorry! User does not have enough Permissions");
+         return apiResponse.forbiddenResponse(res, "Sorry! User does not have enough Permissions");
         }
       });
-    } else {
-      res.json(result);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
     }
-  });
-};
+  }
+]
 
 exports.generateCodes = async function (req, res) {
   try {
@@ -440,20 +350,21 @@ exports.generateCodes = async function (req, res) {
 
         qrCodes.push(qrCode);
       }
-    } else if (type === "barcode") {
-      for (let i = 0; i < limit; i++) {
-        const uniqueId = uniqid();
-        const data = await symbology.createStream(
-          {
-            symbology: symbology.Barcode.CODE128,
-            backgroundColor: "ffffff",
-            foregroundColor: "000000",
-          },
-          uniqueId
-        );
-        qrCodes.push(data.data);
-      }
     }
+    // else if (type === "barcode") {
+    //   for (let i = 0; i < limit; i++) {
+    //     const uniqueId = uniqid();
+    //     const data = await symbology.createStream(
+    //       {
+    //         symbology: symbology.Barcode.CODE128,
+    //         backgroundColor: "ffffff",
+    //         foregroundColor: "000000",
+    //       },
+    //       uniqueId
+    //     );
+    //     qrCodes.push(data.data);
+    //   }
+    // }
     const qrCodesImages = qrCodes.map((qrCode) => {
       return { image: qrCode, width: 150 };
     });

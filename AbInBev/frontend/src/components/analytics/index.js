@@ -52,17 +52,14 @@ const Analytics = (props) => {
   const [districts, setDistricts] = useState([]);
   const [prop, setProp] = useState({});
   let skuArr = [];
-  const [params, setParams] = useState({
-    year: new Date().getFullYear(),
-    date_filter_type: 'by_yearly',
-  });
+  const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
   const [year, setYear] = useState(new Date().getFullYear());
   // const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [qtr, setQtr] = useState('');
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [qtr, setQtr] = useState(1);
   const [isActive, setIsActive] = useState('by_yearly');
   const [Otype, setOtype] = useState('ALL_VENDORS');
   const [selectedViewCode, setSelectedViewCode] = useState(
@@ -75,6 +72,15 @@ const Analytics = (props) => {
   const [inventoryButton, setInventoryButton] = useState('btn');
   const [spm, setSpmButton] = useState('btn');
 
+  // useEffect(() => {
+  //   setMonth(new Date().getMonth() + 1);
+  //   setYear(new Date().getFullYear());
+  //   setParams({
+  //     year: new Date().getFullYear(),
+  //     date_filter_type: 'by_yearly',
+  //   })
+  // }, []);
+  
   useEffect(() => {
     setSKU(props?.sku ? props.sku : prop?.externalId ? prop.externalId : '');
   }, [props, prop]);
@@ -149,9 +155,21 @@ const Analytics = (props) => {
 
   const onTPChange = (value) => {
     const filter = { ...params };
+    if (value == 'by_monthly') {
+      setMonth(new Date().getMonth() + 1);
+      filter.month = new Date().getMonth() + 1;
+      filter.quarter = undefined;
+    }
+    if (value == 'by_quarterly') {
+      setQtr(1);
+      filter.month = undefined;
+      filter.quarter = qtr;
+    }
+    if (value == 'by_yearly') {
+      filter.month = undefined;
+      filter.quarter = undefined;
+    }
     filter.date_filter_type = value;
-    filter.quarter = undefined;
-    filter.month = undefined;
     setIsActive(value);
     setParams(filter);
   };
@@ -175,7 +193,7 @@ const Analytics = (props) => {
       setSpmButton('btn active');
     }
     setSelectedModule(module);
-    setParams({});
+    // setParams({});
   }
   const changeView = (event) => {
     setSKU('');
@@ -212,8 +230,8 @@ const Analytics = (props) => {
     setDistrict('');
     setIsActive('by_yearly');
     setYear(new Date().getFullYear());
-    setMonth('');
-    setQtr('');
+    setMonth(new Date().getMonth() + 1);
+    setQtr(1);
     setOtype('ALL_VENDORS');
     setParams({ year: new Date().getFullYear() });
   };

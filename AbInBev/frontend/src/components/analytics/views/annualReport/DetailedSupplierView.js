@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import profile from '../../../../assets/user.png';
 import Chart from 'react-apexcharts';
 import { getAllOrganisationStats } from '../../../../actions/analyticsAction';
@@ -93,6 +93,67 @@ const DetailedSupplierView = (props) => {
           result.data = n;
         }
       }
+
+      let new_arr = [];
+
+      let s2_bucket = result.data.filter((a) => a.type == 'S2');
+      for (let org of s2_bucket) {
+        let cc = result.data.filter(
+          (a) => a.authority == org.id && a.type == 'S3',
+        );
+        let s3_bucket = [];
+        for (const c of cc) {
+          org.analytics.sales += parseInt(c.analytics.sales);
+          org.analytics.returns += parseInt(c.analytics.returns);
+          s3_bucket.push(c);
+        }
+        
+        if (org)
+          new_arr.push(org);
+        if (s3_bucket.length) {
+          console.log(s3_bucket);
+          
+          new_arr = new_arr.concat(s3_bucket);
+          console.log(new_arr);
+          
+        }
+        
+      }
+      
+
+      let s1_bucket = result.data.filter((a) => a.type == 'S1');
+      for (let org of s1_bucket) {
+        let cc = []
+        if (new_arr.length) {
+          cc = new_arr.filter(
+            (a) => a.authority == org.id && a.type == 'S2',
+          );
+        }
+        else {
+          cc = result.data.filter(
+            (a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'),
+          );
+        }
+        for (const c of cc) {
+          org.analytics.sales += parseInt(c.analytics.sales);
+          org.analytics.returns += parseInt(c.analytics.returns);
+        }
+        if (s1_bucket.length) {
+          if (new_arr.length)
+            new_arr = s1_bucket.concat(new_arr);
+          else
+            new_arr = s1_bucket.concat(cc);
+        }
+      }
+
+      let remaining = result.data.filter(a => !new_arr.some(b => a.id === b.id));
+      if (remaining.length)
+        result.data = new_arr.concat(remaining);
+      
+      // result.data.sort((a, b) => a.type.localeCompare(b.type) || b?.authority?.localeCompare(a?.authority));
+      // console.log(result.data);
+      
+      
       setAnalytics(result.data);
       let s1;
       let s2;
@@ -130,12 +191,40 @@ const DetailedSupplierView = (props) => {
         { name: 'S3', value: Number(s3Data).toFixed(2), fill: '#FFC700' },
       ]);
     })();
+    requestSort('sales');
   }, []);
+
+  const getIntroOfPage = (label) => {
+    if (label == 0) {
+      return 'S1';
+    }
+    if (label == 1) {
+      return 'S2';
+    }
+    if (label == 2) {
+      return 'S3';
+    }
+    return '';
+  };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${getIntroOfPage(label)} : ${
+            payload[0].value
+          }`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   const renderLegend = (props) => {
     const { payload } = props;
     return (
-      <div style={{ display: 'grid', gap: '2em' }}>
+      <div style={{ display: 'grid', gap: '1em' }}>
         {payload.map((entry, index) => (
           <div className="renderLegend">
             <div
@@ -150,6 +239,48 @@ const DetailedSupplierView = (props) => {
         ))}
       </div>
     );
+  };
+
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
+
+    const sortedItems = useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+
+    const requestSort = (key) => {
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(analytics);
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   return (
@@ -271,6 +402,7 @@ const DetailedSupplierView = (props) => {
                   height={36}
                   content={renderLegend}
                 />
+                <Tooltip content={<CustomTooltip />} />
               </RadialBarChart>
             </ResponsiveContainer>
           </div>
@@ -308,8 +440,8 @@ const DetailedSupplierView = (props) => {
                         </td>
                         <td>Karnataka</td>
                         <td>
-                          {!isNaN(analytic.analytics.actualReturns)
-                            ? analytic.analytics.actualReturns
+                          {!isNaN(analytic.analytics.returns) && !isNaN(analytic.analytics.sales)
+                            ? parseFloat(((analytic.analytics.returns / analytic.analytics.sales) * 100)).toFixed(2)
                             : 0}
                           %
                         </td>

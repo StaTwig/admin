@@ -8,15 +8,14 @@ const utility = require("../helpers/utility");
 const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
+const RecordModel = require('../models/RecordModel');
 const WarehouseModel = require("../models/WarehouseModel");
 const ShipmentModel = require("../models/ShipmentModel");
-const RegionModel = require("../models/RegionModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
-const checkToken = require("../middlewares/middleware").checkToken;
 const checkPermissions = require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
@@ -31,9 +30,6 @@ const stream_name = process.env.STREAM;
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
 const AnalyticsModel = require('../models/AnalyticsModel');
-const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
-const { request } = require("http");
-const { match } = require("assert");
 const logger = init.getLog();
 const CENTRAL_AUTHORITY_ID = null;
 const CENTRAL_AUTHORITY_NAME = null;
@@ -43,38 +39,19 @@ exports.getTotalCount = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully"
-          );
-
-          permission_request = {
-            emailId: result,
-            permissionRequired: "viewInventory",
-          };
-          checkPermissions(permission_request, (permissionResult) => {
-            if (permissionResult.success) {
-              res.json("Total inventory count");
-            } else {
-              res.json("Sorry! User does not have enough Permissions");
-            }
-          });
+      const {role} = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, (permissionResult) => {
+        if (permissionResult.success) {
+          return apiResponse.successResponse(res,"Total inventory count");
         } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getTotalCount : refuted token"
-          );
-          res.status(403).json(result);
+          return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
         }
       });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)"
-      );
+      }catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -84,38 +61,19 @@ exports.getTotalCountOnHold = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully"
-          );
-
-          permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+      const {role} = req.user;
+      permission_request = {
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json("Total inventory count on Hold");
+              return apiResponse.successResponse(res,"Total inventory count on Hold");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -125,38 +83,19 @@ exports.getExpiringInventory = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully"
-          );
-
+      const {role} = req.user;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json("Total inventory count expiring");
+              return apiResponse.successResponse(res,"Total inventory count expiring");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -166,39 +105,19 @@ exports.getInventoryforProduct = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly"
-          );
-
+      const {role} = req.user;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              const { product_id } = result.data.key;
-              res.json("Inventory details for product");
+              return apiResponse.successResponse(res,"Inventory details for product");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -208,48 +127,24 @@ exports.getInventoryDetailsForProduct = [
   auth,
   (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key"
-          );
-
+      const {role} = req.user;
+      const { key } = req.query;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { key } = req.query;
               const response = await axios.get(
                 `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
               );
               const items = response.data.items;
-              logger.log("items", items);
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key"
-              );
-              res.json({ data: items });
+              return apiResponse.successResponseWithData(res,"getInventoryDetailsForProduct", items);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
-          });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)"
-      );
+            })
+      }catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -259,22 +154,15 @@ exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher"
-          );
-
+      const {role} = req.user;
+      const { address } = req.user;
+      const { skip, limit } = req.query;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit } = req.query;
-
               /* InventoryModel.collection.dropIndexes(function(){
                 InventoryModel.collection.reIndex(function(finished){
                   console.log("finished re indexing")
@@ -312,10 +200,6 @@ exports.getAllInventoryDetails = [
                 (product) => product.productName
               );
 
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
-              );
               const nextYear = new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)
               );
@@ -500,22 +384,10 @@ exports.getAllInventoryDetails = [
                 },
               });
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, 'User Does not have enough permissions')
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -743,250 +615,6 @@ exports.insertInventories = [
   },
 ];
 
-exports.getAllStates = [
-  auth,
-  async (req, res) => {
-    try {
-      const allStates = await StateDistrictStaticDataModel.find().distinct(
-        "state"
-      );
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-exports.getCountries = [
-  auth,
-  async (req, res) => {
-    try {
-      const countries = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.region' : req.query.region}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.country",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        countries
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-exports.getStatesByCountry = [
-  auth,
-  async (req, res) => {
-    try {
-      const allStates = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.country': req.query.country}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.state",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-exports.getCitiesByState = [
-  auth,
-  async (req, res) => {
-    try {
-      const allCities = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.state': req.query.state}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.city",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allCities
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-exports.getWarehousesByCity = [
-  auth,
-  async (req, res) => {
-    try {
-      var allWarehouses = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.city': req.query.city}},
-      {
-         $group:
-           {
-             _id: "$id",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allWarehouses
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getDistrictsByState = [
-  auth,
-  async (req, res) => {
-    try {
-      const _selectedState = req.query.state;
-      const allStates = await StateDistrictStaticDataModel.find({
-        state: _selectedState,
-      }).distinct("district");
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getVendorsByDistrict = [
-  auth,
-  async (req, res) => {
-    try {
-      const _selectedDistrict = req.query.district;
-      const _vendorType = req.query.vendorType;
-      const allVendors = await OrganisationModel.find({
-        district: _selectedDistrict,
-        type: _vendorType,
-      });
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allVendors
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getAllSKUs = [
-  auth,
-  async (req, res) => {
-    try {
-      const allSKUs = await ProductModel.aggregate([
-        {
-          $group: {
-            _id: { externalId: "$externalId", name: "$name" }
-          }
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$_id", "$$ROOT"]
-            }
-          }
-        },
-        {
-          $project: {
-            _id: 0,
-            id: "$externalId",
-            name: 1
-          }
-        }
-      ]).sort({ name: 1 });
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allSKUs
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getOrganizationsByType = [
-  auth,
-  async (req, res) => {
-    try {
-      const filters = req.query;
-      let matchCondition = {};
-      if (
-        filters.orgType === "BREWERY" ||
-        filters.orgType === "S1" ||
-        filters.orgType === "S2"
-      ) {
-        matchCondition.type = filters.orgType;
-      } else if (filters.orgType === "ALL_VENDORS") {
-        matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
-      }
-
-      const organisations = await OrganisationModel.aggregate([
-        {
-          $match: matchCondition,
-        },
-      ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        organisations
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getOrganizationInfoByID = [
-  auth,
-  async (req, res) => {
-    try {
-      const orgId = req.query.orgId;
-      const organisation = await OrganisationModel.findOne({ id: orgId });
-      const warehouseIds = organisation.warehouses;
-      const stats = await AnalyticsModel.find({
-        warehouseId: { $in: warehouseIds },
-      });
-      let totalStock = 0;
-      stats.forEach((stat) => {
-        totalStock = totalStock + parseInt(stat.returns);
-      });
-
-      let responseObj = {
-        organisation,
-        totalStock,
-      };
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        responseObj
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
 exports.addProductsToInventory = [
   auth,
   body("products")
@@ -1024,7 +652,7 @@ exports.addProductsToInventory = [
       });
       permission_request = {
         role: req.user.role,
-        permissionRequired: "addInventory",
+        permissionRequired: ["addInventory"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
@@ -1067,6 +695,7 @@ exports.addProductsToInventory = [
           //      `Product doesn't conatin valid serial numbers range`,
           //    );
           //  }
+          
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
@@ -1231,9 +860,10 @@ exports.addProductsToInventory = [
           let event_data = {
             eventID: null,
             eventTime: null,
+            transactionId: warehouse.warehouseInventory,
             eventType: {
-              primary: "CREATE",
-              description: "SHIPMENT_CREATION",
+              primary: "ADD",
+              description: "INVENTORY",
             },
             actor: {
               actorid: null,
@@ -1306,11 +936,10 @@ exports.addInventoriesFromExcel = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+      const {role} = req.user;
           permission_request = {
-            role: req.user.role,
-            permissionRequired: "addInventory",
+            role: role,
+            permissionRequired: ["addInventory"],
           };
           const email = req.user.emailId;
           const user_id = req.user.id;
@@ -1495,11 +1124,7 @@ exports.addInventoriesFromExcel = [
               );
             }
           });
-        } else {
-          return apiResponse.ErrorResponse(res, "User not authenticated");
-        }
-      });
-    } catch (e) {
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1580,22 +1205,14 @@ exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { skip, limit } = req.query;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit } = req.query;
-
               const inventoryResult = await InventoryModel.aggregate([
                 { $match: { owner: address } },
                 {
@@ -1629,10 +1246,6 @@ exports.getGroupedInventoryDetails = [
                 (product) => product.productName
               );
 
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
-              );
               const nextYear = new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)
               );
@@ -1810,25 +1423,13 @@ exports.getGroupedInventoryDetails = [
                 },
               });
             } else {
-              apiResponse.ErrorResponse(
+              return apiResponse.forbiddenResponse(
                 res,
                 `Sorry! User doens't have permissions`
               );
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : refused token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1838,50 +1439,27 @@ exports.getInventoryDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { batchNumber, skip, limit } = req.query;
           permission_request = {
-            result: result,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const { address } = req.user;
-              const { batchNumber, skip, limit } = req.query;
-
-              const inventoryResult = await InventoryModel.find({
+            if (permissionResult.success) {  
+            const inventoryResult = await InventoryModel.find({
                 owner: address,
                 batchNumber: batchNumber,
               })
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-
-              res.json({
-                data: inventoryResult,
-              });
+              return apiResponse.successResponseWithData(res, inventoryResult);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, permissionResult.message);
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1891,22 +1469,14 @@ exports.getBatchDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { skip, limit, batchNumber } = req.query;
           permission_request = {
-            role: req.user.role,
-            permissionRequired: "viewInventory",
+            role: role,
+            permissionRequired: ["viewInventory"],
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit, batchNumber } = req.query;
-
               const inventoryResult = await InventoryModel.aggregate([
                 { $match: { owner: address, batchNumber: batchNumber } },
                 {
@@ -1926,27 +1496,12 @@ exports.getBatchDetailsByBatchNumber = [
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-
-              res.json({
-                data: inventoryResult,
-              });
+              return apiResponse.successResponseWithData(res, inventoryResult);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"Sorry! User does not have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : refused token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1997,61 +1552,6 @@ exports.getProductListCounts = [
      
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getProductDetailsByWarehouseId = [
-  auth,
-  async (req, res) => {
-    try {
-      const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.findOne({
-        id: warehouseId,
-      });
-      const val = warehouseDetails.warehouseInventory;
-      const productList = await InventoryModel.find({ id: val });
-      console.log(warehouseDetails);
-      
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
-      for (j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
-        const product = await ProductModel.find({ id: productId });
-        var product1 = {
-          productName: product[0].name,
-          productId: product[0].id,
-          manufacturer: product[0].manufacturer,
-          quantity: list[j].quantity ? list[j].quantity : 0,
-          unitofMeasure:product[0].unitofMeasure
-        };
-        productArray.push(product1);
-      }
-      let { firstLine, secondLine, city, state, country, zipCode } = warehouseDetails.warehouseAddress;
-      let address = firstLine +" "+(secondLine ? secondLine + ' ' : '') + city +' '+ state+' '+zipCode+' '+country;
-      var warehouse = {
-        warehouseCountryId: warehouseDetails.country.countryId,
-        warehouseCountryName: warehouseDetails.country.countryName,
-        warehouseId: warehouseDetails.id,
-        warehouseName: warehouseDetails.title,
-        warehouseAddress: address,
-        warehouseLocation: warehouseDetails.location,
-      };
-
-      return apiResponse.successResponseWithData(res, "Fetch success", {
-        warehouse,
-        productArray,
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -2079,152 +1579,12 @@ exports.getEmployeeDetailsByWarehouseId = [
   },
 ];
 
-exports.getCountryDetailsByRegion = [
-  auth,
-  async (req, res) => {
-    try {
-      const { region , orgType } = req.query;
-      var common = [];
-      var countries = [];
-      if(region && orgType) {
-        const regionDetails = await RegionModel.find({ name: region });
-        if(regionDetails.length > 0)
-        {
-          countries = regionDetails[0].country;
-          countries.sort();
-        }
-        const orgs = await OrganisationModel.find({type:orgType}).select('country');
-        const orgSet = new Set()
-        for (let org of orgs) {
-          orgSet.add(org.country.countryName);
-        }
-        const orgArray = [...orgSet];
-        orgArray.sort();
-
-        // Get common countries
-        var i = 0, j = 0;
-        while(i<countries.length && j<orgArray.length) {
-          if(countries[i] == orgArray[j]) {
-            common.push(countries[i]);
-            i++;
-            j++;
-          }
-          else if(countries[i] < orgArray[j]) {
-            i++;                        
-          }                              
-          else {
-            j++;
-          }
-        }
-      }
-      else
-      {
-        if(region){
-        const regionDetails = await RegionModel.find({ name: region });
-        if(regionDetails.length > 0){
-          common = regionDetails[0].country;
-        }
-      }
-      else{
-        return apiResponse.ErrorResponse(res, "Please provide region and orgType");
-      }
-    }
-      return apiResponse.successResponseWithData(res, `Countries in Region ${region} & OrgType ${orgType}`,common);
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getRegions = [
-  auth,
-  async (req, res) => {
-    try {
-      const {orgType} = req.query;
-      var orgs;
-      if(!orgType)
-      {
-        orgs = await OrganisationModel.find({}).select('region.name');
-      }
-      else{
-        orgs = await OrganisationModel.find({type:orgType}).select('region.name');
-      }
-      const orgSet = new Set()
-      for (let org of orgs) {
-        orgSet.add(org.region.name);
-      }
-      return apiResponse.successResponseWithData(res, `Regions of Organisations of type ${orgType}`,[...orgSet]);
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getWarehouseDetailsByRegion = [
-  // auth,
-  async (req, res) => {
-    try {
-      const { region } = req.query;
-      const warehouseDetails = await WarehouseModel.find({
-       "warehouseAddress.region": region,
-      });
-
-      console.log(warehouseDetails);
-      var warehouseArray = [];
-      for (j = 0; j < warehouseDetails.length; j++) {
-        var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId);
-      }
-
-      return apiResponse.successResponseWithData(
-        res,
-        "Fetch success",
-        warehouseArray
-      );
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.getWarehouseDetailsByCountry = [
-  auth,
-  async (req, res) => {
-    try {
-      const { country } = req.query;
-      const warehouseDetails = await WarehouseModel.find({
-        "country.countryName": country,
-      });
-
-      var warehouseArray = [];
-      for (j = 0; j < warehouseDetails.length; j++) {
-        var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId);
-      }
-
-      return apiResponse.successResponseWithData(
-        res,
-        "Fetch success",
-        warehouseArray
-      );
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
 
 exports.getInventory = [
   auth,
   async (req, res) => {
     try {
+
       const { skip, limit } = req.query;
       var warehouseId = "";
 
@@ -2737,7 +2097,7 @@ async function getFilterConditions(filters) {
 
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const filters = req.query;
@@ -3386,103 +2746,18 @@ exports.deleteProductsFromInventory = [
     },
 ];
 
-exports.getOrgTypes = [
-    async (req, res)=>{
-        try {
-            const orgTypes = await OrganisationModel.find({},{ '_id': 0}).select('type');
-            const orgSet = new Set()
-            for (let org of orgTypes) {
-              if (org.type == null) {
-                continue;
-              }
-              orgSet.add(org.type);
-            }
-            return apiResponse.successResponseWithData(res,"All Organisation Types", [...orgSet]);
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
-        }
-    }
-]
-
-exports.getOrganizations = [
-  auth,
-    async (req, res)=>{
-        try {
-            var orgs = [];
-            const {orgType, country} = req.query;
-            if(orgType && country){
-              orgs = await OrganisationModel.find({$and: [{type: orgType}, {"country.countryName": country}]});
-            }else if(country){
-              orgs = await OrganisationModel.find({"country.countryName": country});
-            }else{
-              return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
-            }
-            return apiResponse.successResponseWithData(res,"All Organizations", orgs);
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
-        }
-    }
-]
-
-exports.getAddresses = [
-  auth,
-  async (req, res)=>{
-      try {
-          var warehouseIds = [];
-          var warehouseData = [];
-          const {orgType, country} = req.query;
-          if(orgType && country){
-            const orgs = await OrganisationModel.find({type: orgType}).select("warehouses");
-            for(let org of orgs){
-              for(let warehouse of org.warehouses){
-                warehouseIds.push(warehouse);
-              }
-            }
-            warehouseData = await WarehouseModel.find({$and: [{id: {$in: warehouseIds}},{"country.countryName": country}]});
-          }else if(country){
-            warehouseData = await WarehouseModel.find({"country.countryName": country});
-          }else{
-            return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
-          }
-          return apiResponse.successResponseWithData(res,`Organizations Warehouse Address of type ${orgType} & country ${country}`, warehouseData);
-      } catch (err) {
-          return apiResponse.ErrorResponse(res, err.message);
-      }
-  }
-]
-
-exports.getOrganizationWarehouses = [
-  auth,
-  async (req, res)=>{
-      try {
-          var warehouseIds = [];
-          var warehouseData = [];
-          const {orgId , country} = req.query;
-          if(orgId && country){
-            const orgs = await OrganisationModel.find({id: orgId}).select("warehouses");
-            for(let org of orgs){
-              for(let warehouse of org.warehouses){
-                warehouseIds.push(warehouse);
-              }
-            }
-            warehouseData = await WarehouseModel.find({$and: [{id: {$in: warehouseIds}},{"country.countryName": country}]});
-          }else if(orgId){
-            warehouseData = await WarehouseModel.find({"organisationId": orgId});
-          }else{
-            return apiResponse.ErrorResponse(res, "Provide OrgId and Country");
-          }
-          return apiResponse.successResponseWithData(res,`Organizations Warehouse Address of ${orgId} & country ${country}`, warehouseData);
-      } catch (err) {
-          return apiResponse.ErrorResponse(res, err.message);
-      }
-  }
-]
-
 exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit,productName,producttype  } = req.query;
+      const {role} = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: ["searchByProductName"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+      const {productName, productType  } = req.query;
       var warehouseId = "";
       if (!req.query.warehouseId)
         warehouseId = req.user.warehouseId;
@@ -3495,8 +2770,8 @@ exports.searchProduct = [
         if (productName) {
           elementMatchQuery[`products.name`] = productName;
         }
-        if (producttype) {
-          elementMatchQuery[`products.type`] = producttype;
+        if (productType) {
+          elementMatchQuery[`products.type`] = productType;
         }
         const inventory = await InventoryModel.aggregate([
           { $unwind: "$inventoryDetails" },
@@ -3516,8 +2791,6 @@ exports.searchProduct = [
         // }
         ])
           .sort({ createdAt: -1 })
-          .skip(parseInt(skip))
-          .limit(parseInt(limit));
         return apiResponse.successResponseWithData(
           res,
           "Inventory Details",
@@ -3529,6 +2802,42 @@ exports.searchProduct = [
           "Cannot find warehouse for this employee"
         );
       }
+    }
+    else{
+      return apiResponse.forbiddenResponse(res, "Access denied");
+     }
+    })}
+        catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
+exports.autoCompleteSuggestions = [
+  auth,
+  async (req, res) => {
+    try {
+      const { searchString  } = req.query;
+       
+        const suggestions = await RecordModel.aggregate([
+          {$project: { _id: 0, value: "$id", record_type: "order"}},
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
+          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
+          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
+
+          {$match: {"value": {$regex: searchString ? searchString: ""} }},
+          {$limit: 10},
+          { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
+  ])
+          .sort({ createdAt: -1 })
+        return apiResponse.successResponseWithData(
+          res,
+          "Autocorrect Suggestions",
+          suggestions
+        );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -3537,6 +2846,26 @@ exports.searchProduct = [
 ];
 
 
-
+exports.fetchBatchesOfInventory = [
+  auth,
+  async (req, res) => {
+    try {
+      const { productId , wareId} = req.query;
+       var warehouseId = wareId ? wareId : req.user.warehouseId;
+       let warehouse = await WarehouseModel.findOne({id: warehouseId}) 
+       let inventoryId = warehouse.warehouseInventory
+        const batches = await AtomModel.find({productId: productId,"batchNumbers": {$nin: ["", "null", null]}, inventoryIds: inventoryId})
+          .sort({"attributeSet.expDate": 1})
+        return apiResponse.successResponseWithData(
+          res,
+          "Batches of product",
+          batches
+        );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
 
 

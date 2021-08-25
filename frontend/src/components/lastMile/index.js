@@ -53,8 +53,8 @@ const lastMile=(props)=>{
         coloumn4: 'Product',
         coloumn5: 'Date & Time',
     
-        img1: <img src={patient} width="18" height="20" className="pb-1"/>,
-        img2: <img src={idprrof} width="23" height="20" className="pb-1"/>,
+        img1: <img src={patient} width="15" height="20" className="pb-1"/>,
+        img2: <img src={idprrof} width="20" height="20" className="pb-1"/>,
         img3: <img src={mobile} width="16" height="25" className="pb-1"/>,
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
@@ -185,7 +185,7 @@ return (
 <div>
 <div className="lastmile" style={{position:"relative",left:"-22px",top:"-20px"}}>
     <h1 className="breadcrumb">LAST MILE</h1>
-    {/* <button className="btn btn-md btn-main-blue float-center ml-5"> 
+    {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
@@ -209,8 +209,8 @@ return (
           
           <div className="d-flex flex-column mb-2 region pt-4">
                 <div className="form-group row mr-1">
-                  <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
-                    <div className="form-control col">
+                  <label htmlFor="shipmentId" className="mt-2 col-4 text-left">Region</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
                                name={region===''?'Region':region}
                                groups={regions}
@@ -222,8 +222,8 @@ return (
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Country</label>
-                    <div className="form-control col">
+                    <label htmlFor="shipmentId" className="mt-2 col-4 text-left">Country</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
                              name={country===''?'Select Country':country}
                              groups={countries}
@@ -235,10 +235,10 @@ return (
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">State</label>
-                    <div className="form-control col">
+                    <label htmlFor="shipmentId" className="mt-2 col-4 text-left">State</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
-                             name={state===''?'Select state':state}
+                             name={state===''?'Select State':state}
                              groups={states}
                              onSelect={item => {
                                 setstate(item)
@@ -248,10 +248,10 @@ return (
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">City</label>
-                    <div className="form-control col">
+                    <label htmlFor="shipmentId" className="mt-2 col-4 text-left">District</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
-                             name={district===''?'Select district':district}
+                             name={district===''?'Select District':district}
                              groups={cities}
                              onSelect={item => {
                                 setdistrict(item)
@@ -261,10 +261,10 @@ return (
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
-                    <div className="form-control col">
+                    <label htmlFor="shipmentId" className="mt-2 col-4 text-left">Location</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
-                             name={location===''?'Select location': location}
+                             name={location===''?'Select Location': location}
                              groups={locations}
                              onSelect={item => {
                                 setlocation(item)
@@ -274,8 +274,8 @@ return (
                     </div>
                 </div>
                 <div className="form-group mb-4 row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Product</label>
-                    <div className="form-control col">
+                    <label htmlFor="shipmentId" className="mt-2 col-4 text-left">Product</label>
+                    <div className="form-control col" style={{borderBottom: "2px solid #d6d6d6"}}>
                         <DropdownButton
                             name={product===''?'Select Product':product}
                             groups={products}
@@ -302,25 +302,25 @@ return (
                 <div className="d-flex text-white mt-2 flex-row " >
                     <ul className="mr-3 text-light">
                         {/* <li className="mb-1">Country ID</li> */}
-                        <li className="mb-1">Country</li>
-                        <li className="mb-1">Location</li>
-                        <li className="mb-1">Location Name</li>
+                        <li className="mb-3">Country</li>
+                        <li className="mb-3">Location</li>
+                        <li className="mb-3">Location Name</li>
                     </ul>
                     <ul class="text-light">
                         {/* <li className="mb-1">{countryId}</li> */}
-                        <li className="mb-1">{locationCountry}</li>
-                        <li className="mb-1">{locationState}</li>
-                        <li className="mb-1">{locationName}</li>
+                        <li className="mb-3">{locationCountry}</li>
+                        <li className="mb-3">{locationState}</li>
+                        <li className="mb-3">{locationName}</li>
                     </ul>
                 </div>
                 </div>
                 <div class="panel address searchpanel mb-2 mt-3 ml-1 mr-1">
                     <div className="row">
                         <img src={pingrey} height="20" width="15"></img>
-                        <div className="ml-2">Address</div>
+                        <div className="ml-2" style={{fontSize:"13px"}}>Address</div>
 
                         </div>
-                        <div>{Address}</div>
+                        <div className="ml-2">{Address}</div>
                     </div>
                 </div>
                 </div>

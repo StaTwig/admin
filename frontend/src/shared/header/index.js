@@ -33,6 +33,10 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import { resetShipments } from '../../actions/shipmentActions';
 import { userLocationReducer } from '../../reducers/userLocationReducer';
 import setAuthToken from '../../utils/setAuthToken';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -40,6 +44,11 @@ const Header = props => {
   const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
+  const [searchString, setSearchString] = useState('');
+
+  const [searchType, setSearchType] = useState('');
+  const [alertType, setAlertType] = useState('ALERT');
+  const [searchtemp, setsearchtemp] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -50,12 +59,23 @@ const Header = props => {
   // const [shippingIds, setShippingIds] = useState([]);
   const [activeWarehouses, setActiveWarehouses]= useState([]);
   const [selectLocation, setSelectLocation] = useState("");
+  const [options, setOptions] = useState([]);
+
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: option => option._id,
+  });
+  
   
 const ref = useOnclickOutside(() => {
     setMenu(false);
   });
   function onSearchChange(e) {
-    setSearch(e.target.value);
+    // console.log(e)
+    setSearchString(e._id)
+    setSearchType(e.type)
+    axios.get(`${config().getSuggestions}?searchString=${e}`)
+    .then((resp)=>setOptions([...resp.data.data]))
   }
 
   const closeModalFail = () => {
@@ -123,7 +143,7 @@ const ref = useOnclickOutside(() => {
           setInvalidSearch(true);
       })
     }
-    else{
+    else if(searchType === "transitNumber"){
         getAllAirwayBillNo().then((result)=>{
           dispatch(turnOn());
           let airWayBillNowithshipmentID = result.data;
@@ -141,6 +161,27 @@ const ref = useOnclickOutside(() => {
 
         });
     }
+    else if (searchType === "productName"){
+      axios.get(`${config().searchProduct}&productName=${searchString}`)
+      .then((resp)=>{
+        if(resp.data.data.length>0)
+        props.history.push(`/viewproduct`, {data: resp.data.data[0]})
+        else
+        alert(`The product "${searchString}" is not found in the inventory`)
+      })
+      .catch((err)=> alert(err.response.data.message))
+    }
+    else if (searchType === "productType"){
+      axios.get(`${config().searchProduct}&productType=${searchString}`)
+      .then((resp)=>{
+        // console.log(resp.data)
+        if(resp.data.data.length>0)
+        props.history.push(`/productinventory/${searchString}`)
+        else
+        alert(`Theere are no products belonging to type: "${searchString}" in your inventory`)
+      })
+      .catch((err)=> alert(err.response.data.message))
+    }
     // if(orderIds.indexOf(search)!=-1)
     // props.history.push(`/vieworder/${search}`);
     // else if(shippingIds.indexOf(search)!=-1)
@@ -156,15 +197,22 @@ const ref = useOnclickOutside(() => {
   const profile = useSelector(state => {
     return state.user;
   });
+  async function changeNotifications (value){
+    const response = await axios.get(`${config().getAlerts}${value}`);
+    console.log(response.data.data)
+    setNotifications(response.data.data);
+  }
   // const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
-      const response = await getNotifications();
-      setNotifications(response.data);
+      // const response = await getNotifications();
+      const response = await axios.get(`${config().getAlerts}${alertType}`);
+      console.log(response.data.data)
+      setNotifications(response.data.data);
       
       const warehouses = await getActiveWareHouses();
-      setActiveWarehouses(warehouses.map(item=>{
+      setActiveWarehouses(warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING').map(item=>{
         return{
           title: item.name,
           organisationId: item.name,
@@ -174,7 +222,7 @@ const ref = useOnclickOutside(() => {
       // console.log("usersLocation",usersLocation);
     
       if(localStorage.getItem("location")!=null){
-        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
+        //setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
       else {
        setLocation(prod=>warehouses[0]);
@@ -207,7 +255,7 @@ const ref = useOnclickOutside(() => {
       if(token){
         setAuthToken(token);
         localStorage.setItem('theLedgerToken', token);
-        props.history.push("/profile");
+        props.history.push("/neworder");
         props.history.replace(`${props.location.pathname}`);
       }
     }
@@ -241,7 +289,33 @@ const imgs = config().fetchProfileImage;
       
       <div className="actions">
         <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
-          <input
+        <Autocomplete
+        
+        id="free-solo-demo"
+        freeSolo
+        //value={search}
+        options={options}
+        getOptionLabel={(option) => option._id}
+        filterOptions={filterOptions}
+        placeholder="Search PO ID/ Shipment ID/ Transit Number"
+            onFocus={(e) => e.target.placeholder = ''}
+            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Transit Number'}
+            inputValue={search}
+            onInputChange={(event, newInputValue) => {
+              setSearch(newInputValue);
+              // console.log(newInputValue,"new------")
+              onSearchChange(newInputValue)
+            }}
+            onChange={(event, newValue) => {
+              onSearchChange(newValue)
+              // console.log("---------")
+            }}
+          renderInput={(params) => (
+          <TextField {...params} label="Search PO ID/ Shipment ID/ Transit Number" margin="normal" variant="outlined" />
+        )
+}
+      />
+        {/* <input
             type="text"
             // value={search}
             placeholder="Search PO ID/ Shipment ID/ Transit Number"
@@ -249,22 +323,30 @@ const imgs = config().fetchProfileImage;
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Transit Number'}
             onChange={onSearchChange}
             className= "form-control search-field"
-          />
+        /> */}
+
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>
         <div>
         
        <div className="user-info ">
        <div className="notifications">
-                {/*   <Badge badgeContent={1} color="primary"> </Badge> {/*<img src={bellIcon} alt="notification" /><MailIcon />*/}
+                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
                   
-                    {  /* <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
+                    <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
               {notifications.length > 0 && <span className="badge badge-light">{notifications.length }</span> }
             </div>
             {showNotifications && notifications.length > 0 && (
               <div className="slider-menu">
                 <React.Fragment>
+                  <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
+                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
+                  <div className="section">
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                  </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
                       <div className="col-sm-10">
@@ -281,27 +363,24 @@ const imgs = config().fetchProfileImage;
                       </div>
                     </div>
                   </div>)}
+                  </div>
                 </React.Fragment>
               </div>
-            )}*/}
-            </div>  
-            <div className="divider" />
-           <div className="location">
-              <img src={Location} width="20" height="26" /> 
-           </div>  
-          {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
+            )}
+            </div>
+            {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
 
-            <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
+            <div className="userName">               
            <DropdownButton
             name={location?.title+"\n"+location?.warehouseAddress?.city+","+location?.warehouseAddress?.country}
             // name={location?.title}
             arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
-           />
+          />
            </div>
            
           <div className="userName">
@@ -330,20 +409,29 @@ const imgs = config().fetchProfileImage;
           <div className="slider-menu" ref={ref}>
             {
               <React.Fragment>
-                <div className="slider-item-text">
+                <div className="slider-item-text p-2">
                   <p>{profile.name}</p>
                   <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
-                <Link className="slider-item border-top-0" to="/profile">
-                  My Profile
-                </Link>
+                <div 
+                    className="slider-item border-top-0 p-0"
+                    onClick={() => props.history.push('/profile')}
+                >
+                    My Profile
+                </div>
+                <div 
+                    className="slider-item p-0"
+                    onClick={() => props.history.push('/alerts')}
+                >
+                    Settings
+                </div>
                <div
-                  className="slider-item"
+                  className="slider-item p-0"
                   onClick={() => dispatch(logoutUser())}
                 >
                   Logout
                 </div>
-              </React.Fragment>
+             </React.Fragment>
             }
           </div>
         )}

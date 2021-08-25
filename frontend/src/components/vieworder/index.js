@@ -28,23 +28,23 @@ else if (order.poStatus === 'ACCEPTED') {
     statusStyle = 'bg-success';
     status = 'Accepted';
   }else if (order.poStatus === 'REJECTED') {
-    statusStyle = 'bg-danger';
+    statusStyle = 'bg-secondary';
     status = 'Rejected';
   }
   else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
     statusStyle = 'bg-info';
-    status = 'Transit and FullyFilled';
+    status = 'Transit & Fullyfilled';
   }
   else if (order.poStatus === 'FULLYFULFILLED') {
-    statusStyle = 'bg-warning';
-    status = 'FullyFilled';
+    statusStyle = 'bg-info';
+    status = 'Fullyfilled';
   }
   else if (order.poStatus === 'TRANSIT&PARTIALLYFULFILLED') {
-    statusStyle = 'bg-info';
-    status = 'Transit and Partially Fulfilled';
+    statusStyle = 'bg-warning';
+    status = 'Transit & Partially Fulfilled';
   }
   else if (order.poStatus === 'PARTIALLYFULFILLED') {
-    statusStyle = 'bg-secondary';
+    statusStyle = 'bg-warning';
     status = 'Partially Fulfilled';
   }
 
@@ -126,6 +126,15 @@ const onPOStatusChange = async status => {
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
                   <span className= " col text-dark ">{order.customer?.organisation?.id}</span>
+                </div>
+                <div class="w-100"></div>
+                <div className="col row mt-3">      
+                  <span className="col-4">Region:</span>
+                  <span className= " col  text-dark ">{order.customer?.region }</span>
+                </div>
+                <div className="col row mt-3">      
+                  <span className="col-4">Country:</span>
+                  <span className= " col text-dark ">{order.customer?.country }</span>
                 </div>
                 <div class="w-100"></div>
                 <div className="col row col-6 mt-3">      

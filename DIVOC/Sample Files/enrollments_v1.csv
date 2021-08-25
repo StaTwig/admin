@@ -1,0 +1,8 @@
+phone,enrollmentScopeId,nationalId,dob,gender,name,email,addressLine1,addressLine2,state,district,pincode
+1111111313,DEL12,234234008,1990-01-01,Male,Reci One,rec8@gmail.com,21,Street,Delhi,Delhi,110011
+1111111314,DEL12,234234009,1980-05-01,Female,Reci Two,rec9@gmail.com,22,Street,Delhi,Delhi,110011
+1111111315,DEL12,234234010,1983-03-01,Male,Reci Three,rec10@gmail.com,21,Street,Delhi,Delhi,110011
+1111111316,DEL12,234234011,1983-03-03,Male,Reci Four,rec11@gmail.com,22,Street,Delhi,Delhi,110011
+1111111317,DEL12,234234012,1983-03-04,Female,Reci Five,rec12@gmail.com,21,Street,Delhi,Delhi,110011
+1111111318,DEL12,234234013,1983-03-06,Male,Reci Six,rec13@gmail.com,21,Street,Delhi,Delhi,110011
+1111111319,DEL12,234234014,1980-02-06,Male,Reci Seven,rec14@gmail.com,22,Street,Delhi,Delhi,110011

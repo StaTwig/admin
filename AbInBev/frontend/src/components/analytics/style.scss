@@ -634,6 +634,21 @@ body {
       color: #54265e;
       font-weight: bolder;
     }
+    .descending {
+      box-shadow: none !important;
+      &:before {
+        content: "▼";
+        float: right;
+      }
+    }
+  
+    .ascending {
+      box-shadow: none !important;
+      &:before {
+        content: "▲";
+        float: right;
+      }
+    }
     tr {
       border-bottom: 1px solid #e5e0e9;
     }
@@ -1237,7 +1252,7 @@ body {
 .renderLegend {
   display: flex;
   gap: 3em;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
 }
 
@@ -1260,4 +1275,12 @@ body {
   padding: 10px 10px;
   border-bottom: 1px solid #CCC;
   margin-bottom: 10px;
+}
+
+.custom-tooltip{
+  background-color: #ffffff;
+  padding:20px;
+  border-radius: 20px;
+  font-weight: bolder;
+  color:#000000
 }

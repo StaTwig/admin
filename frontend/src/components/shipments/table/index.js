@@ -67,27 +67,27 @@ const Table = props => {
                 supplierAddress = wrLocation.firstLine + wrLocation.secondLine + wrLocation.city;
               }
             return (
-              <div className="rTableRow pt-2 pb-2" key={index}>
+              <div className="col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow" key={index}> {/* rTableRow pt-3 pb-3 */}
                 {/* <div className="rTableCell">
                   <div className="combine-data">{shipment.receiver.id}</div>
                 </div> */}
-                <div className="rTableCell ml-4" style={{padding:0, left:"50px"}}>
+                <div className="col-1 txt1" style={{padding:0, left:"10px"}}>
                   <span className="text-primary">{shipment.id}</span>
                   {shipment?.shipmentAlerts?.length > 0 &&
                     <span style={{ backgroundColor: '#EAEAEA', marginLeft: 5 }} className="rounded p-1"><img style={{ height: 15 }} src={alert} /></span>
                   }
                 </div>
-                <div className="rTableCell text-center" style={{paddingLeft:0, left:"30px"}}>{shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}</div>
-                <div className="rTableCell" style={{paddingRight:10,paddingLeft:0, left:"60px"}}><p className="mb-0">{shipment.supplier.org ? shipment.supplier.org.name: "-"}</p><p className="address mb-0 text-muted">{`${supplierAddress.firstLine ? supplierAddress.firstLine: ''} ${supplierAddress.secondLine ? supplierAddress.secondLine : ''} ${supplierAddress.city ? supplierAddress.city : ''}\n ${supplierAddress.state ? supplierAddress.state : ''}\n ${supplierAddress.country ? supplierAddress.country : ''} `}</p></div>
-                <div className="rTableCell" style={{paddingRight:0,paddingLeft:10, left:"80px"}}><p className="mb-0">{shipment.receiver.org ? shipment.receiver.org.name : "-"}</p><p className="mb-0 address text-muted">{`${receiverAddress.firstLine ? receiverAddress.firstLine : ''}  ${receiverAddress.secondLine ? receiverAddress.secondLine : ''} ${receiverAddress.city ? receiverAddress.city : ''} \n ${receiverAddress.state ? receiverAddress.state : ''} \n ${receiverAddress.country ? receiverAddress.country : ''} `}</p></div>
-                <div className="rTableCell text-center" style={{padding:0, left:"120px"}}>
-                <div className={`status secondary-bg ${statusStyle}`}>
+                <div className="col-1 txt1" style={{position:"relative", left:"4.5%"}}>{shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}</div>
+                <div className="col-3 txt1 " style={{position:"relative",left:"10%"}}><p className="mb-0">{shipment.supplier.org ? shipment.supplier.org.name: "-"}</p><p className="address mb-0 text-muted">{`${supplierAddress.firstLine ? supplierAddress.firstLine: ''} ${supplierAddress.secondLine ? supplierAddress.secondLine : ''} ${supplierAddress.city ? supplierAddress.city : ''}\n ${supplierAddress.state ? supplierAddress.state : ''}\n ${supplierAddress.country ? supplierAddress.country : ''} `}</p></div>
+                <div className="col-3 txt1 " style={{position:"relative",left:"12.5%"}}><p className="mb-0">{shipment.receiver.org ? shipment.receiver.org.name : "-"}</p><p className="mb-0 address text-muted">{`${receiverAddress.firstLine ? receiverAddress.firstLine : ''}  ${receiverAddress.secondLine ? receiverAddress.secondLine : ''} ${receiverAddress.city ? receiverAddress.city : ''} \n ${receiverAddress.state ? receiverAddress.state : ''} \n ${receiverAddress.country ? receiverAddress.country : ''} `}</p></div>
+                <div className="rTableCell" style={{position:"relative",left:"11%"}}>
+                <div className={`status secondary-bg btn-sm ml-3 ${statusStyle}`}>
                     {status}
                 </div>
                 </div>
-                <div className="rTableCell" style={{paddingLeft:0,left:"150px"}}>
+                <div className="col-1 txt1" style={{paddingLeft:0,position:"relative",left:"8.5%"}}>
                   <button
-                    className="button btn-primary text-light"
+                    className="button btn-primary text-light btn-sm ml-1"
                     onClick={() => {
                       const data = shipments[index];
                       dispatch(setTracingShipments(data));
@@ -100,9 +100,10 @@ const Table = props => {
                     <span className="pl-1 text-white">Track</span>
                   </button>
                 </div>
-                <div className="rTableCell" style={{left:"75px"}}>
+                <div className="rTableCell" style={{position:"relative",left:"4.5%"}}>
                   <Link to={`/viewshipment/${shipment.id}`} 
-                    className="button pl-3 pr-3 pt-1 pb-1"
+                    className="button btn-sm"
+                    style={{width:"60px"}}
                   >
                     View
                   </Link>
@@ -113,7 +114,7 @@ const Table = props => {
           {shipments?.length > 0 && (
             <div className="d-flex flex-row-reverse">
               <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
-              <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+              <span className="mx-5 my-1 rounded text-dark">Total Records {props.count} </span>
             </div>            
           )}
           </div>

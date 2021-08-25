@@ -1,4 +1,3 @@
-const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 const moveFile = require('move-file');
 const XLSX = require('xlsx');
@@ -12,12 +11,12 @@ const CounterModel = require('../models/CounterModel')
 const OrganisationModel = require('../models/OrganisationModel')
 const ProductModel = require('../models/ProductModel')
 const EmployeeModel = require('../models/EmployeeModel')
+const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require('../models/WarehouseModel')
 const InventoryModel = require('../models/InventoryModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
-const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
     .checkPermissions;
 const dotenv = require('dotenv').config();
@@ -29,7 +28,9 @@ const po_stream_name = process.env.PO_STREAM;
 
 const products = require('../data/products');
 const manufacturers = require('../data/manufacturers');
-
+const CENTRAL_AUTHORITY_ID = null
+const CENTRAL_AUTHORITY_NAME = null
+const CENTRAL_AUTHORITY_ADDRESS = null
 const init = require('../logging/init');
 const logger = init.getLog();
 
@@ -112,24 +113,15 @@ exports.fetchPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
-          );
-          const permission_request = {
-            //role: req.user.role,
-            result: result,
-            permissionRequired: 'viewPO',
+      const { organisationId, role, id } = req.user;
+      const { skip, limit, poId } = req.query;
+      const permission_request = {
+            role: role,
+            permissionRequired: ['viewPO'],
           };
-          checkPermissions(permission_request, async permissionResult => {
+      checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-
-              const { organisationId, role, id } = req.user;
-              const { skip, limit, poId } = req.query;
               var inboundPOs, outboundPOs, poDetails;
-
                     try {
                     if ( poId != null)
                     {
@@ -168,29 +160,12 @@ exports.fetchPurchaseOrders = [
                   console.log(err)
                     return apiResponse.ErrorResponse(res, err);
                 }
-
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res,"User doesn't have enough permission to view Resource");
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -200,16 +175,10 @@ exports.fetchAllPurchaseOrdersBC = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : token verified successfully, querying all stream keys',
-          );
+      const {role} = req.user;
           const permission_request = {
-            result: result,
-            permissionRequired: 'receivePO',
+            role: role,
+            permissionRequired: ['receivePO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -217,29 +186,13 @@ exports.fetchAllPurchaseOrdersBC = [
                   `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
               );
               const items = response.data.items;
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : queried all stream keys',
-              );
-              res.json({ data: items });
+             return apiResponse.successResponseWithData(res, 'fetchAllPurchaseOrdersBC', items);
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -248,31 +201,19 @@ exports.fetchPublisherPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : token verified successfully, querying all publisher keys',
-          );
+      const { address, role } = req.user;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { address } = req.user;
               /*const acceptedPOs = await POModel.find({
                 receiver: address,
                 status: 'Accepted',
               });*/
 
               const acceptedPOs = await wrapper.findRecordsAndSort(POModel,{receiver: address,status: 'Accepted'});
-
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
-              );
               const poIds = acceptedPOs.map(po => po.orderID);
               apiResponse.successResponseWithData(
                   res,
@@ -280,23 +221,12 @@ exports.fetchPublisherPurchaseOrders = [
                   poIds,
               );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
-          });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : refuted token',
+            }
           );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -305,52 +235,29 @@ exports.fetchPurchaseOrderBC = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : token verified successfully, querying data by key',
-          );
-
+      const { role } = req.user;
+      const { key } = req.query;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { key } = req.query;
               const response = await axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
               );
               const items = response.data.items;
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : queried data by key',
-              );
               return apiResponse.successResponseWithData(
                   res,
                   'Purchase Order Info',
                   items,
               );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -359,21 +266,15 @@ exports.changePOStatus = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< POStatus < ShipmentController < changePOStatus : token verified successfully',
-          );
-
+      const { address , role } = req.user;
           const permission_request = {
-            result: result,
-            permissionRequired: 'receivePO',
+            role: role,
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               try {
-                const { address } = req.user;
+
                 const { orderID, status } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
                 if (po && po.customer.customer_incharge === address) {
@@ -390,7 +291,84 @@ exports.changePOStatus = [
                       $push: { poUpdates: updates },
                       $set: {poStatus :status }
                 })
+                try{
+                  let event = Event.findOne({'payloadData.data.order_id': orderID})
+                  
+                  if (status === "ACCEPTED")
+                    event.eventType.primary = "RECEIVE";
+                  else event.eventType.primary = "UPDATE";
 
+                  event.eventType.description = "ORDER";
+                
+                  async function compute(event) {
+                    resultt = await logEvent(event);
+                    return resultt;     
+                  }
+                  console.log(result);
+                  compute(event).then((response) => {
+                    console.log(response);
+          
+                  });
+                }catch(error){
+                  console.log(error);
+                }
+                try{
+                  let event = Event.findOne({'payloadData.data.order_id': orderID})
+                  var evid = Math.random().toString(36).slice(2);
+                  var datee = new Date();
+                  datee = datee.toISOString();
+                  let event_data = {
+                    eventID: null,
+                    eventTime: null,
+                    transactionId: orderID,
+                    eventType: {
+                      primary: "UPDATE",
+                      description: "ORDER",
+                    },
+                    actor: {
+                      actorid: "null",
+                      actoruserid: "null",
+                    },
+                    stackholders: {
+                      ca: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                      actororg: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                      secondorg: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                    },
+                    payload: {
+                      data: {
+                        data: null,
+                      },
+                    },
+                  };
+                  event_data.eventID = "ev0000" + evid;
+                  event_data.eventTime = datee;
+                  event_data.eventType.primary = "UPDATE";
+                  event_data.eventType.description = "ORDER";
+                  event_data.payloaData = event.payloaData;
+                
+                  async function compute(event_data) {
+                    resultt = await logEvent(event_data);
+                    return resultt;     
+                  }
+                  console.log(result);
+                  compute(event_data).then((response) => {
+                    console.log(response);
+                  });
+                }catch(error){
+                  console.log(error);
+                }
                 return apiResponse.successResponseWithData(
                       res,
                       'PO Status',
@@ -402,32 +380,15 @@ exports.changePOStatus = [
                       'You are not authorised to change the status',
                   );
                 }
-
-                logger.log(
-                    'info',
-                    '<<<<< POStatus < ShipmentController < changePOStatus : Changed Successfully',
-                );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                return apiResponse.ErrorResponse(res, e.message);
               }
               } else {
-               res.json('Sorry! User does not have enough Permissions');
+               return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -472,7 +433,7 @@ exports.addPOsFromExcel = [
     try {
       // const permission_request = {
       //   role: req.user.role,
-      //   permissionRequired: 'createPO',
+      //   permissionRequired: ['createPO'],
       // };
       // checkPermissions(permission_request, async permissionResult => {
       //   if (permissionResult.success) {
@@ -513,6 +474,7 @@ exports.addPOsFromExcel = [
                   "customerOrganisation": po['IP Code'],
                   "name" : po['IP Name'],
                   "country" : po['Country Name'],
+				  "region"   : po['Region Name'],
                   "address" : 'NA',
                   // "customerIncharge": po['Customer Incharge'],
                   "shippingAddress": {
@@ -546,7 +508,7 @@ exports.addPOsFromExcel = [
                 "counters.$.value": 1
               }
             });
-            let poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+            let poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.$":1})
             let dataRows =0;
             for(let i in poDataArray){
               if(poDataArray[i].externalId!=null){
@@ -590,6 +552,7 @@ exports.addPOsFromExcel = [
                   }
                   else {
                     const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
+					const region = poDataArray[i].customer?.region ? poDataArray[i].customer?.region : 'Asia';
                     const address = poDataArray[i].customer?.address ? poDataArray[i].customer?.address : '';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
@@ -598,7 +561,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
                     organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
                     const incrementCounterWarehouse = await CounterModel.update({
                       'counters.name': "warehouseId"
@@ -613,9 +576,9 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
                     warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
                     var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
                     var employeeStatus = 'NOTAPPROVED';
                     let addr = '';
@@ -648,6 +611,11 @@ exports.addPOsFromExcel = [
                         countryId: '001',
                         countryName: country
                       },
+					  region:{
+					  id:'reg123',
+					  regionName: region,
+					  name: region
+					  },
                       configuration_id: 'CONF000',
                       authority: req.body?.authority,
                       externalId : poDataArray[i].customer.customerOrganisation
@@ -661,7 +629,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
                     const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
                     const inventoryResult = new InventoryModel({ id: inventoryId });                    
                     console.log(inventoryResult)
@@ -675,6 +643,7 @@ exports.addPOsFromExcel = [
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
+						            region: region,
                         city: address,
                         state: address,
                         country: country,
@@ -713,6 +682,7 @@ exports.addPOsFromExcel = [
                 }
                   else {
                     const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
+                    const region = poDataArray[i].supplier?.region ? poDataArray[i].supplier?.region : 'Asia';
                     const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
@@ -721,7 +691,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
                     organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
                     const incrementCounterWarehouse = await CounterModel.update({
                       'counters.name': "warehouseId"
@@ -736,9 +706,9 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
                     warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
                     var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
                     var employeeStatus = 'NOTAPPROVED';
                     let addr = '';
@@ -771,6 +741,11 @@ exports.addPOsFromExcel = [
                         countryId: '001',
                         countryName: country
                       },
+					  region:{
+					  id:'reg123',
+					  regionName: region,
+					  name: region
+					  },
                       configuration_id: 'CONF000',
                       authority: req.body?.authority,
                       externalId : poDataArray[i].supplier.supplierOrganisation,
@@ -784,7 +759,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
                     const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
                     const inventoryResult = new InventoryModel({ id: inventoryId });
                     console.log(inventoryResult)
@@ -800,6 +775,7 @@ exports.addPOsFromExcel = [
                         secondLine: "",
                         city: address,
                         state: address,
+						            region: region,
                         country: country,
                         landmark: "",
                       },
@@ -845,10 +821,12 @@ exports.addPOsFromExcel = [
     //  });
     } catch (err) {
       console.log(err)
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
+
 
 
 exports.success = [
@@ -879,14 +857,16 @@ exports.createOrder = [
         }
       });
 
-      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.$":1})
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
+      const email = req.user.emailId;
+      const user_id = req.user.id;      
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
       products.forEach(async element => {
         var product = await ProductModel.findOne({ id: element.productId });
-        element.type = product.type
-        element.unitofMeasure= product.unitofMeasure.name
+        element.type = product?.type
+        element.unitofMeasure= product?.unitofMeasure
         console.log(product)
       });
 	    const createdBy =  lastUpdatedBy = req.user.id;
@@ -901,7 +881,31 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
-
+      const supplierID = req.body.supplier.supplierOrganisation;
+      const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.supplierOrganisation,
+      });
+      if(supplierOrgData==null)
+      {
+        console.log("Supplier not defined");
+        return apiResponse.ErrorResponse(res,"Supplier  not defined");
+      }
+                  
+      const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.customer.customerOrganisation,
+      });
+      if(receiverOrgData==null)
+      {
+        console.log("customer not defined");
+        return apiResponse.ErrorResponse(res,"Receiver not defined");
+      }      
+      var datee = new Date();
+      datee = datee.toISOString();
+      const supplierName = supplierOrgData.name;
+      const supplierAddress = supplierOrgData.postalAddress;
+      const receiverId = receiverOrgData.id;
+      const receiverName = receiverOrgData.name;
+      const receiverAddress = receiverOrgData.postalAddress;
       const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
       const updates = {
              "updatedOn": currDateTime,
@@ -910,8 +914,77 @@ exports.createOrder = [
       purchaseOrder.poUpdates = updates;
 
       const result = await purchaseOrder.save();
-      return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
+
+      try{
+        var evid = Math.random().toString(36).slice(2);
+        let event_data = {
+          eventID: null,
+          eventTime: null,
+          eventType: {
+            primary: "CREATE",
+            description: "ORDER",
+          },
+          actor: {
+            actorid: null,
+            actoruserid: null,
+          },
+          stackholders: {
+            ca: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            actororg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            secondorg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+          },
+          payload: {
+            data: {
+              abc: 123,
+            },
+          },
+        };
+        event_data.eventID = "ev0000" + evid;
+        event_data.eventTime = datee;
+        event_data.eventType.primary = "CREATE";
+        event_data.eventType.description = "ORDER";
+        event_data.actor.actorid = user_id || "null";
+        event_data.actor.actoruserid = email || "null";
+        event_data.actorWarehouseId = req.user.warehouseId || "null";
+        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+        event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        event_data.stackholders.secondorg.id = receiverId || "null";
+        event_data.stackholders.secondorg.name = receiverName || "null";
+        event_data.stackholders.secondorg.address = receiverAddress || "null";
+        event_data.stackholders.actororg.id = supplierID || "null";
+        event_data.stackholders.actororg.name = supplierName || "null";
+        event_data.stackholders.actororg.address = supplierAddress || "null";
+        event_data.payload.data = req.body;
+        event_data.payload.data.order_id = poId;
+        event_data.transactionId = poId;
+        async function compute(event_data) {
+          resultt = await logEvent(event_data);
+          return resultt;     
+        }
+        console.log(result);
+        compute(event_data).then((response) => {
+          console.log(response);
+          return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
+
+        });
+      }catch(error){
+        console.log(error);
+      }
     } catch (err) {
+      console.log(err)
       logger.log(
           'error',
           '<<<<< POService < POController < createOrder : error (catch block)',
@@ -925,7 +998,6 @@ exports.getOrderIds = [
   auth,
   async (req, res) => {
     try {
-     
       const {organisationId } = req.user;
       const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId},{"createdBy":req.user.id}]},'id');
     
@@ -935,10 +1007,6 @@ exports.getOrderIds = [
         orderID,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -967,10 +1035,6 @@ exports.getOpenOrderIds = [
         orderID,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -980,20 +1044,14 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
-          );
+      const { organisationId, role } = req.user;
+      const { skip, limit } = req.query;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: ['viewInboundOrders'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { organisationId, role } = req.user;
-              const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let fromCustomer = req.query.from ? req.query.from : undefined;
@@ -1057,8 +1115,6 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                 }
               }
 
-          
-
               console.log("whereQuery ======>", whereQuery);
               try {
                 let inboundPOsCount = await RecordModel.count(whereQuery);
@@ -1118,27 +1174,11 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               } catch (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
-              logger.log(
-                'info',
-                '<<<<< POService < POController < fetchInboundPurchaseOrders',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, "User doesn't have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchInboundPurchaseOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -1148,20 +1188,14 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
-          );
+      const { organisationId, role, id } = req.user;
+      const { skip, limit } = req.query;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: ['viewOutboundOrders'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { organisationId, role, id } = req.user;
-              const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let toSupplier = req.query.to ? req.query.to : undefined;
@@ -1275,33 +1309,15 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               } catch (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
-              logger.log(
-                'info',
-                '<<<<< POService < POController < fetchOutboundPurchaseOrders',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, "User doesn't have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
-
-
 
 exports.fetchProductIdsCustomerLocationsOrganisations = [
   auth,
@@ -1309,7 +1325,7 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
     try {
       let responseData = {};
       ProductModel.find({},'id name').then (function (productIds){
-        WarehouseModel.find({},'id title').then (function (locations){
+        WarehouseModel.find({},'warehouseAddress.city warehouseAddress.country id title').then (function (locations){
           OrganisationModel.find({'status':'ACTIVE'},'id name').then (function (organisation){
             responseData[`organisations`] = organisation;
             responseData[`deliveryLocations`] = locations;
@@ -1323,10 +1339,6 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
         });
       });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchProductIdsCustomerLocations : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

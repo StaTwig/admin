@@ -79,8 +79,8 @@
     .search-form {
       width: 350px;
       position: relative;
-      top: 70px;
-      right: 24.5rem;
+      top: 45px;
+      right: 32.5rem;
       //left: unset;
       display: block;
       
@@ -91,8 +91,8 @@
       }
       img {
         position: relative;
-        right: -20rem;
-        bottom: 30px;
+        right: -26.5rem;
+        bottom: 47px;
         width: 20px;
         opacity: 2;
       }
@@ -124,8 +124,9 @@
         max-width: 100%;
       }
       .notifications {
-        position: absolute;
-        right: 31rem;
+        position: relative;
+        right: 2.5rem;
+        top: -3rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
@@ -138,11 +139,32 @@
         }
         .slider-menu {
           top: .9rem;
-          right: 0rem !important;
+          right: -4rem !important;
+          overflow: scroll;
+          min-width: 350px;
+          min-height: 300px;
+          font-size: 10px;
+
+          .nheader{
+            margin: -16px;
+            justify-content: left;
+            padding: 10px;
+          }
+          
+          .section {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: -10px;
+            margin-top: 15px;
+            font-size: 13px;
+          }
 
           .slider-item {
             white-space: pre-wrap;
-            min-width: 200px;
+            background-color: white;
+            min-width: 300px;
+            font-size: 10px;
+            margin-top: 16px;
             &:first-child {
               border-top: none;
             }
@@ -161,7 +183,7 @@
         // margin-right: 1rem;
         position:relative;
         left: -2.5rem;
-        bottom:1px;
+        bottom:45px;
         // border: 1px solid #fff;
         border: .1px solid #D9D9D9;
         // height: 35px;
@@ -173,16 +195,20 @@
       .location{
         position: relative;
         right:1rem;
-        bottom:.4rem;
+        bottom:3rem;
       }
       .userName {
         max-width: 10vw;
         margin-right: 1rem;
+        position: relative;
+        bottom:2.5rem;
+
         
         .uname {
           font-size: 10px;
           text-align: right;
           margin: 1px;
+          
         }
 
         .cname {
@@ -264,7 +290,9 @@
     
 
       .userPic {
+        position: relative;
         margin-right: 0.5rem;
+        bottom:2.5rem;
         img {
           width: 40px;
           height:40px;
@@ -273,6 +301,8 @@
       }
       .userActions {
         img {
+          position: relative;
+          bottom:2.5rem;
           width: 13px;
           cursor: pointer;
         }

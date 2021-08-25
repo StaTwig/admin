@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # any future command that fails will exit the script
@@ -7,7 +6,7 @@
 #i Lets write the public key of our aws instance
 
 eval $(ssh-agent -s)
-echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+echo "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
 
 # ** Alternative approach
 # echo -e "$PRIVATE_KEY" > /root/.ssh/id_rsa
@@ -19,7 +18,7 @@ echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
 # we have already setup the DEPLOYER_SERVER in our gitlab settings which is a
 # comma seperated values of ip addresses.
-DEPLOY_SERVERS=$DEPLOY_SERVERS
+DEPLOY_SERVERS=$SERVER_IP
 
 # lets split this string and convert this into array
 # In UNIX, we can use this commond to do this
@@ -33,7 +32,7 @@ DEPLOY_SERVERS=$DEPLOY_SERVERS
 #for server in "${ALL_SERVERS[@]}"
 #do
   echo "deploying to ${DEPLOY_SERVERS}"
-  ssh ubuntu@${DEPLOY_SERVERS} "cd /home/ubuntu/PRD && git clone git@gitlab.com:statwig-public/theledger.git && cd /home/ubuntu/PRD/theledger && npm start"
+  ssh root@${DEPLOY_SERVERS} "cd /home/ec2-user && git clone git@gitlab.com:statwig-public/theledger.git && cd /home/ec2-user/theledger"
 #done
 #testi11
 

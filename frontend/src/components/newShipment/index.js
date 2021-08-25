@@ -48,7 +48,7 @@ const NewShipment = (props) => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
-  const [senderOrgId, setSenderOrgId] = useState("Select Organisation Name");
+  const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
@@ -81,13 +81,18 @@ const NewShipment = (props) => {
   });
   
   const customStyles = {
+    placeholder:(provided, state)=>({
+      color: state.isDisabled ? 'black' : 'grey',
+    }),
     option: (provided, state) => ({
       ...provided,
       borderBottom: '1px solid #d6d6d6',
       // padding: 20,
     }),
     control: () => ({
-      display: 'flex'
+      display: 'flex',
+      //border: '2px solid #2196f3',
+      //borderRadius: '6px',
     }),
     indicatorSeparator: () => ({
       display: 'none'
@@ -407,10 +412,16 @@ if (!error) {
   };
  
   const handleQuantityChange = (value, i) => {
-    
     const soDetailsClone = { ...OrderDetails };
-    soDetailsClone.products[i].productQuantity = value;
-    setOrderDetails(soDetailsClone);
+    if(parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)){
+      soDetailsClone.products[i].productQuantity = soDetailsClone.products[i].orderedQuantity;
+      setOrderDetails(soDetailsClone); 
+      alert("Quantity cannot be more than ordered quantity")
+      return
+    }
+      soDetailsClone.products[i].productQuantity = value;
+      setOrderDetails(soDetailsClone);    
+    
   };
  
   const handleBatchChange = (value, i) => {
@@ -631,10 +642,8 @@ if (!error) {
                         groups={OrderIds}
                       /> */}
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        styles={customStyles}
                         placeholder="Select Order ID"
-                
                         onChange={async(v) => {    
                           setfetchdisabled(true);
                           setProducts(p => []);
@@ -643,8 +652,14 @@ if (!error) {
                           setFieldValue("OrderId", v.value);
                           setOrderId(v.value);
                           dispatch(turnOn());
-                          const result = await dispatch(getOrder(v.value));
-                          
+                          let result = await dispatch(getOrder(v.value));
+                          for (let i = 0; i < result.poDetails[0].products.length; i++) {
+                            if(result.poDetails[0].products[i].productQuantityShipped){
+                              result.poDetails[0].products[i].productQuantity = parseInt(result.poDetails[0].products[i].productQuantity) - parseInt(result.poDetails[0].products[i].productQuantityShipped);
+                            }
+                            result.poDetails[0].products[i].orderedQuantity =
+                            result.poDetails[0].products[i].productQuantity;
+                          }
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -653,7 +668,6 @@ if (!error) {
                             // result.poDetails[0].customer.organisation.id
                           );
                           setOrderDetails(result.poDetails[0]);
-
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter((w) => {
@@ -706,6 +720,7 @@ if (!error) {
                             result.poDetails[0].products[i].productQuantityShipped;
                           }
                           console.log(products_temp);
+                          
                          if (result.poDetails[0].products.length > 0) {
                            setProducts(p => []);
                            setAddProducts(p => []);
@@ -721,7 +736,7 @@ if (!error) {
                <div className="col-md-6 com-sm-12">
                  <label className="name" htmlFor="shipmentID">Reference Shipment ID</label>
                   <input
-                      className="input refship "
+                      className="refship" //input
                       type="text"
                       id="referenceShipmentId"
                       name="shipmentID"
@@ -739,7 +754,13 @@ if (!error) {
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        const result = await dispatch(getViewShipment(values.shipmentID));
+                        let result = await dispatch(getViewShipment(values.shipmentID));
+                        for (let i = 0; i < result.products.length; i++) {
+                          if(result.products[i].productQuantityShipped){
+                            result.products[i].productQuantity = parseInt(result.products[i].productQuantity) - parseInt(result.products[i].productQuantityShipped);
+                          }
+                          result.products[i].orderedQuantity = result.products[i].productQuantity;
+                        }
                         dispatch(turnOff());
                         setReceiverOrgLoc();
                         setReceiverOrgId();
@@ -768,7 +789,7 @@ if (!error) {
                           products_temp[i].name =
                             result.products[i].productName;
                           products_temp[i].productQuantity =
-                            result.products[i].productQuantity;
+                            ( (result.products[i].productQuantity) - (result.products[i].productQuantityTaggedSent));
                           products_temp[i].type =
                             result.products[i].productCategory;
                           delete products_temp[i].productQuantityDelivered;
@@ -821,8 +842,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationName">
-                        Organisation Name
+                      <label className="name" htmlFor="organizationName">
+                        Organisation Name*
                       </label>
                       <div className="line">
                         {/* <DropdownButton
@@ -850,8 +871,8 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="orgLocation">
-                        Organisation Location
+                      <label className="name" htmlFor="orgLocation">
+                        Organisation Location*
                       </label>
                       <div className={`line ${errors.fromOrgLoc && touched.fromOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
@@ -881,12 +902,15 @@ if (!error) {
                           groups={senderWarehouses}
                         /> */}
                         <Select
+                          styles={customStyles}
                           isDisabled={false}
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
+                            // console.log(v.value)
+                            setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
                               productName: "",
@@ -918,11 +942,10 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
+                      <label className="name" htmlFor="organizationType">Organisation Type*</label>
                       <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          styles={customStyles}
                           isDisabled={disabled}
                           placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
@@ -945,8 +968,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationName">
-                        Organisation Name
+                      <label className="name" htmlFor="organizationName">
+                        Organisation Name*
                       </label>
                       <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
@@ -963,9 +986,10 @@ if (!error) {
                           groups={allOrganisations}
                         /> */}
                         <Select
-                          isDisabled={disabled}
-                          // placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
-                          placeholder={"Select Organisation Name"}
+                          styles={customStyles}
+                          //isDisabled={disabled}
+                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
+                          //placeholder={"Select Organisation Name"}
                           value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: receiverOrgId}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
@@ -988,7 +1012,7 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="delLocation">Delivery Location</label>
+                      <label className="name" htmlFor="delLocation">Delivery Location*</label>
                       <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgLoc}
@@ -1007,9 +1031,10 @@ if (!error) {
                           groups={receiverWarehouses}
                         /> */}
                         <Select
-                          isDisabled={disabled}
-                          // placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
-                          placeholder={"Select Delivery Location"}
+                          styles={customStyles}
+                          //isDisabled={disabled}
+                          placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
+                          //placeholder={"Select Delivery Location"}
                           value={values.toOrgLoc==""?"Select Delivery Loction":{value: values.toOrgLoc, label:toOrgLocLabel}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
@@ -1037,7 +1062,7 @@ if (!error) {
                 </label>
                 <div className="row">
                   <div className="col-md-6 com-sm-12 mt-2">
-                      <label className="name required-field" htmlFor="organizationName">Transit Number</label>
+                      <label className="name" htmlFor="organizationName">Transit Number*</label>
                       <input
                         className={`input refship ${errors.airWayBillNo && touched.airWayBillNo ? "border-danger" : "" }`}
                         type="text"
@@ -1058,7 +1083,7 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12 mt-3">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="delLocation">Shipment Date</label>
+                      <label className="name" htmlFor="delLocation">Shipment Date*</label>
                       <div className={`input refship ${errors.shipmentDate && touched.shipmentDate ? "border-danger" : "" }`}>
                         <DatePicker
                           className="date"
@@ -1093,7 +1118,7 @@ if (!error) {
                 </div>
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
-                    <label className="name required-field" htmlFor="organizationName">Label Code</label>
+                    <label className="name" htmlFor="organizationName">Label Code*</label>
                     <input
                       className={`input refship ${errors.labelCode && touched.labelCode ? "border-danger" : "" }`}
                       type="text"
@@ -1159,6 +1184,7 @@ if (!error) {
               {OrderDetails?.products?.length > 0 && (
                 <EditTable
                 check="1"
+                warehouseID={senderOrgId}
                   product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
@@ -1364,16 +1390,17 @@ if (!error) {
           />
         </Modal>
       )}
-
-      {message && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-      )}
-
-      {errorMessage && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-      )}
     </div>
   );
 };
 
 export default NewShipment;
+
+
+/* {message && (
+  <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
+)} 
+
+{errorMessage && (
+  <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
+)} */

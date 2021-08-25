@@ -45,6 +45,8 @@ const ReviewOrder = props => {
           customerIncharge: null,
           customerOrganisation: toOrg,
           customerType: rtypeName,
+          region: toOrgRegion,
+          country: toOrgCountry,
           shippingAddress: {
             shippingAddressId:toOrgLoc,
             shipmentReceiverId: null
@@ -138,9 +140,18 @@ const ReviewOrder = props => {
                   <span className="col" style={{color: "black",fontSize:"14px"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
-                <div className="col row  mt-5">
+                <div className="col row mt-3">      
+                  <span className="col-4">Region:</span>
+                  <span className= " col  text-dark ">{order.toOrgRegion}</span>
+                </div>
+                <div className="col row mt-3">      
+                  <span className="col-4">Country:</span>
+                  <span className= " col text-dark ">{order.toOrgCountry}</span>
+                </div>
+                <div className="w-100"></div>
+                <div className="col row  mt-3">
                   <span className="col-4">Organisation Location:</span>
-                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
                 </div>
                 <div className="col row  mt-5">
                 <span className="col-4"></span>

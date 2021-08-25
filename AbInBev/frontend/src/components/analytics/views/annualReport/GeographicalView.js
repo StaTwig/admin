@@ -83,10 +83,10 @@ const GeographicalView = (props) => {
         else setAnalytics(n);
       }
     } else setAnalytics(SKUStats);
+    requestSort('returnRate');
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {
-    console.log('params', param);
     props.onViewChange('DETAILED_GEO_VIEW', param);
   };
 
@@ -97,10 +97,10 @@ const GeographicalView = (props) => {
       let sortableItems = [...items];
       if (sortConfig !== null) {
         sortableItems.sort((a, b) => {
-          if (a[sortConfig.key] < b[sortConfig.key]) {
+          if (parseInt(a[sortConfig.key]) < parseInt(b[sortConfig.key])) {
             return sortConfig.direction === 'ascending' ? -1 : 1;
           }
-          if (a[sortConfig.key] > b[sortConfig.key]) {
+          if (parseInt(a[sortConfig.key]) > parseInt(b[sortConfig.key])) {
             return sortConfig.direction === 'ascending' ? 1 : -1;
           }
           return 0;

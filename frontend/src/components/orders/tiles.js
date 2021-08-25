@@ -25,7 +25,7 @@ const Tiles = props => {
             <img src={Received} alt="truck"/>
           </div>
           <div className="d-flex flex-column">
-            <div className="title recived-text">Total Orders Sent</div>
+            <div className="title recived-text font-weight-bold">Total Orders Sent</div>
             <div className="recived-text count">{orderAnalytics?.outboundPO}</div>
           </div>
         </div>
@@ -36,7 +36,7 @@ const Tiles = props => {
             <img src={Sent} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title sent-text ">Total Orders Received</div>
+            <div className="title sent-text font-weight-bold">Total Orders Received</div>
             <div className="sent-text count">{orderAnalytics?.inboundPO}</div>
           </div>
         </div>
@@ -47,7 +47,7 @@ const Tiles = props => {
             <img src={Current} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title inbound-text">Total Orders Pending</div>
+            <div className="title inbound-text font-weight-bold">Total Orders Pending</div>
             <div className="inbound-text count">{orderAnalytics?.pendingOrders}</div>
           </div>
         </div>
@@ -58,7 +58,7 @@ const Tiles = props => {
             <img src={Rejected} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title outbound-text ">Total Orders Rejected</div>
+            <div className="title outbound-text font-weight-bold">Total Orders Rejected</div>
             <div className="outbound-text count">{orderAnalytics?.rejectedOrders}</div>
           </div>
         </div>
