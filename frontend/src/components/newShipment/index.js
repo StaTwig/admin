@@ -116,7 +116,7 @@ const NewShipment = (props) => {
       const result111 = await getProductList();
      
       setProductsList(result111.message);
-
+      console.log(result111)
       const { search } = props.location;
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
@@ -220,7 +220,13 @@ const NewShipment = (props) => {
                                         ...item
                                       };
                                     }));
-    } catch (err) {
+      setProductsList(prods.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));    } catch (err) {
       setErrorMessage(err);
     }
   };
@@ -703,6 +709,10 @@ if (!error) {
                           
                           let products_temp = result.poDetails[0].products;
                           for (let i = 0; i < products_temp.length; i++) {
+                            if(result.poDetails[0].products[i].productQuantity==0){
+                              products_temp.splice(i,1); 
+                              i--;
+                            }
                             products_temp[i].manufacturer =
                               result.poDetails[0].products[i].manufacturer;
                             products_temp[i].productName =
