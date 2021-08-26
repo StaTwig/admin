@@ -154,7 +154,12 @@ export function config() {
       searchProduct:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${LOCAL_SERVER_URL_ALERTS}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${LOCAL_SERVER_URL_ALERTS}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      //test url is suficient for the below url.
+      getExportFileForInboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${DEV_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${DEV_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
 },
     dev: {
       getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -275,7 +280,11 @@ export function config() {
       searchProduct:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${DEV_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${DEV_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getExportFileForInboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${DEV_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${DEV_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
     },
     stable: {
       getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -402,7 +411,12 @@ export function config() {
       searchProduct:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${STABLE_SERVER_URL_INVENTORY}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${STABLE_SERVER_URL_INVENTORY}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      //test url is sufficient for the below url.
+      getExportFileForInboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${DEV_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${DEV_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -529,7 +543,11 @@ export function config() {
       searchProduct:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${TEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${TEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getExportFileForInboundShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${TEST_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${TEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
 },
     demo: {
       getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -647,7 +665,11 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       getSuggestions:`${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,  
-      getAlerts: `${DEMO_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${DEMO_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getExportFileForInboundShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${DEMO_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -765,9 +787,12 @@ export function config() {
       searchProduct:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getExportFileForInboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${PROD_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${PROD_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
     },
-    
     uniceftest: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -891,7 +916,11 @@ export function config() {
       searchProduct:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
+      getAlerts: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getExportFileForInboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
+      getExportFileForOutboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
+      getExportFileForInboundPurchaseOrdersUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
+      getExportFileForOutboundPurchaseOrdersUrl:  `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
     },
   };
 

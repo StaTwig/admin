@@ -23,6 +23,10 @@ import ExcelPopUp from './ExcelPopup';
 import Received from '../../assets/icons/Received1.svg';
 import Sent from '../../assets/icons/Sent.png';
 import update from '../../assets/icons/Update_Status.png';
+import { config } from '../../config';
+import { getExportFile } from '../../actions/poActions';
+import uuid from 'react-uuid'
+
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
@@ -40,6 +44,8 @@ const ShipmentAnalytic = props => {
   const [toFilter, setToFilter] = useState("");
   const [fromFilter, setFromFilter] = useState("");
   const [count, setCount] = useState(0);
+  const [exportFilterData, setExportFilterData] = useState([]);
+  const [showExportFilter, setShowExportFilter] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -66,7 +72,7 @@ const ShipmentAnalytic = props => {
   }, [visible]);
 
   const onPageChange = async (pageNum) => {
-    const recordSkip = (pageNum-1)*limit;
+    const recordSkip = (pageNum - 1) * limit;
 
     setSkip(recordSkip);
     if (visible == 'one') {
@@ -175,6 +181,41 @@ const ShipmentAnalytic = props => {
     return rtnArr ? rtnArr : [];
   }
 
+  useEffect(() => {
+    setExportFilterData([
+      { key: "excel", value: "Excel", checked: false },
+      { key: "pdf", value: "PDF", checked: false },
+      { key: "email", value: "Mail", checked: false },
+      { key: "print", value: "Print", checked: false },
+    ]);
+  }, []);
+
+  const onSelectionOfDropdownValue = (index, type, value) => {
+    setShowExportFilter(false);
+    let url = ''
+    if (visible === 'one') {
+      url = `${config().getExportFileForInboundShipmentUrl}?type=${value.toLowerCase()}`;
+    }
+    if (visible === 'two') {
+      url = `${config().getExportFileForOutboundShipmentUrl}?type=${value.toLowerCase()}`;
+    }
+    getExportFile(url, value)
+      .then(response => {
+        console.log(response);
+        if ((response.data) && response.status !== 200) {
+          console.log('Error while downloading file');
+        } else {
+          const downloadUrl = window.URL.createObjectURL(new Blob([response]));
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.setAttribute('download', `${uuid()}.${value.toLowerCase()}`); //any other extension
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      })
+  }
+
   return (
     <div className="shipment">
       <div className="d-flex justify-content-between">
@@ -205,10 +246,24 @@ const ShipmentAnalytic = props => {
       </div>
       <Tiles {...props} setData={setData} />
       <div className="mt-4">
-        <Tabs {...props} setvisible={setvisible} visible={visible} />
+        <Tabs {...props} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter}/>
       </div>
       <div className="full-width-ribben mt-4">
-        <TableFilter data={headers} shipmentIdList={shipmentIdList} supplierReceiverList={supplierReceiverList} setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect} setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect} setToShipmentFilterOnSelect={setToShipmentFilterOnSelect} setStatusFilterOnSelect={setStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="80%" />
+        <TableFilter
+          data={headers}
+          shipmentIdList={shipmentIdList}
+          supplierReceiverList={supplierReceiverList}
+          setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
+          setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
+          setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
+          setStatusFilterOnSelect={setStatusFilterOnSelect}
+          setDateFilterOnSelect={setDateFilterOnSelect}
+          fb="80%"
+          showExportFilter={showExportFilter}
+          setShowExportFilter={setShowExportFilter}
+          exportFilterData={exportFilterData}
+          onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+        />
       </div>
       <div className="ribben-space">
         <Table {...props} skip={skip} shpmnts={sendData} count={count} onPageChange={onPageChange} />
