@@ -1229,6 +1229,7 @@ if (!error) {
                 <>
                   <EditTable
                     check="0"
+                    warehouseID={senderOrgId}
                     product={addProducts}
                     products={products}
                     category={category}
