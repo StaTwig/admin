@@ -334,6 +334,7 @@ exports.createShipment = [
   auth,
   async (req, res) => {
     try {
+      let data = req.body; 
       data.products.forEach(async (element) => {
         var product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;

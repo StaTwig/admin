@@ -1,11 +1,13 @@
-FROM node:14.16.1 as react_build 
+FROM node:lts as react_build 
 
 WORKDIR /app
 
-COPY . /app/
- 
+COPY package.json /app/
+
 RUN yarn install
 
+COPY . /app/
+ 
 RUN yarn run build 
 
 FROM nginx:stable-alpine
