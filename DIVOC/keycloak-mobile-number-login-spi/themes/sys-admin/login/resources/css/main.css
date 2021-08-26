@@ -60,7 +60,7 @@
 }
 
 .input-field:focus-within {
-    border: 1px solid #2CD889;
+    border: 1px solid #0093E9;
 }
 
 .input-wrapper {
@@ -83,7 +83,7 @@
 }
 
 .otp-prefix {
-    color: #4CA07A;
+    color: #0093E9;
 }
 
 @media (max-width: 992px) {

@@ -4,8 +4,8 @@ import "./Home.scss"
 import {Col} from "react-bootstrap";
 import {useHistory} from "react-router";
 import {FORM_PRE_ENROLL_CODE} from "./Forms/PreEnrollmentFlow";
-import enrollRecipient from "./enroll_recipient.png"
-import verifyRecipient from "./verify_recpient.png"
+import enrollRecipient from "./add-file.png"
+import verifyRecipient from "./verify_recepient.png"
 import {getMessageComponent, LANGUAGE_KEYS} from "../lang/LocaleContext";
 import {FORM_WALK_IN_ELIGIBILITY_CRITERIA, WALK_IN_ROUTE} from "../components/WalkEnrollments/context";
 import config from "../config"
@@ -42,9 +42,9 @@ function ProgramHeader() {
             <div>
                 {userDetails &&
                 <div className="ml-3 m-2">
-                    <div className="name">{userDetails.facilityDetails.facilityName}</div>
+                    <div className="name test" >{userDetails.facilityDetails.facilityName}</div>
                     <div
-                        className="subtitle">{userDetails.facilityDetails.address.district},{userDetails.facilityDetails.address.state}</div>
+                        className="subtitle test">{userDetails.facilityDetails.address.district},{userDetails.facilityDetails.address.state}</div>
                 </div>
                 }
                 {userDetails && <hr className="mt-0 mb-0"/>}
@@ -94,7 +94,7 @@ function VaccinationProgress() {
     if (beneficiaryStatus.length > 0) {
         return <>
             <div className="enroll-container mt-2">
-                <EnrolmentItems title={getMessageComponent(LANGUAGE_KEYS.RECIPIENT_QUEUE)}
+                <EnrolmentItems  title={getMessageComponent(LANGUAGE_KEYS.RECIPIENT_QUEUE)}
                                 onClick={goToQueue} value={beneficiaryStatus[0].value}/>
                 <EnrolmentItems title={getMessageComponent(LANGUAGE_KEYS.CERTIFICATE_ISSUED)}
                                 value={beneficiaryStatus[1].value}/>
@@ -108,8 +108,8 @@ function VaccinationProgress() {
 export function EnrolmentItems({icon, title, onClick, value}) {
     return (
         <div className={"verify-card"} onClick={onClick}>
-            <BaseCard>
-                <Col>
+            <BaseCard >
+                <Col style={{  background: "#FA7923", borderRadius: "8px"}}>
                     {icon && <img className="icon" src={icon} alt={""}/>}
                     <h5>{value}</h5>
                     <h5>{title}</h5>
@@ -136,7 +136,8 @@ export function VaccineProgram() {
         <Title text={""} content={<EnrollmentTypes/>}/>
         <Title
             text={getMessageComponent(LANGUAGE_KEYS.ENROLLMENT_TODAY, "", {date: formatDate(new Date().toISOString())})}
-            content={<VaccinationProgress/>}/>
+            content={<VaccinationProgress/>}
+            />
         <AppointmentDetails selectedProgramId={getSelectedProgramId()}/>
     </div>;
 }
