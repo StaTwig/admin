@@ -3238,8 +3238,6 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      //checkToken(req, res, async (result) => {
-        //if (result.success) {
           const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
@@ -3373,14 +3371,6 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
           } catch (err) {
             return apiResponse.ErrorResponse(res, err.message);
           }
-        // } else {
-        //   logger.log(
-        //     "warn",
-        //     "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
-        //   );
-        //   res.status(403).json("Auth failed");
-        // }
-      //});
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -3392,8 +3382,6 @@ exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      // checkToken(req, res, async (result) => {
-      //   if (result.success) {
           const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
@@ -3523,14 +3511,6 @@ exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId,
           } catch (err) {
             return apiResponse.ErrorResponse(res, err.message);
           }
-      //   } else {
-      //     logger.log(
-      //       "warn",
-      //       "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
-      //     );
-      //     res.status(403).json("Auth failed");
-      //   }
-      // });
     } catch (err) {
       logger.log(
         "error",
