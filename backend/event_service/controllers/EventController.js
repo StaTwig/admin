@@ -4,7 +4,6 @@ const ProductModel = require('../models/ProductModel');
 const ShipmentModel = require('../models/ShipmentModel');
 
 const { validationResult, param } = require("express-validator");
-const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 require("dotenv").config();
@@ -15,7 +14,7 @@ const auth = require("../middlewares/jwt");
  * @returns {Object}
  */
 exports.getAllEvents = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const resPerPage = Number(req.query.limit) || 10; 
@@ -57,11 +56,10 @@ exports.getAllEvents = [
  * @returns {Object}
  */
 exports.deleteEventById = [
-	//auth,
+	auth,
 	param("eventID", "eventId must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
-	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
 			console.log(req.params)
