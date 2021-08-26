@@ -48,8 +48,6 @@ exports.getTransactionNotifications = [
 
 exports.createNewAlert = [
   auth,
-  body('user', 'username must not be empty.').isLength({ min: 1 }).trim(),
-  sanitizeBody('*').escape(),
   async function (req, res) {
     try {
       let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE"]
