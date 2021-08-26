@@ -18,7 +18,7 @@ import {fetchairwayBillNumber} from '../../actions/shipmentActions';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from '@material-ui/lab';
-import ModalImage from 'react-modal-image';
+//import ModalImage from 'react-modal-image';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;

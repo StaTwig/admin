@@ -61,7 +61,7 @@ inventoryDetails.sort(function(a,b){
                   </div>
                     <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'8.5%'}}>
-                         <span className="drop-pad shadow rounded-circle ">
+                         <span className="drop-pad rounded-circle ">
                          <img src={dropdownIcon} height="12" width="18" /> </span>
                   </div>                  
               {  /* <button

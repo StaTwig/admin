@@ -134,7 +134,7 @@ const EditRow = (props) => {
                     options={prods.filter(p=>p.type==categories)}
                   />
                 </div>
-                <div className="title recived-text">{productId}</div>
+                <div className="title recived-text" style={{position:"relative", top:"7px"}}>{productId}</div>
               </div>
             </div>
             <div className="col mt-1 mb-1 border-right">
@@ -142,6 +142,7 @@ const EditRow = (props) => {
                 <input
                   type="text"
                   className="form-control"
+                  style={{position:"relative", top:"3.5px"}}
                   placeholder="Manufacturer"
                   value={manufacturer}
                   disabled
@@ -154,6 +155,7 @@ const EditRow = (props) => {
                   type="text"
                   onKeyPress={numbersOnly}
                   className="form-control"
+                  style={{position:"relative", top:"3.5px"}}
                   placeholder="Enter Quantity"
                   value={quantity}
                   onChange={(e) =>
@@ -162,7 +164,7 @@ const EditRow = (props) => {
                 />
               </div>
             </div>
-            <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",display:"block"}}>
+            <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",top:"20px",display:"block"}}>
               {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name">Unit</div>}</div>
           </div>
           {inventories.length > 1 && (
