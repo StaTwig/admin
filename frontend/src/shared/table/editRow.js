@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import DropdownButton from '../dropdownButtonGroup';
-import calenderBlue from '../../assets/icons/calendar-blue.svg';
-import downArrow from '../../assets/icons/up-and-down-dark.svg';
+import React, { useState} from 'react';
 import Delete from '../../assets/icons/Delete.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,8 +6,8 @@ import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
 import qty from '../../assets/icons/TotalInventoryAdded_2.png';
 import sdate from '../../assets/icons/ShippingDate.svg';
-import Batch from '../../assets/icons/Batch.png';
-import Serial from '../../assets/icons/Serial.png';
+import Batch from '../../assets/icons/batch.png';
+import Serial from '../../assets/icons/serial.png';
 import Select from 'react-select';
 
 import './style.scss';

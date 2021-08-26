@@ -259,7 +259,10 @@ services:
     build: './frontend'
     image: 'frontend1.0'
     container_name: 'frontend'
-    restart: always    
+    restart: always 
+    environment: 
+      - "NODE_ENV=production"
+      - "ENVIRONMENT=prod"       
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
