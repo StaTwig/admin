@@ -12,7 +12,7 @@ import user from '../../../assets/icons/brand.svg';
 import Quantity from '../../../assets/icons/Quantity.png';
 import Product from '../../../assets/icons/Producttype.png';
 import date from '../../../assets/icons/ShippingDate.svg';
-import Batch from '../../../assets/icons/Batch.png';
+import Batch from '../../../assets/icons/batch.png';
 import TableFilter from './tablefilter.js';
 import axios from 'axios';
 import { config } from '../../../config';
