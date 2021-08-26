@@ -94,15 +94,15 @@ const UserDetails = (props) => {
               />
             )}
             <h6 className="text-primary 
-            pt-1 txtWrapu" style={{
+            pt-1 txtWrapu text-left" style={{
                 marginTop: '-35px',
-                marginLeft: '21px'
+                marginLeft: '21px',
               }}>
               {user?.firstName + " " + user?.lastName}
             </h6>
             <div
-              className="blockquote-footer mt-2 ml-4 txtWrapu"
-              style={{ marginLeft: '21px' }}
+              className="blockquote-footer ml-3 txtWrapu text-left"
+              style={{ marginLeft: '21px', maxWidth:'150px' }}
             >
               {user?.emailId}
             </div>
@@ -131,7 +131,7 @@ const UserDetails = (props) => {
               {user?.walletAddress}
             </a>
           </span>
-          <span className=" w-25 text-center align-self-center emailText">
+          <span className=" w-25 text-left align-self-center emailText">
             {user?.emailId}
           </span>
           <span className=" w-25 text-center align-self-center accountText font-weight-bold">
