@@ -1349,18 +1349,6 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
   auth,
   async (req, res) => {
     try {
-      // checkToken(req, res, async result => {
-      //   if (result.success) {
-      //     logger.log(
-      //       'info',
-      //       '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
-      //     );
-          const permission_request = {
-            result: result,
-            permissionRequired: ['viewPO'],
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
               const { organisationId, role } = req.user;
               const { skip, limit } = req.query;
               let currentDate = new Date();
@@ -1516,18 +1504,6 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
                 'info',
                 '<<<<< POService < POController < fetchInboundPurchaseOrders',
               );
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
-          });
-      //   } else {
-      //     logger.log(
-      //       'warn',
-      //       '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
-      //     );
-      //     res.status(403).json(result);
-      //   }
-      // });
     } catch (err) {
       logger.log(
         'error',
@@ -1542,18 +1518,6 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
   auth,
   async (req, res) => {
     try {
-      // checkToken(req, res, async result => {
-      //   if (result.success) {
-      //     logger.log(
-      //       'info',
-      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
-      //     );
-          const permission_request = {
-            result: result,
-            permissionRequired: ['viewPO'],
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
               const { organisationId, role, id } = req.user;
               const { skip, limit } = req.query;
               let currentDate = new Date();
@@ -1699,19 +1663,8 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                 'info',
                 '<<<<< POService < POController < fetchOutboundPurchaseOrders',
               );
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
-          });
-      //   } else {
-      //     logger.log(
-      //       'warn',
-      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
-      //     );
-      //     res.status(403).json(result);
-      //   }
-      // });
     } catch (err) {
+      console.log(err)
       logger.log(
         'error',
         '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
