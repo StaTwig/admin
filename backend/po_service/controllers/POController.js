@@ -1193,7 +1193,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
       const { skip, limit } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: ['viewOutboundOrders'],
+            permissionRequired:["viewOutboundOrders"]
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -1260,8 +1260,6 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                   }
                 }
               }
-
-              console.log("whereQuery ======>", whereQuery);
               try {
                 let outboundPOsCount = await RecordModel.count(whereQuery);
                 RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
@@ -1315,7 +1313,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
             }
           });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
