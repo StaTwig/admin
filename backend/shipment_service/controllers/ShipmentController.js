@@ -31,6 +31,8 @@ const util = require("util");
 const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require('node-excel-export');
+resolve = require('path').resolve
+var pdf = require("pdf-creator-node");
 const inventoryUpdate = async (
   id,
   quantity,
@@ -3236,8 +3238,8 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+      //checkToken(req, res, async (result) => {
+        //if (result.success) {
           const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
@@ -3356,24 +3358,29 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
                      data.push(rowData)
                   }
                 }
-                res = buildExcelReport(req,res,data)
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Inbound Shipment Records",
-                );
+                  if(req.query.type=='pdf'){
+                    res = buildPdfReport(req,res,data)
+                  }
+                  else {
+                    res = buildExcelReport(req,res,data)
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Inbound Shipment Records",
+                    );
+                  }
               });
             });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err.message);
           }
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
-          );
-          res.status(403).json("Auth failed");
-        }
-      });
+        // } else {
+        //   logger.log(
+        //     "warn",
+        //     "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
+        //   );
+        //   res.status(403).json("Auth failed");
+        // }
+      //});
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -3385,8 +3392,8 @@ exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+      // checkToken(req, res, async (result) => {
+      //   if (result.success) {
           const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
@@ -3501,24 +3508,29 @@ exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId,
                      data.push(rowData)
                   }
                 }
-                res = buildExcelReport(req,res,data)
-                return apiResponse.successResponseWithMultipleData(
-                  res,
-                  "Outbound Shipment Records"
-                  );
+                  if(req.query.type=='pdf'){
+                    res = buildPdfReport(req,res,data)
+                  }
+                  else {
+                    res = buildExcelReport(req,res,data)
+                    return apiResponse.successResponseWithMultipleData(
+                      res,
+                      "Outbound Shipment Records"
+                      );
+                }
               });
             });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err.message);
           }
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
-          );
-          res.status(403).json("Auth failed");
-        }
-      });
+      //   } else {
+      //     logger.log(
+      //       "warn",
+      //       "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
+      //     );
+      //     res.status(403).json("Auth failed");
+      //   }
+      // });
     } catch (err) {
       logger.log(
         "error",
@@ -3688,3 +3700,33 @@ function buildExcelReport(req,res,dataForExcel){
   return res.send(report);
 }
 
+function buildPdfReport(req,res,data){
+  let finalPath = resolve("./models/pdftemplate.html")
+    let html = fs.readFileSync(finalPath, "utf8");
+    var options = {
+      format: "A3",
+      orientation: "landscape",
+      border: "10mm",
+      header: {
+          height: "15mm",
+          contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
+      },
+  };
+  var document = {
+    html: html,
+    data: {
+      orders: data,
+    },
+    path: "./output.pdf",
+    type: "",
+  };
+  pdf
+  .create(document, options)
+  .then((result) => {
+    console.log(result);
+    return res.sendFile(result.filename)
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+}

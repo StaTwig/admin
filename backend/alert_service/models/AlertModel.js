@@ -6,6 +6,7 @@ AlertSchema = new mongoose.Schema(
     label: {
       labelId: String, 
     },
+    active : { type: Object},
     user: {
       user_id: String,
       user_name: String,
