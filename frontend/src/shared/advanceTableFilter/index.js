@@ -12,6 +12,7 @@ import "react-hot-loader/patch"
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Divider } from '@material-ui/core';
+import FilterDropDown from '../../components/filterDropDown';
 
 const StyledMenu = withStyles({
   paper: {
@@ -1162,7 +1163,20 @@ const AdvanceTableFilter = (props) => {
               <div className="d-flex  align-items-center">
                 <img src={ExportIcon} width="16" height="16" className="mr-2" />
                 <span>Export</span>
-                <img src={dropdownIcon} width="10" height="10" className="ml-2" />
+                <img 
+                  src={dropdownIcon} 
+                  width="10" height="10" 
+                  className="ml-2"
+                  onClick={() => props.setShowExportFilter(!props.showExportFilter)} 
+                />
+                {
+                  props.showExportFilter && props.exportFilterData &&
+                  <FilterDropDown
+                    data={props.exportFilterData}
+                    onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
+                    type={'export'}
+                  />
+                }
               </div>
             </button>
           </div>

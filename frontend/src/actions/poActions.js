@@ -76,7 +76,7 @@ export const addPOsFromExcel = async data => {
 
 export const getProductsByCategory = async (id) => {
   try {
-    const result = await axios.get(config().getProductsByCategoryUrl+id);
+    const result = await axios.get(config().getProductsByCategoryUrl + id);
     return result.data;
   } catch (e) {
     return [];
@@ -122,7 +122,7 @@ export const getPOs = (skip = 0, limit = 5) => {
       const result = await axios.get(
         `${config().fetchPurchaseOrderUrl}?skip=${skip}&limit=${limit}`,
       );
-      
+
       // dispatch(setReviewPos(result.data));
       dispatch(turnOff());
       return result.data.data;
@@ -133,7 +133,7 @@ export const getPOs = (skip = 0, limit = 5) => {
   };
 };
 
-export const getSentPOs = async (to, orderId, productName, deliveryLocation, dateFilter,status, skip, limit) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+export const getSentPOs = async (to, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
       `${config().fetchOutboundPurchaseOrderUrl}?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
@@ -145,15 +145,15 @@ export const getSentPOs = async (to, orderId, productName, deliveryLocation, dat
 };
 
 
-export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, dateFilter,status,skip, limit) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
-    try {
-      const result = await axios.get(
-        `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
-      );
-      return result.data;
-    } catch (e) {
-      return [];
-    }
+export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+  try {
+    const result = await axios.get(
+      `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
 };
 
 export const getProductIdDeliveryLocationsOrganisations = async () => {
@@ -236,6 +236,20 @@ export const resetEditPos = data => {
 export const getOrganizationsByTypes = async id => {
   try {
     const result = await axios.get(config().getOrganizationsTypewithauth + id);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getExportFile = async (url, value) => {
+  try {
+    const result = await axios.get(url, {
+      responseType: 'blob',
+      headers: {
+        'Accept': 'application/pdf'
+      }
+    });
     return result.data;
   } catch (e) {
     return e.response;
