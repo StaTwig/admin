@@ -421,7 +421,7 @@ const imgs = config().fetchProfileImage;
                 </div>
                 <div 
                     className="slider-item p-0"
-                    onClick={() => props.history.push('/alerts')}
+                    onClick={() => props.history.push('/settings')}
                 >
                     Settings
                 </div>
