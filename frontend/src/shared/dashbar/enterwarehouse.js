@@ -28,10 +28,10 @@ const EnterWareHouse = props => {
             //props.setDashBarData({})
           }}
         >
-          <img src={CloseIcon} alt="Close" with="30" height="30" />
+          <img src={CloseIcon} alt="Close" with="30" height="30" className="close-icon" />
         </button>
       </div>
-      <div className=" panel  mb-3 searchpanel">
+      <div className="panel mb-3 searchpanel">
         <div>{props.visible ? 'Shipment ID: '+dashBarData.id : warehouse?.warehouseName }</div>
         <div>
           <u>
@@ -136,7 +136,7 @@ const EnterWareHouse = props => {
           dashBarData?.products?.map((product, index) =>
             <Product product={product} index={index} key={index} />
           )}
-          {productArray?.length==0 && <center><h5 style={{color: "blue"}}>No Items to show</h5></center>}
+          {productArray?.length==0 && <center><h5 style={{color: "#0093E9", fontSize: "12px", textAlign:"center"}}>No Items to show</h5></center>}
       </div>
     </div>
   );
