@@ -85,28 +85,28 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="d-flex flex-column align-items-center">
           <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-success btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-success btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-primary btn-sm font-weight-bold"  color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible== "one" ? "Sent" : "Received"}</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-primary btn-sm font-weight-bold"  color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible== "one" ? "Sent" : "Received"}</Button>
             </StyledMenuItem>
 
             <StyledMenuItem>
-            <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-warning btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")}>Transit & Partially Fulfilled</Button>
+            <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-warning btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")}>Transit & Partially Fulfilled</Button>
           </StyledMenuItem>
 
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")}>Transit & Fullyfilled</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")}>Transit & Fullyfilled</Button>
         </StyledMenuItem>
 
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("FULLYFULFILLED")}>Fullyfilled</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("FULLYFULFILLED")}>Fullyfilled</Button>
           </StyledMenuItem>
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-secondary btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("REJECTED")}>Rejected</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px",borderRadius:"10px"}} class="btn btn-outline-secondary btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("REJECTED")}>Rejected</Button>
           </StyledMenuItem>
           <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+              <Button class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
           </div>
         </StyledMenu>
@@ -191,6 +191,7 @@ const AdvanceTableFilter = (props) => {
           <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
+          className="mt-3"
           id="customized-menu"
           anchorEl={inventoryStatusAnchorEl}
           keepMounted
@@ -199,16 +200,16 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="d-flex flex-column align-items-center">
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Added</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px",borderRadius:"10px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Added</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-warning btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Sent</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px",borderRadius:"10px"}} class="btn btn-outline-warning btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Sent</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-success btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}>Received</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px",borderRadius:"10px"}} class="btn btn-outline-success btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}>Received</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
+              <Button class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
           </div>
         </StyledMenu>
@@ -248,13 +249,13 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="d-flex flex-column align-items-center">
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>Shipped</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px",borderRadius:"10px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>Shipped</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("RECEIVED")}>Delivered</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px",borderRadius:"10px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("RECEIVED")}>Delivered</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+              <Button class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
           </div>
         </StyledMenu>
