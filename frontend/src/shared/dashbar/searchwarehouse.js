@@ -89,12 +89,12 @@ import { TextField } from '@material-ui/core';
                         //props.setDashBarData({})
                     }
                 }>
-                    <img src={CloseIcon} alt="Close" with="30" height="30" />
+                    <img src={CloseIcon} alt="Close" with="30" height="30" className="close-icon" />
                 </button>
             </div>
             <div className="d-flex flex-column mb-2 region">
-                <div className="form-group row mr-1">
-                  <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
+                <div className="form-group row mr-1 mt-2">
+                  <label htmlFor="shipmentId" className="mt-2 mr-3 col-3 text-left">Region</label>
                     <div className="form-control col">
                         <Autocomplete
                         value={region}
@@ -112,7 +112,7 @@ import { TextField } from '@material-ui/core';
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Country</label>
+                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-3 text-left">Country</label>
                     <div className="form-control col">
                         <Autocomplete
                         value={country}
@@ -127,7 +127,7 @@ import { TextField } from '@material-ui/core';
                     </div>
                 </div>
                 <div className="form-group mb-4 row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
+                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-3 text-left">Location</label>
                     <div className="form-control col">
                         <Autocomplete
                         value={warehouseId}
@@ -143,7 +143,7 @@ import { TextField } from '@material-ui/core';
             </div>
                 <div className="mainsearchwarehouse">
                 {warehouses.length > 0 && warehouses.map((w, index) =>
-                <div key={index} className=" panel  mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
+                <div key={index} className=" mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
                 <div className="d-flex flex-row " >
                     <ul className="mr-3">
                         <li className="mb-2 text-secondary">Country ID</li>
