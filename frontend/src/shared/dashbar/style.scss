@@ -12,7 +12,7 @@
   flex-direction: column;
   padding: 0px 20px 0 20px;
   z-index: 9;
-  top: 75px;
+  top: 70px;
   right: 0;
   width: 23vw;
   
@@ -23,7 +23,7 @@
      float: right;
    }
    .dashsearch{
-    width:270px;
+    width:330px;
    }
    .font-size-one{
      font-size: 1rem;
@@ -50,6 +50,7 @@
     }
 }
     .searchpanel {
+      margin-top: 15px;
       box-shadow: 0px 3px 6px $grey;
       border-radius: 12px;
       background: transparent linear-gradient(180deg, #0093E9 0%, #0053A8 100%) 0% 0% no-repeat padding-box;
@@ -127,6 +128,9 @@
          }
   
      .form-control {
+      ::after{
+        border-bottom: 2px solid #0093E9;
+      }
         border: none;
         background: transparent;
         // border-bottom: 2px solid #d6d6d6;
@@ -147,4 +151,28 @@
   
       
     }
+}
+.close-icon{
+  position: relative;
+  top:18px;
+  left:15px;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb:hover {
+  background: #0093E9;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb {
+  background: #555;
 }
