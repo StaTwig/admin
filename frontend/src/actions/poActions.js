@@ -245,10 +245,7 @@ export const getOrganizationsByTypes = async id => {
 export const getExportFile = async (url, value) => {
   try {
     const result = await axios.get(url, {
-      responseType: 'blob',
-      headers: {
-        'Accept': 'application/pdf'
-      }
+      responseType: 'blob'
     });
     return result.data;
   } catch (e) {
