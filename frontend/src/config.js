@@ -148,7 +148,9 @@ export function config() {
       getExportFileForInboundShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/exportOutboundShipment`,
       getExportFileForInboundPurchaseOrdersUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/exportInboundPurchaseOrders`,
-      getExportFileForOutboundPurchaseOrdersUrl:  `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/exportOutboundPurchaseOrders`
+      getExportFileForOutboundPurchaseOrdersUrl:  `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/exportOutboundPurchaseOrders`,
+      getAllManageAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/getAllAlerts`,
+      createUpdateAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/createNewAlert`,
 },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -279,7 +281,9 @@ export function config() {
       getExportFileForInboundShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
       getExportFileForInboundPurchaseOrdersUrl: `${TEST_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
-      getExportFileForOutboundPurchaseOrdersUrl:  `${TEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
+      getExportFileForOutboundPurchaseOrdersUrl:  `${TEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
+      getAllManageAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
+      createUpdateAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
 },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -401,7 +405,9 @@ export function config() {
       getExportFileForInboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
       getExportFileForInboundPurchaseOrdersUrl: `${PROD_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
-      getExportFileForOutboundPurchaseOrdersUrl:  `${PROD_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
+      getExportFileForOutboundPurchaseOrdersUrl:  `${PROD_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
+      getAllManageAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
+      createUpdateAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -530,7 +536,9 @@ export function config() {
       getExportFileForInboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipment`,
       getExportFileForInboundPurchaseOrdersUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
-      getExportFileForOutboundPurchaseOrdersUrl:  `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`
+      getExportFileForOutboundPurchaseOrdersUrl:  `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
+      getAllManageAlertsUrl: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
+      createUpdateAlertsUrl: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
     },
   };
 
