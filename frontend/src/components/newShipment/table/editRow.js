@@ -79,10 +79,11 @@ const EditRow = props => {
     //setDisabled(!disabled);
     //setEditButtonStatus(false);
   };
-  const editBatchSelected = (index, value) => {
-    let temp = BatchSelected;
-    temp[index] = value;
-    setBatchSelected([...temp]);
+  const editBatchSelected = (index, type, value) => {
+    let buffer = [...batches];
+    buffer[index][type] = value;
+    setBatches(buffer);
+    console.log(buffer)
   }
 
   const onSaveClick = (e) => {
@@ -172,15 +173,14 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
     setModelProduct(prod);
     let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}&wareId=${warehouseID}`)
     // console.log(res.data);
-    setBatches(res.data.data)
-    console.log(res.data.data)
-    let i = res.data.data.length
-    let temp = []
-    while(i--){
-      temp.push(false);
-    }
-    console.log(temp)
-    setBatchSelected(temp)
+    let buffer = res.data.data
+    buffer.forEach(element => {
+      element.selected = false;
+      element.editable = false;
+      element.immutableQuantity = element.quantity
+    });
+    setBatches(buffer)
+
   }
   const numbersOnly = (e) => {
     // Handle paste
@@ -210,7 +210,12 @@ const setQuantity = (value) => {
 }
 const editQuantity = (value, index) => {
   let buffer = [...batches];
+  if(parseInt(value) > parseInt(buffer[index].immutableQuantity)){
+    alert("quantity cannot exceed batch limit")
+    return
+  }
   buffer[index].quantity = value;
+
   setBatches(buffer);
   setQuantity(value);
   
@@ -360,7 +365,7 @@ const editQuantity = (value, index) => {
                <div>
                 <div className="rTableRow mb-1"> 
                         <input className="txt2 ml-3" type="checkbox" id={index} 
-                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); editBatchSelected(index, !BatchSelected[index]);}}>
+                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); editBatchSelected(index, "selected", !batches[index].selected);}}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
@@ -376,7 +381,7 @@ const editQuantity = (value, index) => {
                           placeholder="Quantity"
                           onKeyPress={numbersOnly}
                           value={product.quantity}
-                          disabled={disabled}
+                          disabled={!product.editable}
                           onChange={(e) => editQuantity(e.target.value, index)}
                         />
               </div>
@@ -411,8 +416,8 @@ const editQuantity = (value, index) => {
                 ) : (
                   <button
                     className="btn-sm btn-yellow d-width"
-                    disabled={!BatchSelected[index]}
-                    onClick={onEditClick}
+                    disabled={!batches[index].selected}
+                    onClick={(e) => editBatchSelected(index, "editable", !batches[index].editable)}
                   >
                     <i className="fa fa-pencil text-center"></i>
                     {/* <span className="ml-1"></span> */}

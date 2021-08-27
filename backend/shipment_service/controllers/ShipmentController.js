@@ -1874,6 +1874,7 @@ exports.updateTrackingStatus = [
       compute(event_data).then((response) => {
         console.log(response);
       });
+      return apiResponse.successResponse(res, "Status Updated");
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }

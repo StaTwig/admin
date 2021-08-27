@@ -293,7 +293,7 @@ exports.changePOStatus = [
                       $set: {poStatus :status }
                 })
                 try{
-                  let event = Event.findOne({'payloadData.data.order_id': orderID})
+                  let event = Event.findOne({'transactionId': orderID})
                   
                   if (status === "ACCEPTED")
                     event.eventType.primary = "RECEIVE";
