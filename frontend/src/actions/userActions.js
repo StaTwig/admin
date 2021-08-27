@@ -202,3 +202,22 @@ export const postUserLocation = async (data)=>{
     return e.response;
   }
 }
+
+export const getAllManageAlerts = async ()=>{
+  try{
+    const result=await axios.get(config().getAllManageAlertsUrl);
+    return result.data.data || [];
+  }catch(e){
+    console.log("error: ", e);
+    return [];
+  }
+}
+
+export const createUpdateNewAlert = async (data) => {
+  try{
+    const result=await axios.post(config().createUpdateAlertsUrl, data);
+    return result;
+  }catch(e){
+    return e.response;
+  }
+}

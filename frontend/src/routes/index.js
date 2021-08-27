@@ -48,6 +48,7 @@ import NoMatch from '../components/NoMatch';
 import ViewProduct from '../containers/viewProduct'
 
 import './style.scss';
+import SettingsContainer from '../containers/settings';
 
 const routes = (
     <Switch>
@@ -60,6 +61,7 @@ const routes = (
       <Route path="/resetPassword" component={resetPasswordPage} />
       <Route path="/landingpage" component={requireAuth(LandingPage)} />
       <Route path="/profile" component={requireAuth(Profile)} />
+      <Route path="/settings" component={requireAuth(SettingsContainer)} />
       <Route path="/adminprofile" component={requireAuth(AdminProfile)} />
       <Route path="/shipments" component={requireAuth(Shipment)} />
       <Route path="/newshipment" component={requireAuth(NewShipment)} />
