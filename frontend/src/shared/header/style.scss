@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .header {
-  height: 75px;
+  height: 85px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
@@ -347,7 +347,7 @@
     font-weight: 400;
     color: #707070;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
     background-color: transparent;
     cursor: pointer;
@@ -356,7 +356,7 @@
     @media (min-width: $xl) {
       margin: 0.5rem 0;
       padding: 0.25rem 1.5rem;
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 

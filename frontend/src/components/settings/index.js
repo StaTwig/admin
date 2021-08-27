@@ -244,6 +244,7 @@ const Settings = (props) => {
                     marginLeft: '-12px'
                   }}>
                   <li
+                    style={{marginBottom: "15px", marginTop: "10px",marginLeft: "12px"}}
                     className={
                       visible === "one" ? "nav-item-active" : "nav-item"
                     }
