@@ -208,7 +208,7 @@ const ShipmentAnalytic = props => {
           const downloadUrl = window.URL.createObjectURL(new Blob([response]));
           const link = document.createElement('a');
           link.href = downloadUrl;
-          link.setAttribute('download', `${uuid()}.${value.toLowerCase()}`); //any other extension
+          link.setAttribute('download', `${uuid()}.${value.toLowerCase() === 'excel' ? 'xlsx' : value.toLowerCase()}`); //any other extension
           document.body.appendChild(link);
           link.click();
           link.remove();
