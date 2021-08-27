@@ -63,7 +63,7 @@ const EditRow = props => {
   const [batches, setBatches] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState({});
   const [selectedIndex, setSelectedIndex] = useState();
-  const [BatchSelected, setBatchSelected] = useState(false);
+  const [BatchSelected, setBatchSelected] = useState([]);
   const closeModal = () => setShowModal(false);
   const handleOpen = () => {
     setOpen(true);
@@ -79,6 +79,11 @@ const EditRow = props => {
     //setDisabled(!disabled);
     //setEditButtonStatus(false);
   };
+  const editBatchSelected = (index, value) => {
+    let temp = BatchSelected;
+    temp[index] = value;
+    setBatchSelected([...temp]);
+  }
 
   const onSaveClick = (e) => {
     setbtn(true);
@@ -168,6 +173,14 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
     let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}&wareId=${warehouseID}`)
     // console.log(res.data);
     setBatches(res.data.data)
+    console.log(res.data.data)
+    let i = res.data.data.length
+    let temp = []
+    while(i--){
+      temp.push(false);
+    }
+    console.log(temp)
+    setBatchSelected(temp)
   }
   const numbersOnly = (e) => {
     // Handle paste
@@ -347,7 +360,7 @@ const editQuantity = (value, index) => {
                <div>
                 <div className="rTableRow mb-1"> 
                         <input className="txt2 ml-3" type="checkbox" id={index} 
-                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); setBatchSelected(!BatchSelected);}}>
+                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); editBatchSelected(index, !BatchSelected[index]);}}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
@@ -398,7 +411,7 @@ const editQuantity = (value, index) => {
                 ) : (
                   <button
                     className="btn-sm btn-yellow d-width"
-                    disabled={!BatchSelected}
+                    disabled={!BatchSelected[index]}
                     onClick={onEditClick}
                   >
                     <i className="fa fa-pencil text-center"></i>
