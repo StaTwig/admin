@@ -50,7 +50,7 @@ exports.createNewAlert = [
   auth,
   async function (req, res) {
     try {
-      let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE"]
+      let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE", "REJECT"]
       let alertSubscription = req.body.eventSecondary.split(',');
       let Alert
       Alert = await Alerts.findOneAndDelete({ username: req.user.id })
@@ -91,7 +91,7 @@ exports.createNewAlert = [
                     newAlert = {
                       id: utility.randomNumber(10),
                       event_type_primary: eventType,
-                      event_type_secondary: "SHIPMENT TRACKING",          
+                      event_type_secondary: "SHIPMENT_TRACKING",          
                       actorOrgId: req.body.actorOrgId || req.user.organisationId,
                       createdBy: req.user.id
                     }
