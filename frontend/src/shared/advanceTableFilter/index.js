@@ -1160,26 +1160,28 @@ const AdvanceTableFilter = (props) => {
                 </StyledMenuItem>
               </div>
             </StyledMenu>
-            <button className="btn btn-md btn-main-blue ml-2">
-              <div className="d-flex  align-items-center">
-                <img src={ExportIcon} width="16" height="16" className="mr-2" />
-                <span>Export</span>
-                <img 
-                  src={dropdownIcon} 
-                  width="10" height="10" 
-                  className="ml-2"
-                  onClick={() => props.setShowExportFilter(!props.showExportFilter)} 
-                />
-                {
-                  props.showExportFilter && props.exportFilterData &&
-                  <FilterDropDown
-                    data={props.exportFilterData}
-                    onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
-                    type={'export'}
+            {!props?.isReportDisabled &&
+              <button className="btn btn-md btn-main-blue ml-2">
+                <div className="d-flex  align-items-center">
+                  <img src={ExportIcon} width="16" height="16" className="mr-2" />
+                  <span>Export</span>
+                  <img
+                    src={dropdownIcon}
+                    width="10" height="10"
+                    className="ml-2"
+                    onClick={() => props.setShowExportFilter(!props.showExportFilter)}
                   />
-                }
-              </div>
-            </button>
+                  {
+                    props.showExportFilter && props.exportFilterData &&
+                    <FilterDropDown
+                      data={props.exportFilterData}
+                      onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
+                      type={'export'}
+                    />
+                  }
+                </div>
+              </button>
+            }
           </div>
         </div>
       </div>

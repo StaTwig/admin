@@ -25,7 +25,8 @@ import Sent from '../../assets/icons/Sent.png';
 import update from '../../assets/icons/Update_Status.png';
 import { config } from '../../config';
 import { getExportFile } from '../../actions/poActions';
-import uuid from 'react-uuid'
+import uuid from 'react-uuid';
+import { isAuthenticated } from '../../utils/commonHelper';
 
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
@@ -46,6 +47,8 @@ const ShipmentAnalytic = props => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
+
+  if (!isAuthenticated('inboundShipments') && !isAuthenticated('outboundShipments')) props.history.push(`/profile`);
 
   useEffect(() => {
     async function fetchData() {
@@ -230,23 +233,29 @@ const ShipmentAnalytic = props => {
             <img src={Order} width="14" height="14" className="mr-2" />
             <span>Create Purchase Order</span>
           </button> */}
+          {isAuthenticated('updateShipment') &&
           <Link to='/enterid'>
             <button className="btn btn-orange fontSize20 font-bold mr-3 chain mt-2" disabled={status == "RECEIVED"}>
               <img src={update} width="20" height="17" className="mr-2 mb-1" />
               <span><b>Update Shipment</b></span>
             </button>
           </Link>
-          <Link to="/newshipment">
-            <button className="btn btn-yellow fontSize20 font-bold mt-2">
-              <img src={Add} width="20" height="17" className="mr-2 mb-1" />
-              <span><b>Create Shipment</b></span>
-            </button>
-          </Link>
+          }
+          {isAuthenticated('createShipment') &&
+            <Link to="/newshipment">
+              <button className="btn btn-yellow fontSize20 font-bold mt-2">
+                <img src={Add} width="20" height="17" className="mr-2 mb-1" />
+                <span><b>Create Shipment</b></span>
+              </button>
+            </Link>
+          }
         </div>
       </div>
-      <Tiles {...props} setData={setData} />
+      {isAuthenticated('shipmentAnalytics') &&
+        <Tiles {...props} setData={setData} />
+      }
       <div className="mt-4">
-        <Tabs {...props} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter}/>
+        <Tabs {...props} isAuthenticated={isAuthenticated} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter}/>
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter
@@ -263,6 +272,7 @@ const ShipmentAnalytic = props => {
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          isReportDisabled={!isAuthenticated('shipmentExportReport')}
         />
       </div>
       <div className="ribben-space">

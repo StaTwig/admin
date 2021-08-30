@@ -22,6 +22,7 @@ import {
 } from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getProducts, getProductsByCategory } from '../../actions/poActions';
+import { isAuthenticated } from '../../utils/commonHelper';
 
 const NewInventory = (props) => {
   const editInventories = useSelector((state) => {
@@ -29,6 +30,8 @@ const NewInventory = (props) => {
   });
 
   const [category, setCategory] = useState([]);
+
+  if (!isAuthenticated('addInventory')) props.history.push(`/profile`);
 
   useEffect(() => {
     async function fetchData() {
@@ -256,13 +259,15 @@ const NewInventory = (props) => {
       <div className="d-flex justify-content-between mb-0">
         <h1 className="breadcrumb mt-3">ADD INVENTORY</h1>
         <div className="d-flex flex-column align-items-center">
-          <button className="btn-primary btn mt-4" onClick={() => setMenu(!menu)}>
-            <div className="d-flex  align-items-center">
-              <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span><b>Import</b></span>
-              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
-            </div>
-          </button>
+          {isAuthenticated('importInventory') &&
+            <button className="btn-primary btn mt-4" onClick={() => setMenu(!menu)}>
+              <div className="d-flex  align-items-center">
+                <img src={ExportIcon} width="16" height="16" className="mr-3" />
+                <span><b>Import</b></span>
+                <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+              </div>
+            </button>
+          }
           {menu ? (
             <div class="menu">
               <button
