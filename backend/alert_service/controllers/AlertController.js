@@ -50,7 +50,7 @@ exports.createNewAlert = [
   auth,
   async function (req, res) {
     try {
-      let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE"]
+      let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE", "REJECT"]
       let alertSubscription = req.body.eventSecondary.split(',');
       let Alert
       Alert = await Alerts.findOneAndDelete({ username: req.user.id })
