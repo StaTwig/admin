@@ -36,7 +36,7 @@ inventoryDetails.sort(function(a,b){
        {inventoryDetails.map((inventory, index) => (
          
           <div className="" key={index}>
-          <Accordion className="mb-3" style={{borderRadius:"15px", width:"103%" }}>
+          <Accordion className="mb-3 p-0 table-inventory">
            
               <AccordionSummary
                  // expand={display}
