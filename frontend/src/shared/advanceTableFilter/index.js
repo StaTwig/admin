@@ -1172,6 +1172,13 @@ const AdvanceTableFilter = (props) => {
                   width="10" height="10"
                   className="ml-2"
                 />
+                {
+                  props.showExportFilter && props.exportFilterData &&
+                  <FilterDropDown
+                    data={props.exportFilterData}
+                    onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
+                    type={'export'}
+                  />
                   {
                     props.showExportFilter && props.exportFilterData &&
                     <FilterDropDown
