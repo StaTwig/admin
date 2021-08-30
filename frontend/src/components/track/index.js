@@ -12,6 +12,7 @@ import './style.scss';
 import { formatTimeAMPM } from '../../utils/dateHelper';
 import zoomOutIcon from '../../assets/icons/smallScreen.png';
 import zoomInIcon from "../../assets/icons/fullScreen.png"
+import { isAuthenticated } from "../../utils/commonHelper";
 
 const Track = (props) => {
   const [value, setValue] = useState('');
@@ -26,6 +27,8 @@ const Track = (props) => {
     searchData,
     resetData,
   } = props;
+
+  if (!isAuthenticated('trackAndTrace')) props.history.push(`/profile`);
 
   React.useEffect(() => {
     if (props.match.params.id && shippmentChainOfCustodyData.length == 0) {

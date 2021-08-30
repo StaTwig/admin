@@ -29,6 +29,7 @@ import {
 } from "../../actions/poActions";
 import { config } from "../../config";
 import uuid from "react-uuid";
+import { isAuthenticated } from '../../utils/commonHelper';
 
 const Orders = (props) => {
   const [menu, setMenu] = useState(false);
@@ -55,6 +56,7 @@ const Orders = (props) => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
+  if (!isAuthenticated('viewInboundOrders') && !isAuthenticated('viewOutboundOrders')) props.history.push(`/profile`);
   useEffect(() => {
     async function fetchData() {
       if (visible == "one") {
@@ -411,33 +413,37 @@ const Orders = (props) => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">YOUR ORDERS</h1>
         <div className="d-flex">
-          <Link to="/neworder">
-            <button className="btn btn-orange fontSize20 font-bold mt-1">
-              <img
-                src={OrderIcon}
-                width="20"
-                height="17"
-                className="mr-2 mb-1"
-              />
-              <span style={{ color: "white" }}>
-                <b>Create New Order</b>
-              </span>
-            </button>
-          </Link>
+          {isAuthenticated('createOrder') &&
+            <Link to="/neworder">
+              <button className="btn btn-orange fontSize20 font-bold mt-1">
+                <img
+                  src={OrderIcon}
+                  width="20"
+                  height="17"
+                  className="mr-2 mb-1"
+                />
+                <span style={{ color: "white" }}>
+                  <b>Create New Order</b>
+                </span>
+              </button>
+            </Link>
+          }
 
           {/* <div className="d-flex flex-column align-items-center"> */}
-          <button
-            className="btn-primary btn fontSize20 font-bold mt-1 ml-2"
-            onClick={() => setMenu(!menu)}
-          >
-            <div className="d-flex align-items-center">
-              <img src={ExportIcon} width="16" height="16" className="mr-2" />
-              <span>
-                <b>Import</b>
-              </span>
-              <img src={dropdownIcon} width="14" height="14" className="ml-2" />
-            </div>
-          </button>
+          {isAuthenticated('importOrder') &&
+            <button
+              className="btn-primary btn fontSize20 font-bold mt-1 ml-2"
+              onClick={() => setMenu(!menu)}
+            >
+              <div className="d-flex align-items-center">
+                <img src={ExportIcon} width="16" height="16" className="mr-2" />
+                <span>
+                  <b>Import</b>
+                </span>
+                <img src={dropdownIcon} width="14" height="14" className="ml-2" />
+              </div>
+            </button>
+          }
           {menu ? (
             <div class="menu">
               <button
@@ -468,7 +474,9 @@ const Orders = (props) => {
           {/* </div> */}
         </div>
       </div>
-      <Tiles {...props} setData={setData} />
+      {isAuthenticated('orderAnalytics') &&
+        <Tiles {...props} setData={setData} />
+      }
       <div className="mt-4">
         <Tabs {...props} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter}/>
       </div>
@@ -491,6 +499,7 @@ const Orders = (props) => {
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          isReportDisabled={!isAuthenticated('orderExportReport')}
         />
       </div>
       <div className="ribben-space">

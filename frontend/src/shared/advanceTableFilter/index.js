@@ -1160,6 +1160,7 @@ const AdvanceTableFilter = (props) => {
                 </StyledMenuItem>
               </div>
             </StyledMenu>
+            {!props?.isReportDisabled &&
             <button className="btn btn-md btn-main-blue ml-2"
               onClick={() => props.setShowExportFilter(!props.showExportFilter)}
             >
@@ -1171,16 +1172,17 @@ const AdvanceTableFilter = (props) => {
                   width="10" height="10"
                   className="ml-2"
                 />
-                {
-                  props.showExportFilter && props.exportFilterData &&
-                  <FilterDropDown
-                    data={props.exportFilterData}
-                    onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
-                    type={'export'}
-                  />
-                }
-              </div>
-            </button>
+                  {
+                    props.showExportFilter && props.exportFilterData &&
+                    <FilterDropDown
+                      data={props.exportFilterData}
+                      onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
+                      type={'export'}
+                    />
+                  }
+                </div>
+              </button>
+            }
           </div>
         </div>
       </div>

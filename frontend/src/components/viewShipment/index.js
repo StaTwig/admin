@@ -23,6 +23,7 @@ import { receiveShipment } from "../../actions/shipmentActions";
 import { getAddress } from '../../utils/commonHelper';
 import { formatTimeAMPM, getLocalTime } from "../../utils/dateHelper";
 import zoomInIcon from "../../assets/icons/fullScreen.png"
+import { isAuthenticated } from "../../utils/commonHelper";
 
 const Tracing = (props) => {
   // console.log('props');
@@ -44,6 +45,9 @@ const Tracing = (props) => {
   const { id } = props.match.params;
   // console.log(id);
 
+
+  if (!isAuthenticated('viewShipment')) props.history.push(`/profile`);
+
   const closeModal = () => {
     setOpenPurchase(false);
   };
@@ -63,19 +67,22 @@ const Tracing = (props) => {
            Back to shipments
            </button>
           </Link>
-
-          <Link to={(status == "RECEIVED") ? `/viewshipment/${id}` : `/updatestatus/${id}`}>
-            <button className="btn btn-orange mr-4 mt-3 chain" disabled={status == "RECEIVED"}>
-              <img src={UpdateStatus} height="17" className="mr-2 mb-1" />
-              <b>Update Status</b>
-            </button>
-          </Link>
-          <Link to={(status == "RECEIVED") ? `/viewshipment/${id}` : `/receiveShipment/${id}`}>
-            <button className="btn btn-main-blue chain mr-3 mt-3" disabled={status == "RECEIVED"}>
-              <img src={returnShipment} width="14" height="14" className="mr-2" disabled={status == "RECEIVED"} />
-              <b>Receive Shipment</b>
-            </button>
-          </Link>
+          {isAuthenticated('updateShipment') &&
+            <Link to={(status == "RECEIVED") ? `/viewshipment/${id}` : `/updatestatus/${id}`}>
+              <button className="btn btn-orange mr-4 mt-3 chain" disabled={status == "RECEIVED"}>
+                <img src={UpdateStatus} height="17" className="mr-2 mb-1" />
+                <b>Update Status</b>
+              </button>
+            </Link>
+          }
+          {isAuthenticated('receiveShipment') &&
+            <Link to={(status == "RECEIVED") ? `/viewshipment/${id}` : `/receiveShipment/${id}`}>
+              <button className="btn btn-main-blue chain mr-3 mt-3" disabled={status == "RECEIVED"}>
+                <img src={returnShipment} width="14" height="14" className="mr-2" disabled={status == "RECEIVED"} />
+                <b>Receive Shipment</b>
+              </button>
+            </Link>
+          }
         </div>
       </div>
       <div className="row">
