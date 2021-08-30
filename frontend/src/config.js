@@ -192,7 +192,7 @@ export function config() {
       createOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      changePOStatus: `${TEST_SERVER_URL}/pomanagement/api/po/changePOStatus`,
+      changePOStatus: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${TEST_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
