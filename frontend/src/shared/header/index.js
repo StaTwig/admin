@@ -37,6 +37,9 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
+import thermoIcon from '../../assets/icons/temprature-icon.png';
+import productIcon from '../../assets/icons/inventorynew.png';
+import shipmentIcon from '../../assets/icons/TotalShipmentsCompleted.png';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -85,6 +88,19 @@ const ref = useOnclickOutside(() => {
   const usersLocation=useSelector((state)=>{
     return state.userLocation;
   });
+
+  function notifIcon(notif) {
+    if (notif.includes('TEMPERATURE')) {
+      return thermoIcon;
+    }
+    else if (notif.includes('ORDER')) {
+      return productIcon;
+    }
+    else if (notif.includes('SHIPMENT')) {
+      return shipmentIcon;
+    }
+  }
+
   // useEffect(() => {
 
     // async function getIds(){
@@ -341,20 +357,24 @@ const imgs = config().fetchProfileImage;
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
-                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px"}}>User Notifications</text> 
                     <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
                   <div className="section">
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                  </div>
                   </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
                       <div className="col-sm-10">
-                        <div>{notification.message}</div>
+                      
+                        <div>
+                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification.message)}/> {notification.message}
+                        </div>
+                    
                       </div>
                       <div className="col-sm-2">
                         <button
-                          type="button"
                           className="close"
                           aria-label="Close"
                         >
@@ -363,7 +383,6 @@ const imgs = config().fetchProfileImage;
                       </div>
                     </div>
                   </div>)}
-                  </div>
                 </React.Fragment>
               </div>
             )}
@@ -372,6 +391,7 @@ const imgs = config().fetchProfileImage;
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
+              <img className="locationimg" src={Location}/> 
 
             <div className="userName">               
            <DropdownButton
