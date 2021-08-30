@@ -91,7 +91,7 @@ exports.createNewAlert = [
                     newAlert = {
                       id: utility.randomNumber(10),
                       event_type_primary: eventType,
-                      event_type_secondary: "SHIPMENT TRACKING",          
+                      event_type_secondary: "SHIPMENT_TRACKING",          
                       actorOrgId: req.body.actorOrgId || req.user.organisationId,
                       createdBy: req.user.id
                     }
