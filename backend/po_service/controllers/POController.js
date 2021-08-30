@@ -7,6 +7,7 @@ const date = require('date-and-time');
 const moment = require('moment');
 const POModel = require('../models/POModel');
 const RecordModel = require('../models/RecordModel');
+const Event = require('../models/EventModal')
 const CounterModel = require('../models/CounterModel')
 const OrganisationModel = require('../models/OrganisationModel')
 const ProductModel = require('../models/ProductModel')
@@ -293,80 +294,15 @@ exports.changePOStatus = [
                       $set: {poStatus :status }
                 })
                 try{
-                  let event = Event.findOne({'transactionId': orderID})
-                  
+                  let event = await Event.findOne({'transactionId': orderID})
+                  console.log(event)
                   if (status === "ACCEPTED")
-                    event.eventType.primary = "RECEIVE";
-                  else event.eventType.primary = "UPDATE";
-
-                  event.eventType.description = "ORDER";
-                
-                  async function compute(event) {
-                    resultt = await logEvent(event);
-                    return resultt;     
-                  }
-                  console.log(result);
-                  compute(event).then((response) => {
-                    console.log(response);
-          
-                  });
-                }catch(error){
-                  console.log(error);
-                }
-                try{
-                  let event = Event.findOne({'payloadData.data.order_id': orderID})
-                  var evid = Math.random().toString(36).slice(2);
-                  var datee = new Date();
-                  datee = datee.toISOString();
-                  let event_data = {
-                    eventID: null,
-                    eventTime: null,
-                    transactionId: orderID,
-                    eventType: {
-                      primary: "UPDATE",
-                      description: "ORDER",
-                    },
-                    actor: {
-                      actorid: "null",
-                      actoruserid: "null",
-                    },
-                    stackholders: {
-                      ca: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                      actororg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                      secondorg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                    },
-                    payload: {
-                      data: {
-                        data: null,
-                      },
-                    },
-                  };
-                  event_data.eventID = "ev0000" + evid;
-                  event_data.eventTime = datee;
-                  event_data.eventType.primary = "UPDATE";
-                  event_data.eventType.description = "ORDER";
-                  event_data.payloaData = event.payloaData;
-                
-                  async function compute(event_data) {
-                    resultt = await logEvent(event_data);
-                    return resultt;     
-                  }
-                  console.log(result);
-                  compute(event_data).then((response) => {
-                    console.log(response);
-                  });
+                    event.eventTypePrimary = "RECEIVE";
+                  else event.eventTypePrimary = "REJECT";     
+                  event.payloadData.data = req.body       
+                  let event_body = new Event(event);
+                  let result = await event_body.save();
+                  console.log(result)
                 }catch(error){
                   console.log(error);
                 }
