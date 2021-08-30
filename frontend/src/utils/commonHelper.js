@@ -12,7 +12,5 @@ export const isAuthenticated = permission => {
   const user = useSelector(state => {
     return state.user;
   });
-  console.log(user.permissions);
-  
   return user.permissions.permissions.indexOf(permission) > -1 ? true : false;
 }
