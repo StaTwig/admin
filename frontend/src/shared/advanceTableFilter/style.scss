@@ -1,4 +1,4 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .filter {
   .filter-item {
@@ -21,9 +21,8 @@
     }
   }
 
-
-  .text{
-    color:white;
+  .text {
+    color: white;
   }
 
   .divider {
@@ -41,8 +40,8 @@
     align-items: center;
   }
 }
-.filter-dropdown{
-width:180%;
-margin-left:40px;
-margin-top:18px;
+.filter-dropdown {
+  width: 180%;
+  margin-left: 40px;
+  margin-top: 18px;
 }
