@@ -384,10 +384,10 @@ const Orders = (props) => {
     setShowExportFilter(false);
     let url = ''
     if (visible === 'one') {
-      url = `${config().getExportFileForInboundPurchaseOrdersUrl}?type=${value.toLowerCase()}`;
+      url = `${config().getExportFileForOutboundPurchaseOrdersUrl}?type=${value.toLowerCase()}`;
     }
     if (visible === 'two') {
-      url = `${config().getExportFileForOutboundPurchaseOrdersUrl}?type=${value.toLowerCase()}`;
+      url = `${config().getExportFileForInboundPurchaseOrdersUrl}?type=${value.toLowerCase()}`;
     }
 
     getExportFile(url)
