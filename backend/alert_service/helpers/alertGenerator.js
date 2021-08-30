@@ -1,6 +1,8 @@
 const Alert = require('../models/AlertModel')
 const Event = require('../models/EventModal')
 const User = require('../models/UserModel')
+const Atoms = require('../models/AtomsModel')
+const WarehouseModel = require('../models/WarehouseModel')
 const { alertMobile, alertEmail, alertPushNotification, pushNotification } = require('./alertSender')
 
 
@@ -92,4 +94,37 @@ catch(err){
     }
 }
 
+
+async function checkProductExpiry(){
+    try{
+        let params = {
+            "attributeSet.expDate" : { $gt: new Date() }
+        }
+        for await(const product of Atoms.find({ 
+            ...params
+        })){
+            productExpired(product.productId,product.quantity,product.inventoryIds)
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+async function productExpired(productId, quantity, owner){
+    for(inventoryId of owner){
+        for await(const inventory of WarehouseModel.find( 
+            { warehouseInventory : inventoryId }
+        )){
+            productExpiryEvent(productId, quantity, inventory.organisationId)
+        }
+    }
+}
+
+async function productExpiryEvent(productId, quantity, owner){
+
+}
+
+
+exports.checkProductExpiry = checkProductExpiry;
 exports.generateAlert = generateAlert;
