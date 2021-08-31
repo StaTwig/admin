@@ -73,29 +73,29 @@ const EditRow = (props) => {
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
       <h6 className="ml-3 text-info font-weight-bold">Product {idx + 1}</h6><br/>
       <div className="d-flex flex-column ml-5 itable">
-        <div className="row mb-3">
+        <div className="row mb-2">
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
-            <div className="col-3 theader text-center pro">
+            <div className={`col-3 theader text-left ml-5 ${addMore ? "product-cat-add-inventory" : "Bproduct-cat-add-inventory" }`} style={{position:"relative", left:"-70px"}}>
               <img src={Package} width="16" height="16" />
               <span className="pl-1 text-muted">Product Category*</span>
             </div>
-            <div className="col-5 theader text-center pro">
+            <div className={`col-4 theader text-left ${addMore ? "product-add-inventory" : "Bproduct-add-inventory" }`}>
               <img src={Package} width="16" height="16" />
               <span className="pl-1 text-muted">Product*</span>
             </div>
-            <div className="col theader ">
+            <div className={`col-2 theader ${addMore ? "manufacturer-add-inventory" : "Bmanufacturer-add-inventory" }`} >
               <img src={mon} width="16" height="16" />
               <span className="pl-1 text-muted">Manufacturer</span>
             </div>
-            <div className="col theader text-center pro">
+            <div className={`col theader text-left ${addMore ? "quantity-add-inventory" : "Bquantity-add-inventory" }`}>
               <img src={qty} width="25" height="16" />
               <span className="pl-1 text-muted">Quantity*</span>
             </div>
           </div>
         </div>
         <div className="row rTable">
-          <div className="rTableRow inp-grp mb-3 col row bg-white">
-            <div className="col-3 align-self-center pt-1 pb-1 border-right bg-white">
+          <div className="rTableRow inp-grp mb-3 col row bg-white p-1">
+            <div className="col-3 align-self-center pt-1 pb-1 border-right bg-white ml-1">
               <div className="square-box" />
               {/* <DropdownButton
                 name={categories}
@@ -115,11 +115,10 @@ const EditRow = (props) => {
                   onChange={(item) => handleCategoryChange(idx, item.value)}
                   options={category}
                   />
-             
             </div>
             <div className="col-4 align-self-center pt-1 pb-1 border-right bg-white">
               <div className="d-flex pt-1 flex-row justify-content-between">
-                <div className="title col-8 recived-text">
+                <div className="title col-11 recived-text" style={{position:"relative", left:"-20px"}}>
                   <Select
                     className="no-border"
                     placeholder= {<div className= "select-placeholder-text" > Product Name </div>}
@@ -131,19 +130,12 @@ const EditRow = (props) => {
                     options={prods.filter(p=>p.type==categories)}
                   />
                 </div>
-                <div className="title recived-text" style={{position:"relative", top:"7px"}}>{productId}</div>
+                <div className="title recived-text" style={{position:"relative", top:"7px", left:"-25px"}}>{productId}</div>
               </div>
             </div>
             <div className="col mt-1 mb-1 border-right">
-              <div className="">
-                <input
-                  type="text"
-                  className="form-control"
-                  style={{position:"relative", top:"3.5px"}}
-                  placeholder="Manufacturer"
-                  value={manufacturer}
-                  disabled
-                />
+              <div className="" style={{position:"relative", top:"10px",fontSize:"16px"}}>
+               {manufacturer ? manufacturer : <div className="select-placeholder-text" style={{fontSize:"14px"}} >Manufacturer</div>}
               </div>
             </div>
             <div className="col mt-1 mb-1 border-right">
@@ -151,8 +143,8 @@ const EditRow = (props) => {
                 <input
                   type="text"
                   onKeyPress={numbersOnly}
-                  className="form-control"
-                  style={{position:"relative", top:"3.5px"}}
+                  className="form-control text-left"
+                  style={{position:"relative", top:"3.5px",fontSize:"14px"}}
                   placeholder="Enter Quantity"
                   value={quantity}
                   onChange={(e) =>
@@ -162,7 +154,7 @@ const EditRow = (props) => {
               </div>
             </div>
             <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",top:"20px",display:"block"}}>
-              {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name">Unit</div>}</div>
+              {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name" style={{fontSize:"14px"}} >Unit </div>}</div>
           </div>
           {inventories.length > 1 && (
             <div className="m-2 pl-3 pt-1" style={{position:"relative", left:"10px"}}>
@@ -177,7 +169,7 @@ const EditRow = (props) => {
           {!addMore && (
             <div className="ml-2 mt-1 pl-3 mb-1 ">
               <button
-                style={{width:"200px",height:"53px"}}
+                style={{width:"150px",height:"53px"}}
                 type="button"
                 onClick={() => {
                   setAddMore(true);
@@ -186,7 +178,7 @@ const EditRow = (props) => {
                 className="btn btn-warning "
               >
                 <i className="txt-inventory" aria-hidden="true"></i>
-                <span className="txt-inventory"> + &nbsp; Add More Details</span>
+                <span className="txt-inventory"> + &nbsp; Add Details</span>
               </button>
             </div>
           )}
@@ -196,28 +188,28 @@ const EditRow = (props) => {
         <div className="d-flex ml-4 pl-2 itable w-90">
           <div className=" rTable row col-12">
             <div className="row col-12 mb-2">
-              <div className="col theader text-center pro">
+              <div className="col theader text-left pro mfg-add-inventory">
                 <img src={sdate} width="16" height="16" />
                 <span className="pl-1 text-muted">Mfg Date</span>
               </div>
-              <div className="col theader text-center pro">
+              <div className="col theader text-left pro exp-add-inventory">
                 <img src={sdate} width="16" height="16" />
                 <span className="pl-1 text-muted">Exp Date</span>
               </div>
-              <div className="col theader text-center pro">
+              <div className="col theader text-left pro">
                 <img src={Batch} width="16" height="16" />
                 <span className="pl-1 text-muted">Batch Number</span>
               </div>
-              <div className="col theader text-center pro">
+              <div className="col theader text-left pro">
                 <img src={Serial} width="16" height="16" />
                 <span className="pl-1 text-muted">Serial Numbers</span>
               </div>
             </div>
-            <div className="rTableRow inp-grp mb-3 row bg-white col-12">
+            <div className="rTableRow inp-grp mb-3 row bg-white col-12 p-1">
               <div className="col mt-1 mb-1 border-right">
                 <div className="">
                   <DatePicker
-                    className="form-control"
+                    className="form-control text-left"
                     onChange={(date) =>
                       handleInventoryChange(idx, 'manufacturingDate', date)
                     }
@@ -237,7 +229,7 @@ const EditRow = (props) => {
               <div className="col mt-1 mb-1 border-right">
                 <div className="">
                   <DatePicker
-                    className="form-control"
+                    className="form-control text-left"
                     placeholderText="Enter Exp Date"
                     dateFormat="MM/yyyy"
                     onChange={(date) =>
@@ -256,7 +248,8 @@ const EditRow = (props) => {
                 <div className="">
                   <input
                     type="text"
-                    className="form-control"
+                    style={{fontSize:"14px"}}
+                    className="form-control text-left"
                     placeholder="Enter Batch Number"
                     value={batchNumber}
                     onChange={(e) =>
@@ -269,7 +262,8 @@ const EditRow = (props) => {
                 <div className="">
                   <input
                     type="text"
-                    className="form-control"
+                    style={{fontSize:"14px"}}
+                    className="form-control text-left"
                     placeholder="Enter Serial Numbers"
                     value={serialNumber}
                     onChange={(e) =>

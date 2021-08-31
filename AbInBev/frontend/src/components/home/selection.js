@@ -1,7 +1,7 @@
 import React from 'react';
 import admin from '../../assets/admin.png';
 import userIcon from '../../assets/user.png';
-import logo from '../../assets/ABInBev.png';
+import logo from '../assets/ABInBev.png';
 import './style.scss';
 
 const Selection = (props) => {

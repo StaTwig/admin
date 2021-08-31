@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import Map from '../Map';
 import Tabs from './dashboardtabs/tabs';
+import { isAuthenticated } from "../../utils/commonHelper";
 
 const DashBoard = props => {
   const { warehouses, warehouseArr, warehouseLocation, shipment, shipmentIds, visible } = props;
   const [warehouseText, setWarehouseText] = useState('');
   const [refArr, setRefArr] = useState([]);
+
+  if (!isAuthenticated('network')) props.history.push(`/profile`);
 
   const onWarehouseChange = v => {
     setWarehouseText(v);

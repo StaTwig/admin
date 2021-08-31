@@ -29,7 +29,7 @@ const VerifyContainer = props => {
          const decoded = jwt_decode(token);
          // Set user and isAuthenticated
          localStorage.setItem('theLedgerToken', token);
-         dispatch(setCurrentUser(decoded));
+        dispatch(setCurrentUser(decoded));
         props.history.push(`/overview`);
       } else {
         const err = result.data.message;
