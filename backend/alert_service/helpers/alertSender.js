@@ -28,7 +28,7 @@ function eventToHtml(event){
 function pushNotification(event,userId,type, transactionId){
     try{
         const content = eventToData(event,"mobile")
-        var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId, eventType: event.eventTypeDesc, transactionId: transactionId});
+        var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId, eventType: event.eventTypeDesc, transactionId: event.transactionId});
         console.log(notification);
         if(type == 'ALERT') notification.type = 'ALERT';
         else notification.type = 'TRANSACTION'
