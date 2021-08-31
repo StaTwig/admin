@@ -1,6 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .productinventory {
+  margin-top:5px;
   padding-right: 6rem;
   padding-left: 4rem;
   //overflow: hidden;
@@ -9,7 +10,7 @@
     padding-left: 10px;
   }
 .breadcrumb{
-  margin-top:-22px;
+  margin-top:-10px;
   margin-left:-5px;
 }
 
@@ -17,7 +18,7 @@
     position: absolute;
     left: 0;
     right: -5px;
-    background-color: #eaeaea;
+    background-color: #EAEAEA;
     .filter{
       margin-left: 8rem;
       margin-right: 0rem;
@@ -30,7 +31,8 @@
   }
 
   .ribbon-space {
-    margin-top: 4rem;
+    margin-top: 5rem;
+    padding: 0px 20px 0px 20px;
   }
 
   .txt{
@@ -63,7 +65,7 @@
 
   .active{
     box-shadow: 0px 3px 6px $grey;
-    background-color: #d6d6d6 !important;
+    background-color: #e8f4f8 !important;
   }
 
   .font-small{
@@ -242,4 +244,24 @@
   //table-layout:fixed;
 
 }
+}
+.bttn1-blue {
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  padding: 5px 8px;
+  margin: 8px ;
+  font-size: 14px;
+  cursor: pointer;
+  float: right;
+}
+.blue-primary {
+  border-color: #0093E9;
+  color: #0093E9;
+}
+
+.blue-primary:hover {
+  background: #0093E9;
+  color: white;
 }

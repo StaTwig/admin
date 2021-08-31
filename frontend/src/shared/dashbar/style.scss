@@ -170,10 +170,12 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb:hover {
-  background: #0093E9;
+  background: #919191;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb {
-  background: #555;
+  background: #A8A8A8;
+  border-radius: 10px;
 }
