@@ -71,7 +71,7 @@ const ProductInventory = props => {
         <Link to="/addNewCategory">
             <button className="btn btn-yellow mr-3" style={{position:"relative", top:"-15px"}}>
               <img src={Add} width="13" height="13" className="mr-2 mb-1" />
-              <span>Add New Category</span>
+              <span><b>Add New Category</b></span>
             </button>
           </Link>
         </div>
@@ -93,22 +93,22 @@ const ProductInventory = props => {
       </div>
         }
       <div className="row">
-        <div className="p-3 rounded full-width-ribbon">
+        <div className="p-2 mt-3 rounded full-width-ribbon">
           <div className="row filter">
             <div className="col-3">
-              <img src={Product} width="24" height="24" alt="Product Name" />
+              <img src={Product} width="16" height="16" alt="Product Name" />
               <span className="ml-2 font-small">Product Name</span>
             </div>
             <div className="col-3">
-              <img src={Quantity} width="35" height="24" alt="Product Category" />
+              <img src={Quantity} width="25" height="16" alt="Product Category" />
               <span className="ml-2 font-small">Product Category</span>
             </div>
             <div className="col-3">
-              <img src={user} width="16" height="24" alt="Manufacturer" />
+              <img src={user} width="16" height="16" alt="Manufacturer" />
               <span className="ml-2 font-small">Manufacturer</span>
             </div>
             <div className="col-2">
-              <img src={Quantity} width="35" height="24" alt="Quantity" />
+              <img src={Quantity} width="25" height="16" alt="Quantity" />
               <span className="ml-2 font-small">Quantity</span>
             </div>
           </div>
@@ -116,15 +116,14 @@ const ProductInventory = props => {
         {
           console.log(data)
         }
-        <div className="ribbon-space col p-3">
+        <div className="ribbon-space col">
           {data.map((inv, i) => 
             <div key={i} className="col mb-3 rounded row bg-white shadow">
-              <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
+              <div className="col-3 txt ">{inv.products.name?inv.products.name:"N/A"}</div>
               <div className="col-3 txt1">{inv.products.type ? inv.products.type:"N/A"}</div>
               <div className="col-2 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
               <div className="col-2 txt1 text-right">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-              <div className="col-2 mb-3">
-              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary mt-3 ml-5">Show {more[i] ? `less` :`more`}</button></div>
+              <div className="col"><button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="bttn1-blue blue-primary">Show more</button></div>
               </div>
             // </div>
           )}
