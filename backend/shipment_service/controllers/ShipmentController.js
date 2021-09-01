@@ -1888,11 +1888,10 @@ exports.chainOfCustody = [
           const { role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewShipment',
+            permissionRequired: ['viewShipment'],
           };
         checkPermissions(permission_request, async permissionResult => {
                 if (permissionResult.success) {
-                    var chainOfCustody = [];
                     var poDetails = "";
                     const id = req.query.shipmentId;
                     if (id.includes("PO")) {
