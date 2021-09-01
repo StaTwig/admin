@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import searchingIcon from '../../assets/icons/search.png';   //'../../assets/icons/search_head.svg'
 import bellIcon from '../../assets/icons/notification_blue.png';
 import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
-import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
 import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation, postUserLocation } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
 //import dropdownIcon from '../../assets/icons/drop-down.png';
-import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification, getImage } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from 'react-cool-onclickoutside';
@@ -28,10 +25,7 @@ import { getOrderIds} from "../../actions/poActions";
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
-import { resetShipments } from '../../actions/shipmentActions';
-import { userLocationReducer } from '../../reducers/userLocationReducer';
 import setAuthToken from '../../utils/setAuthToken';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -213,6 +207,18 @@ const ref = useOnclickOutside(() => {
   const profile = useSelector(state => {
     return state.user;
   });
+
+if(profile.photoId!= null)
+{
+  getImage(profile.photoId).then(r=>{
+    const reader = new window.FileReader();
+    reader.readAsDataURL(r.data); 
+    reader.onload = function () {
+      setImage(reader.result);
+    }
+   })
+};
+
   async function changeNotifications (value){
     const response = await axios.get(`${config().getAlerts}${value}`);
     console.log(response.data.data)
@@ -224,7 +230,6 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       // const response = await getNotifications();
       const response = await axios.get(`${config().getAlerts}${alertType}`);
-      console.log(response.data.data)
       setNotifications(response.data.data);
       
       const warehouses = await getActiveWareHouses();
@@ -235,26 +240,17 @@ const ref = useOnclickOutside(() => {
           ...item
         };
       }));
-      // console.log("usersLocation",usersLocation);
     
       if(localStorage.getItem("location")!=null){
-        //setLocation(prod=>JSON.parse(localStorage.getItem("location")));
+        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
       else {
        setLocation(prod=>warehouses[0]);
         localStorage.setItem('location', JSON.stringify(warehouses[0]));
       }
-      const r = await getImage(profile.photoId);
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data); 
-      reader.onload = function () {
-        setImage(reader.result);
-      }
-
     }
     fetchApi();
-    
-  }, []);
+  },[]);
 
   const handleLocation=async(item)=>{
     setLocation(item);
@@ -396,7 +392,6 @@ const imgs = config().fetchProfileImage;
             <div className="userName">               
            <DropdownButton
             name={location?.title+"\n"+location?.warehouseAddress?.city+","+location?.warehouseAddress?.country}
-            // name={location?.title}
             arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
@@ -411,7 +406,7 @@ const imgs = config().fetchProfileImage;
 
           <div className="userPic">
             <img
-              src={`${imgs}${profile.photoId}` ? `${image}` : user }
+              src={`${image}`}
               alt="profile"
               className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}` }
               onClick={() => setMenu(!menu) }
