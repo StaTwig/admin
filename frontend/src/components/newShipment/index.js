@@ -42,7 +42,7 @@ const NewShipment = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [fetchdisabled, setfetchdisabled] = useState(false);
   const [pofetchdisabled, setpofetchdisabled] = useState(false);
-  
+  const [FromLocationSelected, setFromLocationSelected] = useState(false)
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
@@ -923,6 +923,7 @@ if (!error) {
                             onWarehouseChange(v.warehouseInventory);
                             console.log(v.id)
                             setSelectedWarehouse(v.id)
+                            setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
                             // console.log(v.value)
@@ -1374,7 +1375,7 @@ if (!error) {
                   Cancel
                 </button>
 
-                <button className="btn btn-orange fontSize20 font-bold">
+                <button disabled={!FromLocationSelected} className="btn btn-orange fontSize20 font-bold">
                   <img src={Add} width="20" height="17" className="mr-2 mb-1" />
                   <span>Create Shipment</span>
                 </button>
