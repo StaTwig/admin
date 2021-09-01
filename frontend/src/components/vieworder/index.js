@@ -12,6 +12,7 @@ const ViewOrder = props => {
   //console.log("vieworder",order);
   const [alertMessage, setAlertMessage] = useState({});
   if (!isAuthenticated('viewPO')) props.history.push(`/profile`);
+  const isEnabled = isAuthenticated('acceptRejectOrder');
   const user = useSelector((state) => {
     return state.user;
   });
@@ -70,14 +71,15 @@ const onPOStatusChange = async status => {
 
 {order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED' ? (
           <div className="d-flex">
-            {isAuthenticated('acceptRejectOrder') &&
+            {isEnabled &&
+              <>
               <Link to={`/orders`}>
                 <button className="btn btn-success fontSize20 font-bold mr-4 mt-2" onClick={() => onPOStatusChange('ACCEPTED')} >Accept Order</button></Link>
-            }
-            {isAuthenticated('acceptRejectOrder') &&
+            
               <Link to={`/orders`}>
                 <button className="btn btn-orange fontSize20 font-bold mr-4 mt-2" onClick={() => onPOStatusChange('REJECTED')} >Reject Order</button>
               </Link>
+              </>
             }
             <Link to={`/orders`}>
             <button className="btn btn-outline-primary mt-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
