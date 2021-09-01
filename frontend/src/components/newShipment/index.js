@@ -453,8 +453,10 @@ if (!error) {
       newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
-      setProducts(warehouse.map(item => {
+      let buffer = warehouse.filter(item => item.inventoryDetails.quantity > 0)
+      setProducts(buffer.map(item => {
         // console.log(item.products.name)
+       
                                       return {
                                         value: item.products.name,
                                         label: item.products.name,
