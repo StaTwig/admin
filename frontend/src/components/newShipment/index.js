@@ -23,7 +23,7 @@ import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from 'react-select';
 import {getOrganizationsTypewithauth} from '../../actions/userActions';
-import { getProducts, getProductsByCategory } from "../../actions/poActions";
+import { getProducts, getProductsByCategory, searchProduct } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { TextField } from "@material-ui/core";
@@ -53,6 +53,7 @@ const NewShipment = (props) => {
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
   );
+  const [selectedWarehouse, setSelectedWarehouse] = useState("")
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
   );
@@ -446,17 +447,18 @@ if (!error) {
   };
   const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
     try {
-      const warehouse = await getProductsByCategory(value);
+      const warehouse = await searchProduct(value, selectedWarehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
       newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
-      setProducts(warehouse.data.map(item => {
+      setProducts(warehouse.map(item => {
+        // console.log(item.products.name)
                                       return {
-                                        value: item.name,
-                                        label: item.name,
-                                        ...item
+                                        value: item.products.name,
+                                        label: item.products.name,
+                                        ...item.products
                                       };
                                     }));
     } catch (err) {
@@ -917,6 +919,8 @@ if (!error) {
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
                             onWarehouseChange(v.warehouseInventory);
+                            console.log(v.id)
+                            setSelectedWarehouse(v.id)
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
                             // console.log(v.value)

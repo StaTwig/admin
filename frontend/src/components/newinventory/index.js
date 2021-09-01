@@ -363,9 +363,9 @@ const NewInventory = (props) => {
           />
         </Modal>
       )}
-      {errorMessage && 
+      {/* {errorMessage && 
         <div className=""> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-        }
+        } */}
     </div>
   );
 };

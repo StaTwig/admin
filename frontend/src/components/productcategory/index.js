@@ -14,11 +14,11 @@ const ProductCategory = props => {
     <div className="productcategory">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">PRODUCT CATEGORY</h1>
-        <div className="d-flex mr-5">
+        <div className="d-flex mr-5" style={{position:"relative", left:"-30px"}}>
           <Link to="/addNewCategory">
             <button className="btn btn-yellow">
               <img src={Add} width="13" height="13" className="mr-2" />
-              <span>Add New Category</span>
+              <span><b>Add New Category</b></span>
             </button>
           </Link>
         </div>
