@@ -83,6 +83,16 @@ export const getProductsByCategory = async (id) => {
   }
 };
 
+export const searchProduct = async (id, warehouseId) => {
+  try {
+    const result = await axios.get(config().searchProduct + '&productType=' + id + '&warehouseId=' + warehouseId);
+    console.log(result.data.data)
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getManufacturers = async () => {
   try {
     const result = await axios.get(config().getManufacturers);
