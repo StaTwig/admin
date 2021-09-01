@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.13
+FROM node:lts
 
 WORKDIR /src/utils/event_logger
 

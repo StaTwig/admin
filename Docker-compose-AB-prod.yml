@@ -13,6 +13,15 @@ services:
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=false      
+
   advancedanalytics:
     build: './backend/advanced_analytics_service'
     image: 'advanced_analytics_service1.0'
@@ -20,6 +29,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env
+    depends_on: 
+      - cache  
     environment:
       - REDIS_URL=redis://cache          
     labels:
@@ -30,15 +41,6 @@ services:
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
       
-  cache:
-    image: "redis"
-    container_name: "cache"
-    restart: always
-    ports:
-      - "6379:6379"
-    labels:
-      - traefik.enable=false
-
   alert:
     build: './backend/alert_service'
     image: 'alert_service1.0'
@@ -46,6 +48,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -86,6 +90,25 @@ services:
       - "traefik.http.routers.blockchain.tls=true"
       - "traefik.http.routers.blockchain.tls.certresolver=lets-encrypt"
 
+  employee:
+    build: 
+      context: .
+      dockerfile: backend/employee_service/Dockerfile
+    image: 'employee_service1.0'
+    container_name: 'employee_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env    
+    depends_on: 
+      - cache     
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee.entrypoints=websecure"
+      - "traefik.http.routers.employee.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/usermanagement/`)"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"      
+
   event:
     build: './backend/event_service'
     image: 'event_service1.0'
@@ -110,6 +133,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -125,6 +150,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -157,6 +184,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -172,13 +201,32 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.product.entrypoints=websecure"
       - "traefik.http.routers.product.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/productmanagement/`)"
       - "traefik.http.routers.product.tls=true"
-      - "traefik.http.routers.product.tls.certresolver=lets-encrypt"       
+      - "traefik.http.routers.product.tls.certresolver=lets-encrypt"   
+
+  rbac:
+    build: './backend/rbac_service'
+    image: 'rbac_service1.0'
+    container_name: 'rbac_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env    
+    depends_on: 
+      - cache 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.rbac.entrypoints=websecure"
+      - "traefik.http.routers.rbac.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/rbacmanagement/`)"
+      - "traefik.http.routers.rbac.tls=true"
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"          
 
   shipment:
     build: 
@@ -189,6 +237,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -197,38 +247,6 @@ services:
       - "traefik.http.routers.shipment.tls=true"
       - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
 
-  rbac:
-    build: './backend/rbac_service'
-    image: 'rbac_service1.0'
-    container_name: 'rbac_service1.0'
-    restart: always
-    env_file:
-      - ./env/ledger.env    
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.rbac.entrypoints=websecure"
-      - "traefik.http.routers.rbac.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/rbacmanagement/`)"
-      - "traefik.http.routers.rbac.tls=true"
-      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
-
-  employee:
-    build: 
-      context: .
-      dockerfile: backend/employee_service/Dockerfile
-    image: 'employee_service1.0'
-    container_name: 'employee_service1.0'
-    restart: always
-    env_file:
-      - ./env/ledger.env    
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/usermanagement/`)"
-      - "traefik.http.routers.employee.tls=true"
-      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
-
   shippingorder:
     build: './backend/shippingOrder_service'
     image: 'shippingorder_service1.0'
@@ -236,6 +254,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env    
+    depends_on: 
+      - cache 
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -264,6 +284,9 @@ services:
     image: 'frontend1.0'
     container_name: 'frontend'
     restart: always  
+    environment: 
+      - "NODE_ENV=production"
+      - "ENVIRONMENT=abinbevprod"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"

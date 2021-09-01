@@ -26,7 +26,7 @@ export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
 export function config() {
   const confs = {
-    ainbevprod: {
+    abinbevprod: {
       loginUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/register`,
@@ -37,7 +37,6 @@ export function config() {
       updateProfileUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       getOrganizationsByType: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?type=`,
       getOrganizationsByTypeAbInBev: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/abinbev/getOrganizationsByType?type=`,
-
       upload: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/upload`,
       getAnalyticsUrl: `${ABINBEVPROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl: `${ABINBEVPROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -74,13 +73,11 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       getInventoryProductsUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryProductsByPlatform`,
-
       getAllStates: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
       getOrganizationInfoByID: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationInfoByID`,
       uploadSalesData: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/uploadSalesData`,
-
       trackShipment: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -106,7 +103,7 @@ export function config() {
       getSupplierPerfomance: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
       getStatsBySKUOrgTypeUrl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
     },
-    ainbevtest: {
+    abinbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/register`,
@@ -117,7 +114,6 @@ export function config() {
       updateProfileUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       getOrganizationsByType: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?type=`,
       getOrganizationsByTypeAbInBev: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/abinbev/getOrganizationsByType?type=`,
-
       upload: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/upload`,
       getAnalyticsUrl: `${ABINBEVTEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl: `${ABINBEVTEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -154,7 +150,6 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       getInventoryProductsUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryProductsByPlatform`,
-
       getAllStates: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
@@ -187,7 +182,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'ainbevtest'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'abinbevtest'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
