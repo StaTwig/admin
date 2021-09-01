@@ -2842,22 +2842,37 @@ exports.autoCompleteSuggestions = [
     try {
       const { searchString  } = req.query;
        
-        const suggestions = await RecordModel.aggregate([
+        const suggestions1 = await RecordModel.aggregate([
           {$project: { _id: 0, value: "$id", record_type: "order"}},
           {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
-          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
-          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
-          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
-
-          {$match: {"value": {$regex: searchString ? searchString: ""} }},
-          {$limit: 10},
+          {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+          {$limit: 5},
           { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
   ])
           .sort({ createdAt: -1 })
+
+          const suggestions2 = await RecordModel.aggregate([
+            {$project: { _id: 0, value: "$id", record_type: "order"}},
+            {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}},   
+            {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+            {$limit: 5},
+            { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
+    ])
+            .sort({ createdAt: -1 })
+
+            const suggestions3 = await RecordModel.aggregate([
+              {$project: { _id: 0, value: "$id", record_type: "order"}},
+              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
+              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
+              {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+              {$limit: 5},
+              { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
+      ])
+              .sort({ createdAt: -1 })
         return apiResponse.successResponseWithData(
           res,
           "Autocorrect Suggestions",
-          suggestions
+          [...suggestions1, ...suggestions2, ...suggestions3]
         );
     } catch (err) {
       console.log(err);
