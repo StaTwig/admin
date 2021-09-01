@@ -421,9 +421,9 @@ exports.createShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            const po_product_quantity =
+            const po_product_quantity = 
               product.productQuantity || product.quantity;
-            const shipment_product_qty = p.productQuantity || p.quantity;
+            const shipment_product_qty = p.productQuantityShipped || p.productQuantity || p.quantity;
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
