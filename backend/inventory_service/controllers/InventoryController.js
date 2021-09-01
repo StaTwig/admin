@@ -729,6 +729,8 @@ exports.addProductsToInventory = [
               res,
               "Duplicate Serial Numbers found"
             );
+            var duplicateBatch = false;
+            var duplicateBatchNo = "";
           await utility.asyncForEach(products, async (product) => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({
@@ -838,6 +840,22 @@ exports.addProductsToInventory = [
               };
               atomsArray.push(atom);
             }
+            for(let i = 0; i< atomsArray.length; i++){
+              let res = await AtomModel.findOne({"batchNumbers": atomsArray[i].batchNumbers[0],"inventoryIds": warehouse.warehouseInventory})
+              console.log(res)
+              if(!res){
+                continue;
+              }
+              if(res){
+                duplicateBatch = true;
+                duplicateBatchNo = res.batchNumbers[0];
+                break;
+              }
+            }
+
+
+
+            
 
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -854,6 +872,9 @@ exports.addProductsToInventory = [
              }
            });*/
           });
+          if(duplicateBatch){
+            return apiResponse.ErrorResponse(res,  `A batch with batch number ${duplicateBatchNo} exists in the inventory`);
+          }
           var datee = new Date();
           datee = datee.toISOString();
           var evid = Math.random().toString(36).slice(2);
