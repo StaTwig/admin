@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import searchingIcon from '../../assets/icons/search.png';   //'../../assets/icons/search_head.svg'
 import bellIcon from '../../assets/icons/notification_blue.png';
 import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
-import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
 import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation, postUserLocation } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
 //import dropdownIcon from '../../assets/icons/drop-down.png';
-import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification, getImage } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from 'react-cool-onclickoutside';
@@ -28,15 +25,15 @@ import { getOrderIds} from "../../actions/poActions";
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
-import { resetShipments } from '../../actions/shipmentActions';
-import { userLocationReducer } from '../../reducers/userLocationReducer';
 import setAuthToken from '../../utils/setAuthToken';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
+import thermoIcon from '../../assets/icons/temprature-icon.png';
+import productIcon from '../../assets/icons/inventorynew.png';
+import shipmentIcon from '../../assets/icons/TotalShipmentsCompleted.png';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -85,6 +82,19 @@ const ref = useOnclickOutside(() => {
   const usersLocation=useSelector((state)=>{
     return state.userLocation;
   });
+
+  function notifIcon(notif) {
+    if (notif.includes('TEMPERATURE')) {
+      return thermoIcon;
+    }
+    else if (notif.includes('ORDER')) {
+      return productIcon;
+    }
+    else if (notif.includes('SHIPMENT')) {
+      return shipmentIcon;
+    }
+  }
+
   // useEffect(() => {
 
     // async function getIds(){
@@ -197,6 +207,18 @@ const ref = useOnclickOutside(() => {
   const profile = useSelector(state => {
     return state.user;
   });
+
+if(profile.photoId!= null)
+{
+  getImage(profile.photoId).then(r=>{
+    const reader = new window.FileReader();
+    reader.readAsDataURL(r.data); 
+    reader.onload = function () {
+      setImage(reader.result);
+    }
+   })
+};
+
   async function changeNotifications (value){
     const response = await axios.get(`${config().getAlerts}${value}`);
     console.log(response.data.data)
@@ -208,7 +230,6 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       // const response = await getNotifications();
       const response = await axios.get(`${config().getAlerts}${alertType}`);
-      console.log(response.data.data)
       setNotifications(response.data.data);
       
       const warehouses = await getActiveWareHouses();
@@ -219,26 +240,17 @@ const ref = useOnclickOutside(() => {
           ...item
         };
       }));
-      // console.log("usersLocation",usersLocation);
     
       if(localStorage.getItem("location")!=null){
-        //setLocation(prod=>JSON.parse(localStorage.getItem("location")));
+        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
       else {
        setLocation(prod=>warehouses[0]);
         localStorage.setItem('location', JSON.stringify(warehouses[0]));
       }
-      const r = await getImage(profile.photoId);
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data); 
-      reader.onload = function () {
-        setImage(reader.result);
-      }
-
     }
     fetchApi();
-    
-  }, []);
+  },[]);
 
   const handleLocation=async(item)=>{
     setLocation(item);
@@ -341,20 +353,24 @@ const imgs = config().fetchProfileImage;
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
-                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px"}}>User Notifications</text> 
                     <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
                   <div className="section">
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                  </div>
                   </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
                       <div className="col-sm-10">
-                        <div>{notification.message}</div>
+                      
+                        <div>
+                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification.message)}/> {notification.message}
+                        </div>
+                    
                       </div>
                       <div className="col-sm-2">
                         <button
-                          type="button"
                           className="close"
                           aria-label="Close"
                         >
@@ -363,7 +379,6 @@ const imgs = config().fetchProfileImage;
                       </div>
                     </div>
                   </div>)}
-                  </div>
                 </React.Fragment>
               </div>
             )}
@@ -372,11 +387,11 @@ const imgs = config().fetchProfileImage;
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
+              <img className="locationimg" src={Location}/> 
 
             <div className="userName">               
            <DropdownButton
             name={location?.title+"\n"+location?.warehouseAddress?.city+","+location?.warehouseAddress?.country}
-            // name={location?.title}
             arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
@@ -391,7 +406,7 @@ const imgs = config().fetchProfileImage;
 
           <div className="userPic">
             <img
-              src={`${imgs}${profile.photoId}` ? `${image}` : user }
+              src={`${image}`}
               alt="profile"
               className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}` }
               onClick={() => setMenu(!menu) }

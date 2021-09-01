@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import infoIcon from "../../assets/icons/info.png";
+import Modal from "../../shared/modal";
+import SuccessPopUp from "./PopUp/successPopUp";
 
 import {
   createUpdateNewAlert,
@@ -31,6 +33,7 @@ const Settings = (props) => {
     useState(false);
   const [showToolTipForShippingAlerts, setShowToolTipForShippingAlerts] =
     useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const setIndicatorValuesForTooltipPanel = (type) => {
     if (type === "orders_alerts") {
@@ -183,6 +186,11 @@ const Settings = (props) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  
+  const closeModal = () => {
+    setShowModal(false);
+    props.history.push("/overview");
   };
 
   console.log("createNewAlertString: ", alertsObj);
@@ -437,11 +445,21 @@ const Settings = (props) => {
                 <button
                   className="btn-primary btn"
                   disabled={alertsObj.eventSecondary ? false : true}
-                  onClick={() => createNewAlert()}
+                  onClick={() => {setShowModal(true); createNewAlert()}}
                 >
                   <span>Save</span>
                 </button>
               </div>
+              {showModal && (
+                <Modal
+                  close={() => closeModal()}
+                  size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+                >
+                  <SuccessPopUp
+                    onHide={closeModal} //FailurePopUp
+                  />
+                </Modal>
+              )}
             </div>
           </div>
         </div>

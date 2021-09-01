@@ -19,7 +19,8 @@ import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import Quantity from '../../assets/icons/Quantity.png';
 import Product from '../../assets/icons/Producttype.png';import {useDispatch, useSelector} from "react-redux";
-import {getInventories, resetInventories, getInventoryDetails} from "../../actions/inventoryActions";
+import { getInventories, resetInventories, getInventoryDetails } from "../../actions/inventoryActions";
+import { isAuthenticated } from '../../utils/commonHelper';
 
 const Inventory = props => {
   const headers = {
@@ -40,6 +41,7 @@ const Inventory = props => {
     
   };
 
+  if (!isAuthenticated('viewInventory')) props.history.push(`/profile`);
   const tableHeaders = {
     coloumn1: 'Product Name',
     // coloumn2: 'Manufacturer',
@@ -57,8 +59,9 @@ const Inventory = props => {
   const dispatch = useDispatch();
   /* const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];*/
-  const colors = ["#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc","#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A","#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc",
-                   "#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A","#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc","#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A" ];
+  const colors = ["#D8E5FB","#FFEF83","#DFF1F2","#EBDDED","#D9E5EF","#FFC18C","#F1DDC6","#BCFFF2","#FFD0CA","#63B7AF","#FFCB91","#FFEFA1","#94EBCD","#6DDCCF","#FFE194","#E8F6EF","#B8DFD8",
+                  "#D8E5FB","#FFEF83","#DFF1F2","#EBDDED","#D9E5EF","#FFC18C","#F1DDC6","#BCFFF2","#FFD0CA","#63B7AF","#FFCB91","#FFEFA1","#94EBCD","#6DDCCF","#FFE194","#E8F6EF","#B8DFD8",
+                  "#D8E5FB","#FFEF83","#DFF1F2","#EBDDED","#D9E5EF","#FFC18C","#F1DDC6","#BCFFF2","#FFD0CA","#63B7AF","#FFCB91","#FFEFA1","#94EBCD","#6DDCCF","#FFE194","#E8F6EF","#B8DFD8",];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
         // useEffect(() => {
@@ -162,14 +165,17 @@ const Inventory = props => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
-          <Link to="/newinventory">
-            <button className="btn btn-yellow mt-2">
-              <img src={Add} width="13" height="13" className="mr-2" />
-              <span><b>Add Inventory</b></span>
-            </button>
-          </Link>
+          {isAuthenticated('addInventory') &&
+            <Link to="/newinventory">
+              <button className="btn btn-yellow mt-2">
+                <img src={Add} width="13" height="13" className="mr-2" />
+                <span><b>Add Inventory</b></span>
+              </button>
+            </Link>
+          }
         </div>
       </div>
+      {isAuthenticated('inventoryAnalytics') &&
       <div className="row mb-4">
         <div className="col">
           <Link to="/productcategory">
@@ -344,9 +350,11 @@ const Inventory = props => {
           </Link>
         </div>
       </div>
+      }
       <div className="full-width-ribben">
         
-      <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
+        <TableFilter
+          isReportDisabled={!isAuthenticated('inventoryExportReport')} data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
         fb="80%"/>
       </div>
       <div className="ribben-space">
@@ -355,17 +363,18 @@ const Inventory = props => {
             <Table data={tableHeaders} {...props} colors={colors}inventoryCount ={props.inventoriesCount} onPageChange={onPageChange} />
           </div>
           <div className="col-sm-12 col-xl-3">
+            {isAuthenticated('viewProductList') &&
             <div className="list-container">
-              <div className="d-flex justify-content-between align-items-center ml-4">
+              <div className="d-flex justify-content-between align-items-center ml-3">
                 <h4><b>Product List</b></h4>
                 <Link to="/productcategory">
-                  <button className="btn btn-link mr-3"><b>View all</b></button>
+                  <button className="btn btn-link mr-1"><b>View all</b></button>
                 </Link>
               </div>
               {
                 console.log(productsList)
               }
-              <div className="overflow" style={{height:"800px",overflowX:"hidden"}}>
+              <div className="overflow ml-3" style={{height:"750px",overflowX:"hidden"}}>
               <div className="row">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
@@ -386,6 +395,7 @@ const Inventory = props => {
 
               </div>
             </div>
+            }
           </div>
         </div>
       </div>

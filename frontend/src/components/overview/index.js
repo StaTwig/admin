@@ -13,7 +13,8 @@ import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
 import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import TotalInventoryAdded from '../../assets/icons/TotalProductCategory.png';
-import AverageOrderProcessingTime from  '../../assets/icons/Av_or_pr_ti.png';
+import AverageOrderProcessingTime from '../../assets/icons/Av_or_pr_ti.png';
+import { isAuthenticated } from "../../utils/commonHelper";
 
 import './style.scss';
 
@@ -21,6 +22,7 @@ const Overview = props => {
   const [visible, setvisible] = useState('one');
   const [shpmnts, setShpmnts] = useState([]);
   const [overviewAnalytics, setOverViewAnalytics] = useState({});
+  if (!isAuthenticated('overview')) props.history.push(`/profile`);
   useEffect(() => {
     async function fetchData() {
       const result = await getOverviewAnalytics();
@@ -113,10 +115,12 @@ const Overview = props => {
           <div className="custom-card">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title font-weight-bold mt-2">Inventory Summary</h5>
+               <h5 className="card-title font-weight-bold mt-2">Inventory Summary</h5>
+               {isAuthenticated('addInventory') &&
                 <Link to="/newinventory">
                   <button className="btn-primary btn-sm btn mt-3"> <b>Add Inventory</b></button>
-                </Link>
+                 </Link>
+               }
               </div>
             </div>
             <div className="card-body pl-1">
@@ -125,10 +129,12 @@ const Overview = props => {
 
             </div>
             <div className="card-footer mb-2">
-              <div className="d-flex align-items-center justify-content-center">
-                <Link to="/inventory">
-                <button className=" card-link btn btn-outline-primary">View More</button>
-              </Link>
+             <div className="d-flex align-items-center justify-content-center">
+               {isAuthenticated('viewInventory') &&
+                 <Link to="/inventory">
+                   <button className=" card-link btn btn-outline-primary">View More</button>
+                 </Link>
+               }
               </div>
             </div>
           </div>  
@@ -137,20 +143,24 @@ const Overview = props => {
           <div className="custom-card ml-1">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title font-weight-bold mt-2">Shipment Summary</h5>
-                <Link to="/newshipment">
-                  <button className="btn-primary btn-sm btn mt-3"><b> Create Shipment </b></button>
-                </Link>
+               <h5 className="card-title font-weight-bold mt-2">Shipment Summary</h5>
+               {isAuthenticated('createShipment') &&
+                 <Link to="/newshipment">
+                   <button className="btn-primary btn-sm btn mt-3"><b> Create Shipment </b></button>
+                 </Link>
+               }
               </div>
             </div>
             <div className="card-body" style={{padding:0}}>
               <SummaryTable {...props} setvisible={setData} visible={visible}/>
               </div>
             <div className="card-footer mb-2">
-              <div className="d-flex align-items-center justify-content-center">
-                <Link to="/shipments">
-                <button className=" card-link btn btn-outline-primary">View More</button>
-                  </Link>
+             <div className="d-flex align-items-center justify-content-center">
+               {isAuthenticated('viewShipment') &&
+                 <Link to="/shipments">
+                   <button className=" card-link btn btn-outline-primary">View More</button>
+                 </Link>
+               }
               </div>
             </div>
           </div>

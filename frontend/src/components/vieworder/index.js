@@ -4,12 +4,14 @@ import back from '../../assets/icons/back.png';
 import { useSelector } from "react-redux";
 import './style.scss';
 import { formatDate } from '../../utils/dateHelper';
-import {changePOStatus} from '../../actions/poActions';
+import { changePOStatus } from '../../actions/poActions';
+import { isAuthenticated } from '../../utils/commonHelper';
 
 const ViewOrder = props => {
   const { order, id } = props;
   //console.log("vieworder",order);
   const [alertMessage, setAlertMessage] = useState({});
+  if (!isAuthenticated('viewPO')) props.history.push(`/profile`);
   const user = useSelector((state) => {
     return state.user;
   });
@@ -67,12 +69,17 @@ const onPOStatusChange = async status => {
         <h1 className="breadcrumb">VIEW ORDER</h1>
 
 {order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED' ? (
-  <div className="d-flex">
-<Link to={`/orders`}>
- <button className="btn btn-success fontSize20 font-bold mr-4 mt-2" onClick={() => onPOStatusChange('ACCEPTED')} >Accept Order</button></Link>
-<Link to={`/orders`}>
- <button className="btn btn-orange fontSize20 font-bold mr-4 mt-2"  onClick={() => onPOStatusChange('REJECTED')} >Reject Order</button></Link>
-<Link to={`/orders`}>
+          <div className="d-flex">
+            {isAuthenticated('acceptRejectOrder') &&
+              <Link to={`/orders`}>
+                <button className="btn btn-success fontSize20 font-bold mr-4 mt-2" onClick={() => onPOStatusChange('ACCEPTED')} >Accept Order</button></Link>
+            }
+            {isAuthenticated('acceptRejectOrder') &&
+              <Link to={`/orders`}>
+                <button className="btn btn-orange fontSize20 font-bold mr-4 mt-2" onClick={() => onPOStatusChange('REJECTED')} >Reject Order</button>
+              </Link>
+            }
+            <Link to={`/orders`}>
             <button className="btn btn-outline-primary mt-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
           </Link>
         </div>):(<div className="d-flex">

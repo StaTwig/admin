@@ -77,10 +77,10 @@
    
 
     .search-form {
-      width: 350px;
+      width: 385px;
       position: relative;
       top: 45px;
-      right: 32.5rem;
+      right: 27.5rem;
       //left: unset;
       display: block;
       
@@ -91,7 +91,7 @@
       }
       img {
         position: relative;
-        right: -26.5rem;
+        right: -22rem;
         bottom: 47px;
         width: 20px;
         opacity: 2;
@@ -126,7 +126,7 @@
       .notifications {
         position: relative;
         right: 2.5rem;
-        top: -3rem;
+        top: -2.5rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
@@ -139,18 +139,30 @@
         }
         .slider-menu {
           top: .9rem;
-          right: -4rem !important;
-          overflow: scroll;
-          min-width: 350px;
-          min-height: 300px;
+          right: -12rem !important;
+          overflow-y: scroll;
+          overflow-x: hidden;
+          min-width: 370px;
+          min-height: 350px;
           font-size: 10px;
+          z-index: 101;
+
 
           .nheader{
-            margin: -16px;
+            display: block;
+            margin-block-start: -10px;
+            margin-right: -18px;
+            margin-left: -18px;
             justify-content: left;
-            padding: 10px;
+            padding-right: 40px;
+            padding-top: 20px;
+            padding-left: 40px;
+            padding-bottom: 10px;
+            position: sticky;
+            z-index: 100;
+            top: 0;
           }
-          
+ 
           .section {
             display: flex;
             flex-direction: row;
@@ -160,11 +172,15 @@
           }
 
           .slider-item {
+            text-align: center justify;
             white-space: pre-wrap;
             background-color: white;
-            min-width: 300px;
+            min-width: 340px;
+            margin-top: 10px;
+            margin-bottom: -10px;
             font-size: 10px;
-            margin-top: 16px;
+            position: relative;
+            z-index: 99;
             &:first-child {
               border-top: none;
             }
@@ -197,6 +213,14 @@
         right:1rem;
         bottom:3rem;
       }
+
+      .locationimg {
+        width: 20px;
+        position: relative;
+        top: -2.5rem;
+        right: 0.5rem;
+      }
+
       .userName {
         max-width: 10vw;
         margin-right: 1rem;
@@ -322,7 +346,7 @@
   right: 1rem !important;
   //left: unset;
   max-width: 10rem;
-  height: 8rem;
+  height: 9rem;
   text-align: center;
   position: absolute;
   //z-index: 1000;
