@@ -97,7 +97,7 @@ const TableFilter = (props) => {
          </div>
          <span className="divider" />
         <div className="box col">
-          <button className="btn btn-md btn-main-blue">
+          <button className="btn btn-md btn-main-blue font-weight-bold">
             Select
           </button>
         </div>
