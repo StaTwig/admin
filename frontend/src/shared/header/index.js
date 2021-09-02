@@ -213,12 +213,20 @@ const Header = (props) => {
       });
       if (localStorage.getItem("location") != null) {
         setLocation((prod) => JSON.parse(localStorage.getItem("location")));
+        setActiveWarehouses(active);
       } else {
+        if(active.length > 0)
+        {
         setLocation((prod) => active[0]);
-        console.log("SETTING LOCATION =====", active[0]);
         localStorage.setItem("location", JSON.stringify(active[0]));
+        setActiveWarehouses(active);
+        }
+        else{
+          setLocation((prod) => warehouses[0]);
+          localStorage.setItem("location", JSON.stringify(warehouses[0]));
+          setActiveWarehouses(warehouses);
+        }
       }
-      setActiveWarehouses(active);
     }
     fetchApi();
   }, []);
