@@ -31,9 +31,10 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
-import thermoIcon from '../../assets/icons/temprature-icon.png';
-import productIcon from '../../assets/icons/inventorynew.png';
+import userIcon from '../../assets/icons/user.png';
+import inventoryIcon from '../../assets/icons/inventorynew.png';
 import shipmentIcon from '../../assets/icons/TotalShipmentsCompleted.png';
+import orderIcon from '../../assets/icons/Orders.png'
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -83,15 +84,33 @@ const ref = useOnclickOutside(() => {
     return state.userLocation;
   });
 
-  function notifIcon(notif) {
-    if (notif.includes('TEMPERATURE')) {
-      return thermoIcon;
+ function notifIcon(notif) {
+    if (notif.eventType=='INVENTORY') {
+      return inventoryIcon;
     }
-    else if (notif.includes('ORDER')) {
-      return productIcon;
+    else if (notif.eventType=='ORDER') {
+      return orderIcon;
     }
-    else if (notif.includes('SHIPMENT')) {
+    else if (notif.eventType=='SHIPMENT') {
       return shipmentIcon;
+    }
+    else if (notif.eventType=='SHIPMENT_TRACKING'){
+      return userIcon;
+    }
+  }
+
+  function viewUrl(notif) {
+    if (notif.eventType=='INVENTORY') {
+      return 'productlist/';
+    }
+    else if (notif.eventType=='ORDER') {
+      return 'vieworder/';
+    }
+    else if (notif.eventType=='SHIPMENT') {
+      return 'viewshipment/';
+    }
+    else if (notif.eventType=='SHIPMENT_TRACKING'){
+      return 'viewuser/';
     }
   }
 
@@ -365,7 +384,10 @@ const imgs = config().fetchProfileImage;
                       <div className="col-sm-10">
                       
                         <div>
-                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification.message)}/> {notification.message}
+                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification)}/>
+                           <a href={"/" + viewUrl(notification) + notification.transactionId} >
+                           {notification.message}
+                           </a>
                         </div>
                     
                       </div>
