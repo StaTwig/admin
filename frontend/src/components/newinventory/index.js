@@ -258,9 +258,9 @@ const NewInventory = (props) => {
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-0">
         <h1 className="breadcrumb mt-3">ADD INVENTORY</h1>
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-center" >
           {isAuthenticated('importInventory') &&
-            <button className="btn-primary btn mt-4" onClick={() => setMenu(!menu)}>
+            <button className="btn-primary btn mt-4" onClick={() => setMenu(!menu)} style={{position:"relative", left:"20px"}}>
               <div className="d-flex  align-items-center">
                 <img src={ExportIcon} width="16" height="16" className="mr-3" />
                 <span><b>Import</b></span>

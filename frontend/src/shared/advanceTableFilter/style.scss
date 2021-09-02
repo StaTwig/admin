@@ -26,8 +26,8 @@
   }
 
   .divider {
-    height: 50px;
-    border: 1px solid $d6Grey;
+    height: 40px;
+    border: 0.5px solid $d6Grey;
     display: flex;
     align-self: center;
   }
@@ -45,3 +45,25 @@
   margin-left: 40px;
   margin-top: 18px;
 }
+.btn-filter-info {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #36C2CF;
+  color: white;
+  padding: 10.5px 10.5px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-filter-blue {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #0093E9;
+  color: white;
+  padding: 10px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: 0px;
+}
+
