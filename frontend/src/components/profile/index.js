@@ -131,7 +131,7 @@ class Profile extends React.Component {
       // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
-        warehouseLocations: response.data.data.warehouses,
+        warehouseLocations: response.data.data.warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING' ||i.status == 'NOTVERIFIED'),
         warehouseLocByOrg:wareHouseAddresses
       });
 
