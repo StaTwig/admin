@@ -65,7 +65,17 @@ const ViewInventory = props => {
                 <div className="col-3 txt1 ml-3">{inv.products.type}</div>
                 <div className="col-3 txt1">{inv.products.manufacturer}</div>
                 <div className="col-2 txt1">{inv.inventoryDetails.quantity ? inv.inventoryDetails.quantity : 0}{" ("}{inv.products.unitofMeasure? inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-                <div className="col-0 txt "><button type="button" onClick={() => toggleShowMore(inv.id, inv.products.id, i, more[i])} className="btn btn-outline-primary">Show {more[i] ? `less` : `more`}</button></div>
+                <div className="col-0 txt">
+                {more[i]  ?
+                  <div className="col-0 txt">
+                  <button type="button" onClick={() => toggleShowMore(inv.id, inv.products.id, i, more[i])} className="btn btn-primary">Show {more[i] ? `less` : `more`}</button>
+                  </div>
+                :
+                  <div className="col-0 txt">
+                  <button type="button" onClick={() => toggleShowMore(inv.id, inv.products.id, i, more[i])} className="btn btn-outline-primary">Show {more[i] ? `less` : `more`}</button>
+                  </div>
+                }
+               </div>
               </div>
               {more[i] &&
                 <div className="row">

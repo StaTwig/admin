@@ -79,13 +79,13 @@ const Table = props => {
                 </div>
                 <div className="col-1 txt1" style={{position:"relative", left:"4.5%"}}>{shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}</div>
                 <div className="col-3 txt1 " style={{position:"relative",left:"10%"}}><p className="mb-0">{shipment.supplier.org ? shipment.supplier.org.name: "-"}</p><p className="address mb-0 text-muted">{`${supplierAddress.firstLine ? supplierAddress.firstLine: ''} ${supplierAddress.secondLine ? supplierAddress.secondLine : ''} ${supplierAddress.city ? supplierAddress.city : ''}\n ${supplierAddress.state ? supplierAddress.state : ''}\n ${supplierAddress.country ? supplierAddress.country : ''} `}</p></div>
-                <div className="col-3 txt1 " style={{position:"relative",left:"12.5%"}}><p className="mb-0">{shipment.receiver.org ? shipment.receiver.org.name : "-"}</p><p className="mb-0 address text-muted">{`${receiverAddress.firstLine ? receiverAddress.firstLine : ''}  ${receiverAddress.secondLine ? receiverAddress.secondLine : ''} ${receiverAddress.city ? receiverAddress.city : ''} \n ${receiverAddress.state ? receiverAddress.state : ''} \n ${receiverAddress.country ? receiverAddress.country : ''} `}</p></div>
-                <div className="rTableCell" style={{position:"relative",left:"11%"}}>
-                <div className={`status secondary-bg btn-sm ml-3 ${statusStyle}`}>
+                <div className="col-3 txt1 " style={{position:"relative",left:"12%"}}><p className="mb-0">{shipment.receiver.org ? shipment.receiver.org.name : "-"}</p><p className="mb-0 address text-muted">{`${receiverAddress.firstLine ? receiverAddress.firstLine : ''}  ${receiverAddress.secondLine ? receiverAddress.secondLine : ''} ${receiverAddress.city ? receiverAddress.city : ''} \n ${receiverAddress.state ? receiverAddress.state : ''} \n ${receiverAddress.country ? receiverAddress.country : ''} `}</p></div>
+                <div className="rTableCell" style={{position:"relative",left:"10%"}}>
+                <div className={`status secondary-bg ml-3 ${statusStyle}`}>
                     {status}
                 </div>
                 </div>
-                <div className="col-1 txt1" style={{paddingLeft:0,position:"relative",left:"8.5%"}}>
+                <div className="col-1 txt1" style={{paddingLeft:0,position:"relative",left:"8%"}}>
                   <button
                     className="button btn-primary text-light btn-sm ml-1"
                     onClick={() => {
