@@ -1656,7 +1656,7 @@ function buildExcelReport(req,res,dataForExcel){
       width: 220 
     },
     orderReceiveIncharge: {
-      displayName: 'Order Received From',
+      displayName: 'Order Received By',
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen, 
       width: 220 
