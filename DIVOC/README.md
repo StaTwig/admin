@@ -9,7 +9,7 @@ Open source digital platform for large scale vaccination and certification progr
 
 
 - This is the Release version [Generic1.23.3](https://github.com/egovernments/DIVOC/tree/1.23.3-generic)
-- Test [Hosted](http://ec2-65-1-91-208.ap-south-1.compute.amazonaws.com/)
+- Test [Hosted](https://divoc.vaccineledger.com/)
 
 Steps to Deploy:
 
@@ -32,3 +32,6 @@ docker-compose -f docker-compose-release.yml logs -f --tail 1
 
 - [x] To build & recreate a service ```docker-compose -f docker-compose-release.yml up -d --build --force-recreate --no-deps <service_name>```
 - [x] To enter Database Shell ```docker-compose -f docker-compose-release.yml exec db bash```
+- [x] Authenticate with Database ``` psql -U postgres```
+- [x] Run command `\c registry`
+- [x] Execute SQL command ```update REALM set ssl_required='NONE' where id = 'master';``` to disable HTTPS Keycloak setup
