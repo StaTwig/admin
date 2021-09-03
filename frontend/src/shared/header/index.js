@@ -29,14 +29,15 @@ import {
 } from "../../actions/shippingOrderAction";
 import { getOrderIds } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
-import setAuthToken from "../../utils/setAuthToken";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { createFilterOptions } from "@material-ui/lab/Autocomplete";
-import axios from "axios";
-import thermoIcon from "../../assets/icons/temprature-icon.png";
-import productIcon from "../../assets/icons/inventorynew.png";
-import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
+import setAuthToken from '../../utils/setAuthToken';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
+import userIcon from '../../assets/icons/user.png';
+import inventoryIcon from '../../assets/icons/inventorynew.png';
+import shipmentIcon from '../../assets/icons/TotalShipmentsCompleted.png';
+import orderIcon from '../../assets/icons/Orders.png'
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -78,13 +79,33 @@ const Header = (props) => {
     return state.userLocation;
   });
 
-  function notifIcon(notif) {
-    if (notif.includes("TEMPERATURE")) {
-      return thermoIcon;
-    } else if (notif.includes("ORDER")) {
-      return productIcon;
-    } else if (notif.includes("SHIPMENT")) {
+ function notifIcon(notif) {
+    if (notif.eventType=='INVENTORY') {
+      return inventoryIcon;
+    }
+    else if (notif.eventType=='ORDER') {
+      return orderIcon;
+    }
+    else if (notif.eventType=='SHIPMENT') {
       return shipmentIcon;
+    }
+    else if (notif.eventType=='SHIPMENT_TRACKING'){
+      return userIcon;
+    }
+  }
+
+  function viewUrl(notif) {
+    if (notif.eventType=='INVENTORY') {
+      return 'productlist/';
+    }
+    else if (notif.eventType=='ORDER') {
+      return 'vieworder/';
+    }
+    else if (notif.eventType=='SHIPMENT') {
+      return 'viewshipment/';
+    }
+    else if (notif.eventType=='SHIPMENT_TRACKING'){
+      return 'viewuser/';
     }
   }
 
@@ -323,70 +344,39 @@ const Header = (props) => {
           <img src={searchingIcon} onClick={onSeach} alt='searching' />
         </div>
         <div>
-          <div className='user-info '>
-            <div className='notifications'>
-              <img
-                src={bellIcon}
-                onClick={showNotifications}
-                alt='notification'
-              />
-              <bellIcon />
-
-              <div
-                className='bellicon-wrap'
-                onClick={() => setShowNotifications(!showNotifications)}
-              >
-                {notifications.length > 0 && (
-                  <span className='badge badge-light'>
-                    {notifications.length}
-                  </span>
-                )}
-              </div>
-              {showNotifications && notifications.length > 0 && (
-                <div className='slider-menu'>
-                  <React.Fragment>
-                    <div
-                      className='nheader'
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(to right, #0092e8, #0a6bc6)",
-                      }}
-                    >
-                      <text
-                        style={{
-                          color: "white",
-                          fontSize: "20px",
-                          fontWeight: "bold",
-                          padding: "10px",
-                        }}
-                      >
-                        User Notifications
-                      </text>
-                      <text
-                        style={{
-                          backgroundColor: "#fa7a23",
-                          padding: "5px",
-                          color: "white",
-                          textAlign: "right",
-                          borderRadius: "6px",
-                        }}
-                      >
-                        {notifications.length} new
-                      </text>
-                      <div className='section'>
-                        <button
-                          style={{
-                            backgroundColor: "transparent",
-                            color: "white",
-                            borderColor: "transparent",
-                          }}
-                          onClick={() => {
-                            setAlertType("ALERT");
-                            changeNotifications("ALERT");
-                          }}
-                        >
-                          Alerts
-                        </button>
+        
+       <div className="user-info ">
+       <div className="notifications">
+                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
+                  
+                    <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
+            
+              {notifications.length >= 0 && <span className="badge badge-light">{notifications.length }</span> }
+            </div>
+            {showNotifications && notifications.length >= 0 && (
+              <div className="slider-menu">
+                <React.Fragment>
+                  <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px"}}>User Notifications</text> 
+                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
+                  <div className="section">
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
+                  </div>
+                  </div>
+                  {notifications.map(notification =>  <div className="slider-item">
+                    <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
+                      <div className="col-sm-10">
+                      
+                        <div>
+                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification)}/>
+                           <a href={"/" + viewUrl(notification) + notification.transactionId} >
+                           {notification.message}
+                           </a>
+                        </div>
+                    
+                      </div>
+                      <div className="col-sm-2">
                         <button
                           style={{
                             backgroundColor: "transparent",
