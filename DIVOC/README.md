@@ -9,7 +9,7 @@ Open source digital platform for large scale vaccination and certification progr
 
 
 - This is the Release version [Generic1.23.3](https://github.com/egovernments/DIVOC/tree/1.23.3-generic)
-- Test [Hosted](http://ec2-65-1-91-208.ap-south-1.compute.amazonaws.com/)
+- Test [Hosted](https://divoc.vaccineledger.com/)
 
 Steps to Deploy:
 
