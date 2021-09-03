@@ -1559,7 +1559,9 @@ exports.getProductListCounts = [
         }   
         
 
+        if (product1.quantity > 0){
         productArray.push(product1);
+} 
       }
 
       productArray.sort(function(a,b){
