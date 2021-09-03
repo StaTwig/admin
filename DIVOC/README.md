@@ -32,3 +32,6 @@ docker-compose -f docker-compose-release.yml logs -f --tail 1
 
 - [x] To build & recreate a service ```docker-compose -f docker-compose-release.yml up -d --build --force-recreate --no-deps <service_name>```
 - [x] To enter Database Shell ```docker-compose -f docker-compose-release.yml exec db bash```
+- [x] Authenticate with Database ``` psql -U postgres```
+- [x] Run command `\c registry`
+- [x] Execute SQL command ```update REALM set ssl_required='NONE' where id = 'master';``` to disable HTTPS Keycloak setup
