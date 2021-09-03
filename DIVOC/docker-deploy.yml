@@ -173,7 +173,7 @@ services:
     build: .
     image: "frontend"
     ports:
-      - "4000:80"
+      - "3000:80"
     depends_on:
       - vaccination_api
       - portal_api
