@@ -31,7 +31,7 @@ const ReceiveShipment = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [delivered, setDelivered] = useState(0);
   const dispatch = useDispatch();
-
+  const [files, setFiles] = useState([]);
   const [shipmentId, setShipmentId] = useState([]);
   const [qtyArr, setQtyArr] = useState([...Array(props.trackData?.products?.length).keys()]);
   const [billNo, setBillNo] = useState("");
@@ -69,6 +69,8 @@ const ReceiveShipment = (props) => {
   const [value, setValue] = React.useState(null);
   
   const setFile = (evt) => {
+    setFiles(evt.target.files)
+    console.log(evt.target.files)
     setPhotoUrl(URL.createObjectURL(event.target.files[0]));
     setPhoto(evt.target.files[0]);
     setPhotoUrl2(URL.createObjectURL(event.target.files[1]));
@@ -169,15 +171,17 @@ const ReceiveShipment = (props) => {
   };
   const uploadPhoto = async () => {
     const formData = new FormData();
+    for(let i=0; i< files.length; i++){
+      formData.append("photo", files[i], files[i].name);
 
-    formData.append("photo", photo, photo.name);
-
-    const result = await uploadImage(id, formData);
-    if (result.status == 200) {
-      setMessage("Image Uploaded");
-    } else {
-      console.log(result.status);
+      const result = await uploadImage(id, formData);
+      if (result.status == 200) {
+        setMessage("Image Uploaded");
+      } else {
+        console.log(result.status);
+      }
     }
+    
   };
   const closeModal = () => {
     setOpenUpdatedStatus(false);
@@ -362,7 +366,7 @@ const ReceiveShipment = (props) => {
                     large={photoUrl}
                     small={photoUrl}
                     name="photo"
-                    className="mt-1 "
+                    className="mt-1 modalClass"
                     // style={{ margin: "auto", display: "table" }}
                   />
                    <img onClick={clearImage2} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
@@ -370,7 +374,7 @@ const ReceiveShipment = (props) => {
                     large={photoUrl2}
                     small={photoUrl2}
                     name="photo"
-                    className="mt-1 "
+                    className="mt-1 modalClass"
                     // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
