@@ -34,9 +34,9 @@ eventEmitter.on('change', (change) => {
 	  }
 });
 
-const CALCULATE_RETURNS_CRON_TIME = `45 * * * * *`;
+const CALCULATE_EXPIRED_CRON_TIME = `*/5 * * * * 6`;
 
-cron.schedule(CALCULATE_RETURNS_CRON_TIME, () => {
+cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
 	console.log('Checking Product Expiry');
 	alerts.checkProductExpiry();
 });
