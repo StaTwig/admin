@@ -18,6 +18,7 @@ import {fetchairwayBillNumber} from '../../actions/shipmentActions';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import Select from 'react-select';
 //import ModalImage from 'react-modal-image';
 
 const ReceiveShipment = (props) => {
@@ -45,6 +46,8 @@ const ReceiveShipment = (props) => {
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray,settransitNumberArray] = useState([]);
+  const options = ["orders", "shipments","inventory", "others","q","w","s","o","u","t","b","f","l"];
+
   useEffect(()=>{
     async function fetchairwayBill(){
       let temp_arr = await fetchairwayBillNumber();
@@ -216,7 +219,7 @@ const ReceiveShipment = (props) => {
           </div>
         </div>
         <div className="d-flex  flex-auto">
-          <div className="panel commonpanle" style={{width:"32%"}}>
+          <div className="panel commonpanle mr-4" style={{width:"32%"}}>
             <div className="form-group pt-2"> 
               <label className="mb-1 text-secondary pt-2">Shipment ID:</label>
               <input
@@ -265,7 +268,7 @@ const ReceiveShipment = (props) => {
         <div className="col-sm-4">
           {/* <h6 className="heading mb-3">SHIPMENT SUMMARY</h6> */}
           {/* <ShipmentSummary shipments={tracking} /> */}
-          <h6 className="heading mt-3 mb-4 ml-3">Shipment Details</h6>
+          <h6 className="heading mt-3 mb-3 ml-3">Shipment Details</h6>
           <ShipmentDetails
             shipments={tracking}
             setMenuShip={setMenuShip}
@@ -287,14 +290,24 @@ const ReceiveShipment = (props) => {
           />
         </div>
         <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3 ml-3" style={{padding:4}}>Comments</h6>
+          <h6 className="heading mt-3 mb-3 ml-3" >Comments</h6>
           <div className="col panel commonpanle" style={{ height: "45%"}}>
-            <div className="form-group" style={{ width: "150%" }}>
+          <div className=" pt-2 pb-2 d-flex row">
+          <span className="txt-outline text-muted">Reason 1</span>
+          <span className="txt-outline text-muted">Reason 2</span>
+          <span className="txt-outline text-muted">Reason 3</span>
+          <span className="txt-outline text-muted">Reason 4</span>
+          <span className="txt-outline text-muted">Reason 5</span>
+          <span className="txt-outline text-muted">Other</span>
+          </div>
+            <div className="form-group" style={{ width: "150%", height:"100px" }}>
               <textarea
                 style={{
-                  fontSize: "16px",
+                  fontSize: "14px",
                   resize: "none",
                   borderBottom: "none",
+                 // marginTop:"130px",
+                  //marginBottom:"20px"
                 }}
                 type="text"
                 className="form-control"
@@ -303,18 +316,19 @@ const ReceiveShipment = (props) => {
                 size="40"
                 cols="120"
                 rows="7"
-                placeholder="Enter Comment Here"
+                placeholder="Enter Comment"
                 value={comment}
               />
             </div>
           </div>
+          <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button>
         </div>
         <div className="col-sm-4">
           <div className="row justify-content-between">
-          <h6 className="heading mt-3 ml-4">Upload Image</h6>  
-              <button className="btn btn-orange font-weight-bold mr-4"
+          <h6 className="heading mt-3 mb-3 ml-4">Upload Image</h6>  
+              <button className="btn btn-orange font-weight-bold mr-4 pl-4 pr-4"
                    onClick={uploadPhoto} 
-                   style={{height:'5vh',width:'6vw'}}>
+                   style={{position:"relative", bottom:"10px"}}>
               {/* <img
                     src={uploadWhite}
                     width="35"
@@ -324,31 +338,41 @@ const ReceiveShipment = (props) => {
             </button>
           </div>
           <div
-            className="upload bg-white panel commonpanle"
-            style={{ height: "45%" }}
+            className="upload bg-white panel commonpanle mt-0"
+            style={{ height: "44%" }}
           >
             {photo ? (
               <div>
                 <div
-                  className="row"
+                  className="d-flex row"
                   style={{ margin: "auto", display: "table", cursor:"pointer"}}
                 >
-                  <img onClick={clearImage} width="20" height="20" src={crossIcon} style={{ position:'relative', left:'25vw'}}/>
+                  <img onClick={clearImage} width="20" height="20" src={crossIcon} className="cross-img shadow rounded-circle"/>
                   <img
                     src={photoUrl}
                     name="photo"
-                    width="450"
-                    height="185"
+                    width="170"
+                    height="170"
                     className="mt-1"
                     style={{ margin: "auto", display: "table" }}
                   />
+                   <img onClick={clearImage} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
+                  <img
+                    src={photoUrl}
+                    name="photo"
+                    width="170"
+                    height="170"
+                    className="mt-1 "
+                    style={{ margin: "auto", display: "table" }}
+                  />
                 </div>
+                <button type="button" className="btn btn-link float-right">View All</button>
                 <div className="row">
                                 {photoUrl >
                                   0 && (
                                   <ModalImage
                                     small={image}
-                                    className="challanImage"
+                                    className=""
                                     large={image}
                                     showRotate={true}
                                     hideZoom={false}
@@ -394,7 +418,7 @@ const ReceiveShipment = (props) => {
                 >
                   <label
                     class="btn btn-primary"
-                    style={{ margin: 0, height: "4.3vh" }}
+                    style={{ margin: 0, height: "max-content" }}
                   >
                     Browse Files
                     <input type="file" class="select" onChange={setFile} />{" "}
