@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import Select from 'react-select';
-//import ModalImage from 'react-modal-image';
+import ModalImage from 'react-modal-image';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
@@ -37,9 +37,12 @@ const ReceiveShipment = (props) => {
   const [billNo, setBillNo] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
+  const [photo2, setPhoto2] = useState("");
+  const [photoUrl2, setPhotoUrl2] = useState(undefined);
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
+  const [commentEnabled, setCommentEnabled] = useState(false)
   const [image, setImage] = useState('');
   const id = props.match.params.id;
   const [inputValue, setInputValue] = React.useState('');
@@ -68,6 +71,8 @@ const ReceiveShipment = (props) => {
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(event.target.files[0]));
     setPhoto(evt.target.files[0]);
+    setPhotoUrl2(URL.createObjectURL(event.target.files[1]));
+    setPhoto2(evt.target.files[1]);
   };
 
   const clearImage = () => {
@@ -75,6 +80,10 @@ const ReceiveShipment = (props) => {
     setPhotoUrl(undefined);
   };
 
+  const clearImage2 = () => {
+    setPhoto2("");
+    setPhotoUrl2(undefined);
+  };
   const defaultData = {
     label: {
       labelType: "QR_2DBAR",
@@ -293,15 +302,16 @@ const ReceiveShipment = (props) => {
           <h6 className="heading mt-3 mb-3 ml-3" >Comments</h6>
           <div className="col panel commonpanle" style={{ height: "45%"}}>
           <div className=" pt-2 pb-2 d-flex row">
-          <span className="txt-outline text-muted">Reason 1</span>
-          <span className="txt-outline text-muted">Reason 2</span>
-          <span className="txt-outline text-muted">Reason 3</span>
-          <span className="txt-outline text-muted">Reason 4</span>
-          <span className="txt-outline text-muted">Reason 5</span>
-          <span className="txt-outline text-muted">Other</span>
+          <span onClick={()=> setCommentEnabled(false)} className="txt-outline text-muted">Reason 1</span>
+          <span onClick={()=> setCommentEnabled(false)} className="txt-outline text-muted">Reason 2</span>
+          <span onClick={()=> setCommentEnabled(false)} className="txt-outline text-muted">Reason 3</span>
+          <span onClick={()=> setCommentEnabled(false)} className="txt-outline text-muted">Reason 4</span>
+          <span onClick={()=> setCommentEnabled(false)} className="txt-outline text-muted">Reason 5</span>
+          <span onClick={()=> setCommentEnabled(true)} className="txt-outline text-muted">Other</span>
           </div>
             <div className="form-group" style={{ width: "150%", height:"100px" }}>
               <textarea
+              disabled={!commentEnabled}
                 style={{
                   fontSize: "14px",
                   resize: "none",
@@ -348,30 +358,28 @@ const ReceiveShipment = (props) => {
                   style={{ margin: "auto", display: "table", cursor:"pointer"}}
                 >
                   <img onClick={clearImage} width="20" height="20" src={crossIcon} className="cross-img shadow rounded-circle"/>
-                  <img
-                    src={photoUrl}
+                  <ModalImage
+                    large={photoUrl}
+                    small={photoUrl}
                     name="photo"
-                    width="170"
-                    height="170"
-                    className="mt-1"
-                    style={{ margin: "auto", display: "table" }}
-                  />
-                   <img onClick={clearImage} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
-                  <img
-                    src={photoUrl}
-                    name="photo"
-                    width="170"
-                    height="170"
                     className="mt-1 "
-                    style={{ margin: "auto", display: "table" }}
+                    // style={{ margin: "auto", display: "table" }}
+                  />
+                   <img onClick={clearImage2} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
+                  <ModalImage
+                    large={photoUrl2}
+                    small={photoUrl2}
+                    name="photo"
+                    className="mt-1 "
+                    // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
                 <button type="button" className="btn btn-link float-right">View All</button>
-                <div className="row">
+                {/* <div className="row">
                                 {photoUrl >
                                   0 && (
                                   <ModalImage
-                                    small={image}
+                                    small={photo}
                                     className=""
                                     large={image}
                                     showRotate={true}
@@ -379,7 +387,7 @@ const ReceiveShipment = (props) => {
                                     alt="Upload Image"
                                   />
                                 )}
-                              </div>
+                              </div> */}
               </div>
             ) : (
               <div>
@@ -421,7 +429,7 @@ const ReceiveShipment = (props) => {
                     style={{ margin: 0, height: "max-content" }}
                   >
                     Browse Files
-                    <input type="file" class="select" onChange={setFile} />{" "}
+                    <input type="file" multiple={true} class="select" onChange={setFile} />{" "}
                   </label>
                 </div>
               </div>
