@@ -250,8 +250,16 @@ color: #4A4A4A;
   text-align: center;
   cursor: pointer;
 }
+.txt-outline:hover {
+  background-color: #57c1ff;
+  color: white;
+}
 .cross-img{
  position:relative;
  left:12.4rem;
- top:-6px;
+ top:-5px;
+}
+.modal-image{
+  height: 170px;
+  width:190px;
 }

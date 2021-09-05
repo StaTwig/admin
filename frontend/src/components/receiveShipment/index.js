@@ -49,7 +49,6 @@ const ReceiveShipment = (props) => {
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray,settransitNumberArray] = useState([]);
-  const options = ["orders", "shipments","inventory", "others","q","w","s","o","u","t","b","f","l"];
 
   useEffect(()=>{
     async function fetchairwayBill(){
@@ -314,14 +313,15 @@ const ReceiveShipment = (props) => {
           <span onClick={()=> setCommentEnabled(true)} className="txt-outline text-muted">Other</span>
           </div>
             <div className="form-group" style={{ width: "150%", height:"100px" }}>
-              <textarea
-              disabled={!commentEnabled}
+            {commentEnabled && 
+              <input
+                disabled={!commentEnabled}
                 style={{
                   fontSize: "14px",
                   resize: "none",
-                  borderBottom: "none",
-                 // marginTop:"130px",
-                  //marginBottom:"20px"
+                  //borderBottom: "none",
+                  marginTop:"80px",
+                  //marginBottom:"10px"
                 }}
                 type="text"
                 className="form-control"
@@ -332,10 +332,10 @@ const ReceiveShipment = (props) => {
                 rows="7"
                 placeholder="Enter Comment"
                 value={comment}
-              />
+              />}
             </div>
           </div>
-          <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button>
+          {/* <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button> */}
         </div>
         <div className="col-sm-4">
           <div className="row justify-content-between">
@@ -358,23 +358,25 @@ const ReceiveShipment = (props) => {
             {photo ? (
               <div>
                 <div
-                  className="d-flex row"
+                  className="ml-2 mt-2 d-flex row"
                   style={{ margin: "auto", display: "table", cursor:"pointer"}}
                 >
                   <img onClick={clearImage} width="20" height="20" src={crossIcon} className="cross-img shadow rounded-circle"/>
                   <ModalImage
                     large={photoUrl}
                     small={photoUrl}
+                    showRotate={true}
                     name="photo"
-                    className="mt-1 modalClass"
+                    className="mt-1 modal-image"
                     // style={{ margin: "auto", display: "table" }}
                   />
-                   <img onClick={clearImage2} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
+                  <img onClick={clearImage2} width="20" height="20" src={crossIcon} className="cross-img shadow border-none rounded-circle"/>
                   <ModalImage
                     large={photoUrl2}
                     small={photoUrl2}
-                    name="photo"
-                    className="mt-1 modalClass"
+                    showRotate={true}
+                    //alt="Image2"
+                    className="mt-1 modal-image"
                     // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
