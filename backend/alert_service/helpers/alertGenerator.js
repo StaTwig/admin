@@ -2,6 +2,7 @@ const Alert = require('../models/AlertModel')
 const Event = require('../models/EventModal')
 const User = require('../models/UserModel')
 const Atoms = require('../models/AtomsModel')
+const EmployeeModel = require('../models/EmployeeModel')
 const WarehouseModel = require('../models/WarehouseModel')
 const { alertMobile, alertEmail, alertPushNotification, pushNotification } = require('./alertSender')
 
@@ -98,7 +99,7 @@ catch(err){
 async function checkProductExpiry(){
     try{
         let params = {
-            "attributeSet.expDate" : { $gt: new Date() }
+            "attributeSet.expDate" : { $lt: new Date() }
         }
         for await(const product of Atoms.find({ 
             ...params
@@ -116,13 +117,29 @@ async function productExpired(productId, quantity, owner){
         for await(const inventory of WarehouseModel.find( 
             { warehouseInventory : inventoryId }
         )){
-            productExpiryEvent(productId, quantity, inventory.organisationId)
+            productExpiryEvent(productId, quantity, inventory.id, inventory.organisationId)
         }
     }
 }
 
-async function productExpiryEvent(productId, quantity, owner){
-
+async function productExpiryEvent(productId, quantity, warehouse, organisation){
+    for await(const user of EmployeeModel.find( 
+        { warehouseId : warehouse }
+    )){
+        eventData = {
+            actorOrgId : organisation,
+            eventTypePrimary : "EXPIRE",
+            eventTypeDesc : "PRODUCT",
+            quantity: quantity
+        }
+        pushNotification(eventData,user.id,"ALERT",productId)
+        alertPushNotification(eventData,user.id)
+        let alertData = Alert.findOne({ username : user.id })
+        // alertEmail(eventData,"gmail@sanathswaroop.com")
+        // alertMobile(eventData,"+919392848111")
+        if(alertData?.alertMode?.mobile==true) alertMobile(eventData,user.phoneNumber)
+        if(alertData?.alertMode?.email==true) alertEmail(eventData,user.emailId)
+    }
 }
 
 

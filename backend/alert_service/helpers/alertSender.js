@@ -25,6 +25,11 @@ function eventToHtml(event){
     return `<html><p>New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}</p></html>`
 }
 
+
+function notificationContent(event){
+    
+}
+
 function pushNotification(event,userId,type, transactionId){
     try{
         const content = eventToData(event,"mobile")
@@ -32,6 +37,7 @@ function pushNotification(event,userId,type, transactionId){
         console.log(notification);
         if(type == 'ALERT') notification.type = 'ALERT';
         else notification.type = 'TRANSACTION'
+        notification.transactionId = transactionId;
         notification.save(function(err, doc) {
             if (err) return console.error(err);
             console.log("Document inserted succussfully!",doc);
