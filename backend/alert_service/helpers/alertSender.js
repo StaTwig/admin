@@ -7,14 +7,22 @@ const Notification = require('../models/NotificationsModel')
 var uuid = require('uuid');
 
 function eventToData(event,type){
-    switch(type){
-    case "email" :
-        return eventToHtml(event);
-    case "mobile" :
-        return eventToPlainText(event);     
-    case "push" :
-        return eventToPlainText(event); 
+    switch(event.eventTypeDesc){
+        case "SHIPMENT" :
+            return shipmentMessage(event,event?.payloadData?.data?.id)
+        case "ORDER" : 
+            return orderMessage(event,event?.payloadData?.data?.order_id,event.actorOrgId)
+        default : 
+            return eventToPlainText(event)
     }
+    // switch(type){
+    // case "email" :
+    //     return eventToHtml(event);
+    // case "mobile" :
+    //     return eventToPlainText(event);     
+    // case "push" :
+    //     return eventToPlainText(event); 
+    // }
 }
 
 function eventToPlainText(event){
@@ -25,6 +33,22 @@ function eventToHtml(event){
     return `<html><p>New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}</p></html>`
 }
 
+function shipmentMessage(event,txnId){
+    if(event.eventTypePrimary=="CREATE") return `"Shipment - ${txnId}" has been Created`
+    else if(event.eventTypePrimary=="UPDATE") return `"Shipment - ${txnId}" has been Updated`
+    else if(event.eventTypePrimary=="RECEIVE") return `"Shipment - ${txnId}" has been Delivered`
+    else return `"Shipment - ${txnId}" has been Updated`
+}
+
+
+function orderMessage(event,txnId,actorOrgId){
+    if(event.eventTypePrimary=="RECEIVE") return `Received a new Order "Order - ${txnId}"  from ${actorOrgId}`
+    else if(event.eventTypePrimary=="ACCEPT") return `Your "Order ID: ${txnId}" has been Accepted by ${actorOrgId}`
+    else if(event.eventTypePrimary=="REJECT") return `Your "Order ID: ${txnId}" has been Rejected by ${actorOrgId}`
+    else if(event.eventTypePrimary=="CREATE") return `"Order ID: ${txnId}" has been Created by ${actorOrgId}`
+    else return `"New updates on "Order - ${txnId}"  from ${actorOrgId}`
+}
+
 function pushNotification(event,userId,type, transactionId){
     try{
         const content = eventToData(event,"mobile")
@@ -32,6 +56,7 @@ function pushNotification(event,userId,type, transactionId){
         console.log(notification);
         if(type == 'ALERT') notification.type = 'ALERT';
         else notification.type = 'TRANSACTION'
+        notification.transactionId = transactionId;
         notification.save(function(err, doc) {
             if (err) return console.error(err);
             console.log("Document inserted succussfully!",doc);
