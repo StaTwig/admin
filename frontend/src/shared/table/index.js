@@ -114,7 +114,7 @@ inventoryDetails.sort(function(a,b){
                                               <TableCell align="left">{inventory.payloadData.data.products.batchNumber}</TableCell></div>
                                       </TableRow> 
                                       </div> } 
-                                      <div className="mt-3" style={{position:"absolute ", left:"78% ", bottom:"38% ", width:"20% "}}>
+                                      <div className="mt-3" style={{position:"absolute ", left:"78% ", bottom:"10% ", width:"20% "}}>
                                       {(inventory.eventTypePrimary === 'CREATE'|| inventory.eventTypePrimary === 'RECEIVE')  ? 
                                       <button
                                           type="button" className="bttn-blue blue-primary"  
@@ -124,7 +124,7 @@ inventoryDetails.sort(function(a,b){
                                       >
                                         View Shipment</button>: ''}
                                   </div>
-                                  <div className="mt-3" style={{position:"absolute", left:"73%", bottom:"13%" , width:"25%"}}>
+                                  {/* <div className="mt-3" style={{position:"absolute", left:"73%", bottom:"13%" , width:"25%"}}>
                                       <button
                                         type="button" className="bttn-orange orange-warning"
                                         disabled = {!inventory.payloadData.data.products.batchNumber}
@@ -133,7 +133,7 @@ inventoryDetails.sort(function(a,b){
                                         }}
                                       >
                                       Show Product Details</button>
-                                  </div>   
+                                      </div>   */} 
                                    </TableBody>
                                 </Tablee>
                       </TableContainer> 
