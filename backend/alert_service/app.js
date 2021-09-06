@@ -34,7 +34,7 @@ eventEmitter.on('change', (change) => {
 	  }
 });
 
-const CALCULATE_EXPIRED_CRON_TIME = `5 * * * * 1`;
+const CALCULATE_EXPIRED_CRON_TIME = `00 00 9 * * 1`;
 
 cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
 	console.log('Checking Product Expiry', new Date());
