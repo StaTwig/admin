@@ -351,9 +351,9 @@ const Header = (props) => {
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
-              {notifications.length >= 0 && <span className="badge badge-light">{notifications.length }</span> }
+              {<span className="badge badge-light">{notifications.length }</span> }
             </div>
-            {showNotifications && notifications.length >= 0 && (
+            {showNotifications && (
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
