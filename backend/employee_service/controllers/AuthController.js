@@ -756,32 +756,40 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
-          const activeWarehouse = await WarehouseModel.findOne({ $and: [{ "id": { $in: user.warehouseId } }, {$or: [{ status: 'ACTIVE' },{ status: 'PENDING' }, { status: { $exists: false } }]} ]})
-    var userData ;
-    if(activeWarehouse) {
-      userData = {
-        id: user.id,
-        firstName: user.firstName,
-        emailId: user.emailId,
-        role: user.role,
-        warehouseId: activeWarehouse.id,
-        organisationId: user.organisationId,
-        walletAddress: address,
-        phoneNumber: user.phoneNumber
-      };
-    }
-    else{
-      userData = {
-        id: user.id,
-        firstName: user.firstName,
-        emailId: user.emailId,
-        role: user.role,
-        warehouseId: [],
-        organisationId: user.organisationId,
-        walletAddress: address,
-        phoneNumber: user.phoneNumber
-      };
-    }
+          const activeWarehouse = await WarehouseModel.find({ $and: [{ "id": { $in: user.warehouseId } }, { $or: [{ status: 'ACTIVE' }, { status: 'PENDING' }, { status: { $exists: false } }] }] })
+         
+          
+          var userData;
+          if (activeWarehouse.length > 0) {
+            let activeWarehouseId = 0;
+            const activeWRs = activeWarehouse.filter(w => w.status == 'ACTIVE');
+            if (activeWRs.length > 0)
+              activeWarehouseId = activeWRs[0].id;
+            else 
+              activeWarehouseId = activeWarehouse[0].id;
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: activeWarehouseId,
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber
+            };  
+          }
+          else{
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: [],
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber
+            };
+          }
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
@@ -836,7 +844,8 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
-            postalAddress
+            postalAddress,
+            createdAt
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
@@ -859,7 +868,8 @@ exports.userInfo = [
               configuration_id: org.configuration_id,
               type: org.type,
               location: postalAddress,
-              warehouses: warehouseArray
+              warehouses: warehouseArray,
+              signup_date: createdAt
             };
           }
           else{
@@ -878,7 +888,8 @@ exports.userInfo = [
               configuration_id: null,
               type: null,
               location: postalAddress,
-              warehouses: warehouseArray
+              warehouses: warehouseArray,
+              signup_date: createdAt
             };
           }
           logger.log(
