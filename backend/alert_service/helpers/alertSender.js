@@ -12,6 +12,8 @@ function eventToData(event,type){
             return shipmentMessage(event,event?.payloadData?.data?.id)
         case "ORDER" : 
             return orderMessage(event,event?.payloadData?.data?.order_id,event.actorOrgId)
+        case "SHIPMENT_TRACKING" :
+            return shipmentMessage(event,event?.payloadData?.data?.id)
         default : 
             return eventToPlainText(event)
     }
