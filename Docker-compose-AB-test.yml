@@ -13,6 +13,15 @@ services:
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=false 
+
   advancedanalytics:
     build: './backend/advanced_analytics_service'
     image: 'advanced_analytics_service1.0'
@@ -30,15 +39,6 @@ services:
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
   
-  cache:
-    image: "redis"
-    container_name: "cache"
-    restart: always
-    ports:
-      - "6379:6379"
-    labels:
-      - traefik.enable=false    
-
   alert:
     build: './backend/alert_service'
     image: 'alert_service1.0'
@@ -261,7 +261,10 @@ services:
     build: './AbInBev/frontend' 
     image: 'frontend1.0'
     container_name: 'frontend'
-    restart: always   
+    restart: always 
+    environment: 
+      - "NODE_ENV=production"
+      - "ENVIRONMENT=abinbevtest"  
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"

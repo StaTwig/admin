@@ -52,5 +52,5 @@
     "not dead",
     "not op_mini all"
   ],
-  "proxy": "http://ec2-65-1-91-208.ap-south-1.compute.amazonaws.com/auth/"
+  "proxy": "https://divoc.vaccineledger.com/auth/"
 }

@@ -26,6 +26,7 @@ import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
 
 import Modal from "./modal/index";
+import Modal1 from "../../shared/modal";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {
@@ -130,7 +131,7 @@ class Profile extends React.Component {
       // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
-        warehouseLocations: response.data.data.warehouses,
+        warehouseLocations: response.data.data.warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING' ||i.status == 'NOTVERIFIED'),
         warehouseLocByOrg:wareHouseAddresses
       });
 
@@ -752,14 +753,14 @@ class Profile extends React.Component {
               )}
               <div className="">
                             {this.state.message && (
-                              <Modal
+                              <Modal1
                                 close={() => this.closeModal()}
                                 size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
                               >
                                 <SuccessPopUp
                                      onHide={this.closeModal}
                                 />
-                              </Modal>
+                              </Modal1>
                             )}
                           </div>
             </div>

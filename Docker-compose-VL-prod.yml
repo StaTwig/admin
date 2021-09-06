@@ -13,21 +13,6 @@ services:
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-  advancedanalytics:
-    build: './backend/advanced_analytics_service'
-    image: 'advanced_analytics_service1.0'
-    container_name: 'advanced_analytics_service1.0'
-    restart: always
-    env_file:
-      - ./env/ledger.env     
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.advancedanalytics.entrypoints=websecure"
-      - "traefik.http.routers.advancedanalytics.rule=Host(`vaccineledger.com`) && PathPrefix(`/advancedanalytics/`)"
-      - "traefik.http.routers.advancedanalytics.tls=true"
-      - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
-
   cache:
     image: "redis"
     container_name: "cache"
@@ -37,6 +22,23 @@ services:
     labels:
       - traefik.enable=false
 
+  advancedanalytics:
+    build: './backend/advanced_analytics_service'
+    image: 'advanced_analytics_service1.0'
+    container_name: 'advanced_analytics_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env 
+    depends_on: 
+      - cache      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.advancedanalytics.entrypoints=websecure"
+      - "traefik.http.routers.advancedanalytics.rule=Host(`vaccineledger.com`) && PathPrefix(`/advancedanalytics/`)"
+      - "traefik.http.routers.advancedanalytics.tls=true"
+      - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
+
   alert:
     build: './backend/alert_service'
     image: 'alert_service1.0'
@@ -44,6 +46,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on:
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -59,6 +63,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache  
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -81,6 +87,25 @@ services:
       - "traefik.http.routers.blockchain.rule=Host(`vaccineledger.com`) && PathPrefix(`/blockchainmanagement/`)"
       - "traefik.http.routers.blockchain.tls=true"
       - "traefik.http.routers.blockchain.tls.certresolver=lets-encrypt"
+
+  employee:
+    build: 
+      context: .
+      dockerfile: backend/employee_service/Dockerfile
+    image: 'employee_service1.0'
+    container_name: 'employee_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env 
+    depends_on: 
+      - cache      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee.entrypoints=websecure"
+      - "traefik.http.routers.employee.rule=Host(`vaccineledger.com`) && PathPrefix(`/usermanagement/`)"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"      
 
   event:
     build: './backend/event_service'
@@ -105,7 +130,9 @@ services:
     container_name: 'inventory_service1.0'
     restart: always
     env_file:
-      - ./env/ledger.env     
+      - ./env/ledger.env 
+    depends_on: 
+      - cache      
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -120,7 +147,9 @@ services:
     container_name: 'last_mile_service1.0'
     restart: always
     env_file:
-      - ./env/ledger.env     
+      - ./env/ledger.env
+    depends_on:
+      - cache     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -174,7 +203,24 @@ services:
       - "traefik.http.routers.product.entrypoints=websecure"
       - "traefik.http.routers.product.rule=Host(`vaccineledger.com`) && PathPrefix(`/productmanagement/`)"
       - "traefik.http.routers.product.tls=true"
-      - "traefik.http.routers.product.tls.certresolver=lets-encrypt"       
+      - "traefik.http.routers.product.tls.certresolver=lets-encrypt"    
+
+  rbac:
+    build: './backend/rbac_service'
+    image: 'rbac_service1.0'
+    container_name: 'rbac_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env 
+    depends_on:
+      - cache    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.rbac.entrypoints=websecure"
+      - "traefik.http.routers.rbac.rule=Host(`vaccineledger.com`) && PathPrefix(`/rbacmanagement/`)"
+      - "traefik.http.routers.rbac.tls=true"
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"         
 
   shipment:
     build: 
@@ -192,38 +238,6 @@ services:
       - "traefik.http.routers.shipment.rule=Host(`vaccineledger.com`) && PathPrefix(`/shipmentmanagement/`)"
       - "traefik.http.routers.shipment.tls=true"
       - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
-
-  rbac:
-    build: './backend/rbac_service'
-    image: 'rbac_service1.0'
-    container_name: 'rbac_service1.0'
-    restart: always
-    env_file:
-      - ./env/ledger.env     
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.rbac.entrypoints=websecure"
-      - "traefik.http.routers.rbac.rule=Host(`vaccineledger.com`) && PathPrefix(`/rbacmanagement/`)"
-      - "traefik.http.routers.rbac.tls=true"
-      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
-
-  employee:
-    build: 
-      context: .
-      dockerfile: backend/employee_service/Dockerfile
-    image: 'employee_service1.0'
-    container_name: 'employee_service1.0'
-    restart: always
-    env_file:
-      - ./env/ledger.env     
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`vaccineledger.com`) && PathPrefix(`/usermanagement/`)"
-      - "traefik.http.routers.employee.tls=true"
-      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
   shippingorder:
     build: './backend/shippingOrder_service'

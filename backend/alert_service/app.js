@@ -9,6 +9,7 @@ var cors = require("cors");
 var alerts = require("./helpers/alertGenerator")
 var events = require("./models/EventModal");
 // DB connection
+var cron = require('node-cron');
 var MONGODB_URL = process.env.MONGODB_URL;
 var mongoose = require("mongoose");
 mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true}).then(() => {
@@ -32,6 +33,14 @@ eventEmitter.on('change', (change) => {
 		console.log("********************************EVENT DELETED********************************",change.documentKey._id);
 	  }
 });
+
+const CALCULATE_EXPIRED_CRON_TIME = `*/5 * * * * 6`;
+
+cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
+	console.log('Checking Product Expiry');
+	alerts.checkProductExpiry();
+});
+
 var app = express();
 //Swagger API
 const expressSwagger = require('express-swagger-generator')(app);

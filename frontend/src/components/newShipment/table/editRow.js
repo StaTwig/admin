@@ -146,7 +146,6 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
                     {
                       if(prod.name===productsList[i].productName)
                       {
-                        console.log("Hi");
                         qty = String(productsList[i].quantity);
                         console.log(typeof(qty));
                         break;
@@ -258,7 +257,7 @@ const editQuantity = (value, index) => {
                   defaultInputValue={prod.type}
                   onChange={(v) => {
                     handleCategoryChange(index, v.value,prod.batchNumber);
-                    handleBatchChange(prod.batchNumber, index);
+                    handleBatchChange("", index);
                   }
                 }
                   options={category}
@@ -291,7 +290,7 @@ const editQuantity = (value, index) => {
                    defaultInputValue={prod.name}
                   onChange={(v) => {
                     handleProductChange(index, v);
-                    handleBatchChange(prod.batchNumber, index);
+                    handleBatchChange("", index);
                     setQuantityChecker(1);
                   }
                 }
@@ -365,7 +364,7 @@ const editQuantity = (value, index) => {
                <div>
                 <div className="rTableRow mb-1"> 
                         <input className="txt2 ml-3" type="checkbox" id={index} 
-                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); editBatchSelected(index, "selected", !batches[index].selected);}}>
+                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); editBatchSelected(index, "selected", !batches[index].selected); editBatchSelected(index, "editable", false)}}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
@@ -415,6 +414,7 @@ const editQuantity = (value, index) => {
                   </div>
                 ) : (
                   <button
+                    type="button"
                     className="btn-sm btn-yellow d-width"
                     disabled={!batches[index].selected}
                     onClick={(e) => editBatchSelected(index, "editable", !batches[index].editable)}

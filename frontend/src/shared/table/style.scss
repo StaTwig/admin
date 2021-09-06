@@ -238,20 +238,20 @@
 }
 .txt-inventory{
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   align-self: center;
   overflow: hidden;
   color:#ffffff;
 }
 .txt{
   font-weight: 600;
-  font-size: small;
+  font-size: 14px;
   align-self: center;
   overflow: hidden;
 }
 .txt1{
   font-weight: 400;
-  font-size: small;
+  font-size: 14px;
   align-self: center;
   overflow: hidden;
 }
@@ -267,33 +267,36 @@
 }
 .Bmanufacturer-add-inventory{
   position: relative;
-  left:10px;
+  left:70px;
   //margin-left: 10px;
 }
 .manufacturer-add-inventory{
   position: relative;
-  left:1px;
+  left:60px;
 }
 .Bproduct-add-inventory{
   position:relative; 
-  left:-30px;
+  left:-10px;
 }
 .product-add-inventory{
   margin-left: -50px;
 }
 .Bproduct-cat-add-inventory{
   position:relative; 
-  left:-70px;
+  left:-60px;
 }
 .product-cat-add-inventory{
-  margin-right: 0px;
+  position: relative;
+  left:-55px;
+  //margin-right: 0px;
 }
 .Bquantity-add-inventory{
  position: relative;
- left:90px;
+ left:100px;
 }
 .quantity-add-inventory{
-  margin-left: 65px;
+ position: relative;
+ left:20px;
 }
 .mfg-add-inventory{
   position:relative;
@@ -303,6 +306,65 @@
   position:relative;
   left:-10px;
 }
+.bttn-orange {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  float:right;
+}
+.orange-warning {
+  border-color: #ff9800;
+  color: orange;
+}
+
+.orange-warning:hover {
+  background: #ff9800;
+  color: white;
+}
+.bttn-blue {
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  float: right;
+}
+.blue-primary {
+  border-color: #0093E9;
+  color: #0093E9;
+}
+
+.blue-primary:hover {
+  background: #0093E9;
+  color: white;
+}
+.d-head{
+   font-size: 14px;
+   color:#707070;
+}
+
+.select-placeholder-text-manufacturer {
+  color: #b8b8b8;
+  font-size: 14px;
+  }
+.select-placeholder-text-prod-category {
+  color: #495057;
+  font-size: 14px;
+  position: relative;
+  left:35px;
+  }
+  .select-placeholder-text-prod {
+    color: #495057;
+    font-size: 14px;
+    position: relative;
+    left:85px;
+    }
 /* .btn{
       width: 60px;
       height: 30px;

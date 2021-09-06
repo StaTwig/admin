@@ -421,9 +421,9 @@ exports.createShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            const po_product_quantity =
+            const po_product_quantity = 
               product.productQuantity || product.quantity;
-            const shipment_product_qty = p.productQuantity || p.quantity;
+            const shipment_product_qty = p.productQuantityShipped || p.productQuantity || p.quantity;
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
@@ -1888,11 +1888,10 @@ exports.chainOfCustody = [
           const { role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewShipment',
+            permissionRequired: ['viewShipment'],
           };
         checkPermissions(permission_request, async permissionResult => {
                 if (permissionResult.success) {
-                    var chainOfCustody = [];
                     var poDetails = "";
                     const id = req.query.shipmentId;
                     if (id.includes("PO")) {

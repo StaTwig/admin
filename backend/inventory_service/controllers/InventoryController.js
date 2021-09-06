@@ -729,6 +729,8 @@ exports.addProductsToInventory = [
               res,
               "Duplicate Serial Numbers found"
             );
+            var duplicateBatch = false;
+            var duplicateBatchNo = "";
           await utility.asyncForEach(products, async (product) => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({
@@ -838,6 +840,22 @@ exports.addProductsToInventory = [
               };
               atomsArray.push(atom);
             }
+            for(let i = 0; i< atomsArray.length; i++){
+              let res = await AtomModel.findOne({"batchNumbers": atomsArray[i].batchNumbers[0],"inventoryIds": warehouse.warehouseInventory})
+              console.log(res)
+              if(!res){
+                continue;
+              }
+              if(res){
+                duplicateBatch = true;
+                duplicateBatchNo = res.batchNumbers[0];
+                break;
+              }
+            }
+
+
+
+            
 
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -854,6 +872,9 @@ exports.addProductsToInventory = [
              }
            });*/
           });
+          if(duplicateBatch){
+            return apiResponse.ErrorResponse(res,  `A batch with batch number ${duplicateBatchNo} exists in the inventory`);
+          }
           var datee = new Date();
           datee = datee.toISOString();
           var evid = Math.random().toString(36).slice(2);
@@ -1538,7 +1559,9 @@ exports.getProductListCounts = [
         }   
         
 
+        if (product1.quantity > 0){
         productArray.push(product1);
+} 
       }
 
       productArray.sort(function(a,b){
@@ -2821,22 +2844,37 @@ exports.autoCompleteSuggestions = [
     try {
       const { searchString  } = req.query;
        
-        const suggestions = await RecordModel.aggregate([
+        const suggestions1 = await RecordModel.aggregate([
           {$project: { _id: 0, value: "$id", record_type: "order"}},
           {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
-          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
-          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
-          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
-
-          {$match: {"value": {$regex: searchString ? searchString: ""} }},
-          {$limit: 10},
+          {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+          {$limit: 5},
           { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
   ])
           .sort({ createdAt: -1 })
+
+          const suggestions2 = await RecordModel.aggregate([
+            {$project: { _id: 0, value: "$id", record_type: "order"}},
+            {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}},   
+            {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+            {$limit: 5},
+            { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
+    ])
+            .sort({ createdAt: -1 })
+
+            const suggestions3 = await RecordModel.aggregate([
+              {$project: { _id: 0, value: "$id", record_type: "order"}},
+              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
+              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
+              {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
+              {$limit: 5},
+              { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
+      ])
+              .sort({ createdAt: -1 })
         return apiResponse.successResponseWithData(
           res,
           "Autocorrect Suggestions",
-          suggestions
+          [...suggestions1, ...suggestions2, ...suggestions3]
         );
     } catch (err) {
       console.log(err);

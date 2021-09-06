@@ -12,8 +12,31 @@ exports.getAllAlerts = [
   auth,
   async function (req, res) {
     try {
-      let alerts = await Alerts.find({ username: req.user.id })
-      return apiResponse.successResponseWithData(res, 'Alerts fetched successfully', alerts)
+      const resPerPage = Number(req.query.limit) || 10; 
+			const page = Number(req.query.page) || 1; 
+			const totalRecords = await Alerts.count({...req.params})
+      let alerts = await Alerts.find({ username: req.user.id }).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage).then(
+        Alerts => {
+          if (Alerts.length > 0) {
+            const finalData = {
+              totalRecords : totalRecords,
+              data : Alerts
+            }
+            return apiResponse.successResponseWithData(
+              res,
+              "Operation success",
+              finalData
+            );
+          } else {
+            return apiResponse.successResponseWithData(
+              res,
+              "No Results Found",
+              []
+            );
+          }
+        }
+      )
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
     }
@@ -25,8 +48,31 @@ exports.getAlertNotifications = [
   async function (req, res) {
     try {
       // let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
-      let notifications = await Notification.find({ user : req.user.id, type : req.query.type})
-      return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
+      const resPerPage = Number(req.query.limit) || 10; 
+			const page = Number(req.query.page) || 1; 
+			const totalRecords = await Alerts.count({...req.params})
+      Notification.find({ user : req.user.id, type : req.query.type}).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage).then(
+        Alerts => {
+          if (Alerts.length > 0) {
+            const finalData = {
+              totalRecords : totalRecords,
+              data : Alerts
+            }
+            return apiResponse.successResponseWithData(
+              res,
+              "Operation success",
+              finalData
+            );
+          } else {
+            return apiResponse.successResponseWithData(
+              res,
+              "No Results Found",
+              []
+            );
+          }
+        }
+      )
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
     }
@@ -37,8 +83,28 @@ exports.getTransactionNotifications = [
   auth,
   async function (req, res) {
     try {
-      let notifications = await Notification.find({ user : req.user.id, type : "TRANSACTION"})
-      return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
+      Notification.find({ user : req.user.id, type : "TRANSACTION"}).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage).then(
+        Notifications => {
+          if (Notifications.length > 0) {
+            const finalData = {
+              totalRecords : totalRecords,
+              data : Notifications
+            }
+            return apiResponse.successResponseWithData(
+              res,
+              "Operation success",
+              finalData
+            );
+          } else {
+            return apiResponse.successResponseWithData(
+              res,
+              "No Results Found",
+              []
+            );
+          }
+        }
+      )
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
     }

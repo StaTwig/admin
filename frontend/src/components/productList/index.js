@@ -57,12 +57,12 @@ const ProductList = props => {
           </button>
           </Link>
           <Link to="/addproduct">
-          <button className="btn btn-orange fontSize20 font-bold mr-4 product">
+          <button className="btn btn-orange fontSize20 font-weight-bold mr-4 product">
           <img src={Add} width="14" height="14" className="mr-2" />
             <span>Add New Product</span>
           </button>
           </Link>
-          <button className="btn btn-md btn-main-blue export">
+          <button className="btn btn-md btn-main-blue export font-weight-bold">
             <div className="d-flex  align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
@@ -80,7 +80,7 @@ const ProductList = props => {
       <Table {...props}/>
       </div>
       {loadMore && (
-          <button className="btn btn-success" onClick={onLoadMore}>
+          <button className="btn btn-success font-weight-bold" onClick={onLoadMore}>
             Load More
           </button>
         )}

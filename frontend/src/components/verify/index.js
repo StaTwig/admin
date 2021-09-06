@@ -146,6 +146,9 @@ const FormVerifyPage = (props) => {
                             )}
                           &nbsp;
                         </div>
+                        {errorMessage && (
+                          <span className={`text-danger-verify ${errorMessage ? "border-red" : "" }`}>OTP doesn't match</span>
+                        )}
                         <div className="font-weight-bold text-center">
                           Didn't receive the OTP?
                         </div>
@@ -157,9 +160,9 @@ const FormVerifyPage = (props) => {
                           RESEND CODE
                         </div>
 
-                        {errorMessage && (
+                        {/* {errorMessage && (
                           <div> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-                        )}
+                        )} */}
                         <div className="text-center mt-3 mb-3 ml-1">
                           <button type="submit" className=" buttonS btn btn-primary">
                             VERIFY

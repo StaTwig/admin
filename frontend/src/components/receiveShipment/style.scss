@@ -9,7 +9,10 @@
   margin-left:10px;
 
 }
-
+.modalClass{
+  height: 170px;
+  width: 185px;
+}
 .select{
   display: none;
 }
@@ -224,4 +227,39 @@ color: #4A4A4A;
     height:200px;
     margin: 10px 0px;
   }
-
+.quantity-received{
+  position:relative; 
+  bottom:15px;
+  height: 3.5vh;
+  width: max-content; 
+  font-size: 12px;  
+  margin-top: 0; 
+  margin-bottom: 0px; 
+}
+.select-placeholder-comment{
+  font-size:14.5px;
+  margin-top: 5px;
+  margin-left: 1px;
+}
+.txt-outline{
+  border: 1px solid #57c1ff;
+  border-radius: 10px;
+  padding: 5px 10px 5px 10px;
+  margin: -5px 0px 20px 20px;
+  font-size: small;
+  text-align: center;
+  cursor: pointer;
+}
+.txt-outline:hover {
+  background-color: #57c1ff;
+  color: white;
+}
+.cross-img{
+ position:relative;
+ left:12.4rem;
+ top:-5px;
+}
+.modal-image{
+  height: 170px;
+  width:190px;
+}

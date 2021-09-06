@@ -23,7 +23,7 @@ import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from 'react-select';
 import {getOrganizationsTypewithauth} from '../../actions/userActions';
-import { getProducts, getProductsByCategory } from "../../actions/poActions";
+import { getProducts, getProductsByCategory, searchProduct } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { TextField } from "@material-ui/core";
@@ -42,7 +42,7 @@ const NewShipment = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [fetchdisabled, setfetchdisabled] = useState(false);
   const [pofetchdisabled, setpofetchdisabled] = useState(false);
-  
+  const [FromLocationSelected, setFromLocationSelected] = useState(false)
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
@@ -53,6 +53,7 @@ const NewShipment = (props) => {
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
   );
+  const [selectedWarehouse, setSelectedWarehouse] = useState("")
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
   );
@@ -446,17 +447,20 @@ if (!error) {
   };
   const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
     try {
-      const warehouse = await getProductsByCategory(value);
+      const warehouse = await searchProduct(value, selectedWarehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
       newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
-      setProducts(warehouse.data.map(item => {
+      let buffer = warehouse.filter(item => item.inventoryDetails.quantity > 0)
+      setProducts(buffer.map(item => {
+        // console.log(item.products.name)
+       
                                       return {
-                                        value: item.name,
-                                        label: item.name,
-                                        ...item
+                                        value: item.products.name,
+                                        label: item.products.name,
+                                        ...item.products
                                       };
                                     }));
     } catch (err) {
@@ -917,6 +921,9 @@ if (!error) {
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
                             onWarehouseChange(v.warehouseInventory);
+                            console.log(v.id)
+                            setSelectedWarehouse(v.id)
+                            setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
                             // console.log(v.value)
@@ -1368,7 +1375,7 @@ if (!error) {
                   Cancel
                 </button>
 
-                <button className="btn btn-orange fontSize20 font-bold">
+                <button disabled={!FromLocationSelected} className="btn btn-orange fontSize20 font-bold">
                   <img src={Add} width="20" height="17" className="mr-2 mb-1" />
                   <span>Create Shipment</span>
                 </button>

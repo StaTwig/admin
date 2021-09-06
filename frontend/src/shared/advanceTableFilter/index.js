@@ -128,16 +128,36 @@ const AdvanceTableFilter = (props) => {
     } else {
       return (<div className="box col">
         <span className="divider" />
-        <div className="filter-item">
+         <a className="filter-item ml-4" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
             {props.data.img6}
           </div>
           <div className="filterTitle">{props.data.coloumn6}</div>
-          <div className="filterAction">
-            {/* <img src={updownarrow} width="9" height="9" /> */}
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
+        </a>
+          <StyledMenu
+          className="filter-dropdown"
+          style={{ width: "100rem" }}
+          id="customized-menu"
+          anchorEl={inventoryStatusAnchorEl}
+          keepMounted
+          onBlur={handleInventoryStatusClose}
+          open={Boolean(inventoryStatusAnchorEl)}
+          onClose={handleInventoryStatusClose}
+          >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "0px", height: "40px", width: "130px", borderRadius: "10px" }} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>Shipped</Button>
+            </StyledMenuItem>
+            <StyledMenuItem>
+              <Button style={{ padding: "0px", height: "40px", width: "130px", borderRadius: "10px" }} class="btn btn-outline-success btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("RECEIVED")}>Delivered</Button>
+            </StyledMenuItem>
+            <StyledMenuItem>
+              <Button class="btn btn-link btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
           </div>
+        </StyledMenu>
         </div>
-      </div>
       );
     }
   }
@@ -229,7 +249,7 @@ const AdvanceTableFilter = (props) => {
       // </div>
       //   );
     } else if (columnData == "Status") {
-      return (<div className="box col-2">
+      return (<div className="box col">
         {/* <span className="divider" /> */}
         <a className="filter-item" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
@@ -371,12 +391,12 @@ const AdvanceTableFilter = (props) => {
   const renderColumn4 = (columnData) => {
     if (columnData == "To") {
       return (<div className="box col-3">
-        <a className="filter-item" onClick={handleToShipmentClick} style={{ position: "relative", left: "-70px" }}>
-          <div className="icon mr-2">
+        <a className="filter-item" onClick={handleToShipmentClick} style={{ position: "relative", left: "-80px" }}>
+          <div className="icon mr-0">
             {props.data.img4}
           </div>
           <div className="filterTitle" >{props.data.coloumn4}</div>
-          <img src={updownarrow} width="10" height="10" style={{ position: "relative", left: "130px" }} />
+          <img src={updownarrow} width="10" height="10" style={{ position: "relative", left: "220px" }} />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -556,11 +576,11 @@ const AdvanceTableFilter = (props) => {
     if (columnData == "From") {
       return (<div className="box col-4">
         <a className="filter-item" onClick={handleFromShipmentClick} style={{ position: "relative", left: "-100px" }}>
-          <div className="icon mr-2">
+          <div className="icon mr-0">
             {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "190px" }} />
+          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "205px" }} />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -755,7 +775,7 @@ const AdvanceTableFilter = (props) => {
     else {
       return (<div className="box col-2">
         <div className="filter-item">
-          <div className="icon mr-2">
+          <div className="icon mr-1">
             {props.data.img2}
           </div>
           <div className="filterTitle">{props.data.coloumn2}</div>
@@ -821,12 +841,12 @@ const AdvanceTableFilter = (props) => {
   const renderColumn1 = (columnData) => {
     if (columnData == "Shipment ID") {
       return (<div className="box col-2">
-        <a className="filter-item ml-5 mr-4" onClick={handleShipmentIdClick}>
-          <div className="icon mr-2">
+        <a className="filter-item ml-4 mr-3" onClick={handleShipmentIdClick}>
+          <div className="icon ">
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-1" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -1124,10 +1144,10 @@ const AdvanceTableFilter = (props) => {
             </div>
           </button> */}
             <button
-              className="btn btn-md btn-blue"
+              className="btn-filter-info"
               onClick={handleClick}>
               <div className="d-flex align-items-center">
-                <img src={FilterIcon} width="16" height="16" className="mr-2" />
+                <img src={FilterIcon} width="14" height="14" className="mr-2" />
                 <span className="text">Filter</span>
                 <img src={dropdownIcon} width="10" height="10" className="ml-2" />
               </div>
@@ -1161,11 +1181,11 @@ const AdvanceTableFilter = (props) => {
               </div>
             </StyledMenu>
             {!props?.isReportDisabled &&
-            <button className="btn btn-md btn-main-blue ml-2"
+            <button className="btn-filter-blue ml-2"
               onClick={() => props.setShowExportFilter(!props.showExportFilter)}
             >
               <div className="d-flex  align-items-center">
-                <img src={ExportIcon} width="16" height="16" className="mr-2" />
+                <img src={ExportIcon} width="14" height="14" className="mr-2" />
                 <span>Export</span>
                 <img
                   src={dropdownIcon}

@@ -387,7 +387,7 @@ exports.checkEmail = [
                 countryId: '001',
                 countryName: country
               },
-              status: "ACTIVE"
+              status: "NOTVERIFIED"
             });
             await warehouse.save();
           }
