@@ -1743,7 +1743,7 @@ function buildPdfReport(req,res,data){
   let finalPath = resolve("./models/pdftemplate.html")
     let html = fs.readFileSync(finalPath, "utf8");
     var options = {
-      format: "A3",
+      format: "A4",
       orientation: "landscape",
       border: "10mm",
       header: {
