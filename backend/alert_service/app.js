@@ -34,11 +34,12 @@ eventEmitter.on('change', (change) => {
 	  }
 });
 
-const CALCULATE_EXPIRED_CRON_TIME = `*/5 * * * * 6`;
+const CALCULATE_EXPIRED_CRON_TIME = `00 00 9 * * 1`;
 
 cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
-	console.log('Checking Product Expiry');
+	console.log('Checking Product Expiry', new Date());
 	alerts.checkProductExpiry();
+	alerts.checkProductNearExpiry();
 });
 
 var app = express();

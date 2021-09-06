@@ -5,7 +5,7 @@ const Atoms = require('../models/AtomsModel')
 const EmployeeModel = require('../models/EmployeeModel')
 const WarehouseModel = require('../models/WarehouseModel')
 const { alertMobile, alertEmail, alertPushNotification, pushNotification } = require('./alertSender')
-
+var moment = require('moment');
 
 async function processShipmentEvents(event){
     try{
@@ -34,7 +34,7 @@ async function processShipmentEvents(event){
 
 async function processOrderEvents(event){
     try{
-        const orderId = event?.payloadData?.data?.order_id;
+        const orderId = event?.payloadData?.data?.order_id || event?.transactionId
         let params = { 
             "alerts.event_type_primary": event.eventTypePrimary,
             "alerts.event_type_secondary": event.eventTypeDesc,
@@ -92,12 +92,13 @@ async function generateAlert(event) {
 async function checkProductExpiry(){
     try{
         let params = {
-            "attributeSet.expDate" : { $lt: new Date() }
+            "attributeSet.expDate" : { $lt: moment().format() }
         }
+        console.log(params)
         for await(const product of Atoms.find({ 
             ...params
         })){
-            productExpired(product.productId,product.quantity,product.inventoryIds)
+            productExpired(product.productId,product.quantity,product.inventoryIds, "EXPIRED")
         }
     }
     catch(err){
@@ -105,26 +106,44 @@ async function checkProductExpiry(){
     }
 }
 
-async function productExpired(productId, quantity, owner){
+async function checkProductNearExpiry(){
+    try{
+        let params = {
+            "attributeSet.expDate" : { $lt: moment().add(30,'d').format(), $gt: moment().format() }
+        }
+        for await(const product of Atoms.find({ 
+            ...params
+        })){
+            productExpired(product.productId,product.quantity,product.inventoryIds, "NEAR_EXPIRY")
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+async function productExpired(productId, quantity, owner, expired){
     for(inventoryId of owner){
         for await(const inventory of WarehouseModel.find( 
             { warehouseInventory : inventoryId }
         )){
-            productExpiryEvent(productId, quantity, inventory.id, inventory.organisationId)
+            productExpiryEvent(productId, quantity, inventory.id, inventory.organisationId, expired)
         }
     }
 }
 
-async function productExpiryEvent(productId, quantity, warehouse, organisation){
+async function productExpiryEvent(productId, quantity, warehouse, organisation, expired){
     for await(const user of EmployeeModel.find( 
         { warehouseId : warehouse }
     )){
         eventData = {
             actorOrgId : organisation,
-            eventTypePrimary : "EXPIRE",
-            eventTypeDesc : "PRODUCT",
-            quantity: quantity
+            eventTypePrimary : expired,
+            eventTypeDesc : "INVENTORY",
+            quantity: quantity,
+            transactionId : productId
         }
+        console.log("ALERTING USER",user)
         pushNotification(eventData,user.id,"ALERT",productId)
         alertPushNotification(eventData,user.id)
         let alertData = Alert.findOne({ username : user.id })
@@ -138,3 +157,4 @@ async function productExpiryEvent(productId, quantity, warehouse, organisation){
 
 exports.checkProductExpiry = checkProductExpiry;
 exports.generateAlert = generateAlert;
+exports.checkProductNearExpiry = checkProductNearExpiry;

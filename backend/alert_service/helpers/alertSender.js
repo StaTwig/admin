@@ -11,7 +11,11 @@ function eventToData(event,type){
         case "SHIPMENT" :
             return shipmentMessage(event,event?.payloadData?.data?.id)
         case "ORDER" : 
-            return orderMessage(event,event?.payloadData?.data?.order_id,event.actorOrgId)
+            return orderMessage(event,event?.transactionId,event.actorOrgId)
+        case "SHIPMENT_TRACKING" :
+            return shipmentMessage(event,event?.payloadData?.data?.id)
+        case "INVENTORY" :
+            return inventoryMessage(event,event?.transactionId)
         default : 
             return eventToPlainText(event)
     }
@@ -38,6 +42,13 @@ function shipmentMessage(event,txnId){
     else if(event.eventTypePrimary=="UPDATE") return `"Shipment - ${txnId}" has been Updated`
     else if(event.eventTypePrimary=="RECEIVE") return `"Shipment - ${txnId}" has been Delivered`
     else return `"Shipment - ${txnId}" has been Updated`
+}
+
+function inventoryMessage(event,txnId){
+    if(event.eventTypePrimary=="ADD") return `"Inventory - ${txnId}" has been Created`
+    else if(event.eventTypePrimary=="EXPIRED") return `"Inventory - ${txnId}" has expired`
+    else if(event.eventTypePrimary=="NEAR_EXPIRY") return `"Inventory - ${txnId}" is nearing Expiry`
+    else return `"Inventory - ${txnId}" has been Updated`
 }
 
 
