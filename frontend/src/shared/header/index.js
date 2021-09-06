@@ -370,43 +370,13 @@ const Header = (props) => {
                       
                         <div>
                            <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification)}/>
-                           <a href={"/" + viewUrl(notification) + notification.transactionId} >
+                           <Link to={"/" + viewUrl(notification) + notification.transactionId} >
                            {notification.message}
-                           </a>
+                           </Link>
                         </div>
                     
                       </div>
-                      <div className="col-sm-2">
-                        <button
-                          style={{
-                            backgroundColor: "transparent",
-                            color: "white",
-                            borderColor: "transparent",
-                          }}
-                          onClick={() => {
-                            setAlertType("TRANSACTION");
-                            changeNotifications("TRANSACTION");
-                          }}
-                        >
-                          Transactions
-                        </button>
-                      </div>
-                    </div>
-                    {notifications.map((notification) => (
-                      <div className='slider-item'>
-                        <div
-                          className='row justify-content-between align-items-center'
-                          onClick={() => clearNotification(notification)}
-                        >
-                          <div className='col-sm-10'>
-                            <div>
-                              <img
-                                style={{ size: "15px", marginLeft: "-20px" }}
-                                src={notifIcon(notification.message)}
-                              />{" "}
-                              {notification.message}
-                            </div>
-                          </div>
+
                           <div className='col-sm-2'>
                             <button className='close' aria-label='Close'>
                               <span aria-hidden='true'>&times;</span>
@@ -414,7 +384,7 @@ const Header = (props) => {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )}
                   </React.Fragment>
                 </div>
               )}
