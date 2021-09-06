@@ -45,6 +45,7 @@ function orderMessage(event,txnId,actorOrgId){
     if(event.eventTypePrimary=="RECEIVE") return `Received a new Order "Order - ${txnId}"  from ${actorOrgId}`
     else if(event.eventTypePrimary=="ACCEPT") return `Your "Order ID: ${txnId}" has been Accepted by ${actorOrgId}`
     else if(event.eventTypePrimary=="REJECT") return `Your "Order ID: ${txnId}" has been Rejected by ${actorOrgId}`
+    else if(event.eventTypePrimary=="REJECT") return `"Order ID: ${txnId}" has been Created by ${actorOrgId}`
     else return `"New updates on "Order - ${txnId}"  from ${actorOrgId}`
 }
 
