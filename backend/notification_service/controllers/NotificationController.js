@@ -11,7 +11,7 @@ const client = require('twilio')(accountSid, authToken, {
 });
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-
+const fromMobile = '+1234567890'
 function sendEmail(subject,content,emailId){
   mailer.send(
     constants.confirmEmails.from,
@@ -30,12 +30,20 @@ function sendSMS(content,mobile){
   client.messages
   .create({
      body: content,
-     from: '+15017122661',
+     from: fromMobile,
      to: mobile
    })
   .then(message => console.log(message.sid));
 }
-
+function sendWhatsApp(content,mobile){
+  client.messages
+      .create({
+         from: `whatsapp:${fromMobile}`,
+         body: content,
+         to: `whatsapp:${mobile}`
+       })
+      .then(message => console.log(message.sid));
+}
 exports.getAlertNotifications = [
   auth,
   async function (req, res) {
