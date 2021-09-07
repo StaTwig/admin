@@ -355,20 +355,20 @@ const Header = (props) => {
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
-              {notifications.length >=0 && <span className="badge badge-light">{notifications.length }</span> }
+              {notifications?.length >=0 && <span className="badge badge-light">{notifications?.length }</span> }
             </div>
-            {showNotifications && notifications.length >= 0 &&(
+            {showNotifications && notifications?.length >= 0 &&(
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
                     <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px"}}>User Notifications</text> 
-                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
+                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications?.length} new</text> 
                   <div className="section">
                     <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
                     <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
                   </div>
                   </div>
-                  {notifications.map(notifications =>  <div className="slider-item">
+                  {notifications?.map(notifications =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notifications)}>
                       <div className="col-sm-10">
                       
