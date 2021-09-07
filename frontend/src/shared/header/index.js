@@ -351,7 +351,7 @@ const Header = (props) => {
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
-              {notification.length >=0 && <span className="badge badge-light">{notifications.length }</span> }
+              {notifications.length >=0 && <span className="badge badge-light">{notifications.length }</span> }
             </div>
             {showNotifications && notification.length >= 0 &&(
               <div className="slider-menu">
