@@ -56,7 +56,7 @@ const Header = (props) => {
   const [options, setOptions] = useState([]);
 
   const filterOptions = createFilterOptions({
-    matchFrom: "start",
+    //matchFrom: "start",
     stringify: (option) => option._id,
   });
 
