@@ -398,11 +398,11 @@ const Header = (props) => {
             <div className='userName'>
               <DropdownButton
                 name={
-                  location?.title +
+                  (location?.title +
                   "\n" +
                   location?.warehouseAddress?.city +
                   "," +
-                  location?.warehouseAddress?.country
+                  location?.warehouseAddress?.country).substr(0,25).concat('...')
                 }
                 arrowImg={dropdownIcon}
                 onSelect={(item) => {
