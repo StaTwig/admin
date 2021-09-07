@@ -32,6 +32,7 @@ const Configurationpart = (props) => {
   const [permissionByRoleData, setPermissionByRoleData] = useState([]);
   const [selectedFeature, setSelectedFeature] = useState('');
   const [updatePermissions, setUpdatePermissions] = useState({});
+  const [allPermissions, setAllPermissions] = useState({});
   const [errorForRoleNotFound, setErrorForRoleNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -194,6 +195,15 @@ const Configurationpart = (props) => {
         ...item
       }
     });
+    if (!showAddNewInputSection) {
+      let pr =  permissionByRoleData[0];
+      pr[selectedFeature][permission.key] = permission.hasPermission;
+      setAllPermissions({overview: pr.overview, search: pr.search, inventory: pr.inventory, shipment: pr.shipment, order: pr.order, network: pr.network, track: pr.track, admin: pr.admin});
+    }
+    else
+      setAllPermissions({});
+  
+    // console.log(pr[selectedFeature], selectedFeature, permission, permissionByRoleData);
     setFunctionalitiesPermissionPanelData([...updatedPermissionData]);
     prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, selectedLevel);
   }
@@ -230,7 +240,7 @@ const Configurationpart = (props) => {
   const onSaveOfUpdatePermission = async () => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
       if (!showAddNewInputSection) {
-        await requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading);
+        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: selectedLevel}, setIsLoading);
       } else {
         if (updatePermissions.role) {
           await requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading);
@@ -292,6 +302,7 @@ const Configurationpart = (props) => {
             addresses={addresses}
             acceptApproval={acceptApproval}
             selectedFeature={selectedFeature}
+            selectedLevel={selectedLevel}
           />)
         }
         {tabIndex == 6 && (
@@ -697,9 +708,10 @@ const Configurationpart = (props) => {
 export default Configurationpart;
 async function requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading) {
   try {
-    await updatePermissionsByRole(updatePermissions);
-    window.location.reload();
     setIsLoading(true);
+    await updatePermissionsByRole(updatePermissions);
+    // window.location.reload();
+    setIsLoading(false);
   } catch (error) {
     console.log(error);
     setIsLoading(false);
