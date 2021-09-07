@@ -7,6 +7,9 @@ import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Location from "../../assets/icons/location_blue.png";
 import DrawerMenu from "./drawerMenu";
 import {
+  Link
+} from "react-router-dom";
+import {
   getActiveWareHouses,
   getUserInfo,
   logoutUser,
@@ -213,15 +216,16 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
-    console.log(response.data.data);
-    setNotifications(response.data.data);
+    console.log(response.data.data.data);
+    setNotifications(response.data.data.data);
   }
 
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
-      setNotifications(response.data.data);
+      console.log(response.data.data.data);
+      setNotifications(response.data.data.data);
 
       const warehouses = await getActiveWareHouses();
       const active = warehouses.filter((i) => i.status == "ACTIVE")
@@ -347,7 +351,7 @@ const Header = (props) => {
         
        <div className="user-info ">
        <div className="notifications">
-                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
+                <img src={bellIcon} onClick={() => setShowNotifications(!showNotifications)} alt="notification" /><bellIcon />
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
