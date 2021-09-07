@@ -114,10 +114,10 @@ const NewShipment = (props) => {
     
     async function fetchData() {
 
-      const result111 = await getProductList();
+      /*const result111 = await getProductList();
      
       setProductsList(result111.message);
-      console.log(result111)
+      console.log(result111)*/
       const { search } = props.location;
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
