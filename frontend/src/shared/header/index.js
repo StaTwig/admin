@@ -353,7 +353,7 @@ const Header = (props) => {
             
               {notifications.length >=0 && <span className="badge badge-light">{notifications.length }</span> }
             </div>
-            {showNotifications && notification.length >= 0 &&(
+            {showNotifications && notifications.length >= 0 &&(
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
@@ -364,14 +364,14 @@ const Header = (props) => {
                     <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
                   </div>
                   </div>
-                  {notifications.map(notification =>  <div className="slider-item">
-                    <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
+                  {notifications.map(notifications =>  <div className="slider-item">
+                    <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notifications)}>
                       <div className="col-sm-10">
                       
                         <div>
-                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notification)}/>
-                           <Link to={"/" + viewUrl(notification) + notification.transactionId} >
-                           {notification.message}
+                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notifications)}/>
+                           <Link to={"/" + viewUrl(notifications) + notifications.transactionId} >
+                           {notifications.message}
                            </Link>
                         </div>
                     
