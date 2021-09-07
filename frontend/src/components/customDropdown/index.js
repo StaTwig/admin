@@ -4,7 +4,7 @@ import './styles.scss'
 const CustomDropdown = props => {
     return (
         <select className={'cst-drop-container'}
-            onChange={(e) => props.onSelectOfRole(e)}>
+            onChange={(e) => props.onSelectOfRole(e)} value={props.selected}>
             {props.data &&
                 props.data.map((item, index) => {
                     return (

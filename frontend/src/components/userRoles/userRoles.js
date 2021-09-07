@@ -21,7 +21,8 @@ const UserRoles = ({
   permissions,
   acceptApproval,
   addresses,
-  selectedFeature
+  selectedFeature,
+  selectedLevel
 }) => {
   
   const [data, setData] = useState([]);
@@ -60,8 +61,9 @@ const UserRoles = ({
           <div className="role-section">
             <span className="text">{"Role Title"}</span>
             <CustomDropdown
-              data={defaultRoles}
-              onSelectOfRole={onSelectOfRole}
+                data={defaultRoles}
+                selected={selectedLevel}
+                onSelectOfRole={onSelectOfRole}
             />
           </div>
           {showAddNewInputSection && (
