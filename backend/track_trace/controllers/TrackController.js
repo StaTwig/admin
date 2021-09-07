@@ -7,8 +7,6 @@ const RecordModel = require("../models/RecordModel");
 const AtomModel = require("../models/AtomModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const ProductModel = require("../models/ProductModel");
-const init = require("../logging/init");
-const logger = init.getLog();
 
 exports.fetchGoodsByID = [
   (req, res) => {
@@ -37,17 +35,9 @@ exports.fetchGoodsByID = [
           ExpDate: "04/01/2023",
         },
       ];
-      logger.log(
-        "info",
-        "<<<<< TrackTraceService < TrackController < fetchGoodsByID : successfully sending response with data "
-      );
       return apiResponse.successResponseWithData(res, "Data sent", goodsObject);
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< TrackTraceService < TrackController < fetchGoodsByID : error (catch block) "
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -76,21 +66,13 @@ exports.fetchTracking = [
           Wallet: "0x5cdeca3cf356ad83B813fC2c8eA483AAC76A736e",
         },
       ];
-      logger.log(
-        "info",
-        "<<<<< TrackTraceService < TrackController < fetchTracking : successfully sending response with data "
-      );
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
         trackingObject
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< TrackTraceService < TrackController < fetchTracking : error (catch block) "
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -127,23 +109,14 @@ exports.fetchTemp = [
 
         tempData[time] = temp;
       }
-
-      // console.log(tempData);
-      logger.log(
-        "info",
-        "<<<<< TrackTraceService < TrackController < fetchTemp : successfully sending response with data "
-      );
       return apiResponse.successResponseWithData(
         res,
         "Time-Temperature Data sent",
         tempData
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< TrackTraceService < TrackController < fetchTemp : error (catch block) "
-      );
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -153,11 +126,6 @@ exports.track = [
   async (req, res) => {
     try {
       const { trackingNumber } = req.query;
-      logger.log(
-        "info",
-        "<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash"
-      );
-
       if (trackingNumber.includes("po") || trackingNumber.includes("PO")) {
         var type = "poNumber";
         var shipment_array = [];
@@ -175,10 +143,6 @@ exports.track = [
             craetedBy: user.createdBy,
             status: user.poStatus,
           };
-          logger.log(
-            "info",
-            "<<<<< ShipmentService < ShipmentController < trackShipment : tracked PO, queried data by transaction hash"
-          );
           res.json({
             poDetails: poDetails,
             shipments: shipment_array,
@@ -331,18 +295,10 @@ exports.track = [
               shipments: shipment_array,
             });
           });
-
-          logger.log(
-            "info",
-            "<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash"
-          );
         });
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)"
-      );
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -352,12 +308,13 @@ exports.fetchDataByQRCode = [
   auth,
   async (req, res) => {
     try {
-      const { QRcode } = req.query;  
+      let data = {};
+      const { QRcode } = req.query;
       const shipmentCheck = await ShipmentModel.findOne({
         "label.labelId": QRcode,
       });
       if (shipmentCheck != null) {
-        const s = await ShipmentModel.aggregate([
+        const shipments = await ShipmentModel.aggregate([
           {
             $match: {
               "label.labelId": QRcode,
@@ -415,18 +372,16 @@ exports.fetchDataByQRCode = [
               path: "$receiver.org",
             },
           },
-        ])
-          .then((shipments) => {
-            return res.json({
-              type: "Shipment",
-              shipments: shipments,
-            });
-          })
-          .catch((err) => {
-            return apiResponse.ErrorResponse(res, err);
-          });
+        ]);
+        data.type = "Shipment";
+        data.shipments = shipments;
+        return apiResponse.successResponseWithData(
+          res,
+          "Shipment Details",
+          data
+        );
       } else {
-        const atomCheck = await AtomModel.aggregate([
+        const product = await AtomModel.aggregate([
           {
             $match: {
               "label.labelId": QRcode,
@@ -461,16 +416,14 @@ exports.fetchDataByQRCode = [
               },
             },
           },
-        ])
-          .then((products) => {
-            return res.json({
-              type: "Product",
-              products: products,
-            });
-          })
-          .catch((err) => {
-            return apiResponse.ErrorResponse(res, err);
-          });
+        ]);
+        data.type = "Product";
+        data.product = product;
+        return apiResponse.successResponseWithData(
+          res,
+          "Product Details",
+          data
+        );
       }
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);

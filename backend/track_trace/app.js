@@ -1,41 +1,46 @@
+require("dotenv").config();
 var express = require("express");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-require("dotenv").config();
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
 var cors = require("cors");
-const swaggerUi = require('swagger-ui-express');
-const openApiDocumentation = require('./openApiDocumentation');
+const swaggerUi = require("swagger-ui-express");
+const openApiDocumentation = require("./openApiDocumentation");
 
 var app = express();
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
 var mongoose = require("mongoose");
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true,useUnifiedTopology: true, useCreateIndex: true}).then(() => {
-  //don't show the log when it is test
-  if(process.env.NODE_ENV !== "test") {
-    console.log("Connected to %s", MONGODB_URL);
-    console.log("TracknTrace Service is running ... \n");
-  }
-})
-  .catch(err => {
+mongoose
+  .connect(MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    //don't show the log when it is test
+    if (process.env.NODE_ENV !== "test") {
+      console.log("Connected to %s", MONGODB_URL);
+      console.log("TracknTrace Service is running ... \n");
+    }
+  })
+  .catch((err) => {
     console.error("App starting error:", err.message);
     process.exit(1);
   });
 var db = mongoose.connection;
 
-
 //don't show the log when it is test
-if(process.env.NODE_ENV !== "test") {
-	app.use(logger("dev"));
+if (process.env.NODE_ENV !== "test") {
+  app.use(logger("dev"));
 }
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests
 app.use(cors());
@@ -45,14 +50,14 @@ app.use("/", indexRouter);
 app.use("/tracktracemanagement/api/", apiRouter);
 
 // throw 404 if URL not found
-app.all("*", function(req, res) {
-	return apiResponse.notFoundResponse(res, "Page not found");
+app.all("*", function (req, res) {
+  return apiResponse.notFoundResponse(res, "API not found");
 });
 
 app.use((err, req, res) => {
-	if(err.name == "UnauthorizedError"){
-		return apiResponse.unauthorizedResponse(res, err.message);
-	}
+  if (err.name == "UnauthorizedError") {
+    return apiResponse.unauthorizedResponse(res, err.message);
+  }
 });
 
 module.exports = app;
