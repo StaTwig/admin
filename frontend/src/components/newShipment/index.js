@@ -445,12 +445,12 @@ if (!error) {
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
+  const onCategoryChange = async (index, value,setFieldValue) => {
     try {
       const warehouse = await searchProduct(value, selectedWarehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
-      newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "","batchNumber":"","id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
       let buffer = warehouse.filter(item => item.inventoryDetails.quantity > 0)
