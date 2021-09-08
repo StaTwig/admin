@@ -6,6 +6,7 @@ const RecordModel = require("../models/RecordModel");
 const AtomModel = require("../models/AtomModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const ProductModel = require("../models/ProductModel");
+const RequestModel = require("../models/RequestModel");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 
@@ -327,94 +328,123 @@ exports.fetchDataByQRCode = [
   async (req, res) => {
     try {
       let data = {};
+      let permission = false;
       const { QRcode } = req.query;
-      const { role } = req.user;
+      console.log(req.user);
+      const { role, warehouseId, id, organisationId } = req.user;
       const shipmentCheck = await ShipmentModel.findOne({
         "label.labelId": QRcode,
       });
       if (shipmentCheck != null) {
-        const permission_request = {
-          role: role,
-          permissionRequired: ["viewShipment"],
-        };
-        checkPermissions(permission_request, async (permissionResult) => {
-          if (permissionResult.success) {
-            const shipments = await ShipmentModel.aggregate([
-              {
-                $match: {
-                  "label.labelId": QRcode,
-                },
-              },
-              {
-                $lookup: {
-                  from: "warehouses",
-                  localField: "supplier.locationId",
-                  foreignField: "id",
-                  as: "supplier.warehouse",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$supplier.warehouse",
-                },
-              },
-              {
-                $lookup: {
-                  from: "organisations",
-                  localField: "supplier.warehouse.organisationId",
-                  foreignField: "id",
-                  as: "supplier.org",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$supplier.org",
-                },
-              },
-              {
-                $lookup: {
-                  from: "warehouses",
-                  localField: "receiver.locationId",
-                  foreignField: "id",
-                  as: "receiver.warehouse",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$receiver.warehouse",
-                },
-              },
-              {
-                $lookup: {
-                  from: "organisations",
-                  localField: "receiver.warehouse.organisationId",
-                  foreignField: "id",
-                  as: "receiver.org",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$receiver.org",
-                },
-              },
-            ]);
-            data.type = "Shipment";
-            data.shipments = shipments;
-            return apiResponse.successResponseWithData(
-              res,
-              "Shipment Details",
-              data
-            );
+        data.type = "Shipment";
+        // const permission_request = {
+        //   role: role,
+        //   permissionRequired: ["viewShipment"],
+        // };
+        // checkPermissions(permission_request, async (permissionResult) => {
+        //   if (!permissionResult.success) {
+        //     permission = false;
+        //     data.message =
+        //       "Access Denied, User doesn't have Permission to Track & Trace";
+        //   }
+        // });
+        const receiver = await ShipmentModel.findOne({
+          "label.labelId": QRcode,
+        }).select("receiver");
+
+        if (receiver.receiver.id == organisationId) {
+          if (receiver.receiver.locationId == warehouseId) {
+            permission = true;
           } else {
-            data.message = `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Shipment`;
-            data.type = "Shipment";
-            return apiResponse.forbiddenResponse(res, data);
-            // return apiResponse.forbiddenResponse(
-            //   res,
-            //   `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Shipment`
-            // );
+            data.message =
+              "Access Denied, User location is not same as Delivery Location";
           }
-        });
+        } else {
+          data.message =
+            "Access Denied, User doesn't belong to Receiver Organisation";
+        }
+        if (!permission) {
+          const request = await RequestModel.findOne({
+            "from.id": id,
+            labelId: QRcode,
+          });
+          if (request != null && request.status == "ACCEPTED") {
+            permission = true;
+          }
+        }
+        if (permission) {
+          const shipments = await ShipmentModel.aggregate([
+            {
+              $match: {
+                "label.labelId": QRcode,
+              },
+            },
+            {
+              $lookup: {
+                from: "warehouses",
+                localField: "supplier.locationId",
+                foreignField: "id",
+                as: "supplier.warehouse",
+              },
+            },
+            {
+              $unwind: {
+                path: "$supplier.warehouse",
+              },
+            },
+            {
+              $lookup: {
+                from: "organisations",
+                localField: "supplier.warehouse.organisationId",
+                foreignField: "id",
+                as: "supplier.org",
+              },
+            },
+            {
+              $unwind: {
+                path: "$supplier.org",
+              },
+            },
+            {
+              $lookup: {
+                from: "warehouses",
+                localField: "receiver.locationId",
+                foreignField: "id",
+                as: "receiver.warehouse",
+              },
+            },
+            {
+              $unwind: {
+                path: "$receiver.warehouse",
+              },
+            },
+            {
+              $lookup: {
+                from: "organisations",
+                localField: "receiver.warehouse.organisationId",
+                foreignField: "id",
+                as: "receiver.org",
+              },
+            },
+            {
+              $unwind: {
+                path: "$receiver.org",
+              },
+            },
+          ]);
+          data.shipments = shipments;
+          return apiResponse.successResponseWithData(
+            res,
+            "Shipment Details",
+            data
+          );
+        } else {
+          return apiResponse.forbiddenResponse(res, data);
+          // return apiResponse.forbiddenResponse(
+          //   res,
+          //   `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Shipment`
+          // );
+        }
       } else {
         const permission_request = {
           role: role,
