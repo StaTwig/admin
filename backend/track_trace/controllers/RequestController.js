@@ -18,7 +18,7 @@ exports.getRequests = [
       const requests = await RequestModel.find({
         "to.organisationId": organisationId,
       });
-      return apiResponse.successResponseWithData(res, "Requests", requests);
+      return apiResponse.successResponseWithData(res, "All Requests", requests);
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-import { customAlphabet } from "nanoid";
+const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890", 10);
 const RequestSchema = new mongoose.Schema(
   {

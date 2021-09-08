@@ -328,51 +328,66 @@ exports.fetchDataByQRCode = [
   async (req, res) => {
     try {
       let data = {};
+      let locationMatch = false;
       let permission = false;
       const { QRcode } = req.query;
-      console.log(req.user);
-      const { role, warehouseId, id, organisationId } = req.user;
+      const { role, warehouseId, organisationId, id } = req.user;
       const shipmentCheck = await ShipmentModel.findOne({
         "label.labelId": QRcode,
       });
       if (shipmentCheck != null) {
         data.type = "Shipment";
-        // const permission_request = {
-        //   role: role,
-        //   permissionRequired: ["viewShipment"],
-        // };
-        // checkPermissions(permission_request, async (permissionResult) => {
-        //   if (!permissionResult.success) {
-        //     permission = false;
-        //     data.message =
-        //       "Access Denied, User doesn't have Permission to Track & Trace";
-        //   }
-        // });
         const receiver = await ShipmentModel.findOne({
           "label.labelId": QRcode,
         }).select("receiver");
-
         if (receiver.receiver.id == organisationId) {
           if (receiver.receiver.locationId == warehouseId) {
-            permission = true;
+            locationMatch = true;
           } else {
+            data.requestType = "LOCATION_MISMATCH";
             data.message =
               "Access Denied, User location is not same as Delivery Location";
           }
         } else {
+          data.requestType = "ORGANISATION_MISMATCH";
           data.message =
             "Access Denied, User doesn't belong to Receiver Organisation";
         }
-        if (!permission) {
+        const permission_request = {
+          role: role,
+          permissionRequired: ["viewShipment"],
+        };
+        checkPermissions(permission_request, async (permissionResult) => {
+          if (!permissionResult.success) {
+            permission = false;
+            data.requestType = "UNSUFFICIENT_ROLE";
+            data.message =
+              "Access Denied, User doesn't have Permission to Track & Trace";
+          } else {
+            permission = true;
+          }
+        });
+        if (locationMatch == false) {
           const request = await RequestModel.findOne({
             "from.id": id,
             labelId: QRcode,
+            type: { $in: ["LOCATION_MISMATCH", "ORGANISATION_MISMATCH"] },
           });
           if (request != null && request.status == "ACCEPTED") {
             permission = true;
           }
         }
-        if (permission) {
+        if (permission == false) {
+          const request = await RequestModel.findOne({
+            "from.id": id,
+            labelId: QRcode,
+            type: { $in: ["UNSUFFICIENT_ROLE"] },
+          });
+          if (request != null && request.status == "ACCEPTED") {
+            permission = true;
+          }
+        }
+        if ((permission && locationMatch) == true) {
           const shipments = await ShipmentModel.aggregate([
             {
               $match: {
@@ -440,10 +455,6 @@ exports.fetchDataByQRCode = [
           );
         } else {
           return apiResponse.forbiddenResponse(res, data);
-          // return apiResponse.forbiddenResponse(
-          //   res,
-          //   `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Shipment`
-          // );
         }
       } else {
         const permission_request = {
@@ -499,10 +510,6 @@ exports.fetchDataByQRCode = [
             data.message = `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Product`;
             data.type = "Product";
             return apiResponse.forbiddenResponse(res, data);
-            // return apiResponse.forbiddenResponse(
-            //   res,
-            //   `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Product`
-            // );
           }
         });
       }
