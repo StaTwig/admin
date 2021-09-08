@@ -52,7 +52,7 @@ exports.getAlertNotifications = [
 			const page = Number(req.query.page) || 1; 
 			const totalRecords = await Alerts.count({...req.params})
       Notification.find({ user : req.user.id, type : req.query.type}).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage).then(
+      .limit(resPerPage).sort({_id: -1}).then(
         Alerts => {
           if (Alerts.length > 0) {
             const finalData = {
