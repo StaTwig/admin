@@ -355,31 +355,33 @@ const Header = (props) => {
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
-              {notifications?.length >=0 && <span className="badge badge-light">{notifications?.length }</span> }
+              <span className="badge badge-light">{notifications?.length >=0 ? notifications?.length : 0 }</span>
             </div>
-            {showNotifications && notifications?.length >= 0 &&(
+            {showNotifications &&(
               <div className="slider-menu">
                 <React.Fragment>
                   <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
-                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px"}}>User Notifications</text> 
-                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications?.length} new</text> 
+                      <text style={{ color: "white", fontSize: "20px", fontWeight: "bold", padding: "10px" }}>User Notifications</text> 
+                      {notifications?.length >= 0 &&
+                        <text style={{ backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px" }}>{notifications?.length} new</text>}
                   <div className="section">
                     <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
                     <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
                   </div>
                   </div>
-                  {notifications?.map(notifications =>  <div className="slider-item">
-                    <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notifications)}>
-                      <div className="col-sm-10">
+                    {notifications?.length >= 0 ?
+                      notifications?.map(notifications => <div className="slider-item">
+                        <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notifications)}>
+                          <div className="col-sm-10">
                       
-                        <div>
-                           <img style={{size: '15px', marginLeft: '-20px'}} src={notifIcon(notifications)}/>
-                           <Link to={"/" + viewUrl(notifications) + notifications.transactionId} >
-                           {notifications.message}
-                           </Link>
-                        </div>
+                            <div>
+                              <img style={{ size: '15px', marginLeft: '-20px' }} src={notifIcon(notifications)} />
+                              <Link to={"/" + viewUrl(notifications) + notifications.transactionId} >
+                                {notifications.message}
+                              </Link>
+                            </div>
                     
-                      </div>
+                          </div>
 
                           <div className='col-sm-2'>
                             <button className='close' aria-label='Close'>
@@ -388,7 +390,19 @@ const Header = (props) => {
                           </div>
                         </div>
                       </div>
-                    )}
+                      ) : 
+                      <div className="slider-item">
+                        <div className="row justify-content-between align-items-center" >
+                          <div className="col text-center">
+                            <div>
+                              <span>
+                              No notifications
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
                   </React.Fragment>
                 </div>
               )}
