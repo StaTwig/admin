@@ -352,8 +352,8 @@ exports.fetchDataByQRCode = [
   auth,
   async (req, res) => {
     try {
-      const { QRcode } = req.params;
-      if (req.user.email == "ketki@statwig.com") {
+      const { QRcode } = req.query;
+      if (req.user.emailId == "ketki@statwig.com") {
         const shipmentCheck = await ShipmentModel.findOne({
           "label.labelId": QRcode,
         });
