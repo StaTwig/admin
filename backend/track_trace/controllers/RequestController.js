@@ -1,14 +1,6 @@
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
-const ShipmentModel = require("../models/ShipmentModel");
-const ShippingOrderModel = require("../models/ShippingOrderModel");
-const RecordModel = require("../models/RecordModel");
-const AtomModel = require("../models/AtomModel");
-const OrganisationModel = require("../models/OrganisationModel");
-const ProductModel = require("../models/ProductModel");
 const RequestModel = require("../models/RequestModel");
-const checkPermissions =
-  require("../middlewares/rbac_middleware").checkPermissions;
 
 exports.getRequests = [
   auth,
@@ -30,7 +22,7 @@ exports.getRequestById = [
   auth,
   async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
       const request = await RequestModel.findOne({ id: id });
       return apiResponse.successResponseWithData(res, "Request", request);
     } catch (err) {
@@ -44,21 +36,12 @@ exports.updateRequest = [
   auth,
   async (req, res) => {
     try {
-      let request;
-      const { id, status, payload } = req.body;
-      if (payload) {
-        request = await RequestModel.findOneAndUpdate(
-          { id: id },
-          { $set: { status: status, payload: payload } },
-          { new: true }
-        );
-      } else {
-        request = await RequestModel.findOneAndUpdate(
-          { id: id },
-          { $set: { status: status } },
-          { new: true }
-        );
-      }
+      const { id, status } = req.query;
+      const request = await RequestModel.findOneAndUpdate(
+        { id: id },
+        { $set: { status: status } },
+        { new: true }
+      );
       return apiResponse.successResponseWithData(
         res,
         "Request Updated",
@@ -75,12 +58,12 @@ exports.createRequest = [
   auth,
   async (req, res) => {
     try {
-      const { from, to, payload, labelId } = req.body;
+      const { from, to, labelId, type } = req.body;
       const request = new RequestModel({
         from,
         to,
-        payload,
         labelId,
+        type,
       });
       await request.save();
       return apiResponse.successResponseWithData(

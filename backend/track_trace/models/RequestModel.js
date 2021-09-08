@@ -23,12 +23,13 @@ const RequestSchema = new mongoose.Schema(
       organisationId: { type: String, required: true },
       warehouseId: { type: String, required: true },
     },
-    payload: {
-      shipmentId: [String],
-      productId: [String],
-    },
     status: { type: String, default: "PENDING" },
     labelId: { type: String, required: true },
+    type: {
+      type: String,
+      enum: ["LOCATION_MISMATCH", "ORGANISATION_MISMATCH", "UNSUFFICIENT_ROLE"],
+      required: true,
+    },
     id: { type: String, required: true, unique: true, default: () => nanoid() },
   },
   { timestamps: true }
