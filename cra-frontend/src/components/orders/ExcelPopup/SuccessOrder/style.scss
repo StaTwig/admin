@@ -1,0 +1,23 @@
+@import '../../../../assets/styles/global.scss';
+
+.vieworder {
+    padding-right: 3rem;
+    padding-left: 5rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+    .trackBtn{
+      padding: 0.7rem 3rem;
+    }
+    .shadow{
+      border-radius: 1rem;
+    }
+    .btn-outline-primary:hover{
+     color: #0093E9 !important;
+     border-color: #0093E9 !important;
+    }
+    .col{
+      text-align: left;
+    }
+}
