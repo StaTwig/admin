@@ -1,4 +1,3 @@
-const NotificationModel = require('../models/NotificationModel');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
@@ -7,11 +6,13 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
 const Notification = require('../models/NotificationModel')
 const client = require('twilio')(accountSid, authToken, {
-  lazyLoading: true
+  lazyLoading: false
 });
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-const fromMobile = '+1234567890'
+const fromMobile = process.env.FROMNO
+var uuid = require('uuid');
+
 function sendEmail(subject,content,emailId){
   mailer.send(
     constants.confirmEmails.from,
@@ -27,14 +28,17 @@ function sendEmail(subject,content,emailId){
 }
 
 function sendSMS(content,mobile){
+  console.log("SENDING " + content + " TO " + mobile)
   client.messages
   .create({
      body: content,
      from: fromMobile,
      to: mobile
    })
-  .then(message => console.log(message.sid));
+  .then(message => console.log(message.sid))
+  .catch(err => console.log(err));
 }
+
 function sendWhatsApp(content,mobile){
   client.messages
       .create({
@@ -42,8 +46,10 @@ function sendWhatsApp(content,mobile){
          body: content,
          to: `whatsapp:${mobile}`
        })
-      .then(message => console.log(message.sid));
+      .then(message => console.log(message.sid))
+      .catch(err => console.log(err));
 }
+
 exports.getAlertNotifications = [
   auth,
   async function (req, res) {
@@ -137,10 +143,67 @@ exports.createTwilioBinding = [
 exports.sendOtp = [
   async (req, res) => {
     try {
-
+      let content = "Your OTP to login to " + req.body.source + " is " + req.body.OTP + ". It is valid for 10 minutes"
+      if(req.body.mobile) {
+        if(req.body.whatsapp && req.body.whatsapp == 'true') sendWhatsApp(content,req.body.mobile)
+        else sendSMS(content,req.body.mobile)
+      }
+      if(req.body.email) sendEmail("OTP TO login",content,req.body.email)
+      return apiResponse.successResponse(res,"SENT")
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
+
+exports.sendMessage = [
+  async (req, res) => {
+    try {
+      if(req.body.mobile) {
+        if(req.body.whatsapp && req.body.whatsapp == "true") sendWhatsApp(req.body.content,req.body.mobile)
+        else sendSMS(req.body.content,req.body.mobile)
+      }
+      if(req.body.email) sendEmail(req.body.subject,req.body.content,req.body.email)      
+      return apiResponse.successResponse(res,"SENT")
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.pushNotifications = [
+  async (req, res) => {
+    try {
+      pushNotification(req,req.body.user,req.body.type,req.body.txnId)
+      if(req.body.mobile) {
+        if(req.body.whatsapp && req.body.whatsapp == "true") sendWhatsApp(req.body.content,req.body.mobile)
+        else sendSMS(req.body.content,req.body.mobile)
+      }
+      if(req.body.email) sendEmail(req.body.subject,req.body.content,req.body.email)      
+      return apiResponse.successResponse(res,"SENT")
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+function pushNotification(req,userId,type, transactionId){
+  try{
+      const content = req.body.content
+      var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId, eventType: req.body.eventType, transactionId: transactionId});
+      console.log(notification);
+      if(type == 'ALERT') notification.type = 'ALERT';
+      else notification.type = 'TRANSACTION'
+      notification.transactionId = req.body.transactionId;
+      notification.save(function(err, doc) {
+          if (err) return console.error(err);
+          console.log("Document inserted succussfully!",doc);
+        });
+  }catch(err){
+      console.log(err)
+  }
+}
