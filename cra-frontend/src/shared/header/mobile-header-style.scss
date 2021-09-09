@@ -1,0 +1,35 @@
+.mobile-header {
+  display: none;
+  @media (max-width: 1024px) {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px;
+    align-items: center;
+    box-shadow: 0px 3px 10px #00000029;
+    position: sticky;
+    z-index: 9;
+  }
+
+  .branding {
+    img {
+      width: 60%;
+    }
+  }
+
+  .mobile-menu {
+    font-size: 30px;
+  }
+
+  .slider-menu {
+    display: block;
+    top: 3.8rem;
+    right: 0 !important;
+    max-width: 15rem;
+    padding: 1rem 2rem;
+    border-right: 0;
+
+    .slider-item {
+      font-size: 15px;
+    }
+  }
+}
