@@ -765,7 +765,7 @@ const AdvanceTableFilter = (props) => {
               <Autocomplete
                 id="ProductCategory"
                 options={props.inventoryFilterData}
-                getOptionLabel={(options) => options.name}
+                getOptionLabel={(options) => options.category}
                 onChange={(event, newValue) => {
                   setInventoryProductCategoryFilterOnSelect(newValue.id)
                 }}
