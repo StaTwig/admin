@@ -164,7 +164,7 @@ exports.sendMessage = [
         if(req.body.whatsapp && req.body.whatsapp == "true") sendWhatsApp(req.body.content,req.body.mobile)
         else sendSMS(req.body.content,req.body.mobile)
       }
-      if(req.body.email) sendEmail("OTP TO login",req.body.content,req.body.email)      
+      if(req.body.email) sendEmail(req.body.subject,req.body.content,req.body.email)      
       return apiResponse.successResponse(res,"SENT")
     } catch (err) {
       console.log(err)
@@ -181,7 +181,7 @@ exports.pushNotifications = [
         if(req.body.whatsapp && req.body.whatsapp == "true") sendWhatsApp(req.body.content,req.body.mobile)
         else sendSMS(req.body.content,req.body.mobile)
       }
-      if(req.body.email) sendEmail("OTP TO login",req.body.content,req.body.email)      
+      if(req.body.email) sendEmail(req.body.subject,req.body.content,req.body.email)      
       return apiResponse.successResponse(res,"SENT")
     } catch (err) {
       console.log(err)
