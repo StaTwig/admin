@@ -423,7 +423,15 @@ exports.createShipment = [
           data.products.every((p) => {
             const po_product_quantity = 
               product.productQuantity || product.quantity;
-            const shipment_product_qty = p.productQuantityShipped || p.productQuantity || p.quantity;
+              if(product.productQuantityShipped){
+                console.log("values are" + parseInt(p.productQuantity), parseInt(product.productQuantityShipped))
+                var shipment_product_qty = parseInt(p.productQuantity) + parseInt(product.productQuantityShipped);
+              }
+              else{
+                var shipment_product_qty =  p.productQuantityShipped;
+              }
+                  
+            console.log(po_product_quantity, shipment_product_qty, product.productQuantityShipped)
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
@@ -862,7 +870,11 @@ exports.receiveShipment = [
               data.products.every((p) => {
                 const po_product_quantity =
                   product.productQuantity || product.quantity;
-                const shipment_product_qty = p.productQuantity || p.quantity;
+                if(product.productQuantityDelivered)
+                var shipment_product_qty = parseInt(product.productQuantityDelivered) + parseInt(p.productQuantity);
+                else
+                var shipment_product_qty = p.productQuantity;
+
                 if (
                   parseInt(shipment_product_qty) < parseInt(po_product_quantity)
                 ) {
