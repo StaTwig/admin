@@ -4,14 +4,15 @@ const serviceId = process.env.TWILIO_SERVICE_ID;
 const axios = require('axios');
 const client = require('twilio')(accountSid, authToken);
 const Notification = require('../models/NotificationsModel')
+const Organisation = require('../models/OrganisationModel')
 var uuid = require('uuid');
 
-function eventToData(event,type){
+async function eventToData(event,type){
     switch(event.eventTypeDesc){
         case "SHIPMENT" :
             return shipmentMessage(event,event?.payloadData?.data?.id)
         case "ORDER" : 
-            return orderMessage(event,event?.transactionId,event.actorOrgId)
+            return await orderMessage(event,event?.transactionId,event.actorOrgId)
         case "SHIPMENT_TRACKING" :
             return shipmentMessage(event,event?.payloadData?.data?.id)
         case "INVENTORY" :
@@ -29,22 +30,22 @@ function eventToData(event,type){
     // }
 }
 
-function eventToPlainText(event){
+async function eventToPlainText(event){
     return `New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}`
 }
 
-function eventToHtml(event){
+async function eventToHtml(event){
     return `<html><p>New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}</p></html>`
 }
 
-function shipmentMessage(event,txnId){
+async function shipmentMessage(event,txnId){
     if(event.eventTypePrimary=="CREATE") return `"Shipment - ${txnId}" has been Created`
     else if(event.eventTypePrimary=="UPDATE") return `"Shipment - ${txnId}" has been Updated`
     else if(event.eventTypePrimary=="RECEIVE") return `"Shipment - ${txnId}" has been Delivered`
     else return `"Shipment - ${txnId}" has been Updated`
 }
 
-function inventoryMessage(event,txnId){
+async function inventoryMessage(event,txnId){
     if(event.eventTypePrimary=="ADD") return `"Inventory - ${txnId}" has been Created`
     else if(event.eventTypePrimary=="EXPIRED") return `"Inventory - ${txnId}" has expired`
     else if(event.eventTypePrimary=="NEAR_EXPIRY") return `"Inventory - ${txnId}" is nearing Expiry`
@@ -52,23 +53,24 @@ function inventoryMessage(event,txnId){
 }
 
 
-function orderMessage(event,txnId,actorOrgId){
-    if(event.eventTypePrimary=="RECEIVE") return `Received a new Order "Order - ${txnId}"  from ${actorOrgId}`
-    else if(event.eventTypePrimary=="ACCEPT") return `Your "Order ID: ${txnId}" has been Accepted by ${actorOrgId}`
-    else if(event.eventTypePrimary=="REJECT") return `Your "Order ID: ${txnId}" has been Rejected by ${actorOrgId}`
-    else if(event.eventTypePrimary=="CREATE") return `"Order ID: ${txnId}" has been Created by ${actorOrgId}`
+async function orderMessage(event,txnId,actorOrgId){
+    let organization = await Organisation.findOne({id : actorOrgId })
+    if(event.eventTypePrimary=="RECEIVE") return `Received a new Order "Order - ${txnId}"  from ${actorOrgId} (${organization?.name})`
+    else if(event.eventTypePrimary=="ACCEPT") return `Your "Order ID: ${txnId}" has been Accepted by ${actorOrgId} (${organization?.name})`
+    else if(event.eventTypePrimary=="REJECT") return `Your "Order ID: ${txnId}" has been Rejected by ${actorOrgId} (${organization?.name})`
+    else if(event.eventTypePrimary=="CREATE") return `"Order ID: ${txnId}" has been Created by ${actorOrgId} (${organization?.name})`
     else return `"New updates on "Order - ${txnId}"  from ${actorOrgId}`
 }
 
-function pushNotification(event,userId,type, transactionId){
+async function pushNotification(event,userId,type, transactionId){
     try{
-        const content = eventToData(event,"mobile")
+        const content = await eventToData(event,"mobile")
         var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId, eventType: event.eventTypeDesc, transactionId: event.transactionId});
         console.log(notification);
         if(type == 'ALERT') notification.type = 'ALERT';
         else notification.type = 'TRANSACTION'
         notification.transactionId = transactionId;
-        notification.save(function(err, doc) {
+        notification.save(async function(err, doc) {
             if (err) return console.error(err);
             console.log("Document inserted succussfully!",doc);
           });
@@ -77,9 +79,9 @@ function pushNotification(event,userId,type, transactionId){
     }
 }
 
-function alertMobile(event,mobile){    
+async function alertMobile(event,mobile){    
     try{
-    const content = eventToData(event,"mobile")
+    const content = await eventToData(event,"mobile")
     axios.post(process.env.MESSAGING_SERVICE_URL, {
         "subject": "Testing otp",
         "phone": mobile,
@@ -99,9 +101,9 @@ function alertMobile(event,mobile){
     }
 }
 
-function alertEmail(event,email){
+async function alertEmail(event,email){
     try{
-    const content = eventToData(event,"mobile")
+    const content = await eventToData(event,"mobile")
     console.log("Mailed succesfully to",email)
     axios.post(process.env.MESSAGING_SERVICE_URL, {
         "subject": `New Alert`,
@@ -121,8 +123,8 @@ function alertEmail(event,email){
 }
 }
 
-function alertPushNotification(event,userIdentity){
-    const content = eventToData(event,"push")
+async function alertPushNotification(event,userIdentity){
+    const content = await eventToData(event,"push")
     console.log(userIdentity)
     client.notify.services(serviceId)
     .notifications

@@ -423,12 +423,22 @@ exports.createShipment = [
           data.products.every((p) => {
             const po_product_quantity =
               product.productQuantity || product.quantity;
-            const shipment_product_qty =
-              p.productQuantityShipped || p.productQuantity || p.quantity;
+              const alreadyShipped = product.productQuantityShipped || null;
+              let shipment_product_qty;
+              if(alreadyShipped){
+                console.log("values are" + parseInt(p.productQuantity), parseInt(alreadyShipped))
+                shipment_product_qty = parseInt(p.productQuantity) + parseInt(alreadyShipped);
+              }
+              else{
+                shipment_product_qty =  p.productQuantity;
+              }
+                  
+            console.log(po_product_quantity, shipment_product_qty, alreadyShipped)
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
               quantityMismatch = true;
+              console.log("quantityMismatch is ", quantityMismatch)
               return false;
             }
           });
@@ -891,22 +901,27 @@ exports.receiveShipment = [
           flag = "YS";
         }
 
-        if (flag == "Y") {
-          const po = await RecordModel.findOne({
-            id: data.poId,
-          });
-          let quantityMismatch = false;
-          po.products.every((product) => {
-            data.products.every((p) => {
-              const po_product_quantity =
-                product.productQuantity || product.quantity;
-              const shipment_product_qty = p.productQuantity || p.quantity;
-              if (
-                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-              ) {
-                quantityMismatch = true;
-                return false;
-              }
+          if (flag == "Y") {
+            const po = await RecordModel.findOne({
+              id: data.poId,
+            });
+            let quantityMismatch = false;
+            po.products.every((product) => {
+              data.products.every((p) => {
+                const po_product_quantity =
+                  product.productQuantity || product.quantity;
+                if(product.productQuantityDelivered)
+                var shipment_product_qty = parseInt(product.productQuantityDelivered) + parseInt(p.productQuantity);
+                else
+                var shipment_product_qty = p.productQuantity;
+
+                if (
+                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                ) {
+                  quantityMismatch = true;
+                  return false;
+                }
+              });
             });
           });
           if (quantityMismatch) {

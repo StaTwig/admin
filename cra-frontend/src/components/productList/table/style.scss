@@ -1,0 +1,113 @@
+@import '../../../assets/styles/global.scss';
+
+.producttable {
+  .overflow{
+    height: 400px;
+    overflow: auto;
+  }
+
+  .rTable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .rTableHeading {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .rTableBody {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .rTableRow {
+      display: flex;
+      background: #fff;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 5px 0px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 10px #00000029;
+    }
+
+    .rTableFoot {
+      display: table-footer-group;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    .rTableCell,
+    .rTableHead {
+      flex: 1;
+      padding: 1px 30px;
+      align-self: center;
+      font-size: 12px;
+      color: #707070;
+    }
+
+
+    
+    .rTableCell {
+      color: $black;
+        font-weight: 400;
+      a {
+        color: $black;
+        font-weight: 400;
+      }
+
+      .enlarge{
+        height: 30px;
+        width: 70px;
+        border: 1px solid #0093E9;
+        border-radius: 7px;
+        font-size: 10px;
+        padding: 2px 2px;
+       
+      }
+    }
+     .badge{
+    width: 65px;
+    height: 20px;
+    color: white;
+    align-items: center;
+     }
+    .combine-data {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      
+        color: #0093E9;
+      
+      
+      .round-sign {
+        margin-right: 10px;
+        border-radius: 100%;
+        background-color: #FFBCC4;
+        font: Bold 11px Roboto;
+        letter-spacing: 0px;
+        height: 26px;
+        width: 26px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+/* .btn{
+      width: 60px;
+      height: 30px;
+      font:8px/14px $roboto;
+      letter-spacing: 0px;
+    }
+    .btn:hover{
+      background-color: none;
+    } */

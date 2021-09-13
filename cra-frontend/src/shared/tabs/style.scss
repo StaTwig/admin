@@ -1,0 +1,43 @@
+@import '../../assets/styles/global.scss';
+
+.tabs {
+
+  border-bottom: 3px solid #D6D6D6;
+  margin-left: -5rem;
+  padding-left: 5rem;
+
+  ul {
+    li {
+      &.nav-item-active{
+        
+        color: #0093E9;
+        border-bottom: 7px solid #0093E9;
+        //border-radius: 10px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        cursor: pointer;
+    }
+      a {
+
+       
+        &.nav-link {
+          color: #0093E9;
+          font-size: 18px;
+          padding-bottom: 0.2rem;
+          // font-weight: bold;
+          background-color: transparent;
+          position: relative;
+          cursor: pointer;
+         
+        }
+        &.nav-in {
+          color: rgb(101, 116, 126);
+          
+         
+        }
+      }
+      
+    
+    }
+  }
+}

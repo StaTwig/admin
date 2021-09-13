@@ -5,7 +5,7 @@
   top:-22px;
     padding-right: 45px;
     padding-left: 55px;
-    overflow: hidden;
+    //overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
@@ -13,7 +13,7 @@
   .menu{
     z-index: 1;
     top: 1.9rem ;
-    right: 3rem !important ;
+    right: 1.8rem !important ;
     left: unset;
     max-width: 9rem;
     text-align: center;

@@ -8,6 +8,9 @@
   [entryPoints.websecure]
     address = ":443"
 
+[api]
+  dashboard = true
+  
 [certificatesResolvers.lets-encrypt.acme]
   email = "ashwini@statwig.com"
   storage = "acme.json"

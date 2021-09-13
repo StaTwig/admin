@@ -847,6 +847,7 @@ exports.userInfo = [
             postalAddress,
             createdAt
           } = user;
+          const permissions = await RbacModel.findOne({role});
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
@@ -869,7 +870,8 @@ exports.userInfo = [
               type: org.type,
               location: postalAddress,
               warehouses: warehouseArray,
-              signup_date: createdAt
+              signup_date: createdAt,
+              permissions: permissions
             };
           }
           else{
@@ -889,7 +891,8 @@ exports.userInfo = [
               type: null,
               location: postalAddress,
               warehouses: warehouseArray,
-              signup_date: createdAt
+              signup_date: createdAt,
+              permissions: permissions
             };
           }
           logger.log(
