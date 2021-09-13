@@ -23,6 +23,7 @@ const client = require('twilio')(accountSid, authToken, {
   lazyLoading: true
 });
 const blockchain_service_url = process.env.URL;
+const hf_blockchain_url= process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -418,6 +419,16 @@ exports.checkEmail = [
         });
         await user.save()
 
+        const bc_data = {
+        "username": emailId,
+        "password": "",
+        "orgName": "org1MSP",
+        "role": "",
+        "email": emailId
+    }
+
+      const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+
         try{
           var evid = Math.random().toString(36).slice(2);
           var datee = new Date();
@@ -775,7 +786,9 @@ exports.verifyOtp = [
               warehouseId: activeWarehouseId,
               organisationId: user.organisationId,
               walletAddress: address,
-              phoneNumber: user.phoneNumber
+              phoneNumber: user.phoneNumber,
+              org : user.msp,
+              userName: user.emailId
             };  
           }
           else{
@@ -787,7 +800,9 @@ exports.verifyOtp = [
               warehouseId: [],
               organisationId: user.organisationId,
               walletAddress: address,
-              phoneNumber: user.phoneNumber
+              phoneNumber: user.phoneNumber,
+              org : user.msp,
+              userName: user.emailId
             };
           }
           //Prepare JWT token for authentication
@@ -1199,6 +1214,36 @@ exports.addWarehouse = [
         }
       });
 
+      const bc_data = {
+			  "Id": warehouseId,
+			  "Participant_id": "",
+			  "CreatedOn": "",
+			  "CreatedBy": "",
+			  "IsDelete": true,
+			  "OrganizationId": organisationId,
+			  "PostalAddress": postalAddress,
+			  "Region": JSON.stringify(region),
+			  "Country": JSON.stringify(country),
+			  "Location": JSON.stringify(loc),
+			  "Supervisors": supervisors,
+			  "Employees": employees,
+			  "WarehouseInventory": inventoryResult.id,
+			  "Name": title,
+			  "Gender": "",
+			  "Age": "",
+			  "Aadhar": "",
+			  "Vaccineid": ""
+		}
+		
+		
+		  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+		  const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`, bc_data, {
+			headers: {
+				'Authorization': token
+			}
+		})
+		
       try{
         var evid = Math.random().toString(36).slice(2);
         var datee = new Date();

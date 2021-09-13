@@ -23,6 +23,7 @@ const CENTRAL_AUTHORITY_ADDRESS = null;
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const blockchain_service_url = process.env.URL;
+const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const shipment_stream = process.env.SHIP_STREAM;
 const axios = require("axios");
 const { uploadFile, getFileStream } = require("../helpers/s3");
@@ -693,7 +694,40 @@ exports.createShipment = [
         }
 
         //Blockchain Integration
-        const userData = {
+  const bc_data = {
+         "Id": data.id,
+         "CreatedOn": "",
+         "CreatedBy": "",
+         "IsDelete": true,
+         "ShippingOrderId": "",
+         "PoId": "",
+         "Label": JSON.stringify(data.label),
+         "ExternalShipping": "",
+         "Supplier": JSON.stringify(data.supplier),
+         "Receiver": JSON.stringify(data.receiver),
+         "ImageDetails": "",
+         "TaggedShipments": "",
+        "ShipmentUpdates": JSON.stringify(data.shipmentUpdates),
+         "AirwayBillNo": data.airWayBillNo,
+         "ShippingDate": data.shippingDate,
+         "ExpectedDelDate": data.expectedDeliveryDate,
+         "ActualDelDate": data.actualDeliveryDate,
+         "Status": data.status,
+         "TransactionIds": "",
+         "RejectionRate": "",
+         "Products": JSON.stringify(data.products),
+         "Misc": ""
+                  }
+
+     let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+     const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/shipment/create`, bc_data, {
+         headers: {
+              'Authorization': token
+                  }
+     })
+   
+        /*const userData = {
           stream: shipment_stream,
           key: shipmentId,
           address: req.user.walletAddress,
@@ -712,7 +746,7 @@ exports.createShipment = [
               transactionIds: response.data.transactionId,
             },
           }
-        );
+        );*/
 
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne(
@@ -1061,6 +1095,42 @@ exports.receiveShipment = [
           //}, {
           //  status: "RECEIVED"
           //}, );
+  const shipmentData = await ShipmentModel.findOne({
+          id: req.body.id
+        });
+
+            const bc_data = {
+            "Id": shipmentData.id,
+            "CreatedOn": "",
+            "CreatedBy": "",
+            "IsDelete": true,
+            "ShippingOrderId": "",
+            "PoId": "",
+            "Label": JSON.stringify(shipmentData.label),
+            "ExternalShipping": "",
+            "Supplier": JSON.stringify(shipmentData.supplier),
+            "Receiver": JSON.stringify(shipmentData.receiver),
+            "ImageDetails": "",
+            "TaggedShipments": "",
+            "ShipmentUpdates": JSON.stringify(shipmentData.shipmentUpdates),
+            "AirwayBillNo": shipmentData.airWayBillNo,
+            "ShippingDate": shipmentData.shippingDate,
+            "ExpectedDelDate": shipmentData.expectedDeliveryDate,
+            "ActualDelDate": shipmentData.actualDeliveryDate,
+            "Status": shipmentData.status,
+            "TransactionIds": "",
+            "RejectionRate": "",
+            "Products": JSON.stringify(shipmentData.products),
+            "Misc": ""
+      }
+      console.log("bc data", bc_data)
+      let token = req.headers['x-access-token'] || req.headers['authorization'];
+      console.log("token", token)
+      const bc_response = await axios.put(`${hf_blockchain_url}/api/v1/transactionapi/shipment/update`, bc_data, {
+            headers: {
+                    'Authorization': token
+            }
+      })
 
           var datee = new Date();
           datee = datee.toISOString();
@@ -3820,3 +3890,4 @@ function buildPdfReport(req, res, data) {
       console.error(error);
     });
 }
+
