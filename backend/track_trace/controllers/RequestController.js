@@ -52,6 +52,13 @@ exports.updateRequest = [
         { $set: { status: status } },
         { new: true }
       );
+      if (status === "APPROVED") {
+        const shipment = await ShipmentModel.findOneAndUpdate(
+          { id: request.label.labelId },
+          { $push: { acceptedRequests: req.user.id } },
+          { new: true, upsert: true }
+        );
+      }
       return apiResponse.successResponseWithData(
         res,
         "Request Updated",
@@ -79,7 +86,6 @@ exports.createRequest = [
         walletAddress,
         phoneNumber,
       } = req.user;
-      console.log("ID", id);
       // let requestTypes = [];
       // if (type !== undefined) {
       //   const shipmentCheck = await ShipmentModel.findOne({
@@ -201,10 +207,14 @@ exports.createRequest = [
           organisationId: shipment[0].receiver.id,
         };
       }
+      const shipmentId = await ShipmentModel.findOne({
+        "label.labelId": labelId,
+      }).select("id");
       const request = new RequestModel({
         from,
         to,
         "label.labelId": labelId,
+        shipmentId: shipmentId.id,
         type: element,
       });
       let result = await request.save();

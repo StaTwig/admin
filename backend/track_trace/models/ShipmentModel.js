@@ -36,6 +36,7 @@ ShipmentSchema = new mongoose.Schema(
         labelId: String,
       },
     ],
+    acceptedRequests: [String],
   },
   { timestamps: true }
 );

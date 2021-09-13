@@ -760,348 +760,383 @@ exports.receiveShipment = [
   auth,
   async (req, res) => {
     try {
-      const { role } = req.user;
+      let locationMatch = false;
+      let permission = false;
+      let change = false;
+      const { role, warehouseId, organisationId, id } = req.user;
+      const receiver = await ShipmentModel.findOne({
+        id: req.body.id,
+      }).select("receiver");
+      if (
+        receiver.receiver.id == organisationId &&
+        receiver.receiver.locationId == warehouseId
+      ) {
+        locationMatch = true;
+      }
       const permission_request = {
         role: role,
         permissionRequired: ["receiveShipment"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          const data = req.body;
-          const shipmentID = data.id;
-          const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
-
-          const email = req.user.emailId;
-          const user_id = req.user.id;
-          const empData = await EmployeeModel.findOne({
-            emailId: req.user.emailId,
-          });
-          const orgId = empData.organisationId;
-          const orgName = empData.name;
-          const orgData = await OrganisationModel.findOne({ id: orgId });
-          const address = orgData.postalAddress;
-          const confId = orgData.configuration_id;
-          const confData = await ConfigurationModel.findOne({ id: confId });
-          const supplierID = req.body.supplier.id;
-          const receiverId = req.body.receiver.id;
-          let supplierName = "";
-          let supplierAddress = "";
-          let receiverName = "";
-          let receiverAddress = "";
-          if (supplierID) {
-            const supplierOrgData = await OrganisationModel.findOne({
-              id: req.body.supplier.id,
-            });
-            supplierName = supplierOrgData.name;
-            supplierAddress = supplierOrgData.postalAddress;
-          }
-
-          if (receiverId) {
-            const receiverOrgData = await OrganisationModel.findOne({
-              id: req.body.receiver.id,
-            });
-            receiverName = receiverOrgData.name;
-            receiverAddress = receiverOrgData.postalAddress;
-          }
-
-          var actuallyShippedQuantity = 0;
-          var productNumber = -1;
-          if (shipmentInfo != null) {
-            const receivedProducts = data.products;
-            var shipmentProducts = shipmentInfo[0].products;
-            shipmentProducts.forEach((product) => {
-              productNumber = productNumber + 1;
-              receivedProducts.forEach((reqProduct) => {
-                if (product.productID === reqProduct.productID) {
-                  actuallyShippedQuantity = product.productQuantity;
-                  var receivedQuantity = reqProduct.productQuantity;
-
-                  if (receivedQuantity > actuallyShippedQuantity)
-                    throw new Error(
-                      "Received quantity cannot be greater than Actual quantity"
-                    );
-
-                  var quantityDifference =
-                    actuallyShippedQuantity - receivedQuantity;
-                  var rejectionRate =
-                    (quantityDifference / actuallyShippedQuantity) * 100;
-                  shipmentProducts[productNumber].quantityDelivered =
-                    receivedQuantity;
-                  shipmentProducts[productNumber].rejectionRate = rejectionRate;
-                  ShipmentModel.updateOne(
-                    {
-                      id: shipmentID,
-                      "products.productID": product.productID,
-                    },
-                    {
-                      $set: {
-                        "products.$.rejectionRate": rejectionRate,
-                      },
-                    }
-                  )
-                    .then((e) => {
-                      console.log(e);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }
-              });
-            });
-          }
-          var flag = "Y";
-          if (data.poId === null) {
-            flag = "YS";
-          }
-
-          if (flag == "Y") {
-            const po = await RecordModel.findOne({
-              id: data.poId,
-            });
-            let quantityMismatch = false;
-            po.products.every((product) => {
-              data.products.every((p) => {
-                const po_product_quantity =
-                  product.productQuantity || product.quantity;
-                const shipment_product_qty = p.productQuantity || p.quantity;
-                if (
-                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-                ) {
-                  quantityMismatch = true;
-                  return false;
-                }
-              });
-            });
-            if (quantityMismatch) {
-              po.poStatus = "PARTIALLYFULFILLED";
-              await po.save();
-            } else {
-              po.poStatus = "FULLYFULFILLED";
-              await po.save();
-            }
-          }
-          if (flag != "N") {
-            const suppWarehouseDetails = await WarehouseModel.findOne({
-              id: data.supplier.locationId,
-            });
-            var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-            const suppInventoryDetails = await InventoryModel.findOne({
-              id: suppInventoryId,
-            });
-
-            const recvWarehouseDetails = await WarehouseModel.findOne({
-              id: data.receiver.locationId,
-            });
-            var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-            const recvInventoryDetails = await InventoryModel.findOne({
-              id: recvInventoryId,
-            });
-            var products = data.products;
-            var count = 0;
-            var totalProducts = 0;
-            var totalReturns = 0;
-            var shipmentRejectionRate = 0;
-            for (count = 0; count < products.length; count++) {
-              var shipmentProducts = shipmentInfo[0].products;
-              totalProducts =
-                totalProducts + shipmentProducts[count].productQuantity;
-              totalReturns = totalReturns + products[count].productQuantity;
-              shipmentRejectionRate =
-                ((totalProducts - totalReturns) / totalProducts) * 100;
-              data.products[count]["productId"] =
-                data.products[count].productID;
-              inventoryUpdate(
-                products[count].productID,
-                products[count].productQuantity,
-                suppInventoryId,
-                recvInventoryId,
-                data.poId,
-                "RECEIVED"
-              );
-              shipmentUpdate(
-                products[count].productID,
-                products[count].productQuantity,
-                data.id,
-                "RECEIVED"
-              );
-              if (flag == "Y")
-                await poUpdate(
-                  products[count].productId,
-                  products[count].productQuantity,
-                  data.poId,
-                  "RECEIVED",
-                  req.user
-                );
-
-              if (products[count].batchNumber != null) {
-                const checkBatch = await AtomModel.find({
-                  $and: [
-                    { inventoryIds: recvInventoryId },
-                    { batchNumbers: products[count].batchNumber },
-                  ],
-                });
-
-                if (checkBatch.length > 0) {
-                  const update = await AtomModel.update(
-                    {
-                      batchNumbers: products[count].batchNumber,
-                      inventoryIds: recvInventoryId,
-                    },
-                    {
-                      $inc: {
-                        quantity: parseInt(products[count].productQuantity),
-                      },
-                    }
-                  );
-                } else {
-                  const atom = new AtomModel({
-                    id: uniqid("batch-"),
-                    label: {
-                      labelId: "QR_2D",
-                      labelType: "3232", // ?? What is this ??
-                    },
-                    quantity: products[count].productQuantity,
-                    productId: products[count].productID,
-                    inventoryIds: recvInventoryId,
-                    lastInventoryId: "",
-                    lastShipmentId: "",
-                    poIds: [],
-                    shipmentIds: [],
-                    txIds: [],
-                    batchNumbers: products[count].batchNumber,
-                    atomStatus: "Healthy",
-                    attributeSet: {
-                      mfgDate: products[count].mfgDate,
-                      expDate: products[count].batchNumber.expDate,
-                    },
-                    eolInfo: {
-                      eolId: "IDN29402-23423-23423",
-                      eolDate: "2021-03-31T18:30:00.000Z",
-                      eolBy: req.user.id,
-                      eolUserInfo: "",
-                    },
-                  });
-                  await atom.save();
-                }
-              }
-            }
-
-            const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-            const updates = {
-              updatedOn: currDateTime,
-              updateComment: data.comment,
-              status: "RECEIVED",
-              products: products,
-            };
-
-            const updateData = await ShipmentModel.findOneAndUpdate(
-              { id: req.body.id },
-              {
-                $push: { shipmentUpdates: updates },
-                $set: {
-                  status: "RECEIVED",
-                  rejectionRate: shipmentRejectionRate,
-                },
-              },
-              { new: true }
-            );
-
-            //await ShipmentModel.findOneAndUpdate({
-            //  id: data.id
-            //}, {
-            //  status: "RECEIVED"
-            //}, );
-
-            var datee = new Date();
-            datee = datee.toISOString();
-            var evid = Math.random().toString(36).slice(2);
-            let event_data = {
-              eventID: null,
-              eventTime: null,
-              eventType: {
-                primary: "RECEIVE",
-                description: "SHIPMENT",
-              },
-              actor: {
-                actorid: null,
-                actoruserid: null,
-              },
-              stackholders: {
-                ca: {
-                  id: null,
-                  name: null,
-                  address: null,
-                },
-                actororg: {
-                  id: null,
-                  name: null,
-                  address: null,
-                },
-                secondorg: {
-                  id: null,
-                  name: null,
-                  address: null,
-                },
-              },
-              payload: {
-                data: {
-                  abc: 123,
-                },
-              },
-            };
-            event_data.eventID = "ev0000" + evid;
-            event_data.eventTime = datee;
-            event_data.eventType.primary = "RECEIVE";
-            event_data.eventType.description = "SHIPMENT";
-            event_data.actor.actorid = user_id || "null";
-            event_data.actor.actoruserid = email || "null";
-            event_data.actorWarehouseId = req.user.warehouseId || "null";
-            event_data.stackholders.actororg.id = orgId || "null";
-            event_data.stackholders.actororg.name = orgName || "null";
-            event_data.stackholders.actororg.address = address || "null";
-            event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-            event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-            event_data.stackholders.ca.address =
-              CENTRAL_AUTHORITY_ADDRESS || "null";
-            event_data.transactionId = data.id;
-
-            if (orgId === supplierID) {
-              event_data.stackholders.secondorg.id = receiverId || "null";
-              event_data.stackholders.secondorg.name = receiverName || "null";
-              event_data.stackholders.secondorg.address =
-                receiverAddress || "null";
-            } else {
-              event_data.stackholders.secondorg.id = supplierID || "null";
-              event_data.stackholders.secondorg.name = supplierName || "null";
-              event_data.stackholders.secondorg.address =
-                supplierAddress || "null";
-            }
-
-            event_data.payload.data = data;
-            console.log(event_data);
-            async function compute(event_data) {
-              resultt = await logEvent(event_data);
-              return resultt;
-            }
-            compute(event_data).then((response) => {
-              console.log(response);
-            });
-
-            return apiResponse.successResponseWithData(
-              res,
-              "Shipment Received",
-              updateData
-            );
-          } else {
-            return apiResponse.successResponse(
-              res,
-              "Cannot receive  a Shipment without SO and PO"
-            );
-          }
-        } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          permission = true;
         }
       });
+      if (locationMatch == false) {
+        const request = await RequestModel.findOne({
+          "from.id": id,
+          shipmentId: req.body.id,
+          type: { $in: ["LOCATION_MISMATCH", "ORGANISATION_MISMATCH"] },
+        });
+        if (request != null && request.status == "ACCEPTED") {
+          locationMatch = true;
+          change = true;
+        }
+      }
+      if (permission == false) {
+        const request = await RequestModel.findOne({
+          "from.id": id,
+          shipmentId: req.body.id,
+          type: { $in: ["UNSUFFICIENT_ROLE"] },
+        });
+        if (request != null && request.status == "ACCEPTED") {
+          permission = true;
+        }
+      }
+      if ((permission && locationMatch) == true) {
+        const data = req.body;
+        const shipmentID = data.id;
+        const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
+
+        const email = req.user.emailId;
+        const user_id = req.user.id;
+        const empData = await EmployeeModel.findOne({
+          emailId: req.user.emailId,
+        });
+        const orgId = empData.organisationId;
+        const orgName = empData.name;
+        const orgData = await OrganisationModel.findOne({ id: orgId });
+        const address = orgData.postalAddress;
+        const confId = orgData.configuration_id;
+        const confData = await ConfigurationModel.findOne({ id: confId });
+        const supplierID = req.body.supplier.id;
+        const receiverId = req.body.receiver.id;
+        let supplierName = "";
+        let supplierAddress = "";
+        let receiverName = "";
+        let receiverAddress = "";
+        if (supplierID) {
+          const supplierOrgData = await OrganisationModel.findOne({
+            id: req.body.supplier.id,
+          });
+          supplierName = supplierOrgData.name;
+          supplierAddress = supplierOrgData.postalAddress;
+        }
+
+        if (receiverId) {
+          const receiverOrgData = await OrganisationModel.findOne({
+            id: req.body.receiver.id,
+          });
+          receiverName = receiverOrgData.name;
+          receiverAddress = receiverOrgData.postalAddress;
+        }
+
+        var actuallyShippedQuantity = 0;
+        var productNumber = -1;
+        if (shipmentInfo != null) {
+          const receivedProducts = data.products;
+          var shipmentProducts = shipmentInfo[0].products;
+          shipmentProducts.forEach((product) => {
+            productNumber = productNumber + 1;
+            receivedProducts.forEach((reqProduct) => {
+              if (product.productID === reqProduct.productID) {
+                actuallyShippedQuantity = product.productQuantity;
+                var receivedQuantity = reqProduct.productQuantity;
+
+                if (receivedQuantity > actuallyShippedQuantity)
+                  throw new Error(
+                    "Received quantity cannot be greater than Actual quantity"
+                  );
+
+                var quantityDifference =
+                  actuallyShippedQuantity - receivedQuantity;
+                var rejectionRate =
+                  (quantityDifference / actuallyShippedQuantity) * 100;
+                shipmentProducts[productNumber].quantityDelivered =
+                  receivedQuantity;
+                shipmentProducts[productNumber].rejectionRate = rejectionRate;
+                ShipmentModel.updateOne(
+                  {
+                    id: shipmentID,
+                    "products.productID": product.productID,
+                  },
+                  {
+                    $set: {
+                      "products.$.rejectionRate": rejectionRate,
+                    },
+                  }
+                )
+                  .then((e) => {
+                    console.log(e);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+            });
+          });
+        }
+        var flag = "Y";
+        if (data.poId === null) {
+          flag = "YS";
+        }
+
+        if (flag == "Y") {
+          const po = await RecordModel.findOne({
+            id: data.poId,
+          });
+          let quantityMismatch = false;
+          po.products.every((product) => {
+            data.products.every((p) => {
+              const po_product_quantity =
+                product.productQuantity || product.quantity;
+              const shipment_product_qty = p.productQuantity || p.quantity;
+              if (
+                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+              ) {
+                quantityMismatch = true;
+                return false;
+              }
+            });
+          });
+          if (quantityMismatch) {
+            po.poStatus = "PARTIALLYFULFILLED";
+            await po.save();
+          } else {
+            po.poStatus = "FULLYFULFILLED";
+            await po.save();
+          }
+        }
+        if (flag != "N") {
+          const suppWarehouseDetails = await WarehouseModel.findOne({
+            id: data.supplier.locationId,
+          });
+          var suppInventoryId = suppWarehouseDetails.warehouseInventory;
+          const suppInventoryDetails = await InventoryModel.findOne({
+            id: suppInventoryId,
+          });
+
+          const recvWarehouseDetails = await WarehouseModel.findOne({
+            id: data.receiver.locationId,
+          });
+          var recvInventoryId = recvWarehouseDetails.warehouseInventory;
+          const recvInventoryDetails = await InventoryModel.findOne({
+            id: recvInventoryId,
+          });
+          var products = data.products;
+          var count = 0;
+          var totalProducts = 0;
+          var totalReturns = 0;
+          var shipmentRejectionRate = 0;
+          for (count = 0; count < products.length; count++) {
+            var shipmentProducts = shipmentInfo[0].products;
+            totalProducts =
+              totalProducts + shipmentProducts[count].productQuantity;
+            totalReturns = totalReturns + products[count].productQuantity;
+            shipmentRejectionRate =
+              ((totalProducts - totalReturns) / totalProducts) * 100;
+            data.products[count]["productId"] = data.products[count].productID;
+            inventoryUpdate(
+              products[count].productID,
+              products[count].productQuantity,
+              suppInventoryId,
+              recvInventoryId,
+              data.poId,
+              "RECEIVED"
+            );
+            shipmentUpdate(
+              products[count].productID,
+              products[count].productQuantity,
+              data.id,
+              "RECEIVED"
+            );
+            if (flag == "Y")
+              await poUpdate(
+                products[count].productId,
+                products[count].productQuantity,
+                data.poId,
+                "RECEIVED",
+                req.user
+              );
+
+            if (products[count].batchNumber != null) {
+              const checkBatch = await AtomModel.find({
+                $and: [
+                  { inventoryIds: recvInventoryId },
+                  { batchNumbers: products[count].batchNumber },
+                ],
+              });
+
+              if (checkBatch.length > 0) {
+                const update = await AtomModel.update(
+                  {
+                    batchNumbers: products[count].batchNumber,
+                    inventoryIds: recvInventoryId,
+                  },
+                  {
+                    $inc: {
+                      quantity: parseInt(products[count].productQuantity),
+                    },
+                  }
+                );
+              } else {
+                const atom = new AtomModel({
+                  id: uniqid("batch-"),
+                  label: {
+                    labelId: "QR_2D",
+                    labelType: "3232", // ?? What is this ??
+                  },
+                  quantity: products[count].productQuantity,
+                  productId: products[count].productID,
+                  inventoryIds: recvInventoryId,
+                  lastInventoryId: "",
+                  lastShipmentId: "",
+                  poIds: [],
+                  shipmentIds: [],
+                  txIds: [],
+                  batchNumbers: products[count].batchNumber,
+                  atomStatus: "Healthy",
+                  attributeSet: {
+                    mfgDate: products[count].mfgDate,
+                    expDate: products[count].batchNumber.expDate,
+                  },
+                  eolInfo: {
+                    eolId: "IDN29402-23423-23423",
+                    eolDate: "2021-03-31T18:30:00.000Z",
+                    eolBy: req.user.id,
+                    eolUserInfo: "",
+                  },
+                });
+                await atom.save();
+              }
+            }
+          }
+
+          const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+          const updates = {
+            updatedOn: currDateTime,
+            updateComment: data.comment,
+            status: "RECEIVED",
+            products: products,
+          };
+
+          const updateData = await ShipmentModel.findOneAndUpdate(
+            { id: req.body.id },
+            {
+              $push: { shipmentUpdates: updates },
+              $set: {
+                status: "RECEIVED",
+                rejectionRate: shipmentRejectionRate,
+              },
+            },
+            { new: true }
+          );
+
+          //await ShipmentModel.findOneAndUpdate({
+          //  id: data.id
+          //}, {
+          //  status: "RECEIVED"
+          //}, );
+
+          var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "RECEIVE",
+              description: "SHIPMENT",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: null,
+                name: null,
+                address: null,
+              },
+              actororg: {
+                id: null,
+                name: null,
+                address: null,
+              },
+              secondorg: {
+                id: null,
+                name: null,
+                address: null,
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "RECEIVE";
+          event_data.eventType.description = "SHIPMENT";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.actorWarehouseId = req.user.warehouseId || "null";
+          event_data.stackholders.actororg.id = orgId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address =
+            CENTRAL_AUTHORITY_ADDRESS || "null";
+          event_data.transactionId = data.id;
+
+          if (orgId === supplierID) {
+            event_data.stackholders.secondorg.id = receiverId || "null";
+            event_data.stackholders.secondorg.name = receiverName || "null";
+            event_data.stackholders.secondorg.address =
+              receiverAddress || "null";
+          } else {
+            event_data.stackholders.secondorg.id = supplierID || "null";
+            event_data.stackholders.secondorg.name = supplierName || "null";
+            event_data.stackholders.secondorg.address =
+              supplierAddress || "null";
+          }
+
+          event_data.payload.data = data;
+          console.log(event_data);
+          async function compute(event_data) {
+            resultt = await logEvent(event_data);
+            return resultt;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
+
+          return apiResponse.successResponseWithData(
+            res,
+            "Shipment Received",
+            updateData
+          );
+        } else {
+          return apiResponse.successResponse(
+            res,
+            "Cannot receive  a Shipment without SO and PO"
+          );
+        }
+      } else {
+        return apiResponse.forbiddenResponse(res, "Access denied");
+      }
     } catch (err) {
       logger.log(
         "error",

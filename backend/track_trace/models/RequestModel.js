@@ -23,6 +23,7 @@ const RequestSchema = new mongoose.Schema(
       labelType: { type: String, required: true, default: "QR_2DBAR" },
       labelId: { type: String, required: true },
     },
+    shipmentId: String,
     type: {
       type: String,
       enum: ["LOCATION_MISMATCH", "ORGANISATION_MISMATCH", "UNSUFFICIENT_ROLE"],
