@@ -923,7 +923,6 @@ exports.receiveShipment = [
                 }
               });
             });
-          });
           if (quantityMismatch) {
             po.poStatus = "PARTIALLYFULFILLED";
             await po.save();
