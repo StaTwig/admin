@@ -299,9 +299,9 @@ services:
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
 
   cra:
-    build: "./frontend"
-    image: "frontend1.0"
-    container_name: "frontend"
+    build: "./cra-frontend"
+    image: "frontend2.0"
+    container_name: "cra"
     restart: always
     labels:
       - "traefik.enable=true"
