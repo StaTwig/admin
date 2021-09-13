@@ -7,6 +7,7 @@ const AtomModel = require("../models/AtomModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const ProductModel = require("../models/ProductModel");
 const RequestModel = require("../models/RequestModel");
+const { ScanShipment, ScanProduct } = require("../helpers/scan");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 
@@ -328,6 +329,8 @@ exports.fetchDataByQRCode = [
   async (req, res) => {
     try {
       let data = {};
+      let requestType = [];
+      let messages = [];
       let locationMatch = false;
       let permission = false;
       const { QRcode } = req.query;
@@ -344,14 +347,16 @@ exports.fetchDataByQRCode = [
           if (receiver.receiver.locationId == warehouseId) {
             locationMatch = true;
           } else {
-            data.requestType = "LOCATION_MISMATCH";
-            data.message =
-              "Access Denied, User location is not same as Delivery Location";
+            requestType.push("LOCATION_MISMATCH");
+            messages.push(
+              "Access Denied, User location is not same as Delivery Location"
+            );
           }
         } else {
-          data.requestType = "ORGANISATION_MISMATCH";
-          data.message =
-            "Access Denied, User doesn't belong to Receiver Organisation";
+          requestType.push("ORGANISATION_MISMATCH");
+          messages.push(
+            "Access Denied, User doesn't belong to Receiver Organisation"
+          );
         }
         const permission_request = {
           role: role,
@@ -360,9 +365,10 @@ exports.fetchDataByQRCode = [
         checkPermissions(permission_request, async (permissionResult) => {
           if (!permissionResult.success) {
             permission = false;
-            data.requestType = "UNSUFFICIENT_ROLE";
-            data.message =
-              "Access Denied, User doesn't have Permission to Track & Trace";
+            requestType.push("UNSUFFICIENT_ROLE");
+            messages.push(
+              "Access Denied, User doesn't have Permission to Track & Trace"
+            );
           } else {
             permission = true;
           }
@@ -370,17 +376,17 @@ exports.fetchDataByQRCode = [
         if (locationMatch == false) {
           const request = await RequestModel.findOne({
             "from.id": id,
-            labelId: QRcode,
+            "label.labelId": QRcode,
             type: { $in: ["LOCATION_MISMATCH", "ORGANISATION_MISMATCH"] },
           });
           if (request != null && request.status == "ACCEPTED") {
-            permission = true;
+            locationMatch = true;
           }
         }
         if (permission == false) {
           const request = await RequestModel.findOne({
             "from.id": id,
-            labelId: QRcode,
+            "label.labelId": QRcode,
             type: { $in: ["UNSUFFICIENT_ROLE"] },
           });
           if (request != null && request.status == "ACCEPTED") {
@@ -388,65 +394,7 @@ exports.fetchDataByQRCode = [
           }
         }
         if ((permission && locationMatch) == true) {
-          const shipments = await ShipmentModel.aggregate([
-            {
-              $match: {
-                "label.labelId": QRcode,
-              },
-            },
-            {
-              $lookup: {
-                from: "warehouses",
-                localField: "supplier.locationId",
-                foreignField: "id",
-                as: "supplier.warehouse",
-              },
-            },
-            {
-              $unwind: {
-                path: "$supplier.warehouse",
-              },
-            },
-            {
-              $lookup: {
-                from: "organisations",
-                localField: "supplier.warehouse.organisationId",
-                foreignField: "id",
-                as: "supplier.org",
-              },
-            },
-            {
-              $unwind: {
-                path: "$supplier.org",
-              },
-            },
-            {
-              $lookup: {
-                from: "warehouses",
-                localField: "receiver.locationId",
-                foreignField: "id",
-                as: "receiver.warehouse",
-              },
-            },
-            {
-              $unwind: {
-                path: "$receiver.warehouse",
-              },
-            },
-            {
-              $lookup: {
-                from: "organisations",
-                localField: "receiver.warehouse.organisationId",
-                foreignField: "id",
-                as: "receiver.org",
-              },
-            },
-            {
-              $unwind: {
-                path: "$receiver.org",
-              },
-            },
-          ]);
+          const shipments = await ScanShipment(QRcode);
           data.shipments = shipments;
           return apiResponse.successResponseWithData(
             res,
@@ -454,6 +402,13 @@ exports.fetchDataByQRCode = [
             data
           );
         } else {
+          if (messages.length == 1 && requestType.length == 1) {
+            data.requestType = requestType[0];
+            data.message = messages[0];
+          } else {
+            data.requestType = requestType;
+            data.message = messages;
+          }
           return apiResponse.forbiddenResponse(res, data);
         }
       } else {
@@ -463,42 +418,7 @@ exports.fetchDataByQRCode = [
         };
         checkPermissions(permission_request, async (permissionResult) => {
           if (permissionResult.success) {
-            const product = await AtomModel.aggregate([
-              {
-                $match: {
-                  "label.labelId": QRcode,
-                },
-              },
-              {
-                $lookup: {
-                  from: "products",
-                  localField: "productId",
-                  foreignField: "id",
-                  as: "productDetails",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$productDetails",
-                },
-              },
-              {
-                $project: {
-                  productId: 1,
-                  label: 1,
-                  id: 1,
-                  batchNumbers: 1,
-                  quantity: 1,
-                  name: "$productDetails.type",
-                  type: "$productDetails.name",
-                  manufacturer: "$productDetails.manufacturer",
-                  unitofMeasure: {
-                    id: "$productDetails.unitofMeasure.id",
-                    name: "$productDetails.unitofMeasure.name",
-                  },
-                },
-              },
-            ]);
+            const product = await ScanProduct(QRcode);
             data.type = "Product";
             data.product = product;
             return apiResponse.successResponseWithData(
