@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "react-bootstrap/Navbar";
 import NavbarLogo from "../../assets/img/nav-logo.png";
+import VaccineLegderLogo from "../../assets/img/VACCINELEDGER.png";
 import "./Header.css";
 import Nav from "react-bootstrap/Nav";
 import {useKeycloak} from "@react-keycloak/web";
@@ -35,10 +36,17 @@ function Header() {
             <Navbar.Brand href={"/"}>
                 <img
                     src={NavbarLogo}
-                    width="200"
-                    className="d-inline-block align-top"
-                    alt="React Bootstrap logo"
+                    height="30"
+                    className="divoc-logo"
+                    alt="Divoc logo"
                 />
+                <img
+                    src={VaccineLegderLogo}
+                    height="20"
+                    className="vl-logo"
+                    alt="VL logo"
+                />
+
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
