@@ -32,8 +32,8 @@ exports.getRequestById = [
   auth,
   async (req, res) => {
     try {
-      const { id } = req.query;
-      const request = await RequestModel.findOne({ id: id });
+      let { id } = req.query;
+      const request = await RequestModel.findOne({ id });
       return apiResponse.successResponseWithData(res, "Request", request);
     } catch (err) {
       console.log(err);
