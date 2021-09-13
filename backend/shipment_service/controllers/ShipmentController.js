@@ -423,19 +423,22 @@ exports.createShipment = [
           data.products.every((p) => {
             const po_product_quantity = 
               product.productQuantity || product.quantity;
-              if(product.productQuantityShipped){
-                console.log("values are" + parseInt(p.productQuantity), parseInt(product.productQuantityShipped))
-                var shipment_product_qty = parseInt(p.productQuantity) + parseInt(product.productQuantityShipped);
+              const alreadyShipped = product.productQuantityShipped || null;
+              let shipment_product_qty;
+              if(alreadyShipped){
+                console.log("values are" + parseInt(p.productQuantity), parseInt(alreadyShipped))
+                shipment_product_qty = parseInt(p.productQuantity) + parseInt(alreadyShipped);
               }
               else{
-                var shipment_product_qty =  p.productQuantityShipped;
+                shipment_product_qty =  p.productQuantity;
               }
                   
-            console.log(po_product_quantity, shipment_product_qty, product.productQuantityShipped)
+            console.log(po_product_quantity, shipment_product_qty, alreadyShipped)
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
               quantityMismatch = true;
+              console.log("quantityMismatch is ", quantityMismatch)
               return false;
             }
           });
