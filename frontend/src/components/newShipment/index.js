@@ -769,6 +769,10 @@ if (!error) {
                         dispatch(turnOn());
                         setDisabled(false);
                         let result = await dispatch(getViewShipment(values.shipmentID));
+                        if(result.status !== "RECEIVED"){
+                          values.shipmentID = ""
+                          alert("The shipment has to be delivered first")
+                        }
                         for (let i = 0; i < result.products.length; i++) {
                           if(result.products[i].productQuantityShipped){
                             result.products[i].productQuantity = parseInt(result.products[i].productQuantity) - parseInt(result.products[i].productQuantityShipped);
