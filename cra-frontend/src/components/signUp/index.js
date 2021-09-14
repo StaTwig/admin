@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import { getOrganisations } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
@@ -8,17 +7,13 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./style.scss";
-import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
 import Phone from "../../assets/icons/phone.png";
-import hide from "../../assets/icons/hide.png";
-import eye from "../../assets/icons/eye.png";
 import org from "../../assets/icons/org.png";
 import Waiting from "../../assets/icons/waiting.png";
 import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
-import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import TextField from "@material-ui/core/TextField";
 import { verifyEmailAndPhoneNo } from "../../actions/userActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -71,7 +66,7 @@ const FormPage = (props) => {
     }
   });
   const showOrgByType = (value) => {
-    let arr = organisations.filter((data) => data.type == value);
+    let arr = organisations.filter((data) => data.type === value);
     arr.push({ name: "Other" });
     return arr;
   };
@@ -642,11 +637,11 @@ const FormPage = (props) => {
                                   }
                                   setFieldValue("org", item);
                                   props.onOrganisationChange(item);
-                                  if (item.name != "Other") {
+                                  if (item.name !== "Other") {
                                     setValue(item.name);
                                     props.onOrgChange(false);
                                   }
-                                  if (item.name == "Other") {
+                                  if (item.name === "Other") {
                                     props.onOrgChange(true);
 
                                     if (

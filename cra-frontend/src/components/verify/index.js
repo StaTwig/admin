@@ -1,21 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
-import logo from '../../assets/brands/VaccineLedgerlogo.svg';
-import '../login/style.scss';
+import React, { useState, useRef } from "react";
+import logo from "../../assets/brands/VaccineLedgerlogo.svg";
+import "../login/style.scss";
 import { Formik } from "formik";
-import { Alert, AlertTitle } from '@material-ui/lab';
-
 
 const FormVerifyPage = (props) => {
-  const { otp, onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
+  const { onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
   const [otpArray, setOtpArray] = useState(["", "", "", ""]);
   const firstInputRef = useRef(null);
   const secondInputRef = useRef(null);
   const thirdInputRef = useRef(null);
-  const fourthInputRef = useRef(null);  
+  const fourthInputRef = useRef(null);
   const formRef = useRef();
-  
-  
-  const otpChange = (index, handleChange,) => {
+
+  const otpChange = (index, handleChange) => {
     return (event) => {
       let value = event.target.value;
       if (isNaN(Number(value))) {
@@ -31,7 +28,7 @@ const FormVerifyPage = (props) => {
         else if (index === 2) fourthInputRef.current.focus();
       }
       handleChange(event);
-      if (otpArrayCopy.filter((v) => v != "").length == 4) {
+      if (otpArrayCopy.filter((v) => v !== "").length === 4) {
         formRef.current.handleSubmit();
       }
     };
@@ -45,27 +42,26 @@ const FormVerifyPage = (props) => {
       }
     };
   };
-    return (
-    <div className="login-wrapper">
-      <div className="container">
-          <div className="mobile-header" >
-            <div className="branding" >
-            
-              <img src={ logo } alt="vaccineledger" />
-            </div>
-           </div>
-        <div className="row">
-          <div className="col-sm-6 col-lg-6">
-            <div className="form-content">
-              <img className="logo" src={logo} />
+  return (
+    <div className='login-wrapper'>
+      <div className='container'>
+        <div className='mobile-header'>
+          <div className='branding'>
+            <img src={logo} alt='vaccineledger' />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-6 col-lg-6'>
+            <div className='form-content'>
+              <img className='logo' src={logo} alt='VaccineLedger' />
               <h1>Welcome</h1>
             </div>
           </div>
-          <div className="col-sm-6 col-lg-5">
-            <div className="card">
-              <div className="card-body">
-                <div className="login-form">
-                  <div className="card-title mb-5">Enter OTP</div>
+          <div className='col-sm-6 col-lg-5'>
+            <div className='card'>
+              <div className='card-body'>
+                <div className='login-form'>
+                  <div className='card-title mb-5'>Enter OTP</div>
                   <Formik
                     innerRef={formRef}
                     initialValues={{ otp0: "", otp1: "", otp2: "", otp3: "" }}
@@ -87,7 +83,7 @@ const FormVerifyPage = (props) => {
                       onVerifyOtp();
                     }}
                   >
-                  {({
+                    {({
                       values,
                       errors,
                       touched,
@@ -95,43 +91,46 @@ const FormVerifyPage = (props) => {
                       handleBlur,
                       handleSubmit,
                       isSubmitting,
-                      
                     }) => (
                       <form onSubmit={handleSubmit}>
-                      <div className="ml-5 d-flex flex-row justify-content-center">
-                        {[
-                          firstInputRef,
-                          secondInputRef,
-                          thirdInputRef,
-                          fourthInputRef,
-                        ].map((textInputRef, index) => (
-                          <input
-                            ref={textInputRef}
-                            name={"otp" + index}
-                            id={"otp" + index}
-                            type="text"
-                            style={{border: "none",
-                              borderBottom: "1px solid #d6d6d6",
-                              borderRadius: 0
+                        <div className='ml-5 d-flex flex-row justify-content-center'>
+                          {[
+                            firstInputRef,
+                            secondInputRef,
+                            thirdInputRef,
+                            fourthInputRef,
+                          ].map((textInputRef, index) => (
+                            <input
+                              ref={textInputRef}
+                              name={"otp" + index}
+                              id={"otp" + index}
+                              type='text'
+                              style={{
+                                border: "none",
+                                borderBottom: "1px solid #d6d6d6",
+                                borderRadius: 0,
                               }}
-                            className={`form-control text-center mr-5 ${
-                              errors.otp0 && touched.otp0 ? "border-danger" : "" }`}
-                            value={otpArray[index]}
-                            onKeyUp={onOtpKeyPress(index)}
-                            maxLength={1}
-                            onChange={otpChange(
-                              index,
-                              handleChange,
-                              handleSubmit
-                            )}
-                            onKeyDown={onkeydown}
-                            //onBlur={handleBlur}
-                            autoFocus={index === 0 ? true : undefined}
-                            key={index}
-                          />
-                        ))}
+                              className={`form-control text-center mr-5 ${
+                                errors.otp0 && touched.otp0
+                                  ? "border-danger"
+                                  : ""
+                              }`}
+                              value={otpArray[index]}
+                              onKeyUp={onOtpKeyPress(index)}
+                              maxLength={1}
+                              onChange={otpChange(
+                                index,
+                                handleChange,
+                                handleSubmit
+                              )}
+                              onKeyDown={onkeydown}
+                              //onBlur={handleBlur}
+                              autoFocus={index === 0 ? true : undefined}
+                              key={index}
+                            />
+                          ))}
                         </div>
-                        <div className="mb-4 mt-5">
+                        <div className='mb-4 mt-5'>
                           {(errors.otp0 ||
                             errors.otp1 ||
                             errors.otp2 ||
@@ -140,21 +139,25 @@ const FormVerifyPage = (props) => {
                               touched.otp1 ||
                               touched.otp2 ||
                               touched.otp3) && (
-                              <span className="error-msg text-danger">
-                              
-                              </span>
+                              <span className='error-msg text-danger'></span>
                             )}
                           &nbsp;
                         </div>
                         {errorMessage && (
-                          <span className={`text-danger-verify ${errorMessage ? "border-red" : "" }`}>OTP doesn't match</span>
+                          <span
+                            className={`text-danger-verify ${
+                              errorMessage ? "border-red" : ""
+                            }`}
+                          >
+                            OTP doesn't match
+                          </span>
                         )}
-                        <div className="font-weight-bold text-center">
+                        <div className='font-weight-bold text-center'>
                           Didn't receive the OTP?
                         </div>
                         <div
-                          className="text-center mt-2 mb-5 text-primary resend"
-                          style={{cursor: "pointer"}}
+                          className='text-center mt-2 mb-5 text-primary resend'
+                          style={{ cursor: "pointer" }}
                           onClick={onResendOtp}
                         >
                           RESEND CODE
@@ -163,8 +166,11 @@ const FormVerifyPage = (props) => {
                         {/* {errorMessage && (
                           <div> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                         )} */}
-                        <div className="text-center mt-3 mb-3 ml-1">
-                          <button type="submit" className=" buttonS btn btn-primary">
+                        <div className='text-center mt-3 mb-3 ml-1'>
+                          <button
+                            type='submit'
+                            className=' buttonS btn btn-primary'
+                          >
                             VERIFY
                           </button>
                         </div>
@@ -179,7 +185,6 @@ const FormVerifyPage = (props) => {
       </div>
     </div>
   );
-};         
+};
 
 export default FormVerifyPage;
-

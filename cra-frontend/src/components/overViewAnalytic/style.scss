@@ -1,136 +1,154 @@
-.containerAnalytic{
+.containerAnalytic {
+  position: absolute;
+  top: 180px;
+  background-color: rgb(197, 192, 192);
+  width: 1250px;
+  height: 110px;
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
 
-    position:absolute;top:180px;
-    background-color: rgb(197, 192, 192);
-    width:1250px;
-    height:110px;
-    display:flex;
-    flex-direction: row;
-    flex-flow: wrap;
-    }
-    
-     .box1 {
-     width:249px;
-     height: 110px;
-     background: #EAEAEA 0% 0% no-repeat padding-box;
-    box-shadow: 0px;
-    box-sizing: border-box;
-    opacity: 1;
-    margin:0.4px;
-    }
-    
-    .box1 #text1{
-        
-        font: Bold 12px/12px Roboto;
-        letter-spacing: 0;
-        color: #707070;
-        position: relative;top:-40px ;left:80px;
-    }
-    .box1 #text2{
-        font: Bold 39px/12px Roboto;
-        letter-spacing: 0;
-        color:#0B65C1;
-        opacity: 1;
-        position:relative;top:-20px;left:90px;
-    }
-    
-    .box1 #text3{
-    font: normal 11px/12px Roboto;
-    letter-spacing: 0;
-    color: #000000;
-    position:relative;top:-20px;left:200px;
-    }
-    
-    .box1 #text4{
-        font: Bold 39px/12px Roboto;
-        letter-spacing: 0;
-        color: #2A9FAA;
-        opacity: 1;
-        position:relative;top:-20px;left:90px;
-    }
-    
-    .box1 #text5{
-        font: Bold 39px/12px Roboto;
-        letter-spacing: 0;
-        color: #0093E9;
-        opacity: 1;
-        position:relative;top:-20px;left:90px;
-    }
-    
-    .box1 #text6{
-        font: Bold 39px/12px Roboto;
-        letter-spacing: 0;
-        color: #36C2CF;
-        opacity: 1;
-        position:relative;top:-20px;left:90px;
-    }
-    
-    .box1 #text7{
-        font: Bold 39px/12px Roboto;
-        letter-spacing: 0;
-        color: #FFAB1D;
-        opacity: 1;
-        position:relative;top:-20px;left:90px;
-    }
-    
-    .box1 #text8{
-        font: normal 11px/12px Roboto;
-        letter-spacing: 0;
-        color: #000000;
-        position:relative;top:-20px;left:150px;
-     }
-    
-     .box1 #text9{
-        font: normal 11px/12px Roboto;
-        letter-spacing: 0;
-        color: #000000;
-        position:relative;top:-20px;left:150px;
-        }
-    .box1 #text10{
-            font: normal 11px/12px Roboto;
-            letter-spacing: 0;
-            color: #000000;
-            position:relative;top:-20px;left:150px;   
-        }
-    
-    
-    .box1 #car1{
-    
-        height:40px;
-        width:40px;
-        position:relative;top:8px;left:10px;
-        background-color: white;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-    }
-    
-    
-    .box1 #car3{
-    
-        height:30px;
-        width:30px;
-        position:relative;top:13px;left:15px;
-        background-color: white;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-    }
-    
-    
-    .box1 #circle{
-        height:60px;
-        width:60px;
-        position:relative;top:25px;left:20px;
-        background-color: white;
-        border-radius: 50%;
-    }
-    
-    @media screen and (max-width:1200px){
-        .box1{
-            width:40%;
-        }
-    }
-    @media screen and (max-width:600px){
-        .box1{
-            width:80%;
-        }
-    }
-    
-    
+.box1 {
+  width: 249px;
+  height: 110px;
+  background: #eaeaea 0% 0% no-repeat padding-box;
+  box-shadow: 0px;
+  box-sizing: border-box;
+  opacity: 1;
+  margin: 0.4px;
+}
+
+.box1 #text1 {
+  font: Bold 12px/12px Roboto;
+  letter-spacing: 0;
+  color: #707070;
+  position: relative;
+  top: -40px;
+  left: 80px;
+}
+.box1 #text2 {
+  font: Bold 39px/12px Roboto;
+  letter-spacing: 0;
+  color: #0b65c1;
+  opacity: 1;
+  position: relative;
+  top: -20px;
+  left: 90px;
+}
+
+.box1 #text3 {
+  font: normal 11px/12px Roboto;
+  letter-spacing: 0;
+  color: #000000;
+  position: relative;
+  top: -20px;
+  left: 200px;
+}
+
+.box1 #text4 {
+  font: Bold 39px/12px Roboto;
+  letter-spacing: 0;
+  color: #2a9faa;
+  opacity: 1;
+  position: relative;
+  top: -20px;
+  left: 90px;
+}
+
+.box1 #text5 {
+  font: Bold 39px/12px Roboto;
+  letter-spacing: 0;
+  color: #0093e9;
+  opacity: 1;
+  position: relative;
+  top: -20px;
+  left: 90px;
+}
+
+.box1 #text6 {
+  font: Bold 39px/12px Roboto;
+  letter-spacing: 0;
+  color: #36c2cf;
+  opacity: 1;
+  position: relative;
+  top: -20px;
+  left: 90px;
+}
+
+.box1 #text7 {
+  font: Bold 39px/12px Roboto;
+  letter-spacing: 0;
+  color: #ffab1d;
+  opacity: 1;
+  position: relative;
+  top: -20px;
+  left: 90px;
+}
+
+.box1 #text8 {
+  font: normal 11px/12px Roboto;
+  letter-spacing: 0;
+  color: #000000;
+  position: relative;
+  top: -20px;
+  left: 150px;
+}
+
+.box1 #text9 {
+  font: normal 11px/12px Roboto;
+  letter-spacing: 0;
+  color: #000000;
+  position: relative;
+  top: -20px;
+  left: 150px;
+}
+.box1 #text10 {
+  font: normal 11px/12px Roboto;
+  letter-spacing: 0;
+  color: #000000;
+  position: relative;
+  top: -20px;
+  left: 150px;
+}
+
+.box1 #car1 {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  top: 8px;
+  left: 10px;
+  background-color: white;
+  background: #ffffff 0% 0% no-repeat padding-box;
+}
+
+.box1 #car3 {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  top: 13px;
+  left: 15px;
+  background-color: white;
+  background: #ffffff 0% 0% no-repeat padding-box;
+}
+
+.box1 #circle {
+  height: 60px;
+  width: 60px;
+  position: relative;
+  top: 25px;
+  left: 20px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 1200px) {
+  .box1 {
+    width: 40%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .box1 {
+    width: 80%;
+  }
+}

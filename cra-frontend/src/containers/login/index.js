@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Login from "../../components/login";
 import { sendOtp } from "../../actions/userActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
+
 const LoginContainer = (props) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -23,7 +24,7 @@ const LoginContainer = (props) => {
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
 
-    const data = { emailId: email != "" ? email : phone };
+    const data = { emailId: email !== "" ? email : phone };
     console.log("3", data);
     const result = await sendOtp(data);
     if (result.status === 200) {

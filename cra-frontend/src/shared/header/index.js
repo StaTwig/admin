@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import "./style.scss";
 import searchingIcon from "../../assets/icons/search.png";
 import bellIcon from "../../assets/icons/notification_blue.png";
 import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Location from "../../assets/icons/location_blue.png";
 import DrawerMenu from "./drawerMenu";
+import { Link } from "react-router-dom";
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -57,7 +57,7 @@ const Header = (props) => {
   const [options, setOptions] = useState([]);
 
   const filterOptions = createFilterOptions({
-    matchFrom: "start",
+    //matchFrom: "start",
     stringify: (option) => option._id,
   });
 
@@ -75,7 +75,6 @@ const Header = (props) => {
   const closeModalFail = () => {
     setInvalidSearch(false);
   };
-
   function notifIcon(notif) {
     if (notif.eventType === "INVENTORY") {
       return inventoryIcon;
@@ -204,15 +203,16 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
-    console.log(response.data.data);
-    setNotifications(response.data.data);
+    console.log(response.data.data.data);
+    setNotifications(response.data.data.data);
   }
 
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
-      setNotifications(response.data.data);
+      console.log(response.data.data.data);
+      setNotifications(response.data.data.data);
 
       const warehouses = await getActiveWareHouses();
       const active = warehouses
@@ -240,7 +240,7 @@ const Header = (props) => {
       }
     }
     fetchApi();
-  }, []);
+  }, [alertType, dispatch]);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -338,7 +338,7 @@ const Header = (props) => {
             <div className='notifications'>
               <img
                 src={bellIcon}
-                onClick={showNotifications}
+                onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
               />
               <bellIcon />
@@ -347,13 +347,11 @@ const Header = (props) => {
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                {notifications.length >= 0 && (
-                  <span className='badge badge-light'>
-                    {notifications.length}
-                  </span>
-                )}
+                <span className='badge badge-light'>
+                  {notifications?.length >= 0 ? notifications?.length : 0}
+                </span>
               </div>
-              {showNotifications && notifications.length >= 0 && (
+              {showNotifications && (
                 <div className='slider-menu'>
                   <React.Fragment>
                     <div
@@ -373,17 +371,19 @@ const Header = (props) => {
                       >
                         User Notifications
                       </text>
-                      <text
-                        style={{
-                          backgroundColor: "#fa7a23",
-                          padding: "5px",
-                          color: "white",
-                          textAlign: "right",
-                          borderRadius: "6px",
-                        }}
-                      >
-                        {notifications.length} new
-                      </text>
+                      {notifications?.length >= 0 && (
+                        <text
+                          style={{
+                            backgroundColor: "#fa7a23",
+                            padding: "5px",
+                            color: "white",
+                            textAlign: "right",
+                            borderRadius: "6px",
+                          }}
+                        >
+                          {notifications?.length} new
+                        </text>
+                      )}
                       <div className='section'>
                         <button
                           style={{
@@ -413,39 +413,51 @@ const Header = (props) => {
                         </button>
                       </div>
                     </div>
-                    {notifications.map((notification) => (
-                      <div className='slider-item'>
-                        <div
-                          className='row justify-content-between align-items-center'
-                          onClick={() => clearNotification(notification)}
-                        >
-                          <div className='col-sm-10'>
-                            <div>
-                              <img
-                                alt=''
-                                style={{ size: "15px", marginLeft: "-20px" }}
-                                src={notifIcon(notification)}
-                              />
-                              <Link
-                                to={
-                                  "/" +
-                                  viewUrl(notification) +
-                                  notification.transactionId
-                                }
-                              >
-                                {notification.message}
-                              </Link>
+                    {notifications?.length >= 0 ? (
+                      notifications?.map((notifications) => (
+                        <div className='slider-item'>
+                          <div
+                            className='row justify-content-between align-items-center'
+                            onClick={() => clearNotification(notifications)}
+                          >
+                            <div className='col-sm-10'>
+                              <div>
+                                <img
+                                  style={{ size: "15px", marginLeft: "-20px" }}
+                                  src={notifIcon(notifications)}
+                                  alt='notification'
+                                />
+                                <Link
+                                  to={
+                                    "/" +
+                                    viewUrl(notifications) +
+                                    notifications.transactionId
+                                  }
+                                >
+                                  {notifications.message}
+                                </Link>
+                              </div>
+                            </div>
+
+                            <div className='col-sm-2'>
+                              <button className='close' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                              </button>
                             </div>
                           </div>
-
-                          <div className='col-sm-2'>
-                            <button className='close' aria-label='Close'>
-                              <span aria-hidden='true'>&times;</span>
-                            </button>
+                        </div>
+                      ))
+                    ) : (
+                      <div className='slider-item'>
+                        <div className='row justify-content-between align-items-center'>
+                          <div className='col text-center'>
+                            <div>
+                              <span>No notifications</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )}
                   </React.Fragment>
                 </div>
               )}
@@ -454,7 +466,7 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
-            <img className='locationimg' src={Location} alt='LocationImage' />
+            <img className='locationimg' src={Location} alt='Location' />
 
             <div className='userName'>
               <DropdownButton

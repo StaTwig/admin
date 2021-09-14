@@ -3,7 +3,7 @@
     "admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/"
   ]
 [http.routers.api]
-  rule = "Host(`traefik.vaccineledger.com`)"
+  rule = "Host(`test.traefik.vaccineledger.com`)"
   entrypoints = ["websecure"]
   middlewares = ["simpleAuth"]
   service = "api@internal"

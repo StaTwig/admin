@@ -1,16 +1,16 @@
 import React from "react";
-import VerifyShipment from '../../components/verifyshipment';
-import Header from '../../shared/header';
-import Sidebar from '../../shared/sidebarMenu';
+import VerifyShipment from "../../components/verifyshipment";
+import Header from "../../shared/header";
+import Sidebar from "../../shared/sidebarMenu";
 
-const VerifyShipmentContainer = props => {
+const VerifyShipmentContainer = (props) => {
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
-          <VerifyShipment {...props}/>
+        <div className='content'>
+          <VerifyShipment {...props} />
         </div>
       </div>
     </div>
@@ -18,4 +18,3 @@ const VerifyShipmentContainer = props => {
 };
 
 export default VerifyShipmentContainer;
-

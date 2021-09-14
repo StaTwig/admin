@@ -1,43 +1,43 @@
-@import '../../../assets/styles/global.scss';
+@import "../../../assets/styles/global.scss";
 
 .table {
-  .overflow{
+  .overflow {
     height: 400px;
     overflow: auto;
   }
-  .w-30{
+  .w-30 {
     width: 30vw;
   }
-  span, label{
+  span,
+  label {
     color: #000000;
     opacity: 1;
   }
-  
-  .theader{
-      
-      font-size: 16px;
-      // margin-right: 10%;
-      //color: #707070;
-    }
 
-    .trow {
-      display: flex;
-      background: #fff;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding: 5px 0px;
-      border-radius: 10px;
-      box-shadow: 0px 3px 10px #00000029;
-      align-items: center;
-      color: rgb(67, 78, 88);
-      .tcell {
-        border-right: 1px solid #d6d6d6;
-        .form-control{
-          border: none;
-        }
-        &:last-child {
-          border-right: none;
-        }
+  .theader {
+    font-size: 16px;
+    // margin-right: 10%;
+    //color: #707070;
+  }
+
+  .trow {
+    display: flex;
+    background: #fff;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 5px 0px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px #00000029;
+    align-items: center;
+    color: rgb(67, 78, 88);
+    .tcell {
+      border-right: 1px solid #d6d6d6;
+      .form-control {
+        border: none;
+      }
+      &:last-child {
+        border-right: none;
+      }
     }
   }
 
@@ -82,12 +82,10 @@
       // color: #707070;
     }
 
-
-    
     .rTableCell {
       color: $black;
-        font-weight: 400;
-        padding: 1px 30px;
+      font-weight: 400;
+      padding: 1px 30px;
       a {
         color: $black;
         font-weight: 400;
@@ -98,14 +96,13 @@
       display: flex;
       align-items: center;
       font-weight: bold;
-      
-        color: #0093E9;
-      
-      
+
+      color: #0093e9;
+
       .round-sign {
         margin-right: 10px;
         border-radius: 100%;
-        background-color: #FFBCC4;
+        background-color: #ffbcc4;
         font: Bold 11px Roboto;
         letter-spacing: 0px;
         height: 26px;
@@ -118,13 +115,7 @@
   }
 }
 
-
-
-
-
 .editTable {
-
-
   .square-box {
     width: 25px;
     height: 20px;
@@ -133,22 +124,19 @@
     margin-right: 5px;
   }
   .rTable {
-
     .input-group,
     .form-group {
-      .react-date-picker__wrapper{
-              border:none;
+      .react-date-picker__wrapper {
+        border: none;
       }
-     .react-datepicker__month-wrapper{
-        height:30px;
-        width:205px;
+      .react-datepicker__month-wrapper {
+        height: 30px;
+        width: 205px;
       }
-    
-    
+
       margin-bottom: 0;
       border-bottom: none;
 
-     
       .form-field {
         border: none;
         font-size: 10px;
@@ -158,11 +146,9 @@
     .rTableRow {
       padding: 0;
 
-      .divider{
+      .divider {
         font-size: 10px;
         color: black;
-        
-
       }
 
       .rTableCell {
@@ -171,7 +157,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        
 
         &:last-child {
           border-right: none;
@@ -184,18 +169,14 @@
             width: 100%;
             font-size: 10px;
           }
-          
+
           .form-field1 {
-            width:30%;
+            width: 30%;
             font-size: 10px;
             border: none;
           }
-
-
         }
       }
     }
   }
-
-
 }

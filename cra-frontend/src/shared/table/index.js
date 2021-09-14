@@ -237,7 +237,7 @@ const Table = (props) => {
                           style={{
                             position: "absolute ",
                             left: "78% ",
-                            bottom: "38% ",
+                            bottom: "10% ",
                             width: "20% ",
                           }}
                         >
@@ -258,7 +258,7 @@ const Table = (props) => {
                             ""
                           )}
                         </div>
-                        <div
+                        {/* <div
                           className='mt-3'
                           style={{
                             position: "absolute",
@@ -281,7 +281,7 @@ const Table = (props) => {
                           >
                             Show Product Details
                           </button>
-                        </div>
+                        </div> */}
                       </TableBody>
                     </Tablee>
                   </TableContainer>

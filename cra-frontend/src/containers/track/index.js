@@ -3,11 +3,7 @@ import Track from "../../components/track";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch } from "react-redux";
-import {
-  // chainOfCustody,
-  // chainOfCustodyTrack,
-  getJourneyTrack,
-} from "../../actions/shipmentActions";
+import { getJourneyTrack } from "../../actions/shipmentActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import moment from "moment";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";

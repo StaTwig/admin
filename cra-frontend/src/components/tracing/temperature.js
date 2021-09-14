@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { LineChart } from 'react-chartkick';
-import 'chart.js';
-import { getTemperature } from '../../actions/shipmentActions';
+import React, { useState, useEffect } from "react";
+import { LineChart } from "react-chartkick";
+import "chart.js";
+import { getTemperature } from "../../actions/shipmentActions";
 //import './style.scss'
 
-
-
 const Chart = () => {
-  const [temp, setTemp] = useState({})
-
-
+  const [temp, setTemp] = useState({});
 
   useEffect(() => {
     const interval = setInterval(() => {
       async function fetchData() {
         const result = await getTemperature();
-        setTemp(result.data)
+        setTemp(result.data);
       }
       fetchData();
     }, 5000);
@@ -24,20 +20,19 @@ const Chart = () => {
     };
   }, []);
 
-
-
   return (
     <div>
       <LineChart
-        ymin="-5" ymax="10" min={-5} max={10}
+        ymin='-5'
+        ymax='10'
+        min={-5}
+        max={10}
         colors={["#FA7923", "#666"]}
-        id="users-chart" height="220px"
+        id='users-chart'
+        height='220px'
         data={temp}
       />
-
     </div>
-
   );
-
 };
 export default Chart;

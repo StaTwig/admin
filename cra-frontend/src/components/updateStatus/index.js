@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { useSelector } from "react-redux";
 import crossIcon from "../../assets/icons/crossRed.svg";
 import SuccessPopup from "./successPopup";
 import FailPopup from "./failPopup";
@@ -13,7 +12,6 @@ import {
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
-import { Alert, AlertTitle } from '@material-ui/lab';
 const UpdateStatus = (props) => {
   const profile = useSelector((state) => {
     return state.user;
@@ -21,21 +19,16 @@ const UpdateStatus = (props) => {
   // console.log('Profile');
   // console.log(profile);
   const { id } = props.match.params;
-  const [shipmentId, setShipmentId] = useState([]);
-  const [comments, setComments] = useState("");
   const [firstName, setFirstName] = useState("");
   const [organisationName, setOrganisationName] = useState("");
-  const [organisationLocation, setOrganisationLocation] = useState("");
   const [photo, setPhoto] = useState("");
-  const [photoUrl, setPhotoUrl] = useState(undefined);  
-  const [updateStatusLocation, setUpdateStatusLocation] = useState("");
-  const [alerttrue, setTrue] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(undefined);
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const setFile = (evt) => {
-    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));    
+    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
 
@@ -50,8 +43,8 @@ const UpdateStatus = (props) => {
     formData.append("photo", photo, photo.name);
 
     const result = await uploadImage(id, formData);
-    if (result.status == 200) {   
-      setMessage("Image Uploaded");   
+    if (result.status === 200) {
+      setMessage("Image Uploaded");
     } else {
       console.log(result.status);
     }
@@ -59,7 +52,7 @@ const UpdateStatus = (props) => {
 
   const updateStatus = async (values) => {
     console.log("1", values);
-    const { shipmentId, comments, updateStatusLocation, alerttrue } = values;
+    const { shipmentId, comments, updateStatusLocation } = values;
     const data = {
       id: shipmentId,
       shipmentUpdates: {
@@ -90,9 +83,9 @@ const UpdateStatus = (props) => {
     setOpenShipmentFail(false);
   };
   return (
-    <div className="updateStatus">
-      <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">UPDATE STATUS</h1>
+    <div className='updateStatus'>
+      <div className='d-flex justify-content-between'>
+        <h1 className='breadcrumb'>UPDATE STATUS</h1>
         {/* <div className="d-flex">
           <button className="btn btn-primary font-weight-bold">
             <img
@@ -149,21 +142,20 @@ const UpdateStatus = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="mb-3">
-            <div className="card bg-light border-0">
-              <div className="card-body">
-                <div className="row justify-content-between">
-                  <div className="col ">
-                    <div className="panel commonpanle">
-                      <div
-                        className="form-group">
-                        <label className="mt-3 text-secondary">
+          <form onSubmit={handleSubmit} className='mb-3'>
+            <div className='card bg-light border-0'>
+              <div className='card-body'>
+                <div className='row justify-content-between'>
+                  <div className='col '>
+                    <div className='panel commonpanle'>
+                      <div className='form-group'>
+                        <label className='mt-3 text-secondary'>
                           Shipment ID
                         </label>
                         <input
-                          type="text"
-                          className="form-control"
-                          name="shipmentId"
+                          type='text'
+                          className='form-control'
+                          name='shipmentId'
                           onBlur={handleBlur}
                           value={values.shipmentId}
                         />
@@ -174,31 +166,29 @@ const UpdateStatus = (props) => {
                         </span>
                       )} */}
                     </div>
-                    <h6 className="poheads potext m-4">
+                    <h6 className='poheads potext m-4'>
                       Account Holder Details
                     </h6>
-                    <div className="panel commonpanle">
-                      <div className="form-group">
-                        <label className="mb-1 text-secondary">
-                          User Name
-                        </label>
+                    <div className='panel commonpanle'>
+                      <div className='form-group'>
+                        <label className='mb-1 text-secondary'>User Name</label>
                         <input
-                          type="text"
-                          className="form-control mb-2"
-                          name="firstName"
+                          type='text'
+                          className='form-control mb-2'
+                          name='firstName'
                           onChange={(e) => setFirstName(e.target.value)}
                           value={profile.firstName}
                           readonly
                         />
                       </div>
-                      <div className="form-group">
-                        <label className="mb-1 text-secondary">
+                      <div className='form-group'>
+                        <label className='mb-1 text-secondary'>
                           Organisation Name
                         </label>
                         <input
-                          type="text"
-                          className="form-control mb-2"
-                          name="organisationName"
+                          type='text'
+                          className='form-control mb-2'
+                          name='organisationName'
                           onChange={(e) => setOrganisationName(e.target.value)}
                           value={profile.organisation}
                           readonly
@@ -219,14 +209,14 @@ const UpdateStatus = (props) => {
                           readonly
                         />
                       </div> */}
-                      <div className="form-group mb-0">
-                        <label className="mb-1 text-secondary">
+                      <div className='form-group mb-0'>
+                        <label className='mb-1 text-secondary'>
                           Update Status Location
                         </label>
                         <input
-                          type="text"
-                          className="form-control mb-2"
-                          name="updateStatusLocation"
+                          type='text'
+                          className='form-control mb-2'
+                          name='updateStatusLocation'
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
@@ -240,22 +230,22 @@ const UpdateStatus = (props) => {
                         )} */}
                     </div>
 
-                    <h6 className="poheads potext m-4">Comment</h6>
-                    <div className="panel commonpanle mb-5">
-                      <div className="form-group mb-0">
+                    <h6 className='poheads potext m-4'>Comment</h6>
+                    <div className='panel commonpanle mb-5'>
+                      <div className='form-group mb-0'>
                         <input
-                          type="text"
-                          className="form-control mb-2"
-                          name="comments"
+                          type='text'
+                          className='form-control mb-2'
+                          name='comments'
                           //style={{ flexBasis: "100%" }}
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          placeholder="Enter comments here..."
+                          placeholder='Enter comments here...'
                           value={values.comments}
                         />
                       </div>
                       {errors.comments && touched.comments && (
-                        <span className="error-msg text-danger">
+                        <span className='error-msg text-danger'>
                           {errors.comments}
                         </span>
                       )}
@@ -302,103 +292,121 @@ const UpdateStatus = (props) => {
                       )} */}
                     </div>
                   </div>
-                  <div className="col ">
-                    <div className="row">
-                      <h6 className="col font-weight-bold mt-4">
+                  <div className='col '>
+                    <div className='row'>
+                      <h6 className='col font-weight-bold mt-4'>
                         Upload Image
                       </h6>
                       <button
-                        type="button"
-                        className="col col-3 btn btn-primary font-weight-bold mr-5 mb-3"
+                        type='button'
+                        className='col col-3 btn btn-primary font-weight-bold mr-5 mb-3'
                         onClick={uploadPhoto}
                       >
                         <img
                           src={uploadWhite}
-                          width="20"
-                          height="17"
-                          className="mr-2 mb-1"
+                          width='20'
+                          height='17'
+                          className='mr-2 mb-1'
+                          alt='Upload'
                         />
                         <span>Upload</span>
                       </button>
                     </div>
-                    <div className="d-flex flex-column upload bg-white col-9 p-5">
-                    {photo ? (
-              <div>
-                <div
-                  className="row"
-                  style={{ margin: "auto", display: "table"}}
-                >
-                  <img onClick={clearImage} width="20" height="20" src={crossIcon} style={{ position:'relative', left:'15vw'}}/>
-                  <img
-                    src={photoUrl}
-                    name="photo"
-                    width="250"
-                    height="125"
-                    className="mt-1"
-                    style={{ margin: "auto", display: "table" }}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div
-                  className="row"
-                  style={{ margin: "auto", display: "table" }}
-                >
-                  {/* <label>{photo.name?photo.name:""}</label> */}
-                  <img
-                    src={uploadBlue}
-                    name="photo"
-                    width="50"
-                    height="50"
-                    className="mt-1"
-                    style={{ margin: "auto", display: "table" }}
-                  />
-                  <label>
-                    Drag and drop files here{" "}
-                    <input type="file" class="select" onChange={setFile} />{" "}
-                  </label>
-                </div>
-                <div
-                  className="row mb-3"
-                  style={{ margin: "auto", display: "table" }}
-                >
-                  OR
-                </div>
-                <div
-                  className="row"
-                  style={{
-                    margin: "auto",
-                    display: "table",
-                    position: "relative",
-                    top: "3%",
-                  }}
-                >
-                  <label
-                    class="btn btn-primary"
-                    style={{ margin: 0, height: "5vh" }}
-                  >
-                    Browse Files
-                    <input type="file" class="select" onChange={setFile} />{" "}
-                  </label>
-                </div>
-              </div>
-            )}
+                    <div className='d-flex flex-column upload bg-white col-9 p-5'>
+                      {photo ? (
+                        <div>
+                          <div
+                            className='row'
+                            style={{ margin: "auto", display: "table" }}
+                          >
+                            <img
+                              onClick={clearImage}
+                              width='20'
+                              height='20'
+                              src={crossIcon}
+                              style={{ position: "relative", left: "15vw" }}
+                              alt='Clear'
+                            />
+                            <img
+                              src={photoUrl}
+                              name='photo'
+                              width='250'
+                              height='125'
+                              className='mt-1'
+                              style={{ margin: "auto", display: "table" }}
+                              alt='PhotoURL'
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div
+                            className='row'
+                            style={{ margin: "auto", display: "table" }}
+                          >
+                            {/* <label>{photo.name?photo.name:""}</label> */}
+                            <img
+                              src={uploadBlue}
+                              name='photo'
+                              width='50'
+                              height='50'
+                              className='mt-1'
+                              style={{ margin: "auto", display: "table" }}
+                              alt='Upload'
+                            />
+                            <label>
+                              Drag and drop files here{" "}
+                              <input
+                                type='file'
+                                class='select'
+                                onChange={setFile}
+                              />{" "}
+                            </label>
+                          </div>
+                          <div
+                            className='row mb-3'
+                            style={{ margin: "auto", display: "table" }}
+                          >
+                            OR
+                          </div>
+                          <div
+                            className='row'
+                            style={{
+                              margin: "auto",
+                              display: "table",
+                              position: "relative",
+                              top: "3%",
+                            }}
+                          >
+                            <label
+                              class='btn btn-primary'
+                              style={{ margin: 0, height: "5vh" }}
+                            >
+                              Browse Files
+                              <input
+                                type='file'
+                                class='select'
+                                onChange={setFile}
+                              />{" "}
+                            </label>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                <div className="d-flex flex-row-reverse justify-content-between">
+                <div className='d-flex flex-row-reverse justify-content-between'>
                   <div>
                     <button
-                      type="button"
-                      className="btn btn-outline-primary mr-3"
+                      type='button'
+                      className='btn btn-outline-primary mr-3'
                       onClick={() => props.history.push(`/viewshipment/${id}`)}
                     >
                       Cancel
                     </button>
                     <button
-                      className="btn btn-orange fontSize20 font-bold mr-4 product"
+                      className='btn btn-orange fontSize20 font-bold mr-4 product'
                       onClick={updateStatus}
                     >
                       <span>Update Status</span>
@@ -413,7 +421,7 @@ const UpdateStatus = (props) => {
       {openUpdatedStatus && (
         <Modal
           close={() => closeModal()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModal} //FailurePopUp
@@ -423,7 +431,7 @@ const UpdateStatus = (props) => {
       {openShipmentFail && (
         <Modal
           close={() => closeModalFail()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailPopup
             onHide={closeModalFail} //FailurePopUp
