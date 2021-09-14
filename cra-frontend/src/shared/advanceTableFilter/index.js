@@ -897,9 +897,9 @@ const AdvanceTableFilter = (props) => {
     handlePoOrderIdClose();
   };
 
-  const handleInventoryManufacturerClose = () => {
-    setInventoryManufacturerAnchorEl(null);
-  };
+  // const handleInventoryManufacturerClose = () => {
+  //   setInventoryManufacturerAnchorEl(null);
+  // };
 
   const renderColumn3 = (columnData) => {
     if (columnData === "From") {

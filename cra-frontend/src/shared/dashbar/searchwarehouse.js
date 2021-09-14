@@ -51,16 +51,16 @@ const SearchWareHouse = (props) => {
     }
   };
 
-  const onCountryChange = async (item) => {
-    setRegion(item);
-    // onCountries(item);
-    const regionResult = await getWareHousesByCountry(item);
-    if (regionResult.status === 1) {
-      setWareHouses(regionResult.data);
-      const warehouseList = regionResult.data.map((w) => w.id);
-      setWareHouseIds(warehouseList);
-    }
-  };
+  // const onCountryChange = async (item) => {
+  //   setRegion(item);
+  //   // onCountries(item);
+  //   const regionResult = await getWareHousesByCountry(item);
+  //   if (regionResult.status === 1) {
+  //     setWareHouses(regionResult.data);
+  //     const warehouseList = regionResult.data.map((w) => w.id);
+  //     setWareHouseIds(warehouseList);
+  //   }
+  // };
 
   const onWarehouses = async (item) => {
     const warehousesResult = await getWareHousesByCountry(item);
