@@ -816,6 +816,17 @@ exports.verifyOtp = [
           const {role} = user;
           userData.permissions = await RbacModel.findOne({role});
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+         const bc_data = {
+          "username": user.emailId,
+          "password": "",
+          "orgName": "org1MSP",
+          "role": "",
+          "email": user.emailId
+      } 
+
+      const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+
           logger.log(
             'info',
             '<<<<< UserService < AuthController < login : user login success',
