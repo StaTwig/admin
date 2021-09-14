@@ -80,15 +80,12 @@ const FormPage = (props) => {
     let orgs = organisationsArr.filter((org) =>
       org.name.toLowerCase().includes(value_new.toLowerCase())
     );
-    // orgs.push({ id: 0, name: 'Other' });
     setOrganisations(orgs);
-    // console.log(organisations);
-
     if (
       organisationsArr.filter(
-        (org) => org.name.toLowerCase() == value_new.toLowerCase()
+        (org) => org.name.toLowerCase() === value_new.toLowerCase()
       ).length &&
-      value_new != "Other"
+      value_new !== "Other"
     )
       props.onOrgChange(false);
     else {
@@ -97,16 +94,9 @@ const FormPage = (props) => {
         setValue("Other");
       }
     }
-
     props.onOrganisationChange({ id: 0, name: value_new });
   };
 
-  // console.log(firstName);
-  // console.log(lastName);
-  // console.log(orgType);
-  // console.log(email);
-  // console.log(value);
-  // console.log(mobileNumber);
   if (
     checker &&
     firstName.length > 0 &&
@@ -115,13 +105,6 @@ const FormPage = (props) => {
     value.length > 0 &&
     (email.length > 0 || mobileNumber.length > 0)
   ) {
-    console.log("Entered");
-    console.log(firstName);
-    console.log(lastName);
-    console.log(orgType);
-    console.log(email);
-    console.log(value);
-    console.log(mobileNumber);
     setsignupDisable(false);
     setChecker(false);
   }
@@ -129,11 +112,11 @@ const FormPage = (props) => {
   return (
     <div className='login-wrapper'>
       <div className='container'>
-        {/* <div className="mobile-header ">
-          <div className="branding">
-            <img src={logo} alt="vaccineledger" />
+        <div className='mobile-header '>
+          <div className='branding'>
+            <img src={logo} alt='vaccineledger' />
           </div>
-        </div> */}
+        </div>
 
         <div className='row'>
           <div className='col-m-6 col-lg-6'>

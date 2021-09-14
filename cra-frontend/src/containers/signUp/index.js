@@ -34,9 +34,7 @@ const SignupContainer = (props) => {
       phoneNumber: phone,
       organisationId: organisation.id,
     };
-    // let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
     if (isNewOrg) {
-      // data.organisationName = organisation.name;
       data.organisationName = values.name;
       data.address = {
         line1: values.line1,
@@ -46,7 +44,6 @@ const SignupContainer = (props) => {
         country: values.country,
         region: values.region,
       };
-      // data.type = 'CUSTOMER_SUPPLIER';
       data.type = orgType;
       data.organisationId = 0;
     }
@@ -67,8 +64,6 @@ const SignupContainer = (props) => {
   });
 
   const checkNcontinue = async () => {
-    console.log("1", email);
-    console.log("2", phone);
     if (isNewOrg) {
       let data = {
         firstName,
@@ -112,7 +107,7 @@ const SignupContainer = (props) => {
       <MobileHeader {...props} />
       {innerWidth > 1024 && (
         <nav className='navbar sticky-top navbar-expand-lg'>
-          <Link className='navbar-brand' to='#'>
+          <Link className='navbar-brand' to='/'>
             <img src={logo} width='230' height='30' alt='logo' />
           </Link>
         </nav>
