@@ -1,0 +1,21 @@
+FROM node:lts as react_build 
+
+WORKDIR /app
+
+COPY package.json /app/
+
+RUN yarn install
+
+COPY . /app/
+
+ENV ENVIRONMENT=test
+
+ENV NODE_ENV=production
+ 
+RUN yarn run build 
+
+RUN yarn global add serve
+
+EXPOSE 5000
+
+CMD ["serve","-s","build"]
