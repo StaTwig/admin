@@ -9,19 +9,13 @@ import "./style.scss";
 import ProductList from "./productlist";
 import ShipmentDetails from "./shipmentdetails";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
-// import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import SuccessPopup from "./successPopup";
-// import FailPopup from "./failPopup";
 import { fetchairwayBillNumber } from "../../actions/shipmentActions";
-// import TextField from '@material-ui/core/TextField';
-// import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ModalImage from "react-modal-image";
-import { getImage } from "../../actions/notificationActions";
-import Select from "react-select";
 
 const ReceiveShipment = (props) => {
-  let shipmentDetails = props.trackData.shipmentDetails;
+  // let shipmentDetails = props.trackData.shipmentDetails;
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
@@ -30,38 +24,26 @@ const ReceiveShipment = (props) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [delivered, setDelivered] = useState(0);
   const dispatch = useDispatch();
-
+  const [files, setFiles] = useState([]);
   // const [shipmentId, setShipmentId] = useState([]);
   const [qtyArr, setQtyArr] = useState([
     ...Array(props.trackData?.products?.length).keys(),
   ]);
-  // const [billNo, setBillNo] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
+  const [photo2, setPhoto2] = useState("");
+  const [photoUrl2, setPhotoUrl2] = useState(undefined);
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
+  const [commentEnabled, setCommentEnabled] = useState(false);
   const [image, setImage] = useState("");
   const id = props.match.params.id;
   // const [inputValue, setInputValue] = React.useState("");
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
-  const options = [
-    "orders",
-    "shipments",
-    "inventory",
-    "others",
-    "q",
-    "w",
-    "s",
-    "o",
-    "u",
-    "t",
-    "b",
-    "f",
-    "l",
-  ];
+
   useEffect(() => {
     async function fetchairwayBill() {
       let temp_arr = await fetchairwayBillNumber();
@@ -80,8 +62,12 @@ const ReceiveShipment = (props) => {
   const [value, setValue] = React.useState(null);
 
   const setFile = (evt) => {
+    setFiles(evt.target.files);
+    console.log(evt.target.files);
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
+    setPhotoUrl2(URL.createObjectURL(evt.target.files[1]));
+    setPhoto2(evt.target.files[1]);
   };
 
   const clearImage = () => {
@@ -89,6 +75,10 @@ const ReceiveShipment = (props) => {
     setPhotoUrl(undefined);
   };
 
+  const clearImage2 = () => {
+    setPhoto2("");
+    setPhotoUrl2(undefined);
+  };
   const defaultData = {
     label: {
       labelType: "QR_2DBAR",
@@ -148,7 +138,7 @@ const ReceiveShipment = (props) => {
     //data.products[0].productQuantity = parseInt(delivered);
     dispatch(turnOn());
     const result = await receiveApi(data);
-    if (result.status == 200) {
+    if (result.status === 200) {
       //setOpenUpdatedStatus(true);
       setreceiveShipmentModal(true);
     } else {
@@ -162,31 +152,31 @@ const ReceiveShipment = (props) => {
     newArr[index] = parseInt(value);
     setQtyArr(newArr);
     if (
-      newArr.filter((a) => a != undefined && a > 0).length ===
+      newArr.filter((a) => a !== undefined && a > 0).length ===
       tracking.products.length
     )
       setIsDisabled(false);
     else setIsDisabled(true);
   };
-
-  const getImageURL = async (imageId) => {
-    const r = await getImage(imageId);
-    const reader = new window.FileReader();
-    reader.readAsDataURL(r.data);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
-  };
+  // const getImageURL = async (imageId) => {
+  //   const r = await getImage(imageId);
+  //   const reader = new window.FileReader();
+  //   reader.readAsDataURL(r.data);
+  //   reader.onload = function () {
+  //     setImage(reader.result);
+  //   };
+  // };
   const uploadPhoto = async () => {
     const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("photo", files[i], files[i].name);
 
-    formData.append("photo", photo, photo.name);
-
-    const result = await uploadImage(id, formData);
-    if (result.status == 200) {
-      setMessage("Image Uploaded");
-    } else {
-      console.log(result.status);
+      const result = await uploadImage(id, formData);
+      if (result.status == 200) {
+        setMessage("Image Uploaded");
+      } else {
+        console.log(result.status);
+      }
     }
   };
   const closeModal = () => {
@@ -224,7 +214,6 @@ const ReceiveShipment = (props) => {
                   width='16'
                   height='16'
                   className='mr-2 mb-1'
-                  alt='Return Shipment'
                 />
                 <span>Receive Shipment</span>
               </button>
@@ -315,42 +304,71 @@ const ReceiveShipment = (props) => {
           <h6 className='heading mt-3 mb-3 ml-3'>Comments</h6>
           <div className='col panel commonpanle' style={{ height: "45%" }}>
             <div className=' pt-2 pb-2 d-flex row'>
-              <span className='txt-outline text-muted'>Reason 1</span>
-              <span className='txt-outline text-muted'>Reason 2</span>
-              <span className='txt-outline text-muted'>Reason 3</span>
-              <span className='txt-outline text-muted'>Reason 4</span>
-              <span className='txt-outline text-muted'>Reason 5</span>
-              <span className='txt-outline text-muted'>Other</span>
+              <span
+                onClick={() => setCommentEnabled(false)}
+                className='txt-outline text-muted'
+              >
+                Reason 1
+              </span>
+              <span
+                onClick={() => setCommentEnabled(false)}
+                className='txt-outline text-muted'
+              >
+                Reason 2
+              </span>
+              <span
+                onClick={() => setCommentEnabled(false)}
+                className='txt-outline text-muted'
+              >
+                Reason 3
+              </span>
+              <span
+                onClick={() => setCommentEnabled(false)}
+                className='txt-outline text-muted'
+              >
+                Reason 4
+              </span>
+              <span
+                onClick={() => setCommentEnabled(false)}
+                className='txt-outline text-muted'
+              >
+                Reason 5
+              </span>
+              <span
+                onClick={() => setCommentEnabled(true)}
+                className='txt-outline text-muted'
+              >
+                Other
+              </span>
             </div>
             <div
               className='form-group'
               style={{ width: "150%", height: "100px" }}
             >
-              <textarea
-                style={{
-                  fontSize: "14px",
-                  resize: "none",
-                  borderBottom: "none",
-                }}
-                type='text'
-                className='form-control'
-                name='Comment'
-                onChange={(e) => setComment(e.target.value)}
-                size='40'
-                cols='120'
-                rows='7'
-                placeholder='Enter Comment'
-                value={comment}
-              />
+              {commentEnabled && (
+                <input
+                  disabled={!commentEnabled}
+                  style={{
+                    fontSize: "14px",
+                    resize: "none",
+                    //borderBottom: "none",
+                    marginTop: "80px",
+                    //marginBottom:"10px"
+                  }}
+                  type='text'
+                  className='form-control'
+                  name='Comment'
+                  onChange={(e) => setComment(e.target.value)}
+                  size='40'
+                  cols='120'
+                  rows='7'
+                  placeholder='Enter Comment'
+                  value={comment}
+                />
+              )}
             </div>
           </div>
-          <button
-            type='button'
-            className='btn btn-primary float-right'
-            style={{ position: "relative", bottom: "70px" }}
-          >
-            Submit
-          </button>
+          {/* <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button> */}
         </div>
         <div className='col-sm-4'>
           <div className='row justify-content-between'>
@@ -375,7 +393,7 @@ const ReceiveShipment = (props) => {
             {photo ? (
               <div>
                 <div
-                  className='d-flex row'
+                  className='ml-2 mt-2 d-flex row'
                   style={{
                     margin: "auto",
                     display: "table",
@@ -388,49 +406,47 @@ const ReceiveShipment = (props) => {
                     height='20'
                     src={crossIcon}
                     className='cross-img shadow rounded-circle'
-                    alt='Clear'
                   />
-                  <img
-                    src={photoUrl}
+                  <ModalImage
+                    large={photoUrl}
+                    small={photoUrl}
+                    showRotate={true}
                     name='photo'
-                    width='170'
-                    height='170'
-                    className='mt-1'
-                    style={{ margin: "auto", display: "table" }}
-                    alt='Images'
+                    className='mt-1 modal-image'
+                    // style={{ margin: "auto", display: "table" }}
                   />
                   <img
-                    onClick={clearImage}
+                    onClick={clearImage2}
                     width='20'
                     height='20'
                     src={crossIcon}
                     className='cross-img shadow border-none rounded-circle'
-                    alt='Clear Img'
                   />
-                  <img
-                    src={photoUrl}
-                    name='photo'
-                    width='170'
-                    height='170'
-                    className='mt-1 '
-                    style={{ margin: "auto", display: "table" }}
-                    alt='PhotoUrl'
+                  <ModalImage
+                    large={photoUrl2}
+                    small={photoUrl2}
+                    showRotate={true}
+                    //alt="Image2"
+                    className='mt-1 modal-image'
+                    // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
                 <button type='button' className='btn btn-link float-right'>
                   View All
                 </button>
-                <div className='row'>
-                  {photoUrl > 0 && (
-                    <ModalImage
-                      small={image}
-                      large={image}
-                      showRotate={true}
-                      hideZoom={false}
-                      alt='Upload Image'
-                    />
-                  )}
-                </div>
+                {/* <div className="row">
+                                {photoUrl >
+                                  0 && (
+                                  <ModalImage
+                                    small={photo}
+                                    className=""
+                                    large={image}
+                                    showRotate={true}
+                                    hideZoom={false}
+                                    alt="Upload Image"
+                                  />
+                                )}
+                              </div> */}
               </div>
             ) : (
               <div>
@@ -446,7 +462,6 @@ const ReceiveShipment = (props) => {
                     height='50'
                     className='mt-1'
                     style={{ margin: "auto", display: "table" }}
-                    alt='Upload'
                   />
                   <label className='mt-3'>
                     Drag and drop files here{" "}
@@ -473,7 +488,12 @@ const ReceiveShipment = (props) => {
                     style={{ margin: 0, height: "max-content" }}
                   >
                     Browse Files
-                    <input type='file' class='select' onChange={setFile} />{" "}
+                    <input
+                      type='file'
+                      multiple={true}
+                      class='select'
+                      onChange={setFile}
+                    />{" "}
                   </label>
                 </div>
               </div>
