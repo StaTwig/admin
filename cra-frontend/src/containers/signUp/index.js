@@ -21,14 +21,7 @@ const SignupContainer = (props) => {
   const [adminAwaiting, setAdminAwaiting] = useState(false);
   const [isNewOrg, setIsNewOrg] = useState(false);
   const [innerWidth, setInnerwidth] = useState(window.innerWidth);
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
-  // const updtaeInnerWidth = () =>{
-  //     setInnerwidth(window.innerWidth);
-  // }
-  // setInterval(updtaeInnerWidth,100);
-
   window.onresize = () => {
     setInnerwidth(window.innerWidth);
   };
@@ -139,7 +132,6 @@ const SignupContainer = (props) => {
           setIsNewOrg(value);
           setShowModal(value);
         }}
-        onPasswordChange={(e) => setPassword(e.target.value)}
         onlastNameChange={(e) => setLastName(e.target.value)}
         onOrgTypeChange={(value) => setOrgType(value)}
         onOrganisationChange={(org) =>

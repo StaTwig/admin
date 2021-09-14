@@ -1,19 +1,16 @@
-import { useDispatch} from 'react-redux';
-import React, { useState, useEffect, useSelector } from 'react';
-import AddNewCategory from '../../components/addNewCategory';
- import Header from '../../shared/header';
-import Sidebar from '../../shared/sidebarMenu';
+import React from "react";
+import AddNewCategory from "../../components/addNewCategory";
+import Header from "../../shared/header";
+import Sidebar from "../../shared/sidebarMenu";
 
-
-
-const AddNewCategoryContainer = props => {
+const AddNewCategoryContainer = (props) => {
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
-          <AddNewCategory {...props}/>
+        <div className='content'>
+          <AddNewCategory {...props} />
         </div>
       </div>
     </div>
@@ -21,4 +18,3 @@ const AddNewCategoryContainer = props => {
 };
 
 export default AddNewCategoryContainer;
-

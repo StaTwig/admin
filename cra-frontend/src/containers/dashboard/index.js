@@ -6,11 +6,9 @@ import "./style.scss";
 import DashBar from "../../shared/dashbar/index";
 import {
   getProductDetailsByWarehouseId,
-  // getWarehouseByOrgId,
   getAllWarehouses,
   getShipmentIds,
 } from "../../actions/inventoryActions";
-// import { useSelector } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { getViewShipment } from "../../actions/shipmentActions";
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReviewOrder from "../../components/revieworder";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getOrder } from "../../actions/poActions";
 
 const ReviewOrderContainer = (props) => {
