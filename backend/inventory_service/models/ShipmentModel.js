@@ -5,7 +5,7 @@ ShipmentSchema = new mongoose.Schema(
     shippingOrderId: String,
     poId: String,
     label: {
-      labelId: String,
+      labelId: { type: String, required: true, unique: true },
       labelType: { type: String, default: "QR_2DBAR" },
     },
     externalShipmentId: String,
@@ -21,18 +21,18 @@ ShipmentSchema = new mongoose.Schema(
       locationId: String,
       location: String,
     },
-     imageDetails: {
+    imageDetails: {
       type: Array,
-      default: []
+      default: [],
     },
-    shipmentUpdates : { type: Array,default: []},
+    shipmentUpdates: { type: Array, default: [] },
     airWayBillNo: String,
     shippingDate: String,
     expectedDeliveryDate: String,
     actualDeliveryDate: String,
     status: String,
     transactionIds: [String],
-    rejectionRate:{type:Number, default:0.00},
+    rejectionRate: { type: Number, default: 0.0 },
     products: [
       {
         productID: String,
@@ -40,7 +40,7 @@ ShipmentSchema = new mongoose.Schema(
         manufacturer: String,
         productQuantity: Number,
         productQuantityDelivered: Number,
-        rejectionRate:{type:Number, default:0.00},
+        rejectionRate: { type: Number, default: 0.0 },
         labelId: String,
         productCategory: String,
       },

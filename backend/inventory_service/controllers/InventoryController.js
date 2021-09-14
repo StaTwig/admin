@@ -8,7 +8,7 @@ const utility = require("../helpers/utility");
 const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
-const RecordModel = require('../models/RecordModel');
+const RecordModel = require("../models/RecordModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -16,7 +16,8 @@ const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
-const checkPermissions = require("../middlewares/rbac_middleware").checkPermissions;
+const checkPermissions =
+  require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
 const fs = require("fs");
@@ -27,9 +28,9 @@ const product_service_url = process.env.PRODUCT_URL;
 
 const stream_name = process.env.STREAM;
 
-const init = require('../logging/init');
-const OrganisationModel = require('../models/OrganisationModel');
-const AnalyticsModel = require('../models/AnalyticsModel');
+const init = require("../logging/init");
+const OrganisationModel = require("../models/OrganisationModel");
+const AnalyticsModel = require("../models/AnalyticsModel");
 const logger = init.getLog();
 const CENTRAL_AUTHORITY_ID = null;
 const CENTRAL_AUTHORITY_NAME = null;
@@ -39,19 +40,22 @@ exports.getTotalCount = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
+      const { role } = req.user;
       permission_request = {
         role: role,
         permissionRequired: ["viewInventory"],
       };
       checkPermissions(permission_request, (permissionResult) => {
         if (permissionResult.success) {
-          return apiResponse.successResponse(res,"Total inventory count");
+          return apiResponse.successResponse(res, "Total inventory count");
         } else {
-          return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not authorized to view this resource."
+          );
         }
       });
-      }catch (err) {
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -61,18 +65,24 @@ exports.getTotalCountOnHold = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
+      const { role } = req.user;
       permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, (permissionResult) => {
-            if (permissionResult.success) {
-              return apiResponse.successResponse(res,"Total inventory count on Hold");
-            } else {
-              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
-            }
-          });
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, (permissionResult) => {
+        if (permissionResult.success) {
+          return apiResponse.successResponse(
+            res,
+            "Total inventory count on Hold"
+          );
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not authorized to view this resource."
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -83,18 +93,24 @@ exports.getExpiringInventory = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, (permissionResult) => {
-            if (permissionResult.success) {
-              return apiResponse.successResponse(res,"Total inventory count expiring");
-            } else {
-              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
-            }
-          });
+      const { role } = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, (permissionResult) => {
+        if (permissionResult.success) {
+          return apiResponse.successResponse(
+            res,
+            "Total inventory count expiring"
+          );
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not authorized to view this resource."
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -105,18 +121,24 @@ exports.getInventoryforProduct = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, (permissionResult) => {
-            if (permissionResult.success) {
-              return apiResponse.successResponse(res,"Inventory details for product");
-            } else {
-              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
-            }
-          });
+      const { role } = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, (permissionResult) => {
+        if (permissionResult.success) {
+          return apiResponse.successResponse(
+            res,
+            "Inventory details for product"
+          );
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not authorized to view this resource."
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -127,24 +149,31 @@ exports.getInventoryDetailsForProduct = [
   auth,
   (req, res) => {
     try {
-      const {role} = req.user;
+      const { role } = req.user;
       const { key } = req.query;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const response = await axios.get(
-                `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
-              );
-              const items = response.data.items;
-              return apiResponse.successResponseWithData(res,"getInventoryDetailsForProduct", items);
-            } else {
-              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
-            }
-            })
-      }catch (err) {
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
+          );
+          const items = response.data.items;
+          return apiResponse.successResponseWithData(
+            res,
+            "getInventoryDetailsForProduct",
+            items
+          );
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not authorized to view this resource."
+          );
+        }
+      });
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -154,28 +183,28 @@ exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
+      const { role } = req.user;
       const { address } = req.user;
       const { skip, limit } = req.query;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              /* InventoryModel.collection.dropIndexes(function(){
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          /* InventoryModel.collection.dropIndexes(function(){
                 InventoryModel.collection.reIndex(function(finished){
                   console.log("finished re indexing")
                 })
               })*/
-              // InventoryModel.createIndexes();
-              const inventoryResult = await InventoryModel.find({
-                owner: address,
-              })
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
-              /*
+          // InventoryModel.createIndexes();
+          const inventoryResult = await InventoryModel.find({
+            owner: address,
+          })
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(parseInt(limit));
+          /*
                let chunkUrls = [];
               inventoryResult.forEach(inventory => {
                 const chunkUrl = axios.get(
@@ -185,208 +214,211 @@ exports.getAllInventoryDetails = [
                 );
                 chunkUrls.push(chunkUrl);
               });*/
-              // const responses = await axios.all(chunkUrls);
-              //const items = responses.map(response => response.data.items[0]);
-              const productNamesResponse = await axios.get(
-                `${product_service_url}/getProductNames`,
-                {
-                  headers: {
-                    Authorization: req.headers.authorization,
-                  },
-                }
-              );
+          // const responses = await axios.all(chunkUrls);
+          //const items = responses.map(response => response.data.items[0]);
+          const productNamesResponse = await axios.get(
+            `${product_service_url}/getProductNames`,
+            {
+              headers: {
+                Authorization: req.headers.authorization,
+              },
+            }
+          );
 
-              const products_array = productNamesResponse.data.data.map(
-                (product) => product.productName
-              );
+          const products_array = productNamesResponse.data.data.map(
+            (product) => product.productName
+          );
 
-              const nextYear = new Date(
-                new Date().setFullYear(new Date().getFullYear() + 1)
-              );
-              nextYear.setMonth(0);
-              nextYear.setUTCHours(0, 0, 0, 0);
-              nextYear.setDate(1);
-              const thisYear = new Date(
-                new Date().setFullYear(new Date().getFullYear())
-              );
-              thisYear.setMonth(0);
-              thisYear.setDate(1);
-              thisYear.setUTCHours(0, 0, 0, 0);
-              const nextMonth = new Date(
-                new Date().setMonth(new Date().getMonth() + 1)
-              );
-              nextMonth.setUTCHours(0, 0, 0, 0);
-              const thisMonth = new Date(
-                new Date().setMonth(new Date().getMonth())
-              );
-              thisMonth.setUTCDate(1);
-              thisMonth.setUTCHours(0, 0, 0, 0);
-              /* const nextWeek = new Date(
+          const nextYear = new Date(
+            new Date().setFullYear(new Date().getFullYear() + 1)
+          );
+          nextYear.setMonth(0);
+          nextYear.setUTCHours(0, 0, 0, 0);
+          nextYear.setDate(1);
+          const thisYear = new Date(
+            new Date().setFullYear(new Date().getFullYear())
+          );
+          thisYear.setMonth(0);
+          thisYear.setDate(1);
+          thisYear.setUTCHours(0, 0, 0, 0);
+          const nextMonth = new Date(
+            new Date().setMonth(new Date().getMonth() + 1)
+          );
+          nextMonth.setUTCHours(0, 0, 0, 0);
+          const thisMonth = new Date(
+            new Date().setMonth(new Date().getMonth())
+          );
+          thisMonth.setUTCDate(1);
+          thisMonth.setUTCHours(0, 0, 0, 0);
+          /* const nextWeek = new Date(
                 new Date().setDate(new Date().getDate() + 7),
               );
               nextWeek.setUTCHours(0, 0, 0, 0);*/
-              /* const thisWeek = new Date(
+          /* const thisWeek = new Date(
                 new Date().setDate(new Date().getDate()),
               );*/
-              const thisWeek = Date.monday();
-              const nextWeek = Date.next().monday();
-              const tomorrow = new Date(
-                new Date().setDate(new Date().getDate() + 1)
-              );
-              tomorrow.setUTCHours(0, 0, 0, 0);
-              const today = new Date();
-              today.setUTCHours(0, 0, 0, 0);
+          const thisWeek = Date.monday();
+          const nextWeek = Date.next().monday();
+          const tomorrow = new Date(
+            new Date().setDate(new Date().getDate() + 1)
+          );
+          tomorrow.setUTCHours(0, 0, 0, 0);
+          const today = new Date();
+          today.setUTCHours(0, 0, 0, 0);
 
-              total_inv = await InventoryModel.find({
-                owner: address,
-              }).countDocuments();
-              const thisYearAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisYear.toISOString(),
-                  $lte: nextYear.toISOString(),
-                },
-              }).countDocuments();
-              const thisMonthAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisMonth.toISOString(),
-                  $lte: nextMonth.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisWeek.toISOString(),
-                  $lte: nextWeek.toISOString(),
-                },
-              }).countDocuments();
-              const todayAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: today.toISOString(),
-                  $lt: tomorrow.toISOString(),
-                },
-              }).countDocuments();
-              const thisYearExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisYear.toISOString(),
-                  $lt: nextYear.toISOString(),
-                },
-              }).countDocuments();
-              const thisMonthExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisMonth.toISOString(),
-                  $lt: nextMonth.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisWeek.toISOString(),
-                  $lt: nextWeek.toISOString(),
-                },
-              }).countDocuments();
-              const todayExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: today.toISOString(),
-                  $lt: tomorrow.toISOString(),
-                },
-              }).countDocuments();
-              const totalExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: { $lte: today.toISOString() },
-              }).countDocuments();
-              const thisMonthExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisMonth.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
-              const thisYearExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisYear.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisWeek.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
+          total_inv = await InventoryModel.find({
+            owner: address,
+          }).countDocuments();
+          const thisYearAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisYear.toISOString(),
+              $lte: nextYear.toISOString(),
+            },
+          }).countDocuments();
+          const thisMonthAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisMonth.toISOString(),
+              $lte: nextMonth.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisWeek.toISOString(),
+              $lte: nextWeek.toISOString(),
+            },
+          }).countDocuments();
+          const todayAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: today.toISOString(),
+              $lt: tomorrow.toISOString(),
+            },
+          }).countDocuments();
+          const thisYearExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisYear.toISOString(),
+              $lt: nextYear.toISOString(),
+            },
+          }).countDocuments();
+          const thisMonthExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisMonth.toISOString(),
+              $lt: nextMonth.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisWeek.toISOString(),
+              $lt: nextWeek.toISOString(),
+            },
+          }).countDocuments();
+          const todayExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: today.toISOString(),
+              $lt: tomorrow.toISOString(),
+            },
+          }).countDocuments();
+          const totalExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: { $lte: today.toISOString() },
+          }).countDocuments();
+          const thisMonthExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisMonth.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
+          const thisYearExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisYear.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisWeek.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
 
-              const products = await InventoryModel.aggregate([
-                { $match: { owner: address } },
-                {
-                  $group: {
-                    _id: "$productName",
-                    productName: { $first: "$productName" },
-                    quantity: { $sum: "$quantity" },
-                  },
-                },
-              ]);
-              const dict = {};
+          const products = await InventoryModel.aggregate([
+            { $match: { owner: address } },
+            {
+              $group: {
+                _id: "$productName",
+                productName: { $first: "$productName" },
+                quantity: { $sum: "$quantity" },
+              },
+            },
+          ]);
+          const dict = {};
 
-              for (let j = 0; j < products.length; j++) {
-                const productName = products[j].productName;
-                const count = products[j].quantity;
+          for (let j = 0; j < products.length; j++) {
+            const productName = products[j].productName;
+            const count = products[j].quantity;
 
-                const index = products_array.indexOf(productName);
-                const name = products_array[index];
-                if (name in dict) {
-                  const exis = dict[name];
-                  const new_val = count;
-                  dict[name] = exis + new_val;
-                } else {
-                  dict[name] = count;
-                }
-              }
-
-              res.json({
-                data: inventoryResult,
-                dict,
-                counts: {
-                  inventoryAdded: {
-                    total: total_inv,
-                    thisYear: thisYearAdded,
-                    thisMonth: thisMonthAdded,
-                    thisWeek: thisWeekAdded,
-                    today: todayAdded,
-                  },
-                  currentInventory: {
-                    total: total_inv,
-                    thisYear: thisYearAdded,
-                    thisMonth: thisMonthAdded,
-                    thisWeek: thisWeekAdded,
-                    today: todayAdded,
-                  },
-                  vaccinesNearExpiration: {
-                    total: thisYearExpire,
-                    thisYear: thisYearExpire,
-                    thisMonth: thisMonthExpire,
-                    thisWeek: thisWeekExpire,
-                    today: todayExpire,
-                  },
-                  vaccinesExpired: {
-                    total: totalExpired,
-                    thisYear: thisYearExpired,
-                    thisMonth: thisMonthExpired,
-                    thisWeek: thisWeekExpired,
-                    today: todayExpire,
-                  },
-                },
-              });
+            const index = products_array.indexOf(productName);
+            const name = products_array[index];
+            if (name in dict) {
+              const exis = dict[name];
+              const new_val = count;
+              dict[name] = exis + new_val;
             } else {
-              return apiResponse.forbiddenResponse(res, 'User Does not have enough permissions')
+              dict[name] = count;
             }
+          }
+
+          res.json({
+            data: inventoryResult,
+            dict,
+            counts: {
+              inventoryAdded: {
+                total: total_inv,
+                thisYear: thisYearAdded,
+                thisMonth: thisMonthAdded,
+                thisWeek: thisWeekAdded,
+                today: todayAdded,
+              },
+              currentInventory: {
+                total: total_inv,
+                thisYear: thisYearAdded,
+                thisMonth: thisMonthAdded,
+                thisWeek: thisWeekAdded,
+                today: todayAdded,
+              },
+              vaccinesNearExpiration: {
+                total: thisYearExpire,
+                thisYear: thisYearExpire,
+                thisMonth: thisMonthExpire,
+                thisWeek: thisWeekExpire,
+                today: todayExpire,
+              },
+              vaccinesExpired: {
+                total: totalExpired,
+                thisYear: thisYearExpired,
+                thisMonth: thisMonthExpired,
+                thisWeek: thisWeekExpired,
+                today: todayExpire,
+              },
+            },
           });
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User Does not have enough permissions"
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -646,9 +678,9 @@ exports.addProductsToInventory = [
         );
       }
       let payload = req.body;
-      payload.products.forEach(element => {
+      payload.products.forEach((element) => {
         var product = ProductModel.findOne({ id: element.productId });
-        element.type = product.type
+        element.type = product.type;
       });
       permission_request = {
         role: req.user.role,
@@ -660,11 +692,9 @@ exports.addProductsToInventory = [
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
           //var warehouseId = req.user.warehouseId;
-           if (!req.query.warehouseId)
-             warehouseId = req.user.warehouseId;
-           else
-             warehouseId = req.query.warehouseId;
-          console.log(warehouseId)
+          if (!req.query.warehouseId) warehouseId = req.user.warehouseId;
+          else warehouseId = req.query.warehouseId;
+          console.log(warehouseId);
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -695,7 +725,7 @@ exports.addProductsToInventory = [
           //      `Product doesn't conatin valid serial numbers range`,
           //    );
           //  }
-          
+
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
@@ -729,8 +759,8 @@ exports.addProductsToInventory = [
               res,
               "Duplicate Serial Numbers found"
             );
-            var duplicateBatch = false;
-            var duplicateBatchNo = "";
+          var duplicateBatch = false;
+          var duplicateBatchNo = "";
           await utility.asyncForEach(products, async (product) => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({
@@ -783,8 +813,10 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-			  labelId: product.label?product?.label?.labelId:"QR_2D",
-                          labelType: product.label?product?.label?.labelType:"3232",
+                    labelId: product.label ? product?.label?.labelId : "QR_2D",
+                    labelType: product.label
+                      ? product?.label?.labelType
+                      : "3232", // ?? WHY ??
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -809,14 +841,13 @@ exports.addProductsToInventory = [
                 };
                 atomsArray.push(atom);
               }
-            }
-            else {
+            } else {
               const atom = {
-                id: uniqid('batch-'),
+                id: uniqid("batch-"),
                 label: {
-                          labelId: product.label?product?.label?.labelId:"QR_2D",
-                          labelType: product.label?product?.label?.labelType:"3232",
-		},
+                  labelId: product.label ? product?.label?.labelId : "QR_2D",
+                  labelType: product.label ? product?.label?.labelType : "3232", // ?? WHY ??
+                },
                 quantity: product.quantity,
                 productId: product.productId,
                 inventoryIds: [inventory.id],
@@ -840,22 +871,21 @@ exports.addProductsToInventory = [
               };
               atomsArray.push(atom);
             }
-            for(let i = 0; i< atomsArray.length; i++){
-              let res = await AtomModel.findOne({"batchNumbers": atomsArray[i].batchNumbers[0],"inventoryIds": warehouse.warehouseInventory})
-              console.log(res)
-              if(!res){
+            for (let i = 0; i < atomsArray.length; i++) {
+              let res = await AtomModel.findOne({
+                batchNumbers: atomsArray[i].batchNumbers[0],
+                inventoryIds: warehouse.warehouseInventory,
+              });
+              console.log(res);
+              if (!res) {
                 continue;
               }
-              if(res){
+              if (res) {
                 duplicateBatch = true;
                 duplicateBatchNo = res.batchNumbers[0];
                 break;
               }
             }
-
-
-
-            
 
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -872,8 +902,11 @@ exports.addProductsToInventory = [
              }
            });*/
           });
-          if(duplicateBatch){
-            return apiResponse.ErrorResponse(res,  `A batch with batch number ${duplicateBatchNo} exists in the inventory`);
+          if (duplicateBatch) {
+            return apiResponse.ErrorResponse(
+              res,
+              `A batch with batch number ${duplicateBatchNo} exists in the inventory`
+            );
           }
           var datee = new Date();
           datee = datee.toISOString();
@@ -922,10 +955,11 @@ exports.addProductsToInventory = [
           event_data.stackholders.actororg.id = orgId || "null";
           event_data.stackholders.actororg.name = orgName || "null";
           event_data.stackholders.actororg.address = address || "null";
-	  event_data.actorWarehouseId = req.user.warehouseId || "null";
+          event_data.actorWarehouseId = req.user.warehouseId || "null";
           event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+          event_data.stackholders.ca.address =
+            CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data = payload;
           console.log(event_data);
           async function compute(event_data) {
@@ -957,194 +991,196 @@ exports.addInventoriesFromExcel = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
-          permission_request = {
-            role: role,
-            permissionRequired: ["addInventory"],
-          };
-          const email = req.user.emailId;
-          const user_id = req.user.id;
-          const empData = await EmployeeModel.findOne({
-            emailId: req.user.emailId,
-          });
-          const orgId = empData.organisationId;
-          const orgName = empData.name;
-          const orgData = await OrganisationModel.findOne({ id: orgId });
-          const address = orgData.postalAddress;
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const dir = `uploads`;
-              if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir);
-              }
-              await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
-              const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
-              const sheet_name_list = workbook.SheetNames;
-              let data = XLSX.utils.sheet_to_json(
-                workbook.Sheets[sheet_name_list[0]],
-                { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
-              );
-              const { address } = req.user;
-              let start = new Date();
-              let count = 0;
-              const chunkSize = 50;
-              let limit = chunkSize;
-              let skip = 0;
+      const { role } = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: ["addInventory"],
+      };
+      const email = req.user.emailId;
+      const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          const dir = `uploads`;
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+          }
+          await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+          const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+          const sheet_name_list = workbook.SheetNames;
+          let data = XLSX.utils.sheet_to_json(
+            workbook.Sheets[sheet_name_list[0]],
+            { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
+          );
+          const { address } = req.user;
+          let start = new Date();
+          let count = 0;
+          const chunkSize = 50;
+          let limit = chunkSize;
+          let skip = 0;
 
-              async function recursiveFun() {
-                skip = chunkSize * count;
-                count++;
-                limit = chunkSize * count;
-                const chunkedData = data.slice(skip, limit);
-                let chunkUrls = [];
-                const serialNumbers = chunkedData.map((inventory) => {
-                  return { id: inventory.serialNumber.trim() };
-                });
-                const inventoriesFound = await AtomModel.findOne({
-                  $or: serialNumbers,
-                });
-                if (inventoriesFound) {
-                  const newNotification = new NotificationModel({
-                    owner: address,
-                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                      }`,
-                  });
-                  await newNotification.save();
-                  return apiResponse.ErrorResponse(
-                    res,
-                    "Duplicate Inventory Found"
-                  );
-                }
-                chunkedData.forEach((inventory) => {
-                  inventory.serialNumber = inventory.serialNumber.trim();
-                  const userData = {
-                    stream: stream_name,
-                    key: inventory.serialNumber.trim(),
-                    address: address,
-                    data: inventory,
-                  };
-                  const postRequest = axios.post(
-                    `${blockchain_service_url}/publishExcelData`,
-                    userData
-                  );
-                  chunkUrls.push(postRequest);
-                });
-                axios
-                  .all(chunkUrls)
-                  .then(
-                    axios.spread(async (...responses) => {
-                      const inventoryData = responses.map(
-                        (response) => response.data
-                      );
-                      // console.log(inventoryData);
-
-                      // InventoryModel.insertMany(inventoryData, (err, res) => {
-                      //   if (err) {
-                      //     logger.log("error", err.errmsg);
-                      //   } else
-                      //     logger.log(
-                      //       'info',
-                      //       'Number of documents inserted into mongo: ' +
-                      //       res.length,
-                      //     );
-                      // });
-
-                      if (limit < data.length) {
-                        recursiveFun();
-                      } else {
-                        // const newNotification = new NotificationModel({
-                        //   owner: address,
-                        //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
-                        // });
-                        // await newNotification.save();
-                      }
-                    })
-                  )
-                  .catch((errors) => {
-                    logger.log(errors);
-                  });
-              }
-              recursiveFun();
-              for (const [index, prod] of data.entries()) {
-                let product = await ProductModel.findOne({
-                  name: prod.productName,
-                });
-                if (product) {
-                  data[index].productId = product.id;
-                  data[index].type = product.type;
-                }
-                else {
-                  console.log(product)
-                }
-              }
-
-              var datee = new Date();
-              datee = datee.toISOString();
-              var evid = Math.random().toString(36).slice(2);
-              let event_data = {
-                eventID: null,
-                eventTime: null,
-                eventType: {
-                  primary: "CREATE",
-                  description: "SHIPMENT_CREATION",
-                },
-                actor: {
-                  actorid: null,
-                  actoruserid: null,
-                },
-                stackholders: {
-                  ca: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                  actororg: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                  secondorg: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                },
-                payload: {
-                  data: {
-                    abc: 123,
-                  },
-                },
-              };
-              event_data.eventID = "ev0000" + evid;
-              event_data.eventTime = datee;
-              event_data.eventType.primary = "ADD";
-              event_data.eventType.description = "INVENTORY";
-              event_data.actor.actorid = user_id || "null";
-              event_data.actor.actoruserid = email || "null";
-              event_data.stackholders.actororg.id = orgId || req.user.organisationId || "null";
-              event_data.stackholders.actororg.name = orgName || "null";
-              event_data.stackholders.actororg.address = address || "null";
-	      event_data.actorWarehouseId = req.user.warehouseId || "null";
-              event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-              event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-              event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-              event_data.payload.data.products = [...data];
-              console.log(event_data);
-              async function compute(event_data) {
-                result = await logEvent(event_data);
-                return result;
-              }
-              compute(event_data).then((response) => {
-                console.log(response);
+          async function recursiveFun() {
+            skip = chunkSize * count;
+            count++;
+            limit = chunkSize * count;
+            const chunkedData = data.slice(skip, limit);
+            let chunkUrls = [];
+            const serialNumbers = chunkedData.map((inventory) => {
+              return { id: inventory.serialNumber.trim() };
+            });
+            const inventoriesFound = await AtomModel.findOne({
+              $or: serialNumbers,
+            });
+            if (inventoriesFound) {
+              const newNotification = new NotificationModel({
+                owner: address,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                  inventoriesFound.serialNumber
+                }`,
               });
-              return apiResponse.successResponseWithData(res, "Success", data);
-            } else {
+              await newNotification.save();
               return apiResponse.ErrorResponse(
                 res,
-                "Sorry! User does not have enough Permissions"
+                "Duplicate Inventory Found"
               );
             }
+            chunkedData.forEach((inventory) => {
+              inventory.serialNumber = inventory.serialNumber.trim();
+              const userData = {
+                stream: stream_name,
+                key: inventory.serialNumber.trim(),
+                address: address,
+                data: inventory,
+              };
+              const postRequest = axios.post(
+                `${blockchain_service_url}/publishExcelData`,
+                userData
+              );
+              chunkUrls.push(postRequest);
+            });
+            axios
+              .all(chunkUrls)
+              .then(
+                axios.spread(async (...responses) => {
+                  const inventoryData = responses.map(
+                    (response) => response.data
+                  );
+                  // console.log(inventoryData);
+
+                  // InventoryModel.insertMany(inventoryData, (err, res) => {
+                  //   if (err) {
+                  //     logger.log("error", err.errmsg);
+                  //   } else
+                  //     logger.log(
+                  //       'info',
+                  //       'Number of documents inserted into mongo: ' +
+                  //       res.length,
+                  //     );
+                  // });
+
+                  if (limit < data.length) {
+                    recursiveFun();
+                  } else {
+                    // const newNotification = new NotificationModel({
+                    //   owner: address,
+                    //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
+                    // });
+                    // await newNotification.save();
+                  }
+                })
+              )
+              .catch((errors) => {
+                logger.log(errors);
+              });
+          }
+          recursiveFun();
+          for (const [index, prod] of data.entries()) {
+            let product = await ProductModel.findOne({
+              name: prod.productName,
+            });
+            if (product) {
+              data[index].productId = product.id;
+              data[index].type = product.type;
+            } else {
+              console.log(product);
+            }
+          }
+
+          var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "ADD";
+          event_data.eventType.description = "INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.stackholders.actororg.id =
+            orgId || req.user.organisationId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.actorWarehouseId = req.user.warehouseId || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address =
+            CENTRAL_AUTHORITY_ADDRESS || "null";
+          event_data.payload.data.products = [...data];
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
           });
+          return apiResponse.successResponseWithData(res, "Success", data);
+        } else {
+          return apiResponse.ErrorResponse(
+            res,
+            "Sorry! User does not have enough Permissions"
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -1194,23 +1230,32 @@ exports.getInventoryDetails = [
     try {
       const employee = await EmployeeModel.findOne({ id: req.user.id });
       var warehouseId = "";
-      if (!req.query.warehouseId)
-        warehouseId = employee.warehouseId[0];
-      else
-        warehouseId = req.query.warehouseId;
-      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      if (!req.query.warehouseId) warehouseId = employee.warehouseId[0];
+      else warehouseId = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
       if (warehouse) {
-        const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
-        let inventoryDetails = []
-        await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
-          const product = await ProductModel.findOne({ id: inventoryDetail.productId });
-          const inventoryDetailClone = { ...inventoryDetail };
-          inventoryDetailClone['productName'] = product.name;
-          inventoryDetailClone['manufacturer'] = product.manufacturer;
-          inventoryDetails.push(inventoryDetailClone);
-        })
-        return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
+        const inventory = await InventoryModel.findOne({
+          id: warehouse.warehouseInventory,
+        });
+        let inventoryDetails = [];
+        await utility.asyncForEach(
+          inventory.inventoryDetails,
+          async (inventoryDetail) => {
+            const product = await ProductModel.findOne({
+              id: inventoryDetail.productId,
+            });
+            const inventoryDetailClone = { ...inventoryDetail };
+            inventoryDetailClone["productName"] = product.name;
+            inventoryDetailClone["manufacturer"] = product.manufacturer;
+            inventoryDetails.push(inventoryDetailClone);
+          }
+        );
+        return apiResponse.successResponseWithData(
+          res,
+          "Inventory Details",
+          inventoryDetails
+        );
       } else {
         return apiResponse.ErrorResponse(
           res,
@@ -1226,230 +1271,230 @@ exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      const {role, address} = req.user;
+      const { role, address } = req.user;
       const { skip, limit } = req.query;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const inventoryResult = await InventoryModel.aggregate([
-                { $match: { owner: address } },
-                {
-                  $group: {
-                    _id: { batchNumber: "$batchNumber" },
-                    batchNumber: { $first: "$batchNumber" },
-                    quantity: { $sum: "$quantity" },
-                    manufacturingDate: { $first: "$manufacturingDate" },
-                    expiryDate: { $first: "$expiryDate" },
-                    owner: { $first: "$owner" },
-                    productName: { $first: "$productName" },
-                    manufacturerName: { $first: "$manufacturerName" },
-                    createdAt: { $first: "$createdAt" },
-                  },
-                },
-              ])
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          const inventoryResult = await InventoryModel.aggregate([
+            { $match: { owner: address } },
+            {
+              $group: {
+                _id: { batchNumber: "$batchNumber" },
+                batchNumber: { $first: "$batchNumber" },
+                quantity: { $sum: "$quantity" },
+                manufacturingDate: { $first: "$manufacturingDate" },
+                expiryDate: { $first: "$expiryDate" },
+                owner: { $first: "$owner" },
+                productName: { $first: "$productName" },
+                manufacturerName: { $first: "$manufacturerName" },
+                createdAt: { $first: "$createdAt" },
+              },
+            },
+          ])
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(parseInt(limit));
 
-              const productNamesResponse = await axios.get(
-                `${product_service_url}/getProductNames`,
-                {
-                  headers: {
-                    Authorization: req.headers.authorization,
-                  },
-                }
-              );
-
-              const products_array = productNamesResponse.data.data.map(
-                (product) => product.productName
-              );
-
-              const nextYear = new Date(
-                new Date().setFullYear(new Date().getFullYear() + 1)
-              );
-              nextYear.setMonth(0);
-              nextYear.setUTCHours(0, 0, 0, 0);
-              nextYear.setDate(1);
-              const thisYear = new Date(
-                new Date().setFullYear(new Date().getFullYear())
-              );
-              thisYear.setMonth(0);
-              thisYear.setDate(1);
-              thisYear.setUTCHours(0, 0, 0, 0);
-              const nextMonth = new Date(
-                new Date().setMonth(new Date().getMonth() + 1)
-              );
-              nextMonth.setUTCHours(0, 0, 0, 0);
-              const thisMonth = new Date(
-                new Date().setMonth(new Date().getMonth())
-              );
-              thisMonth.setUTCDate(1);
-              thisMonth.setUTCHours(0, 0, 0, 0);
-              const thisWeek = Date.monday();
-              const nextWeek = Date.next().monday();
-              const tomorrow = new Date(
-                new Date().setDate(new Date().getDate() + 1)
-              );
-              tomorrow.setUTCHours(0, 0, 0, 0);
-              const today = new Date();
-              today.setUTCHours(0, 0, 0, 0);
-
-              total_inv = await InventoryModel.find({
-                owner: address,
-              }).countDocuments();
-              const thisYearAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisYear.toISOString(),
-                  $lte: nextYear.toISOString(),
-                },
-              }).countDocuments();
-              const thisMonthAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisMonth.toISOString(),
-                  $lte: nextMonth.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: thisWeek.toISOString(),
-                  $lte: nextWeek.toISOString(),
-                },
-              }).countDocuments();
-              const todayAdded = await InventoryModel.find({
-                owner: address,
-                createdAt: {
-                  $gte: today.toISOString(),
-                  $lt: tomorrow.toISOString(),
-                },
-              }).countDocuments();
-              const thisYearExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisYear.toISOString(),
-                  $lt: nextYear.toISOString(),
-                },
-              }).countDocuments();
-              const thisMonthExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisMonth.toISOString(),
-                  $lt: nextMonth.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisWeek.toISOString(),
-                  $lt: nextWeek.toISOString(),
-                },
-              }).countDocuments();
-              const todayExpire = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: today.toISOString(),
-                  $lt: tomorrow.toISOString(),
-                },
-              }).countDocuments();
-              const totalExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: { $lte: today.toISOString() },
-              }).countDocuments();
-              const thisMonthExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisMonth.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
-              const thisYearExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisYear.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
-              const thisWeekExpired = await InventoryModel.find({
-                owner: address,
-                expiryDate: {
-                  $gte: thisWeek.toISOString(),
-                  $lte: today.toISOString(),
-                },
-              }).countDocuments();
-
-              const products = await InventoryModel.aggregate([
-                { $match: { owner: address } },
-                {
-                  $group: {
-                    _id: "$productName",
-                    productName: { $first: "$productName" },
-                    quantity: { $sum: "$quantity" },
-                  },
-                },
-              ]);
-              const dict = {};
-
-              for (let j = 0; j < products.length; j++) {
-                const productName = products[j].productName;
-                const count = products[j].quantity;
-
-                const index = products_array.indexOf(productName);
-                const name = products_array[index];
-                if (name in dict) {
-                  const exis = dict[name];
-                  const new_val = count;
-                  dict[name] = exis + new_val;
-                } else {
-                  dict[name] = count;
-                }
-              }
-
-              res.json({
-                data: inventoryResult,
-                dict,
-                counts: {
-                  inventoryAdded: {
-                    total: total_inv,
-                    thisYear: thisYearAdded,
-                    thisMonth: thisMonthAdded,
-                    thisWeek: thisWeekAdded,
-                    today: todayAdded,
-                  },
-                  currentInventory: {
-                    total: total_inv,
-                    thisYear: thisYearAdded,
-                    thisMonth: thisMonthAdded,
-                    thisWeek: thisWeekAdded,
-                    today: todayAdded,
-                  },
-                  vaccinesNearExpiration: {
-                    total: thisYearExpire,
-                    thisYear: thisYearExpire,
-                    thisMonth: thisMonthExpire,
-                    thisWeek: thisWeekExpire,
-                    today: todayExpire,
-                  },
-                  vaccinesExpired: {
-                    total: totalExpired,
-                    thisYear: thisYearExpired,
-                    thisMonth: thisMonthExpired,
-                    thisWeek: thisWeekExpired,
-                    today: todayExpire,
-                  },
-                },
-              });
-            } else {
-              return apiResponse.forbiddenResponse(
-                res,
-                `Sorry! User doens't have permissions`
-              );
+          const productNamesResponse = await axios.get(
+            `${product_service_url}/getProductNames`,
+            {
+              headers: {
+                Authorization: req.headers.authorization,
+              },
             }
+          );
+
+          const products_array = productNamesResponse.data.data.map(
+            (product) => product.productName
+          );
+
+          const nextYear = new Date(
+            new Date().setFullYear(new Date().getFullYear() + 1)
+          );
+          nextYear.setMonth(0);
+          nextYear.setUTCHours(0, 0, 0, 0);
+          nextYear.setDate(1);
+          const thisYear = new Date(
+            new Date().setFullYear(new Date().getFullYear())
+          );
+          thisYear.setMonth(0);
+          thisYear.setDate(1);
+          thisYear.setUTCHours(0, 0, 0, 0);
+          const nextMonth = new Date(
+            new Date().setMonth(new Date().getMonth() + 1)
+          );
+          nextMonth.setUTCHours(0, 0, 0, 0);
+          const thisMonth = new Date(
+            new Date().setMonth(new Date().getMonth())
+          );
+          thisMonth.setUTCDate(1);
+          thisMonth.setUTCHours(0, 0, 0, 0);
+          const thisWeek = Date.monday();
+          const nextWeek = Date.next().monday();
+          const tomorrow = new Date(
+            new Date().setDate(new Date().getDate() + 1)
+          );
+          tomorrow.setUTCHours(0, 0, 0, 0);
+          const today = new Date();
+          today.setUTCHours(0, 0, 0, 0);
+
+          total_inv = await InventoryModel.find({
+            owner: address,
+          }).countDocuments();
+          const thisYearAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisYear.toISOString(),
+              $lte: nextYear.toISOString(),
+            },
+          }).countDocuments();
+          const thisMonthAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisMonth.toISOString(),
+              $lte: nextMonth.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: thisWeek.toISOString(),
+              $lte: nextWeek.toISOString(),
+            },
+          }).countDocuments();
+          const todayAdded = await InventoryModel.find({
+            owner: address,
+            createdAt: {
+              $gte: today.toISOString(),
+              $lt: tomorrow.toISOString(),
+            },
+          }).countDocuments();
+          const thisYearExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisYear.toISOString(),
+              $lt: nextYear.toISOString(),
+            },
+          }).countDocuments();
+          const thisMonthExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisMonth.toISOString(),
+              $lt: nextMonth.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisWeek.toISOString(),
+              $lt: nextWeek.toISOString(),
+            },
+          }).countDocuments();
+          const todayExpire = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: today.toISOString(),
+              $lt: tomorrow.toISOString(),
+            },
+          }).countDocuments();
+          const totalExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: { $lte: today.toISOString() },
+          }).countDocuments();
+          const thisMonthExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisMonth.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
+          const thisYearExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisYear.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
+          const thisWeekExpired = await InventoryModel.find({
+            owner: address,
+            expiryDate: {
+              $gte: thisWeek.toISOString(),
+              $lte: today.toISOString(),
+            },
+          }).countDocuments();
+
+          const products = await InventoryModel.aggregate([
+            { $match: { owner: address } },
+            {
+              $group: {
+                _id: "$productName",
+                productName: { $first: "$productName" },
+                quantity: { $sum: "$quantity" },
+              },
+            },
+          ]);
+          const dict = {};
+
+          for (let j = 0; j < products.length; j++) {
+            const productName = products[j].productName;
+            const count = products[j].quantity;
+
+            const index = products_array.indexOf(productName);
+            const name = products_array[index];
+            if (name in dict) {
+              const exis = dict[name];
+              const new_val = count;
+              dict[name] = exis + new_val;
+            } else {
+              dict[name] = count;
+            }
+          }
+
+          res.json({
+            data: inventoryResult,
+            dict,
+            counts: {
+              inventoryAdded: {
+                total: total_inv,
+                thisYear: thisYearAdded,
+                thisMonth: thisMonthAdded,
+                thisWeek: thisWeekAdded,
+                today: todayAdded,
+              },
+              currentInventory: {
+                total: total_inv,
+                thisYear: thisYearAdded,
+                thisMonth: thisMonthAdded,
+                thisWeek: thisWeekAdded,
+                today: todayAdded,
+              },
+              vaccinesNearExpiration: {
+                total: thisYearExpire,
+                thisYear: thisYearExpire,
+                thisMonth: thisMonthExpire,
+                thisWeek: thisWeekExpire,
+                today: todayExpire,
+              },
+              vaccinesExpired: {
+                total: totalExpired,
+                thisYear: thisYearExpired,
+                thisMonth: thisMonthExpired,
+                thisWeek: thisWeekExpired,
+                today: todayExpire,
+              },
+            },
           });
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            `Sorry! User doens't have permissions`
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -1460,26 +1505,26 @@ exports.getInventoryDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      const {role, address} = req.user;
+      const { role, address } = req.user;
       const { batchNumber, skip, limit } = req.query;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {  
-            const inventoryResult = await InventoryModel.find({
-                owner: address,
-                batchNumber: batchNumber,
-              })
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
-              return apiResponse.successResponseWithData(res, inventoryResult);
-            } else {
-              return apiResponse.forbiddenResponse(res, permissionResult.message);
-            }
-          });
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          const inventoryResult = await InventoryModel.find({
+            owner: address,
+            batchNumber: batchNumber,
+          })
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(parseInt(limit));
+          return apiResponse.successResponseWithData(res, inventoryResult);
+        } else {
+          return apiResponse.forbiddenResponse(res, permissionResult.message);
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -1490,38 +1535,41 @@ exports.getBatchDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      const {role, address} = req.user;
+      const { role, address } = req.user;
       const { skip, limit, batchNumber } = req.query;
-          permission_request = {
-            role: role,
-            permissionRequired: ["viewInventory"],
-          };
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const inventoryResult = await InventoryModel.aggregate([
-                { $match: { owner: address, batchNumber: batchNumber } },
-                {
-                  $group: {
-                    _id: { batchNumber: "$batchNumber" },
-                    batchNumber: { $first: "$batchNumber" },
-                    quantity: { $sum: "$quantity" },
-                    manufacturingDate: { $first: "$manufacturingDate" },
-                    expiryDate: { $first: "$expiryDate" },
-                    owner: { $first: "$owner" },
-                    productName: { $first: "$productName" },
-                    manufacturerName: { $first: "$manufacturerName" },
-                    createdAt: { $first: "$createdAt" },
-                  },
-                },
-              ])
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
-              return apiResponse.successResponseWithData(res, inventoryResult);
-            } else {
-              return apiResponse.forbiddenResponse(res,"Sorry! User does not have enough Permissions");
-            }
-          });
+      permission_request = {
+        role: role,
+        permissionRequired: ["viewInventory"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          const inventoryResult = await InventoryModel.aggregate([
+            { $match: { owner: address, batchNumber: batchNumber } },
+            {
+              $group: {
+                _id: { batchNumber: "$batchNumber" },
+                batchNumber: { $first: "$batchNumber" },
+                quantity: { $sum: "$quantity" },
+                manufacturingDate: { $first: "$manufacturingDate" },
+                expiryDate: { $first: "$expiryDate" },
+                owner: { $first: "$owner" },
+                productName: { $first: "$productName" },
+                manufacturerName: { $first: "$manufacturerName" },
+                createdAt: { $first: "$createdAt" },
+              },
+            },
+          ])
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(parseInt(limit));
+          return apiResponse.successResponseWithData(res, inventoryResult);
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "Sorry! User does not have enough Permissions"
+          );
+        }
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -1532,7 +1580,6 @@ exports.getProductListCounts = [
   auth,
   async (req, res) => {
     try {
-      
       const { warehouseId } = req.user;
       // const warehouseId  = req.query.id;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
@@ -1541,38 +1588,39 @@ exports.getProductListCounts = [
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
-        var productId = list[j].productId;  
+        var productId = list[j].productId;
         const product = await ProductModel.find({ id: productId });
-        if(product && product[0] && product[0].id && product && product[0] && product[0].name )
-        {
-        
+        if (
+          product &&
+          product[0] &&
+          product[0].id &&
+          product &&
+          product[0] &&
+          product[0].name
+        ) {
           var product1 = {
-            productCategory:product && product[0] && product[0].type,
+            productCategory: product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
-            quantity: list && list[0] && list[j].quantity || 0,
-            manufacturer:product && product[0] && product[0].manufacturer,
-            unitofMeasure: product && product[0] && product[0].unitofMeasure,         
+            quantity: (list && list[0] && list[j].quantity) || 0,
+            manufacturer: product && product[0] && product[0].manufacturer,
+            unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
-         
-          
-        }   
-        
+        }
 
-        if (product1.quantity > 0){
-        productArray.push(product1);
-} 
+        if (product1.quantity > 0) {
+          productArray.push(product1);
+        }
       }
 
-      productArray.sort(function(a,b){
-          if(a.quantity>b.quantity){
-            return -1;
-          }
-          else{
-            return 1;
-          }
-        })
-     
+      productArray.sort(function (a, b) {
+        if (a.quantity > b.quantity) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
@@ -1602,21 +1650,17 @@ exports.getEmployeeDetailsByWarehouseId = [
   },
 ];
 
-
 exports.getInventory = [
   auth,
   async (req, res) => {
     try {
-
       const { skip, limit } = req.query;
       var warehouseId = "";
 
-      if (!req.query.warehouseId)
-        warehouseId = req.user.warehouseId;
-      else
-        warehouseId = req.query.warehouseId;
+      if (!req.query.warehouseId) warehouseId = req.user.warehouseId;
+      else warehouseId = req.query.warehouseId;
 
-      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId });
       if (warehouse) {
         const inventory = await InventoryModel.aggregate([
           { $match: { id: warehouse.warehouseInventory } },
@@ -2047,7 +2091,7 @@ async function getFilterConditions(filters) {
   let matchCondition = {};
   if (filters.invDetails && filters.invDetails.length)
     matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
-  
+
   if (filters.orgType && filters.orgType !== "") {
     if (
       filters.orgType === "BREWERY" ||
@@ -2062,15 +2106,17 @@ async function getFilterConditions(filters) {
   }
   if (filters.district && filters.district.length && !filters.organization) {
     let matchWarehouseCondition = {};
-    matchCondition.status = 'ACTIVE';
-    if (filters.status && filters.status !== '') {
+    matchCondition.status = "ACTIVE";
+    if (filters.status && filters.status !== "") {
       matchCondition.status = filters.status;
     }
-    if (filters.state && filters.state !== '') {
-      matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] = new RegExp('^'+filters.state+'$', "i");
+    if (filters.state && filters.state !== "") {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] =
+        new RegExp("^" + filters.state + "$", "i");
     }
-    if (filters.district && filters.district !== '') {
-      matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] = new RegExp('^'+filters.district+'$', "i");
+    if (filters.district && filters.district !== "") {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] =
+        new RegExp("^" + filters.district + "$", "i");
     }
 
     if (filters.orgType === "ALL_VENDORS") {
@@ -2085,32 +2131,33 @@ async function getFilterConditions(filters) {
       },
       {
         $lookup: {
-          from: 'warehouses',
-          localField: 'id',
-          foreignField: 'organisationId',
-          as: 'warehouseDetails'
-        }
-      }, {
-        $unwind: '$warehouseDetails'
+          from: "warehouses",
+          localField: "id",
+          foreignField: "organisationId",
+          as: "warehouseDetails",
+        },
       },
       {
-        $match: matchWarehouseCondition
-       },
+        $unwind: "$warehouseDetails",
+      },
+      {
+        $match: matchWarehouseCondition,
+      },
       {
         $project: {
           id: 1,
           name: 1,
-          type: 1
-        }
-      }
+          type: 1,
+        },
+      },
     ]);
-      
-      let orgs = [];
-      console.log(organisations)
-      for(let org in organisations){
-        orgs.push(organisations[org]['id'])
-      }
-      matchCondition.id = { $in : [...orgs] }
+
+    let orgs = [];
+    console.log(organisations);
+    for (let org in organisations) {
+      orgs.push(organisations[org]["id"]);
+    }
+    matchCondition.id = { $in: [...orgs] };
   }
   if (filters.organization && filters.organization.length) {
     matchCondition.id = filters.organization;
@@ -2132,64 +2179,77 @@ exports.getInventoryProductsByPlatform = [
         skuFilter["productDetails.externalId"] = filters.sku;
       }
       const fl = await getFilterConditions(filters);
-      
+
       const platformInventory = await OrganisationModel.aggregate([
-              {
-                $match: fl,
+        {
+          $match: fl,
+        },
+        {
+          $unwind: "$warehouses",
+        },
+        {
+          $lookup: {
+            from: "warehouses",
+            localField: "warehouses",
+            foreignField: "id",
+            as: "warehouse",
+          },
+        },
+        {
+          $unwind: "$warehouse",
+        },
+        {
+          $lookup: {
+            from: "inventories",
+            localField: "warehouse.warehouseInventory",
+            foreignField: "id",
+            as: "inventories",
+          },
+        },
+        {
+          $unwind: "$inventories",
+        },
+        {
+          $unwind: "$inventories.inventoryDetails",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventories.inventoryDetails.productId",
+            foreignField: "id",
+            as: "productDetails",
+          },
+        },
+        {
+          $unwind: {
+            path: "$productDetails",
+          },
+        },
+        {
+          $match: skuFilter,
+        },
+        {
+          $group: {
+            _id: filters.invDetails
+              ? { id: "$id", pid: "$inventories.inventoryDetails.productId" }
+              : "$inventories.inventoryDetails.productId",
+            quantity: { $sum: "$inventories.inventoryDetails.quantity" },
+            org: {
+              $first: {
+                name: "$name",
+                type: "$type",
+                externalId: "$productDetails.externalId",
+                product_name: "$productDetails.name",
+                shortName: "$productDetails.shortName",
+                manufacturer: "$productDetails.manufacturer",
+                state: "$warehouse.warehouseAddress.state",
+                district: "$warehouse.warehouseAddress.city",
               },
-							{
-								$unwind: "$warehouses"
-							},
-              {
-								$lookup: {
-									from: 'warehouses',
-									localField: 'warehouses',
-									foreignField: 'id',
-									as: 'warehouse'
-								}
-              },
-              {
-								$unwind: "$warehouse"
-							},
-							{
-								$lookup: {
-									from: 'inventories',
-									localField: 'warehouse.warehouseInventory',
-									foreignField: 'id',
-									as: 'inventories'
-								}
-							},
-							{
-								$unwind: "$inventories"
-							},
-							{
-								$unwind: "$inventories.inventoryDetails"
-              },
-              {
-                $lookup: {
-                  from: "products",
-                  localField: "inventories.inventoryDetails.productId",
-                  foreignField: "id",
-                  as: "productDetails",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$productDetails",
-                },
-              },
-              {
-                $match: skuFilter,
-              },
-							{
-								$group: {
-									_id: filters.invDetails ? {id: '$id', pid: '$inventories.inventoryDetails.productId'} : '$inventories.inventoryDetails.productId',
-                  quantity: { $sum: "$inventories.inventoryDetails.quantity" },
-                  org: { "$first": {'name': "$name", 'type': "$type", 'externalId': "$productDetails.externalId", 'product_name': "$productDetails.name", 'shortName': "$productDetails.shortName", 'manufacturer': "$productDetails.manufacturer", 'state': "$warehouse.warehouseAddress.state", 'district': "$warehouse.warehouseAddress.city"} }
-								}
-              },
+            },
+          },
+        },
       ]);
-      
+
       // const platformInventory = await OrganisationModel.aggregate([
       //   {
       //     $match: getFilterConditions(filters),
@@ -2328,29 +2388,22 @@ function _spreadHeaders(inputObj) {
 }
 
 function getBrand(brand) {
-  const ko = ['Knock Out High Punch', 'IP CINNAMON'];
-  const rc = ['RC_STRONG', 'RC_Q', 'RC_P'];
-  const hy = ['HAYWARDS 5000'];
-  const fo = ['FOSTERS STRONG', "FOSTER'S"];
-  const bud = ['Budweiser'];
-  const budm = ['BUDMAGNUMSTRONG'];
-  const becks = ['BECKS', 'BE Xtra Strong'];
-  
+  const ko = ["Knock Out High Punch", "IP CINNAMON"];
+  const rc = ["RC_STRONG", "RC_Q", "RC_P"];
+  const hy = ["HAYWARDS 5000"];
+  const fo = ["FOSTERS STRONG", "FOSTER'S"];
+  const bud = ["Budweiser"];
+  const budm = ["BUDMAGNUMSTRONG"];
+  const becks = ["BECKS", "BE Xtra Strong"];
+
   let returnBrand = brand;
-  if (ko.includes(brand))
-    returnBrand = "KO";
-  else if (rc.includes(brand))
-    returnBrand = "Royal Challenger";
-  else if (hy.includes(brand))
-    returnBrand = "Haywards 5000";
-  else if (fo.includes(brand))
-    returnBrand = "Fosters";
-  else if (bud.includes(brand))
-    returnBrand = "Budweiser";
-  else if (budm.includes(brand))
-    returnBrand = "Budweiser Magnum";
-  else if (becks.includes(brand))
-    returnBrand = "Becks";
+  if (ko.includes(brand)) returnBrand = "KO";
+  else if (rc.includes(brand)) returnBrand = "Royal Challenger";
+  else if (hy.includes(brand)) returnBrand = "Haywards 5000";
+  else if (fo.includes(brand)) returnBrand = "Fosters";
+  else if (bud.includes(brand)) returnBrand = "Budweiser";
+  else if (budm.includes(brand)) returnBrand = "Budweiser Magnum";
+  else if (becks.includes(brand)) returnBrand = "Becks";
 
   return returnBrand;
 }
@@ -2368,12 +2421,17 @@ exports.uploadSalesData = [
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
 
-      var range = XLSX.utils.decode_range(workbook.Sheets[sheet_name_list[0]]['!ref']);
+      var range = XLSX.utils.decode_range(
+        workbook.Sheets[sheet_name_list[0]]["!ref"]
+      );
       range.s.c = 0;
       range.e.c = 58;
       var new_range = XLSX.utils.encode_range(range);
 
-      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { blankrows: false, defval: "", range: new_range });
+      const sheetJSON = XLSX.utils.sheet_to_json(
+        workbook.Sheets[sheet_name_list[0]],
+        { blankrows: false, defval: "", range: new_range }
+      );
 
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
@@ -2386,17 +2444,30 @@ exports.uploadSalesData = [
           let rowKeys = Object.keys(row);
           rowKeys.forEach((rowKey) => {
             let prod = {};
-            if (headerRow5[rowKey] && headerRow5[rowKey].length && headerRow5[rowKey] != 'Stock Code') {
-              prod['brand'] = getBrand(headerRow2[rowKey]);
-              prod['productName'] = headerRow4[rowKey];
-              prod['productSubName'] = headerRow3[rowKey];
-              prod['productId'] = headerRow5[rowKey];
-              prod['depot'] = row['__EMPTY_1'];
-              prod['sales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? parseInt(row[rowKey]) : 0;
-              prod['targetSales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? row[rowKey] * (targetPercentage / 100) : 0;
-              prod['uploadDate'] = collectedDate;
-              let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
-              prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
+            if (
+              headerRow5[rowKey] &&
+              headerRow5[rowKey].length &&
+              headerRow5[rowKey] != "Stock Code"
+            ) {
+              prod["brand"] = getBrand(headerRow2[rowKey]);
+              prod["productName"] = headerRow4[rowKey];
+              prod["productSubName"] = headerRow3[rowKey];
+              prod["productId"] = headerRow5[rowKey];
+              prod["depot"] = row["__EMPTY_1"];
+              prod["sales"] =
+                row[rowKey] === parseInt(row[rowKey], 10)
+                  ? parseInt(row[rowKey])
+                  : 0;
+              prod["targetSales"] =
+                row[rowKey] === parseInt(row[rowKey], 10)
+                  ? row[rowKey] * (targetPercentage / 100)
+                  : 0;
+              prod["uploadDate"] = collectedDate;
+              let depot = warehouseDistrictMapping.find(
+                (w) => w.depot === row["__EMPTY_1"]
+              );
+              prod["warehouseId"] =
+                depot && depot.warehouseId ? depot.warehouseId : "";
             }
             if (Object.keys(prod).length) {
               parsedRows.push(prod);
@@ -2410,13 +2481,11 @@ exports.uploadSalesData = [
         res,
         `Uploaded Sales Data successfully. Num Records - ${respObj.length}`
       );
-
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
-
 
 exports.getBatchNearExpiration = [
   auth,
@@ -2424,16 +2493,14 @@ exports.getBatchNearExpiration = [
     try {
       var warehouseId = "";
 
-      if (!req.query.warehouseId)
-        warehouseId = req.user.warehouseId;
-      else
-        warehouseId = req.query.warehouseId;
+      if (!req.query.warehouseId) warehouseId = req.user.warehouseId;
+      else warehouseId = req.query.warehouseId;
 
       var today = new Date();
       var nextMonth = new Date();
-      nextMonth.setDate(today.getDate() + 30)
+      nextMonth.setDate(today.getDate() + 30);
 
-      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId });
       if (warehouse) {
         const result = await AtomModel.aggregate([
           {
@@ -2442,14 +2509,19 @@ exports.getBatchNearExpiration = [
                 {
                   "attributeSet.expDate": {
                     $gte: today.toISOString(),
-                    $lt: nextMonth.toISOString()
-                  }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                    $lt: nextMonth.toISOString(),
+                  },
+                },
+                {
+                  $expr: {
+                    $in: [warehouse.warehouseInventory, "$inventoryIds"],
+                  },
+                },
                 // {batchNumbers: {$ne: ""}},
-                {"attributeSet.mfgDate": {$ne: ""}},
-                {"attributeSet.expDate": {$ne: ""}}
-              ]
-            }
+                { "attributeSet.mfgDate": { $ne: "" } },
+                { "attributeSet.expDate": { $ne: "" } },
+              ],
+            },
           },
           {
             $lookup: {
@@ -2484,10 +2556,8 @@ exports.getBatchExpired = [
     try {
       var warehouseId = "";
 
-      if (!req.query.warehouseId)
-        warehouseId = req.user.warehouseId;
-      else
-        warehouseId = req.query.warehouseId;
+      if (!req.query.warehouseId) warehouseId = req.user.warehouseId;
+      else warehouseId = req.query.warehouseId;
 
       var today = new Date();
 
@@ -2499,14 +2569,19 @@ exports.getBatchExpired = [
               $and: [
                 {
                   "attributeSet.expDate": {
-                    $lt: today.toISOString()
-                  }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                    $lt: today.toISOString(),
+                  },
+                },
+                {
+                  $expr: {
+                    $in: [warehouse.warehouseInventory, "$inventoryIds"],
+                  },
+                },
                 // {batchNumbers: {$ne: ""}},
-                {"attributeSet.mfgDate": {$ne: ""}},
-                {"attributeSet.expDate": {$ne: ""}}
-              ]
-            }
+                { "attributeSet.mfgDate": { $ne: "" } },
+                { "attributeSet.expDate": { $ne: "" } },
+              ],
+            },
           },
           {
             $lookup: {
@@ -2547,10 +2622,11 @@ exports.getBatchWarehouse = [
           $match: {
             $and: [
               {
-                productId: productId
-              }, { $expr: { $in: [inventoryId, "$inventoryIds"] } }
-            ]
-          }
+                productId: productId,
+              },
+              { $expr: { $in: [inventoryId, "$inventoryIds"] } },
+            ],
+          },
         },
         {
           $lookup: {
@@ -2574,336 +2650,408 @@ exports.getBatchWarehouse = [
 ];
 
 exports.deleteProductsFromInventory = [
-    auth,
-    async (req, res) => {
-        try {
-
-            const inventoryTransfer = async (
-                id,
-                quantity,
-                suppId,
-                recvId,
-                next
-            ) => {
-		    console.log("1",id,quantity,suppId,recvId)
-                const checkProduct = await InventoryModel.find({
-                    $and: [{
-                        id: recvId
-                    }, {
-                        "inventoryDetails.productId": id
-                    }],
-                });
-                if (checkProduct != "") {
-                    const recvUpdate = await InventoryModel.update({
-                        id: recvId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": quantity,
-                        },
-                    });
-                    const suppUpdateRecvTransit = await InventoryModel.update({
-                        id: suppId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": -quantity,
-                        },
-                    });
-                } else if (checkProduct == "") {
-                    const s = await InventoryModel.update({
-                        id: recvId
-                    }, {
-                        $addToSet: {
-                            inventoryDetails: {
-                                productId: id,
-                                quantity: quantity
-                            }
-                        }
-                    });
-                    const suppUpdateRecvTransit = await InventoryModel.update({
-                        id: suppId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": -quantity,
-                        },
-                    });
-                }
-                // next("Success")
-            };
-
-            const data = req.body;
-            const suppWarehouseDetails = await WarehouseModel.findOne({
-                id: data.supplier.locationId,
-            });
-            if (suppWarehouseDetails == null) {
-                return apiResponse.ErrorResponse(res, "suppWarehouseDetails not Found");
+  auth,
+  async (req, res) => {
+    try {
+      const inventoryTransfer = async (id, quantity, suppId, recvId, next) => {
+        console.log("1", id, quantity, suppId, recvId);
+        const checkProduct = await InventoryModel.find({
+          $and: [
+            {
+              id: recvId,
+            },
+            {
+              "inventoryDetails.productId": id,
+            },
+          ],
+        });
+        if (checkProduct != "") {
+          const recvUpdate = await InventoryModel.update(
+            {
+              id: recvId,
+              "inventoryDetails.productId": id,
+            },
+            {
+              $inc: {
+                "inventoryDetails.$.quantity": quantity,
+              },
             }
-            var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-            const suppInventoryDetails = await InventoryModel.findOne({
-                id: suppInventoryId,
-            });
-            if (suppInventoryDetails == null) {
-                return apiResponse.ErrorResponse(res, "suppInventoryDetails not Found");
+          );
+          const suppUpdateRecvTransit = await InventoryModel.update(
+            {
+              id: suppId,
+              "inventoryDetails.productId": id,
+            },
+            {
+              $inc: {
+                "inventoryDetails.$.quantity": -quantity,
+              },
             }
-            const recvWarehouseDetails = await WarehouseModel.findOne({
-                id: data.receiver.locationId,
-            });
-            if (recvWarehouseDetails == null) {
-                return apiResponse.ErrorResponse(res, "recvWarehouseDetails not Found");
-            }
-            var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-            const recvInventoryDetails = await InventoryModel.findOne({
-                id: recvInventoryId,
-            });
-            if (recvInventoryDetails == null) {
-                return apiResponse.ErrorResponse(res, "recvInventoryDetails not Found");
-            }
-
-            const user_id = req.user.id;
-            const email = req.user.emailId;
-            const empData = await EmployeeModel.findOne({
-                emailId: req.user.emailId,
-            });
-            const orgId = empData.organisationId;
-            const orgData = await OrganisationModel.findOne({
-                id: orgId
-            });
-            const orgName = empData.name;
-            const address = orgData.postalAddress;
-            const supplierOrgData = await OrganisationModel.findOne({
-                id: req.body.supplier.id,
-            });
-            const supplierName = supplierOrgData.name;
-            const supplierAddress = supplierOrgData.postalAddress;
-            const receiverId = req.body.receiver.id;
-            const receiverOrgData = await OrganisationModel.findOne({
-                id: req.body.receiver.id,
-            });
-            const receiverName = receiverOrgData.name;
-            const receiverAddress = receiverOrgData.postalAddress;
-            let payload = req.body;
-
-
-            var products = data.products;
-            for (count = 0; count < products.length; count++) {
-                inventoryTransfer(
-                    products[count].productID,
-                    products[count].productQuantity,
-                    suppInventoryId,
-                    recvInventoryId
-                );
-            }
-
-
-            var datee = new Date();
-            datee = datee.toISOString();
-            var evid = Math.random().toString(36).slice(2);
-            let event_data = {
-                eventID: null,
-                eventTime: null,
-                eventType: {
-                    primary: "CREATE",
-                    description: "SHIPMENT_CREATION",
+          );
+        } else if (checkProduct == "") {
+          const s = await InventoryModel.update(
+            {
+              id: recvId,
+            },
+            {
+              $addToSet: {
+                inventoryDetails: {
+                  productId: id,
+                  quantity: quantity,
                 },
-                actor: {
-                    actorid: null,
-                    actoruserid: null,
-                },
-                stackholders: {
-                    ca: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                    actororg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                    secondorg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                },
-                payload: {
-                    data: {
-                        abc: 123,
-                    },
-                },
-            };
-            event_data.eventID = "ev0000" + evid;
-            event_data.eventTime = datee;
-            event_data.eventType.primary = "DELETE";
-            event_data.eventType.description = "INVENTORY";
-            event_data.actor.actorid = user_id || "null";
-            event_data.actor.actoruserid = email || "null";
-            event_data.stackholders.actororg.id = orgId || "null";
-            event_data.stackholders.actororg.name = orgName || "null";
-            event_data.stackholders.actororg.address = address || "null";
-	    event_data.actorWarehouseId = req.user.warehouseId || "null";
-            event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-            event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-            event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-            event_data.stackholders.secondorg.id = receiverId || "null";
-            event_data.stackholders.secondorg.name = receiverName || "null";
-            event_data.stackholders.secondorg.address = receiverAddress || "null";
-
-            event_data.payload.data = payload;
-            async function compute(event_data) {
-                result = await logEvent(event_data);
-                return result;
+              },
             }
-            compute(event_data).then((response) => {
-            });
-
-            return apiResponse.successResponse(
-                res,
-                "Operation success"
-            );
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
+          );
+          const suppUpdateRecvTransit = await InventoryModel.update(
+            {
+              id: suppId,
+              "inventoryDetails.productId": id,
+            },
+            {
+              $inc: {
+                "inventoryDetails.$.quantity": -quantity,
+              },
+            }
+          );
         }
-    },
+        // next("Success")
+      };
+
+      const data = req.body;
+      const suppWarehouseDetails = await WarehouseModel.findOne({
+        id: data.supplier.locationId,
+      });
+      if (suppWarehouseDetails == null) {
+        return apiResponse.ErrorResponse(res, "suppWarehouseDetails not Found");
+      }
+      var suppInventoryId = suppWarehouseDetails.warehouseInventory;
+      const suppInventoryDetails = await InventoryModel.findOne({
+        id: suppInventoryId,
+      });
+      if (suppInventoryDetails == null) {
+        return apiResponse.ErrorResponse(res, "suppInventoryDetails not Found");
+      }
+      const recvWarehouseDetails = await WarehouseModel.findOne({
+        id: data.receiver.locationId,
+      });
+      if (recvWarehouseDetails == null) {
+        return apiResponse.ErrorResponse(res, "recvWarehouseDetails not Found");
+      }
+      var recvInventoryId = recvWarehouseDetails.warehouseInventory;
+      const recvInventoryDetails = await InventoryModel.findOne({
+        id: recvInventoryId,
+      });
+      if (recvInventoryDetails == null) {
+        return apiResponse.ErrorResponse(res, "recvInventoryDetails not Found");
+      }
+
+      const user_id = req.user.id;
+      const email = req.user.emailId;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgData = await OrganisationModel.findOne({
+        id: orgId,
+      });
+      const orgName = empData.name;
+      const address = orgData.postalAddress;
+      const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.id,
+      });
+      const supplierName = supplierOrgData.name;
+      const supplierAddress = supplierOrgData.postalAddress;
+      const receiverId = req.body.receiver.id;
+      const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.receiver.id,
+      });
+      const receiverName = receiverOrgData.name;
+      const receiverAddress = receiverOrgData.postalAddress;
+      let payload = req.body;
+
+      var products = data.products;
+      for (count = 0; count < products.length; count++) {
+        inventoryTransfer(
+          products[count].productID,
+          products[count].productQuantity,
+          suppInventoryId,
+          recvInventoryId
+        );
+      }
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        eventType: {
+          primary: "CREATE",
+          description: "SHIPMENT_CREATION",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: {
+            abc: 123,
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "DELETE";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+      event_data.stackholders.secondorg.id = receiverId || "null";
+      event_data.stackholders.secondorg.name = receiverName || "null";
+      event_data.stackholders.secondorg.address = receiverAddress || "null";
+
+      event_data.payload.data = payload;
+      async function compute(event_data) {
+        result = await logEvent(event_data);
+        return result;
+      }
+      compute(event_data).then((response) => {});
+
+      return apiResponse.successResponse(res, "Operation success");
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
 ];
 
 exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-      const {role} = req.user;
+      const { role } = req.user;
       permission_request = {
         role: role,
         permissionRequired: ["searchByProductName"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-      const {productName, productType  } = req.query;
-      var warehouseId = "";
-      if (!req.query.warehouseId)
-        warehouseId = req.user.warehouseId;
-      else
-        warehouseId = req.query.warehouseId;
-      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
-      if (warehouse) {
-        let elementMatchQuery={}
-        elementMatchQuery['id']=warehouse.warehouseInventory
-        if (productName) {
-          elementMatchQuery[`products.name`] = productName;
+          const { productName, productType } = req.query;
+          var warehouseId = "";
+          if (!req.query.warehouseId) warehouseId = req.user.warehouseId;
+          else warehouseId = req.query.warehouseId;
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+          if (warehouse) {
+            let elementMatchQuery = {};
+            elementMatchQuery["id"] = warehouse.warehouseInventory;
+            if (productName) {
+              elementMatchQuery[`products.name`] = productName;
+            }
+            if (productType) {
+              elementMatchQuery[`products.type`] = productType;
+            }
+            const inventory = await InventoryModel.aggregate([
+              { $unwind: "$inventoryDetails" },
+              {
+                $lookup: {
+                  from: "products",
+                  localField: "inventoryDetails.productId",
+                  foreignField: "id",
+                  as: "products",
+                },
+              },
+              { $unwind: "$products" },
+              { $match: elementMatchQuery },
+              //   { $project:{
+              //     products:"",
+              //   }
+              // }
+            ]).sort({ createdAt: -1 });
+            return apiResponse.successResponseWithData(
+              res,
+              "Inventory Details",
+              inventory
+            );
+          } else {
+            return apiResponse.ErrorResponse(
+              res,
+              "Cannot find warehouse for this employee"
+            );
+          }
+        } else {
+          return apiResponse.forbiddenResponse(res, "Access denied");
         }
-        if (productType) {
-          elementMatchQuery[`products.type`] = productType;
-        }
-        const inventory = await InventoryModel.aggregate([
-          { $unwind: "$inventoryDetails" },
-          {
-            $lookup: {
-              from: "products",
-              localField: "inventoryDetails.productId",
-              foreignField: "id",
-              as: "products",
-            },
-          },
-          { $unwind: "$products" },
-          { $match: elementMatchQuery },
-        //   { $project:{
-        //     products:"",
-        //   }
-        // }
-        ])
-          .sort({ createdAt: -1 })
-        return apiResponse.successResponseWithData(
-          res,
-          "Inventory Details",
-          inventory
-        );
-      } else {
-        return apiResponse.ErrorResponse(
-          res,
-          "Cannot find warehouse for this employee"
-        );
-      }
-    }
-    else{
-      return apiResponse.forbiddenResponse(res, "Access denied");
-     }
-    })}
-        catch (err) {
+      });
+    } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
-
 
 exports.autoCompleteSuggestions = [
   auth,
   async (req, res) => {
     try {
-      const { searchString  } = req.query;
-       
-        const suggestions1 = await RecordModel.aggregate([
-          {$project: { _id: 0, value: "$id", record_type: "order"}},
-          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
-          {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
-          {$limit: 5},
-          { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
-  ])
-          .sort({ createdAt: -1 })
+      const { searchString } = req.query;
 
-          const suggestions2 = await RecordModel.aggregate([
-            {$project: { _id: 0, value: "$id", record_type: "order"}},
-            {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}},   
-            {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
-            {$limit: 5},
-            { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
-    ])
-            .sort({ createdAt: -1 })
+      const suggestions1 = await RecordModel.aggregate([
+        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        {
+          $unionWith: {
+            coll: "products",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  value: "$name",
+                  record_type: "productName",
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            value: { $regex: searchString ? searchString : "", $options: "i" },
+          },
+        },
+        { $limit: 5 },
+        {
+          $group: {
+            _id: "$value",
+            type: { $first: "$record_type" },
+            airWayBillNo: { $first: "$airWayBillNo" },
+          },
+        },
+      ]).sort({ createdAt: -1 });
 
-            const suggestions3 = await RecordModel.aggregate([
-              {$project: { _id: 0, value: "$id", record_type: "order"}},
-              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
-              {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
-              {$match: {"value": {$regex: searchString ? searchString: "", $options: "i"} }},
-              {$limit: 5},
-              { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
-      ])
-              .sort({ createdAt: -1 })
-        return apiResponse.successResponseWithData(
-          res,
-          "Autocorrect Suggestions",
-          [...suggestions1, ...suggestions2, ...suggestions3]
-        );
+      const suggestions2 = await RecordModel.aggregate([
+        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        {
+          $unionWith: {
+            coll: "products",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  value: "$type",
+                  record_type: "productType",
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            value: { $regex: searchString ? searchString : "", $options: "i" },
+          },
+        },
+        { $limit: 5 },
+        {
+          $group: {
+            _id: "$value",
+            type: { $first: "$record_type" },
+            airWayBillNo: { $first: "$airWayBillNo" },
+          },
+        },
+      ]).sort({ createdAt: -1 });
+
+      const suggestions3 = await RecordModel.aggregate([
+        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        {
+          $unionWith: {
+            coll: "shipments",
+            pipeline: [
+              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+            ],
+          },
+        },
+        {
+          $unionWith: {
+            coll: "shipments",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  value: "$airWayBillNo",
+                  airWayBillNo: "$airWayBillNo",
+                  record_type: "transitNumber",
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            value: { $regex: searchString ? searchString : "", $options: "i" },
+          },
+        },
+        { $limit: 5 },
+        {
+          $group: {
+            _id: "$value",
+            type: { $first: "$record_type" },
+            airWayBillNo: { $first: "$airWayBillNo" },
+          },
+        },
+      ]).sort({ createdAt: -1 });
+      return apiResponse.successResponseWithData(
+        res,
+        "Autocorrect Suggestions",
+        [...suggestions1, ...suggestions2, ...suggestions3]
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
-
 
 exports.fetchBatchesOfInventory = [
   auth,
   async (req, res) => {
     try {
-      const { productId , wareId} = req.query;
-       var warehouseId = wareId ? wareId : req.user.warehouseId;
-       let warehouse = await WarehouseModel.findOne({id: warehouseId}) 
-       let inventoryId = warehouse.warehouseInventory
-        const batches = await AtomModel.find({productId: productId,"batchNumbers": {$nin: ["", "null", null]}, inventoryIds: inventoryId, "quantity": {$nin: [0]}})
-          .sort({"attributeSet.expDate": 1})
-        return apiResponse.successResponseWithData(
-          res,
-          "Batches of product",
-          batches
-        );
+      const { productId, wareId } = req.query;
+      var warehouseId = wareId ? wareId : req.user.warehouseId;
+      let warehouse = await WarehouseModel.findOne({ id: warehouseId });
+      let inventoryId = warehouse.warehouseInventory;
+      const batches = await AtomModel.find({
+        productId: productId,
+        batchNumbers: { $nin: ["", "null", null] },
+        inventoryIds: inventoryId,
+        quantity: { $nin: [0] },
+      }).sort({ "attributeSet.expDate": 1 });
+      return apiResponse.successResponseWithData(
+        res,
+        "Batches of product",
+        batches
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
-
-
