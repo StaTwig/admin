@@ -24,6 +24,7 @@ const dotenv = require('dotenv').config();
 const wrapper = require('../models/DBWrapper')
 const excel = require('node-excel-export');
 const blockchain_service_url = process.env.URL;
+const hf_blockchain_url= process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
 var pdf = require("pdf-creator-node");
@@ -849,6 +850,34 @@ exports.createOrder = [
              "status":"CREATED"
       }
       purchaseOrder.poUpdates = updates;
+     
+       const bc_data = {
+	  "Id": poId,
+	  "CreatedOn": "",
+	  "CreatedBy": "",
+	  "IsDelete": true,
+	  "Externalid": "",
+	  "Supplier": JSON.stringify(req.body.supplier),
+	  "Customer": JSON.stringify(req.body.customer),
+	  "Products": JSON.stringify(req.body.products),
+	  "Postatus": req.body.poStatus,
+	  "Poupdates": JSON.stringify(updates),
+	  "Lastupdatedby": req.user.id,
+	  "Lastupdatedon": req.body.lastUpdatedOn,
+	  "Country": "",
+	  "Warehouses": "",
+	  "Location": "",
+	  "Supervisors": "",
+	  "Employees": ""
+	}
+	let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+	const bc_response =  await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/record/create`, bc_data,
+	        {
+	  headers: {
+	  'Authorization': token
+	  }
+	})
 
       const result = await purchaseOrder.save();
 
@@ -1565,18 +1594,18 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                          rowData ={
                            id: row.id,
                            createdBy : row.createdBy,
-                           supplierOrgId: row?.supplier?.organisation?.id,
+			   supplierOrgId: row?.supplier?.organisation?.id,
                            orderReceiveIncharge: row?.customer?.customerIncharge,
                            orderReceiverOrg: row?.customer?.customerOrganisation,
-                           productCategory: product.type,
+			   productCategory: product.type,
                            productName: product.name,
                            manufacturer: product.manufacturer,
                            productQuantity: product.productQuantity,
                            productId: product.id,
-                          recieverOrgName: row?.customer?.organisation?.name,
-                          recieverOrgId: row?.customer?.organisation?.id,
-                          recieverOrgLocation: row?.customer.organisation?.postalAddress,
-                          status: row.poStatus}
+                            recieverOrgName: row?.customer?.organisation?.name,
+                            recieverOrgId: row?.customer?.organisation?.id,
+                            recieverOrgLocation: row?.customer.organisation?.postalAddress,
+			   status: row.poStatus}
                          data.push(rowData)
                       }
                     }
