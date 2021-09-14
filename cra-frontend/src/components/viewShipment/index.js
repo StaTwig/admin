@@ -1,55 +1,30 @@
-import React, { useState, useEffect, setState } from "react";
+import React, { useState } from "react";
 import ShipmentSummary from "./shipmentsummary";
-import PoDetails from "./podetails";
 import ShipmentDetails from "./shipmentdetails";
 import ProductList from "./productlist";
-import Chart from "./temperature";
 import Map from "./map";
-import returnPo from "../../assets/icons/returnPo.svg";
 import returnShipment from "../../assets/icons/returnShipment.svg";
-import updownarrow from "../../assets/icons/up-and-down-white.svg";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
-import CurrentTemperature from "../../assets/icons/thermometer.svg";
-import traceDrop from "../../assets/icons/traceDrop.png";
-import Serial from "./serial";
 import back from "../../assets/icons/back.png";
 import UpdateStatus from "../../assets/icons/Update_Status.png";
 import "./style.scss";
 import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
 import { Link } from "react-router-dom";
-import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
-import { receiveShipment } from "../../actions/shipmentActions";
 import { getAddress } from "../../utils/commonHelper";
-import { formatTimeAMPM, getLocalTime } from "../../utils/dateHelper";
-import zoomInIcon from "../../assets/icons/fullScreen.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
 const Tracing = (props) => {
-  // console.log('props');
-  const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
-  const [chain, setChain] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
-  const [openPurchase, setOpenPurchase] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
   const status = tracking.status;
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
-  // console.log(shippmentChainOfCustodyData)
-  // console.log(tracking);
-  const productCard = props.productDetails;
-  const poCard = props.poDetails;
   const { id } = props.match.params;
-  // console.log(id);
-
   if (!isAuthenticated("viewShipment")) props.history.push(`/profile`);
-
-  const closeModal = () => {
-    setOpenPurchase(false);
-  };
 
   const closeModalShipping = () => {
     setOpenShipping(false);
@@ -69,16 +44,21 @@ const Tracing = (props) => {
           {isAuthenticated("updateShipment") && (
             <Link
               to={
-                status == "RECEIVED"
+                status === "RECEIVED"
                   ? `/viewshipment/${id}`
                   : `/updatestatus/${id}`
               }
             >
               <button
                 className='btn btn-orange mr-4 mt-3 chain'
-                disabled={status == "RECEIVED"}
+                disabled={status === "RECEIVED"}
               >
-                <img src={UpdateStatus} height='17' className='mr-2 mb-1' />
+                <img
+                  src={UpdateStatus}
+                  height='17'
+                  className='mr-2 mb-1'
+                  alt='Update Status'
+                />
                 <b>Update Status</b>
               </button>
             </Link>
@@ -86,21 +66,22 @@ const Tracing = (props) => {
           {isAuthenticated("receiveShipment") && (
             <Link
               to={
-                status == "RECEIVED"
+                status === "RECEIVED"
                   ? `/viewshipment/${id}`
                   : `/receiveShipment/${id}`
               }
             >
               <button
                 className='btn btn-main-blue chain mr-3 mt-3'
-                disabled={status == "RECEIVED"}
+                disabled={status === "RECEIVED"}
               >
                 <img
                   src={returnShipment}
                   width='14'
                   height='14'
                   className='mr-2'
-                  disabled={status == "RECEIVED"}
+                  disabled={status === "RECEIVED"}
+                  alt='Return Shipment'
                 />
                 <b>Receive Shipment</b>
               </button>

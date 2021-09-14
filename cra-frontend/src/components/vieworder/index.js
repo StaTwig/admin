@@ -8,7 +8,7 @@ import { changePOStatus } from "../../actions/poActions";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const ViewOrder = (props) => {
-  const { order, id } = props;
+  const { order } = props;
   //console.log("vieworder",order);
   const [alertMessage, setAlertMessage] = useState({});
   if (!isAuthenticated("viewPO")) props.history.push(`/profile`);
