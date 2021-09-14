@@ -299,7 +299,9 @@ services:
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
 
   cra:
-    build: "./cra-frontend"
+    build:
+      context: .
+      dockerfile: cra-frontend/Dockerfile.serve
     image: "frontend2.0"
     container_name: "cra"
     restart: always
@@ -307,7 +309,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.rule=Host(`test1.vaccineledger.com`)"
+      - "traefik.http.routers.frontend.rule=Host(`cra.vaccineledger.com`)"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
 
