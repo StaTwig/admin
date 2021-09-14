@@ -43,7 +43,7 @@ const UpdateStatus = (props) => {
     formData.append("photo", photo, photo.name);
 
     const result = await uploadImage(id, formData);
-    if (result.status == 200) {
+    if (result.status === 200) {
       setMessage("Image Uploaded");
     } else {
       console.log(result.status);

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Delete from "../../../assets/icons/Delete.png";
-// import DropdownButton from '../../../shared/dropdownButtonGroup';
 import Select from "react-select";
 import { getProductList } from "../../../actions/productActions";
 import "./style.scss";
 import Modal from "../../../shared/modal";
-// import CloseIcon from "../../../assets/icons/cross.svg";
-// import TotalInventoryAdded from '../../../assets/icons/TotalInventoryAddedcopy.svg';
-// import Add from '../../../assets/icons/add.svg';
 import user from "../../../assets/icons/brand.svg";
 import Quantity from "../../../assets/icons/Quantity.png";
 import Product from "../../../assets/icons/Producttype.png";
@@ -66,8 +62,6 @@ const EditRow = (props) => {
   const onEditClick = (e) => {
     setDisabled(!disabled);
     setEditButtonStatus(true);
-    //setDisabled(!disabled);
-    //setEditButtonStatus(false);
   };
   const editBatchSelected = (index, type, value) => {
     let buffer = [...batches];
@@ -85,7 +79,6 @@ const EditRow = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result111 = await getProductList();
-      // console.log(result111);
       setProductsList(result111.message);
     }
 
@@ -96,7 +89,6 @@ const EditRow = (props) => {
 
   if (typeof products != "undefined" && typeof productsList != "undefined") {
     for (var i = 0; i < products.length; i++) {
-      // console.log(productsList);
       let check = false;
       for (var j = 0; j < productsList.length; j++) {
         if (products[i].label === productsList[j].productName) {
@@ -285,7 +277,6 @@ const EditRow = (props) => {
                         ? null
                         : { value: prod.id, label: prod.name }
                     }
-                    placeholder='Product Name'
                     defaultInputValue={prod.name}
                     onChange={(v) => {
                       handleProductChange(index, v);

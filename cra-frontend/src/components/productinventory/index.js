@@ -23,7 +23,7 @@ const ProductInventory = (props) => {
       inventories.map((val) => {
         // if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
         //     val.payloadData.data.products.map((productRecord)=>{
-        if (val.products.type == props.match.params?.category) {
+        if (val.products.type === props.match.params?.category) {
           prodArray.push(val);
           //     }
           // })

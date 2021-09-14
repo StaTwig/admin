@@ -59,7 +59,7 @@ const Orders = (props) => {
     props.history.push(`/profile`);
   useEffect(() => {
     async function fetchData() {
-      if (visible == "one") {
+      if (visible === "one") {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");

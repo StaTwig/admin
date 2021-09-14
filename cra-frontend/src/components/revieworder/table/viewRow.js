@@ -2,7 +2,6 @@ import React from "react";
 import "./style.scss";
 const ViewRow = (props) => {
   const { prod } = props;
-  //console.log("prodUnitofmeasure+++",prod);
   return (
     <div className='row text-center text-dark col ml-5'>
       <div className='col tcell p-2 '>
@@ -68,7 +67,9 @@ const ViewRow = (props) => {
           {prod.productQuantity} <span>{"("}</span>{" "}
           {prod.unitofMeasure ? (
             <span>
-              {prod.unitofMeasure == undefined ? null : prod.unitofMeasure.name}
+              {prod.unitofMeasure === undefined
+                ? null
+                : prod.unitofMeasure.name}
             </span>
           ) : (
             <span className='placeholder_id'>Unit</span>

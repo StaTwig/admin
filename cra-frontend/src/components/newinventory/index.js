@@ -6,12 +6,10 @@ import Modal from "../../shared/modal";
 import InventoryPopUp from "./inventorypopup";
 import ExcelPopUp from "./excelpopup";
 import FailurePopUp from "./failurepopup";
-// import uploadBlue from '../../assets/icons/UploadWhite.svg';
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import review from "../../assets/icons/review.png";
 import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
-// import { Alert, AlertTitle } from '@material-ui/lab';
 
 import {
   setReviewinventories,
@@ -69,7 +67,7 @@ const NewInventory = (props) => {
 
     fetchData();
     dispatch(resetReviewInventories([]));
-  }, []);
+  }, [blankInventory, dispatch, editInventories]);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);

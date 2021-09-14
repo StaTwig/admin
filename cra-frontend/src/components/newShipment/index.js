@@ -12,7 +12,6 @@ import {
   getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
 import { getOrder, getOpenOrderIds } from "../../actions/poActions";
-// import DropdownButton from "../../shared/dropdownButtonGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from "./shipmentPopUp";
@@ -23,7 +22,6 @@ import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
 import { getProducts, searchProduct } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
-// import { Alert, AlertTitle } from '@material-ui/lab';
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -60,7 +58,7 @@ const NewShipment = (props) => {
   // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [productQuantity, setProductQuantity] = useState("");
+  const [productQuantity] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
@@ -68,9 +66,6 @@ const NewShipment = (props) => {
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
-  // const profile = useSelector((state) => {
-  //   return state.user;
-  // });
 
   const customStyles = {
     placeholder: (provided, state) => ({
@@ -79,12 +74,9 @@ const NewShipment = (props) => {
     option: (provided, state) => ({
       ...provided,
       borderBottom: "1px solid #d6d6d6",
-      // padding: 20,
     }),
     control: () => ({
       display: "flex",
-      //border: '2px solid #2196f3',
-      //borderRadius: '6px',
     }),
     indicatorSeparator: () => ({
       display: "none",
@@ -97,10 +89,6 @@ const NewShipment = (props) => {
   };
 
   useEffect(() => {
-    // let date = new Date();
-
-    // setformatedDate(`${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`);
-
     async function fetchData() {
       const result111 = await getProductList();
 

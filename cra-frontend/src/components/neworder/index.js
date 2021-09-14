@@ -86,10 +86,10 @@ const NewOrder = (props) => {
   // const [receiverOrgLoc, setReceiverOrgLoc] = useState(
   //   editPo !== null ? editPo.toOrgLocName : "Select Delivery Location"
   // );
-  const [message, setMessage] = useState("");
+  const [message] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [quantity, setquantity] = useState("");
-  const [openOrder, setOpenOrder] = useState(false);
+  const [quantity] = useState("");
+  const [openOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [shipmentError, setOrderError] = useState("");
   const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
@@ -98,7 +98,6 @@ const NewOrder = (props) => {
   const [country, setCountry] = useState("");
   const [orgType, setOrgType] = useState("");
   const [orgDetails, setOrgDetails] = useState([]);
-  const [fieldValue, setFieldValue] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
