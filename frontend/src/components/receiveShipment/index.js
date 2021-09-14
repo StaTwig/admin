@@ -70,9 +70,9 @@ const ReceiveShipment = (props) => {
   const setFile = (evt) => {
     setFiles(evt.target.files)
     console.log(evt.target.files)
-    setPhotoUrl(URL.createObjectURL(event.target.files[0]));
+    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
-    setPhotoUrl2(URL.createObjectURL(event.target.files[1]));
+    setPhotoUrl2(URL.createObjectURL(evt.target.files[1]));
     setPhoto2(evt.target.files[1]);
   };
 
@@ -160,14 +160,14 @@ const ReceiveShipment = (props) => {
       setIsDisabled(true);
   }
   
-  const getImageURL = async (imageId) => {
-    const r = await getImage(imageId);
-    const reader = new window.FileReader();
-    reader.readAsDataURL(r.data);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
-  };
+  // const getImageURL = async (imageId) => {
+  //   const r = await getImage(imageId);
+  //   const reader = new window.FileReader();
+  //   reader.readAsDataURL(r.data);
+  //   reader.onload = function () {
+  //     setImage(reader.result);
+  //   };
+  // };
   const uploadPhoto = async () => {
     const formData = new FormData();
     for(let i=0; i< files.length; i++){
