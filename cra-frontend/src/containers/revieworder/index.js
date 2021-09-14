@@ -9,13 +9,11 @@ const ReviewOrderContainer = (props) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState([]);
   const { id } = props.match.params;
-
   useEffect(() => {
-    (async () => {
-      const results = await dispatch(getOrder(id));
+    dispatch(getOrder(id)).then((results) => {
       setOrder(results.poDetails[0]);
-    })();
-  }, [dispatch, id]);
+    });
+  }, []);
 
   return (
     <div className='container-fluid p-0'>
