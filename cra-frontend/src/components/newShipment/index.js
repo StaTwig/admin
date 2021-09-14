@@ -33,7 +33,7 @@ const NewShipment = (props) => {
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [fetchdisabled, setfetchdisabled] = useState(false);
-  const [pofetchdisabled, setpofetchdisabled] = useState(false);
+  const [pofetchdisabled] = useState(false);
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
@@ -706,7 +706,6 @@ const NewShipment = (props) => {
                             );
                             setReceiverOrgId(
                               result.poDetails[0].customer.organisation.name
-                              // result.poDetails[0].customer.organisation.id
                             );
                             setOrderDetails(result.poDetails[0]);
                             dispatch(turnOff());

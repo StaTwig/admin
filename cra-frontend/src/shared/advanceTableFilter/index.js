@@ -311,9 +311,9 @@ const AdvanceTableFilter = (props) => {
     handleClose();
   };
 
-  const handleStatusClick = (event) => {
-    setStatusAnchorEl(event.currentTarget);
-  };
+  // const handleStatusClick = (event) => {
+  //   setStatusAnchorEl(event.currentTarget);
+  // };
 
   const handleStatusClose = () => {
     setStatusAnchorEl(null);
@@ -895,15 +895,6 @@ const AdvanceTableFilter = (props) => {
   const setPoOrderIdFilterOnSelect = (selectedVal) => {
     props.setOrderIdNameFilterOnSelect(selectedVal);
     handlePoOrderIdClose();
-  };
-
-  const setInventoryManufacturerFilterOnSelect = (selectedVal) => {
-    props.setInventoryManufacturerFilterOnSelect(selectedVal);
-    handleInventoryManufacturerClose();
-  };
-
-  const handleInventoryManufacturerClick = (event) => {
-    setInventoryManufacturerAnchorEl(event.currentTarget);
   };
 
   const handleInventoryManufacturerClose = () => {

@@ -1,10 +1,4 @@
 import React from "react";
-// import { setTracingShipments } from '../../../actions/shipmentActions';
-// import { useDispatch } from 'react-redux';
-// import alert from '../../../assets/icons/alert.png';
-// import location from '../../../assets/icons/CurrentLocationWhite.svg';
-// import previous from '../../../assets/icons/previous.png';
-// import next from '../../../assets/icons/next.png';
 import user from "../../../assets/icons/user.svg";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../../utils/dateHelper";
@@ -60,7 +54,6 @@ const Table = (props) => {
 
             const { customer, products, supplier, creatorOrganisation } = order;
             return (
-              /* <div className="rTableRow pt-2 pb-2 shadow-none" key={index}> */
               <div
                 className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow'
                 key={index}

@@ -37,9 +37,7 @@ const ReceiveShipment = (props) => {
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
   const [commentEnabled, setCommentEnabled] = useState(false);
-  const [image, setImage] = useState("");
   const id = props.match.params.id;
-  // const [inputValue, setInputValue] = React.useState("");
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
@@ -59,7 +57,6 @@ const ReceiveShipment = (props) => {
   const flatProps = {
     options: transitNumberArray.map((option) => option.airWayBillNo),
   };
-  const [value, setValue] = React.useState(null);
 
   const setFile = (evt) => {
     setFiles(evt.target.files);
@@ -172,7 +169,7 @@ const ReceiveShipment = (props) => {
       formData.append("photo", files[i], files[i].name);
 
       const result = await uploadImage(id, formData);
-      if (result.status == 200) {
+      if (result.status === 200) {
         setMessage("Image Uploaded");
       } else {
         console.log(result.status);
@@ -214,6 +211,7 @@ const ReceiveShipment = (props) => {
                   width='16'
                   height='16'
                   className='mr-2 mb-1'
+                  alt='Return Shipment'
                 />
                 <span>Receive Shipment</span>
               </button>
@@ -406,6 +404,7 @@ const ReceiveShipment = (props) => {
                     height='20'
                     src={crossIcon}
                     className='cross-img shadow rounded-circle'
+                    alt='Clear'
                   />
                   <ModalImage
                     large={photoUrl}
@@ -421,12 +420,12 @@ const ReceiveShipment = (props) => {
                     height='20'
                     src={crossIcon}
                     className='cross-img shadow border-none rounded-circle'
+                    alt='Clear'
                   />
                   <ModalImage
                     large={photoUrl2}
                     small={photoUrl2}
                     showRotate={true}
-                    //alt="Image2"
                     className='mt-1 modal-image'
                     // style={{ margin: "auto", display: "table" }}
                   />
@@ -462,6 +461,7 @@ const ReceiveShipment = (props) => {
                     height='50'
                     className='mt-1'
                     style={{ margin: "auto", display: "table" }}
+                    alt='Upload'
                   />
                   <label className='mt-3'>
                     Drag and drop files here{" "}

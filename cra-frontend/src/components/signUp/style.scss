@@ -1,48 +1,47 @@
 @import "../../assets/styles/global.scss";
 
-
 .login-wrapper {
-background-size:cover;
-background: url(../../assets/brands/background.png);
-background-size:cover;
-height: 100%;
-position: fixed;  
-display: flex;
+  background-size: cover;
+  background: url(../../assets/brands/background.png);
+  background-size: cover;
+  height: 100%;
+  position: fixed;
+  display: flex;
   align-items: center;
   width: 100%;
-.mobile-header {
-  display: none;
-border: none;
- 
-background-color: $white;
-@media (max-width: 1024px){
-    display: flex;
-    background-color: #FFFFFF;
-    min-height: unset;
-    justify-content: space-between;
-    padding: 20px 30px;
-    align-items: center;
-    box-shadow: 0px 3px 10px #FFFFFF;
-    position: sticky;
+  .mobile-header {
+    display: none;
     border: none;
-    z-index: 9;
-  }
 
-  .branding {
-      img {
-          width: 60%;
-      }
-  }
-.navbar {
-   background-color: $white;
-    height: 64px;
+    background-color: $white;
     @media (max-width: 1024px) {
-      display: none;
+      display: flex;
+      background-color: #ffffff;
+      min-height: unset;
+      justify-content: space-between;
+      padding: 20px 30px;
+      align-items: center;
+      box-shadow: 0px 3px 10px #ffffff;
+      position: sticky;
+      border: none;
+      z-index: 9;
     }
-    a {
-      color: #0000FF;
+
+    .branding {
+      img {
+        width: 60%;
+      }
     }
-        }
+    .navbar {
+      background-color: $white;
+      height: 64px;
+      @media (max-width: 1024px) {
+        display: none;
+      }
+      a {
+        color: #0000ff;
+      }
+    }
   }
 
   .form-content {
@@ -50,49 +49,45 @@ background-color: $white;
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    
 
-    @media screen and (max-width: 767px){
+    @media screen and (max-width: 767px) {
       align-items: center;
     }
   }
-  .card{
+  .card {
     margin-top: 60px;
-     //margin-bottom: 109px;
-    width:110%;
-       height: 75%;
-       border: none;
-       box-shadow: 0px 3px 25px #00000029;
-       border-radius: 15px;
-    
+    //margin-bottom: 109px;
+    width: 110%;
+    height: 75%;
+    border: none;
+    box-shadow: 0px 3px 25px #00000029;
+    border-radius: 15px;
   }
-   .login-form {
-     
-    
+  .login-form {
     //box-sizing: border-box;
     //display: flex;
     //flex-direction: column;
-   
+
     .card-title {
       font-size: 30px;
       font-weight: bold;
       text-align: center;
     }
-    
-    .cursorP{
+
+    .cursorP {
       color: #0056b3;
       cursor: pointer;
-    };
+    }
 
     .form-groupverify {
       position: relative;
       margin-bottom: 2rem;
       display: flex;
       flex-direction: row;
-       .form-controlverify {
+      .form-controlverify {
         border: none;
-        border-bottom: 1px solid #D6D6D6;
-        width:25%;
+        border-bottom: 1px solid #d6d6d6;
+        width: 25%;
         border-radius: 0;
         font-size: 20px;
         padding-left: 2rem;
@@ -105,8 +100,8 @@ background-color: $white;
       margin-bottom: 1.5rem;
       display: flex;
       flex-direction: row;
-      width:106.5%;
-            
+      width: 106.5%;
+
       .imgs {
         width: 18px;
         height: 18px;
@@ -124,7 +119,7 @@ background-color: $white;
         bottom: 0px;
         min-width: 25px;
       }
-      .react-tel-input{
+      .react-tel-input {
         width: 365px;
         height: 30px;
         position: absolute;
@@ -152,16 +147,15 @@ background-color: $white;
       }
 
       .form-control {
-            //border: none;
-            border-bottom: 1px solid #757575;
-            border-radius: 0;
-            width: 95%;
-            font-size: 16px;
-                      
-            // padding-left: 3rem;
-            outline: none;
-      
-            
+        //border: none;
+        border-bottom: 1px solid #757575;
+        border-radius: 0;
+        width: 95%;
+        font-size: 16px;
+
+        // padding-left: 3rem;
+        outline: none;
+
         .custom-dropdown .btn-custom-dropdown {
           font-size: 19px;
           @media (max-width: 1250px) {
@@ -170,16 +164,15 @@ background-color: $white;
         }
       }
       .form-control2 {
-            //border: none;
-            border-bottom: 2px solid #0093E9;
-            border-radius: 0;
-            width: 150px;
-            font-size: 16px;
-                      
-            // padding-left: 3rem;
-            outline: none;
-      
-            
+        //border: none;
+        border-bottom: 2px solid #0093e9;
+        border-radius: 0;
+        width: 150px;
+        font-size: 16px;
+
+        // padding-left: 3rem;
+        outline: none;
+
         .custom-dropdown .btn-custom-dropdown {
           font-size: 19px;
           @media (max-width: 1250px) {
@@ -191,12 +184,12 @@ background-color: $white;
       .form-control-login {
         width: 100%;
         border: none;
-        border-bottom: 1px solid #D6D6D6;
+        border-bottom: 1px solid #d6d6d6;
         border-radius: 0;
         font-size: 20px;
         padding-left: 1.5rem;
         outline: none;
-        
+
         .custom-dropdown .btn-custom-dropdown {
           font-size: 19px;
           @media (max-width: 1250px) {
@@ -208,7 +201,7 @@ background-color: $white;
 
     .forgot-link {
       align-self: flex-end;
-      color: #A8A8A8;
+      color: #a8a8a8;
       font-size: 14px;
     }
 
@@ -224,6 +217,3 @@ background-color: $white;
     }
   }
 }
-
-
-

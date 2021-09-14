@@ -1,25 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import "leaflet/dist/leaflet.css";
 
 const AddressField = (props) => {
-  const {
-    refe,
-    error,
-    touched,
-    label,
-    handleBlur,
-    handleChange,
-    value,
-  } = props;
+  const { refe, error, touched, label, handleBlur, handleChange, value } =
+    props;
 
   return (
-    <div className="form-group row">
-      <label htmlFor={refe} className="col-sm-5 txtColor col-form-label">
+    <div className='form-group row'>
+      <label htmlFor={refe} className='col-sm-5 txtColor col-form-label'>
         {label} *
       </label>
-      <div className="col-sm-7">
+      <div className='col-sm-7'>
         <input
-          type="text"
+          type='text'
           className={`form-control border-top-0 border-right-0 border-left-0 rounded-0 ${
             error ? "border-danger" : ""
           }`}
@@ -30,7 +23,7 @@ const AddressField = (props) => {
           value={value}
         />
         {error && touched && (
-          <span className="error-msg text-danger">{error}</span>
+          <span className='error-msg text-danger'>{error}</span>
         )}
       </div>
     </div>

@@ -2,30 +2,23 @@ import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Formik } from "formik";
-import AddressField from "./addressfield";
 import FailedPopUp from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
-import { useDispatch } from "react-redux";
 import CloseIcon from "../../assets/icons/cross.svg";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import {
   fetchAllRegions,
   fetchCountriesByRegion,
   fetchStateByCountry,
   fetchCitiesByState,
 } from "../../actions/productActions";
-import { turnOn, turnOff } from "../../actions/spinnerActions";
 
 const OrganisationPopUp = (props) => {
-  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [orgType, setOrgType] = useState("Organisation type");
   const [message, setMessage] = useState(
     "Location service is disabled. Enter address manually!!!"
   );
-  const [address, setAddress] = useState({});
-  const [pos, setPos] = useState({});
+
   const closeModal = () => setShowModal(false);
   const orgTypeArr = [
     { id: "SUPPLIER", name: "Supplier" },
@@ -40,10 +33,6 @@ const OrganisationPopUp = (props) => {
   const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [addressLine, setAddressLine] = useState("");
-
-  const [inputValue1, setInputValue1] = React.useState("");
-
   const [allregions, setallregions] = useState([]);
   const [allCountries, setallCountries] = useState([]);
   const [allState, setallState] = useState([]);

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-export default ComposedComponent => {
+export default (ComposedComponent) => {
   class RequireAuth extends Component {
     render() {
       const { user } = this.props;
       switch (user) {
         case null:
-          return <Redirect to="/" />;
+          return <Redirect to='/' />;
 
         default:
           return <ComposedComponent {...this.props} />;
