@@ -10,7 +10,6 @@ import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import review from "../../assets/icons/review.png";
 import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
-
 import {
   setReviewinventories,
   resetReviewInventories,
@@ -23,11 +22,8 @@ const NewInventory = (props) => {
   const editInventories = useSelector((state) => {
     return state.reviewInventory;
   });
-
   const [category, setCategory] = useState([]);
-
   if (!isAuthenticated("addInventory")) props.history.push(`/profile`);
-
   useEffect(() => {
     async function fetchData() {
       dispatch(turnOn());
@@ -42,9 +38,7 @@ const NewInventory = (props) => {
           };
         })
       );
-
       const categoryArray = result.map((product) => product.type);
-
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
@@ -61,13 +55,11 @@ const NewInventory = (props) => {
       } else {
         setInventoryState(editInventories);
       }
-
       dispatch(turnOff());
     }
-
     fetchData();
     dispatch(resetReviewInventories([]));
-  }, [blankInventory, dispatch, editInventories]);
+  }, []);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);
@@ -114,17 +106,12 @@ const NewInventory = (props) => {
     "manufacturer",
     "quantity",
     "unitofMeasure",
-    // 'manufacturingDate',
-    // 'expiryDate',
-    // 'batchNumber',
-    // 'serialNumber',
   ];
 
   const month = new Date().getMonth() + 1;
   const newMonth = `0${month}`.slice(-2);
   const todayDate = newMonth + "/" + new Date().getFullYear();
   const dateValidationFields = ["expiryDate"];
-  //const [validate,setValidate] = useState('')
   const expiryDateValidation = (date) => {
     let error = false;
     inventoryState.forEach((inventory) => {

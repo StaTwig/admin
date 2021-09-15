@@ -16,7 +16,7 @@ RUN yarn run build
 
 FROM nginx:stable-alpine
 
-COPY --from=react_build /app /usr/share/nginx/html
+COPY --from=react_build /app/build/ /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
 
