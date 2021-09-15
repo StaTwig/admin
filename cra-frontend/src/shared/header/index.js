@@ -55,6 +55,7 @@ const Header = (props) => {
   const [image, setImage] = useState("");
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
+  const [count, setCount] = useState(0);
 
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -211,9 +212,8 @@ const Header = (props) => {
     dispatch(getUserInfo());
     async function fetchApi() {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
-      console.log(response.data.data.data);
       setNotifications(response.data.data.data);
-
+      setCount(response.data.data.totalRecords);
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -347,9 +347,11 @@ const Header = (props) => {
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                <span className='badge badge-light'>
-                  {notifications?.length >= 0 ? notifications?.length : 0}
-                </span>
+                {notifications.length && (
+                  <span className='badge badge-light'>
+                    {count}
+                  </span>
+                )}
               </div>
               {showNotifications && (
                 <div className='slider-menu'>
@@ -413,7 +415,7 @@ const Header = (props) => {
                         </button>
                       </div>
                     </div>
-                    {notifications?.length >= 0 ? (
+                    {notifications?.length  ? (
                       notifications?.map((notifications) => (
                         <div className='slider-item'>
                           <div
