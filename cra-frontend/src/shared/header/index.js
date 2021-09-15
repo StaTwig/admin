@@ -55,6 +55,7 @@ const Header = (props) => {
   const [image, setImage] = useState("");
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
+  const [count, setCount] = useState(0);
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
@@ -213,7 +214,7 @@ const Header = (props) => {
     async function fetchApi() {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
       setNotifications(response.data.data);
-
+      setCount(response.data.data.totalRecords);
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -349,7 +350,7 @@ const Header = (props) => {
               >
                 {notifications.length >= 0 && (
                   <span className='badge badge-light'>
-                    {notifications.length}
+                    {count}
                   </span>
                 )}
               </div>

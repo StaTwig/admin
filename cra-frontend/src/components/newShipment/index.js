@@ -207,6 +207,11 @@ const NewShipment = (props) => {
   const onWarehouseChange = async (value) => {
     try {
       const prods = await getProductsByInventoryId(value);
+      if(prods.data.length === 0){
+        alert("No products availabe in this warehouse")
+        setErrorMessage("err");
+        return false;
+      }
       setProducts(prods.data.map(item => {
                                       return {
                                         value: item.name,
@@ -220,8 +225,11 @@ const NewShipment = (props) => {
                                         label: item.name,
                                         ...item
                                       };
-                                    }));    } catch (err) {
+                                    }));    
+                return true;
+                                  } catch (err) {
       setErrorMessage(err);
+      return false;
     }
   };
 
@@ -347,28 +355,23 @@ if (!error) {
         for(i=0;i<data.products.length;i++)
         {
           let prdctName = data.products[i].productName;
-          let qty = parseInt(data.products[i].productQuantity);
+          // let qty = parseInt(data.products[i].productQuantity);
           let flag = false;
           
           for(j=0;j<productsList.length;j++)
           {
             if(productsList[j].productName===prdctName)
             {
-              if(qty > productsList[j].quantity)
-              {
-                
-                flag = false;
-                break;
-              }
-              else{
-                flag = true;
-              }
+              flag = true;
+              break;
+            } else {
+              flag = false;
             }
           }
 
           if(!flag)
           {
-            setShipmentError("Not enough quantity of the selected product available");
+            setShipmentError("The product doesn't exist in this inventory");
             //setShipmentError("Check product quantity");
             setOpenShipmentFail(true);
             break;
@@ -912,8 +915,12 @@ if (!error) {
                           styles={customStyles}
                           isDisabled={false}
                           placeholder="Select Organisation Location"
-                          onChange={(v) => {
-                            onWarehouseChange(v.warehouseInventory);
+                          onChange={async (v) => {
+                            let res = await onWarehouseChange(v.warehouseInventory);
+                            console.log(res)
+                            if(!res){
+                              return
+                            }
                             console.log(v.id)
                             setSelectedWarehouse(v.id)
                             setFromLocationSelected(true);
