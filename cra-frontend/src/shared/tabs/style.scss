@@ -7,9 +7,10 @@
 
   ul {
     li {
-      &.nav-item-active {
-        color: #0093e9;
-        border-bottom: 7px solid #0093e9;
+      &.nav-item-active{
+        font-weight: bolder;
+        color: #0093E9;
+        border-bottom: 7px solid #0093E9;
         //border-radius: 10px;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
@@ -20,7 +21,7 @@
           color: #0093e9;
           font-size: 18px;
           padding-bottom: 0.2rem;
-          // font-weight: bold;
+          font-weight: bold;
           background-color: transparent;
           position: relative;
           cursor: pointer;
