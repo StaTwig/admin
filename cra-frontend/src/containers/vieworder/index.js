@@ -15,7 +15,7 @@ const ViewOrderContainer = (props) => {
       const results = await dispatch(getOrder(id));
       setOrder(results.poDetails[0]);
     })();
-  }, [dispatch, id]);
+  }, []);
 
   return (
     <div className='container-fluid p-0'>
