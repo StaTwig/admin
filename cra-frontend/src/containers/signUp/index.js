@@ -21,14 +21,7 @@ const SignupContainer = (props) => {
   const [adminAwaiting, setAdminAwaiting] = useState(false);
   const [isNewOrg, setIsNewOrg] = useState(false);
   const [innerWidth, setInnerwidth] = useState(window.innerWidth);
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
-  // const updtaeInnerWidth = () =>{
-  //     setInnerwidth(window.innerWidth);
-  // }
-  // setInterval(updtaeInnerWidth,100);
-
   window.onresize = () => {
     setInnerwidth(window.innerWidth);
   };
@@ -41,9 +34,7 @@ const SignupContainer = (props) => {
       phoneNumber: phone,
       organisationId: organisation.id,
     };
-    // let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
     if (isNewOrg) {
-      // data.organisationName = organisation.name;
       data.organisationName = values.name;
       data.address = {
         line1: values.line1,
@@ -53,7 +44,6 @@ const SignupContainer = (props) => {
         country: values.country,
         region: values.region,
       };
-      // data.type = 'CUSTOMER_SUPPLIER';
       data.type = orgType;
       data.organisationId = 0;
     }
@@ -74,8 +64,6 @@ const SignupContainer = (props) => {
   });
 
   const checkNcontinue = async () => {
-    console.log("1", email);
-    console.log("2", phone);
     if (isNewOrg) {
       let data = {
         firstName,
@@ -119,7 +107,7 @@ const SignupContainer = (props) => {
       <MobileHeader {...props} />
       {innerWidth > 1024 && (
         <nav className='navbar sticky-top navbar-expand-lg'>
-          <Link className='navbar-brand' to='#'>
+          <Link className='navbar-brand' to='/'>
             <img src={logo} width='230' height='30' alt='logo' />
           </Link>
         </nav>
@@ -139,7 +127,6 @@ const SignupContainer = (props) => {
           setIsNewOrg(value);
           setShowModal(value);
         }}
-        onPasswordChange={(e) => setPassword(e.target.value)}
         onlastNameChange={(e) => setLastName(e.target.value)}
         onOrgTypeChange={(value) => setOrgType(value)}
         onOrganisationChange={(org) =>

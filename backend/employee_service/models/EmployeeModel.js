@@ -47,6 +47,7 @@ var EmployeeSchema = new mongoose.Schema({
     required: false,
   },
   role: { type: String, required: false, default: 'powerUser' },
+  msp : { type: String, required: false, default: 'org1MSP' },
   postalAddress: {
     type: String,
     required: false,

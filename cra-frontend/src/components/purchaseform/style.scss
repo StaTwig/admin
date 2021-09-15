@@ -1,7 +1,7 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .payStyle {
-  background-image: url('https://www.payumoney.com/media/images/payby_payumoney/new_buttons/21.png');
+  background-image: url("https://www.payumoney.com/media/images/payby_payumoney/new_buttons/21.png");
   border: none;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -52,8 +52,8 @@
     .reference {
       color: #707070;
       text-align: left;
-      margin-bottom:0px;
-       font: 15px/20px $roboto;
+      margin-bottom: 0px;
+      font: 15px/20px $roboto;
       @media (max-width: 1250px) {
         font: 14px/18px $roboto;
       }
@@ -64,7 +64,7 @@
       background: transparent;
       border-bottom: 2px solid #d6d6d6;
       border-radius: 0;
-      color: #A8A8A8;
+      color: #a8a8a8;
       flex-basis: 67%;
       flex-grow: inherit;
       font-size: 14px;

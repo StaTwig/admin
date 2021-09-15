@@ -3,7 +3,7 @@ import Tracing from "../../components/tracing";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { trackProduct } from "../../actions/shipmentActions";
-import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
+import { chainOfCustody } from "../../actions/shipmentActions";
 
 const TracingContainer = (props) => {
   const [trackData, setTrackData] = useState({});
@@ -29,10 +29,6 @@ const TracingContainer = (props) => {
     async function fetchData() {
       const result = await chainOfCustody(props.match.params.id);
       if (result.status === 200) {
-        console.log("Data From Response");
-        console.log(result.data.data);
-        //  setPoChainOfCustodyData(result.data.data['poChainOfCustody']);
-        //  poChainOfCustodyData = result.data.data['poChainOfCustody'];
         setPoChainOfCustodyData(result.data.data["poChainOfCustody"]);
         setShippmentChainOfCustodyData(
           result.data.data["shipmentChainOfCustody"]

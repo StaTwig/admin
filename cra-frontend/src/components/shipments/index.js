@@ -89,7 +89,7 @@ const ShipmentAnalytic = (props) => {
     fetchData();
     // dispatch(resetShipments());
     dispatch(getAllUsers());
-  }, [visible]);
+  }, [dispatch, limit, visible]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;

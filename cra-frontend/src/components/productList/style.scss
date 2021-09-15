@@ -1,177 +1,173 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .productlist {
-    padding-right: 3rem;
-    padding-left: 5rem;
-    @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
+  padding-right: 3rem;
+  padding-left: 5rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .breadcrumb {
+    position: relative;
+    left: -40px;
+    top: -3px;
+  }
+
+  .product {
+    background: transparent linear-gradient(90deg, #fa7923 0%, #ffab1d 100%) 0%
+      0% no-repeat padding-box;
+  }
+
+  .export {
+    background: transparent linear-gradient(88deg, #0093e9 0%, #01ceea 100%) 0%
+      0% no-repeat padding-box;
+  }
+
+  .full-width-ribben {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #eaeaea;
+    .filter {
+      margin-left: 10.5rem;
+      margin-right: 3rem;
     }
-    .breadcrumb{
-      position:relative;
-      left:-40px;
-      top:-3px;
+  }
+
+  .ribben-space {
+    margin-top: 4.5rem;
+  }
+
+  .panel {
+    box-shadow: 0px 3px 6px $grey;
+    border-radius: 15px;
+    background-color: $white;
+    padding: 20px 20px 5px 20px;
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+
+    & > .d-flex {
+      margin-top: 15px;
     }
 
-    .product{
-      background: transparent linear-gradient(90deg, #FA7923 0%, #FFAB1D 100%) 0% 0% no-repeat padding-box;
+    @media screen and (max-width: 768px) {
+      border-right: none;
+      justify-content: flex-start;
     }
 
-    .export{
-      background: transparent linear-gradient(88deg, #0093E9 0%, #01CEEA 100%) 0% 0% no-repeat padding-box;
-    }
-
-    .full-width-ribben{
-        position: absolute;
-        left: 0;
-        right: 0;
-        background-color: #eaeaea;
-        .filter {
-          margin-left: 10.5rem;
-          margin-right: 3rem;
-        }
+    @media (max-width: $lg) {
+      &:nth-child(2) {
+        margin-right: 0;
       }
-    
-      .ribben-space {
-        margin-top: 4.5rem;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    .picture {
+      width: 40px;
+      height: 40px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 13px;
+      display: flex;
+
+      @media (min-width: $xl) {
+        width: 60px;
+        height: 60px;
       }
 
-    .panel {
-        box-shadow: 0px 3px 6px $grey;
-        border-radius: 15px;
-        background-color: $white;
-        padding: 20px 20px 5px 20px;
-        margin-top: 20px;
-        display: flex;
-        align-items: flex-start;
-    
-        & > .d-flex {
-          margin-top: 15px;
-        }
-    
-        @media screen and (max-width: 768px) {
-          border-right: none;
-          justify-content: flex-start;
-        }
-    
-        @media (max-width: $lg) {
-          &:nth-child(2) {
-            margin-right: 0;
-          }
-        }
-    
-        &:last-child {
-          margin-right: 0;
-        }
-    
-        .picture {
-          width: 40px;
-          height: 40px;
-          box-shadow: 0px 3px 6px #00000029;
-          border-radius: 50%;
-          justify-content: center;
-          align-items: center;
-          margin-right: 13px;
-          display: flex;
-          
-    
-          @media (min-width: $xl) {
-            width: 60px;
-            height: 60px;
-          }
-    
-          img {
-            width: 40px;
-            height: 18px;
-          }
-    
-          &.truck-bg {
-            background:  #e8f4f8;
-          }                                       
-    
-          &.sent-bg {
-            background: #d4ebf2;
-          }
-    
-          &.recived-bg {
-            background: #fff2e5;
-            
-          }
-    
-          &.transit-bg {
-            background: $C0Blue;
-          }
-        }
-    
-        .tab-container {
-          display: flex;
-          justify-content: space-between;
-          .tab-item {
-            font-size: 8px;
-            color: #707070;
-            margin-right: 3px;
-            cursor: pointer;
-          }
-
-          .tab-item:hover {
-            border-bottom: 2px solid black;
-            color:	rgb(0,0,0);
-            font-size: 10px;
-            
-          }
-           
-          
-        }
-    
-        .title {
-          font-size: 14px;
-          line-height: 9px;
-          font-weight: bold;
-          color: #707070;
-          margin-bottom: 8px;
-          @media (min-width: $xl) {
-            font-size: 14px;
-          }
-        }
-    
-        .count {
-          font-size: 26px;
-          margin-top: 12px;
-          font-weight: bold;
-        }
-    
-        .dayStatus {
-          font-size: 9px;
-          align-self: flex-end;
-          color: $black;
-        }
-    
-        &:after {
-          border: 1px solid $lightGrey;
-          height: 50px;
-        }
-    
-        .truck-text {
-        color: #2BA3AE;;
-        }
-    
-        .sent-text {
-          color: #0093E9;
-        }
-    
-        .recived-text {
-          color: #FA7923;
-        }
-    
-        .transit-text {
-          color: $deepBlue;
-        }
+      img {
+        width: 40px;
+        height: 18px;
       }
+
+      &.truck-bg {
+        background: #e8f4f8;
+      }
+
+      &.sent-bg {
+        background: #d4ebf2;
+      }
+
+      &.recived-bg {
+        background: #fff2e5;
+      }
+
+      &.transit-bg {
+        background: $C0Blue;
+      }
+    }
+
+    .tab-container {
+      display: flex;
+      justify-content: space-between;
+      .tab-item {
+        font-size: 8px;
+        color: #707070;
+        margin-right: 3px;
+        cursor: pointer;
+      }
+
+      .tab-item:hover {
+        border-bottom: 2px solid black;
+        color: rgb(0, 0, 0);
+        font-size: 10px;
+      }
+    }
+
+    .title {
+      font-size: 14px;
+      line-height: 9px;
+      font-weight: bold;
+      color: #707070;
+      margin-bottom: 8px;
+      @media (min-width: $xl) {
+        font-size: 14px;
+      }
+    }
+
+    .count {
+      font-size: 26px;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .dayStatus {
+      font-size: 9px;
+      align-self: flex-end;
+      color: $black;
+    }
+
+    &:after {
+      border: 1px solid $lightGrey;
+      height: 50px;
+    }
+
+    .truck-text {
+      color: #2ba3ae;
+    }
+
+    .sent-text {
+      color: #0093e9;
+    }
+
+    .recived-text {
+      color: #fa7923;
+    }
+
+    .transit-text {
+      color: $deepBlue;
+    }
+  }
 }
 
-.ungroup{
+.ungroup {
   height: auto;
   max-height: 400px;
   overflow: auto;
-
 }

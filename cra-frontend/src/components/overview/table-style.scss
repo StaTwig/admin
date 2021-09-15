@@ -2,7 +2,7 @@
 
 .summaryTable {
   display: flex;
-  .rowData {   
+  .rowData {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -23,7 +23,7 @@
       font-weight: 400;
       height: 6vh;
       background-color: #f5f1f1;
-      // margin: 0;  
+      // margin: 0;
       margin-right: 0;
       font-size: 12px;
     }
@@ -40,23 +40,22 @@
         font-size: 9px;
         @media (min-width: $xl) {
           font-size: 11px;
+        }
       }
-     }
 
- .status[target=RECEIVED]{
-                                background: #28a745 0% 0% no-repeat padding-box;
-                                color: #ffffff;
-                                padding: 3px 10px;
-                                border-radius: 7px;
-                        }
+      .status[target="RECEIVED"] {
+        background: #28a745 0% 0% no-repeat padding-box;
+        color: #ffffff;
+        padding: 3px 10px;
+        border-radius: 7px;
+      }
 
-
-                        .status[target=CREATED]  {
-                                background: #007bff 0% 0% no-repeat padding-box;
-                                padding: 3px 12px;
-                                border-radius: 7px;
-                                color: #ffffff;
-                        }
+      .status[target="CREATED"] {
+        background: #007bff 0% 0% no-repeat padding-box;
+        padding: 3px 12px;
+        border-radius: 7px;
+        color: #ffffff;
+      }
 
       .round-sign {
         border-radius: 4px;
@@ -65,14 +64,13 @@
     }
 
     @media screen and (min-width: 1300px) {
-        flex: 1;
+      flex: 1;
     }
   }
 
   @media screen and (max-width: 768px) {
     display: none;
   }
-
 }
 
 .sm-only {

@@ -311,9 +311,9 @@ const AdvanceTableFilter = (props) => {
     handleClose();
   };
 
-  const handleStatusClick = (event) => {
-    setStatusAnchorEl(event.currentTarget);
-  };
+  // const handleStatusClick = (event) => {
+  //   setStatusAnchorEl(event.currentTarget);
+  // };
 
   const handleStatusClose = () => {
     setStatusAnchorEl(null);
@@ -897,18 +897,9 @@ const AdvanceTableFilter = (props) => {
     handlePoOrderIdClose();
   };
 
-  const setInventoryManufacturerFilterOnSelect = (selectedVal) => {
-    props.setInventoryManufacturerFilterOnSelect(selectedVal);
-    handleInventoryManufacturerClose();
-  };
-
-  const handleInventoryManufacturerClick = (event) => {
-    setInventoryManufacturerAnchorEl(event.currentTarget);
-  };
-
-  const handleInventoryManufacturerClose = () => {
-    setInventoryManufacturerAnchorEl(null);
-  };
+  // const handleInventoryManufacturerClose = () => {
+  //   setInventoryManufacturerAnchorEl(null);
+  // };
 
   const renderColumn3 = (columnData) => {
     if (columnData === "From") {
@@ -1145,30 +1136,26 @@ const AdvanceTableFilter = (props) => {
           >
             <div className='d-flex flex-column align-items-center'>
               <StyledMenuItem>
-                <Button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
-                  onClick={() =>
-                    setInventoryProductCategoryFilterOnSelect("Vaccine")
-                  }
-                >
-                  Vaccine
-                </Button>
-              </StyledMenuItem>
-              <StyledMenuItem>
-                <Button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
-                  onClick={() =>
-                    setInventoryProductCategoryFilterOnSelect("Therapuetics")
-                  }
-                >
-                  Therapuetics
-                </Button>
+                {inventoryProductCategoryAnchorEl ? (
+                  <Autocomplete
+                    id='ProductCategory'
+                    options={props.inventoryFilterData}
+                    getOptionLabel={(options) => options.category}
+                    onChange={(event, newValue) => {
+                      setInventoryProductCategoryFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "100%" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Search Category"}
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                ) : (
+                  <div>Empty List</div>
+                )}
               </StyledMenuItem>
               <StyledMenuItem>
                 <Button

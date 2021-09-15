@@ -1,7 +1,9 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .mobilemenu {
-  background: transparent linear-gradient(180deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+  background: transparent
+    linear-gradient(180deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+    padding-box;
   box-shadow: 5px 0px 10px #00000029;
   border-radius: 0;
   height: 100%;
@@ -18,7 +20,7 @@
     display: flex;
   }
 
-  .closedrawer{
+  .closedrawer {
     font-size: 22px;
     align-self: flex-end;
     padding-top: 20px;
@@ -39,7 +41,7 @@
     }
     .search-field {
       height: 35px;
-      background: #FFFFFF 0% 0% no-repeat padding-box;
+      background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 1px 3px #00000065;
       border-radius: 8px;
     }
@@ -61,7 +63,6 @@
         cursor: pointer;
         color: inherit;
       }
-
 
       &.active {
         font-weight: bold;
