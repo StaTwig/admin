@@ -90,49 +90,49 @@ const ProductList = (props) => {
                         </div>
                         <div className="col-sm mb-2 " style={{textAlign:'right'}}>
                         {isVisible ? 
-                                        <button
-                                            className="btn btn-outline-warning mt-2 mr-1 p-1"
-                                            onClick={() => 
-                                                {
-                                                    deliveredProductList.push(deliveredProduct);
-                                                    props.setDelivered(deliveredProductList);
-                                                    props.setIndex(index);
-                                                    if(deliveredProduct)
-                                                        setIsVisible(false);
-                                                }}
-                                            style={{width:'3vw',height:'4vh', fontSize:'12px'}}
-                                            >
-                                            Save
-                                        </button>
+                                    <button 
+                                        type="button" 
+                                        style={{width:'3vw',height:'4vh', fontSize:'12px'}}
+                                        onClick={() => 
+                                            {
+                                                deliveredProductList.push(deliveredProduct);
+                                                props.setDelivered(deliveredProductList);
+                                                props.setIndex(index);
+                                                if(deliveredProduct)
+                                                    setIsVisible(false);
+                                            }} 
+                                        className="btn btn-outline-warning mt-2 mr-1 p-1">
+                                        { deliveredProduct ? `Save` : `Edit`}
+                                    </button>
                                         : <span> &nbsp;</span>}
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         Product Name
                         </div>
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         {product.productName}
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         Manufacturer
                         </div>
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         {product.manufacturer}
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-3 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         Quantity Sent
                         </div>
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-3 text-secondary styler">
                         {product.productQuantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span>
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-3 text-secondary styler">
+                        <div className="col-sm mb-0 text-secondary styler">
                         Quantity Received
                         </div>
                         <div className="col-sm text-secondary styler" >
@@ -140,8 +140,7 @@ const ProductList = (props) => {
                                                 product['productQuantityDelivered'] ?
                                                     product['productQuantityDelivered'] :
                                                     <input
-                                                        style={{ position:"relative", bottom:"6px",height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0px' }} 
-                                                        className="form-control"
+                                                        className="form-control quantity-received"
                                                         value={deliveredProduct}
                                                         placeholder="Enter the Quantity"
                                                         // maxLength={product.productQuantity.length}
@@ -164,18 +163,18 @@ const ProductList = (props) => {
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         Batch Number
                         </div>
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-1 text-secondary styler">
                         {props.shipments.products[0].batchNumber}
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-3 text-secondary styler">
                         Label ID
                         </div>
-                        <div className="col-sm mb-2 text-secondary styler">
+                        <div className="col-sm mb-3 text-secondary styler">
                         {props.shipments.label.labelId}
                         </div>
                         </div>

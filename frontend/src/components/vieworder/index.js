@@ -105,6 +105,10 @@ const onPOStatusChange = async status => {
             <span className="col-4">Order Date:</span>
             <span className= "col text-dark ">{formatDate(order.creationDate)}</span>
           </div>
+          <div className="col row">
+            <span className="col-4">Created By:</span>
+            <span className= "col text-dark ">{order.createdBy}</span>
+          </div>
         </div>
         <div className="row bg-white shadow mt-4 p-3">
           <div className="col-12">

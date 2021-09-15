@@ -114,10 +114,10 @@ const NewShipment = (props) => {
     
     async function fetchData() {
 
-      const result111 = await getProductList();
+      /*const result111 = await getProductList();
      
       setProductsList(result111.message);
-      console.log(result111)
+      console.log(result111)*/
       const { search } = props.location;
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
@@ -445,12 +445,12 @@ if (!error) {
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
+  const onCategoryChange = async (index, value,setFieldValue) => {
     try {
       const warehouse = await searchProduct(value, selectedWarehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
-      newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "","batchNumber":"","id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
       let buffer = warehouse.filter(item => item.inventoryDetails.quantity > 0)
@@ -769,6 +769,10 @@ if (!error) {
                         dispatch(turnOn());
                         setDisabled(false);
                         let result = await dispatch(getViewShipment(values.shipmentID));
+                        if(result.status !== "RECEIVED"){
+                          values.shipmentID = ""
+                          alert("The shipment has to be delivered first")
+                        }
                         for (let i = 0; i < result.products.length; i++) {
                           if(result.products[i].productQuantityShipped){
                             result.products[i].productQuantity = parseInt(result.products[i].productQuantity) - parseInt(result.products[i].productQuantityShipped);
@@ -807,6 +811,8 @@ if (!error) {
                           products_temp[i].type =
                             result.products[i].productCategory;
                           delete products_temp[i].productQuantityDelivered;
+                          products_temp[i].batchNumber='';
+                          products_temp[i].id=result.products[i].productID;
                         }
                         console.log(products_temp);
                        if (result.products.length > 0) {
@@ -933,6 +939,7 @@ if (!error) {
                               productName: "",
                               manufacturer: "",
                               productQuantity: "",
+                              batchNumber:"",
                             };
                             setAddProducts((prod) => [...prod, newArr]);
                           }}

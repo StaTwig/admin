@@ -67,10 +67,12 @@ const Table = props => {
                     <div className="col-2 txt1 txtBlue" style={{position:'relative',left:"-1.5%"}}> {/*rTableCell */}
                       <div className="userPic text-right d-flex flex-row">
                         <img src={user} width="27" height="18" alt="User" className="align-self-center" />
+                      <b>  
                         <div className="flex-column d-flex text-left">
                           <span className="text-primary bold">{visible == 'two' ? creatorOrganisation.name : supplier.organisation.name}</span>
                           <p className="address mb-0 text-primary">{visible == 'two' ?creatorOrganisation.id :supplier.organisation.id }</p>
                       </div>
+                      </b>
                       </div>
                     </div>
                 <div className="col-1 txt1" style={{position:'relative',left:"-1%"}}>

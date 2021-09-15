@@ -1,0 +1,191 @@
+@import "../../assets/styles/global.scss";
+
+.payStyle {
+  background-image: url("https://www.payumoney.com/media/images/payby_payumoney/new_buttons/21.png");
+  border: none;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.purchaseform {
+  padding-left: 5rem;
+  padding-right: 3rem;
+  height: 450px;
+  overflow: auto;
+
+  .date-alignment {
+    text-align: right;
+    font-size: 14px;
+  }
+
+  .menu5 {
+    z-index: 1;
+    top: 22rem;
+    right: 10rem !important;
+    left: unset;
+    max-width: 9rem;
+    text-align: center;
+    position: absolute;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transform: translate3d(0px, 38px, 0px);
+    will-change: transform;
+    box-shadow: 0px 3px 10px $grey;
+    border-radius: 0 0 8px 8px;
+    padding: 0.5rem;
+    @media (max-width: 1250px) {
+      top: 25rem;
+    }
+    .btn {
+      width: 120px;
+      height: 30px;
+      padding-top: 0.1rem;
+    }
+  }
+
+  .form-group,
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .reference {
+      color: #707070;
+      text-align: left;
+      margin-bottom: 0px;
+      font: 15px/20px $roboto;
+      @media (max-width: 1250px) {
+        font: 14px/18px $roboto;
+      }
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: #a8a8a8;
+      flex-basis: 67%;
+      flex-grow: inherit;
+      font-size: 14px;
+      @media (max-width: 1250px) {
+        font-size: 13px;
+      }
+    }
+
+    .custom-dropdown .btn-custom-dropdown {
+      font-size: 14px;
+      padding-left: 0;
+      @media (max-width: 1250px) {
+        font-size: 18px;
+      }
+    }
+
+    .user {
+      border: none;
+      background: transparent;
+      border-radius: 0;
+      color: $deepBlue;
+      flex-basis: 80%;
+      flex-grow: inherit;
+      font: 25px Helvetica Neue;
+      font-weight: bold;
+    }
+  }
+  .review {
+    float: right;
+  }
+  .input-group {
+    position: relative;
+    margin-bottom: 1rem;
+    flex-basis: 45%;
+
+    .input-group-append {
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+    }
+  }
+
+  hr {
+    border-width: 2px;
+  }
+}
+
+.productTable {
+  .form-control {
+    font-size: 14px;
+    color: black;
+    @media (max-width: 1250px) {
+      font-size: 13px;
+    }
+  }
+
+  .square-box {
+    width: 20px;
+    height: 20px;
+    background-color: $skyBlue;
+    border-radius: 10px;
+    margin-right: 1rem;
+  }
+  .rTable {
+    .input-group,
+    .form-group {
+      margin-bottom: 0;
+      .form-control {
+        font-size: 15px;
+        @media (max-width: 1250px) {
+          font-size: 14px;
+        }
+      }
+
+      .form-field {
+        border: none;
+      }
+    }
+
+    .rTableHeading {
+      .pro {
+        font-size: 13px;
+        @media (max-width: 1250px) {
+          font-size: 11px;
+        }
+      }
+    }
+
+    .rTableRow {
+      padding: 0;
+
+      .rTableCell {
+        border-right: 1px solid #d6d6d6;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .custom-dropdown .btn-custom-dropdown {
+          font-size: 14px;
+          @media (max-width: 1250px) {
+            font-size: 13px;
+          }
+        }
+
+        &:last-child {
+          border-right: none;
+        }
+
+        .form-group {
+          flex-basis: 100%;
+
+          .form-field {
+            width: 100%;
+          }
+        }
+      }
+    }
+    .rTableRow:hover {
+      background: none;
+      cursor: pointer;
+    }
+  }
+}

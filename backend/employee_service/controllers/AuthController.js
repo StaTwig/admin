@@ -23,6 +23,7 @@ const client = require('twilio')(accountSid, authToken, {
   lazyLoading: true
 });
 const blockchain_service_url = process.env.URL;
+const hf_blockchain_url= process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -418,6 +419,16 @@ exports.checkEmail = [
         });
         await user.save()
 
+        const bc_data = {
+        "username": emailId,
+        "password": "",
+        "orgName": "org1MSP",
+        "role": "",
+        "email": emailId
+    }
+
+      const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+
         try{
           var evid = Math.random().toString(36).slice(2);
           var datee = new Date();
@@ -756,32 +767,44 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
-          const activeWarehouse = await WarehouseModel.findOne({ $and: [{ "id": { $in: user.warehouseId } }, {$or: [{ status: 'ACTIVE' },{ status: 'PENDING' }, { status: { $exists: false } }]} ]})
-    var userData ;
-    if(activeWarehouse) {
-      userData = {
-        id: user.id,
-        firstName: user.firstName,
-        emailId: user.emailId,
-        role: user.role,
-        warehouseId: activeWarehouse.id,
-        organisationId: user.organisationId,
-        walletAddress: address,
-        phoneNumber: user.phoneNumber
-      };
-    }
-    else{
-      userData = {
-        id: user.id,
-        firstName: user.firstName,
-        emailId: user.emailId,
-        role: user.role,
-        warehouseId: [],
-        organisationId: user.organisationId,
-        walletAddress: address,
-        phoneNumber: user.phoneNumber
-      };
-    }
+          const activeWarehouse = await WarehouseModel.find({ $and: [{ "id": { $in: user.warehouseId } }, { $or: [{ status: 'ACTIVE' }, { status: 'PENDING' }, { status: { $exists: false } }] }] })
+         
+          
+          var userData;
+          if (activeWarehouse.length > 0) {
+            let activeWarehouseId = 0;
+            const activeWRs = activeWarehouse.filter(w => w.status == 'ACTIVE');
+            if (activeWRs.length > 0)
+              activeWarehouseId = activeWRs[0].id;
+            else 
+              activeWarehouseId = activeWarehouse[0].id;
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: activeWarehouseId,
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber,
+              org : user.msp,
+              userName: user.emailId
+            };  
+          }
+          else{
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: [],
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber,
+              org : user.msp,
+              userName: user.emailId
+            };
+          }
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
@@ -793,6 +816,17 @@ exports.verifyOtp = [
           const {role} = user;
           userData.permissions = await RbacModel.findOne({role});
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+         const bc_data = {
+          "username": user.emailId,
+          "password": "",
+          "orgName": "org1MSP",
+          "role": "",
+          "email": user.emailId
+      } 
+
+      const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+
           logger.log(
             'info',
             '<<<<< UserService < AuthController < login : user login success',
@@ -836,8 +870,10 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
-            postalAddress
+            postalAddress,
+            createdAt
           } = user;
+          const permissions = await RbacModel.findOne({role});
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
@@ -859,7 +895,9 @@ exports.userInfo = [
               configuration_id: org.configuration_id,
               type: org.type,
               location: postalAddress,
-              warehouses: warehouseArray
+              warehouses: warehouseArray,
+              signup_date: createdAt,
+              permissions: permissions
             };
           }
           else{
@@ -878,7 +916,9 @@ exports.userInfo = [
               configuration_id: null,
               type: null,
               location: postalAddress,
-              warehouses: warehouseArray
+              warehouses: warehouseArray,
+              signup_date: createdAt,
+              permissions: permissions
             };
           }
           logger.log(
@@ -1185,6 +1225,36 @@ exports.addWarehouse = [
         }
       });
 
+      const bc_data = {
+			  "Id": warehouseId,
+			  "Participant_id": "",
+			  "CreatedOn": "",
+			  "CreatedBy": "",
+			  "IsDelete": true,
+			  "OrganizationId": organisationId,
+			  "PostalAddress": postalAddress,
+			  "Region": JSON.stringify(region),
+			  "Country": JSON.stringify(country),
+			  "Location": JSON.stringify(loc),
+			  "Supervisors": supervisors,
+			  "Employees": employees,
+			  "WarehouseInventory": inventoryResult.id,
+			  "Name": title,
+			  "Gender": "",
+			  "Age": "",
+			  "Aadhar": "",
+			  "Vaccineid": ""
+		}
+		
+		
+		  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+		  const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`, bc_data, {
+			headers: {
+				'Authorization': token
+			}
+		})
+		
       try{
         var evid = Math.random().toString(36).slice(2);
         var datee = new Date();

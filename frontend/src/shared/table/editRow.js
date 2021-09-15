@@ -118,7 +118,7 @@ const EditRow = (props) => {
             </div>
             <div className="col-4 align-self-center pt-1 pb-1 border-right bg-white">
               <div className="d-flex pt-1 flex-row justify-content-between">
-                <div className="title col-11 recived-text" style={{position:"relative", left:"-20px"}}>
+                <div className="title col-10 recived-text" style={{position:"relative", left:"-15px"}}>
                   <Select
                     className="no-border"
                     placeholder= {<div className= "select-placeholder-text-prod" >Select Product Name </div>}
@@ -130,7 +130,7 @@ const EditRow = (props) => {
                     options={prods.filter(p=>p.type==categories)}
                   />
                 </div>
-                <div className="title recived-text" style={{position:"relative", top:"7px", left:"-25px"}}>{productId}</div>
+                <div className="col-4 title recived-text" style={{position:"relative", top:"7px", left:"-41px"}}>{productId}</div>
               </div>
             </div>
             <div className="col mt-1 mb-1 border-right">

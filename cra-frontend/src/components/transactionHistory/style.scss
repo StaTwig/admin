@@ -1,0 +1,66 @@
+@import "../../assets/styles/global.scss";
+
+.transactionHistory {
+  padding-right: 3rem;
+  padding-left: 5rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  h4 {
+    color: #0093e9;
+    font-weight: bold;
+  }
+  .trans {
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 10px #00000029;
+    border-radius: 10px;
+    font-size: 13px;
+    @media (max-width: 1320px) {
+      font-size: 12px;
+    }
+
+    h6 {
+      color: #0b65c1;
+      font-weight: bold;
+    }
+    .dateinfo {
+      font-size: 14px;
+    }
+    .recive {
+      font-weight: bolder;
+      color: #000000;
+      font-size: 15px;
+    }
+    .ulheads {
+      padding-inline-start: 0px;
+    }
+    ul,
+    li {
+      list-style: none;
+      font-size: 14px;
+    }
+    .heads {
+      color: #0b65c1;
+      font-weight: bold;
+    }
+    table.table th,
+    table.table td {
+      border: 1px solid white;
+    }
+    .amoun {
+      font-size: 10px;
+    }
+    .money {
+      font-size: 18px;
+    }
+    hr {
+      border-width: 1px;
+      border-color: #d3d3d3;
+      margin-top: 0.2px;
+      margin-bottom: 0.2px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+}

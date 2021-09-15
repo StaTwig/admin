@@ -1,0 +1,50 @@
+@import "../../../assets/styles/global.scss";
+
+.PO {
+  height: 400px;
+  overflow: auto;
+  .date-alignment {
+    text-align: right;
+    font-size: 14px;
+  }
+  .reference {
+    color: #a8a8a8;
+  }
+
+  .custom1 {
+    margin-right: 90px;
+  }
+  .custom2 {
+    margin-right: 80px;
+  }
+  .custom3 {
+    margin-right: 50px;
+  }
+  .custom4 {
+    margin-right: 70px;
+  }
+}
+
+table.table th,
+table.table td {
+  border: 1px solid white;
+}
+hr {
+  border-width: 1px;
+  border-color: #808080;
+}
+
+.poModalTable {
+  th {
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+  }
+
+  .square-box {
+    width: 20px;
+    height: 20px;
+    background-color: #36c2cf;
+    border-radius: 10px;
+    margin-right: 1rem;
+  }
+}

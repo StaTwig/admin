@@ -7,6 +7,7 @@
     "dev": "nodemon tracktrace_server.js"
   },
   "dependencies": {
+    "axios": "^0.21.4",
     "cookie-parser": "~1.4.5",
     "cors": "^2.8.5",
     "debug": "~4.3.1",
@@ -15,6 +16,7 @@
     "express-jwt": "^6.0.0",
     "mongoose": "^5.12.11",
     "morgan": "~1.10.0",
+    "nanoid": "^3.1.25",
     "redis": "^3.1.2",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",

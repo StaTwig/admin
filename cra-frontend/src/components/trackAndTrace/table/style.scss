@@ -1,0 +1,142 @@
+@import "../../../assets/styles/global.scss";
+
+.trackandtrace {
+  .overflow {
+    // height: 400px;
+    overflow: auto;
+  }
+
+  .rTable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .rTableBody {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .rTableRow {
+      display: flex;
+      background: #fff;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 10px #00000029;
+    }
+
+    .rTableFoot {
+      display: table-footer-group;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    .rTableCell {
+      flex: 1;
+      padding: 3px 10px;
+      align-self: center;
+      font-size: 12px;
+      color: #707070;
+    }
+
+    .combine-data {
+      display: flex;
+      align-items: center;
+      .txn {
+        color: $primaryBlue;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        width: 120px;
+        @media (max-width: 1280px) {
+          width: 100px;
+        }
+        @media (min-width: $xl) {
+          font-size: 13px;
+        }
+      }
+      .txn1 {
+        color: #707070;
+        font-size: 9px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        width: 80px;
+        @media (min-width: $xl) {
+          font-size: 9px;
+        }
+      }
+      .wallettext {
+        color: #707070;
+        font-size: 9px;
+      }
+      .address {
+        color: $primaryBlue;
+        font-size: 12px;
+        font-weight: 600;
+        @media (min-width: $xl) {
+          font-size: 13px;
+        }
+      }
+    }
+    .badge {
+      height: 22px;
+      width: 60px;
+      border-radius: 8px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      padding-top: 5px;
+    }
+    .shipped {
+      background-color: #0b65c1;
+    }
+    .trans {
+      background-color: #ffb100;
+    }
+    .sent {
+      background-color: #0093e9;
+    }
+    .received {
+      background-color: #009f12;
+    }
+    .btn-outline-info {
+      border-radius: 8px;
+    }
+    .round-sign {
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 15px;
+    }
+    .rounded-circle {
+      width: 6px;
+      height: 6px;
+    }
+    .primary {
+      background-color: #00000065;
+    }
+    .secondary {
+      background-color: #2a9faa;
+    }
+
+    .rTableCell {
+      color: $black;
+      font-weight: 400;
+      a {
+        color: $black;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+/* @media (max-width: $md) {
+            font-size:6px;
+          }*/

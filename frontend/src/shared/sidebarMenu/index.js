@@ -47,7 +47,7 @@ const SideBar = ({
           </Link>
           </li>
         }
-        {isAuthenticated('network') &&
+        {(isAuthenticated('inboundShipments') || isAuthenticated('outboundShipments')) &&
         <li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
           <Link to="/shipments" className="d-inline-block">
             <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? shipIcon : shipIcon} alt="Shippment" />
