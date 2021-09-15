@@ -15,7 +15,7 @@ var uuid = require("uuid");
 function sendEmail(subject, content, emailId) {
   mailer
     .send(constants.confirmEmails.from, emailId, subject, content)
-    .then(function () {
+    .then(() => {
       return true;
     })
     .catch((err) => {
@@ -43,7 +43,7 @@ function sendWhatsApp(content, mobile) {
       body: content,
       to: `whatsapp:${mobile}`,
     })
-    .then((message) => console.log(message.sid))
+    .then((message) => console.log("WhatsApp SENT", message.sid))
     .catch((err) => console.log(err));
 }
 
@@ -51,7 +51,6 @@ exports.getAlertNotifications = [
   auth,
   async function (req, res) {
     try {
-      // let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
       const resPerPage = Number(req.query.limit) || 10;
       const page = Number(req.query.page) || 1;
       const totalRecords = await Alerts.count({ ...req.params });
@@ -147,11 +146,11 @@ exports.sendOtp = [
         req.body.OTP +
         ". It is valid for 10 minutes";
       if (req.body.mobile) {
-        if (req.body.whatsapp && req.body.whatsapp == "true")
+        if (req.body.whatsapp && req.body.whatsapp == true)
           sendWhatsApp(content, req.body.mobile);
         else sendSMS(content, req.body.mobile);
       }
-      if (req.body.email) sendEmail("OTP TO login", content, req.body.email);
+      if (req.body.email) sendEmail("OTP To Login", content, req.body.email);
       return apiResponse.successResponse(res, "SENT");
     } catch (err) {
       console.log(err);
@@ -181,9 +180,14 @@ exports.sendMessage = [
 exports.pushNotifications = [
   async (req, res) => {
     try {
-      pushNotification(req, req.body.user, req.body.type, req.body.txnId);
+      pushNotification(
+        req,
+        req.body.user,
+        req.body.type,
+        req.body.transactionId
+      );
       if (req.body.mobile) {
-        if (req.body.whatsapp && req.body.whatsapp == "true")
+        if (req.body.whatsapp && req.body.whatsapp == true)
           sendWhatsApp(req.body.content, req.body.mobile);
         else sendSMS(req.body.content, req.body.mobile);
       }
@@ -202,16 +206,14 @@ function pushNotification(req, userId, type, transactionId) {
     const content = req.body.content;
     var notification = new Notification({
       id: uuid.v4(),
-      title: "VaccineLedger alert",
+      title: "Vaccine Ledger Alert",
       message: content,
       user: userId,
       eventType: req.body.eventType,
       transactionId: transactionId,
     });
-    console.log(notification);
     if (type == "ALERT") notification.type = "ALERT";
     else notification.type = "TRANSACTION";
-    notification.transactionId = req.body.transactionId;
     notification.save(function (err, doc) {
       if (err) return console.error(err);
       console.log("Document inserted succussfully!", doc);

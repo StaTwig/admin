@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dc94501c-df8f-4a82-8471-0917aa5e381e",
+		"_postman_id": "4d330ea3-2ee1-45e9-bc2a-7ab7b9603ee9",
 		"name": "notification_service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -60,6 +60,66 @@
 						"api",
 						"notification",
 						"deleteNotification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "push Notification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"whatsapp\":true,\n    \"content\":\"HII TEST 2\",\n    \"mobile\":\"+917901051813\",\n    \"user\":\"EMP100001\",\n    \"type\":\"ALERT\",\n    \"eventType\":\"REQUEST\",\n    \"transactionId\":\"0457774154\",\n    \"subject\":\"TEST SUBJECT\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3006/notificationmanagement/api/notification/pushNotification",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"notificationmanagement",
+						"api",
+						"notification",
+						"pushNotification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"whatsapp\":true,\n    \"content\":\"HII TEST 2\",\n    \"mobile\":\"+917901051813\",\n    \"subject\":\"TEST SUBJECT\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3006/notificationmanagement/api/notification/sendMessage",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"notificationmanagement",
+						"api",
+						"notification",
+						"sendMessage"
 					]
 				}
 			},
