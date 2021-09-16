@@ -522,7 +522,7 @@ const Header = (props) => {
             </div>
           </div>
           {menu && (
-            <div className='slider-menu' ref={ref}>
+            <div style={{borderRadius : "5px"}} className='slider-menu' ref={ref}>
               {
                 <React.Fragment>
                   <div className='slider-item-text p-2'>
