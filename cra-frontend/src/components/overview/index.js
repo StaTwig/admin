@@ -37,8 +37,6 @@ const Overview = (props) => {
           );
     if (a !== "")
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    // console.log(rtnArr)
-    // console.log(props.shipments)
     setShpmnts(rtnArr);
   };
 

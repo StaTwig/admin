@@ -23,9 +23,7 @@ const LoginContainer = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
-
     const data = { emailId: email !== "" ? email : phone };
-    console.log("3", data);
     const result = await sendOtp(data);
     if (result.status === 200) {
       props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);

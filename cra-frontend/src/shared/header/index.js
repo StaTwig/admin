@@ -240,7 +240,7 @@ const Header = (props) => {
       }
     }
     fetchApi();
-  }, [alertType, dispatch]);
+  }, [dispatch]);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -341,8 +341,6 @@ const Header = (props) => {
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
               />
-              <bellIcon />
-
               <div
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -355,112 +353,117 @@ const Header = (props) => {
               </div>
               {showNotifications && (
                 <div className='slider-menu'>
-                  <React.Fragment>
-                    <div
-                      className='nheader'
+                  <div
+                    className='nheader'
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(to right, #0092e8, #0a6bc6)",
+                    }}
+                  >
+                    <text
                       style={{
-                        backgroundImage:
-                          "linear-gradient(to right, #0092e8, #0a6bc6)",
+                        color: "white",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        padding: "10px",
                       }}
                     >
+                      User Notifications
+                    </text>
+                    {notifications?.length >= 0 && (
                       <text
                         style={{
+                          backgroundColor: "#fa7a23",
+                          padding: "5px",
                           color: "white",
-                          fontSize: "20px",
-                          fontWeight: "bold",
-                          padding: "10px",
+                          textAlign: "right",
+                          borderRadius: "6px",
                         }}
                       >
-                        User Notifications
+                        {notifications?.length} new
                       </text>
-                      {notifications?.length >= 0 && (
-                        <text
-                          style={{
-                            backgroundColor: "#fa7a23",
-                            padding: "5px",
-                            color: "white",
-                            textAlign: "right",
-                            borderRadius: "6px",
-                          }}
+                    )}
+                    <div className='section'>
+                      <button
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "white",
+                          borderColor: "transparent",
+                        }}
+                        onClick={() => {
+                          setAlertType("ALERT");
+                          changeNotifications("ALERT");
+                        }}
+                      >
+                        Alerts
+                      </button>
+                      <button
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "white",
+                          borderColor: "transparent",
+                        }}
+                        onClick={() => {
+                          setAlertType("TRANSACTION");
+                          changeNotifications("TRANSACTION");
+                        }}
+                      >
+                        Transactions
+                      </button>
+                    </div>
+                  </div>
+                  {notifications?.length >= 0 ? (
+                    notifications?.map((notifications) => (
+                      <div className='slider-item'>
+                        <div
+                          className='row justify-content-between align-items-center'
+                          onClick={() => clearNotification(notifications)}
                         >
-                          {notifications?.length} new
-                        </text>
-                      )}
-                      <div className='section'>
-                        <button
-                          style={{
-                            backgroundColor: "transparent",
-                            color: "white",
-                            borderColor: "transparent",
-                          }}
-                          onClick={() => {
-                            setAlertType("ALERT");
-                            changeNotifications("ALERT");
-                          }}
-                        >
-                          Alerts
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor: "transparent",
-                            color: "white",
-                            borderColor: "transparent",
-                          }}
-                          onClick={() => {
-                            setAlertType("TRANSACTION");
-                            changeNotifications("TRANSACTION");
-                          }}
-                        >
-                          Transactions
-                        </button>
+                          <div
+                            className='col-sm-10'
+                            style={{ display: "flex" }}
+                          >
+                            <img
+                              style={{
+                                size: "100%",
+                                marginLeft: "-20px",
+                                marginRight: "10px",
+                                marginBottom: "10px",
+                                paddingTop: "5px",
+                              }}
+                              src={notifIcon(notifications)}
+                              alt='notification'
+                            />
+                            <Link
+                              to={
+                                "/" +
+                                viewUrl(notifications) +
+                                notifications.transactionId
+                              }
+                            >
+                              {notifications.message}
+                            </Link>
+                          </div>
+
+                          <div className='col-sm-2'>
+                            <button className='close' aria-label='Close'>
+                              <span aria-hidden='true'>&times;</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='slider-item'>
+                      <div className='row justify-content-between align-items-center'>
+                        <div className='col text-center'>
+                          <div>
+                            <span>No notifications</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    {notifications?.length  ? (
-                      notifications?.map((notifications) => (
-                        <div className='slider-item'>
-                          <div
-                            className='row justify-content-between align-items-center'
-                            onClick={() => clearNotification(notifications)}
-                          >
-                            <div className='col-sm-10'>
-                              <div>
-                                <img
-                                  style={{ size: "15px", marginLeft: "-20px" }}
-                                  src={notifIcon(notifications)}
-                                  alt='notification'
-                                />
-                                <Link
-                                  to={
-                                    "/" +
-                                    viewUrl(notifications) +
-                                    notifications.transactionId
-                                  }
-                                >
-                                  {notifications.message}
-                                </Link>
-                              </div>
-                            </div>
-
-                            <div className='col-sm-2'>
-                              <button className='close' aria-label='Close'>
-                                <span aria-hidden='true'>&times;</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className='slider-item'>
-                        <div className='row justify-content-between align-items-center'>
-                          <div className='col text-center'>
-                            <div>
-                              <span>No notifications</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </React.Fragment>
+                  )}
                 </div>
               )}
             </div>

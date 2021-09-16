@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import "./style.scss";
 import Table from "../../shared/table";
 import TableFilter from "../../shared/advanceTableFilter";
@@ -11,8 +10,6 @@ import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
 import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from "../../assets/icons/add.svg";
-// import user from '../../assets/icons/brand.svg';
-// import Package from '../../assets/icons/package.svg';
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
 import Quantity from "../../assets/icons/Quantity.png";
@@ -25,37 +22,29 @@ const Inventory = (props) => {
   const headers = {
     coloumn1: "Product Name",
     coloumn2: "Product Category",
-    // coloumn3: 'Manufacturer',
     coloumn3: "Date",
     coloumn4: "Quantity",
     coloumn5: "Status",
 
-    img1: <img src={Product} width='16' height='16' alt='' />,
-    img2: <img src={Quantity} width='24' height='16' alt='' />,
-    // img3: <img src={user} width="16" height="16" />,
-    img3: <img src={calender} width='16' height='16' alt='' />,
-    img4: <img src={Quantity} width='24' height='16' alt='' />,
-    img5: <img src={Status} width='16' height='16' alt='' />,
+    img1: <img src={Product} width='16' height='16' alt='Product' />,
+    img2: <img src={Quantity} width='24' height='16' alt='Quantity' />,
+    img3: <img src={calender} width='16' height='16' alt='Calender' />,
+    img4: <img src={Quantity} width='24' height='16' alt='Quantity' />,
+    img5: <img src={Status} width='16' height='16' alt='Status' />,
   };
 
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
     coloumn1: "Product Name",
-    // coloumn2: 'Manufacturer',
     coloumn3: "Quantity",
   };
   const MAX_LENGTH = 20;
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState("");
   const [inventoryExpired, setInventoryExpired] = useState("");
-  // const [productCategory, setProductCategory] = useState('');
-  // const [stockOut, setStockOut] = useState('');
-
   const [inventoriesCount, setInventoriesCount] = useState("");
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState("");
   const [productsList, setProductsList] = useState([]);
   const dispatch = useDispatch();
-  /* const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
-        "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];*/
   const colors = [
     "#D8E5FB",
     "#FFEF83",
@@ -119,13 +108,10 @@ const Inventory = (props) => {
   //   fetchData();
   // }, []);
 
-  // const [skip, setSkip] = useState(0);
   const [limit] = useState(10);
-  // const [count, setCount] = useState(0);
   const [dateFilter, setDateFilter] = useState("");
   const [productNameFilter, setProductNameFilter] = useState("");
   const [productCategoryFilter, setProductCategoryFilter] = useState("");
-  // const [manufacturerFilter, setManufacturerFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
   useEffect(() => {
@@ -525,7 +511,6 @@ const Inventory = (props) => {
                     </button>
                   </Link>
                 </div>
-                {console.log(productsList)}
                 <div
                   className='overflow ml-3'
                   style={{ height: "750px", overflowX: "hidden" }}

@@ -53,7 +53,6 @@ const FormPage = (props) => {
     }
     // async function check(){
     //   const data = await verifyEmailAndPhoneNo("phoneNumber=919461132817");
-    //   console.log(data);
     // }
     // check();
     fetchOrganisationType();
@@ -156,7 +155,6 @@ const FormPage = (props) => {
                     }}
                     validate={(values) => {
                       const errors = {};
-                      console.log(values);
                       if (!values.firstName) {
                         errors.firstName = "Required";
                       }
@@ -217,7 +215,6 @@ const FormPage = (props) => {
                               value={props.firstName}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value.length);
                                 if (e.target.value.length > 0) {
                                   setFirstNameError(false);
                                 } else {
@@ -267,7 +264,6 @@ const FormPage = (props) => {
                               value={props.lastName}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value.length);
                                 if (e.target.value.length > 0) {
                                   setLastNameError(false);
                                 } else {
@@ -318,11 +314,9 @@ const FormPage = (props) => {
                               value={props.email.toLowerCase()}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value);
                                 if (e.target.value.length > 0) {
                                   setPhoneNumberError(false);
                                   setMailError(false);
-                                  console.log(mailError);
                                 } else {
                                   setsignupDisable(true);
                                 }
@@ -394,8 +388,8 @@ const FormPage = (props) => {
                               inputProps={{
                                 name: "phone",
                                 required: false,
-                                defaultCountry: "IN",
-                                enableSearch: true,
+                                // defaultCountry: "IN",
+                                // enableSearch: true,
                               }}
                               value={props.phone}
                               onChange={(e) => {
@@ -413,8 +407,6 @@ const FormPage = (props) => {
                                   ? verifyEmailAndPhoneNo(
                                       `phoneNumber=${props.phone}`
                                     ).then((v) => {
-                                      console.log("Hi");
-                                      console.log(v.data, "Data");
                                       if (v.data[0].phoneNumber) {
                                         setphoneerror(true);
                                         // setsignupDisable(true);
@@ -479,9 +471,7 @@ const FormPage = (props) => {
                                 value={orgType}
                                 onChange={(event, item) => {
                                   setChecker(true);
-                                  console.log("Hi");
                                   if (firstName.length <= 0) {
-                                    console.log("Hi1");
                                     setFirstNameError(true);
                                   }
                                   if (lastName.length <= 0) {
@@ -531,10 +521,8 @@ const FormPage = (props) => {
                       placeholder='Organisation Type'
                       onSelect={item => {
                         setChecker(true);
-                        console.log('Hi');
                         if(firstName.length<=0)
                         {
-                          console.log("Hi1");
                           setFirstNameError(true);
                         }
                         if(lastName.length <=0)
@@ -601,12 +589,7 @@ const FormPage = (props) => {
                             >
                               <Autocomplete
                                 onChange={(event, item) => {
-                                  console.log(item, "item-------------");
-                                  console.log(
-                                    "lastName Length " + lastName.length
-                                  );
                                   if (firstName.length <= 0) {
-                                    console.log("Hi1");
                                     setFirstNameError(true);
                                   }
                                   if (lastName.length <= 0) {
@@ -659,10 +642,8 @@ const FormPage = (props) => {
                     isText={true}
                     placeholder='Organisation Name'
                     onSelect={item => {
-                      console.log("lastName Length " + lastName.length);
                       if(firstName.length<=0)
                       {
-                        console.log("Hi1");
                         setFirstNameError(true);
                       }
                       if(lastName.length <=0)
@@ -695,7 +676,6 @@ const FormPage = (props) => {
                     }}
                     groups={showOrgByType(selectedType)}
                         //   changeFn={(v, e = '') => {
-                        //     console.log(v);
                         //     setFieldValue('org', v); 
                         //     changeFn(v, e);
                         //  }}
@@ -724,7 +704,6 @@ const FormPage = (props) => {
 
                           <div className='text-center'>
                             <br></br>
-                            {console.log(signupDisable)}
                             <button
                               type='submit'
                               className='buttonS btn btn-primary mr-5'

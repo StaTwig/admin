@@ -67,8 +67,8 @@ const VerifyContainer = (props) => {
     <div className='container-fluid p-0'>
       <MobileHeader {...props} />
       <nav className='navbar sticky-top navbar-expand-lg'>
-        <Link className='navbar-brand' href='/'>
-          <img src={logo} width='230' height='30' alt='logo' />
+        <Link className='navbar-brand' to='/'>
+          <img src={logo} width='230' height='30' alt='Vaccine Ledger Logo' />
         </Link>
       </nav>
       <Verify
