@@ -208,26 +208,29 @@ const NewShipment = (props) => {
   const onWarehouseChange = async (value) => {
     try {
       const prods = await getProductsByInventoryId(value);
-      setProducts(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-      setProductsList(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-    } catch (err) {
+      if(prods.data.length === 0){
+        alert("No products availabe in this warehouse")
+        setErrorMessage("err");
+        return false;
+      }
+      setProducts(prods.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));
+      setProductsList(prods.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));    
+                return true;
+                                  } catch (err) {
       setErrorMessage(err);
+      return false;
     }
   };
 
@@ -345,24 +348,23 @@ const NewShipment = (props) => {
         let nn = data.products.length;
         for (i = 0; i < data.products.length; i++) {
           let prdctName = data.products[i].productName;
-          let qty = parseInt(data.products[i].productQuantity);
+          // let qty = parseInt(data.products[i].productQuantity);
           let flag = false;
-
-          for (j = 0; j < productsList.length; j++) {
-            if (productsList[j].productName === prdctName) {
-              if (qty > productsList[j].quantity) {
-                flag = false;
-                break;
-              } else {
-                flag = true;
-              }
+          
+          for(j=0;j<productsList.length;j++)
+          {
+            if(productsList[j].productName===prdctName)
+            {
+              flag = true;
+              break;
+            } else {
+              flag = false;
             }
           }
 
-          if (!flag) {
-            setShipmentError(
-              "Not enough quantity of the selected product available"
-            );
+          if(!flag)
+          {
+            setShipmentError("The product doesn't exist in this inventory");
             //setShipmentError("Check product quantity");
             setOpenShipmentFail(true);
             break;
@@ -993,11 +995,15 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={false}
-                          placeholder='Select Organisation Location'
-                          onChange={(v) => {
-                            onWarehouseChange(v.warehouseInventory);
-                            console.log(v.id);
-                            setSelectedWarehouse(v.id);
+                          placeholder="Select Organisation Location"
+                          onChange={async (v) => {
+                            let res = await onWarehouseChange(v.warehouseInventory);
+                            console.log(res)
+                            if(!res){
+                              return
+                            }
+                            console.log(v.id)
+                            setSelectedWarehouse(v.id)
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
