@@ -1025,6 +1025,9 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
               let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let fromDate = req.query.fromDate ? req.query.fromDate : undefined
+              let toDate = req.query.toDate ? req.query.toDate : undefined
+              
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1056,7 +1059,12 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if (fromDateFilter) {
                 whereQuery['createdAt'] = { $gte: fromDateFilter }
               }
-
+              if(fromDate && toDate){
+                var firstDate =  new Date(fromDate);
+                var nextDate = new Date(toDate)
+                whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+              }
+	      
               if (organisationId) {
                 whereQuery["supplier.supplierOrganisation"] = organisationId
               }
@@ -1169,6 +1177,9 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
               let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let fromDate = req.query.fromDate ? req.query.fromDate : undefined
+              let toDate = req.query.toDate ? req.query.toDate : undefined
+
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1191,6 +1202,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                 default:
                   fromDateFilter = 0;
               }
+
+
 
               let whereQuery = {};
               if (orderId) {
@@ -1216,6 +1229,12 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
 
               if(poStatus){
                 whereQuery["poStatus"]=poStatus
+              }
+
+              if(fromDate && toDate){
+                var firstDate =  new Date(fromDate);
+                var nextDate = new Date(toDate)
+                whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
               }
 	      
               if (productName) {
