@@ -8,16 +8,6 @@ import { setCurrentUser, logoutUser } from "./actions/userActions";
 import setAuthToken from "./utils/setAuthToken";
 
 const store = configureStore();
-
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App history={history} />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
-
 setAuthToken();
 if (localStorage.theLedgerToken) {
   setAuthToken(localStorage.theLedgerToken);
@@ -29,3 +19,12 @@ if (localStorage.theLedgerToken) {
     window.location.href = "/";
   }
 }
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App history={history} />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
