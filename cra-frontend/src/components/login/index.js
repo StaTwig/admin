@@ -21,7 +21,6 @@ const FormLoginPage = (props) => {
     emailFieldDisable,
     phoneFieldDisable,
   } = props;
-  console.log(emailFieldDisable, "emailFieldDisable");
   // const onkeydown = (event) => {
   //   if (event.keyCode  === 13) {
   //       onSendOtp();
@@ -111,7 +110,7 @@ const FormLoginPage = (props) => {
                         inputProps={{
                           name: "phone",
                           required: true,
-                          enableSearch: true,
+                          // enableSearch: true,
                         }}
                         value={phone}
                         onChange={onPhoneChange}
