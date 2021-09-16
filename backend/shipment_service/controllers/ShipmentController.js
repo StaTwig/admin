@@ -4,6 +4,7 @@ require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
+const RequestModel = require("../models/RequestModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -424,22 +425,29 @@ exports.createShipment = [
           data.products.every((p) => {
             const po_product_quantity =
               product.productQuantity || product.quantity;
-              const alreadyShipped = product.productQuantityShipped || null;
-              let shipment_product_qty;
-              if(alreadyShipped){
-                console.log("values are" + parseInt(p.productQuantity), parseInt(alreadyShipped))
-                shipment_product_qty = parseInt(p.productQuantity) + parseInt(alreadyShipped);
-              }
-              else{
-                shipment_product_qty =  p.productQuantity;
-              }
-                  
-            console.log(po_product_quantity, shipment_product_qty, alreadyShipped)
+            const alreadyShipped = product.productQuantityShipped || null;
+            let shipment_product_qty;
+            if (alreadyShipped) {
+              console.log(
+                "values are" + parseInt(p.productQuantity),
+                parseInt(alreadyShipped)
+              );
+              shipment_product_qty =
+                parseInt(p.productQuantity) + parseInt(alreadyShipped);
+            } else {
+              shipment_product_qty = p.productQuantity;
+            }
+
+            console.log(
+              po_product_quantity,
+              shipment_product_qty,
+              alreadyShipped
+            );
             if (
               parseInt(shipment_product_qty) < parseInt(po_product_quantity)
             ) {
               quantityMismatch = true;
-              console.log("quantityMismatch is ", quantityMismatch)
+              console.log("quantityMismatch is ", quantityMismatch);
               return false;
             }
           });
@@ -694,39 +702,44 @@ exports.createShipment = [
         }
 
         //Blockchain Integration
-  const bc_data = {
-         "Id": data.id,
-         "CreatedOn": "",
-         "CreatedBy": "",
-         "IsDelete": true,
-         "ShippingOrderId": "",
-         "PoId": "",
-         "Label": JSON.stringify(data.label),
-         "ExternalShipping": "",
-         "Supplier": JSON.stringify(data.supplier),
-         "Receiver": JSON.stringify(data.receiver),
-         "ImageDetails": "",
-         "TaggedShipments": "",
-        "ShipmentUpdates": JSON.stringify(data.shipmentUpdates),
-         "AirwayBillNo": data.airWayBillNo,
-         "ShippingDate": data.shippingDate,
-         "ExpectedDelDate": data.expectedDeliveryDate,
-         "ActualDelDate": data.actualDeliveryDate,
-         "Status": data.status,
-         "TransactionIds": "",
-         "RejectionRate": "",
-         "Products": JSON.stringify(data.products),
-         "Misc": ""
-                  }
+        const bc_data = {
+          Id: data.id,
+          CreatedOn: "",
+          CreatedBy: "",
+          IsDelete: true,
+          ShippingOrderId: "",
+          PoId: "",
+          Label: JSON.stringify(data.label),
+          ExternalShipping: "",
+          Supplier: JSON.stringify(data.supplier),
+          Receiver: JSON.stringify(data.receiver),
+          ImageDetails: "",
+          TaggedShipments: "",
+          ShipmentUpdates: JSON.stringify(data.shipmentUpdates),
+          AirwayBillNo: data.airWayBillNo,
+          ShippingDate: data.shippingDate,
+          ExpectedDelDate: data.expectedDeliveryDate,
+          ActualDelDate: data.actualDeliveryDate,
+          Status: data.status,
+          TransactionIds: "",
+          RejectionRate: "",
+          Products: JSON.stringify(data.products),
+          Misc: "",
+        };
 
-     let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+        let token =
+          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-     const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/shipment/create`, bc_data, {
-         headers: {
-              'Authorization': token
-                  }
-     })
-   
+        const bc_response = await axios.post(
+          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+          bc_data,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
         /*const userData = {
           stream: shipment_stream,
           key: shipmentId,
@@ -935,28 +948,29 @@ exports.receiveShipment = [
           flag = "YS";
         }
 
-          if (flag == "Y") {
-            const po = await RecordModel.findOne({
-              id: data.poId,
-            });
-            let quantityMismatch = false;
-            po.products.every((product) => {
-              data.products.every((p) => {
-                const po_product_quantity =
-                  product.productQuantity || product.quantity;
-                if(product.productQuantityDelivered)
-                var shipment_product_qty = parseInt(product.productQuantityDelivered) + parseInt(p.productQuantity);
-                else
-                var shipment_product_qty = p.productQuantity;
+        if (flag == "Y") {
+          const po = await RecordModel.findOne({
+            id: data.poId,
+          });
+          let quantityMismatch = false;
+          po.products.every((product) => {
+            data.products.every((p) => {
+              const po_product_quantity =
+                product.productQuantity || product.quantity;
+              if (product.productQuantityDelivered)
+                var shipment_product_qty =
+                  parseInt(product.productQuantityDelivered) +
+                  parseInt(p.productQuantity);
+              else var shipment_product_qty = p.productQuantity;
 
-                if (
-                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-                ) {
-                  quantityMismatch = true;
-                  return false;
-                }
-              });
+              if (
+                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+              ) {
+                quantityMismatch = true;
+                return false;
+              }
             });
+          });
           if (quantityMismatch) {
             po.poStatus = "PARTIALLYFULFILLED";
             await po.save();
@@ -1095,42 +1109,47 @@ exports.receiveShipment = [
           //}, {
           //  status: "RECEIVED"
           //}, );
-  const shipmentData = await ShipmentModel.findOne({
-          id: req.body.id
-        });
+          const shipmentData = await ShipmentModel.findOne({
+            id: req.body.id,
+          });
 
-            const bc_data = {
-            "Id": shipmentData.id,
-            "CreatedOn": "",
-            "CreatedBy": "",
-            "IsDelete": true,
-            "ShippingOrderId": "",
-            "PoId": "",
-            "Label": JSON.stringify(shipmentData.label),
-            "ExternalShipping": "",
-            "Supplier": JSON.stringify(shipmentData.supplier),
-            "Receiver": JSON.stringify(shipmentData.receiver),
-            "ImageDetails": "",
-            "TaggedShipments": "",
-            "ShipmentUpdates": JSON.stringify(shipmentData.shipmentUpdates),
-            "AirwayBillNo": shipmentData.airWayBillNo,
-            "ShippingDate": shipmentData.shippingDate,
-            "ExpectedDelDate": shipmentData.expectedDeliveryDate,
-            "ActualDelDate": shipmentData.actualDeliveryDate,
-            "Status": shipmentData.status,
-            "TransactionIds": "",
-            "RejectionRate": "",
-            "Products": JSON.stringify(shipmentData.products),
-            "Misc": ""
-      }
-      console.log("bc data", bc_data)
-      let token = req.headers['x-access-token'] || req.headers['authorization'];
-      console.log("token", token)
-      const bc_response = await axios.put(`${hf_blockchain_url}/api/v1/transactionapi/shipment/update`, bc_data, {
-            headers: {
-                    'Authorization': token
+          const bc_data = {
+            Id: shipmentData.id,
+            CreatedOn: "",
+            CreatedBy: "",
+            IsDelete: true,
+            ShippingOrderId: "",
+            PoId: "",
+            Label: JSON.stringify(shipmentData.label),
+            ExternalShipping: "",
+            Supplier: JSON.stringify(shipmentData.supplier),
+            Receiver: JSON.stringify(shipmentData.receiver),
+            ImageDetails: "",
+            TaggedShipments: "",
+            ShipmentUpdates: JSON.stringify(shipmentData.shipmentUpdates),
+            AirwayBillNo: shipmentData.airWayBillNo,
+            ShippingDate: shipmentData.shippingDate,
+            ExpectedDelDate: shipmentData.expectedDeliveryDate,
+            ActualDelDate: shipmentData.actualDeliveryDate,
+            Status: shipmentData.status,
+            TransactionIds: "",
+            RejectionRate: "",
+            Products: JSON.stringify(shipmentData.products),
+            Misc: "",
+          };
+          console.log("bc data", bc_data);
+          let token =
+            req.headers["x-access-token"] || req.headers["authorization"];
+          console.log("token", token);
+          const bc_response = await axios.put(
+            `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
+            bc_data,
+            {
+              headers: {
+                Authorization: token,
+              },
             }
-      })
+          );
 
           var datee = new Date();
           datee = datee.toISOString();
@@ -3890,4 +3909,3 @@ function buildPdfReport(req, res, data) {
       console.error(error);
     });
 }
-
