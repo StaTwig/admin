@@ -194,12 +194,11 @@
       .divider {
         // margin-right: 1rem;
         position: relative;
-        left: -2.5rem;
-        bottom: 45px;
-        // border: 1px solid #fff;
-        border: 0.1px solid #d9d9d9;
-        // height: 35px;
-        height: 45px;
+        left: -2rem;
+        bottom: 40px;
+        border: 1px solid #d9d9d9;
+        background-color:#d9d9d9;
+        height: 50px;
         @media screen and (max-width: 768px) {
           display: none;
         }

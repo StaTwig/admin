@@ -471,6 +471,7 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
+          <span className="divider"/>
             <img className='locationimg' src={Location} alt='Location' />
 
             <div className='userName'>

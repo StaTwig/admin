@@ -34,6 +34,9 @@ const Settings = (props) => {
   const [showToolTipForShippingAlerts, setShowToolTipForShippingAlerts] =
     useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [mobileAlert, setMobileAlert] = useState(false);
+  const [disabledQuesMark, setDisabledQuesMark] = useState(true);
+
 
   const setIndicatorValuesForTooltipPanel = (type) => {
     if (type === "orders_alerts") {
@@ -313,8 +316,15 @@ const Settings = (props) => {
                         : "#000000",
                     }}
                   >
-                    {"Mobile SMS"}
+                    {"Mobile SMS"} &nbsp;
+                  {disabledQuesMark && 
+                    <span onClick= {() => {setMobileAlert(true); setDisabledQuesMark(false)}} 
+                          className="ques-mark cursorP">{'(?)'} 
+                    </span>}                                 
                   </label>
+                  {mobileAlert && 
+                    <p className="register-mobile-alert">( Please register Mobile Number to get alerts )</p>
+                  }
                   <label
                     className='subscription-alert-label'
                     style={{ color: "#D80000" }}

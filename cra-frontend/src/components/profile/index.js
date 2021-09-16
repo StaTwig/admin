@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Pen from "../../assets/icons/pen.svg";
+import PenWhite from "../../assets/icons/pen-white.svg";
 import Mail from "../../assets/icons/mail.svg";
 import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
@@ -471,7 +472,7 @@ class Profile extends React.Component {
                                       }}
                                     >
                                       <button
-                                        className='btn btn-blue fontSize20 font-bold pl-2 pr-10'
+                                        className='btn-edit fontSize20 pl-2 pr-10'
                                         style={{
                                           height: "35px",
                                           width: "100px",
@@ -484,7 +485,7 @@ class Profile extends React.Component {
                                           className='mr-2'
                                           alt='Edit'
                                         />
-                                        <span>Edit</span>
+                                        <span className="font-weight-bold edit-text">EDIT</span>
                                       </button>
                                     </Link>
                                   )}
@@ -804,7 +805,7 @@ class Profile extends React.Component {
                   }}
                 >
                   <img
-                    src={Pen}
+                    src={PenWhite}
                     width='15'
                     height='15'
                     className='mr-2 mb-1'
