@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
 import "./style.scss";
-import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/mail.png";
-import hide from "../../assets/icons/hide.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
-import eye from "../../assets/icons/eye.png";
 import Phone from "../../assets/icons/phone.png";
 import TextField from "@material-ui/core/TextField";
-import { Hidden } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 const FormLoginPage = (props) => {
@@ -25,7 +20,6 @@ const FormLoginPage = (props) => {
     emailFieldDisable,
     phoneFieldDisable,
   } = props;
-  console.log(emailFieldDisable, "emailFieldDisable");
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
       onSendOtp();
