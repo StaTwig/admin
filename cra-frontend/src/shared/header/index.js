@@ -502,6 +502,7 @@ const Header = (props) => {
 
             <div className='userPic'>
               <img
+                style={{objectFit:"cover"}}
                 src={`${image}`}
                 alt='profile'
                 className={`rounded rounded-circle ${
