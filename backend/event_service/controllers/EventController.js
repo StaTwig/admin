@@ -110,6 +110,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			let productManufacturer = req.query.productManufacturer ? req.query.productManufacturer : undefined;
 			let status = req.query.status ? req.query.status : undefined;
 			let date = req.query.date ? req.query.date : undefined;
+			let fromDate = req.query.fromDate ? req.query.fromDate : undefined
+			let toDate = req.query.toDate ? req.query.toDate : undefined
 
 			switch (req.query.dateFilter) {
 				case "today":
@@ -147,7 +149,11 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				// nextDate = nextDate.split('T')[0];
 				elementMatchQuery[`createdAt`] = {$gte: new Date(date), $lte: nextDate}
 			}
-
+			if(fromDate && toDate){
+				var firstDate =  new Date(fromDate);
+				var nextDate = new Date(toDate)
+				elementMatchQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+			}
 			if (productName) {
 				elementMatchQuery[`productDetails.id`] = productName;
 			}
