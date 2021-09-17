@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import TotalInventoryAdded from "../../assets/icons/TotalProductCategory.png";
@@ -12,6 +12,8 @@ const ProductInventory = (props) => {
   const [data, setData] = useState([]);
   const [enable, setEnable] = useState(true);
   const { products, inventories } = props;
+  const [scrollX, setscrollX] = useState(0);
+  const [scrolEnd, setscrolEnd] = useState(false);
   const categoryArray = products
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
@@ -53,6 +55,35 @@ const ProductInventory = (props) => {
     });
     setData(prodArray);
   };
+  const ref = useRef(null);
+
+  const scrollCheck = () => {
+    console.log(ref.current.scrollLeft)
+    setscrollX(ref.current.scrollLeft);
+    if (
+      Math.floor(ref.current.scrollWidth - ref.current.scrollLeft) <=
+      ref.current.offsetWidth
+    ) {
+      setscrolEnd(true);
+    } else {
+      setscrolEnd(false);
+    }
+  };
+
+  const scroll = (shift) => {
+    console.log(ref.current)
+    ref.current.scrollLeft += shift;
+    setscrollX(scrollX + shift);
+
+    if (
+      Math.floor(ref.current.scrollWidth - ref.current.scrollLeft) <=
+      ref.current.offsetWidth
+    ) {
+      setscrolEnd(true);
+    } else {
+      setscrolEnd(false);
+    }
+  };
   // setData(inventories.filter(r => r.payloadData.data.products[0].type == cat));
   return (
     <div className='productinventory'>
@@ -82,7 +113,7 @@ const ProductInventory = (props) => {
       </div>
       {enable && (
         <div className='main'>
-          <div className='row ml-0 flex-nowrap'>
+          <div onScroll={scrollCheck} style={{overflowX: 'scroll'}} className='row ml-0 flex-nowrap' ref={ref}>
             {categoryArray.map((cat) => (
               <div
                 className={`panel m-2 ${category === cat && `active`}`}
@@ -96,6 +127,7 @@ const ProductInventory = (props) => {
                 </div>
               </div>
             ))}
+            <button onClick={() => scroll(+100)} style={{position: "absolute", justifySelf: "center"}}>NEXT</button>
           </div>
         </div>
       )}
