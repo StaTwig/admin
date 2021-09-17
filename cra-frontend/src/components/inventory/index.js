@@ -117,7 +117,6 @@ const Inventory = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
-      console.log(result);
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
 

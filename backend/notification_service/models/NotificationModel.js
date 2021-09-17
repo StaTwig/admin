@@ -13,6 +13,7 @@ NotificationSchema = new mongoose.Schema(
     },
     type: { type: String },
     eventType: { type: String },
+    isRead: { type: Boolean, default: false },
     transactionId: { type: String },
   },
   { timestamps: true }
