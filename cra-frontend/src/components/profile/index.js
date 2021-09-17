@@ -624,7 +624,7 @@ class Profile extends React.Component {
                           <span>N/A</span>
                         )}
                       </div>
-                      <div className="row row-list">
+                      <div className="row date-joined text-muted">
                         {this.state.signup_date ? (
                           <span>Joined on {new Date(this.state.signup_date).toString().split('GMT')[0]}</span>
                         ) : (

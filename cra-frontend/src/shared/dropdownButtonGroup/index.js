@@ -58,13 +58,13 @@ const DropdownButtonGroup = (props) => {
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <span className={`${name?.length > 30 && "textNeg"}`}>
+          <div className={`${name?.length > 20 && "textNeg"}`}>
             {useParse ? parse(name) : name.split("|")[0]}
-          </span>
+          </div>
           <br></br>
-          <span style={{display: "block"}}>
+          <div className={`location-add ${name?.length > 20 && "textNeg-title"}`}>
             {useParse ? parse(name) : name.split("|")[1]}
-          </span>
+          </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
@@ -90,11 +90,11 @@ const DropdownButtonGroup = (props) => {
                   >
                     {item?.warehouseInventory ? (
                       <div>
-                        <span style={{fontWeight: "bolder"}}>
+                        <span style={{fontWeight: "bolder", color:"#707070"}}>
                           {item.title}
                         </span>
                         <br></br>
-                        <span>
+                        <span style={{color:"#707070", fontSize:"12px"}}>
                           {item?.warehouseAddress?.firstLine +
                             " " +
                             item?.warehouseAddress?.city 

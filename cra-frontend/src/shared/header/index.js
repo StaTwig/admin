@@ -495,7 +495,7 @@ const Header = (props) => {
                   "," +
                   location?.warehouseAddress?.country
                 )
-                  .substr(0, 25)
+                  .substr(0, 30)
                   .concat("...")}
                 arrowImg={dropdownIcon}
                 onSelect={(item) => {
