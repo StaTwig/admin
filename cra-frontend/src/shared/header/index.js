@@ -5,6 +5,7 @@ import searchingIcon from "../../assets/icons/search.png";
 import bellIcon from "../../assets/icons/notification_blue.png";
 import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Location from "../../assets/icons/location_blue.png";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import DrawerMenu from "./drawerMenu";
 import { Link } from "react-router-dom";
 import {
@@ -58,6 +59,7 @@ const Header = (props) => {
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
   const [visible, setVisible] = useState("one");
+  const [limit, setLimit] = useState(10);
 
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -209,15 +211,19 @@ const Header = (props) => {
     });
   }
 
-  async function changeNotifications(value) {
-    const response = await axios.get(`${config().getAlerts}${value}`);
+  function changeNotifications(value, num) {           
+    if(num)
+    setLimit(limit+num)
+   axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
     setNotifications(response.data.data.data);
+   })
   }
 
   useEffect(() => {
     dispatch(getUserInfo());
+    setLimit(10)
     async function fetchApi() {
-      const response = await axios.get(`${config().getAlerts}${alertType}`);
+      const response = await axios.get(`${config().getAlerts}${alertType}&skip=0&limit=11`);
       setNotifications(response.data.data.data);
       setCount(response.data.data.totalRecords);
       const warehouses = await getActiveWareHouses();
@@ -246,7 +252,7 @@ const Header = (props) => {
       }
     }
     fetchApi();
-  }, [dispatch]);
+  }, [alertType, dispatch]);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -357,9 +363,10 @@ const Header = (props) => {
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div className='slider-menu'>
+                <div className='slider-menu' id="scrollableDiv" >
                   <div
                     className='nheader'
+                    
                     style={{
                       backgroundImage:
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
@@ -391,8 +398,9 @@ const Header = (props) => {
                             visible === "one" ? "nav-item-active" : "nav-item"
                           }
                           onClick={() => {
+                            setLimit(10)
                             setAlertType("ALERT");
-                            changeNotifications("ALERT");
+                            changeNotifications("ALERT", 1);
                             setVisible("one");
                             
                           }}
@@ -412,8 +420,9 @@ const Header = (props) => {
                             visible === "two" ? "nav-item-active " : "nav-item"
                           }
                           onClick={() => {
+                            setLimit(10)
                             setAlertType("TRANSACTION");
-                            changeNotifications("TRANSACTION");
+                            changeNotifications("TRANSACTION", 1);
                             setVisible("two");
                           }}
                         >
@@ -430,9 +439,19 @@ const Header = (props) => {
                       </ul>
                     </div>
                   </div>
+                  <div className='slider-item' onScroll={() => console.log('hi')}>
+                  <InfiniteScroll
+                    dataLength={notifications.length}
+                    next={() => changeNotifications(alertType, 10)}
+                    style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+                    hasMore={true}
+                    loader={<h4>Loading...</h4>}
+                    scrollThreshold={1}
+                    scrollableTarget="scrollableDiv"
+  >
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
-                      <div className='slider-item' key={notifications.id}>
+                      <div  key={notifications.id}>
                         <div onClick={() => clearNotification(notifications)}>
                           <div
                             className='col-sm-10'
@@ -480,6 +499,8 @@ const Header = (props) => {
                       </div>
                     </div>
                   )}
+                    </InfiniteScroll>
+                    </div>
                 </div>
               )}
             </div>
