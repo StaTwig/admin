@@ -268,7 +268,7 @@ const NewInventory = (props) => {
             </button>
           )}
           {menu ? (
-            <div class='menu'>
+            <div className='menu'>
               <button
                 className=' btn btn-outline-info mb-2 '
                 onClick={() => setOpenExcel(true)}
@@ -387,7 +387,7 @@ export default NewInventory;
         </button>*/
 
 /* <div className="d-flex flex-column">
-      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  class="select" onChange={setExcelFile}/>
+      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  className="select" onChange={setExcelFile}/>
       <button
         className="btn-primary btn  w-50 mt-2"
         onClick={uploadExcel}

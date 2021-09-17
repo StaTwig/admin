@@ -410,7 +410,7 @@ class Profile extends React.Component {
                             <b>MY LOCATIONS</b>
                           </h5>
                         </div>
-                        <div class="addloc1">
+                        <div className='addloc1'>
                           {editMode && (
                             <button
                               className="buttonA btn btn-orange font-bold mt-1"

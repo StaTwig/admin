@@ -35,10 +35,11 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
-import userIcon from "../../assets/icons/user.png";
+import userIcon from "../../assets/icons/brand.png";
+import Alert from "../../assets/icons/alert.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
-import orderIcon from "../../assets/icons/Orders.png";
+import alertIcon from "../../assets/icons/alert.png";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const Header = (props) => {
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
+  const [visible, setVisible] = useState("one");
 
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -80,21 +82,23 @@ const Header = (props) => {
     if (notif.eventType === "INVENTORY") {
       return inventoryIcon;
     } else if (notif.eventType === "ORDER") {
-      return orderIcon;
+      return alertIcon;
     } else if (notif.eventType === "SHIPMENT") {
       return shipmentIcon;
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return userIcon;
+    } else if (notif.eventType === "NEW_ALERT") {
+      return Alert;
     }
   }
 
   function viewUrl(notif) {
     if (notif.eventType === "INVENTORY") {
-      return "productlist/";
+      return "inventory/";
     } else if (notif.eventType === "ORDER") {
       return "vieworder/";
     } else if (notif.eventType === "SHIPMENT") {
-      return "viewshipment/";
+      return "viewshipment/:id/";
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return "viewuser/";
     }
@@ -166,7 +170,6 @@ const Header = (props) => {
       axios
         .get(`${config().searchProduct}&productType=${searchString}`)
         .then((resp) => {
-          // console.log(resp.data)
           if (resp.data.data.length > 0)
             props.history.push(`/productinventory/${searchString}`);
           else
@@ -204,7 +207,6 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
-    console.log(response.data.data.data);
     setNotifications(response.data.data.data);
   }
 
@@ -335,7 +337,7 @@ const Header = (props) => {
         </div>
         <div>
           <div className='user-info '>
-            <div className='notifications'>
+            <div className='notifications cursorP'>
               <img
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -346,11 +348,10 @@ const Header = (props) => {
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 {notifications.length && (
-                  <span className='badge badge-light'>
-                    {count}
-                  </span>
+                  <span className='badge badge-light'>{count}</span>
                 )}
               </div>
+              {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
                 <div className='slider-menu'>
                   <div
@@ -360,79 +361,83 @@ const Header = (props) => {
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <text
-                      style={{
-                        color: "white",
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        padding: "10px",
-                      }}
-                    >
+                    <div className='user-notification-head'>
                       User Notifications
-                    </text>
+                    </div>
                     {notifications?.length >= 0 && (
-                      <text
+                      <span
                         style={{
+                          position: "relative",
+                          left: "40px",
                           backgroundColor: "#fa7a23",
-                          padding: "5px",
+                          padding: "6px",
                           color: "white",
-                          textAlign: "right",
-                          borderRadius: "6px",
+                          borderRadius: "8px",
+                          fontSize: "14px",
                         }}
                       >
                         {notifications?.length} new
-                      </text>
+                      </span>
                     )}
-                    <div className='section'>
-                      <button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "white",
-                          borderColor: "transparent",
-                        }}
-                        onClick={() => {
-                          setAlertType("ALERT");
-                          changeNotifications("ALERT");
-                        }}
-                      >
-                        Alerts
-                      </button>
-                      <button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "white",
-                          borderColor: "transparent",
-                        }}
-                        onClick={() => {
-                          setAlertType("TRANSACTION");
-                          changeNotifications("TRANSACTION");
-                        }}
-                      >
-                        Transactions
-                      </button>
+
+                    <div className='tab'>
+                      <ul className='nav nav-pills'>
+                        <li
+                          className={
+                            visible === "one" ? "nav-item-active" : "nav-item"
+                          }
+                          onClick={() => {
+                            setAlertType("ALERT");
+                            changeNotifications("ALERT");
+                            setVisible("one");
+                            
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "one"
+                                ? "nav-link"
+                                : "nav-link tab-text"
+                            }
+                          >
+                            Alerts
+                          </div>
+                        </li>
+                        <li
+                          className={
+                            visible === "two" ? "nav-item-active " : "nav-item"
+                          }
+                          onClick={() => {
+                            setAlertType("TRANSACTION");
+                            changeNotifications("TRANSACTION");
+                            setVisible("two");
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "two"
+                                ? "nav-link"
+                                : "nav-link tab-text"
+                            }
+                          >
+                            Transactions
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
-                      <div className='slider-item'>
-                        <div
-                          className='row justify-content-between align-items-center'
-                          onClick={() => clearNotification(notifications)}
-                        >
+                      <div className='slider-item' key={notifications.id}>
+                        <div onClick={() => clearNotification(notifications)}>
                           <div
                             className='col-sm-10'
                             style={{ display: "flex" }}
                           >
                             <img
-                              style={{
-                                size: "100%",
-                                marginLeft: "-20px",
-                                marginRight: "10px",
-                                marginBottom: "10px",
-                                paddingTop: "5px",
-                              }}
+                              className='notification-icons'
                               src={notifIcon(notifications)}
-                              alt='notification'
+                              alt=''
                             />
                             <Link
                               to={
@@ -440,25 +445,32 @@ const Header = (props) => {
                                 viewUrl(notifications) +
                                 notifications.transactionId
                               }
+                              style={{ textDecoration: "none" }}
                             >
-                              {notifications.message}
+                              <div className='notification-events'>
+                                {notifications.message}
+                              </div>
                             </Link>
                           </div>
-
-                          <div className='col-sm-2'>
-                            <button className='close' aria-label='Close'>
-                              <span aria-hidden='true'>&times;</span>
-                            </button>
+                          <div className='text-secondary notif-time'>
+                            2hrs ago
                           </div>
+                          <img
+                            className='toggle-icon'
+                            alt=''
+                            src={dropdownIcon}
+                          ></img>
                         </div>
                       </div>
                     ))
                   ) : (
                     <div className='slider-item'>
-                      <div className='row justify-content-between align-items-center'>
-                        <div className='col text-center'>
+                      <div className='row'>
+                        <div className='col text-center mt-3 mr-5'>
                           <div>
-                            <span>No notifications</span>
+                            <span className='no-notification'>
+                              No notifications
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -471,7 +483,7 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
-          <span className="divider"/>
+            <span className='divider' />
             <img className='locationimg' src={Location} alt='Location' />
 
             <div className='userName'>
@@ -503,6 +515,7 @@ const Header = (props) => {
 
             <div className='userPic'>
               <img
+                style={{objectFit:"cover"}}
                 src={`${image}`}
                 alt='profile'
                 className={`rounded rounded-circle ${
@@ -522,31 +535,33 @@ const Header = (props) => {
             </div>
           </div>
           {menu && (
-            <div className='slider-menu' ref={ref}>
+            <div style={{borderRadius : "5px", marginTop:"5px"}} className='slider-menu' ref={ref}>
               {
                 <React.Fragment>
                   <div className='slider-item-text p-2'>
                     <p>{profile.name}</p>
                     <p>{profile?.organisation?.split("/")[0]}</p>
                   </div>
+                  <div style={{position:"relative", top:"-10px", width:"100px"}}>
                   <div
-                    className='slider-item border-top-0 p-0'
+                    className='slider-item border-top-0 p-1'
                     onClick={() => props.history.push("/profile")}
                   >
                     My Profile
                   </div>
                   <div
-                    className='slider-item p-0'
+                    className='slider-item p-1'
                     onClick={() => props.history.push("/settings")}
                   >
                     Settings
                   </div>
                   <div
-                    className='slider-item p-0'
+                    className='slider-item p-1'
                     onClick={() => dispatch(logoutUser())}
                   >
                     Logout
                   </div>
+                </div>
                 </React.Fragment>
               }
             </div>
@@ -572,5 +587,4 @@ const Header = (props) => {
     </div>
   );
 };
-
 export default Header;

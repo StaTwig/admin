@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
-import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
+import TotalInventoryAdded from "../../assets/icons/TotalProductCategory.png";
 import Add from "../../assets/icons/add.svg";
 import user from "../../assets/icons/brand.svg";
 import Quantity from "../../assets/icons/Quantity.png";
@@ -81,7 +81,7 @@ const ProductInventory = (props) => {
         </div>
       </div>
       {enable && (
-        <div class='main'>
+        <div className='main'>
           <div className='row ml-0 flex-nowrap'>
             {categoryArray.map((cat) => (
               <div
@@ -89,7 +89,7 @@ const ProductInventory = (props) => {
                 onClick={() => changeType(cat)}
               >
                 <div className='flex flex-column'>
-                  <div className=' picture truck-bg'>
+                  <div className='picture'>
                     <img src={TotalInventoryAdded} alt='truck' />
                   </div>
                   <div className='pt-3 flex'>{cat}</div>

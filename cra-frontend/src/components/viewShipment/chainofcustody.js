@@ -50,18 +50,18 @@ const ChainOfCustody = (props) => {
                     </div>
                     <h6 className='poheads potext mt-3 mb-3'>From</h6>
                     <div className=' d-flex flex-row p-1'>
-                      <span class='w-100  text-secondary'>
+                      <span className='w-100  text-secondary'>
                         Organisation Name{" "}
                       </span>
-                      <span class='w-100 pl-2'>
+                      <span className='w-100 pl-2'>
                         {shipmentData.supplier.org.name}
                       </span>
                     </div>
                     <div className=' d-flex flex-row p-1'>
-                      <span class='w-100 text-secondary'>
+                      <span className='w-100 text-secondary'>
                         Organisation Location{" "}
                       </span>
-                      <span class='w-100 pl-2 '>
+                      <span className='w-100 pl-2 '>
                         {getAddress(
                           shipmentData.supplier.warehouse.warehouseAddress
                         )}
@@ -70,18 +70,18 @@ const ChainOfCustody = (props) => {
                     {/* <h6 className="poheads potext mt-3 mb-3">To</h6>
 
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-100 text-secondary">
+                      <span className="w-100 text-secondary">
                         {" "}
                         Organisation Name{" "}
                       </span>
-                      <span class="w-100 pl-2">{shipmentData.receiver.org.name}</span>
+                      <span className="w-100 pl-2">{shipmentData.receiver.org.name}</span>
                     </div>
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-100 text-secondary">
+                      <span className="w-100 text-secondary">
                         {" "}
                         Organisation Location{" "}
                       </span>
-                      <span class="w-100 pl-2">
+                      <span className="w-100 pl-2">
                         {getAddress(shipmentData.receiver.warehouse.warehouseAddress)}
                       </span>
                     </div> */}
@@ -166,19 +166,19 @@ const ChainOfCustody = (props) => {
                         </div>
                         <h6 className='poheads potext mt-3 mb-3'>To</h6>
                         <div className='d-flex flex-row p-1'>
-                          <span class='w-75 text-secondary'>
+                          <span className='w-75 text-secondary'>
                             Organisation Name{" "}
                           </span>
-                          <span class='w-75'>
+                          <span className='w-75'>
                             {shipmentData.receiver.org.name}
                           </span>
                         </div>
                         <div className='d-flex flex-row p-1'>
-                          <span class='w-75 text-secondary'>
+                          <span className='w-75 text-secondary'>
                             {" "}
                             Organisation Location{" "}
                           </span>
-                          <span class='w-75'>
+                          <span className='w-75'>
                             {shipmentData.receiver.warehouse.warehouseAddress
                               .firstLine +
                               " " +
@@ -269,21 +269,21 @@ const ChainOfCustody = (props) => {
                           </strong>
                         </div>
                         <div className=' d-flex flex-row p-1'>
-                          <span class='w-75 text-secondary'> By </span>
-                          <span class='w-75 '>{custody.updatedBy}</span>
+                          <span className='w-75 text-secondary'> By </span>
+                          <span className='w-75 '>{custody.updatedBy}</span>
                         </div>
                         <div className=' d-flex flex-row p-1'>
-                          <span class='w-75 text-secondary'>
+                          <span className='w-75 text-secondary'>
                             {" "}
                             Organisation Name{" "}
                           </span>
-                          <span class='w-75'>{custody.orgid}</span>
+                          <span className='w-75'>{custody.orgid}</span>
                         </div>
                         <div className=' d-flex flex-row p-1'>
-                          <span class='w-75 text-secondary'>
+                          <span className='w-75 text-secondary'>
                             Updated Location{" "}
                           </span>
-                          <span class='w-75 '>{custody.updatedAt}</span>
+                          <span className='w-75 '>{custody.updatedAt}</span>
                         </div>
                       </div>
                       <div className='col'>

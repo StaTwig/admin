@@ -63,14 +63,14 @@ const Table = (props) => {
                 <div className='d-flex flex-column'>
                   <div className='combine-data'>
                     {" "}
-                    <div class='rounded-circle primary mr-2'></div>
+                    <div className='rounded-circle primary mr-2'></div>
                     <div className='font-weight-bold'>
                       {shipment.receiver.locationId}
                     </div>
                   </div>
                   <div className='combine-data'>
                     {" "}
-                    <div class='rounded-circle secondary mr-2'></div>
+                    <div className='rounded-circle secondary mr-2'></div>
                     <div className='font-weight-bold'>
                       {shipment.supplier.locationId}
                     </div>

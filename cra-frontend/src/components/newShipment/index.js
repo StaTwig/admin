@@ -220,27 +220,31 @@ console.log(user.organisation)
   const onWarehouseChange = async (value) => {
     try {
       const prods = await getProductsByInventoryId(value);
-      if(prods.data.length === 0){
-        alert("No products availabe in this warehouse")
+      if (prods.data.length === 0) {
+        alert("No products availabe in this warehouse");
         setErrorMessage("err");
         return false;
       }
-      setProducts(prods.data.map(item => {
-                                      return {
-                                        value: item.name,
-                                        label: item.name,
-                                        ...item
-                                      };
-                                    }));
-      setProductsList(prods.data.map(item => {
-                                      return {
-                                        value: item.name,
-                                        label: item.name,
-                                        ...item
-                                      };
-                                    }));    
-                return true;
-                                  } catch (err) {
+      setProducts(
+        prods.data.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        })
+      );
+      setProductsList(
+        prods.data.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        })
+      );
+      return true;
+    } catch (err) {
       setErrorMessage(err);
       return false;
     }
@@ -362,11 +366,9 @@ console.log(user.organisation)
           let prdctName = data.products[i].productName;
           // let qty = parseInt(data.products[i].productQuantity);
           let flag = false;
-          
-          for(j=0;j<productsList.length;j++)
-          {
-            if(productsList[j].productName===prdctName)
-            {
+
+          for (j = 0; j < productsList.length; j++) {
+            if (productsList[j].productName === prdctName) {
               flag = true;
               break;
             } else {
@@ -374,8 +376,7 @@ console.log(user.organisation)
             }
           }
 
-          if(!flag)
-          {
+          if (!flag) {
             setShipmentError("The product doesn't exist in this inventory");
             //setShipmentError("Check product quantity");
             setOpenShipmentFail(true);
@@ -1000,15 +1001,17 @@ console.log(user.organisation)
                         <Select
                           styles={customStyles}
                           isDisabled={false}
-                          placeholder="Select Organisation Location"
+                          placeholder='Select Organisation Location'
                           onChange={async (v) => {
-                            let res = await onWarehouseChange(v.warehouseInventory);
-                            console.log(res)
-                            if(!res){
-                              return
+                            let res = await onWarehouseChange(
+                              v.warehouseInventory
+                            );
+                            console.log(res);
+                            if (!res) {
+                              return;
                             }
-                            console.log(v.id)
-                            setSelectedWarehouse(v.id)
+                            console.log(v.id);
+                            setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
@@ -1530,14 +1533,14 @@ console.log(user.organisation)
                   </div>
                 </>
               )}
-              {/* <div class="table productTable mt-2">
-                <div class="rTable">
-                  <div class="rTableHeading">
-                    <div class="rTableHead pro">Product Name</div>
+              {/* <div className="table productTable mt-2">
+                <div className="rTable">
+                  <div className="rTableHeading">
+                    <div className="rTableHead pro">Product Name</div>
 
-                    <div class="rTableHead pro">Manufacturer</div>
+                    <div className="rTableHead pro">Manufacturer</div>
 
-                    <div class="rTableHead pro">Quantity</div>
+                    <div className="rTableHead pro">Quantity</div>
                   </div>
 
                 </div>

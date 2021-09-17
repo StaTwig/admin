@@ -10,7 +10,7 @@
     cursor: pointer;
 
     .filterTitle {
-      font-size: 17px !important;
+      font-size: 15px !important;
       font-weight: bold;
       color: #000;
       margin-left: 5px;
@@ -66,4 +66,7 @@
   font-size: 12px;
   cursor: pointer;
   outline: 0px;
+}
+.btn-outline-warning:hover{
+  color:#fff;
 }

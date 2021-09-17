@@ -109,7 +109,7 @@ const Tracing = (props) => {
             </div>
             <div className='panel commonpanle col'>
               <div className='d-flex justify-content-between'>
-                <div class='row ml-3'>
+                <div className='row ml-3'>
                   <div className='arrow mr-2'>
                     <img
                       src={CurrentTemperature}
