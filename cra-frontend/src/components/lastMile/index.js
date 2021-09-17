@@ -359,7 +359,7 @@ const LastMile = (props) => {
                     <li className='mb-3'>Location</li>
                     <li className='mb-3'>Location Name</li>
                   </ul>
-                  <ul class='text-light'>
+                  <ul className='text-light'>
                     {/* <li className="mb-1">{countryId}</li> */}
                     <li className='mb-3'>{locationCountry}</li>
                     <li className='mb-3'>{locationState}</li>
@@ -367,7 +367,7 @@ const LastMile = (props) => {
                   </ul>
                 </div>
               </div>
-              <div class='panel address searchpanel mb-2 mt-3 ml-1 mr-1'>
+              <div className='panel address searchpanel mb-2 mt-3 ml-1 mr-1'>
                 <div className='row'>
                   <img src={pingrey} height='20' width='15' alt=''></img>
                   <div className='ml-2' style={{ fontSize: "13px" }}>

@@ -134,12 +134,26 @@ exports.updateRequest = [
         { $set: { status: status } },
         { new: true }
       );
-      if (status === "APPROVED") {
+      if (status === "ACCEPTED") {
         const shipment = await ShipmentModel.findOneAndUpdate(
           { id: request.label.labelId },
-          { $push: { acceptedRequests: req.user.id } },
+          { $push: { acceptedRequests: request.id } },
           { new: true, upsert: true }
         );
+      }
+      try {
+        await axios.post(URL, {
+          content: `Request #${request.id} for ${request.type} on ${request.label.labelId} has been ${request.status}`,
+          mobile: request.from.phoneNumber,
+          email: request.from.emailId,
+          user: request.from.id,
+          type: "ALERT",
+          eventType: "REQUEST",
+          transactionId: request.id,
+          subject: `Request ${request.status}`,
+        });
+      } catch (err) {
+        console.log(err);
       }
       return apiResponse.successResponseWithData(
         res,

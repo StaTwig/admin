@@ -362,7 +362,7 @@ const PurchaseForm = (props) => {
           +<span> Add Another Product</span>
         </button>
         {menu ? (
-          <div class='menu5'>
+          <div className='menu5'>
             <button
               className=' btn btn-outline-primary'
               onClick={() => setOpenExcel(true)}

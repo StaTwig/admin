@@ -6,7 +6,10 @@ export default (ComposedComponent) => {
   class RequireAuth extends Component {
     render() {
       const { user } = this.props;
-      switch (user) {
+      let check = user;
+      if (!user)
+        check = localStorage.theLedgerToken;
+      switch (check) {
         case null:
           return <Redirect to='/' />;
 

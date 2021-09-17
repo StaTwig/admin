@@ -35,10 +35,11 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
-import userIcon from "../../assets/icons/user.png";
+import userIcon from "../../assets/icons/brand.png";
+import Alert from "../../assets/icons/alert.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
-import orderIcon from "../../assets/icons/Orders.png";
+import alertIcon from "../../assets/icons/alert.png";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const Header = (props) => {
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
+  const [visible, setVisible] = useState("");
 
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -80,11 +82,13 @@ const Header = (props) => {
     if (notif.eventType === "INVENTORY") {
       return inventoryIcon;
     } else if (notif.eventType === "ORDER") {
-      return orderIcon;
+      return alertIcon;
     } else if (notif.eventType === "SHIPMENT") {
       return shipmentIcon;
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return userIcon;
+    } else if (notif.eventType === "NEW_ALERT") {
+      return Alert;
     }
   }
 
@@ -335,7 +339,7 @@ const Header = (props) => {
         </div>
         <div>
           <div className='user-info '>
-            <div className='notifications' id='notification'>
+            <div className='notifications cursorP'>
               <img
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -349,6 +353,7 @@ const Header = (props) => {
                   <span className='badge badge-light'>{count}</span>
                 )}
               </div>
+              {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
                 <div className='slider-menu'>
                   <div
@@ -358,79 +363,80 @@ const Header = (props) => {
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <span
-                      style={{
-                        color: "white",
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        padding: "10px",
-                      }}
-                    >
+                    <div className='user-notification-head'>
                       User Notifications
-                    </span>
+                    </div>
                     {notifications?.length >= 0 && (
                       <span
                         style={{
+                          position: "relative",
+                          left: "40px",
                           backgroundColor: "#fa7a23",
-                          padding: "5px",
+                          padding: "6px",
                           color: "white",
-                          textAlign: "right",
-                          borderRadius: "6px",
+                          borderRadius: "8px",
+                          fontSize: "14px",
                         }}
                       >
                         {notifications?.length} new
                       </span>
                     )}
-                    <div className='section'>
-                      <button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "white",
-                          borderColor: "transparent",
-                        }}
-                        onClick={() => {
-                          setAlertType("ALERT");
-                          changeNotifications("ALERT");
-                        }}
-                      >
-                        Alerts
-                      </button>
-                      <button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "white",
-                          borderColor: "transparent",
-                        }}
-                        onClick={() => {
-                          setAlertType("TRANSACTION");
-                          changeNotifications("TRANSACTION");
-                        }}
-                      >
-                        Transactions
-                      </button>
+
+                    <div className='tab'>
+                      <ul className='nav nav-pills'>
+                        <li
+                          className={
+                            visible === "one" ? "nav-item" : "nav-item-active"
+                          }
+                          onClick={() => {
+                            setAlertType("ALERT");
+                            changeNotifications("ALERT");
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "one"
+                                ? "nav-link tab-text"
+                                : "nav-link"
+                            }
+                          >
+                            Alerts
+                          </div>
+                        </li>
+                        <li
+                          className={
+                            visible === "two" ? "nav-item-active " : "nav-item"
+                          }
+                          onClick={() => {
+                            setAlertType("TRANSACTION");
+                            changeNotifications("TRANSACTION");
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "two"
+                                ? "nav-link"
+                                : "nav-link tab-text"
+                            }
+                          >
+                            Transactions
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
-                      <div className='slider-item'>
-                        <div
-                          className='row justify-content-between align-items-center'
-                          onClick={() => clearNotification(notifications)}
-                        >
+                      <div className='slider-item' key={notifications.id}>
+                        <div onClick={() => clearNotification(notifications)}>
                           <div
                             className='col-sm-10'
                             style={{ display: "flex" }}
                           >
                             <img
-                              style={{
-                                size: "100%",
-                                marginLeft: "-20px",
-                                marginRight: "10px",
-                                marginBottom: "10px",
-                                paddingTop: "5px",
-                              }}
+                              className='notification-icons'
                               src={notifIcon(notifications)}
-                              alt='notification'
+                              alt=''
                             />
                             <Link
                               style={{ pointerEvents: "none" }}
@@ -439,24 +445,30 @@ const Header = (props) => {
                                 notifications.transactionId
                               )}
                             >
-                              {notifications.message}
+                              <div className='notification-events'>
+                                {notifications.message}
+                              </div>
                             </Link>
                           </div>
-
-                          <div className='col-sm-2'>
-                            <button className='close' aria-label='Close'>
-                              <span aria-hidden='true'>&times;</span>
-                            </button>
+                          <div className='text-secondary notif-time'>
+                            2hrs ago
                           </div>
+                          <img
+                            className='toggle-icon'
+                            alt=''
+                            src={dropdownIcon}
+                          ></img>
                         </div>
                       </div>
                     ))
                   ) : (
                     <div className='slider-item'>
-                      <div className='row justify-content-between align-items-center'>
-                        <div className='col text-center'>
+                      <div className='row'>
+                        <div className='col text-center mt-3 mr-5'>
                           <div>
-                            <span>No notifications</span>
+                            <span className='no-notification'>
+                              No notifications
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -469,6 +481,7 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
+            <span className='divider' />
             <img className='locationimg' src={Location} alt='Location' />
 
             <div className='userName'>
@@ -574,5 +587,4 @@ const Header = (props) => {
     </div>
   );
 };
-
 export default Header;
