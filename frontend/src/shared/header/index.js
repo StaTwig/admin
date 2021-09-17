@@ -216,6 +216,7 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
+    console.log(response.data.data.data);
     setNotifications(response.data.data.data);
   }
 
@@ -223,6 +224,7 @@ const Header = (props) => {
     dispatch(getUserInfo());
     async function fetchApi() {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
+      console.log(response.data.data.data);
       setNotifications(response.data.data.data);
 
       const warehouses = await getActiveWareHouses();
