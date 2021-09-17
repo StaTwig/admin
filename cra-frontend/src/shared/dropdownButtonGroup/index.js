@@ -24,6 +24,7 @@ const DropdownButtonGroup = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
+  console.log(name)
   return (
     <div className='custom-dropdown' ref={ref}>
       {isText ? (
@@ -58,7 +59,11 @@ const DropdownButtonGroup = (props) => {
           onClick={() => setMenu(!menu)}
         >
           <span className={`${name?.length > 30 && "textNeg"}`}>
-            {useParse ? parse(name) : name}
+            {useParse ? parse(name) : name.split("|")[0]}
+          </span>
+          <br></br>
+          <span style={{display: "block"}}>
+            {useParse ? parse(name) : name.split("|")[1]}
           </span>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
@@ -77,25 +82,44 @@ const DropdownButtonGroup = (props) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className='dropdown-item p-1'
+                    className="dropdown-item p-1"
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);
                     }}
                   >
-                    {item?.warehouseInventory
-                      ? item?.warehouseAddress
-                        ? item?.title +
-                          ", " +
-                          item?.warehouseAddress?.firstLine +
-                          " " +
-                          item?.warehouseAddress?.city
-                        : item?.title + "/" + item.postalAddress
-                      : item?.name
-                      ? item?.name
-                      : item?.productName
-                      ? item?.productName
-                      : parse(item)}
+                    {item?.warehouseInventory ? (
+                      <div>
+                        <span style={{fontWeight: "bolder"}}>
+                          {item.title}
+                        </span>
+                        <br></br>
+                        <span>
+                          {item?.warehouseAddress?.firstLine +
+                            " " +
+                            item?.warehouseAddress?.city 
+                          //  + " " +
+                          //   item.postalAddress
+                            }
+                        </span>
+                      </div>
+                    ) : (
+                      <span>
+                        {item?.warehouseInventory
+                          ? item?.warehouseAddress
+                            ? item?.title +
+                              " " +
+                              item?.warehouseAddress?.firstLine +
+                              " " +
+                              item?.warehouseAddress?.city
+                            : item?.title + "/" + item.postalAddress
+                          : item?.name
+                          ? item?.name
+                          : item?.productName
+                          ? item?.productName
+                          : parse(item)}
+                      </span>
+                    )}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>

@@ -490,7 +490,7 @@ const Header = (props) => {
               <DropdownButton
                 name={(
                   location?.title +
-                  "\n" +
+                  "|" +
                   location?.warehouseAddress?.city +
                   "," +
                   location?.warehouseAddress?.country
