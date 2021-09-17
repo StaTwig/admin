@@ -358,7 +358,7 @@ const UpdateStatus = (props) => {
                               Drag and drop files here{" "}
                               <input
                                 type='file'
-                                class='select'
+                                className='select'
                                 onChange={setFile}
                               />{" "}
                             </label>
@@ -379,13 +379,13 @@ const UpdateStatus = (props) => {
                             }}
                           >
                             <label
-                              class='btn btn-primary'
+                              className='btn btn-primary'
                               style={{ margin: 0, height: "5vh" }}
                             >
                               Browse Files
                               <input
                                 type='file'
-                                class='select'
+                                className='select'
                                 onChange={setFile}
                               />{" "}
                             </label>

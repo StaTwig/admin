@@ -43,7 +43,7 @@ const Track = (props) => {
       setOp(1);
       onSeach(props.match.params.id);
     }
-  }, [onSeach, props, shippmentChainOfCustodyData]);
+  }, [props, shippmentChainOfCustodyData]);
 
   const onSearchChange = (e) => {
     console.log(e.target.value);

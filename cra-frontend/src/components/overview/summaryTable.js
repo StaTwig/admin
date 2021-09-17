@@ -17,14 +17,17 @@ const SummaryTable = (props) => {
     return state.user;
   });
   const { shipments } = props;
-  console.log({ shipments });
-
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
         <div className='summaryTable justify-content-center '>
           <div className='d-flex flex-column '>
-            <img src={EmptyShipments} height='200' width='200' alt='' />
+            <img
+              src={EmptyShipments}
+              height='200'
+              width='200'
+              alt='Shipments'
+            />
           </div>
         </div>
       ) : (
@@ -51,7 +54,11 @@ const SummaryTable = (props) => {
                       style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
                       className='rounded'
                     >
-                      <img style={{ height: 15 }} src={alertShip} alt='' />
+                      <img
+                        style={{ height: 15 }}
+                        src={alertShip}
+                        alt='Shipments'
+                      />
                     </span>
                   )}
                 </div>
@@ -117,7 +124,7 @@ const SummaryTable = (props) => {
                   height='15'
                   width='15'
                   className='mr-2'
-                  alt=''
+                  alt='Received Shipments'
                 ></img>
                 <b>From</b>
               </span>
@@ -141,7 +148,7 @@ const SummaryTable = (props) => {
                   height='15'
                   width='20'
                   className='mr-2'
-                  alt=''
+                  alt='Sent Shipments'
                 ></img>
                 <b>To</b>
               </span>
@@ -164,7 +171,7 @@ const SummaryTable = (props) => {
                   height='15'
                   width='15'
                   className='mr-2'
-                  alt=''
+                  alt='Status'
                 ></img>
                 <b>Status</b>
               </span>

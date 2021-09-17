@@ -439,7 +439,6 @@ const AddLocation = (props) => {
                   </div>
                   <div className='d-flex flex-row-reverse'>
                     <button
-                      class='close'
                       className='btn btn-yellow float-right font-weight-bold'
                       disabled={
                         !(
@@ -474,7 +473,6 @@ const AddLocation = (props) => {
         </div>
         <div>
           {/* <button
-            class="close"
             className="btn btn-blue btn-lg float-right"
             style={{ position: "relative", top: "-65vh", right: "22px" }}
           >
