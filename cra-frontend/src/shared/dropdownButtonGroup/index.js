@@ -86,9 +86,9 @@ const DropdownButtonGroup = (props) => {
                     {item?.warehouseInventory
                       ? item?.warehouseAddress
                         ? item?.title +
-                          "/" +
-                          item?.warehouseAddress?.firstLine +
                           ", " +
+                          item?.warehouseAddress?.firstLine +
+                          " " +
                           item?.warehouseAddress?.city
                         : item?.title + "/" + item.postalAddress
                       : item?.name

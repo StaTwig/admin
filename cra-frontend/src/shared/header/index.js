@@ -515,6 +515,7 @@ const Header = (props) => {
 
             <div className='userPic'>
               <img
+                style={{objectFit:"cover"}}
                 src={`${image}`}
                 alt='profile'
                 className={`rounded rounded-circle ${
@@ -534,31 +535,33 @@ const Header = (props) => {
             </div>
           </div>
           {menu && (
-            <div className='slider-menu' ref={ref}>
+            <div style={{borderRadius : "5px", marginTop:"5px"}} className='slider-menu' ref={ref}>
               {
                 <React.Fragment>
                   <div className='slider-item-text p-2'>
                     <p>{profile.name}</p>
                     <p>{profile?.organisation?.split("/")[0]}</p>
                   </div>
+                  <div style={{position:"relative", top:"-10px", width:"100px"}}>
                   <div
-                    className='slider-item border-top-0 p-0'
+                    className='slider-item border-top-0 p-1'
                     onClick={() => props.history.push("/profile")}
                   >
                     My Profile
                   </div>
                   <div
-                    className='slider-item p-0'
+                    className='slider-item p-1'
                     onClick={() => props.history.push("/settings")}
                   >
                     Settings
                   </div>
                   <div
-                    className='slider-item p-0'
+                    className='slider-item p-1'
                     onClick={() => dispatch(logoutUser())}
                   >
                     Logout
                   </div>
+                </div>
                 </React.Fragment>
               }
             </div>
