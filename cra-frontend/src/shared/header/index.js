@@ -101,8 +101,6 @@ const Header = (props) => {
       return "viewshipment/:id/";
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return "viewuser/";
-    } else {
-      return "";
     }
   }
 
@@ -353,8 +351,7 @@ const Header = (props) => {
                   <span className='badge badge-light'>{count}</span>
                 )}
               </div>
-              {showNotifications && 
-              <div className="triangle-up"></div>}
+              {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
                 <div className='slider-menu'>
                   <div
@@ -364,78 +361,80 @@ const Header = (props) => {
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <span
-                      style={{
-                        color: "white",
-                        fontSize: "20px",
-                        fontWeight: "bold",
-                        padding: "10px",
-                      }}
-                    >
+                    <div className='user-notification-head'>
                       User Notifications
-                    </span>
+                    </div>
                     {notifications?.length >= 0 && (
                       <span
                         style={{
-                          position:"relative",
-                          left:"40px",
+                          position: "relative",
+                          left: "40px",
                           backgroundColor: "#fa7a23",
                           padding: "6px",
                           color: "white",
                           borderRadius: "8px",
-                          fontSize:"14px",
+                          fontSize: "14px",
                         }}
                       >
                         {notifications?.length} new
                       </span>
                     )}
-                    
+
                     <div className='tab'>
                       <ul className='nav nav-pills'>
-                      <li
-                      className={visible === "one" ? "nav-item" : "nav-item-active"}
-                      onClick={() => {
-                        setAlertType("ALERT");
-                        changeNotifications("ALERT");
-                      }}
-                    >
-                      <div className={visible === "one" ? "nav-link tab-text" : "nav-link"}>
-                        Alerts
-                      </div>
-                    </li>
-                    <li
-                      className={visible === "two" ? "nav-item-active " : "nav-item"}
-                      onClick={() => {
-                        setAlertType("TRANSACTION");
-                        changeNotifications("TRANSACTION");
-                      }}
-                    >
-                      <div className={visible === "two" ? "nav-link" : "nav-link tab-text"}>
-                        Transactions
-                      </button>
+                        <li
+                          className={
+                            visible === "one" ? "nav-item" : "nav-item-active"
+                          }
+                          onClick={() => {
+                            setAlertType("ALERT");
+                            changeNotifications("ALERT");
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "one"
+                                ? "nav-link tab-text"
+                                : "nav-link"
+                            }
+                          >
+                            Alerts
+                          </div>
+                        </li>
+                        <li
+                          className={
+                            visible === "two" ? "nav-item-active " : "nav-item"
+                          }
+                          onClick={() => {
+                            setAlertType("TRANSACTION");
+                            changeNotifications("TRANSACTION");
+                          }}
+                        >
+                          <div
+                            className={
+                              visible === "two"
+                                ? "nav-link"
+                                : "nav-link tab-text"
+                            }
+                          >
+                            Transactions
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
                       <div className='slider-item' key={notifications.id}>
-                        <div
-                          className='row justify-content-between align-items-center'
-                          onClick={() => clearNotification(notifications)}
-                        >
+                        <div onClick={() => clearNotification(notifications)}>
                           <div
                             className='col-sm-10'
                             style={{ display: "flex" }}
                           >
                             <img
-                              style={{
-                                size: "100%",
-                                marginLeft: "-20px",
-                                marginRight: "10px",
-                                marginBottom: "10px",
-                                paddingTop: "5px",
-                              }}
+                              className='notification-icons'
                               src={notifIcon(notifications)}
-                              alt='notification'
+                              alt=''
                             />
                             <Link
                               to={
@@ -443,14 +442,21 @@ const Header = (props) => {
                                 viewUrl(notifications) +
                                 notifications.transactionId
                               }
-                              style={{textDecoration:"none"}}
+                              style={{ textDecoration: "none" }}
                             >
-                              <div className="notification-events">{notifications.message}
+                              <div className='notification-events'>
+                                {notifications.message}
                               </div>
                             </Link>
                           </div>
-                          <div className="text-secondary notif-time">2hrs ago</div>
-                          <img className='toggle-icon' alt="" src={dropdownIcon}></img>
+                          <div className='text-secondary notif-time'>
+                            2hrs ago
+                          </div>
+                          <img
+                            className='toggle-icon'
+                            alt=''
+                            src={dropdownIcon}
+                          ></img>
                         </div>
                       </div>
                     ))
@@ -459,7 +465,9 @@ const Header = (props) => {
                       <div className='row'>
                         <div className='col text-center mt-3 mr-5'>
                           <div>
-                            <span className="no-notification">No notifications</span>
+                            <span className='no-notification'>
+                              No notifications
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -472,7 +480,7 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
-          <span className="divider"/>
+            <span className='divider' />
             <img className='locationimg' src={Location} alt='Location' />
 
             <div className='userName'>
@@ -573,5 +581,4 @@ const Header = (props) => {
     </div>
   );
 };
-
 export default Header;
