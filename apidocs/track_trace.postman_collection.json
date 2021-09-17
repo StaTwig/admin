@@ -230,7 +230,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3005/tracktracemanagement/api/request/updateRequest?id=9251599236&status=APPROVED",
+					"raw": "localhost:3005/tracktracemanagement/api/request/updateRequest?id=9050396925&status=ACCEPTED",
 					"host": [
 						"localhost"
 					],
@@ -244,11 +244,11 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "9251599236"
+							"value": "9050396925"
 						},
 						{
 							"key": "status",
-							"value": "APPROVED"
+							"value": "ACCEPTED"
 						}
 					]
 				}

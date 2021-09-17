@@ -26,7 +26,12 @@ function GetState(permission) {
   const user = useSelector((state) => {
     return state.user;
   });
-  return user.permissions.permissions.indexOf(permission) > -1 ? true : false;
+  let permissionArr = [];
+  if (user)
+    permissionArr = user.permissions.permissions;
+  else
+    permissionArr = localStorage.bkp.split(',');
+  return permissionArr.indexOf(permission) > -1 ? true : false;
 }
 
 export function isAuthenticated(permission) {

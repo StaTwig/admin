@@ -107,7 +107,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-success btn-sm font-weight-bold'
+                  className='btn btn-outline-success btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("ACCEPTED")}
                 >
@@ -122,7 +122,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
@@ -138,7 +138,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-warning btn-sm font-weight-bold'
+                  className='btn btn-outline-warning btn-sm font-weight-bold'
                   color='primary'
                   onClick={() =>
                     setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")
@@ -156,7 +156,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-info btn-sm font-weight-bold'
+                  className='btn btn-outline-info btn-sm font-weight-bold'
                   color='primary'
                   onClick={() =>
                     setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")
@@ -174,7 +174,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-info btn-sm font-weight-bold'
+                  className='btn btn-outline-info btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("FULLYFULFILLED")}
                 >
@@ -189,7 +189,7 @@ const AdvanceTableFilter = (props) => {
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-secondary btn-sm font-weight-bold'
+                  className='btn btn-outline-secondary btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("REJECTED")}
                 >
@@ -198,7 +198,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <Button
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("")}
                 >
@@ -259,7 +259,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("CREATED")}
@@ -275,7 +275,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-success btn-sm font-weight-bold'
+                  className='btn btn-outline-success btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
@@ -285,7 +285,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <Button
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("")}
                 >
@@ -372,7 +372,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("ADD")}
@@ -388,7 +388,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-warning btn-sm font-weight-bold'
+                  className='btn btn-outline-warning btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
@@ -404,7 +404,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-success btn-sm font-weight-bold'
+                  className='btn btn-outline-success btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}
@@ -414,7 +414,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <Button
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
                 >
@@ -471,7 +471,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("CREATED")}
@@ -487,7 +487,7 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
@@ -497,7 +497,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <Button
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("")}
                 >
@@ -539,7 +539,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setPoDeliveryLocationFilterOnSelect("")}
@@ -678,7 +678,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setToShipmentFilterOnSelect("")}
@@ -751,7 +751,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setPoProductNameFilterOnSelect("")}
@@ -822,7 +822,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryfiFilterOnSelect("ADD")}
@@ -833,7 +833,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-outline-primary btn-sm font-weight-bold'
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
@@ -844,7 +844,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
@@ -932,7 +932,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setFromShipmentFilterOnSelect("")}
@@ -999,7 +999,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setPoOrderIdFilterOnSelect("")}
@@ -1160,7 +1160,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryProductCategoryFilterOnSelect("")}
@@ -1265,7 +1265,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setShipmentIdFilterOnSelect("")}
@@ -1335,7 +1335,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setPoToFilterOnSelect("")}
@@ -1402,7 +1402,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setPoFromFilterOnSelect("")}
@@ -1474,7 +1474,7 @@ const AdvanceTableFilter = (props) => {
               <StyledMenuItem>
                 <Button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  class='btn btn-link btn-sm font-weight-bold'
+                  className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryProductNameFilterOnSelect("")}
@@ -1647,7 +1647,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ padding: "10px", height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("today")}
                   >
                     <b>Today</b>
@@ -1657,7 +1657,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("week")}
                   >
                     <b>This Week</b>
@@ -1667,7 +1667,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("month")}
                   >
                     <b>This Month</b>
@@ -1677,7 +1677,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("threeMonth")}
                   >
                     <b>Last 3 Months</b>
@@ -1687,7 +1687,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("sixMonth")}
                   >
                     <b>Last 6 Months</b>
@@ -1697,7 +1697,7 @@ const AdvanceTableFilter = (props) => {
                   <Button
                     type='button'
                     style={{ height: "40px", width: "130px" }}
-                    class='btn btn-outline-primary btn-sm'
+                    className='btn btn-outline-primary btn-sm'
                     onClick={() => setDateFilterOnSelect("year")}
                   >
                     <b>This Year</b>

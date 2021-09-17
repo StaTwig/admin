@@ -152,16 +152,20 @@ const AddProduct = (props) => {
                   alt=''
                 />
 
-                <label class='btn-primary btn browse'>
+                <label className='btn-primary btn browse'>
                   ADD IMAGE
-                  <input type='file' class='select' onChange={setFile} />{" "}
+                  <input
+                    type='file'
+                    className='select'
+                    onChange={setFile}
+                  />{" "}
                 </label>
                 <div>or</div>
-                <label class='btn-primary btn browse'>
+                <label className='btn-primary btn browse'>
                   BROWSE FILES
                   <input
                     type='file'
-                    class='select'
+                    className='select'
                     onChange={setExcelFile}
                   />{" "}
                 </label>

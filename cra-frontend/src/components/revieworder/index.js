@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ViewTable from "./table/viewTable";
 import { useSelector, useDispatch } from "react-redux";
 import OrderIcon from "../../assets/icons/order.svg";
-import Pen from "../../assets/icons/edit.png";
+import Pen from "../../assets/icons/pen.svg";
 import "./style.scss";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import ReviewOrderPopUp from "./revieworderpopup";
@@ -209,7 +209,7 @@ const ReviewOrder = (props) => {
               <span>Create New Order</span>
             </button>
             <button
-              className='btn-outline-primary btn mr-3'
+              className='btn-edit btn mr-3'
               onClick={() => props.history.push("/neworder")}
             >
               <img
@@ -219,7 +219,7 @@ const ReviewOrder = (props) => {
                 className='mr-2'
                 alt='edit'
               />
-              <span>EDIT</span>
+              <span className="edit-text">EDIT</span>
             </button>
             {openReviewOrder && (
               <Modal
