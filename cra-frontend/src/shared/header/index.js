@@ -57,7 +57,7 @@ const Header = (props) => {
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
-  const [visible, setVisible] = useState("");
+  const [visible, setVisible] = useState("one");
 
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -384,18 +384,20 @@ const Header = (props) => {
                       <ul className='nav nav-pills'>
                         <li
                           className={
-                            visible === "one" ? "nav-item" : "nav-item-active"
+                            visible === "one" ? "nav-item-active" : "nav-item"
                           }
                           onClick={() => {
                             setAlertType("ALERT");
                             changeNotifications("ALERT");
+                            setVisible("one");
+                            
                           }}
                         >
                           <div
                             className={
                               visible === "one"
-                                ? "nav-link tab-text"
-                                : "nav-link"
+                                ? "nav-link"
+                                : "nav-link tab-text"
                             }
                           >
                             Alerts
@@ -408,6 +410,7 @@ const Header = (props) => {
                           onClick={() => {
                             setAlertType("TRANSACTION");
                             changeNotifications("TRANSACTION");
+                            setVisible("two");
                           }}
                         >
                           <div
