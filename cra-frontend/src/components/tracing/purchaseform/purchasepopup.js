@@ -24,7 +24,7 @@ const PurchasePopUp = (props) => {
             <label className='reference custom1'>External PO ID: </label>
             <p>
               {props.shipments.poDetails[0].externalId}
-              <span class='badge badge-success ml-5'>Success</span>
+              <span className='badge badge-success ml-5'>Success</span>
             </p>
           </div>
           <div className='input-group text-primary font-weight-bold mb-2 '>
@@ -67,16 +67,16 @@ const PurchasePopUp = (props) => {
         <thead>
           <tr>
             <th scope='col' />
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Product ID
             </th>
-            <th scope='col ' class='text-secondary'>
+            <th scope='col ' className='text-secondary'>
               Product Name
             </th>
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Manufacturer
             </th>
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Quantity
             </th>
           </tr>

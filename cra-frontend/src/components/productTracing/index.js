@@ -55,7 +55,7 @@ const ProductTracing = (props) => {
         </div>
         <div className='panel'>
           <div className='d-flex justify-content-between'>
-            <div class='row'>
+            <div className='row'>
               <img
                 src={CurrentTemperature}
                 width='20'

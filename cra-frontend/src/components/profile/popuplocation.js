@@ -8,8 +8,6 @@ import SuccessPopup from "../../shared/PopUp/successPopUp";
 import Modal from "../../shared/modal";
 
 const PopUpLocation = (props) => {
-  console.log("Pop Up Detail");
-  console.log(props.wareHouses);
   // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse] = useState({});
   const [selectLocation, setSelectLocation] = useState("Select Location");
@@ -17,13 +15,12 @@ const PopUpLocation = (props) => {
   const [alertFlag, setAlertFlag] = useState(false);
 
   const closeModalAddedLocation = () => {
+    console.log(props.history);
     setAddedLocationModal(false);
     props.history.push("/profile");
   };
 
   const updateStatus = async (wareHouse) => {
-    console.log("warehouse for post");
-    console.log(wareHouse);
     const data = {
       title: wareHouse.title,
       organisationId: wareHouse.organisationId,
@@ -118,7 +115,7 @@ const PopUpLocation = (props) => {
         </div>
       </div>
 
-      <div class='wrapper1'>
+      <div className='wrapper1'>
         <button
           className='buttonS btn btn-primary mt-3'
           onClick={() => {

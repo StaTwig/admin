@@ -34,9 +34,9 @@ const ShipmentDetails = (props) => {
         //  </ul>
       }
       <div className='container'>
-        <div class='row'>
-          <div class='col-sm mb-1 text-secondary styler'>Shipment Date</div>
-          <div class='col-sm mb-1 styler'>
+        <div className='row'>
+          <div className='col-sm mb-1 text-secondary styler'>Shipment Date</div>
+          <div className='col-sm mb-1 styler'>
             {props.shipments.shippingDate.split("T")[0].split("-")[2] +
               "/" +
               props.shipments.shippingDate.split("T")[0].split("-")[1] +
@@ -44,45 +44,49 @@ const ShipmentDetails = (props) => {
               props.shipments.shippingDate.split("T")[0].split("-")[0]}
           </div>
         </div>
-        <div class='row'>
-          <div class='col-sm' style={{ padding: 0 }}>
+        <div className='row'>
+          <div className='col-sm' style={{ padding: 0 }}>
             <h6 className='poheads potext mt-3 mb-3 ml-2 styler_header'>
               From
             </h6>
           </div>
-          <div class='col-sm'></div>
+          <div className='col-sm'></div>
         </div>
-        <div class='row'>
-          <div class='col-sm mb-1 text-secondary styler'>Organisation Name</div>
-          <div class='col-sm mb-1 styler'>
+        <div className='row'>
+          <div className='col-sm mb-1 text-secondary styler'>
+            Organisation Name
+          </div>
+          <div className='col-sm mb-1 styler'>
             {props.shipments.supplier.org.name}
           </div>
         </div>
-        <div class='row'>
-          <div class='col-sm mb-1 text-secondary styler'>
+        <div className='row'>
+          <div className='col-sm mb-1 text-secondary styler'>
             Organisation Location
           </div>
-          <div class='col-sm mb-1 styler'>
+          <div className='col-sm mb-1 styler'>
             {props.shipments.supplier.warehouse.title}
           </div>
         </div>
-        <div class='row'>
-          <div class='col-sm' style={{ padding: 0 }}>
+        <div className='row'>
+          <div className='col-sm' style={{ padding: 0 }}>
             <h6 className='poheads potext mt-3 mb-3 ml-2'>To</h6>
           </div>
-          <div class='col-sm'></div>
+          <div className='col-sm'></div>
         </div>
-        <div class='row'>
-          <div class='col-sm mb-1 text-secondary styler'>Organisation Name</div>
-          <div class='col-sm mb-1 styler'>
+        <div className='row'>
+          <div className='col-sm mb-1 text-secondary styler'>
+            Organisation Name
+          </div>
+          <div className='col-sm mb-1 styler'>
             {props.shipments.receiver.org.name}
           </div>
         </div>
-        <div class='row'>
-          <div class='col-sm mb-1 text-secondary styler'>
+        <div className='row'>
+          <div className='col-sm mb-1 text-secondary styler'>
             Organisation Location
           </div>
-          <div class='col-sm mb-1 styler'>
+          <div className='col-sm mb-1 styler'>
             {/* {props.shipments.receiver.org.postalAddress.split(',')[0]} */}
             {props.shipments.receiver.warehouse.title}
           </div>

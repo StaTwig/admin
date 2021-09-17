@@ -465,7 +465,7 @@ const ReceiveShipment = (props) => {
                   />
                   <label className='mt-3'>
                     Drag and drop files here{" "}
-                    <input type='file' class='select' onChange={setFile} />{" "}
+                    <input type='file' className='select' onChange={setFile} />{" "}
                   </label>
                 </div>
                 <div
@@ -484,14 +484,14 @@ const ReceiveShipment = (props) => {
                   }}
                 >
                   <label
-                    class='btn btn-primary'
+                    className='btn btn-primary'
                     style={{ margin: 0, height: "max-content" }}
                   >
                     Browse Files
                     <input
                       type='file'
                       multiple={true}
-                      class='select'
+                      className='select'
                       onChange={setFile}
                     />{" "}
                   </label>

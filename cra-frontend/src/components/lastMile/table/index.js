@@ -67,4 +67,4 @@ const Table = (props) => {
 
 export default Table;
 
-/*   <button type="button" class="btn btn-outline-primary">SHOW MORE</button>*/
+/*   <button type="button" className="btn btn-outline-primary">SHOW MORE</button>*/

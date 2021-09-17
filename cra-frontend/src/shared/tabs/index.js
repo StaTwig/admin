@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./style.scss";
 
 const Tabs = (props) => {
@@ -14,13 +13,14 @@ const Tabs = (props) => {
               props.setShowExportFilter(false);
             }}
           >
-            <Link
+            <div
+              id='tab-content'
               className={
                 props.visible === "one" ? "nav-link" : "nav-link text-secondary"
               }
             >
               Inbound
-            </Link>
+            </div>
           </li>
         )}
         {props.isAuthenticated("outboundShipments") && (
@@ -33,13 +33,14 @@ const Tabs = (props) => {
               props.setShowExportFilter(false);
             }}
           >
-            <Link
+            <div
               className={
                 props.visible === "two" ? "nav-link" : "nav-link text-secondary"
               }
+              id='tab-content'
             >
               Outbound
-            </Link>
+            </div>
           </li>
         )}
       </ul>
