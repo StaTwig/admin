@@ -32,9 +32,13 @@ var OrganisationSchema = new mongoose.Schema(
     },
     primaryContactId: String,
     logoId: String,
-    typeId:String,
+    typeId: String,
     type: String,
-    status: String,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED", "REJECTED"],
+      default: "NOTVERIFIED",
+    },
     warehouses: {
       type: Array,
       default: ["ware123", "ware234"],
