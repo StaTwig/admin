@@ -14,17 +14,17 @@ import {
 } from '../constants/inventoryConstants';
 import { turnOn, turnOff } from './spinnerActions';
 
-export const getInventories = (skip, limit, productName, productCategory, status, fromDate, toDate) => {
+export const getInventories = (skip, limit, dateFilter, productName, productCategory, status) => {
     return async dispatch => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          `${config().getTransactions}?skip=${skip}&limit=${limit}&productName=${productName}&category=${productCategory}&status=${status}&fromDate=${fromDate}&toDate=${toDate}`
+          `${config().getTransactions}?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
           );
         dispatch(setInventories(result.data.data.inventoryRecords));
         dispatch(setInventoriesCount(result.data.data.count));
         dispatch(turnOff());
-        return result.data.data;
+        return result.data.data.length;
       }catch(e) {
         dispatch(turnOff());
         return dispatch => {

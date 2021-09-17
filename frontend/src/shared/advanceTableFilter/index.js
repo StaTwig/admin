@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import updownarrow from '../../assets/icons/up-and-down-1.svg';
 import FilterIcon from '../../assets/icons/Filter.svg';
 import ExportIcon from '../../assets/icons/Export.svg';
@@ -13,8 +13,6 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Divider } from '@material-ui/core';
 import FilterDropDown from '../../components/filterDropDown';
-import Calendar from '../calendar';
-import DropDownFilter from "../../shared/dropDownFilter";
 
 const StyledMenu = withStyles({
   paper: {
@@ -64,31 +62,6 @@ const AdvanceTableFilter = (props) => {
   const [inventoryProductCategoryAnchorEl, setInventoryProductCategoryAnchorEl] = React.useState(null)
   const [inventoryManufacturerAnchorEl, setInventoryManufacturerAnchorEl] = React.useState(null)
 
-  const {
-    onChangeOfSearchForFilterInput,
-    onSelectionOfDropdownValue,
-    showDropDownForToFilter,
-    setShowDropDownForToFilter,
-    toFilterData,
-    fromFilterData,
-    showDropDownForFromFilter,
-    setShowDropDownForFromFilter,
-    shipmentIdData,
-    setShowDropDownForShipmentId,
-    showDropDownForShipmentId,
-    orderIdData,
-    setShowDropDownForOrderId,
-    showDropDownForOrderId,
-    productNameData,
-    setShowDropDownForProductName,
-    showDropDownForProductName,
-    deliveryLocationData,
-    setShowDropDownForDeliveryLocation,
-    showDropDownForDeliveryLocation,
-    orderSentToData,
-    setShowDropDownForOrderSentTo,
-    showDropDownForOrderSentTo
-  } = props;
   const renderColumn6 = (columnData) => {
     if (columnData === "Status") {
       return (<div className="box col-1">
@@ -155,14 +128,14 @@ const AdvanceTableFilter = (props) => {
     } else {
       return (<div className="box col">
         <span className="divider" />
-        <a className="filter-item ml-4" onClick={handleInventoryStatusClick}>
+         <a className="filter-item ml-4" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
             {props.data.img6}
           </div>
           <div className="filterTitle">{props.data.coloumn6}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
-        <StyledMenu
+          <StyledMenu
           className="filter-dropdown"
           style={{ width: "100rem" }}
           id="customized-menu"
@@ -171,7 +144,7 @@ const AdvanceTableFilter = (props) => {
           onBlur={handleInventoryStatusClose}
           open={Boolean(inventoryStatusAnchorEl)}
           onClose={handleInventoryStatusClose}
-        >
+          >
           <div className="d-flex flex-column align-items-center">
             <StyledMenuItem>
               <Button style={{ padding: "0px", height: "40px", width: "130px", borderRadius: "10px" }} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>Shipped</Button>
@@ -184,7 +157,7 @@ const AdvanceTableFilter = (props) => {
             </StyledMenuItem>
           </div>
         </StyledMenu>
-      </div>
+        </div>
       );
     }
   }
@@ -312,23 +285,53 @@ const AdvanceTableFilter = (props) => {
 
     else if (columnData == "Delivery Location") {
       return (<div className="box col">
-        <a className="filter-item ml-5" 
-        onClick={() => setShowDropDownForDeliveryLocation(!showDropDownForDeliveryLocation)} 
-        style={{ position: "relative", left: "-35px" }}>
+        <a className="filter-item ml-5" onClick={handlePoDeliveryLocationClick} style={{ position: "relative", left: "-35px" }}>
           <div className="icon mr-2">
             {props.data.img5}
           </div>
           <div className="filterTitle">{props.data.coloumn5}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "20px" }} />
         </a>
-        {showDropDownForDeliveryLocation && deliveryLocationData &&
-          <DropDownFilter
-            onChangeOfSearchInput={onChangeOfSearchForFilterInput}
-            data={deliveryLocationData}
-            type={'deliveryLocation'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          className="filter-dropdown"
+          anchorEl={poDeliveryLocationAnchorEl}
+          keepMounted
+          open={Boolean(poDeliveryLocationAnchorEl)}
+          onClose={handlePoDeliveryLocationClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setPoDeliveryLocationFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {poDeliveryLocationAnchorEl ?
+              // props.poDeliveryLocationsList.map((location) => {
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setPoDeliveryLocationFilterOnSelect(location.id)}>{location.id}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // })
+              <Autocomplete
+                id="toShipment"
+                options={props.poDeliveryLocationsList}
+                getOptionLabel={(options) => options.title ? options.title + " (" + options.warehouseAddress.city + " ," + options.warehouseAddress.country + ")" : " (" + options.id + " )"}
+                onChange={(event, newValue) => {
+                  setPoDeliveryLocationFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Location'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
+
       </div>);
     } else {
       return (<div className="box col">
@@ -388,46 +391,102 @@ const AdvanceTableFilter = (props) => {
   const renderColumn4 = (columnData) => {
     if (columnData == "To") {
       return (<div className="box col-3">
-        <a className="filter-item"
-          onClick={() =>
-            setShowDropDownForToFilter(!showDropDownForToFilter)
-          }
-          style={{ position: "relative", left: "-80px" }}>
+        <a className="filter-item" onClick={handleToShipmentClick} style={{ position: "relative", left: "-80px" }}>
           <div className="icon mr-0">
             {props.data.img4}
           </div>
           <div className="filterTitle" >{props.data.coloumn4}</div>
           <img src={updownarrow} width="10" height="10" style={{ position: "relative", left: "220px" }} />
         </a>
-        {showDropDownForToFilter && toFilterData &&
-          <DropDownFilter
-            onChangeOfSearchInput={onChangeOfSearchForFilterInput}
-            data={toFilterData}
-            type={'toFilter'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={toShipmentAnchorEl}
+          keepMounted
+          open={Boolean(toShipmentAnchorEl)}
+          onClose={handleToShipmentClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setToShipmentFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {toShipmentAnchorEl ?
+              // props.supplierReceiverList.map((receiver) => {
+              //   let receiverNameDisplay = receiver.name + " (" + receiver.id + ")";
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setToShipmentFilterOnSelect(receiver.id)}>{receiverNameDisplay}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // }) 
+              <Autocomplete
+                id="toShipment"
+                options={props.supplierReceiverList}
+                getOptionLabel={(options) => options.name}
+                onChange={(event, newValue) => {
+                  setToShipmentFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Org. Name'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
       </div>);
     } else if (columnData == "Product") {
       return (<div className="box col-3" >
-        <a className="filter-item" onClick={() => {
-          setShowDropDownForProductName(!showDropDownForProductName)
-        }}
-          style={{ position: "relative", left: "-50px" }}>
+        <a className="filter-item" onClick={handlePoProductNameClick} style={{ position: "relative", left: "-50px" }}>
           <div className="icon mr-2">
             {props.data.img4}
           </div>
           <div className="filterTitle">{props.data.coloumn4}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "100px" }} />
         </a>
-        {showDropDownForProductName && productNameData &&
-          <DropDownFilter
-            onChangeOfSearchInput={onChangeOfSearchForFilterInput}
-            data={productNameData}
-            type={'product'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          className="filter-dropdown"
+          id="customized-menu"
+          anchorEl={poProductNameAnchorEl}
+          keepMounted
+          open={Boolean(poProductNameAnchorEl)}
+          onClose={handlePoProductNameClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setPoProductNameFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {poProductNameAnchorEl ?
+              // props.poProductsList.map((product) => {
+              //   // let productNameDisplay = product.name + " (" + product.id + ")";
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setPoProductNameFilterOnSelect(product.id)}>{product.id}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // }) 
+              <Autocomplete
+                id="fromShipment"
+                options={props.poProductsList}
+                getOptionLabel={(options) => options.name ? options.name + " (" + options.id + " )" : " (" + options.id + " )"}
+                onChange={(event, newValue) => {
+                  setPoProductNameFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Product'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
       </div>);
     } else if (columnData == "Status") {
       return (<div className="box col">
@@ -516,43 +575,101 @@ const AdvanceTableFilter = (props) => {
   const renderColumn3 = (columnData) => {
     if (columnData == "From") {
       return (<div className="box col-4">
-        <a className="filter-item ml-4" onClick={() =>
-          setShowDropDownForFromFilter(!showDropDownForFromFilter)
-        } style={{ position: "relative", left: "-70px" }}>
-          <div className="icon mr-2">
+        <a className="filter-item" onClick={handleFromShipmentClick} style={{ position: "relative", left: "-100px" }}>
+          <div className="icon mr-0">
             {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "140px" }} />
+          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "205px" }} />
         </a>
-        {showDropDownForFromFilter && fromFilterData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={fromFilterData}
-            type={'fromFilter'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={fromShipmentAnchorEl}
+          keepMounted
+          open={Boolean(fromShipmentAnchorEl)}
+          onClose={handleFromShipmentClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setFromShipmentFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {fromShipmentAnchorEl ?
+              // props.supplierReceiverList.map((supplier) => {
+              //   let supplierNameDisplay = supplier.name + " (" + supplier.id + ")";
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setFromShipmentFilterOnSelect(supplier.id)}>{supplierNameDisplay}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // }) 
+              <Autocomplete
+                id="fromShipment"
+                options={props.supplierReceiverList}
+                getOptionLabel={(options) => options.name}
+                onChange={(event, newValue) => {
+                  setFromShipmentFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Org Name'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
+
       </div>);
     } else if (columnData == "Order ID") {
       return (<div className="box col-2">
-        <a className="filter-item" onClick={() =>
-          setShowDropDownForOrderId(!showDropDownForOrderId)
-        }>
+        <a className="filter-item" onClick={handlePoOrderIdClick}>
           <div className="icon mr-2">
             {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
-        {showDropDownForOrderId && orderIdData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={orderIdData}
-            type={'orderId'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={poOrderIdAnchorEl}
+          keepMounted
+          open={Boolean(poOrderIdAnchorEl)}
+          onClose={handlePoOrderIdClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setPoOrderIdFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {poOrderIdAnchorEl ?
+              // props.poOrderIdList.map((order) => {
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setPoOrderIdFilterOnSelect(order.id)}>{order.id}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // }) 
+              <Autocomplete
+                id="idOrder"
+                options={props.poOrderIdList}
+                getOptionLabel={(options) => options.id}
+                onChange={(event, newValue) => {
+                  setPoOrderIdFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Order'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
       </div>);
     }
     // else if (columnData == "Manufacturer") {
@@ -596,35 +713,17 @@ const AdvanceTableFilter = (props) => {
     //   </div>);
     // }
     else {
-      return (
-        <div className="box col-3"
-          style={{
-            position: 'relative',
-            cursor: 'pointer'
-          }}>
-          <a
-            className="filter-item"
-            onClick={() => props.setShowCalendar(!props.showCalendar)}>
-            <div className="icon mr-2">
-              {props.data.img3}
-            </div>
-            <div className="filterTitle">{props.data.coloumn3}</div>
-            <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "20px" }} />
-          </a>
-          {
-            props.showCalendar && props.type === 'INVENTORY' &&
-            <div style={{
-              position: 'absolute',
-              zIndex: 1,
-              top: '43px',
-              left: '0px'
-            }}>
-              <Calendar
-                filterTableByCalendar={props.filterTableByCalendar}
-              />
-            </div>
-          }
-        </div>);
+      return (<div className="box col">
+        <div className="filter-item">
+          <div className="icon mr-2">
+            {props.data.img3}
+          </div>
+          <div className="filterTitle">{props.data.coloumn3}</div>
+          <div className="filterAction">
+            {/* <img src={updownarrow} width="9" height="9" /> */}
+          </div>
+        </div>
+      </div>);
     }
   }
 
@@ -644,16 +743,14 @@ const AdvanceTableFilter = (props) => {
   const renderColumn2 = (columnData) => {
     if (columnData == "Product Category") {
       return (<div className="box col-3">
-        <a className="filter-item ml-4" onClick={() =>
-          props.setShowDropDownForCategory(!props.showDropDownForCategory)
-        } style={{ position: "relative", left: "-70px" }}>
+        <a className="filter-item" onClick={handleInventoryProductCategoryClick}>
           <div className="icon mr-2">
             {props.data.img2}
           </div>
           <div className="filterTitle">{props.data.coloumn2}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "140px" }} />
+          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "20px" }} />
         </a>
-        {/* <StyledMenu
+        <StyledMenu
           id="customized-menu"
           anchorEl={inventoryProductCategoryAnchorEl}
           keepMounted
@@ -681,47 +778,21 @@ const AdvanceTableFilter = (props) => {
             </div>
             }
           </div>
-        </StyledMenu> */}
-        {props.showDropDownForCategory && props.categoryData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={props.categoryData}
-            type={'category'}
-            onClickOfDropDownItem={props.onSelectionOfDropdownValue}
-          />
-        }
+        </StyledMenu>
+
       </div>);
-    } else {
-      return (
-        <div className="box col-3"
-          style={{
-            position: 'relative',
-            cursor: 'pointer'
-          }}>
-          <a
-            className="filter-item"
-            onClick={() => props.setShowCalendar(!props.showCalendar)}>
-            <div className="icon mr-2">
-              {props.data.img2}
-            </div>
-            <div className="filterTitle">{props.data.coloumn2}</div>
-            <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "20px" }} />
-          </a>
-          {
-            props.showCalendar && (props.type === 'SHIPMENT' || props.type === 'ORDERS') &&
-            <div style={{
-              position: 'absolute',
-              zIndex: 1,
-              top: '43px',
-              left: '0px'
-            }}>
-              <Calendar
-                filterTableByCalendar={props.filterTableByCalendar}
-              />
-            </div>
-          }
+    }
+    else {
+      return (<div className="box col-2">
+        <div className="filter-item">
+          <div className="icon mr-1">
+            {props.data.img2}
+          </div>
+          <div className="filterTitle">{props.data.coloumn2}</div>
+          <div className="filterAction">
+          </div>
         </div>
-      );
+      </div>);
     }
   }
 
@@ -732,6 +803,12 @@ const AdvanceTableFilter = (props) => {
   const handleShipmentIdClose = () => {
     setShipmentIdAnchorEl(null);
   };
+
+  const setShipmentIdFilterOnSelect = (selectedVal) => {
+    props.setShipmentIdFilterOnSelect(selectedVal);
+    handleShipmentIdClose();
+  }
+
 
   const handlePoToClick = (event) => {
     setPoToAnchorEl(event.currentTarget);
@@ -774,23 +851,51 @@ const AdvanceTableFilter = (props) => {
   const renderColumn1 = (columnData) => {
     if (columnData == "Shipment ID") {
       return (<div className="box col-2">
-        <a className="filter-item ml-4" onClick={() =>
-          setShowDropDownForShipmentId(!showDropDownForShipmentId)
-        } style={{ position: "relative", left: "-70px" }}>
-          <div className="icon mr-2">
+        <a className="filter-item ml-4 mr-3" onClick={handleShipmentIdClick}>
+          <div className="icon ">
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "140px" }} />
+          <img src={updownarrow} width="10" height="10" className="ml-1" />
         </a>
-        {showDropDownForShipmentId && shipmentIdData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={shipmentIdData}
-            type={'shipmentId'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={shipmentIdAnchorEl}
+          keepMounted
+          open={Boolean(shipmentIdAnchorEl)}
+          onClose={handleShipmentIdClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setShipmentIdFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {shipmentIdAnchorEl ?
+              // props.shipmentIdList.map((shipment) => {
+              //   return (
+              //     <div>
+              //       <StyledMenuItem>
+              //         <Button variant="outlined" color="primary" onClick={() => setShipmentIdFilterOnSelect(shipment.id)}>{shipment.id}</Button>
+              //       </StyledMenuItem>
+              //     </div>
+              //   )
+              // }) 
+              <Autocomplete
+                id="idShipment"
+                options={props.shipmentIdList}
+                getOptionLabel={(options) => options.id}
+                onChange={(event, newValue) => {
+                  setShipmentIdFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Shipment'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
       </div>);
     } else if (columnData == "To") {
       return (<div className="box col" style={{ position: "relative", left: "-30px" }}>
@@ -892,43 +997,54 @@ const AdvanceTableFilter = (props) => {
       </div>);
     } else if (columnData == "Product Name") {
       return (<div className="box col-4">
-        <a className="filter-item ml-4" onClick={() =>
-          props.setShowDropDownForProductName(!props.showDropDownForProductName)
-        } style={{ position: "relative", left: "-70px" }}>
+        <a className="filter-item ml-4" onClick={handleInventoryProductNameClick} style={{ position: "relative", left: "-70px" }}>
           <div className="icon mr-2">
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "140px" }} />
         </a>
-        {props.showDropDownForProductName && props.productNameData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={props.productNameData}
-            type={'productName'}
-            onClickOfDropDownItem={props.onSelectionOfDropdownValue}
-          />
-        }
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={inventoryProductNameAnchorEl}
+          keepMounted
+          open={Boolean(inventoryProductNameAnchorEl)}
+          onClose={handleInventoryProductNameClose}
+        >
+          <div className="d-flex flex-column align-items-center">
+            <StyledMenuItem>
+              <Button style={{ padding: "10px", height: "40px", width: "130px" }} class="btn btn-link btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryProductNameFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+            {inventoryProductNameAnchorEl ?
+              <Autocomplete
+                id="ProductName"
+                options={props.inventoryFilterData}
+                getOptionLabel={(options) => options.name}
+                onChange={(event, newValue) => {
+                  setInventoryProductNameFilterOnSelect(newValue.id)
+                }}
+                style={{ width: '100%' }}
+                renderInput={(params) => <TextField {...params} label={'Search Product'} variant="outlined" />}
+              />
+              :
+              <div>
+                Empty List
+            </div>
+            }
+          </div>
+        </StyledMenu>
       </div>);
     } else {
       return (<div className="box col">
-        <a className="filter-item ml-4" onClick={() =>
-          setShowDropDownForOrderSentTo(!showDropDownForOrderSentTo)
-        } style={{ position: "relative", left: "-70px" }}>
+        <div className="filter-item">
           <div className="icon mr-2">
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="10" height="10" className="ml-3" style={{ position: "relative", left: "140px" }} />
-        </a>
-        {showDropDownForOrderSentTo && orderSentToData &&
-          <DropDownFilter
-            onChangeOfSearchInput={props.onChangeOfSearchForFilterInput}
-            data={orderSentToData}
-            type={'orderSentTo'}
-            onClickOfDropDownItem={onSelectionOfDropdownValue}
-          />
-        }
+          <div className="filterAction">
+            {/* <img src={updownarrow} width="9" height="9" /> */}
+          </div>
+        </div>
       </div>);
     }
   }
@@ -936,7 +1052,7 @@ const AdvanceTableFilter = (props) => {
   return (
     <div className="filter">
       <div className="d-flex justify-content-between">
-        <div className="row" style={{ flexBasis: props.fb, flexWrap: 'nowrap' }}>
+        <div className="row" style={{ flexBasis: props.fb }}>
           {/* <div className="box col">
             <div className="filter-item">
               <div className="icon mr-2">
@@ -1075,22 +1191,22 @@ const AdvanceTableFilter = (props) => {
               </div>
             </StyledMenu>
             {!props?.isReportDisabled &&
-              <button className="btn-filter-blue ml-2"
-                onClick={() => props.setShowExportFilter(!props.showExportFilter)}
-              >
-                <div className="d-flex  align-items-center">
-                  <img src={ExportIcon} width="14" height="14" className="mr-2" />
-                  <span>Export</span>
-                  <img
-                    src={dropdownIcon}
-                    width="10" height="10"
-                    className="ml-2"
-                  />
+            <button className="btn-filter-blue ml-2"
+              onClick={() => props.setShowExportFilter(!props.showExportFilter)}
+            >
+              <div className="d-flex  align-items-center">
+                <img src={ExportIcon} width="14" height="14" className="mr-2" />
+                <span>Export</span>
+                <img
+                  src={dropdownIcon}
+                  width="10" height="10"
+                  className="ml-2"
+                />
                   {
                     props.showExportFilter && props.exportFilterData &&
                     <FilterDropDown
                       data={props.exportFilterData}
-                      onChangeOfFilterDropDown={props.onSelectionOfExportDropdown}
+                      onChangeOfFilterDropDown={props.onSelectionOfDropdownValue}
                       type={'export'}
                     />
                   }
