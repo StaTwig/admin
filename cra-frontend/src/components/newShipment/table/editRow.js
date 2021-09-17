@@ -342,7 +342,7 @@ const EditRow = (props) => {
         <div className='d-flex'>
           <button
             type='button'
-            class='btn btn-outline-primary mr-2 ml-2'
+            className='btn btn-outline-primary mr-2 ml-2'
             style={{ height: "30px", width: "60px" }}
             onClick={() => {
               setShowModal(true);

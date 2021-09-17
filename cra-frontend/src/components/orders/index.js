@@ -465,7 +465,7 @@ const Orders = (props) => {
             </button>
           )}
           {menu ? (
-            <div class='menu'>
+            <div className='menu'>
               <button
                 className=' btn btn-outline-info mb-2 '
                 onClick={() => setOpenExcel(true)}

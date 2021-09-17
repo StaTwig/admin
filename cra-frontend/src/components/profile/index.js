@@ -408,7 +408,7 @@ class Profile extends React.Component {
                             <b>MY LOCATIONS</b>
                           </h5>
                         </div>
-                        <div class='addloc1'>
+                        <div className='addloc1'>
                           {editMode && (
                             <button
                               className='buttonA btn btn-orange font-bold mt-1'
@@ -422,7 +422,7 @@ class Profile extends React.Component {
                           <div className='inventorypopup'>
                             {this.state.openModal && (
                               <Modal
-                                class='modal-lg'
+                                className='modal-lg'
                                 style={{ width: "60vw" }}
                                 close={() => this.closeModal()}
                                 size=''
@@ -801,7 +801,7 @@ class Profile extends React.Component {
                   className='buttonS btn-primary btn'
                   onClick={() => {
                     this.setState({ editMode: true });
-                    this.onOrganisation();
+                    // this.onOrganisation();
                   }}
                 >
                   <img

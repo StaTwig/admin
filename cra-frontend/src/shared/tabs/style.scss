@@ -7,16 +7,16 @@
 
   ul {
     li {
-      &.nav-item-active{
+      &.nav-item-active {
         font-weight: bolder;
-        color: #0093E9;
-        border-bottom: 7px solid #0093E9;
+        color: #0093e9;
+        border-bottom: 7px solid #0093e9;
         //border-radius: 10px;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         cursor: pointer;
       }
-      a {
+      #tab-content {
         &.nav-link {
           color: #0093e9;
           font-size: 18px;

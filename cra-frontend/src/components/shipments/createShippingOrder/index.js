@@ -116,16 +116,16 @@ const CreateShippingOrder = (props) => {
         <thead>
           <tr>
             <th scope='col' />
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Product ID
             </th>
-            <th scope='col ' class='text-secondary'>
+            <th scope='col ' className='text-secondary'>
               Product Name
             </th>
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Manufacturer
             </th>
-            <th scope='col' class='text-secondary'>
+            <th scope='col' className='text-secondary'>
               Quantity
             </th>
           </tr>

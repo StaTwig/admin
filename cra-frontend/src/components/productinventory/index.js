@@ -81,7 +81,7 @@ const ProductInventory = (props) => {
         </div>
       </div>
       {enable && (
-        <div class='main'>
+        <div className='main'>
           <div className='row ml-0 flex-nowrap'>
             {categoryArray.map((cat) => (
               <div

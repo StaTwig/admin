@@ -101,6 +101,8 @@ const Header = (props) => {
       return "viewshipment/:id/";
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return "viewuser/";
+    } else {
+      return "";
     }
   }
 
@@ -170,7 +172,6 @@ const Header = (props) => {
       axios
         .get(`${config().searchProduct}&productType=${searchString}`)
         .then((resp) => {
-          // console.log(resp.data)
           if (resp.data.data.length > 0)
             props.history.push(`/productinventory/${searchString}`);
           else
@@ -208,7 +209,6 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
-    console.log(response.data.data.data);
     setNotifications(response.data.data.data);
   }
 
@@ -350,9 +350,7 @@ const Header = (props) => {
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 {notifications.length && (
-                  <span className='badge badge-light'>
-                    {count}
-                  </span>
+                  <span className='badge badge-light'>{count}</span>
                 )}
               </div>
               {showNotifications && 
@@ -366,11 +364,18 @@ const Header = (props) => {
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <div className="user-notification-head">
+                    <span
+                      style={{
+                        color: "white",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        padding: "10px",
+                      }}
+                    >
                       User Notifications
-                    </div>
+                    </span>
                     {notifications?.length >= 0 && (
-                      <text
+                      <span
                         style={{
                           position:"relative",
                           left:"40px",
@@ -382,7 +387,7 @@ const Header = (props) => {
                         }}
                       >
                         {notifications?.length} new
-                      </text>
+                      </span>
                     )}
                     
                     <div className='tab'>
@@ -407,26 +412,32 @@ const Header = (props) => {
                     >
                       <div className={visible === "two" ? "nav-link" : "nav-link tab-text"}>
                         Transactions
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              {notifications?.length >= 0 ? (
-                notifications?.map((notifications) => (
-                  <div className='slider-item'>
-                    <div
-                      onClick={() => clearNotification(notifications)}
-                    >
-                      <div
-                        className="col-sm-10"
-                        style={{ display: "flex" }}
-                      >
-                          <img className="notification-icons"
-                            src={notifIcon(notifications)}
-                            alt=""
-                          />
-                          <Link
+                      </button>
+                    </div>
+                  </div>
+                  {notifications?.length >= 0 ? (
+                    notifications?.map((notifications) => (
+                      <div className='slider-item' key={notifications.id}>
+                        <div
+                          className='row justify-content-between align-items-center'
+                          onClick={() => clearNotification(notifications)}
+                        >
+                          <div
+                            className='col-sm-10'
+                            style={{ display: "flex" }}
+                          >
+                            <img
+                              style={{
+                                size: "100%",
+                                marginLeft: "-20px",
+                                marginRight: "10px",
+                                marginBottom: "10px",
+                                paddingTop: "5px",
+                              }}
+                              src={notifIcon(notifications)}
+                              alt='notification'
+                            />
+                            <Link
                               to={
                                 "/" +
                                 viewUrl(notifications) +

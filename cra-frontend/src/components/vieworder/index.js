@@ -174,7 +174,7 @@ const ViewOrder = (props) => {
                     {order.customer?.organisation?.id}
                   </span>
                 </div>
-                <div class='w-100'></div>
+                <div className='w-100'></div>
                 <div className='col row mt-3'>
                   <span className='col-4'>Region</span>
                   <span className=' col  text-dark '>
@@ -187,7 +187,7 @@ const ViewOrder = (props) => {
                     {order.customer?.country}
                   </span>
                 </div>
-                <div class='w-100'></div>
+                <div className='w-100'></div>
                 <div className='col row col-6 mt-3'>
                   <span className='col-4'>Delivery Location</span>
                   <span className=' col ml-2 text-dark '>
