@@ -88,21 +88,17 @@ const Header = (props) => {
     }
   }
 
-  function viewUrl(notif,transId) {
-    debugger
-    console.log("notification details "+ " " + notif + "  " + transId);
-    if (notif.eventType === "INVENTORY" && transId)  {
-      return "/productlist/"+{transId};
+  function viewUrl(notif, transId) {
+    if (notif.eventType === "INVENTORY" && transId) {
+      return "/productlist/" + { transId };
     } else if (notif.eventType === "ORDER" && transId) {
-      return "/vieworder/"+{transId};
+      return "/vieworder/" + { transId };
     } else if (notif.eventType === "SHIPMENT" && transId) {
-      return "/viewshipment/"+{transId};
+      return "/viewshipment/" + { transId };
     } else if (notif.eventType === "SHIPMENT_TRACKING" && transId) {
-      return "/viewuser/"+{transId};
-    }
-
-    else{
-     return ""
+      return "/viewshipment/" + { transId };
+    } else {
+      return "/overview";
     }
   }
 
@@ -172,7 +168,6 @@ const Header = (props) => {
       axios
         .get(`${config().searchProduct}&productType=${searchString}`)
         .then((resp) => {
-          // console.log(resp.data)
           if (resp.data.data.length > 0)
             props.history.push(`/productinventory/${searchString}`);
           else
@@ -210,7 +205,6 @@ const Header = (props) => {
 
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
-    console.log(response.data.data.data);
     setNotifications(response.data.data.data);
   }
 
@@ -352,9 +346,7 @@ const Header = (props) => {
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 {notifications.length && (
-                  <span className='badge badge-light'>
-                    {count}
-                  </span>
+                  <span className='badge badge-light'>{count}</span>
                 )}
               </div>
               {showNotifications && (
@@ -366,7 +358,7 @@ const Header = (props) => {
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <text
+                    <span
                       style={{
                         color: "white",
                         fontSize: "20px",
@@ -375,9 +367,9 @@ const Header = (props) => {
                       }}
                     >
                       User Notifications
-                    </text>
+                    </span>
                     {notifications?.length >= 0 && (
-                      <text
+                      <span
                         style={{
                           backgroundColor: "#fa7a23",
                           padding: "5px",
@@ -387,7 +379,7 @@ const Header = (props) => {
                         }}
                       >
                         {notifications?.length} new
-                      </text>
+                      </span>
                     )}
                     <div className='section'>
                       <button
@@ -420,7 +412,7 @@ const Header = (props) => {
                   </div>
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
-                      <div className='slider-item' style={{cursor:'none'}}>
+                      <div className='slider-item'>
                         <div
                           className='row justify-content-between align-items-center'
                           onClick={() => clearNotification(notifications)}
@@ -441,10 +433,11 @@ const Header = (props) => {
                               alt='notification'
                             />
                             <Link
-                              style={{pointerEvents:'none'}}
-                              onClick={() => {
-                                viewUrl(notifications,notifications.transactionId)
-                              }}
+                              style={{ pointerEvents: "none" }}
+                              to={viewUrl(
+                                notifications,
+                                notifications.transactionId
+                              )}
                             >
                               {notifications.message}
                             </Link>
@@ -507,7 +500,7 @@ const Header = (props) => {
 
             <div className='userPic'>
               <img
-                style={{objectFit:"cover"}}
+                style={{ objectFit: "cover" }}
                 src={`${image}`}
                 alt='profile'
                 className={`rounded rounded-circle ${
@@ -527,7 +520,11 @@ const Header = (props) => {
             </div>
           </div>
           {menu && (
-            <div style={{borderRadius : "5px"}} className='slider-menu' ref={ref}>
+            <div
+              style={{ borderRadius: "5px" }}
+              className='slider-menu'
+              ref={ref}
+            >
               {
                 <React.Fragment>
                   <div className='slider-item-text p-2'>
