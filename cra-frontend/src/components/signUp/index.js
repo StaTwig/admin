@@ -98,11 +98,11 @@ const FormPage = (props) => {
 
   if (
     checker &&
-    firstName.length > 0 &&
-    lastName.length > 0 &&
-    orgType.length > 0 &&
-    value.length > 0 &&
-    (email.length > 0 || mobileNumber.length > 0)
+    firstName?.length > 0 &&
+    lastName?.length > 0 &&
+    orgType?.length > 0 &&
+    value?.length > 0 &&
+    (email?.length > 0 || mobileNumber?.length > 0)
   ) {
     setsignupDisable(false);
     setChecker(false);

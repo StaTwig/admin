@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import user from "../../assets/icons/brand.svg";
 import Add from "../../assets/icons/add.svg";
-import { colors } from "@material-ui/core";
 
 const ProductCategory = (props) => {
   const { products } = props;
@@ -109,11 +108,11 @@ const ProductCategory = (props) => {
                       if (sum > 40 && !isNull) displayCount = true;
                       return isNull ? null : displayCount &&
                         j < prods.length ? (
-                        <span className='txt-outline text-muted' style={{border: `2px solid ${colors[i]}`}}>
+                        <span className='txt-line text-muted' style={{border: `2px solid ${colors[i]}`}}>
                           {"+" + (prods.length - j)}
                         </span>
                       ) : (
-                        <span className='txt-outline text-muted' style={{border: `2px solid ${colors[i]}`}}>
+                        <span className='txt-line text-muted' style={{border: `2px solid ${colors[i]}`}}>
                           {product.name}
                         </span>
                       );
