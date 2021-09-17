@@ -513,7 +513,7 @@ const Inventory = (props) => {
                 </div>
                 <div
                   className='overflow ml-3'
-                  style={{ height: "750px", overflowX: "hidden" }}
+                  style={{ height: "720px", overflowX: "hidden" }}
                 >
                   <div className='row'>
                     {productsList?.map((product, index) => (

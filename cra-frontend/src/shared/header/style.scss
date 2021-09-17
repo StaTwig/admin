@@ -122,59 +122,55 @@
       .notifications {
         position: relative;
         right: 2.5rem;
-        top: -2.5rem;
+        top: -2.2rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
+          font-size: 14px;
           .badge {
             position: absolute;
-            top: -10px;
-            left: 10px;
-            border-radius: 100%;
+            top: -28px;
+            left: 8px;
+            border-radius: 50%;
+            color:#fa7923;
+            background-color:#fff;
           }
         }
         .slider-menu {
-          top: 0.9rem;
-          right: -12rem !important;
+          top: 1rem;
+          right: -18rem !important;
           overflow-y: scroll;
           overflow-x: hidden;
-          min-width: 370px;
-          min-height: 350px;
+          min-width: 360px;
+          min-height: 540px;
           font-size: 10px;
-          z-index: 101;
           padding-top: 0%;
-
           .nheader {
             display: block;
             margin-block-start: -10px;
             margin-right: -18px;
             margin-left: -18px;
-            justify-content: left;
-            padding-right: 40px;
-            padding-top: 20px;
-            padding-left: 40px;
-            padding-bottom: 10px;
+            //justify-content: center;
+            padding:15px 45px 10px 20px;
             position: sticky;
             z-index: 100;
-            top: 0;
+            top:0px;
           }
-
           .section {
             display: flex;
             flex-direction: row;
             justify-content: space-evenly;
             margin-bottom: -10px;
-            margin-top: 15px;
-            font-size: 15px;
+            margin-top: 25px;
+            font-size: 12px;
           }
-
           .slider-item {
             text-align: center justify;
             white-space: pre-wrap;
-            background-color: white;
-            min-width: 340px;
-            margin-top: 10px;
-            margin-bottom: -10px;
+            background-color: #fff;
+            min-width: 400px;
+            margin: 10px 0px -10px -10px;
+            padding:0px 0px 0px 0px;
             font-size: 12px;
             position: relative;
             z-index: 99;
@@ -443,3 +439,104 @@
     }
   }
 }
+.triangle-up {
+  position: relative;
+  top:20px;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #0093e9;
+}
+.user-notification-head{
+  position:relative;
+  top:1px;
+  left:-40px;
+  display:inline;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+}
+.notification-events{
+  font-size: 12px;
+  position: relative;
+  top:15px;
+  color: #084787;
+  margin: 10px 0px 0px 0px;
+  display: inline;
+}
+.notification-icons{
+  position:relative;
+  left:-10px;
+  margin: 15px 0px 10px 5px;
+  height:20px;
+}
+.notif-time{
+  position:relative;
+  top:0px;
+  left:-90px;
+  float:right;
+}
+.toggle-icon{
+  display: block;
+  position: relative;
+  left:20rem;
+  transform: rotate(270deg);
+  height: 10px;
+  margin: 0px 0px 12px 0px;
+}
+.icon-pad {
+  box-shadow: 0px 3px 10px $grey;
+  border-radius: 50%;
+  background-color: $white;
+  margin-right: 1rem;
+  height:35px;
+  width:35px;
+}
+.no-notification{
+  font-size: 14px;
+  color:#084787;
+  font-weight: 600;
+}
+.tab {
+  position:relative;
+  top:10px;
+  font-size: 14px;
+  border-bottom: 0px solid #d6d6d6;
+  margin-left: -5rem;
+  padding-left: 5rem;
+
+  ul {
+    li {
+      &.nav-item-active{
+        font-weight: bolder;
+        color: #fff;
+        border-bottom: 3px solid #FFAB1D;
+        //border-radius: 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+      }
+      a {
+        &.nav-link {
+          color: #FFAB1D;
+          font-size: 18px;
+          padding-bottom: 0.2rem;
+          font-weight: bold;
+          background-color: transparent;
+          position: relative;
+          cursor: pointer;
+        }
+        &.nav-in {
+          color: #fff;
+        }
+      }
+      .tab-text{
+        color:#a8a8a8;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
