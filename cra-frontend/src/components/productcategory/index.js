@@ -100,8 +100,8 @@ const ProductCategory = (props) => {
                   <div className=' picture truck-bg' style={{background: colors[i] }}>
                     <img src={user} alt='truck' />
                   </div>
-                  <div className='pt-3 flex'>{cat}</div>
-                  <div className=' pt-2 pb-2 d-flex row'>
+                  <div className='pt-3 flex' style={{color: "black", fontWeight: "bolder"}}>{cat}</div>
+                  <div className=' pt-2 pl-2 pb-2 d-flex row'>
                     {prods.map((product, j) => {
                       let isNull = false;
                       if (displayCount) isNull = true;
