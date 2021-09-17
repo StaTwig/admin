@@ -143,10 +143,10 @@ export const getPOs = (skip = 0, limit = 5) => {
   };
 };
 
-export const getSentPOs = async (to, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+export const getSentPOs = async (to, orderId, productName, deliveryLocation, status, skip, limit, fromDate, toDate) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
-      `${config().fetchOutboundPurchaseOrderUrl}?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
+      `${config().fetchOutboundPurchaseOrderUrl}?to=${to}&orderId=${orderId}&productName=${productName}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`,
     );
     return result.data;
   } catch (e) {
@@ -155,10 +155,10 @@ export const getSentPOs = async (to, orderId, productName, deliveryLocation, dat
 };
 
 
-export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, status, skip, limit, fromDate, toDate) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
-      `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
+      `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`,
     );
     return result.data;
   } catch (e) {
