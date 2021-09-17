@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import EmptyShipments from "../../assets/icons/EmptyShipments.png";
+import EmptyShipments from "../../assets/icons/EmptyShipments-min.png";
 import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
 import shippment from "../../assets/icons/shipment_id.png";

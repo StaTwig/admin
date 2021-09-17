@@ -7,6 +7,7 @@ import Add from "../../assets/icons/add.svg";
 import user from "../../assets/icons/brand.svg";
 import Quantity from "../../assets/icons/Quantity.png";
 import Product from "../../assets/icons/Producttype.png";
+import Next from "../../assets/icons/back.png";
 
 const ProductInventory = (props) => {
   const [category, setCategory] = useState(props.match.params?.category);
@@ -131,8 +132,9 @@ const ProductInventory = (props) => {
                 </div>
               </div>
             ))}
-            <button onClick={() => scroll(+100)} style={{position: "absolute", justifySelf: "center"}}>NEXT</button>
+            
           </div>
+          <button className="toggle-button" onClick={() => scroll(+100)}><img src={Next} className="toggle-icon-next" alt='truck'/></button>
         </div>
       )}
       <div className='row'>
