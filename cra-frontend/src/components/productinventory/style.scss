@@ -256,3 +256,28 @@
   background: #0093e9;
   color: white;
 }
+.toggle-button{
+  border:none;
+  box-shadow: 0px 1px 6px rgb(163, 163, 163);
+  position: relative;
+  top:-105px; 
+  float:right;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 0px 20px;
+  padding:15px;
+  width:60px;
+  cursor: pointer;
+}
+.toggle-icon-next{
+  height: 30px;
+  width: 20px;
+  transform: rotate(180deg);  
+  outline: none;
+} 
+
+button:hover,
+button:active,
+button:focus {
+  outline: 0;
+}
