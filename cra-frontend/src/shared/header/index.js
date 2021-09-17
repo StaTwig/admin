@@ -88,15 +88,21 @@ const Header = (props) => {
     }
   }
 
-  function viewUrl(notif) {
-    if (notif.eventType === "INVENTORY") {
-      return "productlist/";
-    } else if (notif.eventType === "ORDER") {
-      return "vieworder/";
-    } else if (notif.eventType === "SHIPMENT") {
-      return "viewshipment/";
-    } else if (notif.eventType === "SHIPMENT_TRACKING") {
-      return "viewuser/";
+  function viewUrl(notif,transId) {
+    debugger
+    console.log("notification details "+ " " + notif + "  " + transId);
+    if (notif.eventType === "INVENTORY" && transId)  {
+      return "/productlist/"+{transId};
+    } else if (notif.eventType === "ORDER" && transId) {
+      return "/vieworder/"+{transId};
+    } else if (notif.eventType === "SHIPMENT" && transId) {
+      return "/viewshipment/"+{transId};
+    } else if (notif.eventType === "SHIPMENT_TRACKING" && transId) {
+      return "/viewuser/"+{transId};
+    }
+
+    else{
+     return ""
     }
   }
 
@@ -335,7 +341,7 @@ const Header = (props) => {
         </div>
         <div>
           <div className='user-info '>
-            <div className='notifications'>
+            <div className='notifications' id='notification'>
               <img
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -414,7 +420,7 @@ const Header = (props) => {
                   </div>
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
-                      <div className='slider-item'>
+                      <div className='slider-item' style={{cursor:'none'}}>
                         <div
                           className='row justify-content-between align-items-center'
                           onClick={() => clearNotification(notifications)}
@@ -435,11 +441,10 @@ const Header = (props) => {
                               alt='notification'
                             />
                             <Link
-                              to={
-                                "/" +
-                                viewUrl(notifications) +
-                                notifications.transactionId
-                              }
+                              style={{pointerEvents:'none'}}
+                              onClick={() => {
+                                viewUrl(notifications,notifications.transactionId)
+                              }}
                             >
                               {notifications.message}
                             </Link>
