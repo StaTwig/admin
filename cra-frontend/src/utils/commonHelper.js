@@ -17,9 +17,12 @@ export const getAddress = (address) => {
 };
 
 export const isType = (type, val) => {
+  if(val)
   return !!(
     val.constructor && val.constructor.name.toLowerCase() === type.toLowerCase()
   );
+  else
+    return false;
 };
 
 function GetState(permission) {

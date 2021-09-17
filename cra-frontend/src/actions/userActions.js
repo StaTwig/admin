@@ -153,6 +153,7 @@ export const setCurrentUser = decoded => {
 export const logoutUser = () => {
   localStorage.removeItem('theLedgerToken');
   localStorage.removeItem('location');
+  window.location.href = "/"
   return {
     type: AUTH_ERROR,
   };
