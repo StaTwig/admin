@@ -231,3 +231,25 @@ function pushNotification(req, userId, type, transactionId) {
     console.log(err);
   }
 }
+
+exports.readNotification = [
+  auth,
+  async (req, res) => {
+    try {
+      const { id } = req.query;
+      const notification = await Notification.findOneAndUpdate(
+        { id },
+        { $set: { isRead: true } },
+        { new: true }
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Notification READ Success",
+        notification
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
