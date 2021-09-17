@@ -36,11 +36,11 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import userIcon from "../../assets/icons/brand.png";
-import Alert from "../../assets/icons/alert.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
 import alertIcon from "../../assets/icons/alert.png";
-
+import orderIcon from "../../assets/icons/Orders.png";
+import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
@@ -86,25 +86,31 @@ const Header = (props) => {
     if (notif.eventType === "INVENTORY") {
       return inventoryIcon;
     } else if (notif.eventType === "ORDER") {
-      return alertIcon;
+      return orderIcon;
     } else if (notif.eventType === "SHIPMENT") {
       return shipmentIcon;
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
       return userIcon;
     } else if (notif.eventType === "NEW_ALERT") {
-      return Alert;
+      return alertIcon;
+    } else {
+      return alertIcon;
     }
   }
 
-  function viewUrl(notif) {
-    if (notif.eventType === "INVENTORY") {
-      return "inventory/";
+  function notifRouting(notif) {
+    if (notif.transactionId == null || undefined || "") {
+      return "/#";
+    } else if (notif.eventType === "INVENTORY") {
+      return "/inventory/" + notif.transactionId;
     } else if (notif.eventType === "ORDER") {
-      return "vieworder/";
+      return "/vieworder/" + notif.transactionId;
     } else if (notif.eventType === "SHIPMENT") {
-      return "viewshipment/:id/";
+      return "/viewshipment/" + notif.transactionId;
     } else if (notif.eventType === "SHIPMENT_TRACKING") {
-      return "viewuser/";
+      return "/viewshipment/" + notif.transactionId;
+    } else {
+      return "/#";
     }
   }
 
@@ -155,7 +161,6 @@ const Header = (props) => {
           props.history.push(
             `/tracing/${airWayBillNowithshipmentID[index].id}`
           );
-          // props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
         } else setInvalidSearch(true);
       });
     } else if (searchType === "productName") {
@@ -351,7 +356,7 @@ const Header = (props) => {
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                {notifications.length && (
+                {notifications?.length && (
                   <span className='badge badge-light'>{count}</span>
                 )}
               </div>
@@ -394,7 +399,6 @@ const Header = (props) => {
                             setAlertType("ALERT");
                             changeNotifications("ALERT");
                             setVisible("one");
-                            
                           }}
                         >
                           <div
@@ -441,14 +445,10 @@ const Header = (props) => {
                             <img
                               className='notification-icons'
                               src={notifIcon(notifications)}
-                              alt=''
+                              alt='Icon'
                             />
                             <Link
-                              to={
-                                "/" +
-                                viewUrl(notifications) +
-                                notifications.transactionId
-                              }
+                              to={notifRouting(notifications)}
                               style={{ textDecoration: "none" }}
                             >
                               <div className='notification-events'>
@@ -457,11 +457,18 @@ const Header = (props) => {
                             </Link>
                           </div>
                           <div className='text-secondary notif-time'>
-                            {getHours(notifications.createdAt)} hours ago
+                            {formatDistanceToNow(
+                              new Date(
+                                parseInt(
+                                  notifications._id.toString().substr(0, 8),
+                                  16
+                                ) * 1000
+                              )
+                            )}
                           </div>
                           <img
                             className='toggle-icon'
-                            alt=''
+                            alt='Drop Down Icon'
                             src={dropdownIcon}
                           ></img>
                         </div>
@@ -519,7 +526,7 @@ const Header = (props) => {
 
             <div className='userPic'>
               <img
-                style={{objectFit:"cover"}}
+                style={{ objectFit: "cover" }}
                 src={`${image}`}
                 alt='profile'
                 className={`rounded rounded-circle ${
@@ -539,33 +546,43 @@ const Header = (props) => {
             </div>
           </div>
           {menu && (
-            <div style={{borderRadius : "5px", marginTop:"5px"}} className='slider-menu' ref={ref}>
+            <div
+              style={{ borderRadius: "5px", marginTop: "5px" }}
+              className='slider-menu'
+              ref={ref}
+            >
               {
                 <React.Fragment>
                   <div className='slider-item-text p-2'>
                     <p>{profile.name}</p>
                     <p>{profile?.organisation?.split("/")[0]}</p>
                   </div>
-                  <div style={{position:"relative", top:"-10px", width:"100px"}}>
                   <div
-                    className='slider-item border-top-0 p-1'
-                    onClick={() => props.history.push("/profile")}
+                    style={{
+                      position: "relative",
+                      top: "-10px",
+                      width: "100px",
+                    }}
                   >
-                    My Profile
+                    <div
+                      className='slider-item border-top-0 p-1'
+                      onClick={() => props.history.push("/profile")}
+                    >
+                      My Profile
+                    </div>
+                    <div
+                      className='slider-item p-1'
+                      onClick={() => props.history.push("/settings")}
+                    >
+                      Settings
+                    </div>
+                    <div
+                      className='slider-item p-1'
+                      onClick={() => dispatch(logoutUser())}
+                    >
+                      Logout
+                    </div>
                   </div>
-                  <div
-                    className='slider-item p-1'
-                    onClick={() => props.history.push("/settings")}
-                  >
-                    Settings
-                  </div>
-                  <div
-                    className='slider-item p-1'
-                    onClick={() => dispatch(logoutUser())}
-                  >
-                    Logout
-                  </div>
-                </div>
                 </React.Fragment>
               }
             </div>

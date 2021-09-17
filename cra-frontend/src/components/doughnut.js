@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import { getProductList } from "../actions/productActions";
-import EmptyInventory from "../assets/icons/EmptyInventory.png";
+import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
 
 const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
