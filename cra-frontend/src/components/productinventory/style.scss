@@ -75,7 +75,7 @@
   .panel {
     // box-shadow: 0px 3px 6px $grey;
     border-radius: 15px;
-    background-color: #d6d6d6;
+    background-color: #fff;
     cursor: pointer;
     padding: 20px 20px 5px 22px;
     margin-top: 20px;
@@ -120,9 +120,9 @@
     }
 
     .picture {
-      width: 50px;
-      height: 50px;
-      box-shadow: 0px 3px 6px #00000029;
+      width: 0px;
+      height: 0px;
+      //box-shadow: 0px 3px 6px #00000029;
       // border-radius: 50%;
       justify-content: center;
       align-items: center;
@@ -231,7 +231,7 @@
     width: 100%;
     white-space: nowrap !important;
     display: inline-block !important;
-    overflow: auto;
+    // overflow: auto;
     //overflow: visible;
     //table-layout:fixed;
   }
@@ -255,4 +255,29 @@
 .blue-primary:hover {
   background: #0093e9;
   color: white;
+}
+.toggle-button{
+  border:none;
+  box-shadow: 0px 1px 6px rgb(163, 163, 163);
+  position: relative;
+  top:-105px; 
+  float:right;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 0px 20px;
+  padding:15px;
+  width:60px;
+  cursor: pointer;
+}
+.toggle-icon-next{
+  height: 30px;
+  width: 20px;
+  transform: rotate(180deg);  
+  outline: none;
+} 
+
+button:hover,
+button:active,
+button:focus {
+  outline: 0;
 }

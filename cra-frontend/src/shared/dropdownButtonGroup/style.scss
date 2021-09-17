@@ -28,6 +28,18 @@
       margin-top: -1.15rem;
     }
   }
+    .textNeg-title{
+      margin-left: -20px;
+      margin-top: -1.35rem;
+    }
+  .location-add{
+    position:relative;
+    top: 26px;
+    left: -50px;
+    min-width:0rem;
+    font-size: 12px;
+    font-weight: 400;
+  }
   .btn-custom-dropdown img {
     position: absolute;
     right: 0;
@@ -77,6 +89,8 @@
     will-change: transform;
   }
   .customwh {
+    position:relative;
+    left:-10px;
     height: 9px;
     width: 9px;
   }

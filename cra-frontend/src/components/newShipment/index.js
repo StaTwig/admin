@@ -87,14 +87,26 @@ const NewShipment = (props) => {
       return { ...provided, opacity, transition };
     },
   };
+  
+  const handleSOChange = async (item) => {
+    setOrderId(item);
+    dispatch(turnOn());
+    const result = await getShippingOrderById(item);
+    setOrderDetails(result);
+    dispatch(turnOff());
+  };
+
 
   useEffect(() => {
     async function fetchData() {
+
+      
       const result111 = await getProductList();
 
       setProductsList(result111.message);
       console.log(result111);
       const { search } = props.location;
+      console.log(search)
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
 
@@ -107,7 +119,7 @@ const NewShipment = (props) => {
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-
+console.log(user.organisation)
       const orgSplit = user.organisation?.split("/");
 
       setSenderOrganisation([orgSplit[0]]);
@@ -164,14 +176,14 @@ const NewShipment = (props) => {
           : []
       );
 
-      if (search) {
-        const shippingId = search.split("=")[1];
-        handleSOChange(shippingId);
-      }
+      // if (search) {
+      //   const shippingId = search.split("=")[1];
+      //   handleSOChange(shippingId);
+      // }
     }
 
     fetchData();
-  }, [props.location, user.organisation]);
+  }, [ props.location, user.organisation]);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -396,13 +408,6 @@ const NewShipment = (props) => {
     }
   };
 
-  const handleSOChange = async (item) => {
-    setOrderId(item);
-    dispatch(turnOn());
-    const result = await getShippingOrderById(item);
-    setOrderDetails(result);
-    dispatch(turnOff());
-  };
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -752,7 +757,7 @@ const NewShipment = (props) => {
                               "rtype",
                               result.poDetails[0].customer.organisation.type
                             );
-
+                              console.log(result.poDetails[0].products)
                             let products_temp = result.poDetails[0].products;
                             for (let i = 0; i < products_temp.length; i++) {
                               if (
