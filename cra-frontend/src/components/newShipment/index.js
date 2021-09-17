@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Add from "../../assets/icons/createshipment.png";
+import CalenderIcon from "../../assets/icons/date_icon.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
 import { createShipment, getViewShipment } from "../../actions/shipmentActions";
@@ -585,7 +586,7 @@ console.log(user.organisation)
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <div className='row mt-3'>
-                  <div className='col-md-6 col-sm-12 '>
+                  <div className='col-md-6 col-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orderID'>
                         Order ID
@@ -815,9 +816,12 @@ console.log(user.organisation)
                       placeholder='Enter Reference Shipment ID'
                       onChange={handleChange}
                     />
+                    </div>
+                    </div>
+                    <div className="fetch">
                     <span
                       style={{ height: "25px", width: "50px" }}
-                      className='btn btn-outline-secondary fetch'
+                      className='btn btn-outline-secondary btn-fetch'
                       onClick={async () => {
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
@@ -833,7 +837,7 @@ console.log(user.organisation)
                           alert("The shipment has to be delivered first");
                         }
 
-                        for (let i = 0; i < result.products.length; i++) {
+                        for (let i = 0; i < result.products?.length; i++) {
                           if (result.products[i].productQuantityShipped) {
                             result.products[i].productQuantity =
                               parseInt(result.products[i].productQuantity) -
@@ -896,7 +900,6 @@ console.log(user.organisation)
                         Fetch
                       </span>
                     </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1276,6 +1279,7 @@ console.log(user.organisation)
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
                         {/* {errors.shipmentDate && touched.shipmentDate && (
                           <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
@@ -1347,6 +1351,7 @@ console.log(user.organisation)
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>
