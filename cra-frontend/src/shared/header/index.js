@@ -341,13 +341,15 @@ const Header = (props) => {
         </div>
         <div>
           <div className='user-info '>
-            <div className='notifications' id='notification'>
+            <div className='notifications'>
               <img
+                id='notification'
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
               />
               <div
+                id='notification'
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
@@ -441,7 +443,7 @@ const Header = (props) => {
                               alt='notification'
                             />
                             <Link
-                              style={{pointerEvents:'none'}}
+                              // style={{pointerEvents:'none'}}
                               onClick={() => {
                                 viewUrl(notifications,notifications.transactionId)
                               }}
