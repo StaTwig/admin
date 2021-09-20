@@ -110,7 +110,7 @@ const ViewOrder = (props) => {
       <div className='mt-5'>
         <div
           className='row bg-white shadow  p-4'
-          style={{ position: "relative", marginTop: "-40px"}}
+          style={{ position: "relative", marginTop: "-40px" }}
         >
           <div className='col row'>
             <span className='col-4 ml-2'>Order ID</span>
@@ -129,11 +129,11 @@ const ViewOrder = (props) => {
               {formatDate(order.creationDate)}
             </span>
           </div>
-          <div class='w-100'></div>
-        <div className='col row'>
-          <span className='col-2 ml-2 mt-4'>Created By</span>
-          <span className='col text-dark ml-1 mt-4'>{order.createdBy}</span>
-        </div>
+          <div className='w-100'></div>
+          <div className='col row'>
+            <span className='col-2 ml-2 mt-4'>Created By</span>
+            <span className='col text-dark ml-1 mt-4'>{order.createdBy}</span>
+          </div>
         </div>
         <div className='row bg-white shadow mt-4 p-3'>
           <div className='col-12'>
@@ -218,6 +218,7 @@ const ViewOrder = (props) => {
                   index >= 0 ? "ml-5 mb-5" : ""
                 }  p-3`}
                 style={{ width: "25%" }}
+                key={index}
               >
                 <span className=' p-1 font-weight-normal text-primary '>
                   {product.name}
