@@ -17,6 +17,7 @@ import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
 import Modal from "./modal/index";
 import Modal1 from "../../shared/modal";
+import moment from "moment";
 const axios = require("axios");
 
 class Profile extends React.Component {
@@ -626,9 +627,11 @@ class Profile extends React.Component {
                           <span>N/A</span>
                         )}
                       </div>
-                      <div className="row date-joined text-muted">
+                      <div className="row date-joined">
                         {this.state.signup_date ? (
-                          <span>Joined on {new Date(this.state.signup_date).toString().split('GMT')[0]}</span>
+                          <span>Joined on {moment(this.state.signup_date).format("Do MMMM YYYY") === "Invalid date"
+                          ? this.state.signup_date
+                          : moment(this.state.signup_date).format("Do MMMM YYYY")}</span>
                         ) : (
                           <span>N/A</span>
                         )}

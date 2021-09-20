@@ -821,7 +821,7 @@ console.log(user.organisation)
                     <div className="fetch">
                     <span
                       style={{ height: "25px", width: "50px" }}
-                      className='btn btn-outline-secondary btn-fetch'
+                      className='btn btn-fetch'
                       onClick={async () => {
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
