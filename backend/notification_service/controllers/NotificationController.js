@@ -239,8 +239,7 @@ exports.readNotification = [
       const { id } = req.query;
       const notification = await Notification.findOneAndUpdate(
         { id },
-        { $set: { isRead: true } },
-        { new: true }
+        { $set: { isRead: true } }
       );
       return apiResponse.successResponseWithData(
         res,
