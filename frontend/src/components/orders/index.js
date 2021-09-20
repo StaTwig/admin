@@ -56,186 +56,57 @@ const Orders = (props) => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-
-  const [inBoundData, setInBoundData] = useState([]);
-  const [outBoundData, setOutBoundData] = useState([]);
-
-  const [orderIdData, setOrderIdData] = useState([]);
-  const [orderIdReplicaData, setOrderIdReplicaData] = useState([]);
-  const [showDropDownForOrderId, setShowDropDownForOrderId] = useState(false);
-
-  const [orderSentToData, setOrderSentToData] = useState([]);
-  const [orderSentToReplicaData, setOrderSentToReplicaData] = useState([]);
-  const [showDropDownForOrderSentTo, setShowDropDownForOrderSentTo] = useState(false);
-
-  const [productNameData, setProductNameData] = useState([]);
-  const [productNameReplicaData, setProductNameReplicaData] = useState([]);
-  const [showDropDownForProductName, setShowDropDownForProductName] = useState(false);
-
-  const [deliveryLocationData, setDeliveryLocationData] = useState([]);
-  const [deliveryLocationReplicaData, setDeliveryLocationReplicaData] = useState([]);
-  const [showDropDownForDeliveryLocation, setShowDropDownForDeliveryLocation] = useState(false);
-
-  const [queryKey, setQueryKey] = useState("");
-  const [queryValue, setQueryValue] = useState("");
-
   if (!isAuthenticated('viewInboundOrders') && !isAuthenticated('viewOutboundOrders')) props.history.push(`/profile`);
-
-
   useEffect(() => {
-    if (queryKey && queryValue) {
-      if (queryValue === 'orderSentTo') {
-        if (visible === 'one') {
-          async function fetchData() {
-            const outboundRes = await getSentPOs(queryKey, '', '', '', '', 0, limit, '', ''); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-            setOutboundRecords(outboundRes.data.outboundPOs);
-            setCount(outboundRes.data.count);
-          }
-          fetchData();
-        } else {
-          async function fetchData() {
-            const inboundRes = await getReceivedPOs(queryKey, '', '', '', '', 0, limit, '', ''); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-            setInboundRecords(inboundRes.data.inboundPOs);
-            setCount(inboundRes.data.count);
-          }
-          fetchData();
-        }
-      } else if (queryValue === 'orderId') {
-        if (visible === 'one') {
-          async function fetchData() {
-            const outboundRes = await getSentPOs('', queryKey, '', '', '', 0, limit, '', ''); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-            setOutboundRecords(outboundRes.data.outboundPOs);
-            setCount(outboundRes.data.count);
-          }
-          fetchData();
-        } else {
-          async function fetchData() {
-            const inboundRes = await getReceivedPOs('', queryKey, '', '', '', 0, limit, '', ''); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-            setInboundRecords(inboundRes.data.inboundPOs);
-            setCount(inboundRes.data.count);
-          }
-          fetchData();
-        }
-      } else if (queryValue === 'productName') {
-        if (visible === 'one') {
-          async function fetchData() {
-            const outboundRes = await getSentPOs('', '', queryKey, '', '', 0, limit, '', ''); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-            setOutboundRecords(outboundRes.data.outboundPOs);
-            setCount(outboundRes.data.count);
-          }
-          fetchData();
-        } else {
-          async function fetchData() {
-            const inboundRes = await getReceivedPOs('', '', queryKey, '', '', '', 0, limit, '', ''); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-            setInboundRecords(inboundRes.data.inboundPOs);
-            setCount(inboundRes.data.count);
-          }
-          fetchData();
-        }
-      } else if (queryValue === 'deliveryLocation') {
-        if (visible === 'one') {
-          async function fetchData() {
-            const outboundRes = await getSentPOs('', '', '', queryKey, '', 0, limit, '', ''); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-            setOutboundRecords(outboundRes.data.outboundPOs);
-            setCount(outboundRes.data.count);
-          }
-          fetchData();
-        } else {
-          async function fetchData() {
-            const inboundRes = await getReceivedPOs('', '', '', queryKey, '', '', 0, limit, '', ''); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-            setInboundRecords(inboundRes.data.inboundPOs);
-            setCount(inboundRes.data.count);
-          }
-          fetchData();
-        }
+    async function fetchData() {
+      if (visible == "one") {
+        setDateFilter("");
+        setProductNameFilter("");
+        setToFilter("");
+        setFromFilter("");
+        setOrderIdFilter("");
+        setStatusFilter("");
+        setLocationFilter("");
+        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count);
+      } else {
+        setDateFilter("");
+        setProductNameFilter("");
+        setToFilter("");
+        setFromFilter("");
+        setOrderIdFilter("");
+        setStatusFilter("");
+        setLocationFilter("");
+        const inboundRes = await getReceivedPOs(
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          0,
+          limit
+        ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count);
       }
-    } else {
-      async function fetchData() {
-        if (visible == "one") {
-          setDateFilter("");
-          setProductNameFilter("");
-          setToFilter("");
-          setFromFilter("");
-          setOrderIdFilter("");
-          setStatusFilter("");
-          setLocationFilter("");
-          const outboundRes = await getSentPOs("", "", "", "", "", 0, limit, '', ''); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-          setOutboundRecords(outboundRes.data.outboundPOs);
-          setOutBoundData(outboundRes.data.outboundPOs);
-          setCount(outboundRes.data.count);
-        } else {
-          setDateFilter("");
-          setProductNameFilter("");
-          setToFilter("");
-          setFromFilter("");
-          setOrderIdFilter("");
-          setStatusFilter("");
-          setLocationFilter("");
-          const inboundRes = await getReceivedPOs(
-            "",
-            "",
-            "",
-            "",
-            "",
-            0,
-            limit,
-            '',
-            ''
-          ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-          setInboundRecords(inboundRes.data.inboundPOs);
-          setInBoundData(inboundRes.data.inboundPOs);
-          setCount(inboundRes.data.count);
-        }
+      const orderIdListRes = await getOrderIds();
+      setPoOrderIdList(orderIdListRes);
 
-        const orderIdListRes = await getOrderIds();
-        setPoOrderIdList(orderIdListRes);
-
-        const productsLocationsOrganisationsRes =
-          await getProductIdDeliveryLocationsOrganisations();
-        // console.log('products location', productsLocationsOrganisationsRes);
-        setPoDeliveryLocationsList(
-          productsLocationsOrganisationsRes.deliveryLocations
-        );
-        setPoProductsList(productsLocationsOrganisationsRes.productIds);
-        setPoOrganisationsList(productsLocationsOrganisationsRes.organisations);
-        setSkip(0);
-      }
-      fetchData();
+      const productsLocationsOrganisationsRes =
+        await getProductIdDeliveryLocationsOrganisations();
+      // console.log('products location', productsLocationsOrganisationsRes);
+      setPoDeliveryLocationsList(
+        productsLocationsOrganisationsRes.deliveryLocations
+      );
+      setPoProductsList(productsLocationsOrganisationsRes.productIds);
+      setPoOrganisationsList(productsLocationsOrganisationsRes.organisations);
+      setSkip(0);
     }
-  }, [visible, queryKey]);
-
-
-  useEffect(() => {
-    console.log('outboundData: ', outBoundData);
-    if (visible === 'one' && outBoundData && outBoundData.length > 0) {
-      setOrderSentToData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'supplier', 'organisation', 'id'))]);
-      setOrderSentToReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'supplier', 'organisation', 'id'))]);
-
-      setOrderIdData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'id'))]);
-      setOrderIdReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'id'))]);
-
-      setProductNameData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'id'))]);
-      setProductNameReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'id'))]);
-
-      setDeliveryLocationData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'customer', 'warehouse', 'id'))]);
-      setDeliveryLocationReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(outBoundData, 'customer', 'warehouse', 'id'))]);
-
-    } else if (visible === 'two' && inBoundData && inBoundData.length > 0) {
-      setOrderSentToData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'supplier', 'organisation', 'id'))]);
-      setOrderSentToReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'supplier', 'organisation', 'id'))]);
-
-      setOrderIdData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'id'))]);
-      setOrderIdReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'id'))]);
-
-      setProductNameData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'id'))]);
-      setProductNameReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'id'))]);
-
-      setDeliveryLocationData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'customer', 'warehouse', 'id'))]);
-      setDeliveryLocationReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(inBoundData, 'customer', 'warehouse', 'id'))]);
-
-    }
-  }, [inBoundData, outBoundData]);
+    // dispatch(resetReviewPos({}));
+    fetchData();
+  }, [visible]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
@@ -246,11 +117,10 @@ const Orders = (props) => {
         orderIdFilter,
         productNameFilter,
         locationFilter,
+        dateFilter,
         statusFilter,
         recordSkip,
-        limit,
-        '',
-        ''
+        limit
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -260,11 +130,10 @@ const Orders = (props) => {
         orderIdFilter,
         productNameFilter,
         locationFilter,
+        dateFilter,
         statusFilter,
         recordSkip,
-        limit,
-        '',
-        ''
+        limit
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
@@ -513,21 +382,7 @@ const Orders = (props) => {
     ]);
   }, []);
 
-  const appendFileName = (value) => {
-    const date = new Date();
-    const YYYYMMDD_format = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-      .toISOString()
-      .split("T")[0];
-    const HHMMSS_format = `${date.getHours()}${date.getMinutes()}`;
-    console.log(HHMMSS_format);
-    if (visible === 'one') {
-      return `Orders_outbound_${YYYYMMDD_format}_${HHMMSS_format}hrs.${value.toLowerCase() === 'excel' ? 'xlsx' : value.toLowerCase()}`
-    } else {
-      return `Orders_inbound_${YYYYMMDD_format}_${HHMMSS_format}hrs.${value.toLowerCase() === 'excel' ? 'xlsx' : value.toLowerCase()}`
-    }
-  }
-
-  const onSelectionOfExportDropdown = (index, type, value) => {
+  const onSelectionOfDropdownValue = (index, type, value) => {
     setShowExportFilter(false);
     let url = ''
     if (visible === 'one') {
@@ -545,133 +400,13 @@ const Orders = (props) => {
           const downloadUrl = window.URL.createObjectURL(new Blob([response]));
           const link = document.createElement('a');
           link.href = downloadUrl;
-          link.setAttribute('download', appendFileName(value)); //any other extension
+          link.setAttribute('download', `${uuid()}.${value.toLowerCase() === 'excel' ? 'xlsx' : value.toLowerCase()}`); //any other extension
           document.body.appendChild(link);
           link.click();
           link.remove();
         }
       })
   }
-
-  const filterTableByCalendar = async (selectedDateRange) => {
-    console.log(selectedDateRange);
-    const fromDate = new Date(selectedDateRange.startDate.getTime() - (selectedDateRange.startDate.getTimezoneOffset() * 60000))
-      .toISOString()
-      .split("T")[0];
-
-    const toDate = new Date(selectedDateRange.endDate.getTime() - (selectedDateRange.endDate.getTimezoneOffset() * 60000))
-      .toISOString()
-      .split("T")[0];
-
-    console.log(toDate)
-
-    setShowCalendar(false);
-    setSkip(0);
-
-    if (visible == 'one') {
-      const outboundRes = await getSentPOs("", "", "", "", "", 0, limit, fromDate, toDate); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
-      setOutboundRecords(outboundRes.data.outboundPOs);
-      setCount(outboundRes.data.count);
-    } else {
-      const inboundRes = await getReceivedPOs(
-        "",
-        "",
-        "",
-        "",
-        "",
-        0,
-        limit,
-        fromDate,
-        toDate
-      ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-      setInboundRecords(inboundRes.data.inboundPOs);
-      setCount(inboundRes.data.count);
-    }
-  }
-
-  const prepareDropdownData = (data) => {
-    let finalDropDownData = [];
-    data?.forEach(item => {
-      let obj = {};
-      obj['key'] = item.id ? item['id'] : item.toLowerCase();
-      obj['value'] = item.name ? item['name'] : item;
-      obj['checked'] = false;
-      finalDropDownData.push(obj);
-    });
-    return finalDropDownData;
-  }
-
-  const getUniqueStringFromOrgListForGivenType = (data, ...args) => {
-    const availableList = data?.map(item => args.length > 1 ? item && item.hasOwnProperty(args[0]) && item[args[0]].hasOwnProperty(args[1]) && item[args[0]][args[1]].hasOwnProperty(args[2]) && item[args[0]][args[1]][args[2]] : item[args[0]]).filter(item => item);
-    return [...new Set(availableList)];
-  };
-
-  const setCheckedAndUnCheckedOfProvidedList = (typeOriginalData, index) => {
-    return typeOriginalData.map((item, i) => {
-      if (i === index) {
-        item.checked = !item.checked;
-      } else {
-        item.checked = false
-      }
-      return item;
-    });
-  }
-
-  const onSelectionOfDropdownValue = (index, type, value) => {
-    if (type === 'orderSentTo') {
-      setOrderSentToData([...setCheckedAndUnCheckedOfProvidedList(orderSentToData, index)]);
-      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, orderSentToData, index);
-      markOpenedDrownsToFalse();
-    } else if (type === 'orderId') {
-      setOrderIdData([...setCheckedAndUnCheckedOfProvidedList(orderIdData, index)]);
-      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, orderIdData, index);
-      markOpenedDrownsToFalse();
-
-    } else if (type === 'product') {
-      setProductNameData([...setCheckedAndUnCheckedOfProvidedList(productNameData, index)]);
-      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, productNameData, index);
-      markOpenedDrownsToFalse();
-
-    } else if (type === 'deliveryLocation') {
-      setDeliveryLocationData([...setCheckedAndUnCheckedOfProvidedList(deliveryLocationData, index)]);
-      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, deliveryLocationData, index);
-      markOpenedDrownsToFalse();
-    }
-  };
-
-  const markOpenedDrownsToFalse = () => {
-    setShowDropDownForProductName(false);
-    setShowDropDownForOrderSentTo(false);
-    setShowDropDownForDeliveryLocation(false);
-    setShowDropDownForOrderId(false)
-  }
-
-  const filterListForSearchInput = (data, searchInput) => data.filter(item => {
-    return item.value.toLowerCase().includes(searchInput.toLowerCase());
-  });
-
-  const onChangeOfSearchForFilterInput = (searchInput, type) => {
-    if (type === 'orderSentTo' && searchInput) {
-      setOrderSentToData(filterListForSearchInput(orderSentToData, searchInput));
-    } else if (type === 'orderId' && searchInput) {
-      setOrderIdData(filterListForSearchInput(orderIdData, searchInput))
-    } else if (type === 'deliveryLocation' && searchInput) {
-      setDeliveryLocationData(filterListForSearchInput(deliveryLocationData, searchInput))
-    } else if (type === 'product' && searchInput) {
-      setProductNameData(filterListForSearchInput(productNameData, searchInput))
-    } else {
-      if (type === 'orderSentTo') {
-        setOrderSentToData([...orderSentToReplicaData]);
-      } else if (type === 'orderId') {
-        setOrderIdData([...orderIdReplicaData]);
-      } else if (type === 'deliveryLocation') {
-        setDeliveryLocationData([...deliveryLocationReplicaData]);
-      } else if (type === 'product') {
-        setProductNameData([...productNameReplicaData]);
-      }
-    }
-  };
-
 
   return (
     <div className="orders">
@@ -743,7 +478,7 @@ const Orders = (props) => {
         <Tiles {...props} setData={setData} />
       }
       <div className="mt-4">
-        <Tabs {...props} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter} />
+        <Tabs {...props} setvisible={setvisible} visible={visible} setShowExportFilter={setShowExportFilter}/>
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter
@@ -763,26 +498,8 @@ const Orders = (props) => {
           showExportFilter={showExportFilter}
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
-          onSelectionOfExportDropdown={onSelectionOfExportDropdown}
-          isReportDisabled={!isAuthenticated('orderExportReport')}
-          filterTableByCalendar={filterTableByCalendar}
-          showCalendar={showCalendar}
-          setShowCalendar={setShowCalendar}
-          type={'ORDERS'}
-          onChangeOfSearchForFilterInput={onChangeOfSearchForFilterInput}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
-          orderIdData={orderIdData}
-          setShowDropDownForOrderId={setShowDropDownForOrderId}
-          showDropDownForOrderId={showDropDownForOrderId}
-          productNameData={productNameData}
-          setShowDropDownForProductName={setShowDropDownForProductName}
-          showDropDownForProductName={showDropDownForProductName}
-          deliveryLocationData={deliveryLocationData}
-          setShowDropDownForDeliveryLocation={setShowDropDownForDeliveryLocation}
-          showDropDownForDeliveryLocation={showDropDownForDeliveryLocation}
-          orderSentToData={orderSentToData}
-          setShowDropDownForOrderSentTo={setShowDropDownForOrderSentTo}
-          showDropDownForOrderSentTo={showDropDownForOrderSentTo}
+          isReportDisabled={!isAuthenticated('orderExportReport')}
         />
       </div>
       <div className="ribben-space">
@@ -800,14 +517,3 @@ const Orders = (props) => {
 };
 
 export default Orders;
-
-function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
-  if (data[index].checked) {
-    setQueryValue(value);
-    setQueryType(type);
-  } else {
-    setQueryValue();
-    setQueryType();
-  }
-}
-
