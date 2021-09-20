@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "getNotifications",
+			"name": "getNotifications Alerts",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -21,7 +21,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3006/notificationmanagement/api/notification/getAlertNotifications?type=ALERT",
+					"raw": "localhost:3006/notificationmanagement/api/notification/getNotifications?type=ALERT",
 					"host": [
 						"localhost"
 					],
@@ -30,7 +30,7 @@
 						"notificationmanagement",
 						"api",
 						"notification",
-						"getAlertNotifications"
+						"getNotifications"
 					],
 					"query": [
 						{
@@ -43,7 +43,44 @@
 			"response": []
 		},
 		{
-			"name": "getNotifications Copy",
+			"name": "getNotifications Transactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3006/notificationmanagement/api/notification/getNotifications?type=TRANSACTION",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"notificationmanagement",
+						"api",
+						"notification",
+						"getNotifications"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "TRANSACTION"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read Notification",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -74,36 +111,6 @@
 							"key": "id",
 							"value": "dbaeee8c-d6ba-4ef0-879e-121f236176a8"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "deleteNotification",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/notificationmanagement/api/notification/deleteNotification",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"notificationmanagement",
-						"api",
-						"notification",
-						"deleteNotification"
 					]
 				}
 			},
@@ -164,6 +171,46 @@
 						"api",
 						"notification",
 						"sendMessage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send OTP",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"whatsapp\":true,\n    \"mobile\":\"+917901051813\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3006/notificationmanagement/api/notification/sendOTP",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"notificationmanagement",
+						"api",
+						"notification",
+						"sendOTP"
 					]
 				}
 			},
