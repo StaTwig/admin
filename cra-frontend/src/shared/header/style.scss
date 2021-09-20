@@ -110,6 +110,8 @@
     }
 
     .user-info {
+      position: relative;
+      right: 3rem;
       display: flex;
       align-items: center;
       flex: 1;
@@ -122,7 +124,7 @@
       .notifications {
         position: relative;
         right: 2.5rem;
-        top: -2.2rem;
+        top: -2.5rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
@@ -212,15 +214,18 @@
       }
 
       .userName {
-        max-width: 10vw;
+        max-width: 7vw;
         margin-right: 1rem;
         position: relative;
         bottom: 2.5rem;
+        left: 2rem;
 
         .uname {
           font-size: 10px;
           text-align: right;
           margin: 1px;
+          position: relative;
+          left: 1.1rem;
         }
 
         .cname {
@@ -228,12 +233,17 @@
           text-align: right;
           font-weight: 700;
           margin: 0;
+          position: relative;
+          left: 1.1rem;
         }
         @media screen and (max-width: 768px) {
           display: none;
         }
 
         .custom-dropdown {
+          width: 11vw;
+          position: relative;
+          right: 2rem;
           flex-basis: 100%;
           display: flex;
           outline: none;
@@ -262,6 +272,8 @@
             }
           }
           .dropdownImg {
+            position: relative;
+            right: 2rem;
             margin-left: auto;
             width: 13px;
             margin-right: auto;
@@ -303,6 +315,7 @@
         position: relative;
         margin-right: 0.5rem;
         bottom: 2.5rem;
+        left: 3rem;
         img {
           width: 40px;
           height: 40px;
@@ -315,6 +328,7 @@
           bottom: 2.5rem;
           width: 13px;
           cursor: pointer;
+          left: 3rem;
         }
       }
 

@@ -1,6 +1,9 @@
 @import "../../assets/styles/global.scss";
 
 .custom-dropdown {
+  width: 11vw;
+  position: relative;
+  right: 0rem;
   flex-basis: 100%;
   display: flex;
   outline: none;

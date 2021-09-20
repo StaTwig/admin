@@ -258,6 +258,19 @@ const Header = (props) => {
     fetchApi();
   }, [alertType, dispatch]);
 
+  useEffect(() => {
+    const concernedElement = document.querySelector(".click-text");
+
+    document.addEventListener("mousedown", (event) => {
+      if (concernedElement.contains(event.target)) {
+        console.log("Clicked Inside");
+      } else {
+        setShowNotifications(false);
+        console.log("Clicked Outside / Elsewhere");
+      }
+    });
+  }, [])
+
   const handleLocation = async (item) => {
     setLocation(item);
     dispatch(setUserLocation(item));
@@ -351,6 +364,7 @@ const Header = (props) => {
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
+                className="click-text"
               />
               <div
                 className='bellicon-wrap'
