@@ -11,6 +11,7 @@ router.get(
   "/getAlertNotifications",
   NotificationController.getAlertNotifications
 );
+router.get("/readNotification", NotificationController.readNotification);
 router.get(
   "/getTransactionNotifications",
   NotificationController.getTransactionNotifications
