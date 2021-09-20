@@ -47,9 +47,9 @@ function sendWhatsApp(content, mobile) {
     .catch((err) => console.log(err));
 }
 
-exports.getAlertNotifications = [
+exports.getNotifications = [
   auth,
-  async function (req, res) {
+  async (req, res) => {
     try {
       const userId = req.user.id;
       const resPerPage = Number(req.query.limit) || 20;
@@ -86,38 +86,6 @@ exports.getAlertNotifications = [
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getTransactionNotifications = [
-  auth,
-  async function (req, res) {
-    try {
-      Notification.find({ user: req.user.id, type: "TRANSACTION" })
-        .skip(resPerPage * page - resPerPage)
-        .limit(resPerPage)
-        .then((Notifications) => {
-          if (Notifications.length > 0) {
-            const finalData = {
-              totalRecords: totalRecords,
-              data: Notifications,
-            };
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        });
-    } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
   },
