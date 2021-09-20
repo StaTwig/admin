@@ -36,7 +36,7 @@ const ViewShipmentContainer = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result = await chainOfCustody(props.match.params.id);
-      if (result.status === 200) {
+      if (result && result?.status === 200) {
         setShippmentChainOfCustodyData(
           result.data.data["shipmentChainOfCustody"]
         );
@@ -50,7 +50,7 @@ const ViewShipmentContainer = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result = await fetchImage(props.match.params.id);
-      if (result.status === 200) {
+      if (result?.status === 200) {
         setImagesData(result.data.data);
       } else {
         setImageData([]);
