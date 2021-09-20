@@ -784,6 +784,22 @@ exports.createShipment = [
             }
           );
 
+           let quantityMismatch = false;
+           prevTaggedShipments.products.every((product) => {
+           products.every((p) => {
+              const shipment_product_quantity = product.productQuantity-product.productQuantityTaggedSent;
+              const tagged_product_qty = p.productQuantity || p.quantity;
+                  if (parseInt(tagged_product_qty) <= parseInt(shipment_product_quantity))
+                    {
+                      quantityMismatch = true;
+                      return false;
+                    }
+                });
+            });
+
+           if (!quantityMismatch)
+              throw new Error("Tagged product quantity not available");
+
           const tagUpdate = await ShipmentModel.findOneAndUpdate(
             {
               id: shipmentId,
