@@ -8,6 +8,7 @@ import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import DrawerMenu from "./drawerMenu";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/spinner/index.js"
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -43,6 +44,7 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
+  // console.log(ABC)
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
   const [location, setLocation] = useState({});
@@ -58,9 +60,10 @@ const Header = (props) => {
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
+  const [icount, setIcount] = useState(0);
   const [visible, setVisible] = useState("one");
   const [limit, setLimit] = useState(10);
-
+  const [hasMore, setHasMore] = useState(true);
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
     stringify: (option) => option._id,
@@ -216,11 +219,16 @@ const Header = (props) => {
     });
   }
 
-  function changeNotifications(value, num) {           
+  function changeNotifications(value, num) {   
+    turnOn()        
     if(num)
     setLimit(limit+num)
    axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
-    setNotifications(response.data.data.data);
+
+      setNotifications(response.data.data.data);
+      if(response.data.data.data.length === icount)
+        setHasMore(false)
+      setIcount(response.data.data.data.length)
    })
   }
 
@@ -231,6 +239,7 @@ const Header = (props) => {
       const response = await axios.get(`${config().getAlerts}${alertType}&skip=0&limit=11`);
       setNotifications(response.data.data.data);
       setCount(response.data.data.totalRecords);
+      setIcount(response.data.data.data.length)
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -407,6 +416,7 @@ const Header = (props) => {
                             setAlertType("ALERT");
                             changeNotifications("ALERT", 1);
                             setVisible("one");
+                            setHasMore(true);
                           }}
                         >
                           <div
@@ -428,6 +438,7 @@ const Header = (props) => {
                             setAlertType("TRANSACTION");
                             changeNotifications("TRANSACTION", 1);
                             setVisible("two");
+                            setHasMore(true);
                           }}
                         >
                           <div
@@ -447,11 +458,16 @@ const Header = (props) => {
                   <InfiniteScroll
                     dataLength={notifications.length}
                     next={() => changeNotifications(alertType, 10)}
-                    style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
-                    hasMore={true}
-                    loader={<h4>Loading...</h4>}
+                    style={{ display: 'flex', flexDirection: 'column' }} //To put endMessage and loader to the top.
+                    hasMore={hasMore}
+                    loader={<Spinner />}
                     scrollThreshold={1}
                     scrollableTarget="scrollableDiv"
+                    endMessage={
+                      <p style={{ textAlign: 'center' }}>
+                        <b>You have reached the end</b>
+                      </p>
+                    }
   >
                   {notifications?.length >= 0 ? (
                     notifications?.map((notifications) => (
