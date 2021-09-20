@@ -701,13 +701,18 @@ exports.createShipment = [
           return apiResponse.ErrorResponse(res, "Shipment Not saved");
         }
 
-         if (req.body.shippingDate.includes("/"))
-          {
-              var shipmentData = req.body.shippingDate.split("/")
-              const shippingDate = shipmentData[2]+ "-" + shipmentData[1]+ "-" + shipmentData[0] + "T00:00:00.000Z"
-              data.shippingDate = shippingDate
-          }
-        
+        if (req.body.shippingDate.includes("/")) {
+          var shipmentData = req.body.shippingDate.split("/");
+          const shippingDate =
+            shipmentData[2] +
+            "-" +
+            shipmentData[1] +
+            "-" +
+            shipmentData[0] +
+            "T00:00:00.000Z";
+          data.shippingDate = shippingDate;
+        }
+
         //Blockchain Integration
         const bc_data = {
           Id: data.id,
@@ -2536,8 +2541,8 @@ exports.fetchInboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
-      let fromDate = req.query.fromDate ? req.query.fromDate : undefined
-      let toDate = req.query.toDate ? req.query.toDate : undefined
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
 
       switch (req.query.dateFilter) {
         case "today":
@@ -2590,10 +2595,10 @@ exports.fetchInboundShipments = [
         whereQuery["id"] = shipmentId;
       }
 
-      if(fromDate && toDate){
-        var firstDate =  new Date(fromDate);
-        var nextDate = new Date(toDate)
-        whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
@@ -2686,8 +2691,8 @@ exports.fetchOutboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
-      let fromDate = req.query.fromDate ? req.query.fromDate : undefined
-      let toDate = req.query.toDate ? req.query.toDate : undefined      
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -2738,10 +2743,10 @@ exports.fetchOutboundShipments = [
       if (shipmentId) {
         whereQuery["id"] = shipmentId;
       }
-      if(fromDate && toDate){
-        var firstDate =  new Date(fromDate);
-        var nextDate = new Date(toDate)
-        whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
       }
       if (status) {
         whereQuery["status"] = status;
@@ -3932,217 +3937,283 @@ function buildPdfReport(req, res, data) {
     });
 }
 
-
 exports.trackJourneyOnBlockchain = [
-    auth,
-    async (req, res) => {
-        try {
-            var shipmentsArray = [];
-            var inwardShipmentsArray = [];
-            var outwardShipmentsArray = [];
-            var poDetails, trackedShipment;
-            const trackingId = req.query.trackingId;
-            var poShipmentsArray = "";
-            try {
-                if (!trackingId.includes("PO")) {
-
-
-                    const inwardShipmentsQuery = {
-                        "selector": {
-                            "$or": [{
-                                    "Id": trackingId
-                                },
-                                {
-                                    "AirwayBillNo": trackingId
-                                }
-                            ]
-                        }
-                    }
-                    let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-                    const inwardShipments = await axios.post("http://13.235.113.206:8080/api/v1/transactionapi/shipment/querystring", inwardShipmentsQuery, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-
-                    shipmentsArray = JSON.parse(inwardShipments.data.data[0].TaggedShipments);
-                    //shipmentsArray.push(trackingId;
-
-                    const shipmentQuery = {
-                        "selector": {
-                            "Id": {
-                                "$in": shipmentsArray
-                            }
-                        }
-                    }
-
-                    const shipmentResult = await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`, shipmentQuery, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-                    const len = shipmentResult.data.data
-
-                    for (count = 0; count < len.length; count++) {
-                        const supplierDetails = JSON.parse(shipmentResult.data.data[count].Supplier)
-                        const receiverDetails = JSON.parse(shipmentResult.data.data[count].Receiver)
-
-                        const supplierWarehouseDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const supplierOrgDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`, {
-                            headers: {
-                                'Authorization': token
-                            }
-
-                        })
-
-                        const receiverWarehouseDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const receiverOrgDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const shipmentInwardData = {
-                            "Shipmentdata": shipmentResult.data.data[count],
-                            "supplierWarehouseDetails": supplierWarehouseDetails.data.data,
-                            "supplierOrgDetails": supplierOrgDetails.data.data,
-                            "receiverWarehouseDetails": receiverWarehouseDetails.data.data,
-                            "receiverOrgDetails": receiverOrgDetails.data.data
-                        }
-                        inwardShipmentsArray.push(shipmentInwardData)
-                    }
-                    const shipmentQueryOutward = {
-                        "selector": {
-                            "$or": [{
-                                    "taggedShipments": trackingId
-                                },
-                                {
-                                    "status": "RECEIVED"
-                                }
-                            ]
-                        }
-                    }
-
-                    const shipmentResultOutward = await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`, shipmentQueryOutward, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-                    const len1 = shipmentResult.data.data
-
-                    for (count = 0; count < len.length; count++) {
-                        const supplierDetails = JSON.parse(shipmentResultOutward.data.data[count].Supplier)
-                        const receiverDetails = JSON.parse(shipmentResultOutward.data.data[count].Receiver)
-
-                        const supplierWarehouseDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const supplierOrgDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const receiverWarehouseDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-
-                        const receiverOrgDetails = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`, {
-                            headers: {
-                                'Authorization': token
-                            }
-                        })
-                        const shipmentOutwardData = {
-                            "Shipmentdata": shipmentResult.data.data[count],
-                            "supplierWarehouseDetails": supplierWarehouseDetails.data.data,
-                            "supplierOrgDetails": supplierOrgDetails.data.data,
-                            "receiverWarehouseDetails": receiverWarehouseDetails.data.data,
-                            "receiverOrgDetails": receiverOrgDetails.data.data
-                        }
-                        outwardShipmentsArray.push(shipmentOutwardData)
-                    }
-                    console.log("outwardShipmentArray", outwardShipmentsArray) * /
-
-                    const shipmentQueryTracked = {
-                        "selector": {
-                            "$or": [{
-                                    "Id": trackingId
-                                },
-                                {
-                                    "AirwayBillNo": trackingId
-                                }
-                            ]
-                        }
-                    }
-
-                    const shipmentResultTracked = await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`, shipmentQueryTracked, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-
-                    const supplierDetails = JSON.parse(shipmentResultTracked.data.data[0].Supplier)
-                    const receiverDetails = JSON.parse(shipmentResultTracked.data.data[0].Receiver)
-
-                    const supplierWarehouseDetailsTracked = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-
-                    const supplierOrgDetailsTracked = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-
-                    const receiverWarehouseDetailsTracked = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-
-                    const receiverOrgDetailsTracked = await axios.get(`${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    })
-                    const trackedShipment = {
-                        "Shipmentdata": shipmentResultTracked.data.data,
-                        "supplierWarehouseDetails": supplierWarehouseDetailsTracked.data.data,
-                        "supplierOrgDetails": supplierOrgDetailsTracked.data.data,
-                        "receiverWarehouseDetails": receiverWarehouseDetailsTracked.data.data,
-                        "receiverOrgDetails": receiverOrgDetailsTracked.data.data
-                    }
-
-                    return apiResponse.successResponseWithData(res, "Shipments Table", {
-                        //poDetails: poDetails,
-                        inwardShipmentsArray: inwardShipmentsArray,
-                        trackedShipment: trackedShipment,
-                        outwardShipmentsArray: outwardShipmentsArray,
-                        //poShipmentsArray: poShipmentsArray,
-                    });
-                }
-            } catch (err) {
-                return apiResponse.ErrorResponse(res, err.message);
+  auth,
+  async (req, res) => {
+    try {
+      var shipmentsArray = [];
+      var inwardShipmentsArray = [];
+      var outwardShipmentsArray = [];
+      var poDetails, trackedShipment;
+      const trackingId = req.query.trackingId;
+      var poShipmentsArray = "";
+      try {
+        if (!trackingId.includes("PO")) {
+          const inwardShipmentsQuery = {
+            selector: {
+              $or: [
+                {
+                  Id: trackingId,
+                },
+                {
+                  AirwayBillNo: trackingId,
+                },
+              ],
+            },
+          };
+          let token =
+            req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+          const inwardShipments = await axios.post(
+            "http://13.235.113.206:8080/api/v1/transactionapi/shipment/querystring",
+            inwardShipmentsQuery,
+            {
+              headers: {
+                Authorization: token,
+              },
             }
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
+          );
+
+          shipmentsArray = JSON.parse(
+            inwardShipments.data.data[0].TaggedShipments
+          );
+          //shipmentsArray.push(trackingId;
+
+          const shipmentQuery = {
+            selector: {
+              Id: {
+                $in: shipmentsArray,
+              },
+            },
+          };
+
+          const shipmentResult = await axios.post(
+            `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+            shipmentQuery,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          const len = shipmentResult.data.data;
+
+          for (count = 0; count < len.length; count++) {
+            const supplierDetails = JSON.parse(
+              shipmentResult.data.data[count].Supplier
+            );
+            const receiverDetails = JSON.parse(
+              shipmentResult.data.data[count].Receiver
+            );
+
+            const supplierWarehouseDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const supplierOrgDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const receiverWarehouseDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const receiverOrgDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const shipmentInwardData = {
+              Shipmentdata: shipmentResult.data.data[count],
+              supplierWarehouseDetails: supplierWarehouseDetails.data.data,
+              supplierOrgDetails: supplierOrgDetails.data.data,
+              receiverWarehouseDetails: receiverWarehouseDetails.data.data,
+              receiverOrgDetails: receiverOrgDetails.data.data,
+            };
+            inwardShipmentsArray.push(shipmentInwardData);
+          }
+          const shipmentQueryOutward = {
+            selector: {
+              $or: [
+                {
+                  taggedShipments: trackingId,
+                },
+                {
+                  status: "RECEIVED",
+                },
+              ],
+            },
+          };
+
+          const shipmentResultOutward = await axios.post(
+            `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+            shipmentQueryOutward,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          const len1 = shipmentResult.data.data;
+
+          for (count = 0; count < len.length; count++) {
+            const supplierDetails = JSON.parse(
+              shipmentResultOutward.data.data[count].Supplier
+            );
+            const receiverDetails = JSON.parse(
+              shipmentResultOutward.data.data[count].Receiver
+            );
+
+            const supplierWarehouseDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const supplierOrgDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const receiverWarehouseDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+
+            const receiverOrgDetails = await axios.get(
+              `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+            const shipmentOutwardData = {
+              Shipmentdata: shipmentResult.data.data[count],
+              supplierWarehouseDetails: supplierWarehouseDetails.data.data,
+              supplierOrgDetails: supplierOrgDetails.data.data,
+              receiverWarehouseDetails: receiverWarehouseDetails.data.data,
+              receiverOrgDetails: receiverOrgDetails.data.data,
+            };
+            outwardShipmentsArray.push(shipmentOutwardData);
+          }
+          console.log("outwardShipmentArray", outwardShipmentsArray);
+
+          const shipmentQueryTracked = {
+            selector: {
+              $or: [
+                {
+                  Id: trackingId,
+                },
+                {
+                  AirwayBillNo: trackingId,
+                },
+              ],
+            },
+          };
+
+          const shipmentResultTracked = await axios.post(
+            `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+            shipmentQueryTracked,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const supplierDetails = JSON.parse(
+            shipmentResultTracked.data.data[0].Supplier
+          );
+          const receiverDetails = JSON.parse(
+            shipmentResultTracked.data.data[0].Receiver
+          );
+
+          const supplierWarehouseDetailsTracked = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const supplierOrgDetailsTracked = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const receiverWarehouseDetailsTracked = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR100451`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const receiverOrgDetailsTracked = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          const trackedShipment = {
+            Shipmentdata: shipmentResultTracked.data.data,
+            supplierWarehouseDetails: supplierWarehouseDetailsTracked.data.data,
+            supplierOrgDetails: supplierOrgDetailsTracked.data.data,
+            receiverWarehouseDetails: receiverWarehouseDetailsTracked.data.data,
+            receiverOrgDetails: receiverOrgDetailsTracked.data.data,
+          };
+
+          return apiResponse.successResponseWithData(res, "Shipments Table", {
+            //poDetails: poDetails,
+            inwardShipmentsArray: inwardShipmentsArray,
+            trackedShipment: trackedShipment,
+            outwardShipmentsArray: outwardShipmentsArray,
+            //poShipmentsArray: poShipmentsArray,
+          });
         }
-    },
+      } catch (err) {
+        return apiResponse.ErrorResponse(res, err.message);
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
 ];
