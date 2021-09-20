@@ -430,6 +430,8 @@ class Profile extends React.Component {
                                 size=""
                               >
                                 <PopUpLocation
+                                {...this.props}
+                                closeModal={this.closeModal}
                                   wareHouses={this.state.warehouseLocByOrg}
                                 />
                               </Modal>

@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import TotalInventoryAdded from "../../assets/icons/TotalProductCategory.png";
+import ProductSelected from "../../assets/icons/TotalProductCategory-selected.png";
 import Add from "../../assets/icons/add.svg";
 import user from "../../assets/icons/brand.svg";
 import Quantity from "../../assets/icons/Quantity.png";
 import Product from "../../assets/icons/Producttype.png";
+import Next from "../../assets/icons/back.png";
 
 const ProductInventory = (props) => {
   const [category, setCategory] = useState(props.match.params?.category);
@@ -120,15 +122,19 @@ const ProductInventory = (props) => {
                 onClick={() => changeType(cat)}
               >
                 <div className='flex flex-column'>
-                  <div className='picture'>
-                    <img src={TotalInventoryAdded} alt='truck' />
+                  <div className="picture">
+                    <img src={category === cat
+                        ? TotalInventoryAdded
+                        : ProductSelected
+                    } alt='truck'/>
                   </div>
-                  <div className='pt-3 flex'>{cat}</div>
+                  <div className={`pt-3 flex text-dark font-weight-bold ${category === cat || `text-muted`}`}>{cat}</div>
                 </div>
               </div>
             ))}
-            <button onClick={() => scroll(+100)} style={{position: "absolute", justifySelf: "center"}}>NEXT</button>
+            
           </div>
+          <button className="toggle-button" onClick={() => scroll(+100)}><img src={Next} className="toggle-icon-next" alt='truck'/></button>
         </div>
       )}
       <div className='row'>
@@ -176,7 +182,7 @@ const ProductInventory = (props) => {
                 <div className='col-2 txt1 text-right'>
                   {inv.inventoryDetails.quantity
                     ? inv.inventoryDetails.quantity
-                    : "N/A"}
+                    : "0"}
                   {"  ("}
                   {inv.products.unitofMeasure
                     ? inv.products.unitofMeasure.name
