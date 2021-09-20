@@ -458,10 +458,10 @@ exports.register = [
           email: emailId,
         };
 
-        // const bc_response = await axios.post(
-        //   `${hf_blockchain_url}/api/v1/register`,
-        //   bc_data
-        // );
+         const bc_response = await axios.post(
+           `${hf_blockchain_url}/api/v1/register`,
+           bc_data
+         );
 
         try {
           var evid = Math.random().toString(36).slice(2);
@@ -873,7 +873,7 @@ exports.verifyOtp = [
             email: user.emailId,
           };
 
-          // const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+          const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
           return apiResponse.successResponseWithData(
             res,
             "Login Success",
