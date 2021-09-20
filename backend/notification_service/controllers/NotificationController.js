@@ -237,15 +237,8 @@ exports.readNotification = [
   async (req, res) => {
     try {
       const { id } = req.query;
-      const notification = await Notification.findOneAndUpdate(
-        { id },
-        { $set: { isRead: true } }
-      );
-      return apiResponse.successResponseWithData(
-        res,
-        "Notification READ Success",
-        notification
-      );
+      await Notification.findOneAndUpdate({ id }, { $set: { isRead: true } });
+      return apiResponse.successResponse(res, "Notification READ Success");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
