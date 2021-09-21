@@ -10,57 +10,57 @@ const Tabs = (props) => {
           className={tabIndex == 0 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(0)}
         >
-          <a className={tabIndex == 0 ? "nav-link text-secondary" : "nav-link"}>
+          <span className={tabIndex == 0 ? "nav-link textColor" : "nav-link"}>
             {'User Role'}
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 1 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(1)}
         >
-          <a className={tabIndex == 1 ? "nav-link text-secondary" : "nav-link"}>
+          <span className={tabIndex == 1 ? "nav-link textColor" : "nav-link"}>
             Workflow
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 2 ? "nav-item-active" : "nav-item "}
           onClick={() => setTabIndex(2)}
         >
-          <a className={tabIndex == 2 ? "nav-link text-secondary " : "nav-link "}>
+          <span className={tabIndex == 2 ? "nav-link textColor " : "nav-link "}>
             Integration
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 3 ? "nav-item-active " : "nav-item "}
           onClick={() => setTabIndex(3)}
         >
-          <a className={tabIndex == 3 ? "nav-link text-secondary " : "nav-link"}>
+          <span className={tabIndex == 3 ? "nav-link textColor " : "nav-link"}>
             Analytics
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 4 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(4)}
         >
-          <a className={tabIndex == 4 ? "nav-link text-secondary" : "nav-link"}>
+          <span className={tabIndex == 4 ? "nav-link textColor" : "nav-link"}>
             Rules
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 5 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(5)}
         >
-          <a className={tabIndex == 5 ? "nav-link text-secondary" : "nav-link "}>
+          <span className={tabIndex == 5 ? "nav-link textColor" : "nav-link "}>
             Payment
-          </a>
+          </span>
         </li>
         <li
           className={tabIndex == 6 ? "nav-item-active" : "nav-item"}
           onClick={() => setTabIndex(6)}
         >
-          <a className={tabIndex == 6 ? "nav-link text-secondary " : "nav-link "}>
+          <span className={tabIndex == 6 ? "nav-link textColor " : "nav-link "}>
             Type
-          </a>
+          </span>
         </li>
       </ul>
     </div>
