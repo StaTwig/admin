@@ -28,7 +28,7 @@ ShipmentSchema = new mongoose.Schema(
     taggedShipments: { type: Array, required: false },
     shipmentUpdates: { type: Array, default: [] },
     airWayBillNo: String,
-    shippingDate: String,
+    shippingDate: Date,
     expectedDeliveryDate: String,
     actualDeliveryDate: String,
     status: String,

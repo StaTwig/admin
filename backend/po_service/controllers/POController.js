@@ -340,8 +340,9 @@ exports.createPurchaseOrder = [
                  console.log("finished re indexing")
                })
              })*/
-      const { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
+      let { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
+      creationDate = new Date(creationDate);
       const purchaseOrder = new RecordModel({
         id: uniqid('po-'),
         externalId,
@@ -801,6 +802,7 @@ exports.createOrder = [
       const user_id = req.user.id;      
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      creationDate = new Date(creationDate);
       products.forEach(async element => {
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type
@@ -819,6 +821,7 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
+      console.log(purchaseOrder)
       const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.supplierOrganisation,
@@ -1062,7 +1065,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if(fromDate && toDate){
                 var firstDate =  new Date(fromDate);
                 var nextDate = new Date(toDate)
-                whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+                whereQuery[`creationDate`] = {$gte: firstDate, $lte: nextDate}
               }
 	      
               if (organisationId) {
@@ -1234,7 +1237,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               if(fromDate && toDate){
                 var firstDate =  new Date(fromDate);
                 var nextDate = new Date(toDate)
-                whereQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
+                whereQuery[`creationDate`] = {$gte: firstDate, $lte: nextDate}
               }
 	      
               if (productName) {

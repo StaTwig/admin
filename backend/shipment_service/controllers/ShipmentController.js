@@ -712,7 +712,7 @@ exports.createShipment = [
             "T00:00:00.000Z";
           data.shippingDate = shippingDate;
         }
-
+        data.shippingDate = new Date(data.shippingDate);
         //Blockchain Integration
         const bc_data = {
           Id: data.id,
@@ -2614,7 +2614,7 @@ exports.fetchInboundShipments = [
       if (fromDate && toDate) {
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
-        whereQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
@@ -2762,7 +2762,7 @@ exports.fetchOutboundShipments = [
       if (fromDate && toDate) {
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
-        whereQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
       if (status) {
         whereQuery["status"] = status;
