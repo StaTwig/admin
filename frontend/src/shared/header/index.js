@@ -9,6 +9,7 @@ import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import dropdownIcon from "../../assets/icons/drop-down.png";
 import { getUserInfo, logoutUser } from "../../actions/userActions";
+import useOnclickOutside from "react-cool-onclickoutside";
 
 const Header = (props) => {
   const [menu, setMenu] = useState(false);
@@ -16,6 +17,10 @@ const Header = (props) => {
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const ref = useOnclickOutside(() => {
+    setMenu(false);
+  })
 
   function onSearchChange(e) {
     setSearch(e.target.value);
@@ -124,7 +129,7 @@ const Header = (props) => {
           </div>
         </div>
         {menu && (
-          <div className="slider-menu">
+          <div ref={ref} className="slider-menu">
             {
               <React.Fragment>
                 <div className="slider-item-text">

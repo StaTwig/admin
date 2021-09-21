@@ -15,6 +15,7 @@ import {
 import Modal from "../../shared/modal";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { useSelector, useDispatch } from "react-redux";
+import './indexStyle.scss'
 
 const NewAddress = (props) => {
   // const editAddress = JSON.parse(props.match.params.address);
@@ -457,7 +458,8 @@ const NewAddress = (props) => {
                     /> */}<br/>
                     <div className="w-50 d-flex flex-row-reverse" style={{float:"right", position:"relative", left:"330px"}}>
                     <button type="submit" 
-                    className="btn btn-warning">
+                    className="btn btn-warning"
+                    style={{backgroundColor:'#b2b0aa', borderColor: '#b2b0aa'}} >
                       <i
                         className="fa fa-plus txt pr-2"
                         aria-hidden="true"
@@ -470,7 +472,7 @@ const NewAddress = (props) => {
               </Formik>
             </div>
             <div className="w-50 ml-5 d-flex flex-row justify-content-between">
-              <div className="pt-1 w-50 d-flex flex-row-reverse">
+              <div className="pt-1 w-50 d-flex flex-row-reverse addressBtn">
                 <button
                   onClick={getGeoLocation}
                   type="button"
@@ -479,7 +481,7 @@ const NewAddress = (props) => {
                   <span className="txt">Use my current location</span>
                 </button>
               </div>
-              <div className="pl-1 w-75 pt-1">
+              <div className="pl-1 w-75 pt-1 txtAdress">
                 <p className="txtColor font-13">
                   This will auto populate/ auto fill every information that is shown mandatory
                 </p>
