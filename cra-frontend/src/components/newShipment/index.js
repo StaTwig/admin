@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Add from "../../assets/icons/createshipment.png";
+import CalenderIcon from "../../assets/icons/date_icon.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
 import { createShipment, getViewShipment } from "../../actions/shipmentActions";
@@ -87,14 +88,26 @@ const NewShipment = (props) => {
       return { ...provided, opacity, transition };
     },
   };
+  
+  const handleSOChange = async (item) => {
+    setOrderId(item);
+    dispatch(turnOn());
+    const result = await getShippingOrderById(item);
+    setOrderDetails(result);
+    dispatch(turnOff());
+  };
+
 
   useEffect(() => {
     async function fetchData() {
+
+      
       const result111 = await getProductList();
 
       setProductsList(result111.message);
       console.log(result111);
       const { search } = props.location;
+      console.log(search)
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
 
@@ -107,7 +120,7 @@ const NewShipment = (props) => {
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-
+console.log(user.organisation)
       const orgSplit = user.organisation?.split("/");
 
       setSenderOrganisation([orgSplit[0]]);
@@ -164,14 +177,14 @@ const NewShipment = (props) => {
           : []
       );
 
-      if (search) {
-        const shippingId = search.split("=")[1];
-        handleSOChange(shippingId);
-      }
+      // if (search) {
+      //   const shippingId = search.split("=")[1];
+      //   handleSOChange(shippingId);
+      // }
     }
 
     fetchData();
-  }, [props.location, user.organisation]);
+  }, [ props.location, user.organisation]);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -396,13 +409,6 @@ const NewShipment = (props) => {
     }
   };
 
-  const handleSOChange = async (item) => {
-    setOrderId(item);
-    dispatch(turnOn());
-    const result = await getShippingOrderById(item);
-    setOrderDetails(result);
-    dispatch(turnOff());
-  };
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -580,7 +586,7 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <div className='row mt-3'>
-                  <div className='col-md-6 col-sm-12 '>
+                  <div className='col-md-6 col-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orderID'>
                         Order ID
@@ -752,7 +758,7 @@ const NewShipment = (props) => {
                               "rtype",
                               result.poDetails[0].customer.organisation.type
                             );
-
+                              console.log(result.poDetails[0].products)
                             let products_temp = result.poDetails[0].products;
                             for (let i = 0; i < products_temp.length; i++) {
                               if (
@@ -810,9 +816,12 @@ const NewShipment = (props) => {
                       placeholder='Enter Reference Shipment ID'
                       onChange={handleChange}
                     />
+                    </div>
+                    </div>
+                    <div className="fetch">
                     <span
                       style={{ height: "25px", width: "50px" }}
-                      className='btn btn-outline-secondary fetch'
+                      className='btn btn-fetch'
                       onClick={async () => {
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
@@ -828,7 +837,7 @@ const NewShipment = (props) => {
                           alert("The shipment has to be delivered first");
                         }
 
-                        for (let i = 0; i < result.products.length; i++) {
+                        for (let i = 0; i < result.products?.length; i++) {
                           if (result.products[i].productQuantityShipped) {
                             result.products[i].productQuantity =
                               parseInt(result.products[i].productQuantity) -
@@ -891,7 +900,6 @@ const NewShipment = (props) => {
                         Fetch
                       </span>
                     </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1271,6 +1279,7 @@ const NewShipment = (props) => {
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
                         {/* {errors.shipmentDate && touched.shipmentDate && (
                           <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
@@ -1342,6 +1351,7 @@ const NewShipment = (props) => {
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>

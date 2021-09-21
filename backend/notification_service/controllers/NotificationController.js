@@ -47,68 +47,45 @@ function sendWhatsApp(content, mobile) {
     .catch((err) => console.log(err));
 }
 
-exports.getAlertNotifications = [
+exports.getNotifications = [
   auth,
-  async function (req, res) {
+  async (req, res) => {
     try {
-      const resPerPage = Number(req.query.limit) || 10;
+      const userId = req.user.id;
+      const resPerPage = Number(req.query.limit) || 20;
       const page = Number(req.query.page) || 1;
-      const totalRecords = await Alerts.count({ ...req.params });
-      Notification.find({ user: req.user.id, type: req.query.type })
+      const totalRecords = await Notification.countDocuments({
+        user: userId,
+        type: req.query.type,
+      });
+      const newNotifications = await Notification.countDocuments({
+        user: userId,
+        type: req.query.type,
+        isRead: false,
+      });
+      const notifications = await Notification.find({
+        user: userId,
+        type: req.query.type,
+      })
+        .sort({ _id: -1 })
         .skip(resPerPage * page - resPerPage)
-        .limit(resPerPage)
-        .then((Alerts) => {
-          if (Alerts.length > 0) {
-            const finalData = {
-              totalRecords: totalRecords,
-              data: Alerts,
-            };
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        });
+        .limit(resPerPage);
+      if (notifications.length > 0) {
+        const data = {
+          totalRecords: totalRecords,
+          new: newNotifications,
+          data: notifications,
+        };
+        return apiResponse.successResponseWithData(
+          res,
+          "Operation Success",
+          data
+        );
+      } else {
+        return apiResponse.successResponseWithData(res, "No Results Found", []);
+      }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getTransactionNotifications = [
-  auth,
-  async function (req, res) {
-    try {
-      Notification.find({ user: req.user.id, type: "TRANSACTION" })
-        .skip(resPerPage * page - resPerPage)
-        .limit(resPerPage)
-        .then((Notifications) => {
-          if (Notifications.length > 0) {
-            const finalData = {
-              totalRecords: totalRecords,
-              data: Notifications,
-            };
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        });
-    } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -222,3 +199,17 @@ function pushNotification(req, userId, type, transactionId) {
     console.log(err);
   }
 }
+
+exports.readNotification = [
+  auth,
+  async (req, res) => {
+    try {
+      const { id } = req.query;
+      await Notification.findOneAndUpdate({ id }, { $set: { isRead: true } });
+      return apiResponse.successResponse(res, "Notification READ Success");
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];

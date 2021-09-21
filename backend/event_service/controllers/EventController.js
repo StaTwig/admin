@@ -155,7 +155,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				elementMatchQuery[`createdAt`] = {$gte: firstDate, $lte: nextDate}
 			}
 			if (productName) {
-				elementMatchQuery[`productDetails.id`] = productName;
+				elementMatchQuery[`productDetails.name`] = productName;
 			}
 
 			if (productManufacturer) {

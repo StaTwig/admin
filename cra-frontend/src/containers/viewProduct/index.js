@@ -6,7 +6,7 @@ import Sidebar from "../../shared/sidebarMenu";
 const ViewProductContainer = (props) => {
   const [inventories, setInventories] = useState([props.location.state.data]);
   console.log(props.location.state.data);
-  setInventories([]);
+  //setInventories([]);
   return (
     <div className='container-fluid p-0'>
       <Header {...props} />

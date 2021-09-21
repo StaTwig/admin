@@ -110,6 +110,8 @@
     }
 
     .user-info {
+      position: relative;
+      right: 3rem;
       display: flex;
       align-items: center;
       flex: 1;
@@ -122,7 +124,7 @@
       .notifications {
         position: relative;
         right: 2.5rem;
-        top: -2.2rem;
+        top: -2.5rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
@@ -159,7 +161,6 @@
           .section {
             display: flex;
             flex-direction: row;
-            justify-content: space-evenly;
             margin-bottom: -10px;
             margin-top: 25px;
             font-size: 12px;
@@ -213,15 +214,18 @@
       }
 
       .userName {
-        max-width: 10vw;
+        max-width: 7vw;
         margin-right: 1rem;
         position: relative;
         bottom: 2.5rem;
+        left: 2rem;
 
         .uname {
           font-size: 10px;
           text-align: right;
           margin: 1px;
+          position: relative;
+          left: 1.1rem;
         }
 
         .cname {
@@ -229,12 +233,17 @@
           text-align: right;
           font-weight: 700;
           margin: 0;
+          position: relative;
+          left: 1.1rem;
         }
         @media screen and (max-width: 768px) {
           display: none;
         }
 
         .custom-dropdown {
+          width: 11vw;
+          position: relative;
+          right: 2rem;
           flex-basis: 100%;
           display: flex;
           outline: none;
@@ -263,6 +272,8 @@
             }
           }
           .dropdownImg {
+            position: relative;
+            right: 2rem;
             margin-left: auto;
             width: 13px;
             margin-right: auto;
@@ -304,6 +315,7 @@
         position: relative;
         margin-right: 0.5rem;
         bottom: 2.5rem;
+        left: 3rem;
         img {
           width: 40px;
           height: 40px;
@@ -316,6 +328,7 @@
           bottom: 2.5rem;
           width: 13px;
           cursor: pointer;
+          left: 3rem;
         }
       }
 
@@ -462,9 +475,8 @@
 .notification-events {
   font-size: 12px;
   position: relative;
-  top: 15px;
+  top: 12.5px;
   color: #084787;
-  margin: 10px 0px 0px 0px;
   display: inline;
 }
 .notification-icons {
@@ -476,7 +488,7 @@
 .notif-time {
   position: relative;
   top: 0px;
-  left: -90px;
+  left: -85px;
   float: right;
 }
 .toggle-icon {
@@ -485,7 +497,8 @@
   left: 20rem;
   transform: rotate(270deg);
   height: 10px;
-  margin: 0px 0px 12px 0px;
+  top: 5px;
+  margin: -5px 0px 12px 0px;
 }
 .icon-pad {
   box-shadow: 0px 3px 10px $grey;
