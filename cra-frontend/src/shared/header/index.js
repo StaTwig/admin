@@ -269,7 +269,7 @@ const Header = (props) => {
         console.log("Clicked Outside / Elsewhere");
       }
     });
-  }, [])
+  }, []);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -364,7 +364,7 @@ const Header = (props) => {
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
-                className="click-text"
+                className='click-text'
               />
               <div
                 className='bellicon-wrap'
