@@ -9,6 +9,7 @@ const UserDetails = (props) => {
   const [display, setDisplay] = useState(false);
   const [statusStyle, setStatusStyle] = useState("");
   const { user, activateUser, deactivateUser, unaffiliate, permission } = props;
+  const [viewButton, setViewButton] = useState(false)
   // console.log("user",user);
 
   const [status, setStatus] = useState("");
@@ -108,12 +109,12 @@ const UserDetails = (props) => {
             </div>
           </div>
           <span
-            className={`w-25 ${display ? `text-left` : ` align-self-center txtWrapu1 text-center`
-              } `}
+            className={`w-25 ${display ? `text-left` : ` txtWrapu1 text-center`
+              } ${viewButton ? `` : `align-self-center`}`}
           >
             <span className={
-              `w-10 ${display ? `text-left` : ` roleText align-self-center txtWrapu1 text-center`
-              } `
+              `w-10 ${display ? `text-left` : ` roleText txtWrapu1 text-center`
+              } ${viewButton ? `` : `align-self-center`}`
             }>{user?.role}</span>
             {display && (
               <div className="pt-3">
@@ -123,23 +124,23 @@ const UserDetails = (props) => {
               </div>
             )}
           </span>
-          <span className="text-left align-self-center locationText">
+          <span className={`text-left ${viewButton ? `` : `align-self-center`} locationText`}>
             { user?.location }
           </span>
-          <span className=" w-25 text-center align-self-center walletText txtWrapu">
+          <span className={` w-25 text-center ${viewButton ? `` : `align-self-center`} walletText txtWrapu`}>
             <a href="#" className="text-decoration-underline">
               {user?.walletAddress}
             </a>
           </span>
-          <span className=" w-25 text-left align-self-center emailText">
+          <span className={` w-25 text-left ${viewButton ? `` : `align-self-center`} emailText`}>
             {user?.emailId}
           </span>
-          <span className=" w-25 text-center align-self-center accountText font-weight-bold">
+          <span className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
            {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           
           </span>
           <div
-            className={`w-15  ${display ? `align-self-start` : ` align-self-center`
+            className={`w-15  ${display || viewButton ? `align-self-start` : ` align-self-center`
               } `}
           >
             {/* <button
@@ -164,7 +165,7 @@ const UserDetails = (props) => {
             <button
               type="button"
               className="btn btn-view btnText"
-              onClick={() => setDisplay(!display)}
+              onClick={() => {setDisplay(!display); setViewButton(viewButton ? false : true)}}
             >
               {display ? "Back" : "View"}
             </button>
