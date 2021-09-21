@@ -30,6 +30,12 @@ const UserRoles = ({
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
   const [btnTxt, setBtnTxt] = useState("");
+  const [isDisabled, setDisable] = useState(true);
+
+  const unDisableBtn = () => {
+    console.log("enable save button");
+    setDisable(false);
+  }
 
   return isLoading ? (
     <Spinner />
@@ -81,12 +87,14 @@ const UserRoles = ({
         <div className={"btn-section"}>
           <button
             className="save-button"
-            onClick={() => onSaveOfUpdatePermission()}
+            onClick={() => {onSaveOfUpdatePermission(); setDisable(true)}}
+            disabled={isDisabled}
           >
             {"SAVE"}
           </button>
           <button
             className="add-user-btn"
+            style={{outline:"none"}}
             onClick={() => {
               setTitle("ADD NEW USER");
               setBtnTxt("ADD USER");
@@ -134,6 +142,7 @@ const UserRoles = ({
                     </div>
                     <div className="selection-panel">
                       <input
+                        onClick={unDisableBtn}
                         type="checkbox"
                         style={{
                           marginRight: "50px",
