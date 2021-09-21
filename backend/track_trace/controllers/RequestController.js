@@ -182,36 +182,10 @@ exports.createRequest = [
         walletAddress,
         phoneNumber,
       } = req.user;
-      // let requestTypes = [];
-      // if (type !== undefined) {
-      //   const shipmentCheck = await ShipmentModel.findOne({
-      //     "label.labelId": labelId,
-      //   });
-      //   if (shipmentCheck != null) {
-      //     const receiver = await ShipmentModel.findOne({
-      //       "label.labelId": labelId,
-      //     }).select("receiver");
-      //     if (receiver.receiver.id == organisationId) {
-      //       if (receiver.receiver.locationId !== warehouseId) {
-      //         requestTypes.push("LOCATION_MISMATCH");
-      //       }
-      //     } else {
-      //       requestTypes.push("ORGANISATION_MISMATCH");
-      //     }
       const permission_request = {
         role: role,
         permissionRequired: ["viewShipment"],
       };
-      //     checkPermissions(permission_request, async (permissionResult) => {
-      //       if (!permissionResult.success) {
-      //         requestType.push("UNSUFFICIENT_ROLE");
-      //       }
-      //     });
-      //   }
-      //   type = requestTypes;
-      // }
-      // type.forEach(async (element) => {
-      let element = type;
       let from = {
         name: firstName,
         id,
@@ -225,21 +199,34 @@ exports.createRequest = [
       let contactList = new Set();
       let contacts = [];
       let to = {};
-      const shipment = await ScanShipment(labelId);
-      if (element === "LOCATION_MISMATCH") {
-        const { supervisors, employees } = shipment[0].receiver.warehouse;
-        if (supervisors.length > 0) {
-          supervisors.forEach((supervisor) => {
-            contactList.add(supervisor);
-          });
-        }
-        if (employees.length > 0) {
-          employees.forEach((contact) => {
-            contactList.add(contact);
-          });
-        }
+      let shipment = {};
+      if (type === "LOCATION_MISMATCH" || type === "UNSUFFICIENT_ROLE") {
+        shipment = await ShipmentModel.aggregate([
+          { $match: { "label.labelId": labelId } },
+          {
+            $lookup: {
+              from: "employees",
+              let: { warehouse_Id: "$receiver.locationId" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ["ACTIVE", "$accountStatus"] },
+                        { $in: ["$$warehouse_Id", "$warehouseId"] },
+                      ],
+                    },
+                  },
+                },
+              ],
+              as: "receiverEmployees",
+            },
+          },
+        ]);
+        shipment[0].receiverEmployees.forEach((employee) => {
+          contactList.add(employee.id);
+        });
         contactList.forEach((contact) => {
-          console.log(contact);
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               contacts.push(contact);
@@ -252,18 +239,32 @@ exports.createRequest = [
           organisationId: shipment[0].receiver.id,
         };
       }
-      if (element === "ORGANISATION_MISMATCH") {
-        let { supervisors, employees } = shipment[0].supplier.warehouse;
-        if (supervisors.length > 0) {
-          supervisors.forEach((supervisor) => {
-            contactList.add(supervisor);
-          });
-        }
-        if (employees.length > 0) {
-          employees.forEach((contact) => {
-            contactList.add(contact);
-          });
-        }
+      if (type === "ORGANISATION_MISMATCH") {
+        shipment = await ShipmentModel.aggregate([
+          { $match: { "label.labelId": labelId } },
+          {
+            $lookup: {
+              from: "employees",
+              let: { warehouse_Id: "$supplier.locationId" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ["ACTIVE", "$accountStatus"] },
+                        { $in: ["$$warehouse_Id", "$warehouseId"] },
+                      ],
+                    },
+                  },
+                },
+              ],
+              as: "supplierEmployees",
+            },
+          },
+        ]);
+        shipment[0].supplierEmployees.forEach((employee) => {
+          contactList.add(employee.id);
+        });
         contactList.forEach((contact) => {
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
@@ -277,41 +278,12 @@ exports.createRequest = [
           organisationId: shipment[0].supplier.id,
         };
       }
-      if (element === "UNSUFFICIENT_ROLE") {
-        const { supervisors, employees } = shipment[0].org;
-        if (supervisors.length > 0) {
-          supervisors.forEach((supervisor) => {
-            contactList.add(supervisor);
-          });
-        }
-        if (employees.length > 0) {
-          employees.forEach((contact) => {
-            contactList.add(contact);
-          });
-        }
-        contactList.forEach((contact) => {
-          console.log(contact);
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              contacts.push(contact);
-            }
-          });
-        });
-        to = {
-          employees: contacts,
-          warehouseId: shipment[0].receiver.locationId,
-          organisationId: shipment[0].receiver.id,
-        };
-      }
-      const shipmentId = await ShipmentModel.findOne({
-        "label.labelId": labelId,
-      }).select("id");
       const request = new RequestModel({
         from,
         to,
         "label.labelId": labelId,
-        shipmentId: shipmentId.id,
-        type: element,
+        shipmentId: shipment[0].id,
+        type,
       });
       let result = await request.save();
       to.employees.forEach(async (element) => {
@@ -331,8 +303,52 @@ exports.createRequest = [
           console.log(err);
         }
       });
-      // });
       return apiResponse.successResponse(res, "Request Created");
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.validateRequest = [
+  async (req, res) => {
+    try {
+      const { labelId } = req.query;
+      let requestTypes = [];
+      const shipmentCheck = await ShipmentModel.findOne({
+        "label.labelId": labelId,
+      });
+      if (shipmentCheck != null) {
+        const receiver = await ShipmentModel.findOne({
+          "label.labelId": labelId,
+        }).select("receiver");
+        if (receiver.receiver.id == organisationId) {
+          if (receiver.receiver.locationId !== warehouseId) {
+            requestTypes.push("LOCATION_MISMATCH");
+          }
+        } else {
+          requestTypes.push("ORGANISATION_MISMATCH");
+        }
+        const permission_request = {
+          role: role,
+          permissionRequired: ["viewShipment"],
+        };
+        checkPermissions(permission_request, async (permissionResult) => {
+          if (!permissionResult.success) {
+            requestType.push("UNSUFFICIENT_ROLE");
+          }
+        });
+      }
+      if (requestTypes.length > 0) {
+        return apiResponse.successResponseWithData(
+          res,
+          "Scan Invalid with Errors",
+          requestTypes
+        );
+      } else {
+        return apiResponse.successResponse(res, "Scan Valid");
+      }
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
