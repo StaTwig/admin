@@ -484,6 +484,7 @@ const Header = (props) => {
                               to={notifRouting(notifications)}
                               // style={{ textDecoration: "none" }}
                               className={notifications.isRead ? 'read' : 'unRead'}
+                              style={{ textDecoration:"none" }}
                               onClick={() => readNotification(notifications.id)}
                             >
                               <div
