@@ -45,6 +45,16 @@
   padding: 0 10px;
   // align-self: center;
 }
+
+.txtWrapu1 {
+  white-space: nowrap;
+  overflow: unset;
+  text-overflow: ellipsis;
+  max-width: 75%;
+  padding: 0 10px;
+  // align-self: center;
+}
+
 .btn-view {
   width: 80px;
   height: 35px !important;

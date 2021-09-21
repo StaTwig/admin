@@ -108,11 +108,11 @@ const UserDetails = (props) => {
             </div>
           </div>
           <span
-            className={`w-25 ${display ? `text-left` : ` align-self-center txtWrapu text-center`
+            className={`w-25 ${display ? `text-left` : ` align-self-center txtWrapu1 text-center`
               } `}
           >
             <span className={
-              `w-10 ${display ? `text-left` : ` roleText align-self-center txtWrapu text-center`
+              `w-10 ${display ? `text-left` : ` roleText align-self-center txtWrapu1 text-center`
               } `
             }>{user?.role}</span>
             {display && (
