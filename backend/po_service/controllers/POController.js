@@ -295,13 +295,37 @@ exports.changePOStatus = [
                       $set: {poStatus :status }
                 })
                 try{
+                  console.log(req.user)
                   let event = await Event.findOne({'transactionId': orderID})
                   console.log(event)
+                  let newEvent = {
+                    eventID: 'ev0000' +  Math.random().toString(36).slice(2),
+                    eventTime: new Date(),
+                    transactionId: event.transactionId,
+                    eventTypePrimary: event.eventTypePrimary,
+                    eventTypeDesc: event.eventTypeDesc,
+                    actorId: req.user.id || event.actorId,
+                    actorUserId: req.user.emailId || event.actorUserId,
+                    caId: event.caId,
+                    caName: event.caName,
+                    caAddress: event.caAddress,
+                    actorOrgId: event.actorOrgId,
+                    actorOrgName: event.actorOrgName ,
+                    actorOrgAddress: event.actorOrgAddress ,
+                    actorWarehouseId: event.actorWarehouseId ,
+                    secondaryOrgId: event.secondaryOrgId ,
+                    secondaryOrgName: event.secondaryOrgName ,
+                    secondaryOrgAddress: event.secondaryOrgAddress ,
+                    payloadData: {
+                      data: {
+                      }                  
+                  }
+                }
                   if (status === "ACCEPTED")
-                    event.eventTypePrimary = "RECEIVE";
-                  else event.eventTypePrimary = "REJECT";     
-                  event.payloadData.data = req.body       
-                  let event_body = new Event(event);
+                  newEvent.eventTypePrimary = "RECEIVE";
+                  else newEvent.eventTypePrimary = "REJECT";     
+                  newEvent.payloadData.data = req.body       
+                  let event_body = new Event(newEvent);
                   let result = await event_body.save();
                   console.log(result)
                 }catch(error){
