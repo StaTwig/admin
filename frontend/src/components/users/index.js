@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import UserDetails from "./userdetails";
 import Modal from "../../shared/modal";
@@ -160,7 +160,7 @@ const Users = (props) => {
                 onClick={() => setShowFilterDropDown(!showFilterDropDown)}
               >
                 <img className="mr-3" src={FilterIcon} alt={'filter-icon'} />
-                <span>{'Filter'}</span>
+                <span className="btnText">{'Filter'}</span>
                 <img className="ml-3" src={DownArrowIcon} alt={'drp-arrow'} />
                 {
                   showFilterDropDown && calenderFilterJsonData &&

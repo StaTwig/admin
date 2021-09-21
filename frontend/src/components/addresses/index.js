@@ -25,7 +25,7 @@ const Address = (props) => {
           >
             <div className="d-flex  align-items-center ">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span>Import addresses</span>
+              <span style={{fontWeight:"600",fontSize:"small",alignSelf:"center",overflow:"hidden"}}>Import addresses</span>
             </div>
           </button>
           {openExcel && (

@@ -351,7 +351,7 @@ const Configurationpart = (props) => {
                   </p>
                   <div style={{ position: "relative", left: "70%" }}>
                     <button
-                      className="btn btn-yellow ml-5"
+                      className="btn btn-yellow ml-5 btnText"
                       onClick={() => {
                         let newArr = { name: "" };
                         setAddProducts((prod) => [...prod, newArr]);
@@ -389,7 +389,7 @@ const Configurationpart = (props) => {
 
                     <div style={{ position: "relative", left: "70%" }}>
                       <button
-                        className="btn btn-yellow ml-5"
+                        className="btn btn-yellow ml-5 btnText"
                         onClick={() => {
                           let newArr = { name: "" };
                           setAddProducts1((prod) => [...prod, newArr]);

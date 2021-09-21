@@ -163,7 +163,7 @@ const UserDetails = (props) => {
           </button> */}
             <button
               type="button"
-              className="btn btn-view"
+              className="btn btn-view btnText"
               onClick={() => setDisplay(!display)}
             >
               {display ? "Back" : "View"}

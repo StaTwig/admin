@@ -41,6 +41,10 @@
       column-gap: 10px;
 
       .save-button {
+        font-weight: 600;
+        font-size: small;
+        align-self: center;
+        overflow: hidden;
         width: 120px;
         height: 45px;
 
@@ -49,7 +53,7 @@
         opacity: 1;
 
         text-align: center;
-        font: normal normal bold 20px/13px Roboto;
+        // font: normal normal bold 20px/13px Roboto;
         color: #ffffff;
       }
 

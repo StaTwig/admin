@@ -130,7 +130,7 @@ const Details = (props) => {
                   changeStatus("ACTIVE");
                 }
               }}
-              className="btn btn-view w-auto"
+              className="btn btn-view w-auto txt"
             >
               {status == "ACTIVE" ? "Deactivate" : "Activate"}
             </button>
