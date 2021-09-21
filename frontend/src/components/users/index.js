@@ -168,6 +168,8 @@ const Users = (props) => {
                     data={calenderFilterJsonData}
                     onChangeOfFilterDropDown={onSelectionOfDropdownValue}
                     type={'dateRange'}
+                    showFilterDropDown={showFilterDropDown}
+                    setShowFilterDropDown={setShowFilterDropDown}
                   />
                 }
               </button>
