@@ -8,6 +8,7 @@ import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DrawerMenu from "./drawerMenu";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/spinner/index.js"
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -43,6 +44,7 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
+  // console.log(ABC)
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
   const [location, setLocation] = useState({});
@@ -58,9 +60,10 @@ const Header = (props) => {
   const [activeWarehouses, setActiveWarehouses] = useState([]);
   const [options, setOptions] = useState([]);
   const [count, setCount] = useState(0);
+  const [icount, setIcount] = useState(0);
   const [visible, setVisible] = useState("one");
   const [limit, setLimit] = useState(10);
-
+  const [hasMore, setHasMore] = useState(true);
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
     stringify: (option) => option._id,
@@ -111,7 +114,10 @@ const Header = (props) => {
       return "/#";
     }
   }
-
+  async function readNotification(id){
+    let res = axios.get(`${config().readNotification}${id}`)
+    console.log(res)
+  }
   async function getAllShipmentIDs() {
     dispatch(turnOn());
     let result = await getShippingOrderIds();
@@ -212,13 +218,17 @@ const Header = (props) => {
     });
   }
 
-  function changeNotifications(value, num) {
-    if (num) setLimit(limit + num);
-    axios
-      .get(`${config().getAlerts}${value}&skip=0&limit=${limit}`)
-      .then((response) => {
-        setNotifications(response.data.data.data);
-      });
+  function changeNotifications(value, num) {   
+    turnOn()        
+    if(num)
+    setLimit(limit+num)
+   axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
+
+      setNotifications(response.data.data.data);
+      if(response.data.data.data.length === icount)
+        setHasMore(false)
+      setIcount(response.data.data.data.length)
+   })
   }
 
   useEffect(() => {
@@ -230,6 +240,7 @@ const Header = (props) => {
       );
       setNotifications(response.data.data.data);
       setCount(response.data.data.totalRecords);
+      setIcount(response.data.data.data.length)
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -258,18 +269,18 @@ const Header = (props) => {
     fetchApi();
   }, [alertType, dispatch]);
 
-  useEffect(() => {
-    const concernedElement = document.querySelector(".click-text");
+  // useEffect(() => {
+  //   const concernedElement = document.querySelector(".click-text");
 
-    document.addEventListener("mousedown", (event) => {
-      if (concernedElement.contains(event.target)) {
-        console.log("Clicked Inside");
-      } else {
-        setShowNotifications(false);
-        console.log("Clicked Outside / Elsewhere");
-      }
-    });
-  }, [])
+  //   document.addEventListener("mousedown", (event) => {
+  //     if (concernedElement.contains(event.target)) {
+  //       console.log("Clicked Inside");
+  //     } else {
+  //       setShowNotifications(false);
+  //       console.log("Clicked Outside / Elsewhere");
+  //     }
+  //   });
+  // }, [])
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -364,7 +375,7 @@ const Header = (props) => {
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
-                className="click-text"
+                // className="click-text"
               />
               <div
                 className='bellicon-wrap'
@@ -414,6 +425,7 @@ const Header = (props) => {
                             setAlertType("ALERT");
                             changeNotifications("ALERT", 1);
                             setVisible("one");
+                            setHasMore(true);
                           }}
                         >
                           <div
@@ -435,6 +447,7 @@ const Header = (props) => {
                             setAlertType("TRANSACTION");
                             changeNotifications("TRANSACTION", 1);
                             setVisible("two");
+                            setHasMore(true);
                           }}
                         >
                           <div
@@ -458,8 +471,8 @@ const Header = (props) => {
                         display: "flex",
                         flexDirection: "column-reverse",
                       }} //To put endMessage and loader to the top.
-                      hasMore={true}
-                      loader={<h4>Loading...</h4>}
+                      hasMore={hasMore}
+                      loader={<h4><Spinner /></h4>}
                       scrollThreshold={1}
                       scrollableTarget='scrollableDiv'
                     >
@@ -469,7 +482,10 @@ const Header = (props) => {
                             <Link
                               key={notifications.id}
                               to={notifRouting(notifications)}
-                              style={{ textDecoration: "none" }}
+                              // style={{ textDecoration: "none" }}
+                              className={notifications.isRead ? 'read' : 'unRead'}
+                              style={{ textDecoration:"none" }}
+                              onClick={() => readNotification(notifications.id)}
                             >
                               <div
                                 className='col-sm-10'
