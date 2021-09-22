@@ -79,7 +79,7 @@ const NUModal = (props) => {
                   className={`form-control ${
                     errors.email ? "border-danger" : ""
                   }`}
-                  placeholder="Enter the email"
+                  placeholder="Enter email"
                   readOnly={data?.ref != undefined ? true : false}
                   onChange={(e) => {
                     setEmail(e);
@@ -97,7 +97,7 @@ const NUModal = (props) => {
                 <span className="txt-btn">{"Add New User Role"}</span>
               </button>
             </div>
-            <div className="p-1">
+            <div className="p-1" style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
               {permissions.map((permission, index) => (
                 <Role
                   key={index}

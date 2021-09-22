@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import Permission from "./permission";
+import { Link } from "react-router-dom";
 
 const Role = (props) => {
   const {
@@ -45,7 +46,17 @@ const Role = (props) => {
         <div className="w-50">
           <span className="txtColor">{description}</span>
         </div>
-        <div>
+        <div className="d-flex flex-row-reverse">
+          <Link
+              to="/configuration"
+            >
+              <button className="bg-white btn-outline-primary d-width">
+                <i className="fa fa-pencil"></i>
+                <span className="ml-2">Edit</span>
+              </button>
+            </Link>
+            </div>
+        <div className="infoBtn">
           <span>
             <i
               className="shadow"

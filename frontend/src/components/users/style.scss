@@ -207,7 +207,7 @@
   letter-spacing: 0px;
   color: #fa7923;
   opacity: 1;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .plus-icon {
@@ -217,8 +217,8 @@
 }
 
 .redirect-button {
-  width: 252px;
-  height: 54px;
+  width: 210px;
+  height: 40px;
   border: 2px solid #fa7923;
   border-radius: 10px;
   background-color: #ffffff;
@@ -231,4 +231,10 @@
   font-size: small;
   align-self: center;
   overflow: hidden;
+}
+
+.infoBtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }

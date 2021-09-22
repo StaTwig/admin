@@ -19,8 +19,9 @@ const Modal = (props) => {
                 type="button"
                 className="close"
                 onClick={() => props.close()}
+                style={{outline:"none"}}
               >
-                <img src={CloseIcon} alt="Close" with="40" height="40" />
+                <img src={CloseIcon} alt="Close" style={{width:"2rem", height:"2rem",outline:"none"}} />
               </button>
             </div>
             <div className="modal-body">{props.children}</div>
