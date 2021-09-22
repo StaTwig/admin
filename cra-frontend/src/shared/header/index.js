@@ -365,11 +365,13 @@ const Header = (props) => {
           <div className='user-info '>
             <div className='notifications cursorP'>
               <img
+                id='notification'
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
               />
               <div
+                id='notification'
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
