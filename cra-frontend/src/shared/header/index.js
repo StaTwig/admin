@@ -72,6 +72,11 @@ const Header = (props) => {
   const ref = useOnclickOutside(() => {
     setMenu(false);
   });
+
+  const ref1 = useOnclickOutside(() => {
+    setShowNotifications(false);
+  })
+
   function onSearchChange(e) {
     setSearchString(e._id);
     setSearchType(e.type);
@@ -269,18 +274,6 @@ const Header = (props) => {
     fetchApi();
   }, [alertType, dispatch]);
 
-  // useEffect(() => {
-  //   const concernedElement = document.querySelector(".click-text");
-
-    document.addEventListener("mousedown", (event) => {
-      if (concernedElement.contains(event.target)) {
-        console.log("Clicked Inside");
-      } else {
-        setShowNotifications(false);
-        console.log("Clicked Outside / Elsewhere");
-      }
-    });
-  }, []);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -375,7 +368,6 @@ const Header = (props) => {
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
-                className='click-text'
               />
               <div
                 className='bellicon-wrap'
@@ -387,7 +379,7 @@ const Header = (props) => {
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div className='slider-menu' id='scrollableDiv'>
+                <div ref={ref1} className='slider-menu' id="scrollableDiv">
                   <div
                     className='nheader'
                     style={{
