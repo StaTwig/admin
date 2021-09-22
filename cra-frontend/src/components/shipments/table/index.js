@@ -96,7 +96,7 @@ const Table = (props) => {
                   className='col-1 txt1'
                   style={{ position: "relative", left: "4.5%" }}
                 >
-                  {shipment.shippingDate.length === 10
+                  {shipment?.shippingDate?.length === 10
                     ? shipment.shippingDate
                     : formatDate(shipment.shippingDate)}
                 </div>
