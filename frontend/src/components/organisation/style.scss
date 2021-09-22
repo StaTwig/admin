@@ -72,13 +72,22 @@
   margin-top: 10px;
 }
 
-.full-width {
+.full-width{
   position: absolute;
   left: -95px;
   right: 0px;
   background-color: #eaeaea;
   margin-left: 118px;
   width: 100%;
+}
+
+.full-width1 {
+  position: absolute;
+  left: 80px;
+  /* right: 0px; */
+  background-color: #eaeaea;
+  margin-left: 118px;
+  width: 92%;
 }
 
 .filter {

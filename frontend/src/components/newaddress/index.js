@@ -456,17 +456,23 @@ const NewAddress = (props) => {
                       handleBlur={handleBlur}
                       value={values.pincode}
                     /> */}<br/>
-                    <div className="w-50 d-flex flex-row-reverse" style={{float:"right", position:"relative", left:"330px"}}>
-                    <button type="submit" 
-                    className="btn btn-warning"
-                    style={{backgroundColor:'#b2b0aa', borderColor: '#b2b0aa'}} >
-                      <i
-                        className="fa fa-plus txt pr-2"
-                        aria-hidden="true"
-                      ></i>
-                      <span className="txt">Add New Address</span>
-                    </button>
-                    </div>
+
+                    {
+                      Object.keys(addr).length == 0 ? 
+                      <div className="w-50 d-flex flex-row-reverse" style={{float:"right", position:"relative", left:"330px"}}>
+                        <button type="submit" 
+                          className="btn btn-warning"
+                          style={{backgroundColor:'#b2b0aa', borderColor: '#b2b0aa'}} >
+                          <i
+                            className="fa fa-plus txt pr-2"
+                            aria-hidden="true"
+                          ></i>
+                          <span className="txt">Add New Address</span>
+                        </button>
+                      </div> :
+                        ``
+                    }
+                    
                   </form>
                 )}
               </Formik>

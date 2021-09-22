@@ -62,10 +62,10 @@ const Organisations = (props) => {
         <h1 className="breadcrumb dash">MANAGE ORGANISATIONS</h1>
         <SearchBar onChangeOfSearchInput={filterOrganisationListBasedOnTopPanelSearchInput} type={'searchBarTopPanel'} />
       </div>
-      <div className='full-width'>
-        <div className='filter'>
+      <div className={ `${ window.location.pathname == '/organisation' ? `full-width1` : `full-width`}`}>
+        <div className={ `${ window.location.pathname == '/organisation' ? '' : `filter`}`}>
           <div className='row'>
-            <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
+            <div className='box col-1 ml-5 mr-4 headerText'>Name</div>
             <div class="vl text-center"></div>
 
             <div className='box col-2 headerText'>
