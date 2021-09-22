@@ -134,7 +134,8 @@ const ProductInventory = (props) => {
             ))}
             
           </div>
-          <button className="toggle-button" onClick={() => scroll(+100)}><img src={Next} className="toggle-icon-next" alt='truck'/></button>
+          <button className="toggle-button-right" onClick={() => scroll(+100)}><img src={Next} className="toggle-icon-next" alt='truck'/></button>
+          <button className="toggle-button-left" onClick={() => scroll(-100)}><img src={Next} className="toggle-icon-back" alt='truck'/></button>
         </div>
       )}
       <div className='row'>

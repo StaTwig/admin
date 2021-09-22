@@ -148,7 +148,6 @@ const Inventory = (props) => {
   }, []);
 
   const onPageChange = async (pageNum) => {
-    console.log("onPageChange =========>", pageNum);
     const recordSkip = (pageNum - 1) * limit;
     // setSkip(recordSkip);
     dispatch(
@@ -164,7 +163,6 @@ const Inventory = (props) => {
   };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
-    console.log("setDateFilterOnSelect =========>", dateFilterSelected);
     setDateFilter(dateFilterSelected);
     // setSkip(0);
     dispatch(
@@ -263,7 +261,7 @@ const Inventory = (props) => {
   return (
     <div className='inventory'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>INVENTORY </h1>
+        <h2 className='breadcrumb'>INVENTORY </h2>
         <div className='d-flex'>
           {isAuthenticated("addInventory") && (
             <Link to='/newinventory'>
