@@ -4,7 +4,7 @@ var RecordSchema = new mongoose.Schema(
     id: { type: String, required: true, unique: true },
     externalId: { type: 'String' },
     creationDate: {
-      type: String,
+      type: Date,
     },
     createdBy: {
       type: String,
