@@ -123,7 +123,7 @@ const NewShipment = (props) => {
       const orgs = await getAllOrganisations();
 console.log(user.organisation)
       const orgSplit = user.organisation?.split("/");
-      if(orgSplit.length)
+      if(orgSplit?.length)
       setSenderOrganisation([orgSplit[0]]);
 
       const organisations = orgs.data;

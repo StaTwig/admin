@@ -453,12 +453,12 @@ const EditRow = (props) => {
                                   />
                                 </div>
                               </div>
-                              <div className='txt1 title recived-text align-self-center mr-2'>
+                              <div className='txt1 title recived-text align-self-left mr-4' style={{left: '-10px'}}>
                                 {prod.unitofMeasure.name}
                               </div>
 
                               <div className='txt1 mr-3'>
-                                <div>
+                                <div >
                                   {editButtonStatus ? (
                                     <div>
                                       {addnew ? (
