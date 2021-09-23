@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import parse from "html-react-parser";
 import useOnclickOutside from "react-cool-onclickoutside";
 
@@ -9,8 +9,7 @@ const dropdownButtonGroup = (props) => {
   const [menu, setMenu] = useState(false);
   const { groups, name, namer, onSelect, error } = props;
 
-  const ref = useRef();
-  useOnclickOutside(ref, () => {
+  const ref = useOnclickOutside(() => {
     setMenu(false);
   });
   const useParse = name && name?.includes("<");

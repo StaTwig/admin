@@ -60,7 +60,7 @@ const LocationRequests = (props) => {
         <div className="d-flex flex-row mt-5 pt-5">
           <button
             type="button"
-            className="btn rounded btn-outline-success mr-3 pl-2 pr-2"
+            className=" rounded btn-outline-success mr-3 pl-2 pr-2 btnstyles"
             onClick={() => {
               modifyLocations({
                 id: row?.id,
@@ -74,7 +74,7 @@ const LocationRequests = (props) => {
           </button>
           <button
             type="button"
-            className="btn rounded btn-outline-danger pl-2 pr-2"
+            className=" rounded btn-outline-danger pl-2 pr-2 btnstyles"
             onClick={() => {
               modifyLocations({
                 id: row?.id,
