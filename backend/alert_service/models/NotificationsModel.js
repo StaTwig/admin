@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-NotificationSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const NotificationSchema = new mongoose.Schema(
   {
     id: { type: String, unique: true },
     title: {
@@ -11,11 +11,12 @@ NotificationSchema = new mongoose.Schema(
     user: {
       type: String,
     },
-    type: { type: String},
+    type: { type: String },
     eventType: { type: String },
-    transactionId: { type: String}
+    isRead: { type: Boolean, default: false },
+    transactionId: { type: String },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Notification', NotificationSchema)
+module.exports = mongoose.model("Notification", NotificationSchema);

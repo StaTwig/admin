@@ -536,9 +536,9 @@ const AdvanceTableFilter = (props) => {
             onClose={handlePoDeliveryLocationClose}
           >
             <div className='d-flex flex-column align-items-center'>
-              <StyledMenuItem>
+              {/* <StyledMenuItem>
                 <Button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
+                  // style={{ padding: "10px", height: "40px", width: "130px" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
@@ -546,45 +546,59 @@ const AdvanceTableFilter = (props) => {
                 >
                   Clear
                 </Button>
+              </StyledMenuItem> */}
+              <StyledMenuItem style={{ width: "100%" }}>
+                {poDeliveryLocationAnchorEl ? (
+                  // props.poDeliveryLocationsList.map((location) => {
+                  //   return (
+                  //     <div>
+                  //       <StyledMenuItem>
+                  //         <Button variant="outlined" color="primary" onClick={() => setPoDeliveryLocationFilterOnSelect(location.id)}>{location.id}</Button>
+                  //       </StyledMenuItem>
+                  //     </div>
+                  //   )
+                  // })
+                  <Autocomplete
+                    id='toShipment'
+                    options={props.poDeliveryLocationsList}
+                    getOptionLabel={(options) =>
+                      options.title
+                        ? options?.title +
+                          " (" +
+                          options?.warehouseAddress?.city +
+                          " ," +
+                          options?.warehouseAddress?.country +
+                          ")"
+                        : " (" + options.id + " )"
+                    }
+                    onChange={(event, newValue) => {
+                      setPoDeliveryLocationFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "100%" }}
+                    renderInput={(params) => (
+                      <div className='d-flex flex-cloumn'>
+                        <TextField
+                          {...params}
+                          label={"Search Location"}
+                          variant='outlined'
+                        />
+                        <Button
+                          className='btn btn-link btn-sm font-weight-bold'
+                          variant='outlined'
+                          color='primary'
+                          onClick={() =>
+                            setPoDeliveryLocationFilterOnSelect("")
+                          }
+                        >
+                          Clear
+                        </Button>
+                      </div>
+                    )}
+                  />
+                ) : (
+                  <div>Empty List</div>
+                )}
               </StyledMenuItem>
-              {poDeliveryLocationAnchorEl ? (
-                // props.poDeliveryLocationsList.map((location) => {
-                //   return (
-                //     <div>
-                //       <StyledMenuItem>
-                //         <Button variant="outlined" color="primary" onClick={() => setPoDeliveryLocationFilterOnSelect(location.id)}>{location.id}</Button>
-                //       </StyledMenuItem>
-                //     </div>
-                //   )
-                // })
-                <Autocomplete
-                  id='toShipment'
-                  options={props.poDeliveryLocationsList}
-                  getOptionLabel={(options) =>
-                    options.title
-                      ? options.title +
-                        " (" +
-                        options.warehouseAddress.city +
-                        " ," +
-                        options.warehouseAddress.country +
-                        ")"
-                      : " (" + options.id + " )"
-                  }
-                  onChange={(event, newValue) => {
-                    setPoDeliveryLocationFilterOnSelect(newValue.id);
-                  }}
-                  style={{ width: "100%" }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={"Search Location"}
-                      variant='outlined'
-                    />
-                  )}
-                />
-              ) : (
-                <div>Empty List</div>
-              )}
             </div>
           </StyledMenu>
         </div>

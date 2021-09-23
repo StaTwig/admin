@@ -63,6 +63,7 @@ exports.getNotifications = [
         type: req.query.type,
         isRead: false,
       });
+      console.log(newNotifications);
       const notifications = await Notification.find({
         user: userId,
         type: req.query.type,

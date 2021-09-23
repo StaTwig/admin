@@ -143,10 +143,10 @@ const ChartsPage = (props) => {
   return (
     <div>
       {validdata ? (
-        <MDBContainer>
-          <Doughnut id='doughnut-chart' data={doughnut} options={option} />
-        </MDBContainer>
+        // <MDBContainer>
+        <Doughnut id='doughnut-chart' data={doughnut} options={option} />
       ) : (
+        // </MDBContainer>
         <div className='summaryTable justify-content-center '>
           <div className='d-flex flex-column '>
             <img src={EmptyInventory} height='200' width='200' alt='' />

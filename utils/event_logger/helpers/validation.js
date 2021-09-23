@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 const eventSchema = Joi.object().keys({
   eventID: Joi.string().min(1).max(50).required(),
   transactionId: Joi.string().min(1).max(50),
@@ -27,25 +27,23 @@ const eventSchema = Joi.object().keys({
       id: Joi.string().min(1).max(50).required(),
       name: Joi.string().min(1).max(50).required(),
       address: Joi.string().min(1).max(100).required(),
-    })
+    }),
   }),
   payload: Joi.object().keys({
-    data: Joi.any().optional()
+    data: Joi.any().optional(),
   }),
   actorWarehouseId: Joi.string().min(1).max(50),
 });
-
 
 function validate(data) {
   const result = eventSchema.validate(data);
   const { value, error } = result;
   const valid = error == null;
   if (!valid) {
-    console.log(error)
+    console.log(error);
     return false;
-  }
-  else {
-    console.log('success')
+  } else {
+    console.log("success");
     return true;
   }
 }
