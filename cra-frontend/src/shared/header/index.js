@@ -235,9 +235,9 @@ const Header = (props) => {
    axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
       setNewNotifs(response.data.data.new)
       setNotifications(response.data.data.data.reverse());
-      if(response.data.data.data.length === icount)
+      if(response.data.data.data?.length === icount)
         setHasMore(false)
-      setIcount(response.data.data.data.length)
+      setIcount(response.data.data?.data?.length)
    })
   }
 

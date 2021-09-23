@@ -75,12 +75,12 @@ const Table = (props) => {
                     <div className='flex-column d-flex text-left'>
                       <span className='text-primary bold'>
                         {visible === "two"
-                          ? creatorOrganisation.name
+                          ? creatorOrganisation?.name
                           : supplier.organisation.name}
                       </span>
                       <p className='address mb-0 text-primary'>
                         {visible === "two"
-                          ? creatorOrganisation.id
+                          ? creatorOrganisation?.id
                           : supplier.organisation.id}
                       </p>
                     </div>
