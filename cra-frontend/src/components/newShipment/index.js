@@ -837,9 +837,11 @@ console.log(user.organisation)
                           // alert("The shipment has to be delivered first");
                           setShipmentError("Shipment has to be delivered");
                           setOpenShipmentFail(true);
+                          dispatch(turnOff());
                         }
-
-                        for (let i = 0; i < result.products?.length; i++) {
+                        else
+                        {
+                          for (let i = 0; i < result.products?.length; i++) {
                           if (result.products[i].productQuantityShipped) {
                             result.products[i].productQuantity =
                               parseInt(result.products[i].productQuantity) -
@@ -889,8 +891,7 @@ console.log(user.organisation)
                             setFieldValue("products", products_temp);
                           } else setFieldValue("products", []);
                         }
-                      }}
-                      disabled={true}
+                      }}}
                     >
                       <span
                         style={{

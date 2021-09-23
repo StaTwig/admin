@@ -9,9 +9,11 @@ import {
   getAllManageAlerts,
 } from "../../actions/userActions";
 import "./style.scss";
+import { red } from "@material-ui/core/colors";
 
 const Settings = (props) => {
   const [visible, setvisible] = useState("one");
+  const [emailClicked, setEmailClicked] = useState(false);
   const [alertsObj, setAlertsObj] = useState({
     eventSecondary: "",
     alertMobile: false,
@@ -295,7 +297,7 @@ const Settings = (props) => {
                       updateAlertsObj("email");
                     }}
                   />
-                  <label className='subscription-alert-label'>{"Email"}</label>
+                  <label className='subscription-alert-label' style={{color: 'red'}}>{"Email"}</label>
                 </div>
                 <div className='subscription-alert-section'>
                   <input
