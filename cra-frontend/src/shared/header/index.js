@@ -74,7 +74,9 @@ const Header = (props) => {
     setMenu(false);
   });
 
-  const ref1 = useOnclickOutside(() => {
+  const ref1 = useOnclickOutside((ref) => {
+    // console.log(ref.target.className)
+    if(ref.target.className !== "ignore-react-onclickoutside" && ref.target.className !== "badge badge-light")
     setShowNotifications(false);
   })
 
@@ -369,6 +371,7 @@ const Header = (props) => {
             <div className='notifications cursorP'>
               <img
                 id='notification'
+                className="ignore-react-onclickoutside"
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
@@ -384,7 +387,7 @@ const Header = (props) => {
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div ref={ref1} className='slider-menu' id="scrollableDiv">
+                <div ref={ref1} outsideClickIgnoreClass={'ignore-react-onclickoutside'} className='slider-menu' id="scrollableDiv">
                   <div
                     className='nheader'
                     style={{
