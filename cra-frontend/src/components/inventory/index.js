@@ -467,7 +467,8 @@ const Inventory = (props) => {
       )}
       <div className='full-width-ribben'>
         <TableFilter
-          isReportDisabled={!isAuthenticated("inventoryExportReport")}
+          // isReportDisabled={!isAuthenticated("inventoryExportReport")}
+          isReportDisabled={true}
           data={headers}
           inventoryFilterData={props.inventoryFilterData}
           setInventoryProductNameFilterOnSelect={
