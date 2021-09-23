@@ -14,6 +14,7 @@ import { red } from "@material-ui/core/colors";
 const Settings = (props) => {
   const [visible, setvisible] = useState("one");
   const [emailClicked, setEmailClicked] = useState(false);
+  const [smsClicked, setSmsClicked] = useState(false);
   const [alertsObj, setAlertsObj] = useState({
     eventSecondary: "",
     alertMobile: false,
@@ -295,9 +296,10 @@ const Settings = (props) => {
                     checked={alertsObj.alertEmail}
                     onClick={() => {
                       updateAlertsObj("email");
+                      setEmailClicked(!emailClicked)
                     }}
                   />
-                  <label className='subscription-alert-label' style={{color: 'red'}}>{"Email"}</label>
+                  <label className='subscription-alert-label' style={{color: emailClicked ? 'black' : 'grey'}}>{"Email"}</label>
                 </div>
                 <div className='subscription-alert-section'>
                   <input
@@ -307,15 +309,17 @@ const Settings = (props) => {
                     checked={alertsObj.alertMobile}
                     onClick={() => {
                       updateAlertsObj("mobile");
+                      setSmsClicked(!smsClicked);
                     }}
                     disabled={isMobileNumberNotAvailable()}
                   />
                   <label
                     className='subscription-alert-label'
                     style={{
-                      color: isMobileNumberNotAvailable()
-                        ? "#B4B4B4"
-                        : "#000000",
+                      // color: isMobileNumberNotAvailable() 
+                      //   ? "#B4B4B4"
+                      //   : "#000000",
+                        color: smsClicked ? 'black' : 'grey'
                     }}
                   >
                     {"Mobile SMS"} &nbsp;
