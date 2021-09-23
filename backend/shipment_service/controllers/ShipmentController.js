@@ -337,6 +337,18 @@ exports.createShipment = [
   async (req, res) => {
     try {
       let data = req.body;
+      if (req.body.shippingDate.includes("/")) {
+        var shipmentData = req.body.shippingDate.split("/");
+        const shippingDate =
+          shipmentData[2] +
+          "-" +
+          shipmentData[1] +
+          "-" +
+          shipmentData[0] +
+          "T00:00:00.000Z";
+        data.shippingDate = shippingDate;
+      }
+      data.shippingDate = new Date(data.shippingDate);
       data.products.forEach(async (element) => {
         var product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;
@@ -701,18 +713,6 @@ exports.createShipment = [
           return apiResponse.ErrorResponse(res, "Shipment Not saved");
         }
 
-        if (req.body.shippingDate.includes("/")) {
-          var shipmentData = req.body.shippingDate.split("/");
-          const shippingDate =
-            shipmentData[2] +
-            "-" +
-            shipmentData[1] +
-            "-" +
-            shipmentData[0] +
-            "T00:00:00.000Z";
-          data.shippingDate = shippingDate;
-        }
-        data.shippingDate = new Date(data.shippingDate);
         //Blockchain Integration
         const bc_data = {
           Id: data.id,
