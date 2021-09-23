@@ -63,6 +63,7 @@ const Header = (props) => {
   const [icount, setIcount] = useState(0);
   const [visible, setVisible] = useState("one");
   const [limit, setLimit] = useState(10);
+  const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -228,8 +229,8 @@ const Header = (props) => {
     if(num)
     setLimit(limit+num)
    axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
-
-      setNotifications(response.data.data.data);
+      setNewNotifs(response.data.data.new)
+      setNotifications(response.data.data.data.reverse());
       if(response.data.data.data.length === icount)
         setHasMore(false)
       setIcount(response.data.data.data.length)
@@ -243,7 +244,9 @@ const Header = (props) => {
       const response = await axios.get(
         `${config().getAlerts}${alertType}&skip=0&limit=11`
       );
-      setNotifications(response.data.data.data);
+
+      setNotifications(response.data.data.data.reverse());
+      console.log(response.data.data)
       setCount(response.data.data.totalRecords);
       setIcount(response.data.data.data.length)
       const warehouses = await getActiveWareHouses();
@@ -404,7 +407,7 @@ const Header = (props) => {
                           fontSize: "14px",
                         }}
                       >
-                        {notifications?.length} new
+                        {newNotifs} new
                       </span>
                     )}
 
