@@ -16,15 +16,10 @@ const ProductList = (props) => {
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
-    <div>
+      <>
       {props.shipments.products.map((product, index) => (
         <div
-          className={
-            props.productHighLight
-              ? "col panel commonpanle highlight mb-5 "
-              : "col panel commonpanle mb-5"
-          }
-          style={{ padding: 0 }}
+          className= "col-sm-4 "
         >
           {
             //<div className="d-flex flex-row " >
@@ -91,6 +86,11 @@ const ProductList = (props) => {
             // </div>
             //   </div>
           }
+          <div className={
+            props.productHighLight
+              ? "col panel commonpanle highlight mb-5 "
+              : "col panel commonpanle mb-5"
+          }>
           <div className='container ml-2'>
             <div className='row'>
               <div className='col mt-2 productheading'>
@@ -192,6 +192,7 @@ const ProductList = (props) => {
             </div>
           </div>
         </div>
+        </div>
       ))}
       {/* <div className="arrow float-right" onClick={() => {
                     props.setMenuProduct(!props.menuProduct)
@@ -209,7 +210,7 @@ const ProductList = (props) => {
           />
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 export default ProductList;
