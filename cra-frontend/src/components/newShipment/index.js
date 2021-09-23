@@ -834,7 +834,9 @@ console.log(user.organisation)
                         );
                         if (result.status !== "RECEIVED") {
                           values.shipmentID = "";
-                          alert("The shipment has to be delivered first");
+                          // alert("The shipment has to be delivered first");
+                          setShipmentError("Shipment has to be delivered");
+                          setOpenShipmentFail(true);
                         }
 
                         for (let i = 0; i < result.products?.length; i++) {
@@ -888,6 +890,7 @@ console.log(user.organisation)
                           } else setFieldValue("products", []);
                         }
                       }}
+                      disabled={true}
                     >
                       <span
                         style={{
