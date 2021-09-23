@@ -82,12 +82,10 @@
 }
 
 .full-width1 {
-  position: absolute;
-  left: 80px;
-  /* right: 0px; */
-  background-color: #eaeaea;
-  margin-left: 118px;
-  width: 92%;
+    position: relative;
+    left: 0.3rem;
+    background-color: #eaeaea;
+    width: 100%;
 }
 
 .filter {
@@ -115,7 +113,7 @@
 
 
 .details-card {
-  margin-top: 90px;
+  margin-top: 35px;
 }
 
 .details-body {
@@ -150,4 +148,17 @@
   font-size: small;
   align-self: center;
   overflow: hidden;
+}
+
+.colum {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  // position: relative;
+  // left: 3rem;
+}
+
+.addressPostal{
+  position: relative;
+  left: 3rem;
 }

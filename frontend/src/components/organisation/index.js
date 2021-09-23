@@ -84,8 +84,8 @@ const Organisations = (props) => {
       </div>
       <div className={ `${ window.location.pathname == '/organisation' ? `full-width1` : `full-width`}`}>
         <div className={ `${ window.location.pathname == '/organisation' ? '' : `filter`}`}>
-          <div className='row'>
-            <div className='box col-1 ml-5 mr-4 headerText'>Name</div>
+          <div className='row' style={{marginRight:"unset"}}>
+            <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
             <div class="vl text-center"></div>
 
             <div className='box col-2 headerText'>
@@ -127,7 +127,7 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
 
-            <div className='box col-1 ml-2 mr-2 headerText'>
+            <div className='box col-1 ml-3 mr-3 headerText'>
               <span className="headerText"  
                   onClick={() => {
                     setShowDropDownForCountry(!showDropDownForCountry);
@@ -140,7 +140,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -160,7 +160,7 @@ const Organisations = (props) => {
               }
             </div>
             <div class="vl text-center"></div>
-            <div className='box col-1 headerText ml-2 mr-2'>
+            <div className='box col-1 headerText ml-3 mr-3'>
               <span className="headerText" 
                     onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
                     style={{cursor:"pointer"}}>{'Region'}
@@ -171,7 +171,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -190,7 +190,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-2 mr-2 headerText'>
+            <div className='box col ml-3 mr-3 headerText'>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForStatus(!showDropDownForStatus);
@@ -203,7 +203,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -237,7 +237,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}

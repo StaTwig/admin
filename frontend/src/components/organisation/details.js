@@ -47,7 +47,7 @@ const Details = (props) => {
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
           <div className="userPic text-center rounded" 
-            style={{ width: '160px' }}>
+            style={{ width: '160px',display:"flex",flexDirection:"column",alignItems:"center" }}>
             {org?.logoId && (
               <img
                 src={org?.logoId}
@@ -74,7 +74,7 @@ const Details = (props) => {
             </div>
           </div>
           
-          <span className="col text-center align-self-center">
+          <span className="colum text-center align-self-center" style={{position:"relative",left:"2rem"}}>
             {org?.type}
             <DropdownButton
               groups={types}
@@ -86,27 +86,27 @@ const Details = (props) => {
             />
           </span>
 
-          <span className="col-2 ml-5 txt1">
+          <span className="col-2 ml-5 txt1" style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
             {org?.postalAddress}
           </span>
           
-          <span className="col txt1 text-center" style={{position:"relative", left:"0px"}}>
+          <span className="colum txt1 text-center" style={{position:"relative", left:"13px"}}>
             {org?.country?.countryName}
           </span>
           
-          <span className="col txt1 text-center">
+          <span className="colum txt1 text-center" style={{position:"relative", left:"2rem"}}>
             {org?.region?.regionName}
           </span>
           
-          <span className="col txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"0px"}} >
+          <span className="colum txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"3rem"}} >
           {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
-          <span className="col txt1 text-center"  style={{position:"relative", left:"10px"}}>
+          <span className="colum txt1 text-center"  style={{position:"relative", left:"3rem"}}>
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          
-          <div className="col txt1" style={{position:"relative", left:"10px"}}>
+          <div className="colum txt1" style={{position:"relative", left:"1.5rem",display:"flex",flexDirection:"row",justifyContent:"center"}}>
             <button
               type="button"
               onClick={() => {
@@ -130,7 +130,8 @@ const Details = (props) => {
                   changeStatus("ACTIVE");
                 }
               }}
-              className="btn btn-view w-auto txt"
+              className="btn btn-view  txt"
+              style={{width:"6.5vw"}}
             >
               {status == "ACTIVE" ? "Deactivate" : "Activate"}
             </button>
