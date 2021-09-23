@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.scss";
 import searchingIcon from "../../assets/icons/search.png";
@@ -73,12 +73,14 @@ const Header = (props) => {
   const ref = useOnclickOutside(() => {
     setMenu(false);
   });
-
-  const ref1 = useOnclickOutside((ref) => {
+  const ref1 = useRef(null);
+  useOnclickOutside((ref) => {
     // console.log(ref.target.className)
     if(ref.target.className !== "ignore-react-onclickoutside" && ref.target.className !== "badge badge-light")
     setShowNotifications(false);
-  })
+  },
+  { refs: [ref1] }
+  )
 
   function onSearchChange(e) {
     setSearchString(e._id);
@@ -387,7 +389,7 @@ const Header = (props) => {
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div ref={ref1} outsideClickIgnoreClass={'ignore-react-onclickoutside'} className='slider-menu' id="scrollableDiv">
+                <div ref={ref1}  outsideClickIgnoreClass={'ignore-react-onclickoutside'} className='slider-menu' id="scrollableDiv">
                   <div
                     className='nheader'
                     style={{
@@ -426,6 +428,7 @@ const Header = (props) => {
                             changeNotifications("ALERT", 1);
                             setVisible("one");
                             setHasMore(true);
+                            ref1.current.scrollTop = 0
                           }}
                         >
                           <div
@@ -448,6 +451,7 @@ const Header = (props) => {
                             changeNotifications("TRANSACTION", 1);
                             setVisible("two");
                             setHasMore(true);
+                            ref1.current.scrollTop = 0
                           }}
                         >
                           <div
