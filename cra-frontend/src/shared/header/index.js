@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.scss";
 import searchingIcon from "../../assets/icons/search.png";
@@ -63,6 +63,7 @@ const Header = (props) => {
   const [icount, setIcount] = useState(0);
   const [visible, setVisible] = useState("one");
   const [limit, setLimit] = useState(10);
+  const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
@@ -72,10 +73,14 @@ const Header = (props) => {
   const ref = useOnclickOutside(() => {
     setMenu(false);
   });
-
-  const ref1 = useOnclickOutside(() => {
+  const ref1 = useRef(null);
+  useOnclickOutside((ref) => {
+    // console.log(ref.target.className)
+    if(ref.target.className !== "ignore-react-onclickoutside" && ref.target.className !== "badge badge-light")
     setShowNotifications(false);
-  })
+  },
+  { refs: [ref1] }
+  )
 
   function onSearchChange(e) {
     setSearchString(e._id);
@@ -228,8 +233,8 @@ const Header = (props) => {
     if(num)
     setLimit(limit+num)
    axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
-
-      setNotifications(response.data.data.data);
+      setNewNotifs(response.data.data.new)
+      setNotifications(response.data.data.data.reverse());
       if(response.data.data.data.length === icount)
         setHasMore(false)
       setIcount(response.data.data.data.length)
@@ -243,7 +248,9 @@ const Header = (props) => {
       const response = await axios.get(
         `${config().getAlerts}${alertType}&skip=0&limit=11`
       );
-      setNotifications(response.data.data.data);
+
+      setNotifications(response.data.data.data.reverse());
+      console.log(response.data.data)
       setCount(response.data.data.totalRecords);
       setIcount(response.data.data.data.length)
       const warehouses = await getActiveWareHouses();
@@ -366,6 +373,7 @@ const Header = (props) => {
             <div className='notifications cursorP'>
               <img
                 id='notification'
+                className="ignore-react-onclickoutside"
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
@@ -381,7 +389,7 @@ const Header = (props) => {
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div ref={ref1} className='slider-menu' id="scrollableDiv">
+                <div ref={ref1}  outsideClickIgnoreClass={'ignore-react-onclickoutside'} className='slider-menu' id="scrollableDiv">
                   <div
                     className='nheader'
                     style={{
@@ -404,7 +412,7 @@ const Header = (props) => {
                           fontSize: "14px",
                         }}
                       >
-                        {notifications?.length} new
+                        {newNotifs} new
                       </span>
                     )}
 
@@ -420,6 +428,7 @@ const Header = (props) => {
                             changeNotifications("ALERT", 1);
                             setVisible("one");
                             setHasMore(true);
+                            ref1.current.scrollTop = 0
                           }}
                         >
                           <div
@@ -442,6 +451,7 @@ const Header = (props) => {
                             changeNotifications("TRANSACTION", 1);
                             setVisible("two");
                             setHasMore(true);
+                            ref1.current.scrollTop = 0
                           }}
                         >
                           <div

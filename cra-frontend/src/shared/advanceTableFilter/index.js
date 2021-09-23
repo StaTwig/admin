@@ -1708,9 +1708,9 @@ const AdvanceTableFilter = (props) => {
             {!props?.isReportDisabled && (
               <button
                 className='btn-filter-blue ml-2'
-                // onClick={() =>
-                //   props.setShowExportFilter(!props.showExportFilter)
-                // }
+                onClick={() =>
+                  props.setShowExportFilter(!props.showExportFilter)
+                }
               >
                 <div className='d-flex  align-items-center'>
                   <img

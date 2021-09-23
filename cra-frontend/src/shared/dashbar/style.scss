@@ -155,7 +155,8 @@
 }
 /* width */
 ::-webkit-scrollbar {
-  display:none;
+  width: 5px;
+  height: 10px;
 }
 
 /* Track */

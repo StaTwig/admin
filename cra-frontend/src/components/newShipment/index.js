@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Add from "../../assets/icons/createshipment.png";
 import CalenderIcon from "../../assets/icons/date_icon.png";
@@ -67,7 +67,8 @@ const NewShipment = (props) => {
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
-
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
   const customStyles = {
     placeholder: (provided, state) => ({
       color: state.isDisabled ? "black" : "grey",
@@ -122,7 +123,7 @@ const NewShipment = (props) => {
       const orgs = await getAllOrganisations();
 console.log(user.organisation)
       const orgSplit = user.organisation?.split("/");
-
+      if(orgSplit?.length)
       setSenderOrganisation([orgSplit[0]]);
 
       const organisations = orgs.data;
@@ -834,10 +835,14 @@ console.log(user.organisation)
                         );
                         if (result.status !== "RECEIVED") {
                           values.shipmentID = "";
-                          alert("The shipment has to be delivered first");
+                          // alert("The shipment has to be delivered first");
+                          setShipmentError("Shipment has to be delivered");
+                          setOpenShipmentFail(true);
+                          dispatch(turnOff());
                         }
-
-                        for (let i = 0; i < result.products?.length; i++) {
+                        else
+                        {
+                          for (let i = 0; i < result.products?.length; i++) {
                           if (result.products[i].productQuantityShipped) {
                             result.products[i].productQuantity =
                               parseInt(result.products[i].productQuantity) -
@@ -887,7 +892,7 @@ console.log(user.organisation)
                             setFieldValue("products", products_temp);
                           } else setFieldValue("products", []);
                         }
-                      }}
+                      }}}
                     >
                       <span
                         style={{
@@ -1258,6 +1263,7 @@ console.log(user.organisation)
                         }`}
                       >
                         <DatePicker
+                        ref={ref1}
                           className='date'
                           selected={
                             values.shipmentDate
@@ -1279,7 +1285,7 @@ console.log(user.organisation)
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref1.current.setFocus()} />
                         {/* {errors.shipmentDate && touched.shipmentDate && (
                           <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
@@ -1329,6 +1335,7 @@ console.log(user.organisation)
                         }`}
                       >
                         <DatePicker
+                          ref={ref2}
                           className='date'
                           placeholderText='Enter Delivery Date'
                           onChange={(date) => {
@@ -1351,7 +1358,7 @@ console.log(user.organisation)
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon"/>
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref2.current.setFocus()}/>
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>
