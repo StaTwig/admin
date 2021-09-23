@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import SearchBar from '../searchBar';
 import "./style.scss";
+import useOnclickOutside from "react-cool-onclickoutside";
 
 const DropDownFilter = (props) => {
+
+    const ref = useOnclickOutside(() => {
+        setCloseDropdown(false);
+      })
+    
+      const [ closeDropdown, setCloseDropdown] = useState(props.referance)
+      
      return (
-        <div className={`card rounded bg-white border-white role-card-container`} style={{ left: '0rem' }}>
+        <div ref={ref}  className={`card rounded bg-white border-white role-card-container`} style={{ left: '0rem' }}>
             <SearchBar
                 onChangeOfSearchInput={props.onChangeOfSearchInput}
                 type={props.type}
