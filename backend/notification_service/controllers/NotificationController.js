@@ -58,12 +58,15 @@ exports.getNotifications = [
         user: userId,
         type: req.query.type,
       });
+      const totalUnRead = await Notification.countDocuments({
+        user: userId,
+        isRead: false,
+      });
       const newNotifications = await Notification.countDocuments({
         user: userId,
         type: req.query.type,
         isRead: false,
       });
-      console.log(newNotifications);
       const notifications = await Notification.find({
         user: userId,
         type: req.query.type,
@@ -73,6 +76,7 @@ exports.getNotifications = [
         .limit(resPerPage);
       if (notifications.length > 0) {
         const data = {
+          totalUnRead: totalUnRead,
           totalRecords: totalRecords,
           new: newNotifications,
           data: notifications,
