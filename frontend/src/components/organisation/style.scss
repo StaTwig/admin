@@ -73,11 +73,11 @@
 }
 
 .full-width{
-  position: absolute;
-  left: -95px;
-  right: 0px;
+  // position: absolute;
+  // left: -95px;
+  // right: 0px;
   background-color: #eaeaea;
-  margin-left: 118px;
+  // margin-left: 118px;
   width: 100%;
 }
 
@@ -89,8 +89,8 @@
 }
 
 .filter {
-  margin-left: 9rem;
-  margin-right: 3rem;
+  // margin-left: 9rem;
+  // margin-right: 3rem;
 }
 
 .box {
@@ -161,4 +161,12 @@
 .addressPostal{
   position: relative;
   left: 3rem;
+}
+.userTitle{
+  margin-right: unset;
+  margin-left: unset;
+}
+
+.orgTitle{
+  margin-right: unset;
 }

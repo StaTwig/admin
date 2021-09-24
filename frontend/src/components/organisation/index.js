@@ -84,7 +84,7 @@ const Organisations = (props) => {
       </div>
       <div className={ `${ window.location.pathname == '/organisation' ? `full-width1` : `full-width`}`}>
         <div className={ `${ window.location.pathname == '/organisation' ? '' : `filter`}`}>
-          <div className='row' style={{marginRight:"unset"}}>
+          <div className={ `${window.location.pathname == '/organisation' ?`row orgTitle ` : `row userTitle`}`}>
             <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
             <div class="vl text-center"></div>
 

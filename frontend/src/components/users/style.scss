@@ -156,7 +156,7 @@
 .locationText {
   width: 20% !important;
   position: relative;
-  left: -85px;
+  left: -50px;
   font-weight: 400;
   font-size: small;
   // align-self: center;
@@ -172,6 +172,8 @@
   width: 24% !important;
   position: relative;
   left: 5px;
+  display: flex;
+  justify-content: center;
 }
 
 .accountText {
