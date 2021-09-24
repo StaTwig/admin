@@ -458,10 +458,10 @@ exports.register = [
           email: emailId,
         };
 
-         const bc_response = await axios.post(
-           `${hf_blockchain_url}/api/v1/register`,
-           bc_data
-         );
+        const bc_response = await axios.post(
+          `${hf_blockchain_url}/api/v1/register`,
+          bc_data
+        );
 
         try {
           var evid = Math.random().toString(36).slice(2);
@@ -598,17 +598,7 @@ exports.sendOtp = [
   async (req, res) => {
     try {
       const errors = validationResult(req);
-      /* EmployeeModel.collection.dropIndexes(function(){
-         EmployeeModel.collection.reIndex(function(finished){
-                  console.log("finished re indexing")
-                })
-              })*/
-      //EmployeeModel.createIndexes();
       if (!errors.isEmpty()) {
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < login : Validation Error while login"
-        );
         return apiResponse.validationErrorWithData(
           res,
           "Validation Error.",
@@ -626,32 +616,39 @@ exports.sendOtp = [
         }
         if (user) {
           if (user.accountStatus === "ACTIVE") {
-            logger.log(
-              "info",
-              "<<<<< UserService < AuthController < login : user is active"
-            );
-            // if (user.phoneNumber) {
-            //   client.verify.services('VA0410823affc5222e309aca3742ecf315')
-            //     .verifications
-            //     .create({ to: user.phoneNumber, channel: 'sms' })
-            //     .then(verification => console.log(verification.status));
-            // }
-            let otp = utility.randomNumber(4);
-            if (
-              process.env.EMAIL_APPSTORE.includes(user.emailId) &&
-              user.emailId != ""
-            )
+            let otp = 0;
+            if (process.env.ENVIRONMENT === "TEST") {
               otp = process.env.OTP_APPSTORE;
-
+              await EmployeeModel.updateOne({ id: user.id }, { otp });
+              if (user.emailId.indexOf("@") > -1) {
+                await axios.post(process.env.OTP_ENDPOINT, {
+                  email: user.emailId,
+                  OTP: otp.toString(),
+                  source: process.env.SOURCE,
+                });
+              }
+              return apiResponse.successResponseWithData(
+                res,
+                "OTP Generated but is NOT sent because of TEST Environment. OTP will be having default value",
+                { otp: otp.toString() }
+              );
+            } else {
+              if (
+                process.env.EMAIL_APPSTORE.includes(user.emailId) &&
+                user.emailId != ""
+              ) {
+                otp = process.env.OTP_APPSTORE;
+              } else {
+                otp = utility.randomNumber(4);
+              }
+            }
             await EmployeeModel.updateOne({ id: user.id }, { otp });
 
             axios
               .post(process.env.OTP_ENDPOINT, {
-                subject: "OTP request for Vaccine Ledger",
                 email: user.emailId,
-                phone: user.phoneNumber ? user.phoneNumber : "",
-                otp: otp.toString(),
-                message: "Please Send the OTP",
+                mobile: user.phoneNumber ? user.phoneNumber : "",
+                OTP: otp.toString(),
                 source: process.env.SOURCE,
               })
               .then(
@@ -670,53 +667,7 @@ exports.sendOtp = [
                   console.log(error);
                 }
               );
-
-            //   let html = EmailContent({
-            //     name: user.firstName,
-            //     origin: req.headers.origin,
-            //     otp,
-            //   });
-            // // Send confirmation email
-            //   try {
-            //     await mailer
-            //         .send(
-            //             constants.confirmEmails.from,
-            //             user.emailId,
-            //             constants.confirmEmails.subject,
-            //             html,
-            //         );
-            //     return apiResponse.successResponseWithData(
-            //         res,
-            //         'OTP Sent Success.'
-            //     );
-            //   }catch(err) {
-            //     return apiResponse.ErrorResponse(res, err);
-            //   }
-
-            /* let userData = {
-               id: user.id,
-               firstName: user.firstName,
-               emailId: user.emailId,
-               role: user.role,
-               warehouseId:user.warehouseId,
-             };
-             //Prepare JWT token for authentication
-             const jwtPayload = userData;
-             const jwtData = {
-               expiresIn: process.env.JWT_TIMEOUT_DURATION,
-             };
-             const secret = process.env.JWT_SECRET;
-             //Generated JWT token with Payload and secret.
-             userData.token = jwt.sign(jwtPayload, secret, jwtData);
-             logger.log(
-                 'info',
-                 '<<<<< UserService < AuthController < login : user login success',
-             );*/
           } else {
-            logger.log(
-              "warn",
-              "<<<<< UserService < AuthController < login : account is not approved."
-            );
             return apiResponse.unauthorizedResponse(
               res,
               "Account is not Approved. Please contact admin."
@@ -727,13 +678,9 @@ exports.sendOtp = [
         }
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < login : error in login (catch block)"
-      );
       return apiResponse.ErrorResponse(
         res,
-        "Email already registered. Check Email for verifying the account"
+        err.message || "Some error occurred while login."
       );
     }
   },
@@ -873,7 +820,10 @@ exports.verifyOtp = [
             email: user.emailId,
           };
 
-          const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data)
+          const bc_response = await axios.post(
+            `${hf_blockchain_url}/api/v1/register`,
+            bc_data
+          );
           return apiResponse.successResponseWithData(
             res,
             "Login Success",

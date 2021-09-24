@@ -1,11 +1,14 @@
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
-const { ScanShipment } = require("../helpers/scan");
-const { checkPermissions } = require("../middlewares/rbac_middleware");
+const {
+  checkPermissions,
+  checkPermissionAwait,
+} = require("../middlewares/rbac_middleware");
 const RequestModel = require("../models/RequestModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const axios = require("axios");
+const { asyncForEach } = require("../helpers/utility");
 const URL =
   process.env.NOTIFICATION ||
   "https://test.vaccineledger.com/notificationmanagement/api/notification/pushNotification";
@@ -128,21 +131,40 @@ exports.updateRequest = [
   auth,
   async (req, res) => {
     try {
+      let shipment = true;
       const { id, status } = req.query;
-      const request = await RequestModel.findOneAndUpdate(
-        { id: id },
-        { $set: { status: status } },
-        { new: true }
-      );
-      if (status === "ACCEPTED") {
-        const shipment = await ShipmentModel.findOneAndUpdate(
-          { id: request.label.labelId },
-          { $push: { acceptedRequests: request.id } },
-          { new: true, upsert: true }
-        );
+      const oldRequest = await RequestModel.findOne({ id: id });
+      if (oldRequest.status === "ACCEPTED") {
+        return apiResponse.ErrorResponse(res, "Request already accepted");
       }
-      try {
-        await axios.post(URL, {
+      if (!oldRequest.to.employees.includes(req.user.id)) {
+        return apiResponse.ErrorResponse(
+          res,
+          "Not Eligible to Update a Request"
+        );
+      } else {
+        const request = await RequestModel.findOneAndUpdate(
+          { id: id },
+          { $set: { status: status } },
+          { new: true }
+        );
+        if (
+          (status === "ACCEPTED" && request.type === "LOCATION_MISMATCH") ||
+          "ORGANISATION_MISMATCH"
+        ) {
+          shipment = await ShipmentModel.findOneAndUpdate(
+            { "label.labelId": request.label.labelId },
+            {
+              $push: { acceptedRequests: request.id },
+              $set: {
+                "receiver.id": request.from.organisationId,
+                "receiver.locationId": request.from.warehouseId,
+                "receiver.name": request.from.name,
+              },
+            }
+          );
+        }
+        const notification = await axios.post(URL, {
           content: `Request #${request.id} for ${request.type} on ${request.label.labelId} has been ${request.status}`,
           mobile: request.from.phoneNumber,
           email: request.from.emailId,
@@ -152,14 +174,16 @@ exports.updateRequest = [
           transactionId: request.id,
           subject: `Request ${request.status}`,
         });
-      } catch (err) {
-        console.log(err);
+        if (shipment && notification.data.status) {
+          return apiResponse.successResponseWithData(
+            res,
+            "Request Updated",
+            request
+          );
+        } else {
+          return apiResponse.ErrorResponse(res, "Request not updated");
+        }
       }
-      return apiResponse.successResponseWithData(
-        res,
-        "Request Updated",
-        request
-      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -182,10 +206,6 @@ exports.createRequest = [
         walletAddress,
         phoneNumber,
       } = req.user;
-      const permission_request = {
-        role: role,
-        permissionRequired: ["viewShipment"],
-      };
       let from = {
         name: firstName,
         id,
@@ -196,10 +216,63 @@ exports.createRequest = [
         walletAddress,
         role,
       };
-      let contactList = new Set();
-      let contacts = [];
+      let contacts = new Map();
+      let contactList = [];
       let to = {};
       let shipment = {};
+      const send = async (shipmentId) => {
+        try {
+          const request = new RequestModel({
+            from,
+            to,
+            "label.labelId": labelId,
+            shipmentId,
+            type,
+          });
+          let result = await request.save();
+          contacts.forEach(async (element) => {
+            try {
+              await axios.post(URL, {
+                content: `Request #${result.id} made by ${result.from.name} for ${result.type} from ${result.from.warehouseId} on Shipment #${result.shipmentId} Label ${result.label.labelId}`,
+                mobile: element.phoneNumber,
+                email: element.emailId,
+                user: element.id,
+                type: "ALERT",
+                eventType: "REQUEST",
+                transactionId: result.id,
+                subject: `New Request from ${result.from.name}`,
+              });
+            } catch (err) {
+              console.log(err);
+            }
+          });
+          return apiResponse.successResponse(res, "Request Created");
+        } catch (err) {
+          console.log(err);
+          return apiResponse.ErrorResponse(res, err.message);
+        }
+      };
+
+      const toEmployees = async (Employees, shipmentId) => {
+        await asyncForEach(Employees, async (employee) => {
+          const permission_request = {
+            role: employee.role,
+            permissionRequired: ["viewShipment"],
+          };
+          const permission = await checkPermissionAwait(permission_request);
+          if (permission) {
+            contacts.set(employee.id, employee);
+            contactList.push(employee.id);
+          }
+        });
+        to = {
+          employees: contactList,
+          warehouseId: shipment[0].supplier.locationId,
+          organisationId: shipment[0].supplier.id,
+        };
+        send(shipmentId);
+      };
+
       if (type === "LOCATION_MISMATCH" || type === "UNSUFFICIENT_ROLE") {
         shipment = await ShipmentModel.aggregate([
           { $match: { "label.labelId": labelId } },
@@ -223,21 +296,7 @@ exports.createRequest = [
             },
           },
         ]);
-        shipment[0].receiverEmployees.forEach((employee) => {
-          contactList.add(employee.id);
-        });
-        contactList.forEach((contact) => {
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              contacts.push(contact);
-            }
-          });
-        });
-        to = {
-          employees: contacts,
-          warehouseId: shipment[0].receiver.locationId,
-          organisationId: shipment[0].receiver.id,
-        };
+        toEmployees(shipment[0].receiverEmployees, shipment[0].id);
       }
       if (type === "ORGANISATION_MISMATCH") {
         shipment = await ShipmentModel.aggregate([
@@ -262,48 +321,8 @@ exports.createRequest = [
             },
           },
         ]);
-        shipment[0].supplierEmployees.forEach((employee) => {
-          contactList.add(employee.id);
-        });
-        contactList.forEach((contact) => {
-          checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              contacts.push(contact);
-            }
-          });
-        });
-        to = {
-          employees: contacts,
-          warehouseId: shipment[0].supplier.locationId,
-          organisationId: shipment[0].supplier.id,
-        };
+        toEmployees(shipment[0].supplierEmployees, shipment[0].id);
       }
-      const request = new RequestModel({
-        from,
-        to,
-        "label.labelId": labelId,
-        shipmentId: shipment[0].id,
-        type,
-      });
-      let result = await request.save();
-      to.employees.forEach(async (element) => {
-        try {
-          const employee = await EmployeeModel.findOne({ id: element });
-          await axios.post(URL, {
-            content: `Request #${result.id} made by ${result.from.name} for ${result.type} from ${result.from.warehouseId} on ${result.label.labelId}`,
-            mobile: employee.phoneNumber,
-            email: employee.emailId,
-            user: employee.id,
-            type: "ALERT",
-            eventType: "REQUEST",
-            transactionId: result.id,
-            subject: `New Request from ${result.from.name}`,
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      });
-      return apiResponse.successResponse(res, "Request Created");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);

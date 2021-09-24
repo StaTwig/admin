@@ -35,6 +35,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 resolve = require("path").resolve;
 var pdf = require("pdf-creator-node");
+
 const inventoryUpdate = async (
   id,
   quantity,
@@ -337,6 +338,7 @@ exports.createShipment = [
   async (req, res) => {
     try {
       let data = req.body;
+      data.originalReceiver = data.receiver;
       if (req.body.shippingDate.includes("/")) {
         var shipmentData = req.body.shippingDate.split("/");
         const shippingDate =
@@ -784,21 +786,24 @@ exports.createShipment = [
             }
           );
 
-           let quantityMismatch = false;
-           prevTaggedShipments.products.every((product) => {
-           products.every((p) => {
-              const shipment_product_quantity = product.productQuantity-product.productQuantityTaggedSent;
+          let quantityMismatch = false;
+          prevTaggedShipments.products.every((product) => {
+            products.every((p) => {
+              const shipment_product_quantity =
+                product.productQuantity - product.productQuantityTaggedSent;
               const tagged_product_qty = p.productQuantity || p.quantity;
-                  if (parseInt(tagged_product_qty) <= parseInt(shipment_product_quantity))
-                    {
-                      quantityMismatch = true;
-                      return false;
-                    }
-                });
+              if (
+                parseInt(tagged_product_qty) <=
+                parseInt(shipment_product_quantity)
+              ) {
+                quantityMismatch = true;
+                return false;
+              }
             });
+          });
 
-           if (!quantityMismatch)
-              throw new Error("Tagged product quantity not available");
+          if (!quantityMismatch)
+            throw new Error("Tagged product quantity not available");
 
           const tagUpdate = await ShipmentModel.findOneAndUpdate(
             {
@@ -1860,29 +1865,25 @@ exports.updateStatus = [
   auth,
   async (req, res) => {
     try {
-      await Record.update(
+      const update = await Record.findOneAndUpdate(
         {
           id: req.query.shipmentId,
         },
         {
           status: req.body.status,
-        }
-      )
-        .then((result) => {
-          return apiResponse.successResponseWithData(
-            res,
-            "Status Updated",
-            result
-          );
-        })
-        .catch((err) => {
-          return apiResponse.ErrorResponse(res, err.message);
-        });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+        },
+        { new: true }
       );
+      if (!update) {
+        return apiResponse.notFoundResponse(res, "Shipment not found");
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        " Status Updated ",
+        update
+      );
+    } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
