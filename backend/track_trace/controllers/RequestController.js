@@ -131,6 +131,7 @@ exports.updateRequest = [
   auth,
   async (req, res) => {
     try {
+      let shipment = true;
       const { id, status } = req.query;
       const oldRequest = await RequestModel.findOne({ id: id });
       if (oldRequest.status === "ACCEPTED") {
@@ -151,8 +152,8 @@ exports.updateRequest = [
           (status === "ACCEPTED" && request.type === "LOCATION_MISMATCH") ||
           "ORGANISATION_MISMATCH"
         ) {
-          const shipment = await ShipmentModel.findOneAndUpdate(
-            { id: request.label.labelId },
+          shipment = await ShipmentModel.findOneAndUpdate(
+            { "label.labelId": request.label.labelId },
             {
               $push: { acceptedRequests: request.id },
               $set: {
@@ -160,29 +161,28 @@ exports.updateRequest = [
                 "receiver.locationId": request.from.warehouseId,
                 "receiver.name": request.from.name,
               },
-            },
-            { new: true }
+            }
           );
         }
-        try {
-          await axios.post(URL, {
-            content: `Request #${request.id} for ${request.type} on ${request.label.labelId} has been ${request.status}`,
-            mobile: request.from.phoneNumber,
-            email: request.from.emailId,
-            user: request.from.id,
-            type: "ALERT",
-            eventType: "REQUEST",
-            transactionId: request.id,
-            subject: `Request ${request.status}`,
-          });
-        } catch (err) {
-          console.log(err);
+        const notification = await axios.post(URL, {
+          content: `Request #${request.id} for ${request.type} on ${request.label.labelId} has been ${request.status}`,
+          mobile: request.from.phoneNumber,
+          email: request.from.emailId,
+          user: request.from.id,
+          type: "ALERT",
+          eventType: "REQUEST",
+          transactionId: request.id,
+          subject: `Request ${request.status}`,
+        });
+        if (shipment && notification.data.status) {
+          return apiResponse.successResponseWithData(
+            res,
+            "Request Updated",
+            request
+          );
+        } else {
+          return apiResponse.ErrorResponse(res, "Request not updated");
         }
-        return apiResponse.successResponseWithData(
-          res,
-          "Request Updated",
-          request
-        );
       }
     } catch (err) {
       console.log(err);

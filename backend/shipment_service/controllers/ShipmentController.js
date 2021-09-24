@@ -35,6 +35,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 resolve = require("path").resolve;
 var pdf = require("pdf-creator-node");
+
 const inventoryUpdate = async (
   id,
   quantity,
@@ -337,6 +338,7 @@ exports.createShipment = [
   async (req, res) => {
     try {
       let data = req.body;
+      data.originalReceiver = data.receiver;
       data.products.forEach(async (element) => {
         var product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;
