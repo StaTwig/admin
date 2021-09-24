@@ -60,7 +60,7 @@ const Details = (props) => {
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   
-                  //maxWidth: '65%'
+                  maxWidth: '100%'
             }}>{org?.name}</h6>
             <div className="blockquote-footer" style={{
                   whiteSpace: 'nowrap',
@@ -106,7 +106,7 @@ const Details = (props) => {
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          
-          <div className="colum txt1" style={{position:"relative", left:"1.5rem",display:"flex",flexDirection:"row",justifyContent:"center"}}>
+          <div className="colum txt1" style={{position:"relative", left:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center"}}>
             <button
               type="button"
               onClick={() => {
@@ -146,7 +146,8 @@ const Details = (props) => {
                   });
                   changeStatus("REJECTED");
                 }}
-                className="btn bg-secondary btn-view w-auto"
+                className="btn bg-secondary btn-view "
+                style={{width:"6.5vw"}}
               >
                 Reject
               </button>
