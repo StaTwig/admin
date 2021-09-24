@@ -956,7 +956,7 @@ console.log(user.organisation)
                               return;
                             }
                             console.log(v);
-                            setFromOrgLabel(v.title);
+                            setFromOrgLabel(v.label);
                             console.log(values.fromOrgLoc)
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
