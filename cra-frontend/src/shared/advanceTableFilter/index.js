@@ -665,19 +665,21 @@ const AdvanceTableFilter = (props) => {
   const renderColumn4 = (columnData) => {
     if (columnData === "To") {
       return (
-        <div className='box col-3'>
+        <div className='col-3'>
           <div
-            className='filter-item'
+            className='d-flex justify-content-between'
             onClick={handleToShipmentClick}
-            style={{ position: "relative", left: "-80px" }}
+            // style={{ display: "flex", position: "relative", left: "-80px" }}
           >
-            <div className='icon mr-0'>{props.data.img4}</div>
-            <div className='filterTitle'>{props.data.coloumn4}</div>
+            <div className='my-3'>
+              <span className='icon mr-2'>{props.data.img4}</span>
+              <span className='filterTitle mr-4'>{props.data.coloumn4}</span>
+            </div>
             <img
+              className='my-4'
               src={updownarrow}
               width='10'
               height='10'
-              style={{ position: "relative", left: "220px" }}
               alt='arrow'
             />
           </div>
@@ -711,22 +713,24 @@ const AdvanceTableFilter = (props) => {
                 //     </div>
                 //   )
                 // })
-                <Autocomplete
-                  id='toShipment'
-                  options={props.supplierReceiverList}
-                  getOptionLabel={(options) => options.name}
-                  onChange={(event, newValue) => {
-                    setToShipmentFilterOnSelect(newValue.id);
-                  }}
-                  style={{ width: "100%" }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={"Search Org. Name"}
-                      variant='outlined'
-                    />
-                  )}
-                />
+                <StyledMenuItem>
+                  <Autocomplete
+                    id='toShipment'
+                    options={props.supplierReceiverList}
+                    getOptionLabel={(options) => options.name}
+                    onChange={(event, newValue) => {
+                      setToShipmentFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "14rem" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Search Org. Name"}
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                </StyledMenuItem>
               ) : (
                 <div>Empty List</div>
               )}
@@ -784,26 +788,28 @@ const AdvanceTableFilter = (props) => {
                 //     </div>
                 //   )
                 // })
-                <Autocomplete
-                  id='fromShipment'
-                  options={props.poProductsList}
-                  getOptionLabel={(options) =>
-                    options.name
-                      ? options.name + " (" + options.id + " )"
-                      : " (" + options.id + " )"
-                  }
-                  onChange={(event, newValue) => {
-                    setPoProductNameFilterOnSelect(newValue.id);
-                  }}
-                  style={{ width: "100%" }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={"Search Product"}
-                      variant='outlined'
-                    />
-                  )}
-                />
+                <StyledMenuItem>
+                  <Autocomplete
+                    id='fromShipment'
+                    options={props.poProductsList}
+                    getOptionLabel={(options) =>
+                      options.name
+                        ? options.name + " (" + options.id + " )"
+                        : " (" + options.id + " )"
+                    }
+                    onChange={(event, newValue) => {
+                      setPoProductNameFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "100%" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Search Product"}
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                </StyledMenuItem>
               ) : (
                 <div>Empty List</div>
               )}
@@ -1258,7 +1264,7 @@ const AdvanceTableFilter = (props) => {
             className='filter-item ml-4 mr-3'
             onClick={handleShipmentIdClick}
           >
-            <div className='icon '>{props.data.img1}</div>
+            <div className='icon'>{props.data.img1}</div>
             <div className='filterTitle'>{props.data.coloumn1}</div>
             <img
               src={updownarrow}
@@ -1274,11 +1280,12 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(shipmentIdAnchorEl)}
             onClose={handleShipmentIdClose}
+            style={{ width: "150rem" }}
           >
             <div className='d-flex flex-column align-items-center'>
               <StyledMenuItem>
                 <Button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
+                  style={{ padding: "10px", height: "40px", width: "100%" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
@@ -1297,22 +1304,24 @@ const AdvanceTableFilter = (props) => {
                 //     </div>
                 //   )
                 // })
-                <Autocomplete
-                  id='idShipment'
-                  options={props.shipmentIdList}
-                  getOptionLabel={(options) => options.id}
-                  onChange={(event, newValue) => {
-                    setShipmentIdFilterOnSelect(newValue.id);
-                  }}
-                  style={{ width: "100%" }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={"Search Shipment"}
-                      variant='outlined'
-                    />
-                  )}
-                />
+                <StyledMenuItem>
+                  <Autocomplete
+                    id='idShipment'
+                    options={props.shipmentIdList}
+                    getOptionLabel={(options) => options.id}
+                    onChange={(event, newValue) => {
+                      setShipmentIdFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "14rem" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Search Shipment"}
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                </StyledMenuItem>
               ) : (
                 <div>Empty List</div>
               )}
