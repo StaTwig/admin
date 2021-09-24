@@ -251,8 +251,8 @@ const Header = (props) => {
 
       setNotifications(response.data.data?.data?.reverse());
       console.log(response.data?.data)
-      if(response.data?.data?.totalNew)
-      setNewNotifs(response.data?.data?.totalNew)
+      if(response.data?.data?.totalUnRead)
+      setNewNotifs(response.data?.data?.totalUnRead)
       else
       setNewNotifs(response.data?.data?.new)
       setCount(response.data.data?.totalRecords);
