@@ -233,11 +233,11 @@ const Header = (props) => {
     if(num)
     setLimit(limit+num)
    axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
-      setNewNotifs(response.data.data.new)
-      setNotifications(response.data.data.data.reverse());
-      if(response.data.data.data.length === icount)
+      setNewNotifs(response.data?.data?.new)
+      setNotifications(response.data.data?.data?.reverse());
+      if(response.data.data?.data?.length === icount)
         setHasMore(false)
-      setIcount(response.data.data.data.length)
+      setIcount(response.data.data?.data?.length)
    })
   }
 
@@ -249,11 +249,14 @@ const Header = (props) => {
         `${config().getAlerts}${alertType}&skip=0&limit=11`
       );
 
-      setNotifications(response.data.data.data.reverse());
-      console.log(response.data.data)
-      setNewNotifs(response.data.data.new)
-      setCount(response.data.data.totalRecords);
-      setIcount(response.data.data.data.length)
+      setNotifications(response.data.data?.data?.reverse());
+      console.log(response.data?.data)
+      if(response.data?.data?.totalNew)
+      setNewNotifs(response.data?.data?.totalNew)
+      else
+      setNewNotifs(response.data?.data?.new)
+      setCount(response.data.data?.totalRecords);
+      setIcount(response.data.data?.data?.length)
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -470,7 +473,7 @@ const Header = (props) => {
                   </div>
                   <div className='slider-item'>
                     <InfiniteScroll
-                      dataLength={notifications?.length}
+                      dataLength={notifications?.length || 0}
                       next={() => changeNotifications(alertType, 10)}
                       style={{
                         display: "flex",
