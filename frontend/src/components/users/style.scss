@@ -240,3 +240,10 @@
     flex-direction: column;
     justify-content: flex-end;
 }
+
+.userName {
+  max-width: 13rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
