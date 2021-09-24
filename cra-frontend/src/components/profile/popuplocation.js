@@ -107,7 +107,7 @@ const PopUpLocation = (props) => {
                   console.log("Location Selected");
                   console.log(v);
                   setWareHouse({ ...v });
-                  setSelectLocation(v.warehouseAddress.firstLine);
+                  setSelectLocation(v.title);
                   console.log(wareHouse);
                 }}
                 groups={props.wareHouses}
@@ -120,7 +120,8 @@ const PopUpLocation = (props) => {
       <div className='wrapper1'>
         <button
           disabled={selectLocation === "Select Location"}
-          className='buttonS btn btn-primary mt-3'
+          style={{backgroundColor: '#A6A6A6'}}
+          className={selectLocation === "Select Location" ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
           onClick={() => {
             updateStatus(wareHouse);
           }}

@@ -285,22 +285,10 @@ const ReceiveShipment = (props) => {
             highLight={highLight}
             setHighLight={setHighLight}
           />
-
-          <h6 className='heading mt-3 mb-3 ml-3'>Product Details</h6>
-          <ProductList
-            shipments={tracking}
-            productHighLight={productHighLight}
-            setProductHighLight={setProductHighLight}
-            menuProduct={menuProduct}
-            setMenuProduct={setMenuProduct}
-            setDelivered={setDelivered}
-            setIndex={setIndex}
-            onQuantityChange={(index, value) => qtyChange(index, value)}
-          />
         </div>
         <div className='col-sm-4'>
           <h6 className='heading mt-3 mb-3 ml-3'>Comments</h6>
-          <div className='col panel commonpanle' style={{ height: "45%" }}>
+          <div className='col panel commonpanle' >
             <div className=' pt-2 pb-2 d-flex row'>
               <span
                 onClick={() => setCommentEnabled(false)}
@@ -341,7 +329,7 @@ const ReceiveShipment = (props) => {
             </div>
             <div
               className='form-group'
-              style={{ width: "150%", height: "100px" }}
+              style={{ width: "150%", height: "60px" }}
             >
               {commentEnabled && (
                 <input
@@ -350,7 +338,7 @@ const ReceiveShipment = (props) => {
                     fontSize: "14px",
                     resize: "none",
                     //borderBottom: "none",
-                    marginTop: "80px",
+                    marginTop: "40px",
                     //marginBottom:"10px"
                   }}
                   type='text'
@@ -386,7 +374,6 @@ const ReceiveShipment = (props) => {
           </div>
           <div
             className='upload bg-white panel commonpanle mt-0'
-            style={{ height: "44%" }}
           >
             {photo ? (
               <div>
@@ -450,7 +437,7 @@ const ReceiveShipment = (props) => {
             ) : (
               <div>
                 <div
-                  className='row mt-3'
+                  className='row '
                   style={{ margin: "auto", display: "table" }}
                 >
                   {/* <label>{photo.name?photo.name:""}</label> */}
@@ -500,6 +487,25 @@ const ReceiveShipment = (props) => {
             )}
           </div>
         </div>
+      </div>
+      
+      <div className='row'>
+        <div className="col-sm-4">
+          <h6 class="heading mt-3 mb-3 ml-3">Product Details</h6>
+        </div>
+      </div>
+      <div className='row'>
+
+        <ProductList
+          shipments={tracking}
+          productHighLight={productHighLight}
+          setProductHighLight={setProductHighLight}
+          menuProduct={menuProduct}
+          setMenuProduct={setMenuProduct}
+          setDelivered={setDelivered}
+          setIndex={setIndex}
+          onQuantityChange={(index, value) => qtyChange(index, value)}
+        />
       </div>
       {receiveShipmentModal && (
         <Modal

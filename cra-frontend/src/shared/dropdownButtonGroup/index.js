@@ -59,7 +59,7 @@ const DropdownButtonGroup = (props) => {
           onClick={() => setMenu(!menu)}
         >
           <div className={`${name?.length > 20 && "textNeg"}`}>
-            {useParse ? parse(name) : name.split("|")[0]}
+            {useParse ? parse(name) : name.split("|")[0] }
           </div>
           <br></br>
           <div className={`location-add ${name?.length > 20 && "textNeg-title"}`}>
@@ -68,7 +68,7 @@ const DropdownButtonGroup = (props) => {
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className={arrowImg ? "dropdownImg" : "customwh"}
+            className={ "customwh"}
           />
         </button>
       )}

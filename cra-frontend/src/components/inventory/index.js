@@ -36,6 +36,7 @@ const Inventory = (props) => {
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
     coloumn1: "Product Name",
+    coloumn2: "Product Category",
     coloumn3: "Quantity",
   };
   const MAX_LENGTH = 20;
@@ -467,7 +468,8 @@ const Inventory = (props) => {
       )}
       <div className='full-width-ribben'>
         <TableFilter
-          isReportDisabled={!isAuthenticated("inventoryExportReport")}
+          // isReportDisabled={!isAuthenticated("inventoryExportReport")}
+          isReportDisabled={true}
           data={headers}
           inventoryFilterData={props.inventoryFilterData}
           setInventoryProductNameFilterOnSelect={
