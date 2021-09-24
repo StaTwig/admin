@@ -31,14 +31,14 @@
       margin-top: -1.15rem;
     }
   }
-    .textNeg-title{
-      margin-left: -20px;
-      margin-top: -1.35rem;
-    }
+    // .textNeg-title{
+    //   margin-left: 45px;
+    //   margin-top: -1.35rem;
+    // }
   .location-add{
-    position:relative;
-    top: 26px;
-    left: -50px;
+    position: absolute;
+    top: 10px;
+    // left: -85px;
     min-width:0rem;
     font-size: 12px;
     font-weight: 400;
@@ -92,9 +92,9 @@
     will-change: transform;
   }
   .customwh {
-    position:relative;
-    left:-10px;
+    position: absolute;
+    left: 122px;
     height: 9px;
-    width: 9px;
+    width: 14px;
   }
 }

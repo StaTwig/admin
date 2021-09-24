@@ -10,7 +10,6 @@ const ShipmentDetails = (props) => {
           ? "col panel commonpanle highlight"
           : "col panel commonpanle"
       }
-      style={{ height: "45%" }}
     >
       {
         //   <div className="d-flex flex-row  ">
