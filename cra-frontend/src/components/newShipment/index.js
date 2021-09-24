@@ -32,12 +32,14 @@ const NewShipment = (props) => {
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [fetchdisabled, setfetchdisabled] = useState(false);
+  const [FromOrgLabel, setFromOrgLabel] = useState("Select Organisation Location")
   const [pofetchdisabled] = useState(false);
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
+  // const []
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
@@ -518,7 +520,7 @@ console.log(user.organisation)
     <div className='NewShipment'>
       <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
       <Formik
-        // enableReinitialize={true}
+        enableReinitialize={true}
         initialValues={{
           poId: "",
           type: "",
@@ -535,6 +537,7 @@ console.log(user.organisation)
           shipmentDate: "",
           estimateDeliveryDate: "",
           products: [],
+          reset: OrderId,
         }}
         validate={(values) => {
           const errors = {};
@@ -593,73 +596,7 @@ console.log(user.organisation)
                         Order ID
                       </label>
                       <div className='line'>
-                        {/* <DropdownButton
-                        name={OrderId}
-                        name2="Select Order ID"
-                        onSelect={async (v) => {
-                          setOrderIdSelected(true);
-                          setFieldValue("OrderId", v);
-                          // handleSOChange(v);
-                          setOrderId(v);
-                          dispatch(turnOn());
-                          const result = await dispatch(getOrder(v));
-                          console.log("Result");
-                          console.log(result);
-                          setReceiverOrgLoc(
-                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
-                          );
-                          setReceiverOrgId(
-                            result.poDetails[0].customer.organisation.id
-                          );
-                          setOrderDetails(result.poDetails[0]);
-
-                          dispatch(turnOff());
-                          setDisabled(true);
-                          let warehouse = senderWarehouses.filter((w) => {
-                            let supplierWarehouse =
-                              result.poDetails[0].supplier.organisation
-                                .warehouses;
-                            for (let i = 0; i < supplierWarehouse.length; i++) {
-                              return w.id == supplierWarehouse[i];
-                            }
-                          });
-                          setFieldValue("fromOrg", senderOrganisation[0]);
-                          setFieldValue(
-                            "fromOrgLoc",
-                            result.poDetails[0].supplier.organisation.id
-                          );
-                          setFieldValue(
-                            "toOrg",
-                            result.poDetails[0].customer.organisation.id
-                          );
-                          setFieldValue(
-                            "toOrgLoc",
-                            result.poDetails[0].customer.shippingAddress
-                              .shippingAddressId
-                          );
-                          // setSenderOrgLoc(warehouse[0].postalAddress);
-                          let products_temp = result.poDetails[0].products;
-                          for (let i = 0; i < products_temp.length; i++) {
-                            products_temp[i].manufacturer =
-                              result.poDetails[0].productDetails[i].manufacturer;
-                            products_temp[i].productName =
-                              result.poDetails[0].productDetails[i].name;
-                            products_temp[i].productQuantity =
-                              result.poDetails[0].products[i].quantity;
-                            products_temp[i].productCategory =
-                              result.poDetails[0].products[i].type;
-                            products_temp[i].productID =
-                              result.poDetails[0].products[i].productId;
-                          }
-                          
-                         if (result.poDetails[0].productDetails.length > 0) {
-                           setProducts([]);
-                            setAddProducts([]);
-                            setFieldValue("products",products_temp);
-                          } else setFieldValue("products", []);
-                        }}
-                        groups={OrderIds}
-                      /> */}
+                      
                         <Select
                           styles={customStyles}
                           placeholder='Select Order ID'
@@ -723,7 +660,7 @@ console.log(user.organisation)
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue(
                               "fromOrgLoc",
-                              result.poDetails[0].supplier.organisation.id
+                              ""
                             );
                             setFieldValue(
                               "toOrg",
@@ -1018,7 +955,9 @@ console.log(user.organisation)
                             if (!res) {
                               return;
                             }
-                            console.log(v.id);
+                            console.log(v);
+                            setFromOrgLabel(v.title);
+                            console.log(values.fromOrgLoc)
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
@@ -1034,7 +973,12 @@ console.log(user.organisation)
                             };
                             setAddProducts((prod) => [...prod, newArr]);
                           }}
-                          defaultInputValue={values.fromOrgLoc}
+                          value={
+                            values.fromOrgLoc === ""
+                              ? "Select Organisation Location"
+                              : { value: values.fromOrgLoc, label: FromOrgLabel}
+                          }
+                          // defaultInputValue={values.fromOrgLoc}
                           options={senderWarehouses.filter(
                             (ele, ind) =>
                               ind ===

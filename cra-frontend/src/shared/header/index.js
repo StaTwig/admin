@@ -251,6 +251,7 @@ const Header = (props) => {
 
       setNotifications(response.data.data.data.reverse());
       console.log(response.data.data)
+      setNewNotifs(response.data.data.new)
       setCount(response.data.data.totalRecords);
       setIcount(response.data.data.data.length)
       const warehouses = await getActiveWareHouses();
