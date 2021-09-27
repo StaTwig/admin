@@ -78,7 +78,7 @@ locationApprovals.sort(function (a, b) {
       </div>
       <div className="d-flex flex-row ">
         <div className="panel w-50 mr-3 mt-3">
-          <h5 className="sub-header">Request Pending</h5>
+          <h5 className="sub-header" style={{fontWeight:"bold"}}>Request Pending</h5>
           {requestsPending.map((row, index) => (
             <NewRequests
               requestRow={row}
@@ -117,7 +117,7 @@ locationApprovals.sort(function (a, b) {
             {recentRequestsSent.length == 0 && <NoRecordsFound />}
           </div> */}
           <div className="">
-            <h5 className="sub-header">Location approvals</h5>
+            <h5 className="sub-header" style={{fontWeight:"bold"}}>Location approvals</h5>
             {locationApprovals.map((row, index) => (
               <LocationRequests
                 row={row}
