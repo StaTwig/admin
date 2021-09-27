@@ -39,7 +39,7 @@ const Organisations = (props) => {
   });
 
   return (
-    <div className="users" style={{height:"90vh"}}>
+    <div className="users">
       {showModal && (
         <Modal
           close={closeModal}
