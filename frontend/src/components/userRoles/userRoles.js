@@ -36,6 +36,7 @@ const UserRoles = ({
     console.log("enable save button");
     setDisable(false);
     document.getElementById('saveBtn').style.backgroundColor = '#0093e9';
+    document.getElementById('saveBtn').style.opacity = '1';
   }
 
   return isLoading ? (
