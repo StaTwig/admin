@@ -35,6 +35,8 @@ const UserRoles = ({
   const unDisableBtn = () => {
     console.log("enable save button");
     setDisable(false);
+    document.getElementById('saveBtn').style.backgroundColor = '#0093e9';
+    document.getElementById('saveBtn').style.opacity = '1';
   }
 
   return isLoading ? (
@@ -86,11 +88,12 @@ const UserRoles = ({
         </div>
         <div className={"btn-section"}>
           <button
+            id = "saveBtn"
             className="save-button"
             onClick={() => {onSaveOfUpdatePermission(); setDisable(true)}}
             disabled={isDisabled}
           >
-            {"SAVE"}
+            {"Save"}
           </button>
           <button
             className="add-user-btn"

@@ -9,11 +9,20 @@ import FilterDropDown from "../filterDropDown";
 import FilterIcon from '../../assets/icons/adjust-filter.svg';
 import DownArrowIcon from '../../assets/icons/down-arrow.svg';
 import SearchBar from "../searchBar";
+import useOnclickOutside from "react-cool-onclickoutside";
 
 const Users = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
+
+  const ref = useOnclickOutside(() => {
+    setShowDropDownForRole(false);
+  })
+
+  const ref1 = useOnclickOutside(() => {
+    setShowDropDownForAccountStatus(false);
+  })
 
   const {
     usersList,
@@ -109,6 +118,7 @@ const Users = (props) => {
               />
               {showDropDownForRole && roleData &&
                 <DropDownFilter
+                  referance = {ref}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={roleData}
                   type={'role'}
@@ -148,6 +158,7 @@ const Users = (props) => {
               />
               {showDropDownForAccountStatus &&
                 <DropDownFilter
+                  referance = {ref1}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={accountStatusData}
                   type={'accountStatus'}

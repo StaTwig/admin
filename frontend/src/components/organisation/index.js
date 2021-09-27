@@ -6,6 +6,7 @@ import OrganisationPopUp from "./organisationPopUp";
 
 import sortIcon from '../../assets/icons/up-and-down-1.png'
 import "./style.scss";
+import useOnclickOutside from "react-cool-onclickoutside";
 
 import SearchBar from "../searchBar";
 import DropDownFilter from "../dropDownFilter";
@@ -32,6 +33,25 @@ const Organisations = (props) => {
     setShowDropDownForType
    } = props;
 
+   const ref = useOnclickOutside(() => {
+    setShowDropDownForType(false);
+  })
+
+  const ref1 = useOnclickOutside(() => {
+    setShowDropDownForCountry(false);
+  })
+
+  const ref2 = useOnclickOutside(() => {
+    setShowDropDownForRegion(false);
+  })
+
+  const ref3 = useOnclickOutside(() => {
+    setShowDropDownForStatus(false);
+  })
+
+  const ref4 = useOnclickOutside(() => {
+    setShowDropDownForCreatedOn(false);
+  })
 
   organisationList.sort(function (a, b) {
     return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
@@ -64,8 +84,8 @@ const Organisations = (props) => {
       </div>
       <div className={ `${ window.location.pathname == '/organisation' ? `full-width1` : `full-width`}`}>
         <div className={ `${ window.location.pathname == '/organisation' ? '' : `filter`}`}>
-          <div className='row'>
-            <div className='box col-1 ml-5 mr-4 headerText'>Name</div>
+          <div className={ `${window.location.pathname == '/organisation' ?`row orgTitle ` : `row userTitle`}`}>
+            <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
             <div class="vl text-center"></div>
 
             <div className='box col-2 headerText'>
@@ -93,6 +113,7 @@ const Organisations = (props) => {
               />
               {showDropDownForType && orgTypeData &&
                 <DropDownFilter
+                  referance={ref}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={orgTypeData}
                   type={'orgType'}
@@ -106,7 +127,7 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
 
-            <div className='box col-1 ml-2 mr-2 headerText'>
+            <div className='box col-1 ml-3 mr-3 headerText'>
               <span className="headerText"  
                   onClick={() => {
                     setShowDropDownForCountry(!showDropDownForCountry);
@@ -119,7 +140,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -130,6 +151,7 @@ const Organisations = (props) => {
               />
               {showDropDownForCountry && countryData &&
                 <DropDownFilter
+                  referance={ref1}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={countryData}
                   type={'country'}
@@ -138,7 +160,7 @@ const Organisations = (props) => {
               }
             </div>
             <div class="vl text-center"></div>
-            <div className='box col-1 headerText ml-2 mr-2'>
+            <div className='box col-1 headerText ml-3 mr-3'>
               <span className="headerText" 
                     onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
                     style={{cursor:"pointer"}}>{'Region'}
@@ -149,7 +171,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -158,6 +180,7 @@ const Organisations = (props) => {
               />
               {showDropDownForRegion &&
                 <DropDownFilter
+                  referance = {ref2}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={regionData}
                   type={'region'}
@@ -167,7 +190,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-2 mr-2 headerText'>
+            <div className='box col ml-3 mr-3 headerText'>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForStatus(!showDropDownForStatus);
@@ -180,7 +203,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -191,6 +214,7 @@ const Organisations = (props) => {
               />
               {showDropDownForStatus &&
                 <DropDownFilter
+                  referance = {ref3}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={statusData}
                   type={'status'}
@@ -213,7 +237,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px',
+                  marginLeft: '20px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -224,6 +248,7 @@ const Organisations = (props) => {
               />
               {showDropDownForCreatedOn &&
                 <DropDownFilter
+                  referance = {ref4}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={[]}
                   type={'createdOn'}

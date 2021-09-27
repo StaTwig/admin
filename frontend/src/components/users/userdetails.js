@@ -85,12 +85,12 @@ const UserDetails = (props) => {
   return (
       <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
         <div className="card-body d-flex">
-          <div className="userPic w-25 text-center rounded">
+          <div className="userPic w-25 text-center rounded userName">
             {user?.photoId && (
               <img
                 style={{ display: "flex" }}
                 src={user?.photoId}
-                alt="user"
+                alt=""
                 className="rounded mr-1"
               />
             )}
@@ -128,7 +128,7 @@ const UserDetails = (props) => {
             { user?.location }
           </span>
           <span className={` w-25 text-center ${viewButton ? `` : `align-self-center`} walletText txtWrapu`}>
-            <a href="#" className="text-decoration-underline">
+            <a href="#" className="text-decoration-underline" style={{position:"relative",left:"1rem"}}>
               {user?.walletAddress}
             </a>
           </span>
@@ -136,7 +136,7 @@ const UserDetails = (props) => {
             {user?.emailId}
           </span>
           <span className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
-           {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
+           {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           
           </span>
           <div
@@ -166,6 +166,7 @@ const UserDetails = (props) => {
               type="button"
               className="btn btn-view btnText"
               onClick={() => {setDisplay(!display); setViewButton(viewButton ? false : true)}}
+              style={{position:"relative",left:"1rem"}}
             >
               {display ? "Back" : "View"}
             </button>
