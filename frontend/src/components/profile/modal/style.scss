@@ -1,8 +1,8 @@
-@import '../../../assets/styles/global.scss';
+@import "../../../assets/styles/global.scss";
 
 .modal-backdrop {
   background-color: #707070;
-  opacity: .5;
+  opacity: 0.5;
   border: 1px solid #707070;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -28,15 +28,13 @@
         }
       }
 
-      .modal-body{
-        padding:0rem;
+      .modal-body {
+        padding: 0rem;
       }
 
       .modal-footer {
-       
         border: none;
       }
     }
-    
   }
 }

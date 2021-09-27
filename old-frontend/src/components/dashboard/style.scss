@@ -1,0 +1,26 @@
+@import "../../assets/styles/global.scss";
+
+.dashboard{
+    padding-right: 3rem;
+    padding-left: 5rem;
+    
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    .dash{
+      margin-bottom:0.2rem;
+    }  
+
+}
+.leaflet-container {
+    border-top: 3px solid #D6D6D6;
+    bottom: 0;
+    top: 198px;
+    position: fixed;
+    left: 95px;
+    z-index: 9;
+    width: 100%;
+
+}

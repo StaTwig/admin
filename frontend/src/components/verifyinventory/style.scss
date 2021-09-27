@@ -1,13 +1,11 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .verifyinventory {
-  position:relative;
-  top:-22px;
+  position: relative;
+  top: -22px;
   padding-left: 3.3rem;
-  padding-right: 1.5rem; 
-  
-  
+  padding-right: 1.5rem;
+
   ul {
     padding: 0.5rem 0.5rem;
     display: flex;
@@ -15,41 +13,36 @@
 
     li {
       padding: 0.3rem 0.3rem;
-      margin:0.3rem;
+      margin: 0.3rem;
       list-style: none;
     }
-}
+  }
 
+  .head {
+    text-align: left;
+    font: Bold 18px/13px Roboto;
+    letter-spacing: 0px;
+    color: #0b65c1;
+    opacity: 1;
+  }
+  .btn {
+    border-radius: 10px;
+  }
 
-.head{
-    
-  text-align: left;
-  font: Bold 18px/13px Roboto;
-  letter-spacing: 0px;
-  color: #0B65C1;
-  opacity: 1;
-}
-.btn{
- 
-  border-radius: 10px;
-}
-
-  .total{
+  .total {
     color: $OBBlue;
-    font:  25px/13px $roboto;
-   
+    font: 25px/13px $roboto;
   }
-  .value{
+  .value {
     color: $black;
-    font:  25px/13px $roboto;
+    font: 25px/13px $roboto;
   }
 
-  .bold{
-
+  .bold {
     font-weight: bold;
   }
 
-  .opacityHalf{
+  .opacityHalf {
     opacity: 0.5;
   }
 
@@ -58,22 +51,14 @@
   }
 }
 
-
-.inventorypopup{
-
-  .data{
+.inventorypopup {
+  .data {
     font: Regular 20px/33px Roboto;
-     color: #707070;
-
-
+    color: #707070;
   }
 
-
-  .alert{
+  .alert {
     font: Bold 25px/33px Roboto;
     color: #000000;
-}
-
-
-
+  }
 }

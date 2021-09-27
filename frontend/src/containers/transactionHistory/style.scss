@@ -1,15 +1,14 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .transactionHistory {
-    padding-right: 3rem;
-    padding-left: 3rem;
+  padding-right: 3rem;
+  padding-left: 3rem;
 
-    .fix-wrap {
-        flex-wrap: wrap;
+  .fix-wrap {
+    flex-wrap: wrap;
 
-        @media (min-width: 1600px) {
-            flex-wrap: nowrap;
-        }
+    @media (min-width: 1600px) {
+      flex-wrap: nowrap;
     }
-
+  }
 }

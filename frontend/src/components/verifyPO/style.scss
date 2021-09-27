@@ -1,13 +1,12 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
-
-.purchaseform{
+.purchaseform {
   padding-left: 5rem;
   padding-right: 3rem;
 
-  .date-alignment{
+  .date-alignment {
     text-align: right;
-    font-size:14px;
+    font-size: 14px;
   }
 
   .form-group,
@@ -44,21 +43,21 @@
       font-weight: bold;
     }
   }
-      .review{
-        float:right;
-      }
+  .review {
+    float: right;
+  }
 
-      .edit{
-        float:right;
-        border-color:  #707070;
-        color: #707070;
-        border-radius: 10px;
-        box-shadow: 0px 3px 6px #00000029;
- }
-     
-.bold{
-  font-weight: bold;
-}
+  .edit {
+    float: right;
+    border-color: #707070;
+    color: #707070;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px #00000029;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
   .input-group {
     position: relative;
     margin-bottom: 1rem;
@@ -77,12 +76,11 @@
 }
 
 .productTable {
+  .overflow {
+    height: auto;
+    max-height: 400px;
+  }
 
-    .overflow {
-      height: auto;
-      max-height: 400px;
-    }
-  
   .square-box {
     width: 20px;
     height: 20px;
@@ -91,7 +89,6 @@
     margin-right: 1rem;
   }
   .rTable {
-
     .input-group,
     .form-group {
       margin-bottom: 0;
@@ -115,45 +112,34 @@
           border-right: none;
         }
 
-        .form-control{
-          border:none;
-          background:transparent;
+        .form-control {
+          border: none;
+          background: transparent;
         }
         .form-group {
           flex-basis: 100%;
-        
 
           .form-field {
             width: 100%;
           }
         }
       }
-    }.rTableRow:hover{
-      background:none;
-      cursor:pointer;
-
     }
-
+    .rTableRow:hover {
+      background: none;
+      cursor: pointer;
+    }
   }
-
-
 }
 
-.inventorypopup{
-
-  .data{
+.inventorypopup {
+  .data {
     font: Regular 20px/33px Roboto;
-     color: #707070;
-
-
+    color: #707070;
   }
 
-
-  .alert{
+  .alert {
     font: Bold 25px/33px Roboto;
     color: #000000;
-}
-
-
-
+  }
 }
