@@ -49,7 +49,7 @@ const Users = (props) => {
 
 
   return (
-    <div className="users">
+    <div className="users" style={{height: "90vh"}}>
       {showModal && (
         <Modal
           close={closeModal}
@@ -118,7 +118,7 @@ const Users = (props) => {
               />
               {showDropDownForRole && roleData &&
                 <DropDownFilter
-                  referance = {ref}
+                  setShowDropDownForRole = {setShowDropDownForRole}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={roleData}
                   type={'role'}
@@ -158,7 +158,7 @@ const Users = (props) => {
               />
               {showDropDownForAccountStatus &&
                 <DropDownFilter
-                  referance = {ref1}
+                  setShowDropDownForAccountStatus = {setShowDropDownForAccountStatus}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={accountStatusData}
                   type={'accountStatus'}
