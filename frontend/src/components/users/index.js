@@ -90,7 +90,7 @@ const Users = (props) => {
       </div>
       <div className="full-width">
         <div className="filter">
-          <div className="row" style={{ flexBasis: '95%' }}>
+          <div className="row" style={{ flexBasis: '95%',margin:"unset" }}>
             <span className="col box headerText">Name</span>
 
             <div class="vl text-center"></div>
