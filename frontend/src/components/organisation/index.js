@@ -6,7 +6,6 @@ import OrganisationPopUp from "./organisationPopUp";
 
 import sortIcon from '../../assets/icons/up-and-down-1.png'
 import "./style.scss";
-import useOnclickOutside from "react-cool-onclickoutside";
 
 import SearchBar from "../searchBar";
 import DropDownFilter from "../dropDownFilter";
@@ -33,25 +32,7 @@ const Organisations = (props) => {
     setShowDropDownForType
    } = props;
 
-   const ref = useOnclickOutside(() => {
-    setShowDropDownForType(false);
-  })
 
-  const ref1 = useOnclickOutside(() => {
-    setShowDropDownForCountry(false);
-  })
-
-  const ref2 = useOnclickOutside(() => {
-    setShowDropDownForRegion(false);
-  })
-
-  const ref3 = useOnclickOutside(() => {
-    setShowDropDownForStatus(false);
-  })
-
-  const ref4 = useOnclickOutside(() => {
-    setShowDropDownForCreatedOn(false);
-  })
 
   organisationList.sort(function (a, b) {
     return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
@@ -113,7 +94,7 @@ const Organisations = (props) => {
               />
               {showDropDownForType && orgTypeData &&
                 <DropDownFilter
-                  referance={ref}
+                  setShowDropDownForType={setShowDropDownForType}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={orgTypeData}
                   type={'orgType'}
@@ -151,7 +132,7 @@ const Organisations = (props) => {
               />
               {showDropDownForCountry && countryData &&
                 <DropDownFilter
-                  referance={ref1}
+                  setShowDropDownForCountry={setShowDropDownForCountry}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={countryData}
                   type={'country'}
@@ -180,7 +161,7 @@ const Organisations = (props) => {
               />
               {showDropDownForRegion &&
                 <DropDownFilter
-                  referance = {ref2}
+                  setShowDropDownForRegion = {setShowDropDownForRegion}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={regionData}
                   type={'region'}
@@ -214,7 +195,7 @@ const Organisations = (props) => {
               />
               {showDropDownForStatus &&
                 <DropDownFilter
-                  referance = {ref3}
+                  setShowDropDownForStatus = {setShowDropDownForStatus}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={statusData}
                   type={'status'}
@@ -248,7 +229,7 @@ const Organisations = (props) => {
               />
               {showDropDownForCreatedOn &&
                 <DropDownFilter
-                  referance = {ref4}
+                  setShowDropDownForCreatedOn = {setShowDropDownForCreatedOn}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={[]}
                   type={'createdOn'}
