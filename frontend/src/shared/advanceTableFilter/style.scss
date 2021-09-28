@@ -10,7 +10,8 @@
     cursor: pointer;
 
     .filterTitle {
-      font-size: 13px;
+      font-size: 15px !important;
+      font-weight: bold;
       color: #000;
       margin-left: 5px;
       margin-right: 5px;
@@ -48,7 +49,7 @@
 .btn-filter-info {
   border: 0px solid black;
   border-radius: 10px;
-  background-color: #36C2CF;
+  background-color: #36c2cf;
   color: white;
   padding: 10.5px 10.5px;
   font-size: 12px;
@@ -59,11 +60,17 @@
 .btn-filter-blue {
   border: 0px solid black;
   border-radius: 10px;
-  background-color: #0093E9;
+  background-color: #0093e9;
   color: white;
   padding: 10px 10px;
   font-size: 12px;
   cursor: pointer;
   outline: 0px;
 }
+.btn-outline-warning:hover {
+  color: #fff;
+}
 
+#customized-menu {
+  width: 150rem;
+}

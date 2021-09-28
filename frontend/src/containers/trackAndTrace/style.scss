@@ -1,5 +1,4 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .trackTrace {
   padding-left: 3rem;
@@ -67,7 +66,7 @@
       box-shadow: 0px 3px 6px $grey;
       background: $white;
       padding: 1rem;
-      margin-right: .8rem;
+      margin-right: 0.8rem;
     }
 
     .title {
@@ -79,8 +78,6 @@
       color: $primaryBlue;
       font-weight: bold;
     }
-
-
 
     &:after {
       border: 1px solid $lightGrey;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { LineChart } from 'react-chartkick';
-import 'chart.js';
+import React from "react";
+import { LineChart } from "react-chartkick";
+import "chart.js";
 //import './style.scss'
 
 const Chart = (props) => {
@@ -8,7 +8,8 @@ const Chart = (props) => {
     <div>
       <LineChart
         colors={["#FA7923", "#666"]}
-        id="users-chart" height="220px"
+        id='users-chart'
+        height='220px'
         data={props.lastTenIotShipmentData}
       />
     </div>

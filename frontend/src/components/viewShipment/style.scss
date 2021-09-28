@@ -2,11 +2,10 @@
 .tracing {
   position: relative;
   top: -22px;
-  left: -30px;
-  margin-right: -30px;
-  //margin-right:0px ;
-  //margin-left:-30px;
-  overflow: hidden;
+  left: 90px;
+  margin-right: 150px;
+  margin-left:-30px;
+  //overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;

@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 import "./style.scss";
-import { isAuthenticated } from '../../utils/commonHelper';
+import { isAuthenticated } from "../../utils/commonHelper";
 
-const Tabs = props => {
+const Tabs = (props) => {
   return (
-    <div className="tabs">
-      <ul className="nav nav-pills">
-        {isAuthenticated('viewOutboundOrders') &&
-          <li className={props.visible === "one" ? "nav-item-active" : "nav-item"} onClick={() => { props.setvisible('one'); props.setShowExportFilter(false) }}>
-            <a className={props.visible === "one" ? "nav-link" : "nav-link text-secondary"}>Orders Sent</a>
+    <div className='tabs'>
+      <ul className='nav nav-pills'>
+        {isAuthenticated("viewOutboundOrders") && (
+          <li
+            className={props.visible === "one" ? "nav-item-active" : "nav-item"}
+            onClick={() => {
+              props.setvisible("one");
+              props.setShowExportFilter(false);
+            }}
+          >
+            <div
+              className={
+                props.visible === "one" ? "nav-link" : "nav-link text-secondary"
+              }
+            >
+              Orders Sent
+            </div>
           </li>
-        }
-        {isAuthenticated('viewInboundOrders') &&
-          <li className={props.visible === "two" ? "nav-item-active " : "nav-item"} onClick={() => { props.setvisible('two'); props.setShowExportFilter(false) }}>
-            <a className={props.visible === "two" ? "nav-link" : "nav-link text-secondary"}>Orders Received</a>
+        )}
+        {isAuthenticated("viewInboundOrders") && (
+          <li
+            className={
+              props.visible === "two" ? "nav-item-active " : "nav-item"
+            }
+            onClick={() => {
+              props.setvisible("two");
+              props.setShowExportFilter(false);
+            }}
+          >
+            <div
+              className={
+                props.visible === "two" ? "nav-link" : "nav-link text-secondary"
+              }
+            >
+              Orders Received
+            </div>
           </li>
-        }
+        )}
       </ul>
     </div>
   );

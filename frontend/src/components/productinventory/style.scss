@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .productinventory {
-  margin-top:5px;
+  margin-top: 5px;
   padding-right: 6rem;
   padding-left: 4rem;
   //overflow: hidden;
@@ -9,25 +9,25 @@
     padding-right: 10px;
     padding-left: 10px;
   }
-.breadcrumb{
-  margin-top:-10px;
-  margin-left:-5px;
-}
+  .breadcrumb {
+    margin-top: -10px;
+    margin-left: -5px;
+  }
 
-  .full-width-ribbon{
+  .full-width-ribbon {
     position: absolute;
     left: 0;
     right: -5px;
-    background-color: #EAEAEA;
-    .filter{
+    background-color: #eaeaea;
+    .filter {
       margin-left: 8rem;
       margin-right: 0rem;
     }
   }
 
-  .rounded{
+  .rounded {
     border-radius: 15px !important;
-    box-shadow: 0px 3px 10px #e4e4e4!important;
+    box-shadow: 0px 3px 10px #e4e4e4 !important;
   }
 
   .ribbon-space {
@@ -35,47 +35,47 @@
     padding: 0px 20px 0px 20px;
   }
 
-  .txt{
+  .txt {
     font-weight: 600;
     font-size: 14px;
     align-self: center;
   }
-  .txt1{
+  .txt1 {
     font-weight: 400;
     font-size: 14px;
     align-self: center;
     //text-align: right;
   }
-  .txt2{
+  .txt2 {
     font-weight: 400;
     font-size: 14px;
     align-self: center;
     text-align: right;
-    position:relative;
-    left:-130px;    
+    position: relative;
+    left: -130px;
   }
 
-  .txtBlue{
+  .txtBlue {
     color: #0093e9;
   }
 
-  .bg-grey{
+  .bg-grey {
     background-color: #d6d6d6 !important;
   }
 
-  .active{
+  .active {
     box-shadow: 0px 3px 6px $grey;
     background-color: #e8f4f8 !important;
   }
 
-  .font-small{
+  .font-small {
     font-size: small;
   }
 
   .panel {
     // box-shadow: 0px 3px 6px $grey;
     border-radius: 15px;
-    background-color: $white;
+    background-color: #fff;
     cursor: pointer;
     padding: 20px 20px 5px 22px;
     margin-top: 20px;
@@ -106,7 +106,7 @@
       }
     }
 
-    .txt-outline{
+    .txt-outline {
       border: 1px solid #57c1ff;
       border-radius: 10px;
       padding: 0.2rem;
@@ -120,9 +120,9 @@
     }
 
     .picture {
-      width: 50px;
-      height: 50px;
-      box-shadow: 0px 3px 6px #00000029;
+      width: 0px;
+      height: 0px;
+      //box-shadow: 0px 3px 6px #00000029;
       // border-radius: 50%;
       justify-content: center;
       align-items: center;
@@ -139,10 +139,9 @@
         height: 25px;
       }
 
-     
       &.truck-bg {
-        background:  #e8f4f8;
-      }                                       
+        background: #e8f4f8;
+      }
 
       &.sent-bg {
         background: #d4ebf2;
@@ -150,7 +149,6 @@
 
       &.recived-bg {
         background: #fff2e5;
-        
       }
 
       &.transit-bg {
@@ -167,16 +165,11 @@
         margin-right: 3px;
         cursor: pointer;
       }
-        .tab-item:hover {
-          border-bottom: 2px solid black;
-          color:	rgb(0,0,0);
-          font-size: 10px;
-          
-        }
-
-      
-      
-     
+      .tab-item:hover {
+        border-bottom: 2px solid black;
+        color: rgb(0, 0, 0);
+        font-size: 10px;
+      }
     }
 
     .title {
@@ -197,7 +190,7 @@
       font-size: 26px;
       margin-top: 12px;
       font-weight: bold;
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .dayStatus {
@@ -212,16 +205,15 @@
     }
 
     .truck-text {
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .sent-text {
-      color: #0093E9;
+      color: #0093e9;
     }
 
     .recived-text {
       color: $darkYellow;
-      
     }
 
     .transit-text {
@@ -232,18 +224,17 @@
     position: absolute;
     width: 2000px;
     height: 100px;
-}
-.main{
-  margin-right: 2rem;
-  height:160px;
-  width:100%;
-  white-space:nowrap !important;
-  display:inline-block !important;
-  overflow: auto;
-  //overflow: visible;
-  //table-layout:fixed;
-
-}
+  }
+  .main {
+    margin-right: 2rem;
+    height: 160px;
+    width: 100%;
+    white-space: nowrap !important;
+    display: inline-block !important;
+    // overflow: auto;
+    //overflow: visible;
+    //table-layout:fixed;
+  }
 }
 .bttn1-blue {
   border: 1px solid black;
@@ -251,17 +242,63 @@
   background-color: white;
   color: black;
   padding: 5px 8px;
-  margin: 8px ;
+  margin: 8px;
   font-size: 14px;
   cursor: pointer;
   float: right;
 }
 .blue-primary {
-  border-color: #0093E9;
-  color: #0093E9;
+  border-color: #0093e9;
+  color: #0093e9;
 }
 
 .blue-primary:hover {
-  background: #0093E9;
+  background: #0093e9;
   color: white;
+}
+.toggle-button-right{
+  border:none;
+  box-shadow: 0px 1px 6px rgb(163, 163, 163);
+  position: relative;
+  top:-97px; 
+  float:right;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 0px 20px;
+  padding:12px;
+  width:50px;
+  cursor: pointer;
+}
+.toggle-button-left{
+  border:none;
+  box-shadow: 0px 1px 6px rgb(163, 163, 163);
+  position: relative;
+  left:-35px;
+  top:-97px; 
+  float:left;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 0px 20px;
+  padding:12px;
+  width:50px;
+  cursor: pointer;
+}
+.toggle-icon-next{
+  height: 20px;
+  width: 15px;
+  transform: rotate(180deg);  
+  outline: none;
+}
+.toggle-icon-back{
+  height: 20px;
+  width: 15px;  
+  outline: none;
+  position: relative;
+  left:-2px;
+} 
+
+button:hover,
+button:active,
+button:focus {
+  outline: 0;
 }

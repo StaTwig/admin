@@ -1,0 +1,15 @@
+@import '../../assets/styles/global.scss';
+
+.inventory {
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    .fix-wrap {
+        flex-wrap: wrap;
+
+        @media (min-width: 1600px) {
+            flex-wrap: nowrap;
+        }
+    }
+
+}

@@ -1,6 +1,9 @@
 @import "../../assets/styles/global.scss";
 
 .custom-dropdown {
+  width: 11vw;
+  position: relative;
+  right: 0rem;
   flex-basis: 100%;
   display: flex;
   outline: none;
@@ -12,23 +15,35 @@
     border: none;
     display: flex;
     justify-content: left !important;
-    width:100%;
-    color:#3b2222;
+    width: 100%;
+    color: #3b2222;
     flex-basis: 100%;
     outline: none;
     align-items: center;
     font-size: 15px;
-    
+
     position: absolute;
     background: transparent;
     &.active {
       color: $primaryBlue;
     }
-    .textNeg{
+    .textNeg {
       margin-top: -1.15rem;
     }
   }
-  .btn-custom-dropdown img{
+    // .textNeg-title{
+    //   margin-left: 45px;
+    //   margin-top: -1.35rem;
+    // }
+  .location-add{
+    position: absolute;
+    top: 10px;
+    // left: -85px;
+    min-width:0rem;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .btn-custom-dropdown img {
     position: absolute;
     right: 0;
   }
@@ -36,7 +51,7 @@
     border: none;
     display: flex;
     justify-content: space-between;
-    color:black;
+    color: black;
     flex-basis: 100%;
     outline: none;
     align-items: center;
@@ -45,12 +60,12 @@
     &.active {
       color: $primaryBlue;
     }
-    .textNeg{
+    .textNeg {
       margin-top: -1.15rem;
     }
   }
   .dropdown-menu {
-    height:180px;
+    height: 180px;
     overflow: auto;
     box-shadow: 0px 3px 10px $grey;
     border-radius: 8px;
@@ -76,9 +91,10 @@
     right: -15px;
     will-change: transform;
   }
-  .customwh{
-    height:9px;
-    width:9px;
+  .customwh {
+    position: absolute;
+    left: 122px;
+    height: 9px;
+    width: 14px;
   }
- 
 }

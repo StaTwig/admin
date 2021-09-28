@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+
 import "./style.scss";
 import User from "../../assets/icons/mail.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
@@ -20,11 +21,11 @@ const FormLoginPage = (props) => {
     emailFieldDisable,
     phoneFieldDisable,
   } = props;
-  const onkeydown = (event) => {
-    if (event.keyCode === 13) {
-      onSendOtp();
-    }
-  };
+  // const onkeydown = (event) => {
+  //   if (event.keyCode  === 13) {
+  //       onSendOtp();
+  //   }
+  //  }
   return (
     <div className='login-wrapper'>
       <div className='container'>
@@ -36,7 +37,7 @@ const FormLoginPage = (props) => {
         <div className='row'>
           <div className='col-m-6 col-lg-6'>
             <div className='form-content'>
-              <img className='logo' src={logo} />
+              <img className='logo' src={logo} alt='' />
               <h1>Welcome Back,</h1>
               <p>Login to continue</p>
             </div>

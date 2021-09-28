@@ -283,7 +283,7 @@ services:
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
 
   frontend:
-    build: "./cra-frontend"
+    build: "./frontend"
     image: "frontend2.0"
     container_name: "cra-frontend"
     restart: always
