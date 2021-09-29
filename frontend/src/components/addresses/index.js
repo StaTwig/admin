@@ -40,7 +40,7 @@ const Address = (props) => {
               />
             </Modal>
           )}
-          <button type="button" className="btn btn-warning ml-3" style={{backgroundColor:'#b2b0aa', borderColor: '#b2b0aa'}}>
+          <button type="button" className="btn btn-warning ml-3">
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
             <Link to="/newaddress" className="forgot-link text-decoration-none">
               <span className="txt ">Add New Address</span>

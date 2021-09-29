@@ -97,6 +97,7 @@ const NUModal = (props) => {
               </div>
               <button 
                 // disabled={errors}
+                style={{visibility:buttonText === "NEXT" ? "" : "hidden"}}
                 className="redirect-button" 
                 onClick={() => redirectToConfigurationPage()}>
                 <i className="plus-icon fa fa-plus pr-2" aria-hidden="true"></i>
