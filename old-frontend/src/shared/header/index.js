@@ -205,9 +205,23 @@ const Header = (props) => {
     });
   }
 
+<<<<<<< HEAD:cra-frontend/src/shared/header/index.js
+  function changeNotifications(value, num) {   
+    turnOn()        
+    if(num)
+    setLimit(limit+num)
+   axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
+      setNewNotifs(response.data?.data?.new)
+      setNotifications(response.data.data?.data?.reverse());
+      if(response.data.data?.data?.length === icount)
+        setHasMore(false)
+      setIcount(response.data.data?.data?.length)
+   })
+=======
   async function changeNotifications(value) {
     const response = await axios.get(`${config().getAlerts}${value}`);
     setNotifications(response.data.data.data);
+>>>>>>> 41cca8641524b8c017aaa751e5d3eb86897b6305:old-frontend/src/shared/header/index.js
   }
 
   useEffect(() => {
@@ -216,6 +230,17 @@ const Header = (props) => {
       const response = await axios.get(`${config().getAlerts}${alertType}`);
       setNotifications(response.data.data.data);
 
+<<<<<<< HEAD:cra-frontend/src/shared/header/index.js
+      setNotifications(response.data.data?.data?.reverse());
+      console.log(response.data?.data)
+      if(response.data?.data?.totalUnRead)
+      setNewNotifs(response.data?.data?.totalUnRead)
+      else
+      setNewNotifs(response.data?.data?.new)
+      setCount(response.data.data?.totalRecords);
+      setIcount(response.data.data?.data?.length)
+=======
+>>>>>>> 41cca8641524b8c017aaa751e5d3eb86897b6305:old-frontend/src/shared/header/index.js
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status == "ACTIVE")
@@ -422,8 +447,79 @@ const Header = (props) => {
                             className='row justify-content-between align-items-center'
                             onClick={() => clearNotification(notifications)}
                           >
+<<<<<<< HEAD:cra-frontend/src/shared/header/index.js
+                            Transactions
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className='slider-item'>
+                    <InfiniteScroll
+                      dataLength={notifications?.length || 0}
+                      next={() => changeNotifications(alertType, 10)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                      }} //To put endMessage and loader to the top.
+                      hasMore={hasMore}
+                      loader={<h4><Spinner /></h4>}
+                      scrollThreshold={1}
+                      scrollableTarget='scrollableDiv'
+                    >
+                      {notifications?.length >= 0 ? (
+                        notifications?.map((notifications) =>
+                          notifications.transactionId ? (
+                            <Link
+                              key={notifications.id}
+                              to={notifRouting(notifications)}
+                              // style={{ textDecoration: "none" }}
+                              className={notifications.isRead ? 'read' : 'unRead'}
+                              style={{ textDecoration:"none" }}
+                              onClick={() => readNotification(notifications.id)}
+                            >
+                              <div
+                                className='col-sm-10'
+                                style={{ display: "flex" }}
+                              >
+                                <img
+                                  className='notification-icons'
+                                  src={notifIcon(notifications)}
+                                  alt='Icon'
+                                />
+                                <div className='notification-events'>
+                                  {notifications.message}
+                                </div>
+                              </div>
+                              <div className='text-secondary notif-time'>
+                                {formatDistanceToNow(
+                                  new Date(
+                                    parseInt(
+                                      notifications._id.toString().substr(0, 8),
+                                      16
+                                    ) * 1000
+                                  )
+                                )}
+                              </div>
+                              <img
+                                className='toggle-icon'
+                                alt='Drop Down Icon'
+                                src={dropdownIcon}
+                              ></img>
+                            </Link>
+                          ) : (
+                            <div
+                              key={notifications.id}
+                              style={{ cursor: "not-allowed" }}
+                            >
+                              <div
+                                className='col-sm-10'
+                                style={{ display: "flex" }}
+                              >
+=======
                             <div className='col-sm-10'>
                               <div>
+>>>>>>> 41cca8641524b8c017aaa751e5d3eb86897b6305:old-frontend/src/shared/header/index.js
                                 <img
                                   style={{ size: "15px", marginLeft: "-20px" }}
                                   src={notifIcon(notifications)}

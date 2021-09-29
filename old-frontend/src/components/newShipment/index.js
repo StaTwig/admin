@@ -41,12 +41,14 @@ const NewShipment = (props) => {
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [fetchdisabled, setfetchdisabled] = useState(false);
+  const [FromOrgLabel, setFromOrgLabel] = useState("Select Organisation Location")
   const [pofetchdisabled, setpofetchdisabled] = useState(false);
-  const [FromLocationSelected, setFromLocationSelected] = useState(false)
+  const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
+  // const []
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
@@ -511,7 +513,7 @@ if (!error) {
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
       <Formik
-        // enableReinitialize={true}
+        enableReinitialize={true}
         initialValues={{
           poId: "",
           type: "",
@@ -528,6 +530,7 @@ if (!error) {
           shipmentDate: "",
           estimateDeliveryDate: "",
           products: [],
+          reset: OrderId,
         }}
         validate={(values) => { 
           const errors = {};
@@ -924,11 +927,19 @@ if (!error) {
                         <Select
                           styles={customStyles}
                           isDisabled={false}
-                          placeholder="Select Organisation Location"
-                          onChange={(v) => {
-                            onWarehouseChange(v.warehouseInventory);
-                            console.log(v.id)
-                            setSelectedWarehouse(v.id)
+                          placeholder='Select Organisation Location'
+                          onChange={async (v) => {
+                            let res = await onWarehouseChange(
+                              v.warehouseInventory
+                            );
+                            console.log(res);
+                            if (!res) {
+                              return;
+                            }
+                            console.log(v);
+                            setFromOrgLabel(v.label);
+                            console.log(values.fromOrgLoc)
+                            setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
@@ -943,8 +954,19 @@ if (!error) {
                             };
                             setAddProducts((prod) => [...prod, newArr]);
                           }}
-                          defaultInputValue={values.fromOrgLoc}
-                          options={senderWarehouses.filter( (ele, ind) => ind === senderWarehouses.findIndex( elem => elem.label===ele.label))}
+                          value={
+                            values.fromOrgLoc === ""
+                              ? "Select Organisation Location"
+                              : { value: values.fromOrgLoc, label: FromOrgLabel}
+                          }
+                          // defaultInputValue={values.fromOrgLoc}
+                          options={senderWarehouses.filter(
+                            (ele, ind) =>
+                              ind ===
+                              senderWarehouses.findIndex(
+                                (elem) => elem.label === ele.label
+                              )
+                          )}
                         />
                         {/* {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
