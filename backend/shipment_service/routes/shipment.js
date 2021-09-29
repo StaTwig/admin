@@ -47,6 +47,8 @@ router.get(
   ShipmentController.fetchShipmentsForAbInBev
 );
 
+router.get("/abinbev/fetchShipmentsOnBlockchain",ShipmentController.fetchShipmentsForAbInBevOnBlockchain);
+
 router.get("/fetchInboundShipments", ShipmentController.fetchInboundShipments); // /fetchInboundShipments => Takes warehouseId from req.user header and filter based on the query params {date,to,from,status}
 router.get(
   "/fetchOutboundShipments",

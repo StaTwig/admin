@@ -4235,3 +4235,296 @@ exports.trackJourneyOnBlockchain = [
     }
   },
 ];
+
+function matchConditionShipmentOnBlockchain(filters) {
+    console.log("mc", filters)
+    let matchCondition = {
+        $and: []
+    };
+    if (filters.orgType && filters.orgType !== "") {
+        if (
+            filters.orgType === "BREWERY" ||
+            filters.orgType === "S1" ||
+            filters.orgType === "S2" ||
+            filters.orgType === "S3"
+        ) {
+            matchCondition.$and.push({
+                $or: [{
+                        "supplier.org.type": filters.orgType
+                    },
+                    {
+                        "receiver.org.type": filters.orgType
+                    },
+                ],
+            });
+        } else if (filters.orgType === "ALL_VENDORS") {
+            matchCondition.$and.push({
+                $or: [{
+                        "supplier.org.type": "S1"
+                    },
+                    {
+                        "supplier.org.type": "S2"
+                    },
+                    {
+                        "supplier.org.type": "S3"
+                    },
+                    {
+                        "receiver.org.type": "S1"
+                    },
+                    {
+                        "receiver.org.type": "S2"
+                    },
+                    {
+                        "receiver.org.type": "S3"
+                    },
+                ],
+            });
+        }
+    }
+
+    if (filters.state && filters.state.length) {
+        matchCondition.$and.push({
+            $or: [{
+                    "supplier.warehouse.warehouseAddress.state": filters.state.toUpperCase(),
+                },
+                {
+                    "receiver.warehouse.warehouseAddress.state": filters.state.toUpperCase(),
+                },
+            ],
+        });
+    }
+    if (filters.district && filters.district.length) {
+        matchCondition.$and.push({
+            $or: [{
+                    "supplier.warehouse.warehouseAddress.city": filters.district.toUpperCase(),
+                },
+                {
+                    "receiver.warehouse.warehouseAddress.city": filters.district.toUpperCase(),
+                },
+            ],
+        });
+    }
+    console.log("mcres", JSON.stringify(matchCondition))
+    return matchCondition;
+}
+
+function getShipmentFilterConditionOnBlockhain(filters, warehouseIds) {
+    let matchCondition = {};
+    if (filters.organization && filters.organization !== "") {
+        if (filters.txn_type === "ALL") {
+            matchCondition.$or = [{
+                    "supplier.id": filters.organization,
+                },
+                {
+                    "receiver.id": filters.organization,
+                },
+            ];
+        } else if (filters.txn_type === "SENT") {
+            matchCondition["supplier.id"] = filters.organization;
+        } else if (filters.txn_type === "RECEIVED") {
+            matchCondition["receiver.id"] = filters.organization;
+        }
+    }
+
+    if (filters.txn_type && filters.txn_type !== "") {
+        if (filters.txn_type === "SENT") {
+            matchCondition.Status = {
+                $in: ["CREATED", "SENT"]
+            };
+        } else if (filters.txn_type === "RECEIVED") {
+            matchCondition.Status = "RECEIVED";
+        }
+    }
+
+    if (filters.date_filter_type && filters.date_filter_type.length) {
+        const DATE_FORMAT = "YYYY-MM-DD";
+        if (filters.date_filter_type === "by_range") {
+            let startDate = filters.start_date ? filters.start_date : new Date();
+            let endDate = filters.end_date ? filters.end_date : new Date();
+            matchCondition.createdOn = {
+                $gte: new Date(`${startDate}T00:00:00.0Z`),
+                $lt: new Date(`${endDate}T23:59:59.0Z`),
+            };
+        } else if (filters.date_filter_type === "by_monthly") {
+            let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+            let startDateOfTheMonth = moment(startDateOfTheYear)
+                .add(filters.month - 1, "months")
+                .format(DATE_FORMAT);
+            let endDateOfTheMonth = moment(startDateOfTheMonth)
+                .endOf("month")
+                .format(DATE_FORMAT);
+            console.log(startDateOfTheMonth, endDateOfTheMonth);
+            matchCondition.createdOn = {
+                $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
+                $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`),
+            };
+        } else if (filters.date_filter_type === "by_quarterly") {
+            let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+            let startDateOfTheQuarter = moment(startDateOfTheYear)
+                .quarter(filters.quarter)
+                .startOf("quarter")
+                .format(DATE_FORMAT);
+            let endDateOfTheQuarter = moment(startDateOfTheYear)
+                .quarter(filters.quarter)
+                .endOf("quarter")
+                .format(DATE_FORMAT);
+            console.log(startDateOfTheQuarter, endDateOfTheQuarter);
+            matchCondition.createdOn = {
+                $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
+                $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`),
+            };
+        } else if (filters.date_filter_type === "by_yearly") {
+            const currentDate = moment().format(DATE_FORMAT);
+            const currentYear = moment().year();
+
+            let startDateOfTheYear = moment([filters.year]).format(
+                "YYYY-MM-DDTHH:mm:ss"
+            );
+            let endDateOfTheYear = moment([filters.year])
+                .endOf("year")
+                .format("YYYY-MM-DDTHH:mm:ss");
+
+            if (filters.year === currentYear) {
+                endDateOfTheYear = currentDate;
+            }
+            console.log(startDateOfTheYear, endDateOfTheYear);
+            matchCondition.createdOn = {
+                $gte: new Date(startDateOfTheYear),
+                $lte: new Date(endDateOfTheYear),
+            };
+        }
+    }
+    return matchCondition;
+}
+
+exports.fetchShipmentsForAbInBevOnBlockchain = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                skip,
+                limit
+            } = req.query;
+            var shipmentsArray = [];
+
+            const filters = req.query;
+            try {
+                let warehouseIds = [];
+
+                const shipmentQuery = {
+                    selector: getShipmentFilterConditionOnBlockhain(filters, warehouseIds)
+                    //selector:  matchConditionShipment(filters)
+                }
+                //Blockchain
+                /*const shipmentQuery = {
+   selector: {
+      ShippingDate: {
+        $gte: "2021-07-25T00:00:00Z",
+        $lt : "2021-07-31T00:00:00Z"
+      }
+   }
+}*/
+                /*        const shipmentQuery =
+{
+   selector: {
+Status: { "$in": ["RECEIVED"] }
+   }
+}*/
+                /* const shipmentQuery = {
+   "selector": {
+      "Supplier": {
+                "$regex": "ORG10017"
+      }
+   }
+}*/
+
+                /*const shipmentQuery = {
+                  "selector": {
+                                                        "$or": [
+                                                            { "Supplier": {"$regex": "ORG10017"} },
+                                                            { "Receiver": {"$regex": "ORG10001"} }
+                                                        ]
+                                                }
+                                                }*/
+
+                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+                const shipmentResult = await axios.post(
+                    `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+                    shipmentQuery, {
+                        headers: {
+                            Authorization: token,
+                        },
+                    }
+                );
+                const len = shipmentResult.data.data;
+                for (count = 0; count < len.length; count++) {
+                    const supplierDetails = JSON.parse(
+                        shipmentResult.data.data[count].Supplier
+                    );
+                    const receiverDetails = JSON.parse(
+                        shipmentResult.data.data[count].Receiver
+                    );
+
+                    const supplierWarehouseDetails = await axios.get(
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                            headers: {
+                                Authorization: token,
+                            },
+                        }
+                    );
+
+                    /*const supplierOrgDetails = await axios.get(
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+                      {
+                        headers: {
+                          Authorization: token,
+                        },
+                      }
+                    );*/
+
+                    const receiverWarehouseDetails = await axios.get(
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                            headers: {
+                                Authorization: token,
+                            },
+                        }
+                    );
+
+                    /*const receiverOrgDetails = await axios.get(
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+                      {
+                        headers: {
+                          Authorization: token,
+                        },
+                      }
+                    );*/
+
+                    const shipmentInwardData = {
+                        Shipmentdata: shipmentResult.data.data[count],
+                        supplierWarehouseDetails: supplierWarehouseDetails.data.data,
+                        //supplierOrgDetails: supplierOrgDetails.data.data,
+                        receiverWarehouseDetails: receiverWarehouseDetails.data.data,
+                        //receiverOrgDetails: receiverOrgDetails.data.data,
+                    };
+                    //                console.log("123",shipmentInwardData)
+                    shipmentsArray.push(shipmentInwardData);
+                }
+
+
+                              //path: "$supplier.org.S1",
+                          //{ $match: matchConditionShipment(filters) },
+
+                return apiResponse.successResponseWithMultipleData(
+                    res,
+                    "Shipments Table",
+                    shipmentsArray
+                );
+            } catch (err) {
+                return apiResponse.ErrorResponse(res, err.message);
+            }
+        } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+        }
+    },
+];
