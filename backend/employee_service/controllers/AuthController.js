@@ -1263,6 +1263,11 @@ exports.addWarehouse = [
         Age: "",
         Aadhar: "",
         Vaccineid: "",
+        Title:title,
+        Warehouseaddr:warehouseAddress,
+        Status:"NOTVERIFIED",
+        Misc1:"",
+        Misc2:""
       };
 
       let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
