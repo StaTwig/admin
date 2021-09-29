@@ -104,8 +104,9 @@ const NewInventory = (props) => {
     "categories",
     "productName",
     "manufacturer",
+    "batchNumber",
     "quantity",
-    "unitofMeasure",
+    "unitofMeasure"
   ];
 
   const month = new Date().getMonth() + 1;

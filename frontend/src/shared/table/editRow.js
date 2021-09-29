@@ -84,7 +84,7 @@ const EditRow = (props) => {
               <span className='pl-2 text-muted'>Product Category*</span>
             </div>
             <div
-              className={`col-4 theader text-center ${
+              className={`col-3 theader text-center ${
                 addMore ? "product-add-inventory" : "Bproduct-add-inventory"
               }`}
             >
@@ -101,6 +101,10 @@ const EditRow = (props) => {
               <img src={mon} width='16' height='16' alt='manufacturer' />
               <span className='pl-2 text-muted'>Manufacturer</span>
             </div>
+            <div className='col-2 theader text-center pro'>
+                <img src={Batch} width='16' height='16' alt='Batch' />
+                <span className='pl-2 text-muted'>Batch Number</span>
+              </div>
             <div
               className={`col theader text-center ${
                 addMore ? "quantity-add-inventory" : "Bquantity-add-inventory"
@@ -143,7 +147,7 @@ const EditRow = (props) => {
                 options={category}
               />
             </div>
-            <div className='col-4 align-self-center pt-1 pb-1 border-right bg-white'>
+            <div className='col-3 align-self-center pt-1 pb-1 border-right bg-white'>
               <div className='d-flex pt-1 flex-row justify-content-between'>
                 <div
                   className='title col-10 recived-text'
@@ -193,6 +197,20 @@ const EditRow = (props) => {
                 )}
               </div>
             </div>
+             <div className='col-2 mt-1 mb-1 border-right'>
+                <div className=''>
+                  <input
+                    type='text'
+                    style={{ fontSize: "14px" }}
+                    className='form-control text-center'
+                    placeholder='Enter Batch Number'
+                    value={batchNumber}
+                    onChange={(e) =>
+                      handleInventoryChange(idx, "batchNumber", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
             <div className='col mt-1 mb-1'>
               <div className=''>
                 <input
@@ -283,10 +301,10 @@ const EditRow = (props) => {
                 <img src={sdate} width='16' height='16' alt='ExpiryDate' />
                 <span className='pl-2 text-muted'>Exp Date</span>
               </div>
-              <div className='col theader text-center pro'>
+              {/* <div className='col theader text-center pro'>
                 <img src={Batch} width='16' height='16' alt='Batch' />
                 <span className='pl-2 text-muted'>Batch Number</span>
-              </div>
+              </div> */}
               <div className='col theader text-center pro'>
                 <img src={Serial} width='16' height='16' alt='Serial' />
                 <span className='pl-2 text-muted'>Serial Numbers</span>
@@ -331,7 +349,7 @@ const EditRow = (props) => {
                   />
                 </div>
               </div>
-              <div className='col mt-1 mb-1 border-right'>
+              {/* <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <input
                     type='text'
@@ -344,7 +362,7 @@ const EditRow = (props) => {
                     }
                   />
                 </div>
-              </div>
+              </div> */}
               <div className='col mt-1 mb-1 '>
                 <div className=''>
                   <input
