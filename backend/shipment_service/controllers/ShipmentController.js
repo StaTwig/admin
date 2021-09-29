@@ -4474,14 +4474,14 @@ Status: { "$in": ["RECEIVED"] }
                         }
                     );
 
-                    /*const supplierOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+                    const supplierOrgDetails = await axios.get(
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
                       {
                         headers: {
                           Authorization: token,
                         },
                       }
-                    );*/
+                    );
 
                     const receiverWarehouseDetails = await axios.get(
                         `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
@@ -4491,14 +4491,14 @@ Status: { "$in": ["RECEIVED"] }
                         }
                     );
 
-                    /*const receiverOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+                    const receiverOrgDetails = await axios.get(
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
                       {
                         headers: {
                           Authorization: token,
                         },
                       }
-                    );*/
+                    );
 
                     const shipmentInwardData = {
                         Shipmentdata: shipmentResult.data.data[count],
