@@ -1,27 +1,26 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .NewOrder {
   position: relative;
-  top:-35px;
-    padding-right: 20px;
-    padding-left: 50px;
-    //overflow: hidden;
-    @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-    .breadcrumb{
-      margin-left: -0.7rem;
-    }
-    
-  .userpanel{
+  top: -35px;
+  padding-right: 20px;
+  padding-left: 50px;
+  //overflow: hidden;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .breadcrumb {
+    margin-left: -0.7rem;
+  }
+
+  .userpanel {
     padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    .profileIconRound{
-      background-color: #FABCC4;
+    .profileIconRound {
+      background-color: #fabcc4;
       font-size: 0.625rem;
       width: 30px;
       height: 30px;
@@ -32,11 +31,11 @@
       margin-right: 11px;
       display: flex;
     }
-  }  
+  }
 
-  .formContainer{
+  .formContainer {
     border-radius: 0.313rem;
-    box-shadow: 0px 3px 10px #e4e4e4!important;
+    box-shadow: 0px 3px 10px #e4e4e4 !important;
   }
 
   .form-group,
@@ -45,16 +44,15 @@
     justify-content: space-between;
     align-items: center;
 
-    
-    .custom-dropdown .btn-custom-dropdown{
-      font-size:14px;
+    .custom-dropdown .btn-custom-dropdown {
+      font-size: 14px;
       align-items: center;
       padding-left: 0;
       @media (min-width: $xl) {
-        font-size:14px;
+        font-size: 14px;
       }
       @media (max-width: $lg) {
-        font-size:12px;
+        font-size: 12px;
       }
     }
 
@@ -62,12 +60,12 @@
       // color: #707070;
       text-align: left;
       font-size: 15px;
-      margin-bottom:0px;
+      margin-bottom: 0px;
     }
-     .date{
-       border:none;
-       background: none;
-     }
+    .date {
+      border: none;
+      background: none;
+    }
     .form-control {
       border: none;
       background: transparent;
@@ -82,10 +80,9 @@
     @media (min-width: $xl) {
       label {
         font-size: 14px;
-        margin-bottom:0px;
-      } 
+        margin-bottom: 0px;
+      }
 
-  
       .form-control {
         border: none;
         background: transparent;
@@ -95,10 +92,7 @@
         flex-basis: 65%;
         flex-grow: inherit;
         font-size: 14px;
-       
-        
       }
-
     }
   }
   .line {
@@ -106,33 +100,30 @@
     padding: 0;
     color: $black;
     flex-basis: 65%;
-    
+
     font-size: 14px;
-    width:400px;
-    
+    width: 400px;
   }
-  .name{
+  .name {
     color: #707070;
     font-weight: 400;
     font-size: 14px;
     padding: 0;
   }
-  .org{
-    position:relative;
-    top:10px;
+  .org {
+    position: relative;
+    top: 10px;
   }
-  .orgV{
-    position:relative;
-    top:10px;
-    right:400px;
-    color:#333333;
+  .orgV {
+    position: relative;
+    top: 10px;
+    right: 400px;
+    color: #333333;
   }
- 
+
   .input-group {
     position: relative;
     margin-bottom: 1rem;
-
-    
 
     .input-group-append {
       position: absolute;
@@ -141,47 +132,45 @@
     }
   }
 
-  .low{
-    padding-bottom:5px;
+  .low {
+    padding-bottom: 5px;
     border-radius: 10px;
   }
-  .headsup1{
+  .headsup1 {
     font-size: 16px;
     font-weight: 1000;
     margin-top: -1rem;
     padding-bottom: 0rem;
-    padding-left: 1.5rem 
-    
+    padding-left: 1.5rem;
   }
-  .headsup{
+  .headsup {
     font-size: 15px;
     font-weight: 700;
-    padding-top:1.25rem;
-    padding-bottom: 0.625rem; 
+    padding-top: 1.25rem;
+    padding-bottom: 0.625rem;
   }
-  .total{
+  .total {
     color: $OBBlue;
-    font:  25px/13px $roboto;
-   
+    font: 25px/13px $roboto;
   }
-  .value{
+  .value {
     color: $black;
-    font:  25px/13px $roboto;
+    font: 25px/13px $roboto;
   }
 
   hr {
     border-width: 2px;
-    border-color: #D3D3D3;
+    border-color: #d3d3d3;
   }
 
-  .btn-outline-info{
+  .btn-outline-info {
     border-radius: 10px;
   }
 
   .tooltip {
     position: relative;
- }
- .tooltip::before {
+  }
+  .tooltip::before {
     background-color: white;
     border: 1px solid #888;
     border-radius: 2px;
@@ -195,12 +184,10 @@
     top: 20px;
     left: 5px;
     z-index: 1;
- }
- .tooltip:hover::before {
+  }
+  .tooltip:hover::before {
     display: block;
- }
-
-  
+  }
 
   .table {
     .overflow {
@@ -210,38 +197,33 @@
   }
 }
 
+.shipmentpopup {
+  .data {
+    font: 16px/27px $roboto;
+    color: #707070;
+  }
 
-.shipmentpopup{
+  .error {
+    font: 22px/36px $roboto;
+    color: #707070;
+  }
 
-  .data{
-    font: 16px/27px $roboto ;
-     color: #707070;
-}
-
-.error{
-  font: 22px/36px $roboto ;
-  color: #707070;
-}
-
-  .alert{
-    font:  25px/0.1px $roboto;
+  .alert {
+    font: 25px/0.1px $roboto;
     color: #000000;
-}
-
-
+  }
 }
 .select-placeholder-text {
-  color: #A8A8A8;
-  }
- .sidename
- {
-   font-size: 16px;
- }
- .text-danger1{
-  color:rgb(216, 9, 9);
-  position:relative;
-  left:76rem;
-  top:-75px;
+  color: #a8a8a8;
+}
+.sidename {
+  font-size: 16px;
+}
+.text-danger1 {
+  color: rgb(216, 9, 9);
+  position: relative;
+  left: 76rem;
+  top: -75px;
   font-size: 14px;
   padding: 0;
 }

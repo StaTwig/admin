@@ -1,5 +1,5 @@
-var mongoose = require("mongoose");
-ShipmentSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const ShipmentSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     shippingOrderId: String,
@@ -16,6 +16,12 @@ ShipmentSchema = new mongoose.Schema(
       location: String,
     },
     receiver: {
+      id: String,
+      name: String,
+      locationId: String,
+      location: String,
+    },
+    originalReceiver: {
       id: String,
       name: String,
       locationId: String,
@@ -54,6 +60,7 @@ ShipmentSchema = new mongoose.Schema(
         },
       },
     ],
+    acceptedRequests: [String],
   },
   { timestamps: true }
 );

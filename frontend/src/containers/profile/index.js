@@ -1,19 +1,16 @@
-import { useDispatch} from 'react-redux';
-import React, { useState, useEffect, useSelector } from 'react';
-import Profile from '../../components/profile';
-import Header from '../../shared/header';
-import Sidebar from '../../shared/sidebarMenu';
-import {getUserInfo} from "../../actions/userActions";
+import React from "react";
+import Profile from "../../components/profile";
+import Header from "../../shared/header";
+import Sidebar from "../../shared/sidebarMenu";
 
-
-const ProfileContainer = props => {
+const ProfileContainer = (props) => {
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
-          <Profile {...props}/>
+        <div className='content'>
+          <Profile {...props} />
         </div>
       </div>
     </div>
@@ -21,4 +18,3 @@ const ProfileContainer = props => {
 };
 
 export default ProfileContainer;
-

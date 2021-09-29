@@ -2,17 +2,17 @@
 
 .Newinventory {
   position: relative;
-  top:-22px;
-    padding-right: 45px;
-    padding-left: 55px;
-    //overflow: hidden;
+  top: -22px;
+  padding-right: 45px;
+  padding-left: 55px;
+  //overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
   }
-  .menu{
+  .menu {
     z-index: 1;
-    top: 1.9rem ;
+    top: 1.9rem;
     right: 1.8rem !important ;
     left: unset;
     max-width: 9rem;
@@ -26,16 +26,16 @@
     box-shadow: 0px 3px 10px $grey;
     border-radius: 0 0 8px 8px;
     padding: 1rem;
-    .btn{
-      width: 110px ;
+    .btn {
+      width: 110px;
       height: 30px;
       padding-top: 0.1rem;
     }
   }
-  
-    @media screen and (max-width: 768px) {
-      right: 0 !important;
-    }
+
+  @media screen and (max-width: 768px) {
+    right: 0 !important;
+  }
 
   .form-group,
   .input-group {
@@ -89,55 +89,47 @@
   }
 }
 
+.inventorypopup {
+  .data {
+    font: 16px/27px $roboto;
+    color: #707070;
+  }
 
-.inventorypopup{
+  .error {
+    font: 22px/36px $roboto;
+    color: #707070;
+  }
 
-  .data{
-    font: 16px/27px $roboto ;
-     color: #707070;
-}
-
-.error{
-  font: 22px/36px $roboto ;
-  color: #707070;
-}
-
-  .alert{
-    font:  25px/0.1px $roboto;
+  .alert {
+    font: 25px/0.1px $roboto;
     color: #000000;
-}
-
-
-
+  }
 }
 
 .btn-custom-dropdown {
   justify-content: space-around !important;
-  span{
+  span {
     font-size: 1rem;
     // opacity: 0.5;
   }
 }
 
-.excelpopup{
-.upload{
-  height:200px;
-  width:350px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px dashed #707070;
-  border-radius: 8px;
-
-}
-}
-
-.css-1hb7zxy-IndicatorsContainer
-{
-  border:0;
+.excelpopup {
+  .upload {
+    height: 200px;
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px dashed #707070;
+    border-radius: 8px;
+  }
 }
 
-.Newinventory
-{
-  padding-bottom:150px;
+.css-1hb7zxy-IndicatorsContainer {
+  border: 0;
+}
+
+.Newinventory {
+  padding-bottom: 150px;
 }

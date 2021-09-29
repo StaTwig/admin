@@ -1,5 +1,5 @@
-var mongoose = require("mongoose");
-ShipmentSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const ShipmentSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     shippingOrderId: String,
@@ -21,27 +21,46 @@ ShipmentSchema = new mongoose.Schema(
       locationId: String,
       location: String,
     },
+    originalReceiver: {
+      id: String,
+      name: String,
+      locationId: String,
+      location: String,
+    },
     imageDetails: {
       type: Array,
       default: [],
     },
+    taggedShipments: { type: Array, required: false },
     shipmentUpdates: { type: Array, default: [] },
     airWayBillNo: String,
-    shippingDate: String,
+    shippingDate: Date,
     expectedDeliveryDate: String,
     actualDeliveryDate: String,
     status: String,
     transactionIds: [String],
+    rejectionRate: { type: Number, default: 0.0 },
     products: [
       {
         productID: String,
         productName: String,
         manufacturer: String,
+        batchNumber: String,
         productQuantity: Number,
+        productQuantityTaggedSent: { type: Number, default: 0.0 },
         productQuantityDelivered: Number,
+        rejectionRate: { type: Number, default: 0.0 },
         labelId: String,
+        productCategory: String,
+        unitofMeasure: {
+          id: { type: String },
+          name: {
+            type: String,
+          },
+        },
       },
     ],
+    acceptedRequests: [String],
   },
   { timestamps: true }
 );

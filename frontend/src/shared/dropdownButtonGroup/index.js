@@ -1,12 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import parse from "html-react-parser";
 import useOnclickOutside from "react-cool-onclickoutside";
-
-// import upDownArrow from '../../assets/icons/up-and-down-blue.svg';
 import upDownArrow from "../../assets/icons/dropdown.svg";
 import "./style.scss";
 
-const dropdownButtonGroup = (props) => {
+const DropdownButtonGroup = (props) => {
   const [menu, setMenu] = useState(false);
   const {
     groups,
@@ -26,6 +24,7 @@ const dropdownButtonGroup = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
+  console.log(name)
   return (
     <div className='custom-dropdown' ref={ref}>
       {isText ? (
@@ -38,7 +37,7 @@ const dropdownButtonGroup = (props) => {
             }, 500)
           }
           onKeyDown={(e) =>
-            (e.keyCode == 27 || e.keyCode == 13) && setMenu(false)
+            (e.keyCode === 27 || e.keyCode === 13) && setMenu(false)
           }
           onChange={(e) => changeFn(e.target.value)}
           value={value}
@@ -48,6 +47,7 @@ const dropdownButtonGroup = (props) => {
           onClick={() => groups.length && setMenu(true)}
         />
       ) : (
+        // eslint-disable-next-line jsx-a11y/no-redundant-roles
         <button
           className={
             name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
@@ -58,13 +58,17 @@ const dropdownButtonGroup = (props) => {
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <span className={`${name?.length > 30 && "textNeg"}`}>
-            {useParse ? parse(name) : name}
-          </span>
+          <div className={`${name?.length > 20 && "textNeg"}`}>
+            {useParse ? parse(name) : name.split("|")[0] }
+          </div>
+          <br></br>
+          <div className={`location-add ${name?.length > 20 && "textNeg-title"}`}>
+            {useParse ? parse(name) : name.split("|")[1]}
+          </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className={arrowImg ? "dropdownImg" : "customwh"}
+            className={ "customwh"}
           />
         </button>
       )}
@@ -78,25 +82,44 @@ const dropdownButtonGroup = (props) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className='dropdown-item p-1'
+                    className="dropdown-item p-1"
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);
                     }}
                   >
-                    {item?.warehouseInventory
-                      ? item?.warehouseAddress
-                        ? item?.title +
-                          "/" +
-                          item?.warehouseAddress?.firstLine +
-                          ", " +
-                          item?.warehouseAddress?.city
-                        : item?.title + "/" + item.postalAddress
-                      : item?.name
-                      ? item?.name
-                      : item?.productName
-                      ? item?.productName
-                      : parse(item)}
+                    {item?.warehouseInventory ? (
+                      <div>
+                        <span style={{fontWeight: "bolder", color:"#707070"}}>
+                          {item.title}
+                        </span>
+                        <br></br>
+                        <span style={{color:"#707070", fontSize:"12px"}}>
+                          {item?.warehouseAddress?.firstLine +
+                            " " +
+                            item?.warehouseAddress?.city 
+                          //  + " " +
+                          //   item.postalAddress
+                            }
+                        </span>
+                      </div>
+                    ) : (
+                      <span>
+                        {item?.warehouseInventory
+                          ? item?.warehouseAddress
+                            ? item?.title +
+                              " " +
+                              item?.warehouseAddress?.firstLine +
+                              " " +
+                              item?.warehouseAddress?.city
+                            : item?.title + "/" + item.postalAddress
+                          : item?.name
+                          ? item?.name
+                          : item?.productName
+                          ? item?.productName
+                          : parse(item)}
+                      </span>
+                    )}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>
@@ -108,4 +131,4 @@ const dropdownButtonGroup = (props) => {
   );
 };
 
-export default dropdownButtonGroup;
+export default DropdownButtonGroup;

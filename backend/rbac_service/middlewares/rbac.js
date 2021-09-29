@@ -49,6 +49,26 @@ const checkPermissions = async (request, next) => {
   }
 };
 
+const checkPermissionAwait = async (request) => {
+  try {
+    const required_permission = request["permissionRequired"];
+    const request_role = request["role"];
+    for (var i = 0; i < required_permission.length; i++) {
+      const result = await member(request_role, required_permission[i]);
+      if (result === 1) {
+        return true;
+      } else {
+        if (i === required_permission.length - 1) {
+          return false;
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 module.exports = {
   checkPermissions: checkPermissions,
+  checkPermissionAwait: checkPermissionAwait,
 };

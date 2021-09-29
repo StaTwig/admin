@@ -5,11 +5,11 @@ import Sidebar from "../../shared/sidebarMenu";
 
 const enterId = (props) => {
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
+        <div className='content'>
           <EnterId {...props} />
         </div>
       </div>

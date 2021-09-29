@@ -1,21 +1,18 @@
 @import "../../../assets/styles/global.scss";
 
-.excelpopup{
-.upload{
-    height:200px;
-    width:350px;
+.excelpopup {
+  .upload {
+    height: 200px;
+    width: 350px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border: 1px dashed #707070;
     border-radius: 8px;
-  
-
-}
-.excelSpace{
-   float:left;
-    margin-left:2.1rem;
-    width:280px;
-   
-}
+  }
+  .excelSpace {
+    float: left;
+    margin-left: 2.1rem;
+    width: 280px;
+  }
 }

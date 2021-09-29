@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
+    "dev": "nodemon blockchain_server.js",
     "start": "node blockchain_server.js"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.5",
-    "date-and-time": "^1.0.0",
+    "date-and-time": "^2.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",

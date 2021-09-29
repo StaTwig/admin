@@ -1,7 +1,7 @@
-@import '../../../assets/styles/global.scss';
+@import "../../../assets/styles/global.scss";
 
 .producttable {
-  .overflow{
+  .overflow {
     height: 400px;
     overflow: auto;
   }
@@ -47,44 +47,40 @@
       color: #707070;
     }
 
-
-    
     .rTableCell {
       color: $black;
-        font-weight: 400;
+      font-weight: 400;
       a {
         color: $black;
         font-weight: 400;
       }
 
-      .enlarge{
+      .enlarge {
         height: 30px;
         width: 70px;
-        border: 1px solid #0093E9;
+        border: 1px solid #0093e9;
         border-radius: 7px;
         font-size: 10px;
         padding: 2px 2px;
-       
       }
     }
-     .badge{
-    width: 65px;
-    height: 20px;
-    color: white;
-    align-items: center;
-     }
+    .badge {
+      width: 65px;
+      height: 20px;
+      color: white;
+      align-items: center;
+    }
     .combine-data {
       display: flex;
       align-items: center;
       font-weight: bold;
-      
-        color: #0093E9;
-      
-      
+
+      color: #0093e9;
+
       .round-sign {
         margin-right: 10px;
         border-radius: 100%;
-        background-color: #FFBCC4;
+        background-color: #ffbcc4;
         font: Bold 11px Roboto;
         letter-spacing: 0px;
         height: 26px;
@@ -96,11 +92,6 @@
     }
   }
 }
-
-
-
-
-
 
 /* .btn{
       width: 60px;

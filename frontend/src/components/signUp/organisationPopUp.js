@@ -1,121 +1,119 @@
-import React, {useState,useEffect} from "react";
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { useState, useEffect } from "react";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Formik } from "formik";
-import AddressField from "./addressfield";
 import FailedPopUp from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
-import { useDispatch } from "react-redux";
-import CloseIcon from '../../assets/icons/cross.svg';
-import DropdownButton from '../../shared/dropdownButtonGroup';
-import {fetchAllRegions,fetchCountriesByRegion,fetchStateByCountry,fetchCitiesByState,} from "../../actions/productActions";
-
+import CloseIcon from "../../assets/icons/cross.svg";
+import {
+  fetchAllRegions,
+  fetchCountriesByRegion,
+  fetchStateByCountry,
+  fetchCitiesByState,
+} from "../../actions/productActions";
 
 const OrganisationPopUp = (props) => {
-    const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
-    const [clicked, setClicked] = useState(false);
-    const [orgType, setOrgType] = useState("Organisation type");
-    const [message, setMessage] = useState(
-        "Location service is disabled. Enter address manually!!!"
-    );
-    const [address, setAddress] = useState({});
-    const [pos, setPos] = useState({});
-    const closeModal = () => setShowModal(false);
-    const orgTypeArr = [
-        { id: 'SUPPLIER', name: 'Supplier' },
-        { id: 'CUSTOMER', name: 'Customer' },
-        { id: 'CUSTOMER_SUPPLIER', name: 'Both' },
-        { id: 'CENTRAL_AUTHORITY', name: 'Central authority' }
-    ];
-    const [line1, setline1] = useState("");
-    const [name,setname] = useState("");
-    const [pincode, setPincode] = useState("");
-    const [region,setregion] = useState("");
-    const [country, setcountry] = useState("");
-    const [city, setCity] = useState("");
-    const [state, setState] = useState("");
-    const [addressLine, setAddressLine] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [message, setMessage] = useState(
+    "Location service is disabled. Enter address manually!!!"
+  );
 
-    const [inputValue1, setInputValue1] = React.useState('');
-
-    const [allregions,setallregions] = useState([]);
-    const [allCountries,setallCountries] = useState([]);
-    const [allState,setallState] = useState([]);
-    const [allCity,setallCity] = useState([]);
-    useEffect(()=>{
-      async function fetchAllRegions1(){
-        let arr = await fetchAllRegions();
-        console.log(arr);
-        setallregions(arr.data);
-      }
-      fetchAllRegions1();
-    },[]);
-    async function fetchAllCountries1(id){
-      let res = await fetchCountriesByRegion(id);
-      setallCountries(res.data);
-    };
-    async function fetchAllState1(id){
-      let res = await fetchStateByCountry(id);
-      setallState(res.data);
-    };
-    async function fetchAllCity1(id){
-      let res = await fetchCitiesByState(id);
-      console.log(res,"All City");
-      setallCity(res.data);
-    };
-    const getGeoLocation = async () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          setPos(position);
-          dispatch(turnOn());
-          const result = await getAddressByLatLong(position);
-          dispatch(turnOff());
-          if (result.status === 200) {
-            await setAddress(result);
-          } else {
-            setShowModal(true);
-          }
-        },
-        (error) => {
-          setShowModal(true);
-        }
-      );
-    } else {
-      setShowModal(true);
+  const closeModal = () => setShowModal(false);
+  const orgTypeArr = [
+    { id: "SUPPLIER", name: "Supplier" },
+    { id: "CUSTOMER", name: "Customer" },
+    { id: "CUSTOMER_SUPPLIER", name: "Both" },
+    { id: "CENTRAL_AUTHORITY", name: "Central authority" },
+  ];
+  const [line1, setline1] = useState("");
+  const [name, setname] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [region, setregion] = useState("");
+  const [country, setcountry] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [allregions, setallregions] = useState([]);
+  const [allCountries, setallCountries] = useState([]);
+  const [allState, setallState] = useState([]);
+  const [allCity, setallCity] = useState([]);
+  useEffect(() => {
+    async function fetchAllRegions1() {
+      let arr = await fetchAllRegions();
+      console.log(arr);
+      setallregions(arr.data);
     }
-    };
-    function search(name, myArray){
-      for (var i=0; i < myArray.length; i++) {
-          if (myArray[i].name === name) {
-              return myArray[i].id;
-          }
+    fetchAllRegions1();
+  }, []);
+  async function fetchAllCountries1(id) {
+    let res = await fetchCountriesByRegion(id);
+    setallCountries(res.data);
+  }
+  async function fetchAllState1(id) {
+    let res = await fetchStateByCountry(id);
+    setallState(res.data);
+  }
+  async function fetchAllCity1(id) {
+    let res = await fetchCitiesByState(id);
+    console.log(res, "All City");
+    setallCity(res.data);
+  }
+  //   const getGeoLocation = async () => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         setPos(position);
+  //         dispatch(turnOn());
+  //         const result = await getAddressByLatLong(position);
+  //         dispatch(turnOff());
+  //         if (result.status === 200) {
+  //           await setAddress(result);
+  //         } else {
+  //           setShowModal(true);
+  //         }
+  //       },
+  //       (error) => {
+  //         setShowModal(true);
+  //       }
+  //     );
+  //   } else {
+  //     setShowModal(true);
+  //   }
+  //   };
+  function search(name, myArray) {
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i].name === name) {
+        return myArray[i].id;
       }
+    }
   }
   return (
-      <div className="inventorypopup">
-          {showModal && (
+    <div className='inventorypopup'>
+      {showModal && (
         <Modal
           close={closeModal}
           // size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-          buttonclassName="btn-orange"
+          buttonclassName='btn-orange'
         >
           <FailedPopUp onHide={closeModal} message={message} />
         </Modal>
       )}
-          <div className="d-flex flex-row justify-content-between">
-              <div className="flex-column">
-                <div className="alert mt-3 p-0 pl-3" >
-                    Almost there! 
-                </div>
-                <div className="text-info pl-3">Add organisation details to continue</div>
-              </div>
-              <div>
-                  <button type="button" className="close" onClick={() => props.onHide()}>
-                  <img src={CloseIcon} alt="Close" with="40" height="40" />
-                </button>
-              </div>
+      <div className='d-flex flex-row justify-content-between'>
+        <div className='flex-column'>
+          <div className='alert mt-3 p-0 pl-3'>Almost there!</div>
+          <div className='text-info pl-3'>
+            Add organisation details to continue
+          </div>
+        </div>
+        <div>
+          <button
+            type='button'
+            className='close'
+            onClick={() => props.onHide()}
+          >
+            <img src={CloseIcon} alt='Close' with='40' height='40' />
+          </button>
+        </div>
         {/* <div className="pt-1 ">
             <button
                 onClick={getGeoLocation}
@@ -125,99 +123,102 @@ const OrganisationPopUp = (props) => {
                 <span className="txt">Use my current location</span>
             </button>
         </div> */}
-        </div>
-        <div className="mr-4">
-            <div className="card-body flex-column d-flex">
-            <div className="flex-row text-muted justify-content-between">
-              <Formik
-                enableReinitialize={true}
-                initialValues={{
+      </div>
+      <div className='mr-4'>
+        <div className='card-body flex-column d-flex'>
+          <div className='flex-row text-muted justify-content-between'>
+            <Formik
+              enableReinitialize={true}
+              initialValues={{
                 //   type: "",
-                  region,
-                  name,
-                  line1,
-                  pincode,
-                  city,
-                  state,
-                  country,
-                }}
-                validate={(values) => {
-                  console.log(values,"Values Validate")
-                  const errors = {};
+                region,
+                name,
+                line1,
+                pincode,
+                city,
+                state,
+                country,
+              }}
+              validate={(values) => {
+                console.log(values, "Values Validate");
+                const errors = {};
                 //   if (!values.type) {
                 //     errors.type = "Required";
                 //   }
-                  if (!values.name) {
-                    errors.name = "Required";
-                  }
-                  if (!values.pincode) {
-                    errors.pincode = "Required";
-                  }
-                  if (!values.region) {
-                    errors.region = "Required";
-                  }
-                  if (!values.line1) {
-                    errors.line1 = "Required";
-                  }
-                  if (!values.city) {
-                    errors.city = "Required";
-                  }
-                  if (!values.state) {
-                    errors.state = "Required";
-                  }
-                  if (!values.country) {
-                    errors.country = "Required";
-                  }
-                  return errors;
-                }}
-                onSubmit={(values, { setSubmitting }) => {
-                  console.log(values,"Values");
-                  setClicked(true);
-                  setSubmitting(false);
-                  props.onSignup(values);
-                }}
-              
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  dirty,
-                }) => (
-                  <form onSubmit={handleSubmit} className="mb-3">
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                  <TextField 
-                    style={{
-                        width:"425px"
-                    }}
-                  id="standard-basic"
-                  label="Organisation Name" 
-                  className="form-control2"
-                  name="name"
-                  value={values.name}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  //error={errors.name}
-                  touched={touched.name}
-                  onChange={(e) => {setname(e.target.value)}}
-                  />
-                  {errors.name && touched.name && (
-                  <span className="error-msg text-danger-ANL">{errors.name}</span>
-                  )}
+                if (!values.name) {
+                  errors.name = "Required";
+                }
+                if (!values.pincode) {
+                  errors.pincode = "Required";
+                }
+                if (!values.region) {
+                  errors.region = "Required";
+                }
+                if (!values.line1) {
+                  errors.line1 = "Required";
+                }
+                if (!values.city) {
+                  errors.city = "Required";
+                }
+                if (!values.state) {
+                  errors.state = "Required";
+                }
+                if (!values.country) {
+                  errors.country = "Required";
+                }
+                return errors;
+              }}
+              onSubmit={(values, { setSubmitting }) => {
+                console.log(values, "Values");
+                setClicked(true);
+                setSubmitting(false);
+                props.onSignup(values);
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                setFieldValue,
+                dirty,
+              }) => (
+                <form onSubmit={handleSubmit} className='mb-3'>
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        <TextField
+                          style={{
+                            width: "425px",
+                          }}
+                          id='standard-basic'
+                          label='Organisation Name'
+                          className='form-control2'
+                          name='name'
+                          value={values.name}
+                          handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          //error={errors.name}
+                          touched={touched.name}
+                          onChange={(e) => {
+                            setname(e.target.value);
+                          }}
+                        />
+                        {errors.name && touched.name && (
+                          <span className='error-msg text-danger-ANL'>
+                            {errors.name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                       {/* <label className="required-field col-sm-6" htmlFor="region">Region</label> */}
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        {/* <label className="required-field col-sm-6" htmlFor="region">Region</label> */}
                         <Autocomplete
                           value={region}
                           onChange={(event, newValue) => {
@@ -227,25 +228,27 @@ const OrganisationPopUp = (props) => {
                             setState("");
                             setCity("");
                           }}
-                          id="controllable-states-demo"
+                          id='controllable-states-demo'
                           // inputValue={inputValue1}
                           // onInputChange={(event, newInputValue) => {
                           //   setInputValue1(newInputValue);
-                          // }}                 
+                          // }}
                           options={allregions}
                           style={{ width: 425 }}
-                          renderInput={(params) => <TextField {...params} label="Select Region"  />}
+                          renderInput={(params) => (
+                            <TextField {...params} label='Select Region' />
+                          )}
                         />
                         {errors.region && touched.region && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.region}
                           </span>
                         )}
-                        </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* <AddressField
+                  {/* <AddressField
                       error={errors.city}
                       touched={touched.city}
                       label="City/ Town"
@@ -263,51 +266,55 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.state}
                     /> */}
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                      {/* <label className="required-field col-sm-6" htmlFor="country">Country</label> */}
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        {/* <label className="required-field col-sm-6" htmlFor="country">Country</label> */}
                         <Autocomplete
                           value={country}
                           onChange={(event, newValue) => {
-                            let v = search(newValue,allCountries);
+                            let v = search(newValue, allCountries);
                             fetchAllState1(v);
                             setcountry(newValue);
                             setState("");
                             setCity("");
                           }}
-                          id="controllable-states-demo"
-                          options={allCountries.map((option)=>option.name)}
+                          id='controllable-states-demo'
+                          options={allCountries.map((option) => option.name)}
                           style={{ width: 425 }}
-                          renderInput={(params) => <TextField {...params} label="Select Country"  />}
+                          renderInput={(params) => (
+                            <TextField {...params} label='Select Country' />
+                          )}
                         />
                         {errors.country && touched.country && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.country}
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                      {/* <label className="required-field col-sm-6" htmlFor="state">State</label> */}
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        {/* <label className="required-field col-sm-6" htmlFor="state">State</label> */}
                         <Autocomplete
                           value={state}
                           onChange={(event, newValue) => {
-                            let v = search(newValue,allState);
+                            let v = search(newValue, allState);
                             fetchAllCity1(v);
                             setState(newValue);
                             setCity("");
                           }}
-                          id="controllable-states-demo"
-                          options={allState.map((option)=>option.name)}
+                          id='controllable-states-demo'
+                          options={allState.map((option) => option.name)}
                           style={{ width: 425 }}
-                          renderInput={(params) => <TextField {...params} label="Select State"  />}
+                          renderInput={(params) => (
+                            <TextField {...params} label='Select State' />
+                          )}
                         />
                         {errors.state && touched.state && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.state}
                           </span>
                         )}
@@ -315,22 +322,24 @@ const OrganisationPopUp = (props) => {
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                      {/* <label className="required-field col-sm-6" htmlFor="city">City</label> */}
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        {/* <label className="required-field col-sm-6" htmlFor="city">City</label> */}
                         <Autocomplete
                           value={city}
                           onChange={(event, newValue) => {
                             setCity(newValue);
                           }}
-                          id="controllable-states-demo"
-                          options={allCity.map((Option)=>Option.name)}
+                          id='controllable-states-demo'
+                          options={allCity.map((Option) => Option.name)}
                           style={{ width: 425 }}
-                          renderInput={(params) => <TextField {...params} label="Select City"  />}
+                          renderInput={(params) => (
+                            <TextField {...params} label='Select City' />
+                          )}
                         />
                         {errors.city && touched.city && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.city}
                           </span>
                         )}
@@ -346,32 +355,36 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.name}
                     /> */}
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12" >
-                      <div className="form-group"  style={{width:"425px"}} >
-                  <TextField 
-                  style={{
-                      width:"425px"
-                  }}
-                  id="standard-basic"
-                  label="Address Line" 
-                  className="form-controll"
-                  name="line1"
-                  value={values.line1}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  //error={errors.line1}
-                  touched={touched.line1}
-                  onChange={(e) => {setline1(e.target.value); }}
-                  />
-                  {errors.line1 && touched.line1 && (
-                  <span className="error-msg text-danger-ANL">{errors.line1}</span>
-                  )}
-                  </div>
-                  </div>
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group' style={{ width: "425px" }}>
+                        <TextField
+                          style={{
+                            width: "425px",
+                          }}
+                          id='standard-basic'
+                          label='Address Line'
+                          className='form-controll'
+                          name='line1'
+                          value={values.line1}
+                          handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          //error={errors.line1}
+                          touched={touched.line1}
+                          onChange={(e) => {
+                            setline1(e.target.value);
+                          }}
+                        />
+                        {errors.line1 && touched.line1 && (
+                          <span className='error-msg text-danger-ANL'>
+                            {errors.line1}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                    {/* <AddressField
+                  {/* <AddressField
 
                       error={errors.line1}
                       touched={touched.line1}
@@ -381,33 +394,37 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.line1}
                     /> */}
-                                      <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                  <TextField 
-                  style={{
-                      width:"425px"
-                  }}
-                  id="standard-basic"
-                  label="Pin Code" 
-                  type="number"
-                  className="form-control2"
-                  name="pincode"
-                  value={values.pincode}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  //error={errors.pincode}
-                  touched={touched.pincode}
-                  onChange={(e) => {setPincode(e.target.value)}}
-                  />
-                  {errors.pincode && touched.pincode && (
-                  <span className="error-msg text-danger-ANL">{errors.pincode}</span>
-                  )}
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        <TextField
+                          style={{
+                            width: "425px",
+                          }}
+                          id='standard-basic'
+                          label='Pin Code'
+                          type='number'
+                          className='form-control2'
+                          name='pincode'
+                          value={values.pincode}
+                          handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          //error={errors.pincode}
+                          touched={touched.pincode}
+                          onChange={(e) => {
+                            setPincode(e.target.value);
+                          }}
+                        />
+                        {errors.pincode && touched.pincode && (
+                          <span className='error-msg text-danger-ANL'>
+                            {errors.pincode}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  </div>
-                  </div>
-                
-                    {/* <AddressField
+
+                  {/* <AddressField
                       error={errors.pincode}
                       touched={touched.pincode}
                       label="Pincode"
@@ -416,21 +433,23 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.pincode}
                     /> */}
-                    <div className="pt-5 d-flex flex-row-reverse">
-                      <button disabled={clicked} type="submit" className="btn btn-primary ">
-                        Done
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </Formik>
-            </div>
+                  <div className='pt-5 d-flex flex-row-reverse'>
+                    <button
+                      disabled={clicked}
+                      type='submit'
+                      className='btn btn-primary '
+                    >
+                      Done
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Formik>
           </div>
         </div>
+      </div>
     </div>
   );
 };
 
 export default OrganisationPopUp;
-
-

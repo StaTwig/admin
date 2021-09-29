@@ -1,5 +1,4 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .prodTracing {
   padding-left: 3rem;
@@ -39,8 +38,6 @@
     }
   }
 
-  
-
   .panel {
     background: $eeGrey;
     padding: 1rem;
@@ -51,7 +48,5 @@
     &:first-child {
       justify-content: flex-end;
     }
-    
-    
   }
 }

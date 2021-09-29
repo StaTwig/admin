@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import EditRow from './editRow';
-import './style.scss';
+import React, { useState } from "react";
+import EditRow from "./editRow";
+import "./style.scss";
 
-const EditTable = props => {
-
+const EditTable = (props) => {
   const [visible, setVisible] = useState(false);
- return (
-    <div className="">
-      <div className="d-flex flex-column">
+  return (
+    <div className=''>
+      <div className='d-flex flex-column'>
         {/* <div className="d-flex txtColor flex-row pb-3">
           <div className={visible ? `w-15` : `w-20`}> Product Name</div>
           <div className={visible ? `w-15` : `w-20`}>
@@ -30,14 +29,21 @@ const EditTable = props => {
            <span>&nbsp;</span>
          </div>
         </div> */}
-          {props.inventories.map((inventory, index) => <EditRow key={index} {...props} {...inventory} idx={index} setVisible={setVisible} />)}
-        </div>
+        {props.inventories.map((inventory, index) => (
+          <EditRow
+            key={index}
+            {...props}
+            {...inventory}
+            idx={index}
+            setVisible={setVisible}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
 export default EditTable;
-
 
 /*<div className="input-group-append">
 <img src={downArrow} alt="downarrow" width="9" height="9" />

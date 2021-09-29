@@ -13,10 +13,9 @@ const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
 mongoose
   .connect(MONGODB_URL, {
+    keepAlive: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
   })
   .then(() => {
     //don't show the log when it is test

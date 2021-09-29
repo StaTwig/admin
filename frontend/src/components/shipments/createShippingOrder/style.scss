@@ -1,83 +1,77 @@
-@import '../../../assets/styles/global.scss';
+@import "../../../assets/styles/global.scss";
 
 .createshipping {
-       
- height: 400px;
- overflow: auto;
-                 .date-alignment{
-                text-align: right;
-                font-size:14px;
-              }
-      .reference{
-                color : #A8A8A8;
-             }
-            
-                .custom1{
-                        margin-right: 90px;
-                }
-                .custom2{
-                        margin-right: 80px;
-                      
-                }
-                .custom3{
-                        margin-right: 50px; 
-                }
-                .custom4{
-                        margin-right: 70px; 
-                }
-        
-                .form-group,
-                .input-group {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-              
-                  .reference{
-                    color: #707070;
-                    font: 15px/20px $roboto;
-                    @media (max-width: 1250px) {
-                      font: 14px/18px $roboto;
-                    }
-                  }
-              
-                  .form-control {
-                    border: none;
-                    background: transparent;
-                    border-bottom: 2px solid #d6d6d6;
-                    border-radius: 0;
-                    // color: #A8A8A8;
-                    color: #707070;
-                    flex-basis: 67%;
-                    flex-grow: inherit;
-                    font-size:14px;
-                    @media (max-width: 1250px) {
-                      font-size:13px;
-                    }
-              
-                   
-                  }
-              
-              
-                  .custom-dropdown .btn-custom-dropdown{
-                    font-size:14px;
-                    @media (max-width: 1250px) {
-                      font-size:18px;
-                    }
-                  }   
-                }
+  height: 400px;
+  overflow: auto;
+  .date-alignment {
+    text-align: right;
+    font-size: 14px;
+  }
+  .reference {
+    color: #a8a8a8;
+  }
 
+  .custom1 {
+    margin-right: 90px;
+  }
+  .custom2 {
+    margin-right: 80px;
+  }
+  .custom3 {
+    margin-right: 50px;
+  }
+  .custom4 {
+    margin-right: 70px;
+  }
+
+  .form-group,
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .reference {
+      color: #707070;
+      font: 15px/20px $roboto;
+      @media (max-width: 1250px) {
+        font: 14px/18px $roboto;
+      }
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      // color: #A8A8A8;
+      color: #707070;
+      flex-basis: 67%;
+      flex-grow: inherit;
+      font-size: 14px;
+      @media (max-width: 1250px) {
+        font-size: 13px;
+      }
+    }
+
+    .custom-dropdown .btn-custom-dropdown {
+      font-size: 14px;
+      @media (max-width: 1250px) {
+        font-size: 18px;
+      }
+    }
+  }
 }
 
-table.table th, table.table td {
-        border: 1px solid white;
-    }
-    hr {
-        border-width: 1px;
-        border-color: #808080;
-      }
-      
-.poModalTable {
+table.table th,
+table.table td {
+  border: 1px solid white;
+}
+hr {
+  border-width: 1px;
+  border-color: #808080;
+}
 
+.poModalTable {
   .form-controler {
     border: none;
     background: transparent;
@@ -87,29 +81,22 @@ table.table th, table.table td {
     color: #707070;
     flex-basis: 50%;
     flex-grow: inherit;
-    font-size:14px;
+    font-size: 14px;
     @media (max-width: 1250px) {
-      font-size:13px;
+      font-size: 13px;
     }
-
-   
   }
-        
-         th {
-                border-bottom:1px solid white;
-                border-top: 1px solid white;
-              
 
-              }
-              
-              
-              
-        .square-box {
-                width: 20px;
-                height: 20px;
-                background-color: #36C2CF;
-                border-radius: 10px;
-                margin-right: 1rem;
-        }
+  th {
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+  }
 
+  .square-box {
+    width: 20px;
+    height: 20px;
+    background-color: #36c2cf;
+    border-radius: 10px;
+    margin-right: 1rem;
+  }
 }

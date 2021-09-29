@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import { getProductList } from "../actions/productActions";
-import EmptyInventory from "../assets/icons/EmptyInventory.png";
+import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
 
 const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
-  const [validdata,setValiddata]=useState(false);
-  
+  const [validdata, setValiddata] = useState(false);
+
   useEffect(() => {
     async function fetchData() {
       const productList = await getProductList();
@@ -15,9 +15,8 @@ const ChartsPage = (props) => {
       const result = productArray.slice(0, 10);
       const productNames = result.map((product) => product.productName);
       const quantity = result.map((product) => product.quantity);
-     
-      if(productNames.length>0)
-      {
+
+      if (productNames.length > 0) {
         setValiddata(true);
         setDoughnut({
           labels: productNames,
@@ -34,7 +33,7 @@ const ChartsPage = (props) => {
                 "#F1DDC6",
                 "#BCFFF2",
                 "#FFD0CA",
-                
+
                 "#63B7AF",
                 "#FFCB91",
                 "#FFEFA1",
@@ -47,7 +46,7 @@ const ChartsPage = (props) => {
                 "#01A9B4",
                 "#87DFD6",
                 "#FBFD8A",
-                
+
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -77,7 +76,7 @@ const ChartsPage = (props) => {
                 "#F1DDC6",
                 "#BCFFF2",
                 "#FFD0CA",
-                
+
                 "#63B7AF",
                 "#F7A440",
                 "#FFCB91",
@@ -91,7 +90,7 @@ const ChartsPage = (props) => {
                 "#01A9B4",
                 "#87DFD6",
                 "#FBFD8A",
-                
+
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -115,53 +114,46 @@ const ChartsPage = (props) => {
           ],
         });
       }
-     
-     
     }
     fetchData();
   }, []);
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
-  
+
   const option = {
     maintainAspectRatio: true,
     responsive: true,
     layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top:0,
-                bottom:0
-            }
-        },
-  legend: {
-  position: 'right',
-  padding:10,
-  labels: {
-  usePointStyle: true,
-  fontFamily: 'Source Sans Pro',
-
-  }
- }
-}
+      padding: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+      },
+    },
+    legend: {
+      position: "right",
+      padding: 10,
+      labels: {
+        usePointStyle: true,
+        fontFamily: "Source Sans Pro",
+      },
+    },
+  };
 
   return (
     <div>
-      { validdata  ? 
-  (   
-    <MDBContainer>
-    <Doughnut id="doughnut-chart" data={doughnut} options={option} />
-  </MDBContainer>
-  
-   
-  )   : (
-      <div className="summaryTable justify-content-center ">
-      <div className="d-flex flex-column ">
-        <img src={EmptyInventory} height="200" width="200" />
-      </div>
-      </div>
-     )
-    }
-  </div>
+      {validdata ? (
+        // <MDBContainer>
+        <Doughnut id='doughnut-chart' data={doughnut} options={option} />
+      ) : (
+        // </MDBContainer>
+        <div className='summaryTable justify-content-center '>
+          <div className='d-flex flex-column '>
+            <img src={EmptyInventory} height='200' width='200' alt='' />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

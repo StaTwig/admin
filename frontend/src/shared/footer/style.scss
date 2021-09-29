@@ -1,4 +1,4 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 footer {
   display: flex !important;
@@ -19,7 +19,7 @@ footer {
 
   .footer-branding {
     display: flex;
-    margin-top: .2rem;
+    margin-top: 0.2rem;
 
     img {
       width: 90px;
@@ -27,7 +27,7 @@ footer {
       margin-bottom: 40px;
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
       width: 150px;
     }
 

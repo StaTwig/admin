@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import { getOrganisations } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
@@ -8,17 +7,13 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./style.scss";
-import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
 import Phone from "../../assets/icons/phone.png";
-import hide from "../../assets/icons/hide.png";
-import eye from "../../assets/icons/eye.png";
 import org from "../../assets/icons/org.png";
 import Waiting from "../../assets/icons/waiting.png";
 import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
-import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import TextField from "@material-ui/core/TextField";
 import { verifyEmailAndPhoneNo } from "../../actions/userActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -58,7 +53,6 @@ const FormPage = (props) => {
     }
     // async function check(){
     //   const data = await verifyEmailAndPhoneNo("phoneNumber=919461132817");
-    //   console.log(data);
     // }
     // check();
     fetchOrganisationType();
@@ -71,7 +65,7 @@ const FormPage = (props) => {
     }
   });
   const showOrgByType = (value) => {
-    let arr = organisations.filter((data) => data.type == value);
+    let arr = organisations.filter((data) => data.type === value);
     arr.push({ name: "Other" });
     return arr;
   };
@@ -85,15 +79,12 @@ const FormPage = (props) => {
     let orgs = organisationsArr.filter((org) =>
       org.name.toLowerCase().includes(value_new.toLowerCase())
     );
-    // orgs.push({ id: 0, name: 'Other' });
     setOrganisations(orgs);
-    // console.log(organisations);
-
     if (
       organisationsArr.filter(
-        (org) => org.name.toLowerCase() == value_new.toLowerCase()
+        (org) => org.name.toLowerCase() === value_new.toLowerCase()
       ).length &&
-      value_new != "Other"
+      value_new !== "Other"
     )
       props.onOrgChange(false);
     else {
@@ -102,31 +93,17 @@ const FormPage = (props) => {
         setValue("Other");
       }
     }
-
     props.onOrganisationChange({ id: 0, name: value_new });
   };
 
-  // console.log(firstName);
-  // console.log(lastName);
-  // console.log(orgType);
-  // console.log(email);
-  // console.log(value);
-  // console.log(mobileNumber);
   if (
     checker &&
-    firstName.length > 0 &&
-    lastName.length > 0 &&
-    orgType.length > 0 &&
-    value.length > 0 &&
-    (email.length > 0 || mobileNumber.length > 0)
+    firstName?.length > 0 &&
+    lastName?.length > 0 &&
+    orgType?.length > 0 &&
+    value?.length > 0 &&
+    (email?.length > 0 || mobileNumber?.length > 0)
   ) {
-    console.log("Entered");
-    console.log(firstName);
-    console.log(lastName);
-    console.log(orgType);
-    console.log(email);
-    console.log(value);
-    console.log(mobileNumber);
     setsignupDisable(false);
     setChecker(false);
   }
@@ -134,16 +111,16 @@ const FormPage = (props) => {
   return (
     <div className='login-wrapper'>
       <div className='container'>
-        {/* <div className="mobile-header ">
-          <div className="branding">
-            <img src={logo} alt="vaccineledger" />
+        <div className='mobile-header '>
+          <div className='branding'>
+            <img src={logo} alt='vaccineledger' />
           </div>
-        </div> */}
+        </div>
 
         <div className='row'>
           <div className='col-m-6 col-lg-6'>
             <div className='form-content'>
-              <img className='logo' src={logo} />
+              <img className='logo' src={logo} alt='Logo' />
               <h1>Welcome,</h1>
               <p>Signup to continue</p>
             </div>
@@ -178,7 +155,6 @@ const FormPage = (props) => {
                     }}
                     validate={(values) => {
                       const errors = {};
-                      console.log(values);
                       if (!values.firstName) {
                         errors.firstName = "Required";
                       }
@@ -239,7 +215,6 @@ const FormPage = (props) => {
                               value={props.firstName}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value.length);
                                 if (e.target.value.length > 0) {
                                   setFirstNameError(false);
                                 } else {
@@ -289,7 +264,6 @@ const FormPage = (props) => {
                               value={props.lastName}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value.length);
                                 if (e.target.value.length > 0) {
                                   setLastNameError(false);
                                 } else {
@@ -340,11 +314,9 @@ const FormPage = (props) => {
                               value={props.email.toLowerCase()}
                               onChange={(e) => {
                                 setChecker(true);
-                                console.log(e.target.value);
                                 if (e.target.value.length > 0) {
                                   setPhoneNumberError(false);
                                   setMailError(false);
-                                  console.log(mailError);
                                 } else {
                                   setsignupDisable(true);
                                 }
@@ -435,8 +407,6 @@ const FormPage = (props) => {
                                   ? verifyEmailAndPhoneNo(
                                       `phoneNumber=${props.phone}`
                                     ).then((v) => {
-                                      console.log("Hi");
-                                      console.log(v.data, "Data");
                                       if (v.data[0].phoneNumber) {
                                         setphoneerror(true);
                                         // setsignupDisable(true);
@@ -501,9 +471,7 @@ const FormPage = (props) => {
                                 value={orgType}
                                 onChange={(event, item) => {
                                   setChecker(true);
-                                  console.log("Hi");
                                   if (firstName.length <= 0) {
-                                    console.log("Hi1");
                                     setFirstNameError(true);
                                   }
                                   if (lastName.length <= 0) {
@@ -553,10 +521,8 @@ const FormPage = (props) => {
                       placeholder='Organisation Type'
                       onSelect={item => {
                         setChecker(true);
-                        console.log('Hi');
                         if(firstName.length<=0)
                         {
-                          console.log("Hi1");
                           setFirstNameError(true);
                         }
                         if(lastName.length <=0)
@@ -623,12 +589,7 @@ const FormPage = (props) => {
                             >
                               <Autocomplete
                                 onChange={(event, item) => {
-                                  console.log(item, "item-------------");
-                                  console.log(
-                                    "lastName Length " + lastName.length
-                                  );
                                   if (firstName.length <= 0) {
-                                    console.log("Hi1");
                                     setFirstNameError(true);
                                   }
                                   if (lastName.length <= 0) {
@@ -642,11 +603,11 @@ const FormPage = (props) => {
                                   }
                                   setFieldValue("org", item);
                                   props.onOrganisationChange(item);
-                                  if (item.name != "Other") {
+                                  if (item.name !== "Other") {
                                     setValue(item.name);
                                     props.onOrgChange(false);
                                   }
-                                  if (item.name == "Other") {
+                                  if (item.name === "Other") {
                                     props.onOrgChange(true);
 
                                     if (
@@ -681,10 +642,8 @@ const FormPage = (props) => {
                     isText={true}
                     placeholder='Organisation Name'
                     onSelect={item => {
-                      console.log("lastName Length " + lastName.length);
                       if(firstName.length<=0)
                       {
-                        console.log("Hi1");
                         setFirstNameError(true);
                       }
                       if(lastName.length <=0)
@@ -717,7 +676,6 @@ const FormPage = (props) => {
                     }}
                     groups={showOrgByType(selectedType)}
                         //   changeFn={(v, e = '') => {
-                        //     console.log(v);
                         //     setFieldValue('org', v); 
                         //     changeFn(v, e);
                         //  }}
@@ -746,7 +704,6 @@ const FormPage = (props) => {
 
                           <div className='text-center'>
                             <br></br>
-                            {console.log(signupDisable)}
                             <button
                               type='submit'
                               className='buttonS btn btn-primary mr-5'

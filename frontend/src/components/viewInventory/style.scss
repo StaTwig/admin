@@ -7,73 +7,73 @@
     padding-right: 10px;
     padding-left: 10px;
   }
-  .breadcrumb{
+  .breadcrumb {
     margin: 0px 0px 20px -10px;
   }
 
-  .full-width-ribbon{
+  .full-width-ribbon {
     position: absolute;
     left: 0;
     right: 0;
     background-color: #eaeaea;
-    
-    .filter{
+
+    .filter {
       margin-left: 9rem;
       margin-right: 0rem;
     }
   }
 
-  .rounded{
+  .rounded {
     border-radius: 15px !important;
     margin-top: 20px;
-    box-shadow: 0px 3px 10px #e4e4e4!important;
+    box-shadow: 0px 3px 10px #e4e4e4 !important;
   }
 
   .ribbon-space {
     margin-top: 4rem;
   }
 
-  .btn{
+  .btn {
     height: 35px;
     font-size: 13px;
   }
 
-  .txt{
+  .txt {
     font-weight: 600;
     font-size: small;
     align-self: center;
     overflow: hidden;
   }
-  .txt1{
+  .txt1 {
     font-weight: 400;
     font-size: small;
     align-self: center;
     overflow: hidden;
   }
-  .txt2{
+  .txt2 {
     font-weight: 400;
     font-size: small;
     align-self: center;
     overflow: hidden;
     text-align: right;
-    position:relative;
-    left:-130px; 
+    position: relative;
+    left: -130px;
   }
 
-  .txtBlue{
+  .txtBlue {
     color: #0093e9;
   }
 
-  .bg-grey{
+  .bg-grey {
     background-color: #d6d6d6 !important;
   }
 
-  .active{
+  .active {
     box-shadow: 0px 3px 6px $grey;
     background-color: #d6d6d6 !important;
   }
 
-  .font-small{
+  .font-small {
     font-size: small;
   }
 
@@ -111,7 +111,7 @@
       }
     }
 
-    .txt-outline{
+    .txt-outline {
       border: 1px solid #57c1ff;
       border-radius: 10px;
       padding: 0.2rem;
@@ -144,10 +144,9 @@
         height: 25px;
       }
 
-     
       &.truck-bg {
-        background:  #e8f4f8;
-      }                                       
+        background: #e8f4f8;
+      }
 
       &.sent-bg {
         background: #d4ebf2;
@@ -155,7 +154,6 @@
 
       &.recived-bg {
         background: #fff2e5;
-        
       }
 
       &.transit-bg {
@@ -172,16 +170,11 @@
         margin-right: 3px;
         cursor: pointer;
       }
-        .tab-item:hover {
-          border-bottom: 2px solid black;
-          color:	rgb(0,0,0);
-          font-size: 10px;
-          
-        }
-
-      
-      
-     
+      .tab-item:hover {
+        border-bottom: 2px solid black;
+        color: rgb(0, 0, 0);
+        font-size: 10px;
+      }
     }
 
     .title {
@@ -202,7 +195,7 @@
       font-size: 26px;
       margin-top: 12px;
       font-weight: bold;
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .dayStatus {
@@ -217,16 +210,15 @@
     }
 
     .truck-text {
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .sent-text {
-      color: #0093E9;
+      color: #0093e9;
     }
 
     .recived-text {
       color: $darkYellow;
-      
     }
 
     .transit-text {
