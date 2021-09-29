@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import Role from "./role";
 import { Formik } from "formik";
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import LocationAddUser from "./LocationAddUser";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
+  const [buttonText, setButtonText] = useState("NEXT")
   const [wh, setWH] = useState("Select a Location");
+  const [disableButton, setDisableBtn] = useState(true);
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
   const setRole = (role) => {
     setSelectedValue(role);
@@ -14,6 +17,7 @@ const NUModal = (props) => {
 
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
+    setDisableBtn(false);
   };
 
   const setWarehouse = (name, id) => {
@@ -21,9 +25,11 @@ const NUModal = (props) => {
     setData({ ...data, ...{ warehouse: id } });
   };
 
+  const formikRef = useRef();
   return (
     <div className="p-0">
       <Formik
+        innerRef={formikRef}
         initialValues={{ email: data?.ref, role: "", warehouse: "" }}
         validate={(values) => {
           const errors = {};
@@ -98,28 +104,48 @@ const NUModal = (props) => {
               </button>
             </div>
             <div className="p-1" style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
-              {permissions.map((permission, index) => (
-                <Role
-                  key={index}
-                  title={permission.role}
-                  description={permission.role + " Description"}
-                  selectedValue={selectedValue}
-                  setSelectedValue={setRole}
-                  i={index}
-                  value={permission.role}
-                  listPermission={permission.permissions}
-                  name="role"
-                  handleBlur={handleBlur}
-                  handleChange={handleChange}
-                />
-              ))}
-              {errors.role && touched.role && (
-                <span className="pl-3 error-msg text-danger">
-                  {errors.role}
-                </span>
+              {buttonText === "NEXT" ? (
+                <div>
+                  {permissions.map((permission, index) => (
+                    <Role
+                      key={index}
+                      title={permission.role}
+                      description={permission.role + " Description"}
+                      selectedValue={selectedValue}
+                      setSelectedValue={setRole}
+                      i={index}
+                      value={permission.role}
+                      listPermission={permission.permissions}
+                      name="role"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                    />
+                  ))}
+                   {errors.role && touched.role && (
+                       <span className="pl-3 error-msg text-danger">
+                         {errors.role}
+                      </span>
+                    )}
+                </div>
+              ) : (
+                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent:"space-evenly"}}>
+                      {/* {addresses.map((address,index) => ( */}
+                        <LocationAddUser 
+                          referance = {formikRef}
+                          addresses={addresses}
+                          onSelect = {(data) => {
+                            setWarehouse(data.title,data.id)
+                          }}
+                          name={wh}
+                        ></LocationAddUser>
+                      {/* ))} */}
+                    </div>
               )}
+              
             </div>
-            <div className="p-4 d-flex flex-column">
+            
+            
+            {/* <div className="p-4 d-flex flex-column">
               <div className="input-group">
                 <DropdownButton
                   groups={addresses}
@@ -135,12 +161,19 @@ const NUModal = (props) => {
                   {errors.warehouse}
                 </span>
               )}
-            </div>
+            </div> */}
             <div className="d-flex w-100 divider"></div>
             <div className="d-flex flex-row-reverse p-3">
-              <button type="submit" className="ml-3 btn btn-orange">
-                {props.buttonText}
-              </button>
+              {buttonText === "NEXT" ? 
+                (
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setButtonText('ADD USER'); }} disabled = {disableButton}>
+                    {buttonText}
+                  </button>
+                ) : (
+                  <button type="submit" className="ml-3 btn btn-orange">
+                    {buttonText}
+                  </button>
+                )}
               <button
                 type="button"
                 onClick={onHide}
