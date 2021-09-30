@@ -17,10 +17,22 @@ services:
     image: "redis"
     container_name: "cache"
     restart: always
+    expose:
+      - 6379
     ports:
       - "6379:6379"
     labels:
-      - traefik.enable=false
+      - traefik.enable=true
+      - traefik.tcp.routers.cache.entrypoints=redis
+      - traefik.tcp.routers.cache.service=cache
+      - traefik.tcp.routers.cache.rule=HostSNI(`test.vaccineledger.com`)
+      - traefik.tcp.routers.tls=true
+    # command: ["cache-server", "--requirepass", "password"]
+    hostname: cache
+    volumes:
+      - ./cache-data:/data
+    networks:
+      - proxy
 
   advancedanalytics:
     build: "./backend/advanced_analytics_service"
