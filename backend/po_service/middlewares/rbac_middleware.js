@@ -6,6 +6,9 @@ const client = redis.createClient({
 
 client.on("connect", () => {
   console.log("Connected to Redis");
+  client.keys("*", (err, keys) => {
+    console.log(keys);
+  });
 });
 client.on("error", (err) => {
   console.log("Error " + err);
