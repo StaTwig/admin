@@ -1,15 +1,12 @@
 const redis = require("redis");
 const client = redis.createClient({
-  host: "test.vaccineledger.com",
-  port: 6379,
-  password: "password",
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT || 6379,
+  password: process.env.REDIS_PASSWORD,
 });
 
 client.on("connect", () => {
   console.log("Connected to Redis");
-  client.keys("*", (err, keys) => {
-    console.log(keys);
-  });
 });
 client.on("error", (err) => {
   console.log("Error " + err);
