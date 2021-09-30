@@ -28,7 +28,7 @@ services:
       - traefik.tcp.routers.cache.rule=HostSNI(`test.vaccineledger.com`)
       - traefik.tcp.routers.tls=true
     # command: ["cache-server", "--requirepass", "password"]
-    hostname: cache
+    # hostname: cache
     volumes:
       - ./cache-data:/data
     # networks:
