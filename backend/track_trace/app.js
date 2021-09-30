@@ -49,15 +49,15 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/tracktracemanagement/api/", apiRouter);
 
+// app.use((err, req, res) => {
+//   if (err.name == "UnauthorizedError") {
+//     return apiResponse.unauthorizedResponse(res, err.message);
+//   }
+// });
+
 // throw 404 if URL not found
 app.all("*", function (req, res) {
   return apiResponse.notFoundResponse(res, "API not found");
-});
-
-app.use((err, req, res) => {
-  if (err.name == "UnauthorizedError") {
-    return apiResponse.unauthorizedResponse(res, err.message);
-  }
 });
 
 module.exports = app;

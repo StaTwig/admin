@@ -32,7 +32,7 @@ function sendSMS(content, mobile) {
       from: fromMobile,
       to: mobile,
     })
-    .then((message) => console.log(message.sid))
+    .then((message) => console.log(message))
     .catch((err) => console.log(err));
 }
 
@@ -43,7 +43,7 @@ function sendWhatsApp(content, mobile) {
       body: content,
       to: `whatsapp:${mobile}`,
     })
-    .then((message) => console.log("WhatsApp SENT", message.sid))
+    .then((message) => console.log("WhatsApp SENT", message))
     .catch((err) => console.log(err));
 }
 
@@ -100,8 +100,6 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
-      console.log("REGISTERING");
-      console.log(req.user);
       client.notify
         .services(twilio_service_id)
         .bindings.create({
@@ -109,11 +107,12 @@ exports.createTwilioBinding = [
           bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
           address: req.body.token_id,
         })
-        .then((binding) => console.log(binding));
+        .then((binding) => console.log(binding))
+        .catch((err) => console.log(err));
       return apiResponse.successResponse(res, "Succesfully Registered");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -162,16 +161,18 @@ exports.sendMessage = [
 exports.pushNotifications = [
   async (req, res) => {
     try {
-      pushNotification(
+      await pushNotification(
         req,
         req.body.user,
         req.body.type,
         req.body.transactionId
       );
-      if (req.body.mobile) {
-        if (req.body.whatsapp && req.body.whatsapp == true)
-          sendWhatsApp(req.body.content, req.body.mobile);
-        else sendSMS(req.body.content, req.body.mobile);
+      if (!process.env.ENVIRONMENT == "TEST") {
+        if (req.body.mobile) {
+          if (req.body.whatsapp && req.body.whatsapp == true)
+            sendWhatsApp(req.body.content, req.body.mobile);
+          else sendSMS(req.body.content, req.body.mobile);
+        }
       }
       if (req.body.email)
         sendEmail(req.body.subject, req.body.content, req.body.email);
@@ -183,10 +184,10 @@ exports.pushNotifications = [
   },
 ];
 
-function pushNotification(req, userId, type, transactionId) {
+async function pushNotification(req, userId, type, transactionId) {
   try {
-    const content = req.body.content;
-    var notification = new Notification({
+    const { content } = req.body;
+    let notification = new Notification({
       id: uuid.v4(),
       title: "Vaccine Ledger Alert",
       message: content,
@@ -196,9 +197,11 @@ function pushNotification(req, userId, type, transactionId) {
     });
     if (type == "ALERT") notification.type = "ALERT";
     else notification.type = "TRANSACTION";
-    notification.save(function (err, doc) {
-      if (err) return console.error(err);
-      console.log("Document inserted succussfully!", doc);
+    await notification.save();
+    await client.notify.services(twilio_service_id).notifications.create({
+      fcm: { notification: { body: content, title: "New Notification" } },
+      apn: { notification: { body: content, title: "New Notification" } },
+      identity: userId,
     });
   } catch (err) {
     console.log(err);
