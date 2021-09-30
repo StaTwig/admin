@@ -67,29 +67,36 @@ exports.updatePermissions = [
         );
       }
       const { role, permissions } = req.body;
-      var permsArray = [];
-      for (var i in permissions) {
-        for (const [key, value] of Object.entries(permissions[i])) {
-          if (value == true) {
-            permsArray.push(key);
-          }
-          if (value == false) {
-            permsArray = permsArray.filter((elem) => elem !== key);
+      if (role == "powerUser") {
+        return apiResponse.unauthorizedResponse(
+          res,
+          "You cannot update permissions of powerUser role."
+        );
+      } else {
+        var permsArray = [];
+        for (var i in permissions) {
+          for (const [key, value] of Object.entries(permissions[i])) {
+            if (value == true) {
+              permsArray.push(key);
+            }
+            if (value == false) {
+              permsArray = permsArray.filter((elem) => elem !== key);
+            }
           }
         }
+        let rbac_object = await RbacModel.findOneAndUpdate(
+          { role },
+          { $set: permissions, permissions: permsArray },
+          { new: true, upsert: true }
+        );
+        const result = await axios.get(
+          process.env.LEDGER + "/rbacmanagement/api/rbacCache"
+        );
+        if (result.data == undefined) {
+          return apiResponse.errorResponse(res, result.data);
+        }
+        return apiResponse.successResponseWithData(res, "Success", rbac_object);
       }
-      let rbac_object = await RbacModel.findOneAndUpdate(
-        { role },
-        { $set: permissions, permissions: permsArray },
-        { new: true, upsert: true }
-      );
-      const result = await axios.get(
-        process.env.LEDGER + "/rbacmanagement/api/rbacCache"
-      );
-      if (result.data == undefined) {
-        return apiResponse.errorResponse(res, result.data);
-      }
-      return apiResponse.successResponseWithData(res, "Success", rbac_object);
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
