@@ -6,6 +6,7 @@ import { addWarehouse } from "../../actions/userActions";
 import { Link } from "react-router-dom";
 import SuccessPopup from "../../shared/PopUp/successPopUp";
 import Modal from "../../shared/modal";
+import LocationDropdown from "./LocationDropdown";
 
 const PopUpLocation = (props) => {
   console.log(props)
@@ -99,7 +100,7 @@ const PopUpLocation = (props) => {
                 alertFlag ? "border-danger" : ""
               }`}
             >
-              <DropdownButton
+              <LocationDropdown
                 name={selectLocation}
                 // name2="Select Location"
                 onSelect={(v) => {
