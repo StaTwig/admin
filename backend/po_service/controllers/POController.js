@@ -312,72 +312,60 @@ exports.changePOStatus = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          try {
-            const { orderID, status } = req.body;
-            const po = await RecordModel.findOne({ id: orderID });
-            if (po && po.customer.customer_incharge === address) {
-              const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-              const updates = {
-                updatedOn: currDateTime,
-                status: status,
-              };
-
-              const updateData = await RecordModel.findOneAndUpdate(
-                { id: orderID },
-                {
-                  $push: { poUpdates: updates },
-                  $set: { poStatus: status },
-                }
-              );
-              try {
-                console.log(req.user);
-                let event = await Event.findOne({ transactionId: orderID });
-                console.log(event);
-                let newEvent = {
-                  eventID: "ev0000" + Math.random().toString(36).slice(2),
-                  eventTime: new Date(),
-                  transactionId: event.transactionId,
-                  eventTypePrimary: event.eventTypePrimary,
-                  eventTypeDesc: event.eventTypeDesc,
-                  actorId: req.user.id || event.actorId,
-                  actorUserId: req.user.emailId || event.actorUserId,
-                  caId: event.caId,
-                  caName: event.caName,
-                  caAddress: event.caAddress,
-                  actorOrgId: event.actorOrgId,
-                  actorOrgName: event.actorOrgName,
-                  actorOrgAddress: event.actorOrgAddress,
-                  actorWarehouseId: event.actorWarehouseId,
-                  secondaryOrgId: event.secondaryOrgId,
-                  secondaryOrgName: event.secondaryOrgName,
-                  secondaryOrgAddress: event.secondaryOrgAddress,
-                  payloadData: {
-                    data: {},
-                  },
-                };
-                if (status === "ACCEPTED")
-                  newEvent.eventTypePrimary = "RECEIVE";
-                else newEvent.eventTypePrimary = "REJECT";
-                newEvent.payloadData.data = req.body;
-                let event_body = new Event(newEvent);
-                let result = await event_body.save();
-                console.log(result);
-              } catch (error) {
-                console.log(error);
-              }
-              return apiResponse.successResponseWithData(
-                res,
-                "PO Status",
-                "Success"
-              );
-            } else {
-              return apiResponse.ErrorResponse(
-                res,
-                "You are not authorised to change the status"
-              );
-            }
-          } catch (e) {
-            return apiResponse.ErrorResponse(res, e.message);
+          const { orderID, status } = req.body;
+          const po = await RecordModel.findOne({ id: orderID });
+          if (po && po.customer.customer_incharge === address) {
+            const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+            const updates = {
+              updatedOn: currDateTime,
+              status: status,
+            };
+            const updateData = await RecordModel.findOneAndUpdate(
+              { id: orderID },
+              {
+                $push: { poUpdates: updates },
+                $set: { poStatus: status },
+              },
+              { new: true }
+            );
+            const event = await Event.findOne({ transactionId: orderID });
+            let newEvent = {
+              eventID: "ev0000" + Math.random().toString(36).slice(2),
+              eventTime: new Date(),
+              transactionId: event.transactionId,
+              eventTypePrimary: event.eventTypePrimary,
+              eventTypeDesc: event.eventTypeDesc,
+              actorId: req.user.id || event.actorId,
+              actorUserId: req.user.emailId || event.actorUserId,
+              caId: event.caId,
+              caName: event.caName,
+              caAddress: event.caAddress,
+              actorOrgId: event.actorOrgId,
+              actorOrgName: event.actorOrgName,
+              actorOrgAddress: event.actorOrgAddress,
+              actorWarehouseId: event.actorWarehouseId,
+              secondaryOrgId: event.secondaryOrgId,
+              secondaryOrgName: event.secondaryOrgName,
+              secondaryOrgAddress: event.secondaryOrgAddress,
+              payloadData: {
+                data: {},
+              },
+            };
+            if (status === "ACCEPTED") newEvent.eventTypePrimary = "RECEIVE";
+            else newEvent.eventTypePrimary = "REJECT";
+            newEvent.payloadData.data = req.body;
+            const event_body = new Event(newEvent);
+            await event_body.save();
+            return apiResponse.successResponseWithData(
+              res,
+              "PO Status",
+              updateData
+            );
+          } else {
+            return apiResponse.ErrorResponse(
+              res,
+              "You are not authorised to change the status"
+            );
           }
         } else {
           return apiResponse.forbiddenResponse(
@@ -387,20 +375,16 @@ exports.changePOStatus = [
         }
       });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
 exports.createPurchaseOrder = [
   auth,
   async (req, res) => {
     try {
-      //Use this code for reindex
-      /*  RecordModel.collection.dropIndexes(function(){
-         RecordModel.collection.reIndex(function(finished){
-                 console.log("finished re indexing")
-               })
-             })*/
       let {
         externalId,
         creationDate,
@@ -1160,7 +1144,8 @@ exports.getOrderIds = [
 
       return apiResponse.successResponseWithData(res, "Order Ids", orderID);
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1193,7 +1178,8 @@ exports.getOpenOrderIds = [
         orderID
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
