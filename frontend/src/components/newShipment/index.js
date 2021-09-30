@@ -36,6 +36,7 @@ const NewShipment = (props) => {
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
+  const [FromOrgLabel, setFromOrgLabel] = useState("Select Organisation Location");
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
@@ -518,7 +519,7 @@ console.log(user.organisation)
     <div className='NewShipment'>
       <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
       <Formik
-        // enableReinitialize={true}
+        enableReinitialize={true}
         initialValues={{
           poId: "",
           type: "",
@@ -535,6 +536,7 @@ console.log(user.organisation)
           shipmentDate: "",
           estimateDeliveryDate: "",
           products: [],
+          reset: OrderId,          
         }}
         validate={(values) => {
           const errors = {};
@@ -723,7 +725,7 @@ console.log(user.organisation)
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue(
                               "fromOrgLoc",
-                              result.poDetails[0].supplier.organisation.id
+                              ""
                             );
                             setFieldValue(
                               "toOrg",
@@ -1018,7 +1020,8 @@ console.log(user.organisation)
                             if (!res) {
                               return;
                             }
-                            console.log(v.id);
+                            setFromOrgLabel(v.label);
+                            console.log(values.fromOrgLoc)
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
@@ -1034,7 +1037,12 @@ console.log(user.organisation)
                             };
                             setAddProducts((prod) => [...prod, newArr]);
                           }}
-                          defaultInputValue={values.fromOrgLoc}
+                          value={
+                            values.fromOrgLoc === ""
+                              ? "Select Organisation Location"
+                              : { value: values.fromOrgLoc, label: FromOrgLabel}
+                          }
+
                           options={senderWarehouses.filter(
                             (ele, ind) =>
                               ind ===

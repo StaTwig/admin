@@ -8,6 +8,10 @@ const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
   const [validdata, setValiddata] = useState(false);
 
+  const truncate = (str, n) => {
+		return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+	};
+
   useEffect(() => {
     async function fetchData() {
       const productList = await getProductList();
@@ -16,10 +20,12 @@ const ChartsPage = (props) => {
       const productNames = result.map((product) => product.productName);
       const quantity = result.map((product) => product.quantity);
 
+      const productNameShorted = productNames.map((product) => truncate(product, 15));
+
       if (productNames.length > 0) {
         setValiddata(true);
         setDoughnut({
-          labels: productNames,
+          labels: productNameShorted,
           datasets: [
             {
               data: quantity,
@@ -120,7 +126,8 @@ const ChartsPage = (props) => {
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
 
   const option = {
-    maintainAspectRatio: true,
+    cutout:"75%",
+    maintainAspectRatio: false,
     responsive: true,
     layout: {
       padding: {
@@ -130,12 +137,14 @@ const ChartsPage = (props) => {
         bottom: 0,
       },
     },
-    legend: {
-      position: "right",
-      padding: 10,
-      labels: {
-        usePointStyle: true,
-        fontFamily: "Source Sans Pro",
+    plugins: {
+      legend: {
+        position: "right",
+        padding: 10,
+        labels: {
+          usePointStyle: true,
+          fontFamily: "Source Sans Pro",
+        },
       },
     },
   };
@@ -144,12 +153,17 @@ const ChartsPage = (props) => {
     <div>
       {validdata ? (
         // <MDBContainer>
-        <Doughnut id='doughnut-chart' data={doughnut} options={option} />
+        <Doughnut
+          height={250}
+          id="doughnut-chart"
+          data={doughnut}
+          options={option}
+        />
       ) : (
         // </MDBContainer>
-        <div className='summaryTable justify-content-center '>
-          <div className='d-flex flex-column '>
-            <img src={EmptyInventory} height='200' width='200' alt='' />
+        <div className="summaryTable justify-content-center ">
+          <div className="d-flex flex-column ">
+            <img src={EmptyInventory} height="200" width="200" alt="" />
           </div>
         </div>
       )}

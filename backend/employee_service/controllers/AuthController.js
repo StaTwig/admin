@@ -1151,6 +1151,34 @@ exports.getUserWarehouses = [
   },
 ];
 
+exports.pushWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const {
+        warehouseId,
+      } = req.body;
+
+      await EmployeeModel.findOneAndUpdate(
+        {
+          id: req.user.id,
+        },
+        {
+          $push: {
+            pendingWarehouseId: warehouseId,
+          },
+        }
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Warehouse added"
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.addWarehouse = [
   auth,
   async (req, res) => {
@@ -1239,7 +1267,7 @@ exports.addWarehouse = [
         },
         {
           $push: {
-            warehouseId: warehouseId,
+            pendingWarehouseId: warehouseId,
           },
         }
       );
@@ -1263,6 +1291,11 @@ exports.addWarehouse = [
         Age: "",
         Aadhar: "",
         Vaccineid: "",
+        Title:title,
+        Warehouseaddr:warehouseAddress,
+        Status:"NOTVERIFIED",
+        Misc1:"",
+        Misc2:""
       };
 
       let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
