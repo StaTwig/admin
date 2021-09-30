@@ -28,14 +28,8 @@ services:
       - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
     volumes:
       - ./cache-data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
-    command:
-      [
-        "redis-server",
-        "/usr/local/etc/redis/redis.conf",
-        "--requirepass",
-        "password",
-      ]
+      # - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "--requirepass", "password"]
 
   advancedanalytics:
     build: "./backend/advanced_analytics_service"
