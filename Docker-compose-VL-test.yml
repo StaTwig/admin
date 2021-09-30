@@ -23,8 +23,10 @@ services:
       - "6379:6379"
     labels:
       - traefik.enable=true
+      - traefik.docker.network=proxy
       - traefik.tcp.routers.cache.entrypoints=redis
       - traefik.tcp.routers.cache.rule=HostSNI(`test.vaccineledger.com`)
+      # - traefik.tcp.services.cache.loadbalancer.server.port=6379
       - traefik.tcp.routers.cache.tls=true
       - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
     # command: ["cache-server", "--requirepass", "password"]
