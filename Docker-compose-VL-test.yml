@@ -25,7 +25,8 @@ services:
       - traefik.enable=true
       - traefik.tcp.routers.cache.entrypoints=redis
       - traefik.tcp.routers.cache.rule=HostSNI(`test.vaccineledger.com`)
-      - traefik.tcp.routers.tls=true
+      - traefik.tcp.routers.cache.tls=true
+      - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
     # command: ["cache-server", "--requirepass", "password"]
     # hostname: cache
     volumes:
