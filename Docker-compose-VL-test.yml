@@ -26,9 +26,10 @@ services:
       - traefik.tcp.routers.cache.rule=HostSNI(`test.vaccineledger.com`)
       - traefik.tcp.routers.cache.tls=true
       - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
+      # - traefik.tcp.routers.cache.tls.passthrough=true
     volumes:
       - ./cache-data:/data
-    command: ["redis-server", "--requirepass", "password"]
+    command: ["redis-server", "--requirepass", "StaTwig2021"]
 
   advancedanalytics:
     build: "./backend/advanced_analytics_service"
