@@ -31,8 +31,8 @@ services:
     hostname: cache
     volumes:
       - ./cache-data:/data
-    networks:
-      - proxy
+    # networks:
+    #   - proxy
 
   advancedanalytics:
     build: "./backend/advanced_analytics_service"
