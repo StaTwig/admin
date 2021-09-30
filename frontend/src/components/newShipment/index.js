@@ -71,9 +71,9 @@ const NewShipment = (props) => {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const customStyles = {
-    placeholder: (provided, state) => ({
-      color: state.isDisabled ? "black" : "grey",
-    }),
+    // placeholder: (provided, state) => ({
+    //   color: state.isDisabled ? "black" : "grey",
+    // }),
     option: (provided, state) => ({
       ...provided,
       borderBottom: "1px solid #d6d6d6",
