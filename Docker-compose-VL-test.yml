@@ -17,8 +17,6 @@ services:
     image: "redis"
     container_name: "cache"
     restart: always
-    expose:
-      - 6379
     ports:
       - "6379:6379"
     labels:
@@ -29,7 +27,6 @@ services:
       - traefik.tcp.routers.cache.tls=true
       - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
     command: ["cache-server", "--requirepass", "password"]
-    hostname: cache
     volumes:
       - ./cache-data:/data
 
