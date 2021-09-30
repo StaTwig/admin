@@ -2,6 +2,7 @@ const redis = require("redis");
 const client = redis.createClient({
   host: "test.vaccineledger.com",
   port: 6379,
+  password: "password",
 });
 
 client.on("connect", () => {
