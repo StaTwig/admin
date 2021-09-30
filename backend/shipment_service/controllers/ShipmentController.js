@@ -4467,7 +4467,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const supplierWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`, {
                             headers: {
                                 Authorization: token,
                             },
@@ -4475,7 +4475,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const supplierOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
                       {
                         headers: {
                           Authorization: token,
@@ -4484,7 +4484,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const receiverWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`, {
                             headers: {
                                 Authorization: token,
                             },
@@ -4492,7 +4492,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const receiverOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
                       {
                         headers: {
                           Authorization: token,
