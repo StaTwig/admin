@@ -86,7 +86,7 @@ const PopUpLocation = (props) => {
       <br></br>
       <div className='ml-5'>
         <div className='col-md-12'>
-          <div className='form-group'>
+          <div className='form-group' style={{position:"relative",bottom:"2rem"}}>
             <img
               src={Location}
               className='addLocModalImg pt-2'

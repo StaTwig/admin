@@ -97,7 +97,7 @@
   }
   .dropdownIcon {
     position: absolute;
-    left: 20rem;
+    left: 21rem;
     height: 9px;
     width: 14px;
   }
@@ -109,3 +109,18 @@
     flex-direction: row;
   }
 } 
+.regionCountry {
+  color:"#707070";
+  font-size: 12px;
+
+}
+
+.title {
+  font-weight: bolder;
+  color: #0093e9;
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}

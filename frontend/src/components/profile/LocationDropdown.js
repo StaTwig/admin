@@ -78,7 +78,7 @@ const LocationDropdown = (props) => {
         <div
           ref={ref}
           className={`dropdown-menu show dropdownCard ${dClass}`}
-          style={{width:"25vw"}}
+          style={{width:"23vw"}}
         >
           {groups &&
             groups.map((item, index) => {
@@ -93,14 +93,14 @@ const LocationDropdown = (props) => {
                   >
                     {item?.warehouseInventory ? (
                       <div className="locationAdress">
-                        <span style={{fontWeight: "bolder", color:"#0093e9",width:"40%" }}>
+                        <span className="title" style={{fontWeight: "bolder", color:"#0093e9",width:"50%" }}>
                           {item.title}
                         </span>
                         
-                        <span style={{color:"#707070", fontSize:"12px", width:"60%"}}>
-                          {item?.warehouseAddress?.firstLine +
-                            " " +
-                            item?.warehouseAddress?.city 
+                        <span className="regionCountry">
+                          {item?.warehouseAddress?.region +
+                            ", " +
+                            item?.warehouseAddress?.country
                           //  + " " +
                           //   item.postalAddress
                             }
