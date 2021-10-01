@@ -19,11 +19,13 @@ const ShipmentFailPopUp = (props) => {
         </div>
         <div className='data'>
           {props.shipmentError === "Check deliveryDate" ||
-          props.shipmentError === "Check Shipment Reference ID"
+          props.shipmentError === "Check Shipment Reference ID" ||
+          props.shipmentError === "ShipmentID cannot be Empty" || 
+          props.shipmentError === "Shipment has to be delivered"
             ? null
             : "cannot be Empty"}
         </div>
-        <div className='data mb-3'> Please Try Again </div>
+        <div style = {{visibility : props.shipmentError === "ShipmentID cannot be Empty" ? "hidden" : ''}} className='data mb-3'> Please Try Again </div>
         <button className='btn-primary btn' onClick={props.onHide}>
           TRY AGAIN
         </button>

@@ -832,69 +832,78 @@ console.log(user.organisation)
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        let result = await dispatch(
-                          getViewShipment(values.shipmentID)
-                        );
-                        if (result.status !== "RECEIVED") {
-                          values.shipmentID = "";
-                          // alert("The shipment has to be delivered first");
-                          setShipmentError("Shipment has to be delivered");
+                        if(values.shipmentID.length == 0) {
+                          setShipmentError("ShipmentID cannot be Empty");
                           setOpenShipmentFail(true);
                           dispatch(turnOff());
                         }
-                        else
-                        {
-                          for (let i = 0; i < result.products?.length; i++) {
-                          if (result.products[i].productQuantityShipped) {
-                            result.products[i].productQuantity =
-                              parseInt(result.products[i].productQuantity) -
-                              parseInt(
-                                result.products[i].productQuantityShipped
-                              );
-                          }
-                          result.products[i].orderedQuantity =
-                            result.products[i].productQuantity;
-                        }
-                        dispatch(turnOff());
-                        setReceiverOrgLoc();
-                        setReceiverOrgId();
-                        setFieldValue("fromOrg", "");
-                        setFieldValue("fromOrgLoc", "");
-                        setFieldValue("rtype");
-                        setFieldValue("toOrg", "");
+                        else{
+                          let result = await dispatch(
+                            getViewShipment(values.shipmentID)
+                          );
 
-                        if (result.status === 500) {
-                          setShipmentError("Check Shipment Reference ID");
-                          setOpenShipmentFail(true);
-                        } else {
-                          setOrderDetails(result);
-                          let wa = result.receiver.warehouse;
-                          setFieldValue("toOrgLoc", "");
-                          settoOrgLocLabel("");
-                          // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
-                          let products_temp = result.products;
-                          for (let i = 0; i < products_temp.length; i++) {
-                            products_temp[i].manufacturer =
-                              result.products[i].manufacturer;
-                            products_temp[i].name =
-                              result.products[i].productName;
-                            products_temp[i].productQuantity =
-                              result.products[i].productQuantity -
-                              result.products[i].productQuantityTaggedSent;
-                            products_temp[i].type =
-                              result.products[i].productCategory;
-                            delete products_temp[i].productQuantityDelivered;
-                            products_temp[i].batchNumber = "";
-                            products_temp[i].id = result.products[i].productID;
+                          if (result.status !== "RECEIVED") {
+                            values.shipmentID = "";
+                            // alert("The shipment has to be delivered first");
+                            setShipmentError("Shipment has to be delivered");
+                            setOpenShipmentFail(true);
+                            dispatch(turnOff());
                           }
-                          console.log(products_temp);
-                          if (result.products.length > 0) {
-                            setProducts((p) => []);
-                            setAddProducts((p) => []);
-                            setFieldValue("products", products_temp);
-                          } else setFieldValue("products", []);
+                          else
+                          {
+                            for (let i = 0; i < result.products?.length; i++) {
+                            if (result.products[i].productQuantityShipped) {
+                              result.products[i].productQuantity =
+                                parseInt(result.products[i].productQuantity) -
+                                parseInt(
+                                  result.products[i].productQuantityShipped
+                                );
+                            }
+                            result.products[i].orderedQuantity =
+                              result.products[i].productQuantity;
+                          }
+                          dispatch(turnOff());
+                          setReceiverOrgLoc();
+                          setReceiverOrgId();
+                          setFieldValue("fromOrg", "");
+                          setFieldValue("fromOrgLoc", "");
+                          setFieldValue("rtype");
+                          setFieldValue("toOrg", "");
+
+                          if (result.status === 500) {
+                            setShipmentError("Check Shipment Reference ID");
+                            setOpenShipmentFail(true);
+                          } else {
+                            setOrderDetails(result);
+                            let wa = result.receiver.warehouse;
+                            setFieldValue("toOrgLoc", "");
+                            settoOrgLocLabel("");
+                            // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
+                            let products_temp = result.products;
+                            for (let i = 0; i < products_temp.length; i++) {
+                              products_temp[i].manufacturer =
+                                result.products[i].manufacturer;
+                              products_temp[i].name =
+                                result.products[i].productName;
+                              products_temp[i].productQuantity =
+                                result.products[i].productQuantity -
+                                result.products[i].productQuantityTaggedSent;
+                              products_temp[i].type =
+                                result.products[i].productCategory;
+                              delete products_temp[i].productQuantityDelivered;
+                              products_temp[i].batchNumber = "";
+                              products_temp[i].id = result.products[i].productID;
+                            }
+                            console.log(products_temp);
+                            if (result.products.length > 0) {
+                              setProducts((p) => []);
+                              setAddProducts((p) => []);
+                              setFieldValue("products", products_temp);
+                            } else setFieldValue("products", []);
+                          }
                         }
-                      }}}
+                      }
+                     }}
                     >
                       <span
                         style={{
