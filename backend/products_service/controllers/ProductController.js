@@ -274,16 +274,16 @@ exports.addProduct = [
                   pricing:req.body.pricing,
                   //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
                   unitofMeasure:{
-                    id:req.body.unitofMeasure.id,
-                    name:req.body.unitofMeasure.name
+                    id:req.body.unitofMeasure?.id,
+                    name:req.body.unitofMeasure?.name
                   },
                   characteristicSet: {
-                    temperature_max: req.body.characteristicSet.temperature_max,
-                    temperature_min: req.body.characteristicSet.temperature_min,
-                    humidity_max: req.body.characteristicSet.humidity_max,
-                    humidity_min: req.body.characteristicSet.humidity_min,
-                    pressure_max: req.body.characteristicSet.pressure_max,
-                    pressure_min: req.body.characteristicSet.pressure_min,
+                    temperature_max: req.body.characteristicSet?.temperature_max,
+                    temperature_min: req.body.characteristicSet?.temperature_min,
+                    humidity_max: req.body.characteristicSet?.humidity_max,
+                    humidity_min: req.body.characteristicSet?.humidity_min,
+                    pressure_max: req.body.characteristicSet?.pressure_max,
+                    pressure_min: req.body.characteristicSet?.pressure_min,
                   },                  
                 });
                 await product.save();
@@ -295,6 +295,7 @@ exports.addProduct = [
                   product
                 );
               } catch (e) {
+                console.log(e)
                 return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
@@ -302,6 +303,7 @@ exports.addProduct = [
             }
           });
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

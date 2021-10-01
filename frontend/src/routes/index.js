@@ -47,6 +47,7 @@ import AddNewCategory from "../containers/addNewCategory";
 import NoMatch from "../components/NoMatch";
 import ViewProduct from "../containers/viewProduct";
 import SettingsContainer from "../containers/settings";
+import AddProductContainer from "../containers/addproduct"
 
 const routes = (
   <Switch>
@@ -118,6 +119,8 @@ const routes = (
     />
     <Route path='/addNewCategory' component={requireAuth(AddNewCategory)} />
     <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
+    <Route path='/addNewProduct' component={AddProductContainer} />
+
 
     <Route component={NoMatch} />
   </Switch>

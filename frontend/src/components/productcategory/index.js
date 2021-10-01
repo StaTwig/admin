@@ -70,7 +70,7 @@ const ProductCategory = (props) => {
           className='d-flex mr-5'
           style={{ position: "relative", left: "-30px" }}
         >
-          <Link to='/addNewCategory'>
+          <Link to='/addNewProduct'>
             <button className='btn btn-yellow'>
               <img
                 src={Add}
@@ -80,7 +80,7 @@ const ProductCategory = (props) => {
                 alt='Add'
               />
               <span>
-                <b>Add New Category</b>
+                <b>Add New Product</b>
               </span>
             </button>
           </Link>
