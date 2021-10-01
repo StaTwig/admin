@@ -7,7 +7,7 @@ import Package from "../../assets/icons/package.svg";
 import qty from "../../assets/icons/TotalInventoryAdded_2.png";
 import sdate from "../../assets/icons/ShippingDate.svg";
 import Batch from "../../assets/icons/batch.png";
-import Serial from "../../assets/icons/serial.png";
+import Serial from "../../assets/icons/Serial.png";
 import Select from "react-select";
 
 import "./style.scss";

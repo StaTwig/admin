@@ -14,7 +14,7 @@ import Quantity from "../../assets/icons/TotalInventoryAdded_2.png";
 import Mfg_date from "../../assets/icons/ship_date.png";
 import Expire from "../../assets/icons/ship_date.png";
 import Batch from "../../assets/icons/batch.png";
-import Serial from "../../assets/icons/serial.png";
+import Serial from "../../assets/icons/Serial.png";
 import "./style.scss";
 
 const VerifyInventory = (props) => {
