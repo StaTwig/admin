@@ -1,16 +1,15 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 require("dotenv").config();
-var indexRouter = require("./routes/index");
-var apiResponse = require("./helpers/apiResponse");
+const indexRouter = require("./routes/index");
+const apiResponse = require("./helpers/apiResponse");
 const { RbacCache } = require("./helpers/rbacCache");
-var cors = require("cors");
+const cors = require("cors");
 
 // DB connection
-var MONGODB_URL = process.env.MONGODB_URL;
-var mongoose = require("mongoose");
+const MONGODB_URL = process.env.MONGODB_URL;
+const mongoose = require("mongoose");
 mongoose
   .connect(MONGODB_URL, {
     keepAlive: true,
@@ -33,9 +32,9 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-var db = mongoose.connection;
+const db = mongoose.connection;
 
-var app = express();
+const app = express();
 
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {

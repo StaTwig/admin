@@ -4467,7 +4467,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const supplierWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`, {
                             headers: {
                                 Authorization: token,
                             },
@@ -4475,7 +4475,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const supplierOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
                       {
                         headers: {
                           Authorization: token,
@@ -4484,7 +4484,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const receiverWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/WAR10104`, {
+                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`, {
                             headers: {
                                 Authorization: token,
                             },
@@ -4492,7 +4492,7 @@ Status: { "$in": ["RECEIVED"] }
                     );
 
                     const receiverOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/ORG10017`,
+                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
                       {
                         headers: {
                           Authorization: token,
@@ -4523,6 +4523,132 @@ Status: { "$in": ["RECEIVED"] }
             } catch (err) {
                 return apiResponse.ErrorResponse(res, err.message);
             }
+        } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+        }
+    },
+];
+
+
+exports.warehousesOrgsExportToBlockchain = [
+    auth,
+    async (req, res) => {
+        try {
+            const warehouses = await WarehouseModel.find({
+                "status": "ACTIVE"
+            });
+
+            for (i = 0; i < warehouses.length; i++) {
+
+                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+                var s = warehouses[i].id
+                const supplierWarehouseDetails = await axios.get(
+                    `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${s}`, {
+                        headers: {
+                            Authorization: token,
+                        },
+                    }
+                );
+
+                if (supplierWarehouseDetails.data.status == false) {
+                    const warehouseDetails = await WarehouseModel.findOne({
+                        id: s
+                    });
+
+                    const bc_data = {
+                        "Id": warehouseDetails.id,
+                        "Participant_id": "",
+                        "CreatedOn": "",
+                        "CreatedBy": "",
+                        "IsDelete": true,
+                        "OrganizationId": warehouseDetails.organisationId,
+                        "PostalAddress": (warehouseDetails.postalAddress == null) ? "" : warehouseDetails.postalAddress,
+                        "Region": JSON.stringify(warehouseDetails.region),
+                        "Country": JSON.stringify(warehouseDetails.country),
+                        "Location": JSON.stringify(warehouseDetails.location),
+                        "Supervisors": warehouseDetails.supervisors,
+                        "Employees": warehouseDetails.employees,
+                        "WarehouseInventory": warehouseDetails.warehouseInventory,
+                        "Name": warehouseDetails.title,
+                        "Gender": "",
+                        "Age": "",
+                        "Aadhar": "",
+                        "Vaccineid": "",
+                        "Title": warehouseDetails.title,
+                        "Warehouseaddr": warehouseDetails.warehouseAddress,
+                        "Status": warehouseDetails.status,
+                        "Misc1": "",
+                        "Misc2": ""
+
+                    }
+
+                    const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`, bc_data, {
+                        headers: {
+                           'Authorization': token,
+                        },
+                   }
+                )
+                }
+            }
+  
+            const orgs = await OrganisationModel.find({
+                "status": "ACTIVE"
+            });
+
+            for (i = 0; i < orgs.length; i++) {
+
+                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+                var s = orgs[i].id
+                const supplierOrgDetails = await axios.get(
+                    `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${s}`, {
+                        headers: {
+                            Authorization: token,
+                        },
+                    }
+                );
+
+                if (supplierOrgDetails.data.status == false) {
+                    const orgDetails = await OrganisationModel.findOne({
+                        id: s
+                    });
+
+                    const bc_data = {
+                        "Id": orgDetails.id,
+                        "Participant_id": "",
+                        "CreatedOn": "",
+                        "CreatedBy": "",
+                        "IsDelete": true,
+                        "OrganizationName": orgDetails.name,
+                        "PostalAddress": orgDetails.postalAddress,
+                        "Region": JSON.stringify(orgDetails.region),
+                        "Country": JSON.stringify(orgDetails.country),
+                        "Location": JSON.stringify(orgDetails.location),
+                        "PrimaryContractId": orgDetails.primaryContactId,
+                        "Logoid": "",
+                        "Type": orgDetails.type,
+                        "Status": 'ACTIVE',
+                        "Configuration_id": orgDetails.configuration_id,
+                        "Warehouses": orgDetails.warehouses,
+                        "Supervisors": orgDetails.supervisors,
+                        "WarehouseEmployees": orgDetails.warehouseEmployees,
+                        "Authority": ""
+                    }
+
+
+                    const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Organizations/create`, bc_data, {
+                        headers: {
+                           'Authorization': token,
+                        },
+                   }
+                )
+                }
+            }
+            return apiResponse.successResponseWithData(
+                res,
+                "Export success",
+                orgs
+            );
+
         } catch (err) {
             return apiResponse.ErrorResponse(res, err.message);
         }
