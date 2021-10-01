@@ -84,7 +84,7 @@ const UserDetails = (props) => {
 
   return (
       <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
-        <div className="card-body d-flex">
+        <div className="card-body d-flex" style={{fontWeight:"bold"}}>
           <div className="userPic w-25 text-center rounded userName">
             {user?.photoId && (
               <img
