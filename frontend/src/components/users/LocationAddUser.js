@@ -14,8 +14,12 @@ const LocationAddUser = (props) => {
 
         const selectedValue = addresses.find((address,index) => {
             if(selected.id === address.id){
-                setSelected(true);
-                setSelectedAddress(selected)
+                // setSelected(true);
+                // setSelectedAddress(selected)
+                document.getElementById(`selectedCard${index}`).style.backgroundColor = '#DFF1F2';
+            }
+            else{
+                document.getElementById(`selectedCard${index}`).style.backgroundColor = '#fff';
             }
         })
     }
@@ -24,19 +28,21 @@ const LocationAddUser = (props) => {
         <React.Fragment>
             {addresses.map((address,index) => (
                 <div 
+                    id = {`selectedCard${index}`}
                     style ={{width : "27%", cursor:"pointer", position:"relative"}}
-                    className="card flex-row justify-content-between rounded border border-white shadow bg-white mt-3 ml-2 p-3"
+                    className="card flex-row justify-content-between rounded border border-white shadow mt-3 ml-2 p-3"
                     onClick={() => {
                         onSelect(address);
-                        selectedValue(address);
-                        props.referance.current.setFieldValue('warehouse',address.id)
+                        selectedValue(address,index);
+                        props.referance.current.setFieldValue('warehouse',address.id);
+                        // document.getElementById(`selectedCard${index}`).style.backgroundColor = '#DFF1F2';
                     }}
                     key={address.id}
                     >
-                    {(selected && selectedAddress.id === address.id) ?   (
+                    {/* {(selected && selectedAddress.id === address.id) ?   (
                         <span className="selectedValue">Selected</span>
                     ) : ``}
-                
+                 */}
                     <div className="addressalign">
                         <span className = "title">{address.title}</span><br/>
                         <span className = "secondAddress">{address.warehouseAddress.city}, {address.warehouseAddress.state}, {address.warehouseAddress.country}</span><br/>

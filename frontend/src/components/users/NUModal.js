@@ -8,7 +8,9 @@ const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
   const [buttonText, setButtonText] = useState("NEXT")
   const [wh, setWH] = useState("Select a Location");
-  const [disableButton, setDisableBtn] = useState(true);
+  const [disableButton, setDisableBtn] = useState(false);
+  const [disableRoleBtn, setDisanleRole] = useState(false);
+  const [changeComponent, setChangeComponent] = useState('role');
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
   const setRole = (role) => {
     setSelectedValue(role);
@@ -17,7 +19,7 @@ const NUModal = (props) => {
 
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
-    setDisableBtn(false);
+    event.target.value.length > 0 ? setDisableBtn(true) : setDisableBtn(false);
   };
 
   const setWarehouse = (name, id) => {
@@ -26,6 +28,17 @@ const NUModal = (props) => {
   };
 
   const formikRef = useRef();
+
+  console.log(disableRoleBtn);
+
+  const unDisableNxtBtn = () => {
+    if(disableRoleBtn && disableButton)
+      return false;
+    else
+      return true
+  }
+
+  // debugger
   return (
     <div className="p-0">
       <Formik
@@ -105,7 +118,7 @@ const NUModal = (props) => {
               </button>
             </div>
             <div className="p-1" style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
-              {buttonText === "NEXT" ? (
+              {changeComponent === "role" ? (
                 <div>
                   {permissions.map((permission, index) => (
                     <Role
@@ -120,6 +133,7 @@ const NUModal = (props) => {
                       name="role"
                       handleBlur={handleBlur}
                       handleChange={handleChange}
+                      disableRoleBtn = {setDisanleRole}
                     />
                   ))}
                    {errors.role && touched.role && (
@@ -167,7 +181,7 @@ const NUModal = (props) => {
             <div className="d-flex flex-row-reverse p-3">
               {buttonText === "NEXT" ? 
                 (
-                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setButtonText('ADD USER'); }} disabled = {disableButton}>
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); }} disabled = {unDisableNxtBtn()}>
                     {buttonText}
                   </button>
                 ) : (
@@ -175,13 +189,15 @@ const NUModal = (props) => {
                     {buttonText}
                   </button>
                 )}
-              <button
-                type="button"
-                onClick={onHide}
-                className="btn btn-outline-dark"
-              >
-                CANCEL
-              </button>
+                {changeComponent === "address" && 
+                  <button
+                    type="button"
+                    onClick={(e) => {setChangeComponent('role');setButtonText('NEXT')}}
+                    className="btn btn-outline-dark"
+                  >
+                    Back
+                  </button>
+                }
             </div>
           </form>
         )}
