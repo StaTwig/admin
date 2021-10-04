@@ -157,7 +157,7 @@ const SummaryTable = (props) => {
               index < 5 ? (
                 <div className='row combine-data pl-3' key={index}>
                   <div className='rTableCell text-left'>
-                    <p className='mb-0 bold'>{shipment.receiver.org.name}</p>
+                    <p className='mb-0 bold table-text'>{shipment.receiver.org.name}</p>
                   </div>
                 </div>
               ) : null

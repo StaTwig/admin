@@ -192,6 +192,12 @@
       //margin-top: 6px;
       position: relative;
       top: 8px;
+      @media (max-width: $lg) {
+        font-size: 22px;
+      }
+      @media (max-width: $md) {
+        font-size: 20px;
+      }
     }
 
     .count2 {
@@ -200,6 +206,12 @@
       font-weight: bold;
       position: relative;
       top: 8px;
+      @media (max-width: $lg) {
+        font-size: 22px;
+      }
+      @media (max-width: $md) {
+        font-size: 20px;
+      }
     }
 
     .count3 {
@@ -208,6 +220,12 @@
       font-weight: bold;
       position: relative;
       top: 8px;
+      @media (max-width: $lg) {
+        font-size: 22px;
+      }
+      @media (max-width: $md) {
+        font-size: 20px;
+      }
     }
 
     .count4 {
@@ -216,6 +234,12 @@
       font-weight: bold;
       position: relative;
       top: 8px;
+      @media (max-width: $lg) {
+        font-size: 22px;
+      }
+      @media (max-width: $md) {
+        font-size: 20px;
+      }
     }
 
     .count5 {
@@ -224,6 +248,12 @@
       font-weight: bold;
       position: relative;
       top: 8px;
+      @media (max-width: $lg) {
+        font-size: 22px;
+      }
+      @media (max-width: $md) {
+        font-size: 20px;
+      }
     }
 
     .dayStatus {

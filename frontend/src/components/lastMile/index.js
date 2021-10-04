@@ -212,9 +212,9 @@ const LastMile = (props) => {
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
 </button> */}
           <div className='row'>
-            <div className='col tab' style={{ width: "100%" }}>
+            <div className='col tab' style={{ width: "76%" }}>
               <div className=''>
-                <TableFilter data={headers} fb='79%' />
+                <TableFilter data={headers} fb='85%' />
               </div>
             </div>
           </div>
