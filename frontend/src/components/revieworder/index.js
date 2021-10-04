@@ -15,7 +15,7 @@ const ReviewOrder = (props) => {
   });
   console.log("order is ", order);
   const dispatch = useDispatch();
-  const [setFailedPop] = useState(false);
+  const [failedPop, setFailedPop] = useState(false);
   const [openReviewOrder, setopenReviewOrder] = useState(false);
   const [modalProps, setModalProps] = useState({});
 
