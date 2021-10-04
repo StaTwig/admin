@@ -179,7 +179,7 @@ exports.pushNotifications = [
       return apiResponse.successResponse(res, "SENT");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
