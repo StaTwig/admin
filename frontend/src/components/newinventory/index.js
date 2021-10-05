@@ -38,7 +38,7 @@ const NewInventory = (props) => {
           };
         })
       );
-      const categoryArray = result.map((product) => product.type);
+      const categoryArray = result.filter((item) => item.name !== 'category').map((product) => product.type);
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)

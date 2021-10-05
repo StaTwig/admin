@@ -138,7 +138,7 @@ console.log(user.organisation)
         })
       );
       const result1 = await getProducts();
-      const categoryArray = result1.map((product) => product.type);
+      const categoryArray = result1.filter((item) => item.name !== 'category').map((product) => product.type);
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
