@@ -63,13 +63,13 @@ const Organisations = (props) => {
         <h1 className="breadcrumb dash">MANAGE ORGANISATIONS</h1>
         <SearchBar onChangeOfSearchInput={filterOrganisationListBasedOnTopPanelSearchInput} type={'searchBarTopPanel'} />
       </div>
-      <div className={ `${ window.location.pathname == '/organisation' ? `full-width1` : `full-width`}`}>
-        <div className={ `${ window.location.pathname == '/organisation' ? '' : `filter`}`}>
-          <div className={ `${window.location.pathname == '/organisation' ?`row orgTitle ` : `row userTitle`}`}>
-            <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
+      <div className='full-width'>
+        <div className='filter'>
+          <div className='row'>
+            <div className='box col-1 ml-5 mr-5 headerText headerTitles' style={{position:"relative",left:"1.1rem"}}>Name</div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText'>
+            <div className='box col-2 headerText headerTitles' style={{marginLeft:"12px"}}>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForType(!showDropDownForType);
@@ -104,11 +104,11 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText'>Postal address</div>
+            <div className='box col-2 headerText headerTitles'>Postal address</div>
             <div class="vl text-center"></div>
 
 
-            <div className='box col-1 ml-3 mr-3 headerText'>
+            <div className='box col-1 ml-2 mr-2 headerText headerTitles'>
               <span className="headerText"  
                   onClick={() => {
                     setShowDropDownForCountry(!showDropDownForCountry);
@@ -121,7 +121,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '20px',
+                  marginLeft: '68px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -141,7 +141,7 @@ const Organisations = (props) => {
               }
             </div>
             <div class="vl text-center"></div>
-            <div className='box col-1 headerText ml-3 mr-3'>
+            <div className='box col-1 headerText ml-2 mr-2 headerTitles'>
               <span className="headerText" 
                     onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
                     style={{cursor:"pointer"}}>{'Region'}
@@ -152,7 +152,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '20px',
+                  marginLeft: '68px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -171,7 +171,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-3 mr-3 headerText'>
+            <div className='box col ml-2 mr-2 headerText headerTitles'>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForStatus(!showDropDownForStatus);
@@ -184,7 +184,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '20px',
+                  marginLeft: '68px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -205,7 +205,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-2  headerText'>
+            <div className='box col ml-2  headerText headerTitles'>
               <span className="headerText" 
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
@@ -218,7 +218,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '20px',
+                  marginLeft: '38px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}

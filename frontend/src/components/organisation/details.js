@@ -51,8 +51,8 @@ const Details = (props) => {
   return (
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
-          <div className="userPic text-center rounded" 
-            style={{ width: '160px',display:"flex",flexDirection:"column",alignItems:"center" }}>
+          <div className="userPic  rounded" 
+            style={{ width: '160px',display:"flex",flexDirection:"column"}}>
             {org?.logoId && (
               <img
                 src={org?.logoId}
@@ -80,7 +80,7 @@ const Details = (props) => {
           </div>
           <div className="typeSpace">
             {openDropDown ? (
-              <span style={{position:"relative",left:"2rem", marginRight:"3rem",display:"flex",flexDirection:"row"}}>
+              <span style={{position:"relative",left:"1rem",display:"flex",flexDirection:"row",width:"100%",alignItems:"center"}}>
                 <DropdownButton
                   groups={types}
                   onSelect={(item) => {
@@ -93,14 +93,14 @@ const Details = (props) => {
                   onClickOfDropDownItem = {onClickOfDropDownItem}
                   type={'orgType'}
                 />
-                <img className = "editIcon" src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
+                <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
               </span>
             ) : (
-              <div>
-              <span className="colum text-center align-self-center" style={{position:"relative",left:"2rem", marginRight:"3rem"}}>
+              <div style = {{width:"100%",display:"flex",flexDirection:"row"}}>
+              <span className="colum text-center align-self-center" style={{position:"relative",left:"1rem", marginRight: `${org?.type === 'CUSTOMER_SUPPLIER' ? `` : `3rem`}`,display:"flex",flexDirection:"row"}}>
                 {org?.type}
                 </span>
-                <img className = "editIcon" src={editIcon} alt="edit" onClick ={(e) => {setOpenDropDown(true)}} />
+                <img className = "editIcon" style={{position:"relative",left:"2rem"}} src={editIcon} alt="edit" onClick ={(e) => {setOpenDropDown(true)}} />
               </div>
             )}
               
