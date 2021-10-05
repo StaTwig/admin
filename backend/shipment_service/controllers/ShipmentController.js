@@ -784,9 +784,9 @@ exports.createShipment = [
             {
               _id: 0,
               taggedShipments: 1,
+              products: 1
             }
           );
-
           let quantityMismatch = false;
           prevTaggedShipments.products.every((product) => {
             products.every((p) => {
@@ -829,9 +829,8 @@ exports.createShipment = [
           resultt = await logEvent(event_data);
           return resultt;
         }
-        console.log(result);
         compute(event_data).then((response) => {
-          console.log(response);
+          // console.log(response);
         });
 
         return apiResponse.successResponseWithData(

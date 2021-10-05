@@ -11,7 +11,7 @@ const ReviewOrderContainer = (props) => {
   const { id } = props.match.params;
   useEffect(() => {
     dispatch(getOrder(id)).then((results) => {
-      setOrder(results.poDetails[0]);
+      setOrder(results);
     });
   }, []);
 
