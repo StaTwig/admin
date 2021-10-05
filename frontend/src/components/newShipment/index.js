@@ -289,7 +289,7 @@ console.log(user.organisation)
     const {
       toOrg,
       airWayBillNo,
-      OrderId,
+      reset,
       labelCode,
       shipmentDate,
       estimateDeliveryDate,
@@ -304,7 +304,7 @@ console.log(user.organisation)
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: OrderId ? OrderId : null,
+        poId: reset && reset != 'Select Order ID' ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -671,6 +671,8 @@ console.log(user.organisation)
                             setAddProducts((p) => []);
                             setOrderIdSelected(true);
                             setFieldValue("OrderId", v.value);
+                            console.log(v.value, "v.value");
+                            
                             setOrderId(v.value);
                             dispatch(turnOn());
                             let result = await dispatch(getOrder(v.value));
