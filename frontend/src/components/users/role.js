@@ -35,6 +35,7 @@ const Role = (props) => {
             id={`${name}${i}`}
             value={value}
             onBlur={handleBlur}
+            checked = {selectedValue === value ? true : false}
             onChange={(e) => {
               setSelectedValue(e.currentTarget.value);
               handleChange(e);

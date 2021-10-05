@@ -3,6 +3,8 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import editIcon from "../../assets/icons/editIcon.png"
+import greenn_tick from "../../assets/icons/greenn_tick.png"
 
 export function getColor(status) {
   if (status === 'ACTIVE') {
@@ -21,6 +23,9 @@ const Details = (props) => {
   const [status, setStatus] = useState("");
   const [typeId, setTypeId] = useState("");
   const [type, setType] = useState(org?.type);
+  const [openDropDown, setOpenDropDown] = useState(false);
+
+  const { onClickOfDropDownItem } = props;
 
 
   useEffect(() => {
@@ -73,18 +78,33 @@ const Details = (props) => {
               {org?.primaryContactId}
             </div>
           </div>
-          
-          <span className="colum text-center align-self-center" style={{position:"relative",left:"2rem"}}>
-            {org?.type}
-            <DropdownButton
-              groups={types}
-              onSelect={(item) => {
-                setType(item.name);
-                typedIdset();
-              }}
-              name={type}
-            />
-          </span>
+          <div className="typeSpace">
+            {openDropDown ? (
+              <span style={{position:"relative",left:"2rem", marginRight:"3rem",display:"flex",flexDirection:"row"}}>
+                <DropdownButton
+                  groups={types}
+                  onSelect={(item) => {
+                    setType(item.name);
+                    typedIdset();
+                  }}
+                  name={type}
+                  source = {'manageOrg'}
+                  setItemType = {setType}
+                  onClickOfDropDownItem = {onClickOfDropDownItem}
+                  type={'orgType'}
+                />
+                <img className = "editIcon" src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
+              </span>
+            ) : (
+              <div>
+              <span className="colum text-center align-self-center" style={{position:"relative",left:"2rem", marginRight:"3rem"}}>
+                {org?.type}
+                </span>
+                <img className = "editIcon" src={editIcon} alt="edit" onClick ={(e) => {setOpenDropDown(true)}} />
+              </div>
+            )}
+              
+          </div>
 
           <span className="col-2 ml-5 txt1" style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
             {org?.postalAddress}

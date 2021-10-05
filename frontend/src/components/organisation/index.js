@@ -250,6 +250,7 @@ const Organisations = (props) => {
             setShowModals={setShowModals}
             modifyOrg={modifyOrg}
             types={orgTypeData}
+            onClickOfDropDownItem={onSelectionOfDropdownValue}
           />
         }) : <div>{'loading....'}</div>}
       </div>
