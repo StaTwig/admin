@@ -93,7 +93,7 @@ const LocationDropdown = (props) => {
                   >
                     {item?.warehouseInventory ? (
                       <div className="locationAdress">
-                        <span className="title" style={{fontWeight: "bolder", color:"#0093e9",width:"50%" }}>
+                        <span className="LocationTitle" style={{fontWeight: "bolder", color:"#0093e9",width:"50%" }}>
                           {item.title}
                         </span>
                         
