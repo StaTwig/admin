@@ -53,15 +53,15 @@ const AddProduct = (props) => {
     let formData = new FormData();
 
     formData.append("manufacturer", manufacturer);
-    let unitofMeasure = {
-      id: UOM,
-      name: UOM
-    }
+    // let unitofMeasure = 
     formData.append("name", productName);
     formData.append("shortName", productName);
     formData.append("externalId", Math.random().toString(36).substr(2, 7));
     formData.append("type", category);
-    formData.append("unitOfMeasure", unitofMeasure);
+    formData.append("unitofMeasure", JSON.stringify({
+      id: UOM,
+      name: UOM
+    }));
     formData.append("description", description);
     formData.append("photo", photo);
     const result = await addNewProduct(formData);
