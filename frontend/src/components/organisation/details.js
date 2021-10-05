@@ -106,15 +106,15 @@ const Details = (props) => {
               
           </div>
 
-          <span className="col-2 ml-5 txt1" style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
+          <span className="col-2 ml-5 txt1" style={{display:"flex",flexDirection:"column",position:"relative",right:"1rem"}}>
             {org?.postalAddress}
           </span>
           
-          <span className="colum txt1 text-center" style={{position:"relative", left:"13px"}}>
+          <span className="colum txt1" style={{position:"relative", left:"1.4rem"}}>
             {org?.country?.countryName}
           </span>
           
-          <span className="colum txt1 text-center" style={{position:"relative", left:"2rem"}}>
+          <span className="colum txt1 " style={{position:"relative", left:"1.5rem"}}>
             {org?.region?.regionName}
           </span>
           

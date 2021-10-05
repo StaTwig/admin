@@ -104,7 +104,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText headerTitles'>Postal address</div>
+            <div className='box col-2 headerText headerTitles' style={{marginLeft:"15px"}}>Postal address</div>
             <div class="vl text-center"></div>
 
 
@@ -121,7 +121,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '50px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
@@ -152,7 +152,7 @@ const Organisations = (props) => {
                   width: '7px',
                   height: '10px',
                   marginTop: '0px',
-                  marginLeft: '68px',
+                  marginLeft: '50px',
                   cursor:"pointer"
                 }}
                 src={sortIcon}
