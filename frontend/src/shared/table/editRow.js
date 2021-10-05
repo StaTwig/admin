@@ -239,8 +239,8 @@ const EditRow = (props) => {
                 display: "block",
               }}
             >
-              {unitofMeasure.name ? (
-                <div>{unitofMeasure.name}</div>
+              {unitofMeasure?.name ? (
+                <div>{unitofMeasure?.name}</div>
               ) : (
                 <div className='placeholder_name' style={{ fontSize: "14px" }}>
                   Unit{" "}
