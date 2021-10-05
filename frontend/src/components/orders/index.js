@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
@@ -16,6 +16,7 @@ import dropdownIcon from "../../assets/icons/drop-down.svg";
 import ExcelPopUp from "./ExcelPopup";
 import Modal from "../../shared/modal";
 import Status from "../../assets/icons/Status.svg";
+import { useReactToPrint } from 'react-to-print';
 import {
   getSentPOs,
   getReceivedPOs,
@@ -28,6 +29,12 @@ import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Orders = (props) => {
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
@@ -382,6 +389,8 @@ const Orders = (props) => {
   }, []);
 
   const onSelectionOfDropdownValue = (index, type, value) => {
+    if(value === 'Print')
+      handlePrint()
     setShowExportFilter(false);
     let url = "";
     if (visible === "one") {
@@ -527,7 +536,7 @@ const Orders = (props) => {
           isReportDisabled={!isAuthenticated("orderExportReport")}
         />
       </div>
-      <div className='ribben-space'>
+      <div ref={componentRef} className='ribben-space'>
         <Table
           {...props}
           skip={skip}
