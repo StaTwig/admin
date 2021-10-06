@@ -39,6 +39,7 @@ import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import userIcon from "../../assets/icons/brand.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
+import SettingIcon from "../../assets/icons/utilitieswhite.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
 import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
@@ -421,6 +422,14 @@ const Header = (props) => {
                         {newNotifs} new
                       </span>
                     )}
+                    <div>
+                    <img
+                        className="setting-notif-icon"
+                        src={SettingIcon}
+                        onClick={() => props.history.push("/settings")}
+                        alt='settings'
+                    />
+                    </div>
 
                     <div className='tab'>
                       <ul className='nav nav-pills'>

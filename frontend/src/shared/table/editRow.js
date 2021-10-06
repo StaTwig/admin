@@ -101,7 +101,11 @@ const EditRow = (props) => {
               <img src={mon} width='16' height='16' alt='manufacturer' />
               <span className='pl-2 text-muted'>Manufacturer</span>
             </div>
-            <div className='col-2 theader text-center pro'>
+            <div className={`col-2 theader ${
+              addMore
+                ? "batch-add-inventory"
+                : "Bbatch-add-inventory"
+            }`}>
                 <img src={Batch} width='16' height='16' alt='Batch' />
                 <span className='pl-2 text-muted'>Batch Number</span>
               </div>
