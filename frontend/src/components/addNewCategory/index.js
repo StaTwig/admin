@@ -39,7 +39,7 @@ const AddCategory = (props) => {
     formData.append("shortName", "category");
     formData.append("externalId", Math.random().toString(36).substr(2, 7));
     formData.append("type", categoryName);
-    formData.append("unitOfMeasure", unitofMeasure);
+    formData.append("unitofMeasure", unitofMeasure);
     formData.append("description", description);
     formData.append("photo", photo);
     const result = await addNewProduct(formData);
