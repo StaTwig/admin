@@ -161,12 +161,7 @@ exports.sendMessage = [
 exports.pushNotifications = [
   async (req, res) => {
     try {
-      await pushNotification(
-        req,
-        req.body.user,
-        req.body.type,
-        req.body.transactionId
-      );
+      await pushNotification(req);
       if (!process.env.ENVIRONMENT == "TEST") {
         if (req.body.mobile) {
           if (req.body.whatsapp && req.body.whatsapp == true)
@@ -184,14 +179,14 @@ exports.pushNotifications = [
   },
 ];
 
-async function pushNotification(req, userId, type, transactionId) {
+async function pushNotification(req) {
   try {
-    const { content } = req.body;
+    const { content, user, type, transactionId } = req.body;
     let notification = new Notification({
       id: uuid.v4(),
       title: "Vaccine Ledger Alert",
       message: content,
-      user: userId,
+      user: user,
       eventType: req.body.eventType,
       transactionId: transactionId,
     });
@@ -201,7 +196,7 @@ async function pushNotification(req, userId, type, transactionId) {
     await client.notify.services(twilio_service_id).notifications.create({
       fcm: { notification: { body: content, title: "New Notification" } },
       apn: { notification: { body: content, title: "New Notification" } },
-      identity: userId,
+      identity: user,
     });
   } catch (err) {
     console.log(err);
