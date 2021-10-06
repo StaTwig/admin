@@ -1361,7 +1361,7 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
   async (req, res) => {
     try {
               const { organisationId, role } = req.user;
-              const { skip, limit } = req.query;
+              // const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let fromCustomer = req.query.from ? req.query.from : undefined;
@@ -1428,7 +1428,7 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
           
               try {
                 let inboundPOsCount = await RecordModel.count(whereQuery);
-                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
+                RecordModel.find(whereQuery).sort({ createdAt: -1 }).then((inboundPOList) => {
                   let inboundPORes = [];
                   let findInboundPOData = inboundPOList.map(async (inboundPO) => {
                     let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
@@ -1530,7 +1530,7 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
   async (req, res) => {
     try {
               const { organisationId, role, id } = req.user;
-              const { skip, limit } = req.query;
+              // let { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let toSupplier = req.query.to ? req.query.to : undefined;
@@ -1597,7 +1597,7 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
 
               try {
                 let outboundPOsCount = await RecordModel.count(whereQuery);
-                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                RecordModel.find(whereQuery).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))

@@ -302,7 +302,7 @@ const ShipmentAnalytic = (props) => {
       { key: "excel", value: "Excel", checked: false },
       { key: "pdf", value: "PDF", checked: false },
       { key: "email", value: "Mail", checked: false },
-      { key: "print", value: "Print", checked: false },
+      // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
 

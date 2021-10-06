@@ -3428,7 +3428,7 @@ exports.exportInboundShipments = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      // const { skip, limit } = req.query;
       const { warehouseId } = req.user;
       let currentDate = new Date();
       let fromDateFilter = 0;
@@ -3514,8 +3514,6 @@ exports.exportInboundShipments = [
       try {
         let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
-          .skip(parseInt(skip))
-          .limit(parseInt(limit))
           .sort({ createdAt: -1 })
           .then((inboundShipmentsList) => {
             let inboundShipmentsRes = [];
@@ -3600,7 +3598,7 @@ exports.exportOutboundShipments = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      // const { skip, limit } = req.query;
       const { warehouseId } = req.user;
       let currentDate = new Date();
       let fromDateFilter = 0;
@@ -3683,8 +3681,6 @@ exports.exportOutboundShipments = [
       try {
         let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
-          .skip(parseInt(skip))
-          .limit(parseInt(limit))
           .sort({ createdAt: -1 })
           .then((outboundShipmentsList) => {
             let outboundShipmentsRes = [];
