@@ -138,7 +138,7 @@ console.log(user.organisation)
         })
       );
       const result1 = await getProducts();
-      const categoryArray = result1.filter((item) => item.name !== 'category').map((product) => product.type);
+      const categoryArray = result1.map((product) => product.type);
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
@@ -1387,7 +1387,7 @@ console.log(user.organisation)
               <label htmlFor='productDetails' className='headsup'>
                 Product Details
               </label>
-              {OrderDetails?.products?.length > 0 && (
+              {OrderDetails?.products?.length > 0 ? (
                 <EditTable
                   check='1'
                   warehouseID={senderOrgId}
@@ -1430,7 +1430,12 @@ console.log(user.organisation)
                   }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              )}
+              ) : products?.length <= 0 && (<div>
+                <h4 style={{fontSize: "100%", marginRight: '550px', marginLeft: '-105px', color: 'red'}} className="mt-5 ">*No products available</h4>
+                </div> )
+                }
+
+              
               {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
@@ -1568,7 +1573,7 @@ console.log(user.organisation)
                 </div>
               </div> */}
             </div>
-            {errors.products && touched.products && (
+      {errors.products && touched.products && (
               <span className='error-msg text-danger-DD'>
                 {errors.products}
               </span>

@@ -30,7 +30,7 @@ const NewInventory = (props) => {
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
       setProducts(
-        result.map((item) => {
+        result.filter((item) => item.name !== 'category').map((item) => {
           return {
             value: item.name,
             label: item.name,
@@ -38,7 +38,7 @@ const NewInventory = (props) => {
           };
         })
       );
-      const categoryArray = result.filter((item) => item.name !== 'category').map((product) => product.type);
+      const categoryArray = result.map((product) => product.type);
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
