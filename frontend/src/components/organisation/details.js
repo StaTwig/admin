@@ -3,8 +3,8 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
-import editIcon from "../../assets/icons/editIcon.png"
-import greenn_tick from "../../assets/icons/greenn_tick.png"
+import editIcon from "../../assets/icons/editIcon.png";
+import greenn_tick from "../../assets/icons/greenn_tick.png";
 
 export function getColor(status) {
   if (status === 'ACTIVE') {
@@ -47,7 +47,31 @@ const Details = (props) => {
       }
     });
   }
-  
+
+    const changeBtnStatus = (status) => {
+      debugger
+      if (status == "ACTIVE") {
+        modifyOrg({
+          id: org?.id,
+          status: "Non Active",
+          index: org?.ridex,
+          type: type,
+          typeId: typeId,
+        });
+        changeStatus("Non Active");
+      } else {
+        modifyOrg({
+          id: org?.id,
+          status: "ACTIVE",
+          index: org?.ridex,
+          type: type,
+          typeId: typeId,
+        });
+        changeStatus("ACTIVE");
+      }
+    }
+
+
   return (
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
@@ -118,15 +142,21 @@ const Details = (props) => {
             {org?.region?.regionName}
           </span>
           
-          <span className="colum txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"3rem"}} >
-          {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
+          <span className="colum txt1 font-weight-bold text-secondory text-center switchBar" 
+               >
+                  <label class="switch">
+                    <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
+                    <span class="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>
+                 </label>
+
+           {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">Non Active</div>}
           </span>
           
-          <span className="colum txt1 text-center"  style={{position:"relative", left:"3rem"}}>
+          <span className="colum txt1 text-center">
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          
-          <div className="colum txt1" style={{position:"relative", left:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center"}}>
+          {/* <div className="colum txt1" style={{position:"relative", left:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center"}}>
             <button
               type="button"
               onClick={() => {
@@ -172,7 +202,7 @@ const Details = (props) => {
                 Reject
               </button>
             )}
-          </div>
+          </div> */}
         </div>
     </div>
   );

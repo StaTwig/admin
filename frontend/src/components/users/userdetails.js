@@ -136,7 +136,7 @@ const UserDetails = (props) => {
             {user?.emailId}
           </span>
           <span className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
-           {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
+           {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">Non Active</div>}
           
           </span>
           <div

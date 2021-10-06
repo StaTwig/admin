@@ -236,9 +236,10 @@ const Organisations = (props) => {
                   onClickOfDropDownItem={onSelectionOfDropdownValue}
                 />}
             </div>
-            <div className='box col headerText'>
+            {/* <div className='box col headerText'>
               <span className="headerText" style={{ marginRight: '72px' }}>{''}</span>
-            </div></div>
+            </div> */}
+            </div>
         </div>
       </div>
       <div className="details-card">
