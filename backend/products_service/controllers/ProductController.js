@@ -262,7 +262,7 @@ exports.addProduct = [
                 //     `${dir}/${req.body.productName}.png`
                 //   );
                 // }
-
+                console.log(req.body.unitofMeasure)
                 const product_unique = uniqid("prod-");
                 const product = new ProductModel({
                   id: product_unique,
@@ -285,7 +285,7 @@ exports.addProduct = [
                 });
                 await product.save();
                 console.log(product)
-
+                ProductModel.findOneAndDelete({type: req.body.type, name: 'category'}).then((res)=> console.log(res)).catch((err)=>console.log(err))
                 return apiResponse.successResponseWithData(
                   res,
                   "Success",
