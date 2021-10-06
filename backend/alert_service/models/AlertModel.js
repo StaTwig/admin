@@ -1,5 +1,5 @@
-var mongoose = require("mongoose");
-AlertSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const AlertSchema = new mongoose.Schema(
   {
     id: { type: String, unique: true },
     username: String,
