@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 import Footer from "../footer";
 import HomeIcon from "../../assets/icons/Overviewselected.png";
@@ -8,7 +7,7 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
