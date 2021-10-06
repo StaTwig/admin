@@ -181,13 +181,13 @@ exports.pushNotifications = [
 
 async function pushNotification(body) {
   try {
-    const { content, user, type, transactionId } = body;
+    const { content, user, type, transactionId, eventType } = body;
     let notification = new Notification({
       id: uuid.v4(),
       title: "Vaccine Ledger Alert",
       message: content,
       user: user,
-      eventType: req.body.eventType,
+      eventType: eventType,
       transactionId: transactionId,
     });
     if (type == "ALERT") notification.type = "ALERT";

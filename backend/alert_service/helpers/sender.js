@@ -1,16 +1,26 @@
 const axios = require("axios");
 
-exports.sendNotification = async function (
-  user,
-  email,
-  content,
-  subject,
-  mobile
-) {
-  let res = axios.post(process.env.NOTICATION, {
+exports.sendNotification = async function (data) {
+  const {
     user,
     email,
-    whatsapp: false,
     mobile,
+    subject,
+    content,
+    type,
+    eventType,
+    transactionId,
+  } = data;
+  let res = await axios.post(process.env.NOTIFICATION, {
+    user,
+    email,
+    mobile,
+    whatsapp: false,
+    subject,
+    content,
+    type,
+    eventType,
+    transactionId,
   });
+  return res.data;
 };
