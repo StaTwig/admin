@@ -38,7 +38,7 @@ const NUModal = (props) => {
       return true
   }
 
-  // debugger
+  debugger
   return (
     <div className="p-0">
       <Formik
@@ -151,6 +151,7 @@ const NUModal = (props) => {
                           onSelect = {(data) => {
                             setWarehouse(data.title,data.id)
                           }}
+                          selectedAddress = {data}
                           name={wh}
                         ></LocationAddUser>
                       {/* ))} */}
