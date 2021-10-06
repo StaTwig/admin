@@ -161,7 +161,7 @@ exports.sendMessage = [
 exports.pushNotifications = [
   async (req, res) => {
     try {
-      await pushNotification(req);
+      await pushNotification(req.body);
       if (!process.env.ENVIRONMENT == "TEST") {
         if (req.body.mobile) {
           if (req.body.whatsapp && req.body.whatsapp == true)
@@ -179,9 +179,9 @@ exports.pushNotifications = [
   },
 ];
 
-async function pushNotification(req) {
+async function pushNotification(body) {
   try {
-    const { content, user, type, transactionId } = req.body;
+    const { content, user, type, transactionId } = body;
     let notification = new Notification({
       id: uuid.v4(),
       title: "Vaccine Ledger Alert",
