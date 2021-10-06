@@ -1451,7 +1451,7 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
                       });
                            let creatorOrganisation = await OrganisationModel.findOne(
                       {
-                              id: creator.organisationId
+                              id: creator?.organisationId
                       });
 
                     let supplierOrganisation = await OrganisationModel.findOne(
