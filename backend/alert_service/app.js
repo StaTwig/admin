@@ -2,12 +2,13 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const cron = require("node-cron");
-require("dotenv").config();
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const alerts = require("./helpers/alertGenerator");
 const events = require("./models/EventModal");
+
+require("dotenv").config();
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
 mongoose
@@ -41,10 +42,10 @@ eventEmitter.on("change", (change) => {
   }
 });
 
-const CALCULATE_EXPIRED_CRON_TIME = `00 00 9 * * 1`;
+const CALCULATE_EXPIRED_CRON_TIME = `00 9 * * 1-5`;
 
 cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
-  console.log("Checking Product Expiry", new Date());
+  console.log("RUNNING CRON JOBS ==> ", new Date());
   alerts.checkProductExpiry();
   alerts.checkProductNearExpiry();
 });

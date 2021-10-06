@@ -1,6 +1,4 @@
 const Alert = require("../models/AlertModel");
-const Event = require("../models/EventModal");
-const User = require("../models/UserModel");
 const Atoms = require("../models/AtomsModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -183,6 +181,27 @@ async function productExpiryEvent(
   }
 }
 
-exports.checkProductExpiry = checkProductExpiry;
-exports.generateAlert = generateAlert;
-exports.checkProductNearExpiry = checkProductNearExpiry;
+async function ordersPending() {
+  try {
+    for await (const order of OrderModel.find({
+      poStatus: "CREATED",
+    })) {
+      let event = {
+        transactionId: order.id,
+        actorOrgId: order.supplier.supplierOrganisation,
+        secondaryOrgId: order.customer.customerOrganisation,
+        eventTypePrimary: "ORDER",
+        eventTypeDesc: "PENDING",
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+module.exports = {
+  generateAlert,
+  checkProductExpiry,
+  checkProductNearExpiry,
+  ordersPending,
+};

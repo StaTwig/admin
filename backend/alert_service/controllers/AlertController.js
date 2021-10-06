@@ -1,7 +1,6 @@
 const apiResponse = require("../helpers/apiResponse");
 const { body } = require("express-validator");
 const auth = require("../middlewares/jwt");
-//models
 const utility = require("../helpers/utility");
 const Alerts = require("../models/AlertModel");
 const Notification = require("../models/NotificationsModel");
