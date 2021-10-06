@@ -130,8 +130,9 @@ const NewOrder = (props) => {
       // setSenderWarehouses(warehouses.data);
 
       const result = await getProducts();
+      let res = result.filter(item => item.name !== 'category')
       setProducts(
-        result.map((item) => {
+        res.map((item) => {
           return {
             value: item.name,
             label: item.name,
