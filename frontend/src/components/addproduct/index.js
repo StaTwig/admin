@@ -201,7 +201,7 @@ const AddProduct = (props) => {
               {" "}
               <button
                 className='btn btn-outline-primary mr-4'
-                onClick={() => props.history.push("/productlist")}
+                onClick={() => props.history.push("/productcategory")}
               >
                 CANCEL
               </button>

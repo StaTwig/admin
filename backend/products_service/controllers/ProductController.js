@@ -285,7 +285,8 @@ exports.addProduct = [
                 });
                 await product.save();
                 console.log(product)
-                ProductModel.findOneAndDelete({type: req.body.type, name: 'category'}).then((res)=> console.log(res)).catch((err)=>console.log(err))
+                if(req.body.name !== 'category')
+                    ProductModel.findOneAndDelete({type: req.body.type, name: 'category'}).then((res)=> console.log(res)).catch((err)=>console.log(err))
                 return apiResponse.successResponseWithData(
                   res,
                   "Success",
