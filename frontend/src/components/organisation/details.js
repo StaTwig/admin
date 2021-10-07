@@ -53,12 +53,12 @@ const Details = (props) => {
       if (status == "ACTIVE") {
         modifyOrg({
           id: org?.id,
-          status: "Non Active",
+          status: "DEACTIVATED",
           index: org?.ridex,
           type: type,
           typeId: typeId,
         });
-        changeStatus("Non Active");
+        changeStatus("DEACTIVATED");
       } else {
         modifyOrg({
           id: org?.id,
@@ -149,7 +149,7 @@ const Details = (props) => {
                     <span class="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>
                  </label>
 
-           {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">Non Active</div>}
+           {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
           <span className="colum txt1 text-center">

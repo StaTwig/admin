@@ -180,13 +180,13 @@ const NUModal = (props) => {
             </div> */}
             <div className="d-flex w-100 divider"></div>
             <div className="d-flex flex-row-reverse p-3">
-              {buttonText === "NEXT" ? 
+              {changeComponent === "role" ? 
                 (
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); }} disabled = {unDisableNxtBtn()}>
                     {buttonText}
                   </button>
                 ) : (
-                  <button type="submit" className="ml-3 btn btn-orange">
+                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange">
                     {buttonText}
                   </button>
                 )}
