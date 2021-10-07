@@ -101,7 +101,6 @@ const TrackContainer = (props) => {
             .concat(result.data.data.trackedShipment)
             .concat(result.data.data.outwardShipmentsArray);
       }
-
       setShippmentChainOfCustodyData(finalArr);
     } else {
       setPoChainOfCustodyData([]);
