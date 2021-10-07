@@ -1818,9 +1818,9 @@ function buildPdfReport(req,res,data){
   let finalPath = resolve("./models/pdftemplate.html")
     let html = fs.readFileSync(finalPath, "utf8");
     var options = {
-      format: "A4",
+      format: "A3",
       orientation: "landscape",
-      border: "10mm",
+      border: "6mm",
       header: {
           height: "15mm",
           contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
