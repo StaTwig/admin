@@ -88,7 +88,8 @@ const Header = (props) => {
     setSearchType(e.type);
     axios
       .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) => setOptions([...resp.data.data]));
+      .then((resp) => setOptions( [...new Set(resp.data.data.map( (item) => {return item._id} ))].map(((item) => {return {_id: item}}))  ));
+     
   }
 
   const closeModalFail = () => {
