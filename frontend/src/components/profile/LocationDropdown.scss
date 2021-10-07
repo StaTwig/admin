@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .custom-dropdown {
-  width: 11vw;
+  width: 15vw;
   position: relative;
   right: 0rem;
   flex-basis: 100%;
@@ -52,6 +52,7 @@
     right: 0;
   }
   .btn-custom-dropdown1 {
+    font-weight: bold;
     border: none;
     display: flex;
     justify-content: space-between;

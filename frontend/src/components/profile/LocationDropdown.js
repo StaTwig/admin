@@ -60,7 +60,7 @@ const LocationDropdown = (props) => {
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <div className={`${name?.length > 20 && "textNeg"}`}>
+          <div className={`${name?.length > 20 && "textNeg"}`} style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:"300px"}}>
             {useParse ? parse(name) : name.split("|")[0] }
           </div>
           <br></br>
