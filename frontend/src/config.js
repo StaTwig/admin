@@ -398,7 +398,8 @@ export function config() {
       searchProduct: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      // getAlerts: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getAlerts: `${PROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications?type=`,
       getExportFileForInboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipments`,
       getExportFileForInboundPurchaseOrdersUrl: `${PROD_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
@@ -528,7 +529,8 @@ export function config() {
       searchProduct: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
-      getAlerts: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      // getAlerts: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`,
+      getAlerts: `${UNICEFTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications?type=`,
       getExportFileForInboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportInboundShipments`,
       getExportFileForOutboundShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/exportOutboundShipments`,
       getExportFileForInboundPurchaseOrdersUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportInboundPurchaseOrders`,
@@ -538,7 +540,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `unicef`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
