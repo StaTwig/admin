@@ -135,7 +135,15 @@ const UserDetails = (props) => {
           <span className={` w-25 text-left ${viewButton ? `` : `align-self-center`} emailText`}>
             {user?.emailId}
           </span>
-          <span className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
+          <span
+            style={{display:"flex",flexDirection:"row",justifyContent:"center"}}
+           className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
+
+              <label className="switch">
+                    <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
+                    <span className="slider round" onClick={(e) => { status === "ACTIVE" ? true : false }} checked={status === "ACTIVE" ? true : false}></span>
+              </label>
+
            {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           
           </span>

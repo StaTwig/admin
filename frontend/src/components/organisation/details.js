@@ -144,9 +144,9 @@ const Details = (props) => {
           
           <span className="colum txt1 font-weight-bold text-secondory text-center switchBar" 
                >
-                  <label class="switch">
+                  <label className="switch">
                     <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
-                    <span class="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>
+                    <span className="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>
                  </label>
 
            {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}

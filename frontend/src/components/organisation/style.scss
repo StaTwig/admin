@@ -190,8 +190,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 53px;
-  height: 25px;
+  width: 50px;
+  height: 22px;
 }
 
 .switch input { 
@@ -215,10 +215,10 @@
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 16px;
+  width: 16px;
   left: 4px;
-  bottom: 4px;
+  bottom: 3px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
@@ -249,9 +249,8 @@ input:checked + .slider:before {
 
 .switchBar {
   position: relative;
-  right: 2.5rem;
+  right: 4.5rem;
   display: flex;
   flex-direction: row;
-  justify-content:space-between;
-  align-items: center;
+  justify-content: space-evenly;
 }
