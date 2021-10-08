@@ -108,7 +108,7 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
 
-            <div className='box col-1 ml-2 mr-2 headerText headerTitles'>
+            <div className='box ml-2 mr-2 headerText headerTitles' style={{flex:"0 0 10.333333%", maxWidth:"10.333333%"}}>
               <span className="headerText"  
                   onClick={() => {
                     setShowDropDownForCountry(!showDropDownForCountry);

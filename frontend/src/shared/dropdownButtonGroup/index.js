@@ -16,6 +16,7 @@ const dropdownButtonGroup = (props) => {
   const useParse = typeName && typeName?.includes("<");
   return (
     <div
+      style={{  right: `${props.type === "orgType" ? `1rem` : ``}`}}
       className={`custom-dropdown form-control ${error ? "border-danger" : ""}`}
     >
       <button
@@ -27,7 +28,7 @@ const dropdownButtonGroup = (props) => {
           setMenu(!menu);
         }}
       >
-        {!useParse && <span className="text">{typeName}</span>}
+        {!useParse && <span style={{  width: `${props.type === "orgType" ? `100px` : `130px`}`}} className="text">{typeName}</span>}
         {useParse && <span className="text">{parse(typeName)}</span>}
         <img src={upDownArrow} alt="downarrow" width="9" height="9" />
       </button>

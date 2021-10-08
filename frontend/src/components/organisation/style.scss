@@ -249,8 +249,8 @@ input:checked + .slider:before {
 
 .switchBar {
   position: relative;
-  right: 4.5rem;
+  right: 0.5rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }

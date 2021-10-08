@@ -89,7 +89,7 @@ const Details = (props) => {
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   
-                  maxWidth: '100%'
+                  maxWidth: '75%'
             }}>{org?.name}</h6>
             <div className="blockquote-footer" style={{
                   whiteSpace: 'nowrap',
@@ -120,8 +120,18 @@ const Details = (props) => {
                 <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
               </span>
             ) : (
-              <div style = {{width:"100%",display:"flex",flexDirection:"row"}}>
-              <span className="colum text-center align-self-center" style={{position:"relative",left:"1rem", marginRight: `${org?.type === 'CUSTOMER_SUPPLIER' ? `` : `3rem`}`,display:"flex",flexDirection:"row"}}>
+              <div style = {{width:"90%",display:"flex",flexDirection:"row"}}>
+              <span className="colum  align-self-center"
+                style={{
+                  position:"relative",
+                  // left:"1rem", 
+                  marginRight: `${org?.type === 'CUSTOMER_SUPPLIER' || 'IMPLEMENTATION PARTNER' ? `` : `3rem`}`,
+                  display:"flex",
+                  flexDirection:"row",
+                  whiteSpace:"nowrap",
+                  overflow:"hidden",
+                  textOverflow:"ellipsis",
+                  maxWidth:"90%"}}>
                 {org?.type}
                 </span>
                 <img className = "editIcon" style={{position:"relative",left:"2rem"}} src={editIcon} alt="edit" onClick ={(e) => {setOpenDropDown(true)}} />
@@ -130,15 +140,20 @@ const Details = (props) => {
               
           </div>
 
-          <span className="col-2 ml-5 txt1" style={{display:"flex",flexDirection:"column",position:"relative",right:"1rem"}}>
+          <span className="col-2 ml-5 txt1" 
+            style={{
+             display:"flex",
+             flexDirection:"column",
+             position:"relative",
+             right:"2rem"}}>
             {org?.postalAddress}
           </span>
           
-          <span className="colum txt1" style={{position:"relative", left:"1.4rem"}}>
+          <span className="colum txt1" style={{position:"relative", left:"0.4rem"}}>
             {org?.country?.countryName}
           </span>
           
-          <span className="colum txt1 " style={{position:"relative", left:"1.5rem"}}>
+          <span className="colum txt1 " style={{position:"relative", left:"0.5rem"}}>
             {org?.region?.regionName}
           </span>
           
@@ -152,7 +167,12 @@ const Details = (props) => {
            {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
-          <span className="colum txt1 text-center">
+          <span 
+            className="colum txt1 text-center"
+            style={{
+              display:"flex",
+              flexDirection:"row",
+              justifyContent:"center"}}>
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          

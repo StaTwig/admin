@@ -90,11 +90,16 @@ const Users = (props) => {
       </div>
       <div className="full-width">
         <div className="filter">
-          <div className="row" style={{ flexBasis: '95%',margin:"unset" }}>
-            <span className="col box headerText">Name</span>
+          <div className="row" style={{ flexBasis: '95%' }}>
+            <span
+               className="col box headerText col-1 ml-5 mr-5"
+               style={{position:"relative",
+                left:"15px",
+                justifyContent:"unset"}}
+               >Name</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText'>
+            <div className='col box headerText' style={{paddingLeft:"10px"}}>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForRole(!showDropDownForRole);
@@ -128,16 +133,16 @@ const Users = (props) => {
             </div>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText">Location</span>
+            <span className="headerText col box headerText pl-2">Location</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText">Wallet address</span>
+            <span className="headerText col box headerText pl-2">Wallet address</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText">Email/Mobile</span>
+            <span className="headerText col box headerText pl-2">Email/Mobile</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText'>
+            <div className='col box headerText pl-2'>
               <span className="headerText" onClick={() => {
                 setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
               }} style={{cursor:"pointer"}}>{'Account Status'}</span>
@@ -147,7 +152,7 @@ const Users = (props) => {
                 width: '7px',
                 height: '10px',
                 marginTop: '0px',
-                marginLeft: '68px',
+                marginLeft: '50px',
                 cursor:"pointer"
               }}
                 src={sortIcon}
@@ -166,7 +171,7 @@ const Users = (props) => {
                 />
               }
             </div>
-            <div className="col box">
+            <div className="col box pl-3">
               <button className='btn btn-primary'
                 onClick={() => setShowFilterDropDown(!showFilterDropDown)}
               >

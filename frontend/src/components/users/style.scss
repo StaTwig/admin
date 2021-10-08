@@ -147,7 +147,7 @@
 .roleText {
   width: 24% !important;
   position: relative;
-  left: -80px;
+  left: -66px;
   // font-weight: 400;
   font-size: small;
   align-self: center;
@@ -156,7 +156,7 @@
 .locationText {
   width: 20% !important;
   position: relative;
-  left: -50px;
+  left: -60px;
   // font-weight: 400;
   font-size: small;
   // align-self: center;
@@ -171,14 +171,14 @@
 .emailText {
   width: 24% !important;
   position: relative;
-  left: 5px;
+  right: 7px;
   display: flex;
   justify-content: center;
 }
 
 .accountText {
   position: relative;
-  left: -60px;
+  // left: -60px;
 }
 
 .imageFilterIcon {
@@ -246,6 +246,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  position: relative;
+  right: 9px;
 }
 
 .switch {
