@@ -285,8 +285,8 @@
             margin-right: auto;
           }
           .dropdown-menu {
-            height: 70vh;
-            width: 300px;
+            height: max-content;
+            width: max-content;
             overflow: auto;
             box-shadow: 0px 3px 10px $grey;
             border-radius: 4px;
