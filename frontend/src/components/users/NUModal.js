@@ -106,6 +106,7 @@ const NUModal = (props) => {
                   }}
                   onBlur={handleBlur}
                   value={values.email}
+                  disabled={ changeComponent === "address" && disableButton ? true : false }
                 />
               </div>
               <button 
