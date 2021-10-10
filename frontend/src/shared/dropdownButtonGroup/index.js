@@ -47,7 +47,7 @@ const dropdownButtonGroup = (props) => {
                       onSelect(item);
                       setTypeName(item.value);
                       setItemType(item.value);
-                      onClickOfDropDownItem(index, props.type, item.value)
+                      // onClickOfDropDownItem(index, props.type, item.value)
                     }}
                     >
                       {item.value}

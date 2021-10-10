@@ -71,7 +71,7 @@ const Details = (props) => {
       }
     }
 
-
+    
   return (
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
@@ -157,8 +157,7 @@ const Details = (props) => {
             {org?.region?.regionName}
           </span>
           
-          <span className="colum txt1 font-weight-bold text-secondory text-center switchBar" 
-               >
+          <span className="colum txt1 font-weight-bold text-secondory text-center switchBar">
                   <label className="switch">
                     <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
                     <span className="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>

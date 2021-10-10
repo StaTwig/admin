@@ -143,7 +143,23 @@ const UserDetails = (props) => {
 
               <label className="switch">
                     <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
-                    <span className="slider round" onClick={(e) => { status === "ACTIVE" ? true : false }} checked={status === "ACTIVE" ? true : false}></span>
+                    <span 
+                      className="slider round" 
+                        onClick={(e) => { 
+                          if (status == "ACTIVE") {
+                            deactivateUser({ id: user?.id, index: user?.ridex });
+                            changeStatus("REJECTED");
+                          } else {
+                            activateUser({
+                              id: user?.id,
+                              role: user?.role,
+                              index: user?.ridex,
+                            });
+                            changeStatus("ACTIVE");
+                          }
+                       }} 
+                      checked={status === "ACTIVE" ? true : false}>
+                    </span>
               </label>
 
            {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
