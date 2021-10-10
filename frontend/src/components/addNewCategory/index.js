@@ -1,9 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./style.scss";
-// import { Formik } from "formik";
+import { Formik } from "formik";
+import {
+  addNewProduct,
+} from "../../actions/poActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import { Link } from "react-router-dom";
+import Modal from "../../shared/modal";
+import ProductPopUp from "./productPopUp";
+
 const AddCategory = (props) => {
+  const [manufacturer, setManufacturer] = useState("Select Manufacturer");
+  const [categoryName, setcategoryName] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(undefined);
+  const [description, setDescription] = useState("");
+  const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+
+  const closeModal = () => {
+    setOpenCreatedInventory(false);
+    props.history.push("/inventory");
+  };
+
+  const setFile = (evt) => {
+    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
+    setPhoto(evt.target.files[0]);
+  };
+  const addProduct = async () => {
+    // const data = { manufacturer, categoryName, productCategory: category, productSubCategory: subCategory, storageConditions, description };
+    let formData = new FormData();
+
+    formData.append("manufacturer", manufacturer);
+    let unitofMeasure = {
+      id: "N/A",
+      name: "N/A"
+    }
+    formData.append("name", "category");
+    formData.append("shortName", "category");
+    formData.append("externalId", Math.random().toString(36).substr(2, 7));
+    formData.append("type", categoryName);
+    formData.append("unitofMeasure", JSON.stringify(unitofMeasure));
+    formData.append("description", description);
+    formData.append("photo", photo);
+    const result = await addNewProduct(formData);
+    if (result.status === 1) {
+      setOpenCreatedInventory(true);
+      console.log("success add product");
+    }
+  };
+
   console.log(props);
   return (
     <div>
@@ -17,24 +62,26 @@ const AddCategory = (props) => {
             <div className='d-flex'>
               <div className=''>
                 <div className='mb-4'>
-                  <img
-                    name='photo'
-                    src={uploadBlue}
-                    style={{
-                      height: "150px",
-                      width: "100px",
-                      marginLeft: "45px",
-                    }}
-                    className='rounded rounded-circle'
-                    alt=''
-                  />
-                </div>
-                <label className='btn-primary btn btn-browse font-weight-bold'
-                       style={{padding:"10px 10px 10px 10px", marginLeft:"15px", width:"10rem"}} 
-                >
-                  {"ADD IMAGE"}
-                  <input type='file' class='select' />{" "}
+                <div className='d-flex flex-column upload'>
+                <img
+                  src={photoUrl || uploadBlue}
+                  name='photo'
+                  width={photoUrl ? '150' : '50'}
+                  height={photoUrl ? '150' : '50'}
+                  className='mt-3'
+                  alt=''
+                />
+
+                <label className='btn-primary btn browse'>
+                  ADD IMAGE
+                  <input
+                    type='file'
+                    className='select'
+                    onChange={setFile}
+                  />{" "}
                 </label>
+              </div>
+              </div>
               </div>
 
               <div className='col-8 mt-5'>
@@ -48,11 +95,13 @@ const AddCategory = (props) => {
                     Category Name
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    name='product'
-                    placeholder='Enter Category Title'
-                  />
+                  type='text'
+                  className='form-control'
+                  name='product'
+                  placeholder='Enter Category Name'
+                  onChange={(e) => setcategoryName(e.target.value)}
+                  value={categoryName}
+                />
                 </div>
                 <div className='form-group'>
                   <label
@@ -68,6 +117,8 @@ const AddCategory = (props) => {
                     className='form-control'
                     name='product'
                     placeholder='Enter Category Description'
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
                   />
                 </div>
               </div>
@@ -87,10 +138,21 @@ const AddCategory = (props) => {
             </button>
           </Link>
           <button className='btn btn-orange fontSize20 font-bold mb-2 mt-0'
+          onClick={addProduct}
           >
             <span>+ Add New Category</span>
           </button>
         </div>
+        {openCreatedInventory && (
+              <Modal
+                close={() => closeModal()}
+                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+              >
+                <ProductPopUp
+                  onHide={closeModal} //FailurePopUp
+                />
+              </Modal>
+            )}
       </div>
     </div>
   );
