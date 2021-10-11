@@ -24,3 +24,15 @@ exports.sendNotification = async function (data) {
   });
   return res.data;
 };
+
+exports.sendMessage = async function (data) {
+  const { mobile, content, subject } = data;
+  let res = await axios.post(process.env.MESSAGE, {
+    whatsapp: false,
+    content,
+    mobile,
+    subject,
+    email,
+  });
+  return res.data;
+};

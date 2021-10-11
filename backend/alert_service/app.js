@@ -7,7 +7,7 @@ const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const alerts = require("./helpers/alertGenerator");
 const events = require("./models/EventModal");
-
+const { alertListener } = require("./helpers/listener");
 require("dotenv").config();
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
@@ -33,7 +33,8 @@ const eventEmitter = events.watch();
 eventEmitter.on("change", (change) => {
   if (change.operationType === "insert") {
     const event = change.fullDocument;
-    alerts.generateAlert(event);
+    // alerts.generateAlert(event);
+    alertListener(event);
   } else if (change.operationType === "delete") {
     console.log(
       "******************************** EVENT DELETED ********************************",

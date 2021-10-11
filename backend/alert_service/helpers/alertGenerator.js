@@ -9,6 +9,7 @@ const {
   pushNotification,
 } = require("./alertSender");
 const moment = require("moment");
+const { alertListener } = require("./listener");
 
 async function processShipmentEvents(event) {
   try {
@@ -193,6 +194,7 @@ async function ordersPending() {
         eventTypePrimary: "ORDER",
         eventTypeDesc: "PENDING",
       };
+      alertListener(event);
     }
   } catch (err) {
     console.log(err);

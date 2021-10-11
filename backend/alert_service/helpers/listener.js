@@ -18,7 +18,7 @@ const {
   inventoryUpdate,
 } = require("./inventory");
 const Alert = require("../models/AlertModel");
-
+const { sendMessage } = require("./sender");
 async function shipmentListener(event) {
   try {
     switch (event.eventTypePrimary) {
@@ -117,12 +117,15 @@ async function subscribedAlerts(event) {
     if (row.alertMode.mobile && row.alertMode.email) {
       // alertMobile(event, row.user.mobile_number);
       // Send notification to user email & Mobile
+      console.log("Send notification to user email & Mobile");
     } else {
       if (row.alertMode.mobile) {
         // alertMobile(event, row.user.mobile_number);
+        console.log("Send notification to user in Mobile");
       }
       if (row.alertMode.email) {
         // Send notification to user email & Mobile
+        console.log("Send notification to user in Email");
       }
     }
   }
@@ -138,13 +141,20 @@ async function subscribedAlerts(event) {
     if (element.alertMode.mobile && element.alertMode.email) {
       // alertMobile(event, element.user.mobile_number);
       // Send notification to user email & Mobile
+      console.log("Send notification to user email & Mobile");
     } else {
       if (element.alertMode.mobile) {
         // alertMobile(event, element.user.mobile_number);
+        console.log("Send notification to user in Mobile");
       }
       if (element.alertMode.email) {
         // Send notification to user email & Mobile
+        console.log("Send notification to user in Email");
       }
     }
   }
 }
+
+module.exports = {
+  alertListener,
+};
