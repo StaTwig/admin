@@ -74,7 +74,7 @@ exports.shipmentCreate = async (event) => {
   };
   await sendNotification(dataSender);
 
-  // if (event?.payloadData?.data?.receiver?.id) {
+  // if (event?.payloadData?.data?.receiver?.id) {   // if receiver userId is present then send notification to that user // Not Implemented yet so we are sending notification to all eligible users
   //   let getReceiverDetails = await getUserDetails(
   //     event.payloadData.data.receiverId
   //   );
