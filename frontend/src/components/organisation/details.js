@@ -71,7 +71,7 @@ const Details = (props) => {
       }
     }
 
-    
+
   return (
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
@@ -153,7 +153,7 @@ const Details = (props) => {
             {org?.country?.countryName}
           </span>
           
-          <span className="colum txt1 " style={{position:"relative", left:"0.5rem"}}>
+          <span className="colum txt1 " style={{position:"relative", left:"0.8rem"}}>
             {org?.region?.regionName}
           </span>
           

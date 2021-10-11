@@ -74,6 +74,7 @@ const NewRequests = (props) => {
               setBtnTxt("ASSIGN");
               setShowModal(true);
             }}
+            style = {{width:"10vw"}}
           >
             Accept request
           </button>
@@ -86,6 +87,7 @@ const NewRequests = (props) => {
                 rindex: rindex,
               });
             }}
+            style = {{width:"10vw"}}
           >
             Reject request
           </button>
