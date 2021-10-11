@@ -1,6 +1,18 @@
 const fs = require('fs');
 const moveFile = require('move-file');
 const XLSX = require('xlsx');
+var PdfPrinter = require('pdfmake');
+resolve = require('path').resolve
+
+var fontDescriptors = {
+  Roboto: {
+    normal: resolve('./controllers/Roboto-Regular.ttf'),
+    bold: resolve('./controllers/Roboto-Medium.ttf'),
+    italics: resolve('./controllers/Roboto-Italic.ttf'),
+    bolditalics: resolve('./controllers/Roboto-MediumItalic.ttf')
+  }
+}
+var printer = new PdfPrinter(fontDescriptors);
 const axios = require('axios');
 const uniqid = require('uniqid');
 const date = require('date-and-time');
@@ -30,7 +42,6 @@ const po_stream_name = process.env.PO_STREAM;
 var pdf = require("pdf-creator-node");
 const products = require('../data/products');
 const manufacturers = require('../data/manufacturers');
-resolve = require('path').resolve
 const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
@@ -1815,32 +1826,73 @@ function buildExcelReport(req,res,dataForExcel){
 
 
 function buildPdfReport(req,res,data){
-  let finalPath = resolve("./models/pdftemplate.html")
-    let html = fs.readFileSync(finalPath, "utf8");
-    var options = {
-      format: "A3",
-      orientation: "landscape",
-      border: "6mm",
+  // console.log(data)
+  var rows = [];
+rows.push([{text: 'Order Id', bold: true}, {text: 'Order created By', bold: true}, {text: 'Creator Org Id', bold: true}, {text: 'Order Received from', bold: true}, {text: 'ORG ID - Receiver', bold:  true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'Organization Name', bold: true}, {text: 'Organization ID', bold: true}, {text: 'Organization Location Details', bold: true}, {text: 'Status', bold: true}]);
+for(var i = 0; i < data.length; i++) {
+    rows.push([data[i].id || 'N/A', data[i].createdBy || 'N/A', data[i].supplierOrgId || 'N/A', data[i].orderReceiveIncharge|| 'N/A', data[i].orderReceiverOrg || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productId || 'N/A', data[i].productQuantity || 'N/A', data[i].manufacturer || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].status || 'N/A']);
+}
+
+var docDefinition = {
+  pageSize: 'A3',
+  pageOrientation: 'landscape',
+    content: [{
+        table: {
+          headerRows: 1,
+          headerStyle:  'header',
+                 widths: [70, 70, 70, 70, 70,70, 70, 70, 70, 70, 70, 70, 70, 70],
+                body: rows
+            }
+    }],
+    styles: {
       header: {
-          height: "15mm",
-          contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
+        fontSize: 14,
+        bold: true
       },
-  };
-  var document = {
-    html: html,
-    data: {
-      orders: data,
-    },
-    path: "./output.pdf",
-    type: "",
-  };
-  pdf
-  .create(document, options)
-  .then((result) => {
-    console.log(result);
-    return res.sendFile(result.filename)
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+    }
+
+}
+
+  var options= {fontLayoutCache: true}
+  var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+  var temp123;
+var pdfFile = pdfDoc.pipe(temp123 = fs.createWriteStream('./output.pdf'))
+var path = pdfFile.path
+pdfDoc.end();
+temp123.on('finish', async function () {
+  // do send PDF file 
+  return res.sendFile(resolve(path))
+});
+return
+
+
+  // let finalPath = resolve("./models/pdftemplate.html")
+  //   let html = fs.readFileSync(finalPath, "utf8");
+  //   var options = {
+  //     format: "A3",
+  //     orientation: "landscape",
+  //     border: "6mm",
+  //     header: {
+  //         height: "15mm",
+  //         contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
+  //     },
+  // };
+  // var document = {
+  //   html: html,
+  //   data: {
+  //     orders: data,
+  //   },
+  //   path: "./output.pdf",
+  //   type: "",
+  // };
+  // pdf
+  // .create(document, options)
+  // .then((result) => {
+  //   console.log(result);
+    
+  //   return res.sendFile(result.filename)
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
 }

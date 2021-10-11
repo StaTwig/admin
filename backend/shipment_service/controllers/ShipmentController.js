@@ -33,7 +33,18 @@ const util = require("util");
 const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
-resolve = require("path").resolve;
+var PdfPrinter = require('pdfmake');
+resolve = require('path').resolve
+
+var fontDescriptors = {
+  Roboto: {
+    normal: resolve('./controllers/Roboto-Regular.ttf'),
+    bold: resolve('./controllers/Roboto-Medium.ttf'),
+    italics: resolve('./controllers/Roboto-Italic.ttf'),
+    bolditalics: resolve('./controllers/Roboto-MediumItalic.ttf')
+  }
+}
+var printer = new PdfPrinter(fontDescriptors);
 var pdf = require("pdf-creator-node");
 
 const inventoryUpdate = async (
@@ -3920,6 +3931,48 @@ function buildExcelReport(req, res, dataForExcel) {
 }
 
 function buildPdfReport(req, res, data) {
+    // console.log(data)
+    var rows = [];
+    rows.push([{text: 'Shipment ID', bold: true}, {text: 'Reference Order ID', bold: true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Batch Number', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'From Organization Name', bold: true}, {text: 'From Organization ID', bold: true}, {text: 'From Organization Location Details', bold: true}, {text: 'Delivery Organization Name', bold: true}, {text: 'Delivery Organization ID', bold: true}, {text: 'Delivery Organization Location Details', bold: true}, {text: 'Transit Number', bold: true}, {text: 'Label Code', bold: true}, {text: 'Shipment Date', bold: true}, {text: 'Shipment Estimate Date', bold: true}]);
+    // console.log(rows[0].length)
+    for(var i = 0; i < data.length; i++) {
+        rows.push([data[i].id || 'N/A', data[i].poId || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productID || 'N/A', data[i].productQuantity || 'N/A', data[i].batchNumber || 'N/A', data[i].manufacturer || 'N/A', data[i].supplierOrgName || 'N/A', data[i].supplierOrgId || 'N/A', data[i].supplierOrgLocation || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].airWayBillNo || 'N/A', data[i].label || 'N/A', data[i].shippingDate || 'N/A', data[i].expectedDeliveryDate || 'N/A']);
+    }
+    
+    var docDefinition = {
+      pageSize: 'A3',
+      pageOrientation: 'landscape',
+      pageMargins: [ 30, 30, 1, 5 ],
+        content: [{
+            table: {
+              margin: [ 1, 1, 1, 1 ],
+              headerRows: 1,
+              headerStyle:  'header',
+                     widths: [60, 60, 55, 55, 55, 45, 48, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                    body: rows
+                }
+        }],
+        styles: {
+          header: {
+            fontSize: 14,
+            bold: true
+          },
+        }
+    
+    }
+    
+      var options= {fontLayoutCache: true}
+      var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+      var temp123;
+    var pdfFile = pdfDoc.pipe(temp123 = fs.createWriteStream('./output.pdf'))
+    var path = pdfFile.path
+    pdfDoc.end();
+    temp123.on('finish', async function () {
+      // do send PDF file 
+      return res.sendFile(resolve(path))
+    });
+    return
+    
   let finalPath = resolve("./models/pdftemplate.html");
   let html = fs.readFileSync(finalPath, "utf8");
   var options = {
