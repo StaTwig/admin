@@ -45,7 +45,7 @@ var fontDescriptors = {
   }
 }
 var printer = new PdfPrinter(fontDescriptors);
-var pdf = require("pdf-creator-node");
+// var pdf = require("pdf-creator-node");
 
 const inventoryUpdate = async (
   id,
@@ -3973,34 +3973,6 @@ function buildPdfReport(req, res, data) {
     });
     return
     
-  let finalPath = resolve("./models/pdftemplate.html");
-  let html = fs.readFileSync(finalPath, "utf8");
-  var options = {
-    format: "A4",
-    orientation: "landscape",
-    border: "10mm",
-    header: {
-      height: "15mm",
-      contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>',
-    },
-  };
-  var document = {
-    html: html,
-    data: {
-      orders: data,
-    },
-    path: "./output.pdf",
-    type: "",
-  };
-  pdf
-    .create(document, options)
-    .then((result) => {
-      console.log(result);
-      return res.sendFile(result.filename);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
 }
 
 exports.trackJourneyOnBlockchain = [
