@@ -149,9 +149,7 @@ exports.updateRequest = [
           { new: true }
         );
         if (
-          (status === "ACCEPTED" && request.type === "LOCATION_MISMATCH") ||
-          "ORGANISATION_MISMATCH"
-        ) {
+        (status === "ACCEPTED") && (request.type === "LOCATION_MISMATCH" || request.type === "ORGANISATION_MISMATCH")){
           shipment = await ShipmentModel.findOneAndUpdate(
             { "label.labelId": request.label.labelId },
             {
