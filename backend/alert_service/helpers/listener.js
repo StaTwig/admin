@@ -7,9 +7,9 @@ const {
 const {
   orderAccept,
   orderPending,
-  orderReceive,
   orderReject,
   orderDefault,
+  orderCreated,
 } = require("./order");
 const {
   inventoryAdd,
@@ -49,10 +49,10 @@ async function orderListener(event) {
       case "PENDING":
         await orderPending(event);
         break;
-      case "RECEIVE":
-        await orderReceive(event);
+      case "CREATE":
+        await orderCreated(event);
         break;
-      case "ACCEPT":
+      case "RECEIVE":
         await orderAccept(event);
         break;
       case "REJECT":
