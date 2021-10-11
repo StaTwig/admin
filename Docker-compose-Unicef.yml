@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   traefik:
-    image: "traefik:v2.4"
+    image: "traefik"
     container_name: "traefik"
     restart: unless-stopped
     ports:
@@ -265,8 +265,8 @@ services:
 
   frontend:
     build: "./frontend"
-    image: "frontend1.0"
-    container_name: "frontend"
+    image: "frontend2.0"
+    container_name: "cra-frontend"
     restart: always
     environment:
       - "NODE_ENV=production"
