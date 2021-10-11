@@ -23,6 +23,8 @@ import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
 import { getProducts, searchProduct } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
+import { config } from "../../config";
+import axios from "axios";
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -42,6 +44,7 @@ const NewShipment = (props) => {
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
+  const [validShipmentID, setValidShipmentID] = useState(false)
   // const [senderOrgLoc, setSenderOrgLoc] = useState(
   //   "Select Organisation Location"
   // );
@@ -520,6 +523,16 @@ console.log(user.organisation)
     // setOrderProduct(inventoryStateClone);
   };
 
+  function onSearchChange(e) {
+    debugger
+    axios
+      .get(`${config().getSuggestions}?searchString=${e}`)
+      .then((resp) =>{
+        const value = resp.data.data.length > 0 ? true : false
+         setValidShipmentID(value)
+        })
+  }
+
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
@@ -822,7 +835,14 @@ console.log(user.organisation)
                       value={values.shipmentID}
                       onBlur={handleBlur}
                       placeholder='Enter Reference Shipment ID'
-                      onChange={handleChange}
+                      onInputChange={(event, newInputValue) => {
+                        onSearchChange(newInputValue);
+                      }}
+                      onChange={(event, newValue) => {
+                        console.log("evnt",event, newValue)
+                        handleChange(event);
+                        onSearchChange(event.target.value);
+                      }}
                     />
                     </div>
                     </div>
@@ -844,7 +864,7 @@ console.log(user.organisation)
                               dispatch(turnOff());
                             }
                             else {
-                              if (/SH+[0-9][^a-z]+$/i.test(values.shipmentID)) {
+                              if (validShipmentID) {
                                   let result = await dispatch(
                                     getViewShipment(values.shipmentID)
                                   );
