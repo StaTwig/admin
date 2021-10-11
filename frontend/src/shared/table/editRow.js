@@ -122,7 +122,7 @@ const EditRow = (props) => {
         <div className='row rTable'>
           <div
             className='rTableRow inp-grp mb-3 col row bg-white p-1'
-            style={{ height: "56px" }}
+            // style={{ height: "56px" }}
           >
             <div className='col-3 align-self-center pt-1 pb-1 border-right bg-white ml-1'>
               <div className='square-box' />

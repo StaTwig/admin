@@ -540,7 +540,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `unicef`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
