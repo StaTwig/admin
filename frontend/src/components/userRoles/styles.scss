@@ -59,6 +59,7 @@
       }
 
       .add-user-btn {
+        border: 0;
         width: 12rem;
         height: 45px;
 
@@ -86,7 +87,8 @@
 
       background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 6px #0000003f;
-      border-radius: 15px;
+      border-radius: 8px;
+      margin-bottom: 50px;
     }
 
     .feature-panel {
@@ -102,6 +104,7 @@
 
     .selectedFeature {
       color: #0b65c1;
+      font-weight: bold;
     }
 
     .feature-functionality-permissions-headers {
@@ -126,8 +129,9 @@
 
       span {
         color: #000000;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 21px;
+        font-weight: bold;
       }
 
      input {

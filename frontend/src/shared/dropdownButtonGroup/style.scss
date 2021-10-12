@@ -5,6 +5,7 @@
   display: flex;
   outline: none;
   position: relative;
+  margin-right: 10px;
 
   small {
     color: $a8Grey;
@@ -27,7 +28,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 130px;
+      // width: 130px;
     }
   }
 

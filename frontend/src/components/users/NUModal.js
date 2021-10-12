@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import Role from "./role";
 import { Formik } from "formik";
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import LocationAddUser from "./LocationAddUser";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
+  const [buttonText, setButtonText] = useState("NEXT")
   const [wh, setWH] = useState("Select a Location");
+  const [disableButton, setDisableBtn] = useState(false);
+  const [disableRoleBtn, setDisanleRole] = useState(false);
+  const [changeComponent, setChangeComponent] = useState('role');
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
   const setRole = (role) => {
     setSelectedValue(role);
@@ -14,6 +19,7 @@ const NUModal = (props) => {
 
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
+    event.target.value.length > 0 ? setDisableBtn(true) : setDisableBtn(false);
   };
 
   const setWarehouse = (name, id) => {
@@ -21,9 +27,23 @@ const NUModal = (props) => {
     setData({ ...data, ...{ warehouse: id } });
   };
 
+  const formikRef = useRef();
+  const scrolling = useRef()
+
+  console.log(disableRoleBtn);
+
+  const unDisableNxtBtn = () => {
+    if(disableRoleBtn && disableButton)
+      return false;
+    else
+      return true
+  }
+
+  debugger
   return (
     <div className="p-0">
       <Formik
+        innerRef={formikRef}
         initialValues={{ email: data?.ref, role: "", warehouse: "" }}
         validate={(values) => {
           const errors = {};
@@ -87,39 +107,63 @@ const NUModal = (props) => {
                   }}
                   onBlur={handleBlur}
                   value={values.email}
+                  disabled={ changeComponent === "address" && disableButton ? true : false }
                 />
               </div>
               <button 
                 // disabled={errors}
+                style={{visibility:buttonText === "NEXT" ? "" : "hidden"}}
                 className="redirect-button" 
                 onClick={() => redirectToConfigurationPage()}>
                 <i className="plus-icon fa fa-plus pr-2" aria-hidden="true"></i>
                 <span className="txt-btn">{"Add New User Role"}</span>
               </button>
             </div>
-            <div className="p-1" style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
-              {permissions.map((permission, index) => (
-                <Role
-                  key={index}
-                  title={permission.role}
-                  description={permission.role + " Description"}
-                  selectedValue={selectedValue}
-                  setSelectedValue={setRole}
-                  i={index}
-                  value={permission.role}
-                  listPermission={permission.permissions}
-                  name="role"
-                  handleBlur={handleBlur}
-                  handleChange={handleChange}
-                />
-              ))}
-              {errors.role && touched.role && (
-                <span className="pl-3 error-msg text-danger">
-                  {errors.role}
-                </span>
+            <div className="p-1" ref={scrolling} style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
+              {changeComponent === "role" ? (
+                <div>
+                  {permissions.map((permission, index) => (
+                    <Role
+                      key={index}
+                      title={permission.role}
+                      description={permission.role + " Description"}
+                      selectedValue={selectedValue}
+                      setSelectedValue={setRole}
+                      i={index}
+                      value={permission.role}
+                      listPermission={permission.permissions}
+                      name="role"
+                      handleBlur={handleBlur}
+                      handleChange={handleChange}
+                      disableRoleBtn = {setDisanleRole}
+                    />
+                  ))}
+                   {errors.role && touched.role && (
+                       <span className="pl-3 error-msg text-danger">
+                         {errors.role}
+                      </span>
+                    )}
+                </div>
+              ) : (
+                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent:"space-evenly"}}>
+                      {/* {addresses.map((address,index) => ( */}
+                        <LocationAddUser 
+                          referance = {formikRef}
+                          addresses={addresses}
+                          onSelect = {(data) => {
+                            setWarehouse(data.title,data.id)
+                          }}
+                          selectedAddress = {data}
+                          name={wh}
+                        ></LocationAddUser>
+                      {/* ))} */}
+                    </div>
               )}
+              
             </div>
-            <div className="p-4 d-flex flex-column">
+            
+            
+            {/* <div className="p-4 d-flex flex-column">
               <div className="input-group">
                 <DropdownButton
                   groups={addresses}
@@ -135,19 +179,28 @@ const NUModal = (props) => {
                   {errors.warehouse}
                 </span>
               )}
-            </div>
+            </div> */}
             <div className="d-flex w-100 divider"></div>
             <div className="d-flex flex-row-reverse p-3">
-              <button type="submit" className="ml-3 btn btn-orange">
-                {props.buttonText}
-              </button>
-              <button
-                type="button"
-                onClick={onHide}
-                className="btn btn-outline-dark"
-              >
-                CANCEL
-              </button>
+              {changeComponent === "role" ? 
+                (
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); scrolling.current.scrollTop = 0  }} disabled = {unDisableNxtBtn()}>
+                    {buttonText}
+                  </button>
+                ) : (
+                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange">
+                    {buttonText}
+                  </button>
+                )}
+                {changeComponent === "address" && 
+                  <button
+                    type="button"
+                    onClick={(e) => {setChangeComponent('role');setButtonText('NEXT'); scrolling.current.scrollTop = 0}}
+                    className="btn btn-outline-dark"
+                  >
+                    Back
+                  </button>
+                }
             </div>
           </form>
         )}

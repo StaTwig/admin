@@ -111,7 +111,7 @@ const UserRoles = ({
         </div>
       </div>
       <div className="user-role-content">
-        <div className="card card-container">
+        <div className="card card-container p-2 mt-2" > 
           <div className="list-group list-group-flush">
             {featurePanelValues?.map((item, index) => {
               return (

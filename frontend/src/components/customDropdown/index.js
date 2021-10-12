@@ -9,6 +9,7 @@ const CustomDropdown = props => {
                 props.data.map((item, index) => {
                     return (
                         <option
+                            className = "cst-drop-container-menu"
                             key={index}
                             value={item.key}>
                             {item.value}

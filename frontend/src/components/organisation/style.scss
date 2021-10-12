@@ -72,25 +72,18 @@
   margin-top: 10px;
 }
 
-.full-width{
-  // position: absolute;
-  // left: -95px;
-  // right: 0px;
+.full-width {
+  position: absolute;
+  left: -95px;
+  right: 0px;
   background-color: #eaeaea;
-  // margin-left: 118px;
+  margin-left: 118px;
   width: 100%;
 }
 
-.full-width1 {
-    position: relative;
-    left: 0.3rem;
-    background-color: #eaeaea;
-    width: 100%;
-}
-
 .filter {
-  // margin-left: 9rem;
-  // margin-right: 3rem;
+  margin-left: 9rem;
+  margin-right: 3rem;
 }
 
 .box {
@@ -113,7 +106,7 @@
 
 
 .details-card {
-  margin-top: 35px;
+  margin-top: 90px;
 }
 
 .details-body {
@@ -140,7 +133,7 @@
 .txt{
   font-weight: 600;
   font-size: small;
-  align-self: center;
+  align-self: unset;
   overflow: hidden;
 }
 .txt1{
@@ -169,4 +162,95 @@
 
 .orgTitle{
   margin-right: unset;
+}
+
+.editIcon {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+}
+
+.typeSpace {
+  // width: 12%;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  right: 1.5rem;
+  width: 15%;
+}
+
+.headerTitles {
+  justify-content: unset;
+  // padding-left: 7px;
+
+  // position: relative;
+  // left: 1rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 22px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #FFA83B;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #FFA83B;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.switchBar {
+  position: relative;
+  right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

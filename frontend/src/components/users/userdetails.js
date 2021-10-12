@@ -84,8 +84,8 @@ const UserDetails = (props) => {
 
   return (
       <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
-        <div className="card-body d-flex">
-          <div className="userPic w-25 text-center rounded userName">
+        <div className="card-body d-flex" style={{fontWeight:"bold"}}>
+          <div className="userPic w-25  rounded userName">
             {user?.photoId && (
               <img
                 style={{ display: "flex" }}
@@ -103,17 +103,17 @@ const UserDetails = (props) => {
             </h6>
             <div
               className="blockquote-footer ml-3 txtWrapu text-left"
-              style={{ marginLeft: '21px', maxWidth:'150px' }}
+              style={{ marginLeft: '21px' }}
             >
               {user?.emailId}
             </div>
           </div>
           <span
-            className={`w-25 ${display ? `text-left` : ` txtWrapu1 text-center`
+            className={`w-25 ${display ? `text-left` : ` txtWrapu1 `
               } ${viewButton ? `` : `align-self-center`}`}
           >
             <span className={
-              `w-10 ${display ? `text-left` : ` roleText txtWrapu1 text-center`
+              `w-10 ${display ? `text-left` : ` roleText txtWrapu1 `
               } ${viewButton ? `` : `align-self-center`}`
             }>{user?.role}</span>
             {display && (
@@ -127,20 +127,46 @@ const UserDetails = (props) => {
           <span className={`text-left ${viewButton ? `` : `align-self-center`} locationText`}>
             { user?.location }
           </span>
-          <span className={` w-25 text-center ${viewButton ? `` : `align-self-center`} walletText txtWrapu`}>
-            <a href="#" className="text-decoration-underline" style={{position:"relative",left:"1rem"}}>
+          <span className={` w-25  ${viewButton ? `` : `align-self-center`} walletText txtWrapu`}>
+            <a href="#" className="text-decoration-underline" style={{position:"relative",left:"0rem"}}>
               {user?.walletAddress}
             </a>
           </span>
-          <span className={` w-25 text-left ${viewButton ? `` : `align-self-center`} emailText`}>
+          <span
+            style={{justifyContent:"unset"}}
+            className={` w-25 text-left ${viewButton ? `` : `align-self-center`} emailText`} >
             {user?.emailId}
           </span>
-          <span className={`" w-25 text-center ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
+          <span
+            style={{display:"flex",flexDirection:"row"}}
+            className={`" w-25  ${viewButton ? `` : `align-self-center`} accountText font-weight-bold"`}>
+
+              <label className="switch">
+                    <input type="checkbox" checked = {status === "ACTIVE" ?  true : false} />
+                    <span 
+                      className="slider round" 
+                        onClick={(e) => { 
+                          if (status == "ACTIVE") {
+                            deactivateUser({ id: user?.id, index: user?.ridex });
+                            changeStatus("REJECTED");
+                          } else {
+                            activateUser({
+                              id: user?.id,
+                              role: user?.role,
+                              index: user?.ridex,
+                            });
+                            changeStatus("ACTIVE");
+                          }
+                       }} 
+                      checked={status === "ACTIVE" ? true : false}>
+                    </span>
+              </label>
+
            {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           
           </span>
           <div
-            className={`w-15  ${display || viewButton ? `align-self-start` : ` align-self-center`
+            className={`w-15  ${display || viewButton ? `align-self-start` : ` align-self-end`
               } `}
           >
             {/* <button

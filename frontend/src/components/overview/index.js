@@ -52,7 +52,7 @@ locationApprovals.sort(function (a, b) {
               closeModal();
             }}
             onHide={closeModal}
-            buttonText={btnTxt}
+            
             setData={setData}
             redirectToConfigurationPage={redirectToConfigurationPage}
           />
