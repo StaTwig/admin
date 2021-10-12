@@ -28,6 +28,7 @@ const NUModal = (props) => {
   };
 
   const formikRef = useRef();
+  const scrolling = useRef()
 
   console.log(disableRoleBtn);
 
@@ -118,7 +119,7 @@ const NUModal = (props) => {
                 <span className="txt-btn">{"Add New User Role"}</span>
               </button>
             </div>
-            <div className="p-1" style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
+            <div className="p-1" ref={scrolling} style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
               {changeComponent === "role" ? (
                 <div>
                   {permissions.map((permission, index) => (
@@ -183,7 +184,7 @@ const NUModal = (props) => {
             <div className="d-flex flex-row-reverse p-3">
               {changeComponent === "role" ? 
                 (
-                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); }} disabled = {unDisableNxtBtn()}>
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); scrolling.current.scrollTop = 0  }} disabled = {unDisableNxtBtn()}>
                     {buttonText}
                   </button>
                 ) : (
@@ -194,7 +195,7 @@ const NUModal = (props) => {
                 {changeComponent === "address" && 
                   <button
                     type="button"
-                    onClick={(e) => {setChangeComponent('role');setButtonText('NEXT')}}
+                    onClick={(e) => {setChangeComponent('role');setButtonText('NEXT'); scrolling.current.scrollTop = 0}}
                     className="btn btn-outline-dark"
                   >
                     Back
