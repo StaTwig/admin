@@ -3,11 +3,28 @@ const validate = require("./helpers/validation.js");
 const Event = require("./models/EventModal");
 const config = require("./config.js");
 
-async function connectDB() {
-  var MONGODB_URL = process.env.MONGODB_URL || config.MONGODB_URL;
+ var MONGODB_URL = process.env.MONGODB_URL || config.MONGODB_URL;
+  console.log(MONGODB_URL);
   var mongoose = require("mongoose");
   mongoose
-    .connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(MONGODB_URL, {keepAlive: true, useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      if (process.env.NODE_ENV !== "test") {
+        console.log("Connected to DB");
+      }
+    })
+    .catch((err) => {
+      console.error("App starting error:", err.message);
+      process.exit(1);
+    });
+  var db = mongoose.connection;
+
+async function connectDB() {
+  var MONGODB_URL = process.env.MONGODB_URL || config.MONGODB_URL;
+  console.log(MONGODB_URL);
+  var mongoose = require("mongoose");
+  mongoose
+    .connect(MONGODB_URL, {keepAlive: true, useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
       if (process.env.NODE_ENV !== "test") {
         console.log("Connected to DB");
@@ -23,17 +40,17 @@ async function connectDB() {
 
 async function logEvent(data) {
   if (validate(data) == true) {
-    let connection = await connectDB();
+    //let connection = await connectDB();
     return await Event.findOne(
       { eventID: data.eventID },
-      function (err, foundEvent) {
+      async function (err, foundEvent) {
         if (err) console.log("Error is", err);
         if (foundEvent != null) {
           err = {
             message: "Event exists with same Event ID",
             code: 500,
           };
-          console.log(connection.close());
+          //await connection.close();
           console.log(err);
           return err;
         } else {
@@ -61,17 +78,17 @@ async function logEvent(data) {
           return event.save(async function (err) {
             if (err) {
               console.log(err);
-              console.log(connection.close());
+             // await connection.close();
               return err;
             } else {
               console.log("data stored succesfully");
-              console.log(connection.close());
+              //await connection.close();
               return true;
             }
           });
         }
       }
-    );
+    ).clone();
   } else {
     err = {
       message: "Data Invalid : Fields incorrect",

@@ -289,7 +289,7 @@ console.log(user.organisation)
     const {
       toOrg,
       airWayBillNo,
-      OrderId,
+      reset,
       labelCode,
       shipmentDate,
       estimateDeliveryDate,
@@ -298,13 +298,16 @@ console.log(user.organisation)
       shipmentID,
       products,
     } = values;
+    let errorMsg = '';
     products.forEach((p) => {
-      if (p.productQuantity < 1) error = true;
+      if (p.productQuantity < 1) { error = true; errorMsg = 'product quantity'; }
+      else if (!p.batchNumber) {error = true; errorMsg = 'batch number';
+    }
     });
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: OrderId ? OrderId : null,
+        poId: reset && reset != 'Select Order ID' ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -357,12 +360,11 @@ console.log(user.organisation)
         console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
-      } else {
-        /* else if(check===2)
+      } else if(check===2)
       {
         setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
-      } */
+      } else {
         let i, j;
         let nn = data.products.length;
         for (i = 0; i < data.products.length; i++) {
@@ -400,13 +402,15 @@ console.log(user.organisation)
               type: "Success",
             });
           } else {
+
+            setShipmentError(result.data.message);
             setOpenShipmentFail(true);
             setErrorMessage("Create Shipment Failed");
           }
         }
       }
     } else {
-      setShipmentError("Check product quantity");
+      setShipmentError("Check "+errorMsg);
       setOpenShipmentFail(true);
     }
   };
@@ -1385,7 +1389,7 @@ console.log(user.organisation)
               <label htmlFor='productDetails' className='headsup'>
                 Product Details
               </label>
-              {OrderDetails?.products?.length > 0 && (
+              {OrderDetails?.products?.length > 0 ? (
                 <EditTable
                   check='1'
                   warehouseID={senderOrgId}
@@ -1428,7 +1432,12 @@ console.log(user.organisation)
                   }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              )}
+              ) : products?.length <= 0 && (<div>
+                <h4 style={{fontSize: "100%", marginRight: '550px', marginLeft: '-105px', color: 'red'}} className="mt-5 ">*No products available</h4>
+                </div> )
+                }
+
+              
               {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
@@ -1566,7 +1575,7 @@ console.log(user.organisation)
                 </div>
               </div> */}
             </div>
-            {errors.products && touched.products && (
+      {errors.products && touched.products && (
               <span className='error-msg text-danger-DD'>
                 {errors.products}
               </span>

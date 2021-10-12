@@ -262,8 +262,8 @@ exports.addProduct = [
                 //     `${dir}/${req.body.productName}.png`
                 //   );
                 // }
-
-                const product_unique = uniqid("prod-");
+                console.log(req.body.unitofMeasure)
+                const product_unique = uniqid("prod-").substring(0, 9);
                 const product = new ProductModel({
                   id: product_unique,
                   externalId: req.body.externalId,
@@ -273,28 +273,27 @@ exports.addProduct = [
                   manufacturer: req.body.manufacturer,
                   pricing:req.body.pricing,
                   //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
-                  unitofMeasure:{
-                    id:req.body.unitofMeasure.id,
-                    name:req.body.unitofMeasure.name
-                  },
+                  unitofMeasure: JSON.parse(req.body.unitofMeasure),
                   characteristicSet: {
-                    temperature_max: req.body.characteristicSet.temperature_max,
-                    temperature_min: req.body.characteristicSet.temperature_min,
-                    humidity_max: req.body.characteristicSet.humidity_max,
-                    humidity_min: req.body.characteristicSet.humidity_min,
-                    pressure_max: req.body.characteristicSet.pressure_max,
-                    pressure_min: req.body.characteristicSet.pressure_min,
+                    temperature_max: req.body.characteristicSet?.temperature_max,
+                    temperature_min: req.body.characteristicSet?.temperature_min,
+                    humidity_max: req.body.characteristicSet?.humidity_max,
+                    humidity_min: req.body.characteristicSet?.humidity_min,
+                    pressure_max: req.body.characteristicSet?.pressure_max,
+                    pressure_min: req.body.characteristicSet?.pressure_min,
                   },                  
                 });
                 await product.save();
                 console.log(product)
-
+                if(req.body.name !== 'category')
+                    ProductModel.findOneAndDelete({type: req.body.type, name: 'category'}).then((res)=> console.log(res)).catch((err)=>console.log(err))
                 return apiResponse.successResponseWithData(
                   res,
                   "Success",
                   product
                 );
               } catch (e) {
+                console.log(e)
                 return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
@@ -302,6 +301,7 @@ exports.addProduct = [
             }
           });
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

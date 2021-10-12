@@ -39,6 +39,7 @@ import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import userIcon from "../../assets/icons/brand.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
+import SettingIcon from "../../assets/icons/utilitieswhite.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
 import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
@@ -87,7 +88,8 @@ const Header = (props) => {
     setSearchType(e.type);
     axios
       .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) => setOptions([...resp.data.data]));
+      .then((resp) => setOptions( [...new Set(resp.data.data.map( (item) => {return item._id} ))].map(((item) => {return {_id: item}}))  ));
+     
   }
 
   const closeModalFail = () => {
@@ -389,9 +391,7 @@ const Header = (props) => {
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                {notifications?.length && (
-                  <span className='badge badge-light'>{newNotifs}</span>
-                )}
+                <span className='badge badge-light'>{newNotifs ? newNotifs : 0}</span>
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
@@ -421,6 +421,14 @@ const Header = (props) => {
                         {newNotifs} new
                       </span>
                     )}
+                    <div>
+                    <img
+                        className="setting-notif-icon"
+                        src={SettingIcon}
+                        onClick={() => props.history.push("/settings")}
+                        alt='settings'
+                    />
+                    </div>
 
                     <div className='tab'>
                       <ul className='nav nav-pills'>

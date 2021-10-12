@@ -98,12 +98,12 @@ const BatchExpiry = (props) => {
               <div className='col-2 txt1 '>{exp.batchNumbers[0]}</div>
               <div className='col-1 txt1 '>
                 {exp.attributeSet.mfgDate
-                  ? formatDate(exp.attributeSet.mfgDate)
+                  ? formatDate(exp.attributeSet.mfgDate, "mmyyyy")
                   : ""}
               </div>
               <div className='col-1 txt1 '>
                 {exp.attributeSet.expDate
-                  ? formatDate(exp.attributeSet.expDate)
+                  ? formatDate(exp.attributeSet.expDate, "mmyyyy")
                   : ""}
               </div>
             </div>

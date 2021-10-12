@@ -101,7 +101,11 @@ const EditRow = (props) => {
               <img src={mon} width='16' height='16' alt='manufacturer' />
               <span className='pl-2 text-muted'>Manufacturer</span>
             </div>
-            <div className='col-2 theader text-center pro'>
+            <div className={`col-2 theader ${
+              addMore
+                ? "batch-add-inventory"
+                : "Bbatch-add-inventory"
+            }`}>
                 <img src={Batch} width='16' height='16' alt='Batch' />
                 <span className='pl-2 text-muted'>Batch Number</span>
               </div>
@@ -118,7 +122,7 @@ const EditRow = (props) => {
         <div className='row rTable'>
           <div
             className='rTableRow inp-grp mb-3 col row bg-white p-1'
-            style={{ height: "56px" }}
+            // style={{ height: "56px" }}
           >
             <div className='col-3 align-self-center pt-1 pb-1 border-right bg-white ml-1'>
               <div className='square-box' />
@@ -239,8 +243,8 @@ const EditRow = (props) => {
                 display: "block",
               }}
             >
-              {unitofMeasure.name ? (
-                <div>{unitofMeasure.name}</div>
+              {unitofMeasure?.name ? (
+                <div>{unitofMeasure?.name}</div>
               ) : (
                 <div className='placeholder_name' style={{ fontSize: "14px" }}>
                   Unit{" "}

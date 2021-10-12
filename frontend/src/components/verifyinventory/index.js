@@ -127,7 +127,7 @@ const VerifyInventory = (props) => {
                 >
                   {reviewInventory.quantity}
                   <span>{"("}</span>
-                  {reviewInventory.unitofMeasure.name}
+                  {reviewInventory.unitofMeasure?.name}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>

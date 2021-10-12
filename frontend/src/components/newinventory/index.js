@@ -30,7 +30,7 @@ const NewInventory = (props) => {
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
       setProducts(
-        result.map((item) => {
+        result.filter((item) => item.name !== 'category').map((item) => {
           return {
             value: item.name,
             label: item.name,

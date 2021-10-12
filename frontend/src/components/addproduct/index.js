@@ -6,21 +6,25 @@ import {
   getManufacturers,
   addNewProduct,
   addMultipleProducts,
+  getProducts
 } from "../../actions/poActions";
+
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import Modal from "../../shared/modal";
-import "./style.scss";
 import ProductPopUp from "./productPopUp";
+import "./style.scss";
 
 const AddProduct = (props) => {
   const [manufacturer, setManufacturer] = useState("Select Manufacturer");
+  const [category, setCategory] = useState("Select Category");
   const [manufacturers, setManufacturers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [storageConditions, setStorageConditions] = useState("");
+  const [UOM, setUOM] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(undefined);
   const [excel, setExcel] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
 
@@ -32,18 +36,32 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
+      const result = await getProducts();
+      const categoryArray = result.map((product) => product.type);
+      setCategories(
+        categoryArray
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map((item) => {
+            return item
+          })
+      );
     }
     fetchData();
   }, []);
   const addProduct = async () => {
-    // const data = { manufacturer, productName, productCategory: category, productSubCategory: subCategory, storageConditions, description };
+    // const data = { manufacturer, productName, productCategory: category, productSubCategory: subCategory, UOM, description };
     let formData = new FormData();
 
     formData.append("manufacturer", manufacturer);
-    formData.append("productName", productName);
-    formData.append("productCategory", category);
-    formData.append("productSubCategory", subCategory);
-    formData.append("storageConditions", storageConditions);
+    // let unitofMeasure = 
+    formData.append("name", productName);
+    formData.append("shortName", productName);
+    formData.append("externalId", Math.random().toString(36).substr(2, 7));
+    formData.append("type", category);
+    formData.append("unitofMeasure", JSON.stringify({
+      id: UOM,
+      name: UOM
+    }));
     formData.append("description", description);
     formData.append("photo", photo);
     const result = await addNewProduct(formData);
@@ -61,11 +79,12 @@ const AddProduct = (props) => {
     }
   };
   const setFile = (evt) => {
+    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
-  const setExcelFile = (evt) => {
-    setExcel(evt.target.files[0]);
-  };
+  // const setExcelFile = (evt) => {
+  //   setExcel(evt.target.files[0]);
+  // };
 
   return (
     <div className='addproduct'>
@@ -73,6 +92,39 @@ const AddProduct = (props) => {
       <div className='card'>
         <div className='card-body'>
           <div className='d-flex flex-row justify-content-between'>
+          <div className='col ml-5'>
+              <h6 className='font-weight-bold mb-4'>Product Image</h6>
+              <div className='d-flex flex-column upload'>
+                <img
+                  src={photoUrl || uploadBlue}
+                  name='photo'
+                  width={photoUrl ? '150' : '50'}
+                  height={photoUrl ? '150' : '50'}
+                  className='mt-3'
+                  alt=''
+                />
+
+                <label className='btn-primary btn browse'>
+                  ADD IMAGE
+                  <input
+                    type='file'
+                    className='select'
+                    onChange={setFile}
+                  />{" "}
+                </label>
+                {/* <div>or</div>
+                <label className='btn-primary btn browse'>
+                  BROWSE FILES
+                  <input
+                    type='file'
+                    className='select'
+                    onChange={setExcelFile}
+                  />{" "}
+                </label> */}
+              </div>
+            </div>
+      
+       
             <div className='col mr-5'>
               <div className='form-group'>
                 <label htmlFor='shipmentId'> Product Name</label>
@@ -85,6 +137,7 @@ const AddProduct = (props) => {
                   value={productName}
                 />
               </div>
+          
               <div className='form-group'>
                 <label htmlFor='shipmentId'>Manufacturer</label>
                 <div className='form-control'>
@@ -97,35 +150,31 @@ const AddProduct = (props) => {
               </div>
               <div className='form-group'>
                 <label htmlFor='shipmentId'>Product Category</label>
-                <input
+                {/* <input
                   type='text'
                   className='form-control'
                   name='productcategory'
                   placeholder='Enter Product-Category'
                   onChange={(e) => setCategory(e.target.value)}
                   value={category}
-                />
+                /> */}
+                <div className='form-control'>
+                  <DropdownButton
+                    name={category}
+                    onSelect={(item) => setCategory(item)}
+                    groups={categories}
+                  />
+                </div>
               </div>
               <div className='form-group'>
-                <label htmlFor='shipmentId'>Product Sub-Category</label>
+                <label htmlFor='shipmentId'>Unit of Measure</label>
                 <input
                   type='text'
                   className='form-control'
-                  name='productsubcategory'
-                  placeholder='Enter Sub-Category'
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  value={subCategory}
-                />
-              </div>
-              <div className='form-group'>
-                <label htmlFor='shipmentId'>Storage Conditions</label>
-                <input
-                  type='text'
-                  className='form-control'
-                  name='StorageConditions'
-                  placeholder='Enter Storage Conditions'
-                  onChange={(e) => setStorageConditions(e.target.value)}
-                  value={storageConditions}
+                  name='UOM'
+                  placeholder='Enter Unit of Measure'
+                  onChange={(e) => setUOM(e.target.value)}
+                  value={UOM}
                 />
               </div>
               <div className='form-group'>
@@ -140,37 +189,9 @@ const AddProduct = (props) => {
                 />
               </div>
             </div>
-            <div className='col ml-5'>
-              <h6 className='font-weight-bold mb-4'>Product Image</h6>
-              <div className='d-flex flex-column upload'>
-                <img
-                  src={uploadBlue}
-                  name='photo'
-                  width='50'
-                  height='50'
-                  className='mt-3'
-                  alt=''
-                />
-
-                <label className='btn-primary btn browse'>
-                  ADD IMAGE
-                  <input
-                    type='file'
-                    className='select'
-                    onChange={setFile}
-                  />{" "}
-                </label>
-                <div>or</div>
-                <label className='btn-primary btn browse'>
-                  BROWSE FILES
-                  <input
-                    type='file'
-                    className='select'
-                    onChange={setExcelFile}
-                  />{" "}
-                </label>
-              </div>
-            </div>
+           
+    
+          
             <div></div>
           </div>
 
@@ -180,7 +201,7 @@ const AddProduct = (props) => {
               {" "}
               <button
                 className='btn btn-outline-primary mr-4'
-                onClick={() => props.history.push("/productlist")}
+                onClick={() => props.history.push("/productcategory")}
               >
                 CANCEL
               </button>
@@ -193,10 +214,10 @@ const AddProduct = (props) => {
               </button>
               <button
                 className='btn btn-orange fontSize20 font-bold mr-4'
-                onClick={addProducts}
+                onClick={() => props.history.push('/addNewCategory')}
               >
                 <img src={Add} width='14' height='14' className='mr-2' alt='' />
-                <span>Add Multiple Products</span>
+                <span>Add New Category</span>
               </button>
             </div>{" "}
             {openCreatedInventory && (
