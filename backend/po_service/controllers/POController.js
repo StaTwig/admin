@@ -1508,7 +1508,7 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
                       }
                     }
                     if(req.query.type=='pdf'){
-                      res = buildPdfReport(req,res,data)
+                      res = buildPdfReport(req,res,data, 'Inbound')
                       }
                       else {
                         res = buildExcelReport(req,res,data)
@@ -1667,7 +1667,7 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                       }
                     }
                     if(req.query.type=='pdf'){
-                    res = buildPdfReport(req,res,data)
+                    res = buildPdfReport(req,res,data, 'Outbound')
                     }
                     else {
                       res = buildExcelReport(req,res,data)
@@ -1825,8 +1825,8 @@ function buildExcelReport(req,res,dataForExcel){
 }
 
 
-function buildPdfReport(req,res,data){
-  // console.log(data)
+function buildPdfReport(req,res,data, orderType){
+  console.log(data)
   var rows = [];
 rows.push([{text: 'Order Id', bold: true}, {text: 'Order created By', bold: true}, {text: 'Creator Org Id', bold: true}, {text: 'Order Received from', bold: true}, {text: 'ORG ID - Receiver', bold:  true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'Organization Name', bold: true}, {text: 'Organization ID', bold: true}, {text: 'Organization Location Details', bold: true}, {text: 'Status', bold: true}]);
 for(var i = 0; i < data.length; i++) {
@@ -1836,7 +1836,10 @@ for(var i = 0; i < data.length; i++) {
 var docDefinition = {
   pageSize: 'A3',
   pageOrientation: 'landscape',
-    content: [{
+    content: [
+      { text: `${orderType} Purchase order`, fontSize: 34, style: 'header' },
+      {
+      
         table: {
           headerRows: 1,
           headerStyle:  'header',
@@ -1846,8 +1849,8 @@ var docDefinition = {
     }],
     styles: {
       header: {
-        fontSize: 14,
-        bold: true
+        bold: true,
+        margin: [10,10,10,10]
       },
     }
 

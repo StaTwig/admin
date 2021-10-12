@@ -3585,7 +3585,7 @@ exports.exportInboundShipments = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, 'Inbound');
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithData(
@@ -3752,7 +3752,7 @@ exports.exportOutboundShipments = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, 'Outbound');
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithMultipleData(
@@ -3930,7 +3930,7 @@ function buildExcelReport(req, res, dataForExcel) {
   return res.send(report);
 }
 
-function buildPdfReport(req, res, data) {
+function buildPdfReport(req, res, data, orderType) {
     // console.log(data)
     var rows = [];
     rows.push([{text: 'Shipment ID', bold: true}, {text: 'Reference Order ID', bold: true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Batch Number', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'From Organization Name', bold: true}, {text: 'From Organization ID', bold: true}, {text: 'From Organization Location Details', bold: true}, {text: 'Delivery Organization Name', bold: true}, {text: 'Delivery Organization ID', bold: true}, {text: 'Delivery Organization Location Details', bold: true}, {text: 'Transit Number', bold: true}, {text: 'Label Code', bold: true}, {text: 'Shipment Date', bold: true}, {text: 'Shipment Estimate Date', bold: true}]);
@@ -3943,7 +3943,9 @@ function buildPdfReport(req, res, data) {
       pageSize: 'A3',
       pageOrientation: 'landscape',
       pageMargins: [ 30, 30, 1, 5 ],
-        content: [{
+        content: [
+          { text: `${orderType} shipments`, fontSize: 34, style: 'header' },
+          {
             table: {
               margin: [ 1, 1, 1, 1 ],
               headerRows: 1,
@@ -3954,8 +3956,8 @@ function buildPdfReport(req, res, data) {
         }],
         styles: {
           header: {
-            fontSize: 14,
-            bold: true
+            bold: true,
+            margin: [10,10,10,10]
           },
         }
     

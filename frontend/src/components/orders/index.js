@@ -16,7 +16,6 @@ import dropdownIcon from "../../assets/icons/drop-down.svg";
 import ExcelPopUp from "./ExcelPopup";
 import Modal from "../../shared/modal";
 import Status from "../../assets/icons/Status.svg";
-import { useReactToPrint } from 'react-to-print';
 import {
   getSentPOs,
   getReceivedPOs,
@@ -30,10 +29,6 @@ import { isAuthenticated } from "../../utils/commonHelper";
 
 const Orders = (props) => {
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
 
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
@@ -389,8 +384,6 @@ const Orders = (props) => {
   }, []);
 
   const onSelectionOfDropdownValue = (index, type, value) => {
-    if(value === 'Print')
-      handlePrint()
     setShowExportFilter(false);
     let url = "";
     if (visible === "one") {
@@ -536,7 +529,7 @@ const Orders = (props) => {
           isReportDisabled={!isAuthenticated("orderExportReport")}
         />
       </div>
-      <div ref={componentRef} className='ribben-space'>
+      <div className='ribben-space'>
         <Table
           {...props}
           skip={skip}
