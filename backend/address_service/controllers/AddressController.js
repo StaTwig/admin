@@ -57,10 +57,11 @@ exports.addressesOfOrgWarehouses = [
 ];
 
 function getConditionForLocationApprovals(type, id) {
+  let matchConditions = { };
   // let matchConditions = { status: "NOTVERIFIED" };
-  let matchConditions = {
-    $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
-  };
+  // let matchConditions = {
+  //   $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
+  // };
   if (type != "CENTRAL_AUTHORITY") matchConditions.organisationId = id;
   return matchConditions;
 }
@@ -86,7 +87,7 @@ exports.getLocationApprovals = [
             pipeline: [
               {
                 $match: {
-                  $expr: { $in: ["$$wid", "$warehouseId"] },
+                  $expr: { $in: ["$$wid", "$pendingWarehouseId"] },
                 },
               },
             ],
@@ -469,32 +470,38 @@ exports.modifyLocation = [
                     $set: {
                       warehouseId: [id],
                     },
+                    $pull: {
+                      pendingWarehouseId: id
+                    }
                   }
                 );
               }
-              // if (type == 2) {
-              //   await EmployeeModel.updateOne(
-              //     {
-              //       id: eid,
-              //     },
-              //     {
-              //       $push: {
-              //         warehouseId: id,
-              //       },
-              //     }
-              //   );
-              // } else {
-              //   await EmployeeModel.updateOne(
-              //     {
-              //       id: eid,
-              //     },
-              //     {
-              //       $pull: {
-              //         warehouseId: id,
-              //       },
-              //     }
-              //   );
-              // }
+              else if (type == 1) {
+                await EmployeeModel.updateOne(
+                  {
+                    id: eid,
+                  },
+                  {
+                    $push: {
+                      warehouseId: id
+                    },
+                    $pull: {
+                      pendingWarehouseId: id
+                    }
+                  }
+                );
+              } else {
+                await EmployeeModel.updateOne(
+                  {
+                    id: eid,
+                  },
+                  {
+                    $pull: {
+                      pendingWarehouseId: id,
+                    },
+                  }
+                );
+              }
             });
 
           return apiResponse.successResponseWithData(
