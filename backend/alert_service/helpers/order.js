@@ -1,13 +1,20 @@
 const OrganisationModel = require("../models/OrganisationModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const { sendNotification } = require("./sender");
 const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
+
 async function getOrgName(orgId) {
   if (orgId) {
-    const org = await OrganisationModel.findById(orgId);
+    const org = await OrganisationModel.findOne({ id: orgId });
     return org.name;
   } else {
     return "";
   }
+}
+
+async function getUserDetails(userId) {
+  const user = await EmployeeModel.findOne({ id: userId });
+  return user;
 }
 
 async function getEligibleUsers(locationId, type) {
@@ -40,6 +47,7 @@ async function getEligibleUsers(locationId, type) {
       eligibleUsers.push(user);
     }
   });
+  return eligibleUsers;
 }
 
 exports.orderCreated = async (event) => {
@@ -54,10 +62,11 @@ exports.orderCreated = async (event) => {
   let templateReceiver = `Received a new Order "Order - ${txnId}" from ${event?.secondaryOrgId} ${updatedSecondaryOrgName}`;
   let templateOthers = `"Order - ${txnId}" has been created by ${event?.actorOrgId} ${updatedOrgName}"`;
   if (event.actorId && event.actorUserid) {
+    const mobile = await getUserDetails(actorId).phoneNumber;
     let dataSender = {
-      user: user.id,
-      email: user.emailId,
-      mobile: user.phoneNumber,
+      user: actorId,
+      email: actorUserid,
+      mobile: mobile,
       subject: `Order Alert`,
       content: templateSender,
       type: "ALERT",
@@ -66,7 +75,7 @@ exports.orderCreated = async (event) => {
     };
     await sendNotification(dataSender);
   } else {
-    eligibleUsers = [];
+    let eligibleUsers = [];
     if (event.actorWarehouseId) {
       eligibleUsers = await getEligibleUsers(
         event.actorWarehouseId,
@@ -131,10 +140,11 @@ exports.orderAccept = async (event) => {
   let templateSender = `Your "Order - ${txnId}" has been Accepted by ${event?.actorOrgId} ${updatedOrgName}`;
   let templateReceiver = `Accepted "Order - ${txnId}"`;
   if (event.actorId && event.actorUserid) {
+    const mobile = await getUserDetails(actorId).phoneNumber;
     let dataSender = {
-      user: user.id,
-      email: user.emailId,
-      mobile: user.phoneNumber,
+      user: actorId,
+      email: actorUserid,
+      mobile: mobile,
       subject: `Order Alert`,
       content: templateReceiver,
       type: "ALERT",
@@ -143,7 +153,7 @@ exports.orderAccept = async (event) => {
     };
     await sendNotification(dataSender);
   } else {
-    eligibleUsers = [];
+    let eligibleUsers = [];
     if (event.actorWarehouseId) {
       eligibleUsers = await getEligibleUsers(
         event.actorWarehouseId,
@@ -205,7 +215,7 @@ exports.orderReject = async (event) => {
     };
     await sendNotification(dataSender);
   } else {
-    eligibleUsers = [];
+    let eligibleUsers = [];
     if (event.actorWarehouseId) {
       eligibleUsers = await getEligibleUsers(
         event.actorWarehouseId,
@@ -267,7 +277,7 @@ exports.orderPending = async (event) => {
     };
     await sendNotification(dataSender);
   } else {
-    eligibleUsers = [];
+    let eligibleUsers = [];
     if (event.actorWarehouseId) {
       eligibleUsers = await getEligibleUsers(
         event.actorWarehouseId,
@@ -328,7 +338,7 @@ exports.orderDefault = async (event) => {
     };
     await sendNotification(dataSender);
   } else {
-    eligibleUsers = [];
+    let eligibleUsers = [];
     if (event.actorWarehouseId) {
       eligibleUsers = await getEligibleUsers(
         event.actorWarehouseId,

@@ -15,7 +15,7 @@ const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
 
 async function getOrgName(orgId) {
   if (orgId) {
-    const org = await OrganisationModel.findById(orgId);
+    const org = await OrganisationModel.findOne({ id: orgId });
     return org.name;
   } else {
     return "";
@@ -24,7 +24,7 @@ async function getOrgName(orgId) {
 
 async function getUserDetails(userId) {
   if (userId) {
-    const user = await EmployeeModel.findById(userId);
+    const user = await EmployeeModel.findOne({ id: userId });
     return user;
   }
 }

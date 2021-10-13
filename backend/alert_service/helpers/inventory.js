@@ -6,7 +6,7 @@ const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
 async function getEligibleUsers(warehouseId) {
   let eligibleUsers = [];
   const users = await EmployeeModel.find({
-    organisation: { $in: [warehouseId] },
+    warehouseId: { $in: [warehouseId] },
     accountStatus: "ACTIVE",
   });
   users.forEach(async (user) => {
@@ -32,9 +32,9 @@ exports.inventoryAdd = async (event) => {
   let txnId = event.transactionId;
   let template = `"Inventory - ${txnId}" has been Added`;
   if (event.actorId) {
-    const actor = await EmployeeModel.findOne(event.actorId);
+    const actor = await EmployeeModel.findOne({ id: event.actorId });
     let dataSender = {
-      user: event?.actorId,
+      user: event.actorId,
       email: actor.emailId,
       mobile: actor.phoneNumber,
       subject: `Inventory Alert`,
@@ -51,9 +51,9 @@ exports.inventoryUpdate = async (event) => {
   let txnId = event.transactionId;
   let template = `"Inventory - ${txnId}" has been Updated`;
   if (event.actorId) {
-    const actor = await EmployeeModel.findOne(event.actorId);
+    const actor = await EmployeeModel.findOne({ id: event.actorId });
     let dataSender = {
-      user: event?.actorId,
+      user: event.actorId,
       email: actor.emailId,
       mobile: actor.phoneNumber,
       subject: `Inventory Alert`,
@@ -69,9 +69,9 @@ exports.inventoryNearExpiry = async (event) => {
   let txnId = event.transactionId;
   let template = `"Inventory - ${txnId}" will expire soon`;
   if (event.actorId) {
-    const actor = await EmployeeModel.findOne(event.actorId);
+    const actor = await EmployeeModel.findOne({ id: event.actorId });
     let dataSender = {
-      user: event?.actorId,
+      user: event.actorId,
       email: actor.emailId,
       mobile: actor.phoneNumber,
       subject: `Inventory Alert`,

@@ -18,7 +18,6 @@ const {
   inventoryUpdate,
 } = require("./inventory");
 const Alert = require("../models/AlertModel");
-const { sendMessage } = require("./sender");
 async function shipmentListener(event) {
   try {
     switch (event.eventTypePrimary) {
