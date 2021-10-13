@@ -169,6 +169,14 @@ $ sudo service docker restart
 
 - We are not binding an Volume to docker containers
 
+## Working with Redis
+
+To connect to Redis Instance
+
+```bash
+redis-cli -h <Hostname> -a StaTwig2021
+```
+
 ## References
 
 - Docker & Docker compose :

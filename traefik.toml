@@ -13,9 +13,6 @@
 [api]
   dashboard = true
 
-[log]
-  level = "DEBUG"
-
 [certificatesResolvers.lets-encrypt.acme]
   email = "ashwini@statwig.com"
   storage = "acme.json"
