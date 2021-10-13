@@ -1825,12 +1825,14 @@ function buildExcelReport(req,res,dataForExcel){
 }
 
 
-function buildPdfReport(req,res,data, orderType){
+async function buildPdfReport(req,res,data, orderType){
   console.log(data)
   var rows = [];
-rows.push([{text: 'Order Id', bold: true}, {text: 'Order created By', bold: true}, {text: 'Creator Org Id', bold: true}, {text: 'Order Received from', bold: true}, {text: 'ORG ID - Receiver', bold:  true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'Organization Name', bold: true}, {text: 'Organization ID', bold: true}, {text: 'Organization Location Details', bold: true}, {text: 'Status', bold: true}]);
+rows.push([{text: 'Order Id', bold: true}, {text: 'Order created By', bold: true}, {text: 'Creator Org Id', bold: true}, {text: 'Creator Org Name', bold: true}, {text: 'ORG ID - Receiver', bold:  true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'Delivery Organization Name', bold: true}, {text: 'Delivery Organization ID', bold: true}, {text: 'Delivery Organization Location Details', bold: true}, {text: 'Status', bold: true}]);
 for(var i = 0; i < data.length; i++) {
-    rows.push([data[i].id || 'N/A', data[i].createdBy || 'N/A', data[i].supplierOrgId || 'N/A', data[i].orderReceiveIncharge|| 'N/A', data[i].orderReceiverOrg || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productId || 'N/A', data[i].productQuantity || 'N/A', data[i].manufacturer || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].status || 'N/A']);
+    let OrgName = await OrganisationModel.findOne({id: data[i].supplierOrgId})
+    OrgName = OrgName?.name
+    rows.push([data[i].id || 'N/A', data[i].createdBy || 'N/A', data[i].supplierOrgId || 'N/A', OrgName|| 'N/A', data[i].orderReceiverOrg || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productId || 'N/A', data[i].productQuantity || 'N/A', data[i].manufacturer || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].status || 'N/A']);
 }
 
 var docDefinition = {
