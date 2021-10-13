@@ -33,10 +33,15 @@ const NUModal = (props) => {
   console.log(disableRoleBtn);
 
   const unDisableNxtBtn = () => {
-    if(disableRoleBtn && disableButton)
+    if(props.data.id) {
       return false;
-    else
-      return true
+    }
+    else{
+      if(disableRoleBtn && disableButton)
+        return false;
+      else
+        return true
+    }
   }
 
   debugger
