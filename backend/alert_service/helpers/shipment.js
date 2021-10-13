@@ -35,7 +35,7 @@ async function getEligibleUsers(warehouseId) {
     organisation: { $in: [warehouseId] },
     accountStatus: "ACTIVE",
   });
-  users.forEach((user) => {
+  users.forEach(async (user) => {
     const permission_request = {
       role: user.role,
       permissionRequired: [
