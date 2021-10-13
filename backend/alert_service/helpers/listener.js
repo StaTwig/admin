@@ -106,13 +106,13 @@ async function alertListener(event) {
 }
 
 async function subscribedAlerts(event) {
-  let params = {
+  let actorOrgIdParam = {
     "alerts.event_type_primary": event.eventTypePrimary,
     "alerts.event_type_secondary": event.eventTypeDesc,
     "alerts.actorOrgId": event.actorOrgId,
   };
   for await (const row of Alert.find({
-    ...params,
+    ...actorOrgIdParam,
   })) {
     if (row.alertMode.mobile && row.alertMode.email) {
       // alertMobile(event, row.user.mobile_number);
@@ -130,13 +130,13 @@ async function subscribedAlerts(event) {
     }
   }
 
-  let params = {
+  let txnIdParam = {
     "alerts.event_type_primary": event.eventTypePrimary,
     "alerts.event_type_secondary": event.eventTypeDesc,
     "alerts.transactionId": event.transactionId,
   };
   for await (const element of Alert.find({
-    ...params,
+    ...txnIdParam,
   })) {
     if (element.alertMode.mobile && element.alertMode.email) {
       // alertMobile(event, element.user.mobile_number);
