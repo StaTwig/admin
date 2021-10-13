@@ -24,7 +24,7 @@ async function getEligibleUsers(locationId, type) {
       accountStatus: "ACTIVE",
     });
   }
-  users.forEach((user) => {
+  users.forEach(async (user) => {
     const permission_request = {
       role: user.role,
       permissionRequired: [
@@ -75,7 +75,7 @@ exports.orderCreated = async (event) => {
     } else {
       eligibleUsers = await getEligibleUsers(event.actorOrgId, "ORGANISATION");
     }
-    eligibleUsers.forEach((user) => {
+    eligibleUsers.forEach(async (user) => {
       let dataSender = {
         user: user.id,
         email: user.emailId,
@@ -93,7 +93,7 @@ exports.orderCreated = async (event) => {
     event.secondaryOrgId,
     "ORGANISATION"
   );
-  secondaryOrgUsers.forEach((user) => {
+  secondaryOrgUsers.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -108,7 +108,7 @@ exports.orderCreated = async (event) => {
   });
   if (event.caId) {
     const caUsers = await getEligibleUsers(event.caId, "ORGANISATION");
-    caUsers.forEach((user) => {
+    caUsers.forEach(async (user) => {
       let dataReceiver = {
         user: user.id,
         email: user.emailId,
@@ -152,7 +152,7 @@ exports.orderAccept = async (event) => {
     } else {
       eligibleUsers = await getEligibleUsers(event.actorOrgId, "ORGANISATION");
     }
-    eligibleUsers.forEach((user) => {
+    eligibleUsers.forEach(async (user) => {
       let dataSender = {
         user: user.id,
         email: user.emailId,
@@ -170,7 +170,7 @@ exports.orderAccept = async (event) => {
     event.secondaryOrgId,
     "ORGANISATION"
   );
-  secondaryOrgUsers.forEach((user) => {
+  secondaryOrgUsers.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -214,7 +214,7 @@ exports.orderReject = async (event) => {
     } else {
       eligibleUsers = await getEligibleUsers(event.actorOrgId, "ORGANISATION");
     }
-    eligibleUsers.forEach((user) => {
+    eligibleUsers.forEach(async (user) => {
       let dataSender = {
         user: user.id,
         email: user.emailId,
@@ -232,7 +232,7 @@ exports.orderReject = async (event) => {
     event.secondaryOrgId,
     "ORGANISATION"
   );
-  secondaryOrgUsers.forEach((user) => {
+  secondaryOrgUsers.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -276,7 +276,7 @@ exports.orderPending = async (event) => {
     } else {
       eligibleUsers = await getEligibleUsers(event.actorOrgId, "ORGANISATION");
     }
-    eligibleUsers.forEach((user) => {
+    eligibleUsers.forEach(async (user) => {
       let dataSender = {
         user: user.id,
         email: user.emailId,
@@ -294,7 +294,7 @@ exports.orderPending = async (event) => {
     event.secondaryOrgId,
     "ORGANISATION"
   );
-  secondaryOrgUsers.forEach((user) => {
+  secondaryOrgUsers.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -337,7 +337,7 @@ exports.orderDefault = async (event) => {
     } else {
       eligibleUsers = await getEligibleUsers(event.actorOrgId, "ORGANISATION");
     }
-    eligibleUsers.forEach((user) => {
+    eligibleUsers.forEach(async (user) => {
       let dataSender = {
         user: user.id,
         email: user.emailId,
@@ -355,7 +355,7 @@ exports.orderDefault = async (event) => {
     event.secondaryOrgId,
     "ORGANISATION"
   );
-  secondaryOrgUsers.forEach((user) => {
+  secondaryOrgUsers.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,

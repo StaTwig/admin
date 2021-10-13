@@ -93,7 +93,7 @@ exports.shipmentCreate = async (event) => {
   let getReceiverDetails = await getEligibleUsers(
     event.payloadData.data.receiver.locationId
   );
-  getReceiverDetails.forEach((user) => {
+  getReceiverDetails.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -147,7 +147,7 @@ exports.shipmentUpdate = async (event) => {
   let getReceiverDetails = await getEligibleUsers(
     event.payloadData.data.receiver.locationId
   );
-  getReceiverDetails.forEach((user) => {
+  getReceiverDetails.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -181,7 +181,7 @@ exports.shipmentReceive = async (event) => {
   let getReceiverDetails = await getEligibleUsers(
     event.payloadData.data.supplier.locationId
   );
-  getReceiverDetails.forEach((user) => {
+  getReceiverDetails.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,
@@ -206,7 +206,7 @@ exports.shipmentDelayed = async (event) => {
   let getSenderDetails = await getEligibleUsers(
     event.payloadData.data.supplier.locationId
   );
-  getSenderDetails.forEach((user) => {
+  getSenderDetails.forEach(async (user) => {
     let dataSender = {
       user: user.id,
       email: user.emailId,
@@ -222,7 +222,7 @@ exports.shipmentDelayed = async (event) => {
   let getReceiverDetails = await getEligibleUsers(
     event.payloadData.data.receiver.locationId
   );
-  getReceiverDetails.forEach((user) => {
+  getReceiverDetails.forEach(async (user) => {
     let dataReceiver = {
       user: user.id,
       email: user.emailId,

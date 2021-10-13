@@ -9,7 +9,7 @@ async function getEligibleUsers(warehouseId) {
     organisation: { $in: [warehouseId] },
     accountStatus: "ACTIVE",
   });
-  users.forEach((user) => {
+  users.forEach(async (user) => {
     const permission_request = {
       role: user.role,
       permissionRequired: [
@@ -89,7 +89,7 @@ exports.inventoryExpired = async (event) => {
   const warehouseId = await WarehouseModel.find({ warehouseInventory: txnId });
   for (warehouse of warehouseId) {
     const employees = await getEligibleUsers(warehouse.id);
-    employees.forEach((user) => {
+    employees.forEach(async (user) => {
       let dataReceiver = {
         user: user.id,
         email: user.emailId,
