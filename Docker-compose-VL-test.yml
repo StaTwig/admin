@@ -14,7 +14,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     labels:
       # Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`test.traefik.vaccineledger.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`https://test.traefik.vaccineledger.com`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls.certresolver=leresolver"
       - "traefik.http.routers.traefik.entrypoints=websecure"
