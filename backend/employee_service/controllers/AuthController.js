@@ -873,11 +873,11 @@ exports.userInfo = [
           );
           const warehouse = await EmployeeModel.findOne(
             { id },
-            { _id: 0, warehouseId: 1 }
+            { _id: 0, warehouseId: 1, pendingWarehouseId: 1 }
           );
           // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
           const warehouseArray = await WarehouseModel.find({
-            id: { $in: warehouse.warehouseId },
+             $or: [{ id: { $in: warehouse.warehouseId } }, { id: { $in: warehouse.pendingWarehouseId } }],
           });
           var user_data;
           if (org) {
@@ -899,6 +899,7 @@ exports.userInfo = [
               warehouses: warehouseArray,
               signup_date: createdAt,
               permissions: permissions,
+              pendingWarehouseId: warehouse.pendingWarehouseId
             };
           } else {
             user_data = {
@@ -919,6 +920,7 @@ exports.userInfo = [
               warehouses: warehouseArray,
               signup_date: createdAt,
               permissions: permissions,
+              pendingWarehouseId: warehouse.pendingWarehouseId
             };
           }
           logger.log(
