@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("express-jwt");
 const secret = process.env.JWT_SECRET;
 

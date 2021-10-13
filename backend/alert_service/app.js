@@ -10,6 +10,7 @@ const events = require("./models/EventModal");
 const { alertListener } = require("./helpers/listener");
 require("dotenv").config();
 const MONGODB_URL = process.env.MONGODB_URL;
+
 const mongoose = require("mongoose");
 mongoose
   .connect(MONGODB_URL, {
