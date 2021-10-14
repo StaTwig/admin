@@ -99,7 +99,7 @@ const Users = (props) => {
                >Name</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText' style={{paddingLeft:"10px"}}>
+            <div className='col box headerText' style={{paddingLeft:"10px",justifyContent:"unset"}}>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForRole(!showDropDownForRole);
@@ -133,16 +133,16 @@ const Users = (props) => {
             </div>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2">Location</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Location</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2">Wallet address</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Wallet address</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2">Email/Mobile</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Email/Mobile</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText pl-2'>
+            <div className='col box headerText pl-2' style={{justifyContent:"unset"}}>
               <span className="headerText" onClick={() => {
                 setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
               }} style={{cursor:"pointer"}}>{'Account Status'}</span>

@@ -45,7 +45,7 @@ const DropDownFilter = (props) => {
             setShowDropDownForRole
              } = props
      return (
-        <div ref={ref}  className={`card rounded bg-white border-white role-card-container`} style={{left:"0rem",height:"auto",minHeight:"5rem",maxHeight:"15rem"}}>
+        <div ref={ref}  className={`card rounded bg-white border-white role-card-container`} style={{left:"unset",height:"auto",minHeight:"5rem",maxHeight:"15rem"}}>
             <SearchBar
                 onChangeOfSearchInput={props.onChangeOfSearchInput}
                 type={props.type}
