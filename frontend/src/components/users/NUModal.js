@@ -27,7 +27,10 @@ const NUModal = (props) => {
 
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
-    event.target.value.length > 0 ? setDisableBtn(true) : setDisableBtn(false);
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value))
+      setDisableBtn(false)
+    else
+      setDisableBtn(true)
   };
 
   const setWarehouse = (name, id) => {
