@@ -29,7 +29,7 @@ const LocationAddUser = (props) => {
             {addresses.map((address,index) => (
                 <div 
                     id = {`selectedCard${index}`}
-                    style ={{width : "27%", cursor:"pointer", position:"relative", backgroundColor:`${props.selectedAddress.warehouse === address.id ? "#DFF1F2" :""}`}}
+                    style ={{width : "27%", cursor:"pointer", position:"relative", backgroundColor:`${props.selectedAddress.warehouse === address.id ? "#DFF1F2" :""}`, left : `${props.addresses.length < 2 ? `3rem` : `unset`}`}}
                     className="card flex-row justify-content-between rounded border border-white shadow mt-3 ml-2 p-3"
                     onClick={() => {
                         onSelect(address);

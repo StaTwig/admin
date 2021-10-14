@@ -44,7 +44,7 @@ const NUModal = (props) => {
   console.log(disableRoleBtn);
 
   const unDisableNxtBtn = () => {
-    if(props.data.id) {
+    if(props.data.id && disableRoleBtn) {
       return false;
     }
     else{
@@ -185,7 +185,7 @@ const NUModal = (props) => {
                     )}
                 </div>
               ) : (
-                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent:"space-evenly"}}>
+                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent: `${addresses.length < 2  ? `unset` : `space-evenly`}`}}>
                       {/* {addresses.map((address,index) => ( */}
                         <LocationAddUser 
                           referance = {formikRef}
