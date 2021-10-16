@@ -3,17 +3,16 @@ import './location.scss'
 
 const LocationAddUser = (props) => {
 
-    const [selected, setSelected] = useState(false);
+    const [select, setSelected] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState({})
 
     const addresses = props.addresses;
-    const {  onSelect,name } = props;
+    const {  onSelect,name,getSelectedAddress,addUserBtnDisable } = props;
 
     const selectedValue = (selected) => {
-        setSelected(false);
-
-        const selectedValue = addresses.find((address,index) => {
-            if(selected.id === address.id){
+        getSelectedAddress(addUserBtnDisable ? false : true)
+        const selectedValue = addresses.forEach((address,index) => {
+            if(selected.id === address.id && addUserBtnDisable){
                 // setSelected(true);
                 // setSelectedAddress(selected)
                 document.getElementById(`selectedCard${index}`).style.backgroundColor = '#DFF1F2';

@@ -13,6 +13,7 @@ const NUModal = (props) => {
   const [disableRoleBtn, setDisanleRole] = useState(false);
   const [changeComponent, setChangeComponent] = useState('role');
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
+  const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
 
   const usersList = useSelector((state) => {
@@ -71,6 +72,11 @@ const NUModal = (props) => {
 
       })
     }
+  }
+
+  const getSelectedAddress = (value) => {
+    // debugger
+    setAddUserBtnDisable(value)
   }
   
 
@@ -195,6 +201,8 @@ const NUModal = (props) => {
                           }}
                           selectedAddress = {data}
                           name={wh}
+                          getSelectedAddress = {getSelectedAddress}
+                          addUserBtnDisable = {addUserBtnDisable}
                         ></LocationAddUser>
                       {/* ))} */}
                     </div>
@@ -228,7 +236,7 @@ const NUModal = (props) => {
                     {buttonText}
                   </button>
                 ) : (
-                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange">
+                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
                     {buttonText}
                   </button>
                 )}
