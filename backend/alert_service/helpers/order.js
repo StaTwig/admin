@@ -90,7 +90,7 @@ exports.orderCreated = async (event) => {
   let sendorOrg = await employeeOrg(event?.actorId);
   let senderEmployeeName = (await getUserDetails(event?.actorId).name) || "";
   let templateReceiver = `Received a new "Order - ${txnId}" from ${senderEmployeeName} from ${sendorOrg.name}-${sendorOrg.id}`;
-  let templateOthers = `"Order - ${txnId}" has been created by ${senderEmployeeName} from ${sendorOrgName}"`;
+  let templateOthers = `"Order - ${txnId}" has been created by ${senderEmployeeName} from ${sendorOrg.name}-${sendorOrg.id}`;
   const eligibleUsers = await getEligibleUsers(
     event.actorOrgId,
     "ORGANISATION"
