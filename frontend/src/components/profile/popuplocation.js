@@ -6,6 +6,7 @@ import { addWarehouse } from "../../actions/userActions";
 import { Link } from "react-router-dom";
 import SuccessPopup from "../../shared/PopUp/successPopUp";
 import Modal from "../../shared/modal";
+import LocationDropdown from "./LocationDropdown";
 
 const PopUpLocation = (props) => {
   console.log(props)
@@ -85,7 +86,7 @@ const PopUpLocation = (props) => {
       <br></br>
       <div className='ml-5'>
         <div className='col-md-12'>
-          <div className='form-group'>
+          <div className='form-group' style={{position:"relative",bottom:"2rem"}}>
             <img
               src={Location}
               className='addLocModalImg pt-2'
@@ -99,7 +100,7 @@ const PopUpLocation = (props) => {
                 alertFlag ? "border-danger" : ""
               }`}
             >
-              <DropdownButton
+              <LocationDropdown
                 name={selectLocation}
                 // name2="Select Location"
                 onSelect={(v) => {

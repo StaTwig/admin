@@ -263,7 +263,7 @@ exports.addProduct = [
                 //   );
                 // }
                 console.log(req.body.unitofMeasure)
-                const product_unique = uniqid("prod-").substring(0, 9);
+                const product_unique = uniqid("prod-")
                 const product = new ProductModel({
                   id: product_unique,
                   externalId: req.body.externalId,

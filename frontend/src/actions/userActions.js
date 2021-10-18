@@ -139,6 +139,24 @@ export const getWarehouseById = async (id) => {
   }
 };
 
+// Alert Modal Popup Verification
+export const getAlertModalData = async (id) => {
+  try {
+    const result = await axios.get(config().requestModalAlertUrl + id);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const updateAlertModalData = async (id, status) => {
+  try {
+    const result = await axios.get(config().updateStatusModalAlert + id + "&status=" + status);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
 
 
 // Set logged in user

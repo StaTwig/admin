@@ -23,6 +23,8 @@ import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
 import { getProducts, searchProduct } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
+import { config } from "../../config";
+import axios from "axios";
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -42,6 +44,7 @@ const NewShipment = (props) => {
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
+  const [validShipmentID, setValidShipmentID] = useState(false)
   // const [senderOrgLoc, setSenderOrgLoc] = useState(
   //   "Select Organisation Location"
   // );
@@ -519,6 +522,17 @@ console.log(user.organisation)
     setOrderDetails(cloneOrder);
     // setOrderProduct(inventoryStateClone);
   };
+
+  function onSearchChange(e) {
+    debugger
+    axios
+      .get(`${config().getSuggestions}?searchString=${e}`)
+      .then((resp) =>{
+        const value = resp.data.data.length > 0 ? true : false
+         setValidShipmentID(value)
+        })
+  }
+
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
@@ -810,7 +824,7 @@ console.log(user.organisation)
                     </div>
                   </div>
                   <div className='col-md-6 com-sm-12'>
-                    <label className='name' htmlFor='shipmentID'>
+                    <label className='name' htmlFor='shipmentID' style={{position:"relative",top:"0.5rem"}}>
                       Reference Shipment ID
                     </label>
                     <input
@@ -821,96 +835,138 @@ console.log(user.organisation)
                       value={values.shipmentID}
                       onBlur={handleBlur}
                       placeholder='Enter Reference Shipment ID'
-                      onChange={handleChange}
+                      onInputChange={(event, newInputValue) => {
+                        onSearchChange(newInputValue);
+                      }}
+                      onChange={(event, newValue) => {
+                        console.log("evnt",event, newValue)
+                        handleChange(event);
+                        onSearchChange(event.target.value);
+                      }}
                     />
                     </div>
                     </div>
                     <div className="fetch">
-                    <span
-                      style={{ height: "25px", width: "50px" }}
-                      className='btn btn-fetch'
-                      onClick={async () => {
-                        // setpofetchdisabled(true);
-                        setProducts((p) => []);
-                        setAddProducts((p) => []);
-                        setOrderIdSelected(true);
-                        dispatch(turnOn());
-                        setDisabled(false);
-                        let result = await dispatch(
-                          getViewShipment(values.shipmentID)
-                        );
-                        if (result.status !== "RECEIVED") {
-                          values.shipmentID = "";
-                          // alert("The shipment has to be delivered first");
-                          setShipmentError("Shipment has to be delivered");
-                          setOpenShipmentFail(true);
-                          dispatch(turnOff());
-                        }
-                        else
-                        {
-                          for (let i = 0; i < result.products?.length; i++) {
-                          if (result.products[i].productQuantityShipped) {
-                            result.products[i].productQuantity =
-                              parseInt(result.products[i].productQuantity) -
-                              parseInt(
-                                result.products[i].productQuantityShipped
-                              );
-                          }
-                          result.products[i].orderedQuantity =
-                            result.products[i].productQuantity;
-                        }
-                        dispatch(turnOff());
-                        setReceiverOrgLoc();
-                        setReceiverOrgId();
-                        setFieldValue("fromOrg", "");
-                        setFieldValue("fromOrgLoc", "");
-                        setFieldValue("rtype");
-                        setFieldValue("toOrg", "");
-
-                        if (result.status === 500) {
-                          setShipmentError("Check Shipment Reference ID");
-                          setOpenShipmentFail(true);
-                        } else {
-                          setOrderDetails(result);
-                          let wa = result.receiver.warehouse;
-                          setFieldValue("toOrgLoc", "");
-                          settoOrgLocLabel("");
-                          // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
-                          let products_temp = result.products;
-                          for (let i = 0; i < products_temp.length; i++) {
-                            products_temp[i].manufacturer =
-                              result.products[i].manufacturer;
-                            products_temp[i].name =
-                              result.products[i].productName;
-                            products_temp[i].productQuantity =
-                              result.products[i].productQuantity -
-                              result.products[i].productQuantityTaggedSent;
-                            products_temp[i].type =
-                              result.products[i].productCategory;
-                            delete products_temp[i].productQuantityDelivered;
-                            products_temp[i].batchNumber = "";
-                            products_temp[i].id = result.products[i].productID;
-                          }
-                          console.log(products_temp);
-                          if (result.products.length > 0) {
+                      {values.shipmentID.length > 0 ? (
+                        <span
+                          style={{ height: "25px", width: "50px" }}
+                          className='btn btn-fetch'
+                          onClick={async () => {
+                            // setpofetchdisabled(true);
                             setProducts((p) => []);
                             setAddProducts((p) => []);
-                            setFieldValue("products", products_temp);
-                          } else setFieldValue("products", []);
-                        }
-                      }}}
-                    >
-                      <span
-                        style={{
-                          position: "relative",
-                          top: "-6px",
-                          fontSize: "12px",
-                          left: "-11px",
-                        }}
-                      >
-                        Fetch
-                      </span>
-                    </span>
+                            setOrderIdSelected(true);
+                            dispatch(turnOn());
+                            setDisabled(false);
+                            if (values.shipmentID.length == 0) {
+                              setShipmentError("ShipmentID cannot be Empty");
+                              setOpenShipmentFail(true);
+                              dispatch(turnOff());
+                            }
+                            else {
+                              if (validShipmentID) {
+                                  let result = await dispatch(
+                                    getViewShipment(values.shipmentID)
+                                  );
+
+                                  if (result.status !== "RECEIVED") {
+                                    values.shipmentID = "";
+                                    // alert("The shipment has to be delivered first");
+                                    setShipmentError("Shipment has to be delivered");
+                                    setOpenShipmentFail(true);
+                                    dispatch(turnOff());
+                                  }
+                                  else 
+                                  {
+                                    for (let i = 0; i < result.products?.length; i++) {
+                                      if (result.products[i].productQuantityShipped) {
+                                        result.products[i].productQuantity =
+                                          parseInt(result.products[i].productQuantity) -
+                                          parseInt(
+                                            result.products[i].productQuantityShipped
+                                          );
+                                      }
+                                      result.products[i].orderedQuantity =
+                                        result.products[i].productQuantity;
+                                    }
+                                    dispatch(turnOff());
+                                    setReceiverOrgLoc();
+                                    setReceiverOrgId();
+                                    setFieldValue("fromOrg", "");
+                                    setFieldValue("fromOrgLoc", "");
+                                    setFieldValue("rtype");
+                                    setFieldValue("toOrg", "");
+
+                                    if (result.status === 500) {
+                                      setShipmentError("Check Shipment Reference ID");
+                                      setOpenShipmentFail(true);
+                                    } else {
+                                      setOrderDetails(result);
+                                      let wa = result.receiver.warehouse;
+                                      setFieldValue("toOrgLoc", "");
+                                      settoOrgLocLabel("");
+                                      // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
+                                      let products_temp = result.products;
+                                      for (let i = 0; i < products_temp.length; i++) {
+                                        products_temp[i].manufacturer =
+                                          result.products[i].manufacturer;
+                                        products_temp[i].name =
+                                          result.products[i].productName;
+                                        products_temp[i].productQuantity =
+                                          result.products[i].productQuantity -
+                                          result.products[i].productQuantityTaggedSent;
+                                        products_temp[i].type =
+                                          result.products[i].productCategory;
+                                        delete products_temp[i].productQuantityDelivered;
+                                        products_temp[i].batchNumber = "";
+                                        products_temp[i].id = result.products[i].productID;
+                                      }
+                                      console.log(products_temp);
+                                      if (result.products.length > 0) {
+                                        setProducts((p) => []);
+                                        setAddProducts((p) => []);
+                                        setFieldValue("products", products_temp);
+                                      } else setFieldValue("products", []);
+                                    }
+                                  }
+                              }
+                              else {
+                                setShipmentError("Invalid ShipmentID Please Enter a Valid ShipmentID");
+                                setOpenShipmentFail(true);
+                                dispatch(turnOff());
+                              }
+                            }
+                          }}
+                        >
+                            <span
+                              style={{
+                                position: "relative",
+                                top: "-6px",
+                                fontSize: "12px",
+                                left: "-11px",
+                              }}
+                            >
+                              Fetch
+                            </span>
+                        </span>
+                      ) : (
+                        <span 
+                          style={{ height: "25px", width: "50px" }}
+                          className='btn fetchDisable'
+                        >
+                          <span
+                              style={{
+                                position: "relative",
+                                top: "-6px",
+                                fontSize: "12px",
+                                left: "-11px",
+                              }}
+                            >
+                              Fetch
+                            </span>
+                        </span>
+                      )}
+                        
                 </div>
               </div>
             </div>
