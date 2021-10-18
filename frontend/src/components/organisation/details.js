@@ -71,6 +71,12 @@ const Details = (props) => {
     }
 
     const updatedType = (value) => {
+
+      setSelectedType(value)
+      
+    }
+
+    const clickOnType = (value) => {
       debugger
       org.type = value
       modifyOrg({
@@ -123,7 +129,7 @@ const Details = (props) => {
                   onclickSelectedValue = {updatedType}
                   type={'orgType'}
                 />
-                <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
+                <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false); clickOnType(getSelectedType)}}/>
               </span>
             ) : (
               <div style = {{width:"90%",display:"flex",flexDirection:"row"}}>
