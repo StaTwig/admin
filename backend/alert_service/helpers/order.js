@@ -3,7 +3,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const { sendNotification } = require("./sender");
 const { asyncForEach } = require("./utility");
 const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
-const RecordModel = require("../../po_service/models/RecordModel");
+const RecordModel = require("../models/RecordModel");
 
 async function getOrgName(orgId) {
   const org = await OrganisationModel.findOne({ id: orgId });
