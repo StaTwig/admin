@@ -18,6 +18,7 @@ const {
   inventoryUpdate,
 } = require("./inventory");
 const Alert = require("../models/AlertModel");
+
 async function shipmentListener(event) {
   try {
     switch (event.eventTypePrimary) {
@@ -91,7 +92,11 @@ async function inventoryListener(event) {
 
 async function alertListener(event) {
   try {
-    if (event.eventTypeDesc == "SHIPMENT" || "SHIPMENT_TRACKING") {
+    console.log(event.eventTypeDesc);
+    if (
+      event.eventTypeDesc == "SHIPMENT" ||
+      event.eventTypeDesc == "SHIPMENT_TRACKING"
+    ) {
       await shipmentListener(event);
     } else if (event.eventTypeDesc == "ORDER") {
       await orderListener(event);
