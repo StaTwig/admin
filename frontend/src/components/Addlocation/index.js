@@ -446,7 +446,8 @@ const AddLocation = (props) => {
                           values.addressTitle &&
                           values.city &&
                           values.state &&
-                          values.pincode
+                          values.pincode &&
+                          addressLine.length > 0
                         )
                       }
                       type='submit'
