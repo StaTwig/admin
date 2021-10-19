@@ -23,7 +23,7 @@ const ShipmentDetails = (props) => {
           <h6 className='poheads potext mt-3 mb-3'>To</h6>
           <li className='mb-1 text-secondary'>Organisation Name</li>
           <li className='mb-1 text-secondary'>Organisation Location</li>
-          <h6 className='poheads potext mt-3 mb-3'>Delivery Details:</h6>
+          <h6 className='poheads potext mt-3 mb-3'>Delivery Details</h6>
           <li className='mb-1 text-secondary'>Transit Number</li>
           <li className='mb-1 text-secondary'>Label Code</li>
           <li className='mb-1 text-secondary'>Shipment Date</li>
@@ -67,7 +67,7 @@ const ShipmentDetails = (props) => {
             className='poheads potext mt-3 mb-3 text-white'
             style={{ visibility: "hidden" }}
           >
-            Delivery Details:
+            Delivery Details
           </h6>
           <li className='mb-1'>{props.shipments.airWayBillNo}</li>
           <li className='mb-1'>{props.shipments.label.labelId}</li>
