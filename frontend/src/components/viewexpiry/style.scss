@@ -1,16 +1,14 @@
 @import "../../assets/styles/global.scss";
 
-.batchexpiry {
-  padding-right: 3rem;
+.viewinventory {
+  padding-right: 1.5rem;
   padding-left: 5rem;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
   }
   .breadcrumb {
-    position: relative;
-    top: -10px;
-    left: -35px;
+    margin: 0px 0px 20px -10px;
   }
 
   .full-width-ribbon {
@@ -18,23 +16,52 @@
     left: 0;
     right: 0;
     background-color: #eaeaea;
+
     .filter {
       margin-left: 9rem;
-      margin-right: 3.5rem;
+      margin-right: 0rem;
     }
   }
 
   .rounded {
     border-radius: 15px !important;
+    margin-top: 20px;
+    box-shadow: 0px 3px 10px #e4e4e4 !important;
   }
 
   .ribbon-space {
     margin-top: 4rem;
   }
 
+  .btn {
+    height: 30px;
+    font-size: 12px;
+  }
+  .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
   .txt {
     font-weight: 600;
     font-size: small;
+    align-self: center;
+    overflow: hidden;
+  }
+  .txt1 {
+    font-weight: 400;
+    font-size: small;
+    align-self: center;
+    overflow: hidden;
+  }
+  .txt2 {
+    font-weight: 400;
+    font-size: small;
+    align-self: center;
+    overflow: hidden;
+    text-align: right;
+    position: relative;
+    left: -130px;
   }
 
   .txtBlue {
@@ -202,9 +229,4 @@
       color: $deepBlue;
     }
   }
-}
-.sm-btn {
-  height: 30px;
-  font-size: 13px;
-  background: #fff;
 }
