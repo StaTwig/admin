@@ -4,6 +4,7 @@ import "./style.scss";
 import User from "../../assets/icons/mail.png";
 import logo from "../../assets/aicons/AdminLogo.png";
 import { Formik } from "formik";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp } = props;
@@ -92,12 +93,19 @@ const FormLoginPage = (props) => {
                           )}
                         </div>
                         {errorMessage && (
-                          <div className="alert alert-danger">
-                            {errorMessage}
+                          <div className='mb-3 ml-5 mr-4'>
+                            {" "}
+                            <Alert variant='filled' severity='error'>
+                              <AlertTitle>Error</AlertTitle>
+                              {errorMessage}
+                            </Alert>
                           </div>
                         )}
-                        <div className="text-center mt-5">
-                          <button type="submit" className="btn btn-primary">
+                        <div className="text-center mt-4">
+                          <button 
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={onSendOtp} >
                             SEND OTP
                           </button>
                         </div>
