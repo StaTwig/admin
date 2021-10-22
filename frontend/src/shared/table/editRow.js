@@ -74,7 +74,7 @@ const EditRow = (props) => {
         <div className='row mb-2'>
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
             <div
-              className={`col-3 theader text-center ml-5 ${
+              className={`col-3 theader  ml-5 ${
                 addMore
                   ? "product-cat-add-inventory"
                   : "Bproduct-cat-add-inventory"
@@ -84,8 +84,8 @@ const EditRow = (props) => {
               <span className='pl-2 text-muted'>Product Category*</span>
             </div>
             <div
-              className={`col-3 theader text-center ${
-                addMore ? "product-add-inventory" : "Bproduct-add-inventory"
+              className={` theader ${
+                addMore ? "col-3 product-add-inventory" : " col-2 Bproduct-add-inventory"
               }`}
             >
               <img src={Package} width='16' height='16' alt='product' />
@@ -107,7 +107,7 @@ const EditRow = (props) => {
                 : "Bbatch-add-inventory"
             }`}>
                 <img src={Batch} width='16' height='16' alt='Batch' />
-                <span className='pl-2 text-muted'>Batch Number</span>
+                <span className='pl-2 text-muted'>Batch No</span>
               </div>
             <div
               className={`col theader text-center ${
@@ -151,7 +151,10 @@ const EditRow = (props) => {
                 options={category}
               />
             </div>
-            <div className='col-3 align-self-center pt-1 pb-1 border-right bg-white'>
+            <div 
+              className='col-3 align-self-center pt-1 pb-1 border-right bg-white' 
+              style = {{display:"flex",flexDirection:"row"}}
+              >
               <div className='d-flex pt-1 flex-row justify-content-between'>
                 <div
                   className='title col-10 recived-text'
@@ -201,13 +204,13 @@ const EditRow = (props) => {
                 )}
               </div>
             </div>
-             <div className='col-2 mt-1 mb-1 border-right'>
+             <div className='col-2 mt-1 mb-1 border-right' style={{display:"flex",alignItems:"center"}}>
                 <div className=''>
                   <input
                     type='text'
                     style={{ fontSize: "14px" }}
                     className='form-control text-center'
-                    placeholder='Enter Batch Number'
+                    placeholder='Enter Batch No'
                     value={batchNumber}
                     onChange={(e) =>
                       handleInventoryChange(idx, "batchNumber", e.target.value)
@@ -216,7 +219,7 @@ const EditRow = (props) => {
                 </div>
               </div>
             <div className='col mt-1 mb-1'>
-              <div className=''>
+              <div style={{position:"relative",right:"13px"}}>
                 <input
                   type='text'
                   onKeyPress={numbersOnly}
