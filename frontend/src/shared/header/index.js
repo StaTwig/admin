@@ -6,8 +6,9 @@ import "./style.scss";
 import DrawerMenu from "./drawerMenu";
 import logo from "../../assets/aicons/AdminLogo.png";
 import searchingIcon from "../../assets/icons/searching@2x.png";
-import bellIcon from "../../assets/icons/bellwhite.png";
-import dropdownIcon from "../../assets/icons/drop-down.png";
+// import bellIcon from "../../assets/icons/bellwhite.png";
+import bellIcon from "../../assets/icons/bell.png"
+import dropdownIcon from "../../assets/icons/DropdownIcon.png";
 import { getUserInfo, logoutUser } from "../../actions/userActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 
@@ -118,6 +119,7 @@ const Header = (props) => {
               src={profile?.photoId}
               alt={profile?.firstName + " " + profile?.lastName}
               className="rounded rounded-circle"
+              style={{color:"#0B65C1"}}
             />
           </div>
           <div className="userActions">
