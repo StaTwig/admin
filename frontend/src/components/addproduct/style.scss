@@ -28,13 +28,14 @@
     align-items: center;
   }
   .upload {
-    height: 200px;
-    width: 350px;
+    height: 9rem;
+    width: 9rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     border: 1px dashed #707070;
     border-radius: 8px;
+    margin-bottom: 25px;
 
     .select {
       display: none;
