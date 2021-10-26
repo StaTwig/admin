@@ -187,7 +187,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'ainbevtest'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'ainbevprod'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

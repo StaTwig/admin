@@ -37,7 +37,13 @@ services:
     ports:
       - "6379:6379"
     labels:
-      - traefik.enable=false
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.tcp.routers.cache.entrypoints=redis
+      - traefik.tcp.routers.cache.rule=HostSNI(`test.abinbev.statledger.io`)
+      - traefik.tcp.routers.cache.tls=true
+      - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
+    command: ["redis-server", "--requirepass", "StaTwig2021"]
 
   alert:
     build: './backend/alert_service'
