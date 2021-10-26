@@ -226,9 +226,9 @@ const AddProduct = (props) => {
               </div>
             <div>
                 <button
-                  className='btn btn-orange fontSize20 font-bold mr-4'
+                  className='fontSize20 font-bold mr-4 addNewBtn'
                   onClick={() => props.history.push('/addNewCategory')}
-                  style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
+                  // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
                 >
                   <img src={Add} width='10' height='10' className='mr-2' alt='' />
                   <span style={{fontSize:"1vw"}}>Add New Category</span>
@@ -252,9 +252,9 @@ const AddProduct = (props) => {
                   CANCEL
                 </button>
                 <button
-                  className='btn btn-orange fontSize20 font-bold mr-4 product'
+                  className='addNewBtn fontSize20 font-bold mr-4 product'
                   onClick={addProduct}
-                  style={{height:"2rem"}}
+                  style={{position:"unset"}}
                 >
                   <img src={Add} width='10' height='10' className='mr-2' alt='' />
                   <span style={{fontSize:"1vw"}}>Add New Product</span>

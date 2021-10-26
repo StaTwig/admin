@@ -101,3 +101,21 @@
     }
   }
 }
+
+.addNewBtn {
+    position: relative;
+    top: 2.5rem;
+    height: 2rem;
+    right: 10rem;
+    background-color: #fa7923;
+    color: #FFFFFF;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 10px;
+    border-width: 0;
+    text-transform: capitalize;
+    padding: 5px 20px;
+}
+
+.addNewBtn:hover{
+  color: #FFFFFF;
+}
