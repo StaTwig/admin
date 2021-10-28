@@ -3,17 +3,17 @@ import './location.scss'
 
 const LocationAddUser = (props) => {
 
-    const [selected, setSelected] = useState(false);
+    const [select, setSelected] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState({})
+    const [sndClickAnotherCard, setSndClickAnotherCard] = useState({});
 
     const addresses = props.addresses;
-    const {  onSelect,name } = props;
+    const {  onSelect,name,getSelectedAddress,addUserBtnDisable } = props;
 
     const selectedValue = (selected) => {
-        setSelected(false);
-
-        const selectedValue = addresses.find((address,index) => {
-            if(selected.id === address.id){
+        // getSelectedAddress(addUserBtnDisable ? false : true)
+        const selectedValue = addresses.forEach((address,index) => {
+            if(selected.id === address.id && addUserBtnDisable){
                 // setSelected(true);
                 // setSelectedAddress(selected)
                 document.getElementById(`selectedCard${index}`).style.backgroundColor = '#DFF1F2';
@@ -22,6 +22,22 @@ const LocationAddUser = (props) => {
                 document.getElementById(`selectedCard${index}`).style.backgroundColor = '#fff';
             }
         })
+
+        setSndClickAnotherCard(
+            {
+                selectedCardId : selected.id,
+                value : true
+            }
+        )
+    }
+
+    const unSelectCard = (selected) => {
+        if(sndClickAnotherCard && selected.id === sndClickAnotherCard.selectedCardId) {
+            getSelectedAddress(true)
+        }
+        else {
+            getSelectedAddress(false)
+        }
     }
   
     return (
@@ -29,9 +45,10 @@ const LocationAddUser = (props) => {
             {addresses.map((address,index) => (
                 <div 
                     id = {`selectedCard${index}`}
-                    style ={{width : "27%", cursor:"pointer", position:"relative", backgroundColor:`${props.selectedAddress.warehouse === address.id ? "#DFF1F2" :""}`}}
+                    style ={{width : "27%", cursor:"pointer", position:"relative", backgroundColor:`${props.selectedAddress.warehouse === address.id ? "#DFF1F2" :""}`, left : `${props.addresses.length < 2 ? `3rem` : `unset`}`}}
                     className="card flex-row justify-content-between rounded border border-white shadow mt-3 ml-2 p-3"
                     onClick={() => {
+                        unSelectCard(address)
                         onSelect(address);
                         selectedValue(address,index);
                         props.referance.current.setFieldValue('warehouse',address.id);

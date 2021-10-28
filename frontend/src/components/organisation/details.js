@@ -24,8 +24,7 @@ const Details = (props) => {
   const [typeId, setTypeId] = useState("");
   const [type, setType] = useState(org?.type);
   const [openDropDown, setOpenDropDown] = useState(false);
-
-  const { onClickOfDropDownItem } = props;
+  const [getSelectedType, setSelectedType] = useState("")
 
 
   useEffect(() => {
@@ -71,6 +70,19 @@ const Details = (props) => {
       }
     }
 
+    const updatedType = (value) => {
+
+      setSelectedType(value)
+      
+    }
+
+    const clickOnType = (value) => {
+      debugger
+      org.type = value
+      modifyOrg({
+        org
+      });
+    }
 
   return (
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
@@ -114,10 +126,10 @@ const Details = (props) => {
                   name={type}
                   source = {'manageOrg'}
                   setItemType = {setType}
-                  onClickOfDropDownItem = {onClickOfDropDownItem}
+                  onclickSelectedValue = {updatedType}
                   type={'orgType'}
                 />
-                <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false)}}/>
+                <img className = "editIcon"  src = {greenn_tick} alt="right click" onClick={() => {setOpenDropDown(false); clickOnType(getSelectedType)}}/>
               </span>
             ) : (
               <div style = {{width:"90%",display:"flex",flexDirection:"row"}}>

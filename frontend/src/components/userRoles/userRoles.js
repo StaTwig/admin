@@ -6,6 +6,7 @@ import Arrow from "../../assets/icons/arrow.png";
 import Spinner from "../spinner";
 import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
+import SuccessPopUp from "../../shared/PopUp/successPopUp";
 
 const UserRoles = ({
   defaultRoles,
@@ -31,12 +32,18 @@ const UserRoles = ({
   const closeModal = () => setShowModal(false);
   const [btnTxt, setBtnTxt] = useState("");
   const [isDisabled, setDisable] = useState(true);
+  const [showSuccessModel, setShowSuccessModel] = useState(false);
+  const [message, setMessage] = useState("Successfully Updated Configuration")
 
   const unDisableBtn = () => {
     console.log("enable save button");
     setDisable(false);
     document.getElementById('saveBtn').style.backgroundColor = '#0093e9';
     document.getElementById('saveBtn').style.opacity = '1';
+  }
+
+  const closeModals = () => {
+    setShowSuccessModel(false)
   }
 
   return isLoading ? (
@@ -64,6 +71,17 @@ const UserRoles = ({
           />
         </Modal>
       )}
+        {showSuccessModel && (
+          <Modal
+            close={closeModals}
+            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          >
+            <SuccessPopUp
+              onHide={closeModals} 
+              message = {message}
+            />
+          </Modal>
+        )}
       <div className="user-role-header">
         <div className="input-section">
           <div className="role-section">
@@ -90,7 +108,7 @@ const UserRoles = ({
           <button
             id = "saveBtn"
             className="save-button"
-            onClick={() => {onSaveOfUpdatePermission(); setDisable(true)}}
+            onClick={() => {onSaveOfUpdatePermission(); setDisable(true);setShowSuccessModel(true) }}
             disabled={isDisabled}
           >
             {"Save"}

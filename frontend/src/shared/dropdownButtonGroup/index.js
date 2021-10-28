@@ -8,7 +8,7 @@ import "./style.scss";
 const dropdownButtonGroup = (props) => {
   const [menu, setMenu] = useState(false);
   const [typeName, setTypeName] = useState(props.name);
-  const { groups, name, namer, onSelect, error, setItemType, onClickOfDropDownItem } = props;
+  const { groups, name, namer, onSelect, error, setItemType, onClickOfDropDownItem,onclickSelectedValue } = props;
 
   const ref = useOnclickOutside(() => {
     setMenu(false);
@@ -48,6 +48,7 @@ const dropdownButtonGroup = (props) => {
                       setTypeName(item.value);
                       setItemType(item.value);
                       // onClickOfDropDownItem(index, props.type, item.value)
+                      onclickSelectedValue(item.value)
                     }}
                     >
                       {item.value}

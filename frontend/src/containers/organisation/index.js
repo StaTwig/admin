@@ -106,9 +106,9 @@ const OrganisationContainer = (props) => {
 
   const updateOrgs = async (data) => {
     dispatch(turnOn());
-    const result = await updateOrg(data);
+    const result = await updateOrg(data.org ? data.org : data);
     if (result.status == 200) {
-      setSuccessMessage("This organisation " + data.status.toLowerCase() + "!");
+      setSuccessMessage("This organisation " + data.org ? data.status : data.status.toLowerCase() + "!");
     } else {
       setError(result.data.data.message);
     }

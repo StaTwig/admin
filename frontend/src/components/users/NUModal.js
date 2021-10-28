@@ -3,6 +3,7 @@ import Role from "./role";
 import { Formik } from "formik";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
+import { useDispatch, useSelector } from "react-redux";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
@@ -11,7 +12,15 @@ const NUModal = (props) => {
   const [disableButton, setDisableBtn] = useState(false);
   const [disableRoleBtn, setDisanleRole] = useState(false);
   const [changeComponent, setChangeComponent] = useState('role');
+  const [userAlreadyExits, setUserAlreadyExits] = useState(false);
+  const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
+
+  const usersList = useSelector((state) => {
+    // setUsersData(state.organisation.users);
+    return state.organisation.users;
+  });
+
   const setRole = (role) => {
     setSelectedValue(role);
     setData({ ...data, ...{ role: role } });
@@ -19,7 +28,10 @@ const NUModal = (props) => {
 
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
-    event.target.value.length > 0 ? setDisableBtn(true) : setDisableBtn(false);
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value))
+      setDisableBtn(false)
+    else
+      setDisableBtn(true)
   };
 
   const setWarehouse = (name, id) => {
@@ -33,13 +45,41 @@ const NUModal = (props) => {
   console.log(disableRoleBtn);
 
   const unDisableNxtBtn = () => {
-    if(disableRoleBtn && disableButton)
+    if(props.data.id && disableRoleBtn) {
       return false;
-    else
-      return true
+    }
+    else{
+      if(userAlreadyExits) 
+        return true
+      else if(disableRoleBtn && disableButton)
+        return false;
+      else
+        return true
+    }
   }
 
-  debugger
+  const verifyEmailIds = (event) => {
+
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
+      setUserAlreadyExits(false)
+    }
+    else {
+      const valifyEmail = usersList.forEach((user, index) => {
+        if (user.emailId === event.target.value) {
+          setUserAlreadyExits(true)
+          console.log("user already exits")
+        }
+
+      })
+    }
+  }
+
+  const getSelectedAddress = (value) => {
+    // debugger
+    setAddUserBtnDisable(value)
+  }
+  
+
   return (
     <div className="p-0">
       <Formik
@@ -102,6 +142,7 @@ const NUModal = (props) => {
                   placeholder="Enter email"
                   readOnly={data?.ref != undefined ? true : false}
                   onChange={(e) => {
+                    verifyEmailIds(e);
                     setEmail(e);
                     handleChange(e);
                   }}
@@ -110,6 +151,11 @@ const NUModal = (props) => {
                   disabled={ changeComponent === "address" && disableButton ? true : false }
                 />
               </div>
+                {userAlreadyExits && (
+                  <div  style={{position:"absolute",top:"4.8rem",left:"2rem",zIndex:"5",color:"rgb(244, 33, 46)"}}>
+                     <span>{"Email has already been taken."}</span>
+                  </div>
+                )}
               <button 
                 // disabled={errors}
                 style={{visibility:buttonText === "NEXT" ? "" : "hidden"}}
@@ -145,7 +191,7 @@ const NUModal = (props) => {
                     )}
                 </div>
               ) : (
-                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent:"space-evenly"}}>
+                    <div style={{display:"flex",flexDirection:"row", flexWrap:"wrap",justifyContent: `${addresses.length < 2  ? `unset` : `space-evenly`}`}}>
                       {/* {addresses.map((address,index) => ( */}
                         <LocationAddUser 
                           referance = {formikRef}
@@ -155,6 +201,8 @@ const NUModal = (props) => {
                           }}
                           selectedAddress = {data}
                           name={wh}
+                          getSelectedAddress = {getSelectedAddress}
+                          addUserBtnDisable = {addUserBtnDisable}
                         ></LocationAddUser>
                       {/* ))} */}
                     </div>
@@ -188,7 +236,7 @@ const NUModal = (props) => {
                     {buttonText}
                   </button>
                 ) : (
-                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange">
+                  <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
                     {buttonText}
                   </button>
                 )}
