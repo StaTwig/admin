@@ -1,0 +1,31 @@
+.viewTargets {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.targetsBtn {
+    padding: 7px;
+    border-radius: 10px;
+    width: 22%;
+    border : 2px solid #A20134;
+    font-family: open sans;
+    font-weight: bold;
+    color: #A20134;
+}
+
+.editTargetsContainer {
+    position: absolute;
+    bottom: 0;
+    right: 1rem;
+    width: 6rem;
+}
+
+.editTarBtn {
+    padding: 7px;
+    border-radius: 7px;
+    background-color: #a20134;
+    color: #ffffff;
+    border : 0;
+}

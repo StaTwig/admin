@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import profile from '../../../../assets/user.png';
 import { getSupplierPerformanceByOrgType } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
+import './SpmDashBoard.scss'
 
 const SpmDashboard = (props) => {
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
@@ -21,37 +22,41 @@ const SpmDashboard = (props) => {
     })();
   }, []);
 
+  debugger
+
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
-
+      <div className="viewTargets">
+        <button className="targetsBtn">View Targets & Rating</button>
+      </div>
       <div className="tableDetals">
-        <table className="table text-align-left">
-          <thead>
+        <table className="table text-align-left" style={{ background: "unset" }}>
+          <thead style={{ fontFamily: "open sans", fontWeight: "bold", borderBottom: "unset" }}>
             <tr>
               <th scope="col">Rank</th>
               <th scope="col">Supplier</th>
               <th scope="col">Location</th>
-              <th scope="col">Overall Rating</th>
+              <th scope="col" style={{ width: "17%" }}>Overall Rating</th>
               <th scope="col"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ background: "#ffffff" }}>
             {supplierPerformances?.map((perf, index) => (
               <>
                 <tr
                   key={index}
-                  className={`${
-                    selectedRatingIndex === index
-                      ? 'selectedRow noBottomRadius'
-                      : ''
-                  }`}
+                  className={`${selectedRatingIndex === index
+                    ? 'selectedRow noBottomRadius'
+                    : ''
+                    }`}
+                  style={{ fontWeight: "bold", fontFamily: "open sans" }}
                 >
-                  <td scope="row">{index + 1}</td>
+                  <td scope="row" style={{ verticalAlign: "unset" }}>{index + 1}</td>
                   <td>
-                    <div className="tableProfileIconCard justify-content-start">
+                    <div className="tableProfileIconCard justify-content-start" style={{ lineHeight: "1.5" }}>
                       <div className="profileIcon">
                         <img src={profile} alt="" />
                       </div>
@@ -66,127 +71,90 @@ const SpmDashboard = (props) => {
                         >
                           {perf.type}
                         </label>
+                        {selectedRatingIndex === index && (
+                          <div className="spmDetailsUserCard justify-content-start">
+                            <div className="profileName">
+                              <label>
+                                <b>Vendor ID:</b> {perf.id}
+                              </label>
+                              <label>
+                                <b>Mobile No:</b> {perf.phoneNumber}
+                              </label>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
-                  <td>{perf.postalAddress}</td>
+                  <td style={{ verticalAlign: "unset" }}>{perf.postalAddress}</td>
                   {/* <td>{perf.returnRate ? perf.returnRate : 0}</td> */}
-                  <td>{0}</td>
-                  <td>
-                    {selectedRatingIndex !== index ? (
-                      <div
-                        className="round round-lg"
-                        onClick={() => {
-                          setSelectedRatingIndex(index);
-                        }}
-                      >
-                        <span className="fa fa-angle-right marron"></span>
+                  <td style={{ verticalAlign: "unset" }}>{0}</td>
+                  <td style={{ position: "relative", verticalAlign: "unset" }}>
+                    {/* {selectedRatingIndex !== index ? ( */}
+                    <div
+                      className="round round-lg"
+                      onClick={() => {
+                        `${selectedRatingIndex !== index ? setSelectedRatingIndex(index) : setSelectedRatingIndex(null)}`
+                      }}
+                    >
+                      <span className={`${selectedRatingIndex !== index ? `fa fa-angle-down marron` : `fa fa-angle-up marron`}`}></span>
+                    </div>
+                    {selectedRatingIndex === index && (
+                      <div className="editTargetsContainer" style={{ position: "absolute" }}>
+                        <button className="editTarBtn">Edit Targets</button>
                       </div>
-                    ) : (
-                      ''
                     )}
+
+
+                    {/* ) : (
+                      ''
+                    )} */}
                   </td>
                 </tr>
                 {selectedRatingIndex === index ? (
                   <tr>
                     <td colSpan="5" className="selectedSupplier">
-                      <div>
-                        <table className="table text-align-left noBottomRadius mb-0">
-                          <tbody>
-                            <tr>
-                              <td scope="row"></td>
-                              <td>
-                                <div className="spmDetailsUserCard justify-content-start">
-                                  <div className="profileIcon">
-                                    <img src={profile} alt="" />
-                                  </div>
-                                  <div className="profileName">
-                                    <span className="profileTitle">
-                                      {perf.name}
-                                    </span>
-                                    <label
-                                      className={`
-                            ${perf.type === 'S1' ? 'boldGreen' : ''}
-                            ${perf.type === 'S2' ? 'boldPurple' : ''}
-                            ${perf.type === 'S3' ? 'boldblue' : ''}
-                          `}
-                                    >
-                                      {perf.type}
-                                    </label>
-                                    <label>
-                                      <b>Vendor ID:</b> {perf.id}
-                                    </label>
-                                    <label>
-                                      <b>Mobile No:</b> {perf.phoneNumber}
-                                    </label>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div className="spmAddress">
-                                  <span className="addressTitle">
-                                    Hyd, Telangana
-                                  </span>
-                                  <br />
-                                  <address>{perf.postalAddress}</address>
-                                </div>
-                              </td>
-                              <td></td>
-                              <td>
-                                <div
-                                  className="round round-lg"
-                                  onClick={() => {
-                                    setSelectedRatingIndex(null);
-                                  }}
-                                >
-                                  <span className="fa fa-angle-left marron"></span>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
 
-                      <div>
-                        <table className="table text-align-left noTopRadius">
+                      <div style={{ backgroundColor: "#ffffff", borderRadius: "15px" }}>
+                        <table className="table text-align-left noTopRadius" style={{ background: "unset" }}>
                           <thead>
-                            <tr>
+                            <tr style={{ fontFamily: "open sans", fontWeight: "bold", color: "#707070" }}>
                               <th scope="col">Criteria</th>
                               <th scope="col">Details</th>
                               <th scope="col">Weightage</th>
                               <th scope="col">Rating</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                             <tr>
-                              <td scope="row">Return Rate</td>
+                              <td scope="row" style={{ color: "#A20134" }}>Return Rate</td>
                               <td>{perf.returnRate ? perf.returnRate : 0}%</td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Lead Time</td>
+                              <td scope="row" style={{ color: "#A20134" }}>Lead Time</td>
                               <td>
                                 {perf.leadTime?.length
                                   ? perf.leadTime[0]?.avgLeadTime > 60
                                     ? Math.round(
-                                        perf.leadTime[0]?.avgLeadTime / 60,
-                                      ) +
-                                      ' H ' +
-                                      Math.round(
-                                        perf.leadTime[0]?.avgLeadTime % 60,
-                                      ) +
-                                      ' M'
+                                      perf.leadTime[0]?.avgLeadTime / 60,
+                                    ) +
+                                    ' H ' +
+                                    Math.round(
+                                      perf.leadTime[0]?.avgLeadTime % 60,
+                                    ) +
+                                    ' M'
                                     : Math.round(
-                                        perf.leadTime[0]?.avgLeadTime,
-                                      ) + ' M'
+                                      perf.leadTime[0]?.avgLeadTime,
+                                    ) + ' M'
                                   : 0}
                               </td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Storage Capacity
                                 <br />
                                 <span className="subTitle">Sqft</span>
@@ -202,13 +170,13 @@ const SpmDashboard = (props) => {
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Dirty Bottles</td>
+                              <td scope="row" style={{ color: "#A20134" }}>Dirty Bottles</td>
                               <td>{perf.dirtyBottles}%</td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Breakage</td>
+                              <td scope="row" style={{ color: "#A20134" }}>Breakage</td>
                               <td>{perf.breakage}%</td>
                               <td></td>
                               <td></td>
