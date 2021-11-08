@@ -3,6 +3,7 @@ import profile from '../../../../assets/user.png';
 import { getSupplierPerformanceByOrgType } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 import './SpmDashBoard.scss'
+import cancelIcon from '../../../../assets/icons/cross.png'
 
 const SpmDashboard = (props) => {
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
@@ -11,6 +12,8 @@ const SpmDashboard = (props) => {
   const [dates, setDates] = useState([]);
   const [persentages, setPercentages] = useState([])
   const [openDialogBox, setOpenDialogBox] = useState(false)
+  const [selectedType, setSelectedType] = useState('All');
+  const [openSelectSuplier, setopenSelectSuplier] = useState(false);
   // const []
 
   useEffect(() => {
@@ -47,6 +50,10 @@ const SpmDashboard = (props) => {
     })();
   }, []);
 
+  const typeSelected = (type) => {
+    setSelectedType(type)
+  }
+
 
   return (
     <div>
@@ -54,7 +61,7 @@ const SpmDashboard = (props) => {
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
       <div className="viewTargets">
-        <button className="targetsBtn">View Targets & Rating</button>
+        <button className="targetsBtn" onClick={() => setopenSelectSuplier(true)}>Set Targets</button>
       </div>
       <div className="tableDetals">
         <table className="table text-align-left" style={{ background: "unset" }}>
@@ -324,9 +331,60 @@ const SpmDashboard = (props) => {
           </div>
         )
       }
-      {/* 
-      <h1>SPM detialed view</h1>
-       */}
+      {openSelectSuplier && (
+        <div>
+          <div className="setTargetsContainer">
+            <div className="editSelectSuplier">
+              <span className="edittargetName">Select Supplier</span>
+              <img src={cancelIcon} style={{ width: "2rem" }} onClick={() => setopenSelectSuplier(false)} />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-around", height: "23rem" }}>
+              <div>
+                <label className="filterSubHeading mt-3">Select State</label>
+                <select
+                  className="filterSelect-1 mt-2"
+                  value="Select"
+                  style={{ width: "100%" }}
+                >
+                  <option>Select State</option>
+                  <option>Telangana</option>
+                </select>
+              </div>
+              <div>
+                <label className="filterSubHeading mt-3">Select District</label>
+                <select
+                  className="filterSelect-1 mt-2"
+                  value="Select"
+                  style={{ width: "100%" }}
+                >
+                  <option>Select District</option>
+                  <option>Hyderabad</option>
+                </select>
+              </div>
+              <div className="filterSection-1">
+                <label className="filterSubHeading-1 mt-3">vendor Type</label>
+                <div className="btn-group vonderType filterButton-1 mt-2 mb-4">
+                  {['All', 'S1', 'S2', 'S3'].map((type, index) => (
+                    <span
+                      onClick={() => { typeSelected(type) }}
+                      key={index}
+                      className={`btn p-2  ${selectedType == type ? `active` : ``}`}
+                      htmlFor={type}
+
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="buttons" style={{ marginTop: "40px" }}>
+              <button className="backBtn" onClick={() => { setopenSelectSuplier(false) }}>Close</button>
+              <button className="saveBtn" disabled>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

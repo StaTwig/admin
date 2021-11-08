@@ -1,3 +1,4 @@
+
 .viewTargets {
     width: 100%;
     display: flex;
@@ -58,7 +59,7 @@
     border: none;
     box-shadow: 0px 4px 8px #54265e26;
     border-radius: 10px;
-    width: 50%;
+    width: 35%;
   }
 
   .buttons {
@@ -89,4 +90,108 @@
         margin-left: 20px;
         background-color: #FFA83B;
         border:0;
+  }
+
+.setTargetsContainer{
+    width: 64rem;
+    height: 35rem;
+    background-color: #e5e0e9;
+    /* display: flex; */
+    /* justify-content: center; */
+    align-content: center;
+    top: 8%;
+    position: absolute;
+    right:10%;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 10;
+}
+.filterSubHeading {
+    margin: 10px 0px;
+    font-size: 14px;
+    font: normal normal bold 16px/27px Open Sans;
+    letter-spacing: 0px;
+    color: #707070;
+    display: flex;
+  }
+
+  .vonderType {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #F49C00;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .editSelectSuplier {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  
+.filterSection-1{
+    .filterHeader{
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      font-size:  20px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      color: #707070;
+      .filterIcon{
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+    .filterSubHeading-1 {
+        margin: 10px 0px;
+        font-size: 14px;
+        font: normal normal bold 16px/27px Open Sans;
+        letter-spacing: 0px;
+        color: #707070;
+        display: flex;
+      }
+    .SearchButton{
+      background: #54265E 0% 0% no-repeat padding-box;
+      box-shadow: 0px 4px 8px #54265E26;
+      border-radius: 24px;
+      color: #ffffff;
+      margin: 20px auto;
+      display: flex;
+      padding: 10px 35px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .filterSelect{
+      padding: 9px 17px;
+      border: none;
+      box-shadow: 0px 4px 8px #54265e26;
+      border-radius: 10px;
+      width:100%;
+    }
+    .filterButton-1{
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      border: 1px solid #F49C00;
+      border-radius: 24px;
+      margin-bottom: 20px;
+      width: 15rem;
+      .active{
+        background: #F49C00;
+        border-radius: 24px !important;
+        color: #ffffff;
+        font-weight: 500;
+        outline:none !important;
+      }
+      a{
+        font-size: 0.8vw;
+        outline:none; 
+        padding: 14px 11px;
+      }
+      a:focus{
+        outline:none !important;
+      }
+    }
   }
