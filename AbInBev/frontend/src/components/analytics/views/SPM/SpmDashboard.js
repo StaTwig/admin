@@ -8,6 +8,31 @@ const SpmDashboard = (props) => {
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
 
   const [supplierPerformances, setSupplierPerformances] = useState([]);
+  const [dates, setDates] = useState([]);
+  const [persentages, setPercentages] = useState([])
+  const [openDialogBox, setOpenDialogBox] = useState(false)
+  // const []
+
+  useEffect(() => {
+    debugger
+    var pushdates = [];
+    for (var i = 1; i <= 30; i++) {
+      pushdates.push(i + " days")
+    }
+    setDates(pushdates);
+
+    var numbers = [];
+    for (var i = 0; i < 20; i++) {
+      numbers.push((i * 5) + "%")
+    }
+    setPercentages(numbers)
+    // console.log(dates)
+  }, [])
+
+  // var future = new Date();
+  // future.setDate(future.getDate() + 30);
+  // console.log("total dates", future)
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -22,7 +47,6 @@ const SpmDashboard = (props) => {
     })();
   }, []);
 
-  debugger
 
   return (
     <div>
@@ -101,7 +125,7 @@ const SpmDashboard = (props) => {
                     </div>
                     {selectedRatingIndex === index && (
                       <div className="editTargetsContainer" style={{ position: "absolute" }}>
-                        <button className="editTarBtn">Edit Targets</button>
+                        <button className="editTarBtn" onClick={() => { setOpenDialogBox(true) }}>Edit Targets</button>
                       </div>
                     )}
 
@@ -194,6 +218,112 @@ const SpmDashboard = (props) => {
           </tbody>
         </table>
       </div>
+      {
+        openDialogBox && (
+          <div className="editTargetsContainer1">
+            <div className="editTitle">
+              <span className="edittargetName" >Edit Targets</span>
+            </div>
+            <div>
+              <table className="table text-align-left noTopRadius" style={{ background: "unset" }}>
+                <thead>
+                  <tr style={{ fontFamily: "open sans", fontWeight: "bold", color: "#707070" }}>
+                    <th scope="col">Criteria</th>
+                    <th scope="col">Set Target</th>
+                    <th scope="col">Weightage</th>
+                  </tr>
+                </thead>
+                <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Return Rate</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      //  onChange={onStateChange}
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Lead Time</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      >
+                        <option value="">Select</option>
+                        {
+                          dates.map((date, index) => (
+                            <option key={index} value={date}>{date}</option>
+                          ))
+
+                        }
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Breakage Bottle %</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                        style={{ boxShadow: "0px 4px 8px #54265e26" }}
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Dirty Bottle</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      //  onChange={onStateChange}
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#000000" }}>WAREHOUSE DETAILS</td>
+                    <td></td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Storage Capacity</td>
+                    <td><input className="filterSelect-1" type="number" /></td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Bottle Capacity</td>
+                    <td><input className="filterSelect-1" type="number" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="buttons">
+              <button className="backBtn" onClick={() => { setOpenDialogBox(false) }}>Close</button>
+              <button className="saveBtn">Save</button>
+            </div>
+          </div>
+        )
+      }
       {/* 
       <h1>SPM detialed view</h1>
        */}
