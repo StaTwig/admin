@@ -11,9 +11,13 @@ const SpmDashboard = (props) => {
   const [supplierPerformances, setSupplierPerformances] = useState([]);
   const [dates, setDates] = useState([]);
   const [persentages, setPercentages] = useState([])
-  const [openDialogBox, setOpenDialogBox] = useState(false)
+  const [openEditTargets, setOpenEditTargets] = useState(false)
   const [selectedType, setSelectedType] = useState('All');
   const [openSelectSuplier, setopenSelectSuplier] = useState(false);
+  const [state, setState] = useState('');
+  const [districts, setDistricts] = useState([]);
+  const [district, setDistrict] = useState('');
+  const [openSetRating, setOpenSetRating] = useState(false)
   // const []
 
   useEffect(() => {
@@ -54,7 +58,20 @@ const SpmDashboard = (props) => {
     setSelectedType(type)
   }
 
+  const onStateChange = async (event) => {
+    debugger
+    const selectedState = event.target.value;
+    setState(selectedState);
+    const result = await props.getDistricts(selectedState);
+    setDistricts(result.data);
+  }
 
+  const onDistrictChange = (event) => {
+    const selectedDistrict = event.target.value;
+    setDistrict(selectedDistrict);
+  }
+
+  // debugger
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -132,7 +149,7 @@ const SpmDashboard = (props) => {
                     </div>
                     {selectedRatingIndex === index && (
                       <div className="editTargetsContainer" style={{ position: "absolute" }}>
-                        <button className="editTarBtn" onClick={() => { setOpenDialogBox(true) }}>Edit Targets</button>
+                        <button className="editTarBtn" onClick={() => { setOpenEditTargets(true) }}>Edit Targets</button>
                       </div>
                     )}
 
@@ -226,7 +243,7 @@ const SpmDashboard = (props) => {
         </table>
       </div>
       {
-        openDialogBox && (
+        openEditTargets && (
           <div className="editTargetsContainer1">
             <div className="editTitle">
               <span className="edittargetName" >Edit Targets</span>
@@ -247,7 +264,6 @@ const SpmDashboard = (props) => {
                       <select
                         className="filterSelect-1 mt-2"
                         value="Select"
-                      //  onChange={onStateChange}
                       >
                         <option value="">Select</option>
                         {persentages.map((item, index) => (
@@ -298,7 +314,6 @@ const SpmDashboard = (props) => {
                       <select
                         className="filterSelect-1 mt-2"
                         value="Select"
-                      //  onChange={onStateChange}
                       >
                         <option value="">Select</option>
                         {persentages.map((item, index) => (
@@ -325,7 +340,7 @@ const SpmDashboard = (props) => {
               </table>
             </div>
             <div className="buttons">
-              <button className="backBtn" onClick={() => { setOpenDialogBox(false) }}>Close</button>
+              <button className="backBtn" onClick={() => { setOpenEditTargets(false) }}>Close</button>
               <button className="saveBtn">Save</button>
             </div>
           </div>
@@ -338,27 +353,37 @@ const SpmDashboard = (props) => {
               <span className="edittargetName">Select Supplier</span>
               <img src={cancelIcon} style={{ width: "2rem" }} onClick={() => setopenSelectSuplier(false)} />
             </div>
-            <div style={{ display: "flex", justifyContent: "space-around", height: "23rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
                 <label className="filterSubHeading mt-3">Select State</label>
                 <select
                   className="filterSelect-1 mt-2"
-                  value="Select"
+                  value={state}
                   style={{ width: "100%" }}
+                  onChange={onStateChange}
                 >
-                  <option>Select State</option>
-                  <option>Telangana</option>
+                  <option value="">Select State</option>
+                  {props.states?.map((state, index) => (
+                    <option key={index} value={state}>
+                      {state}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className="filterSubHeading mt-3">Select District</label>
                 <select
                   className="filterSelect-1 mt-2"
-                  value="Select"
+                  value={district}
                   style={{ width: "100%" }}
+                  onChange={onDistrictChange}
                 >
                   <option>Select District</option>
-                  <option>Hyderabad</option>
+                  {districts?.map((district, index) => (
+                    <option key={index} value="">
+                      {district}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="filterSection-1">
@@ -378,9 +403,139 @@ const SpmDashboard = (props) => {
                 </div>
               </div>
             </div>
-            <div className="buttons" style={{ marginTop: "40px" }}>
+            {true && (
+              <div className="dealer_container">
+                {supplierPerformances?.map((supplier, index) => (
+                  <div style={{ display: "flex" }}>
+                    <div style={{ width: "50%" }}>
+                      <div style={{ display: "flex", alignItems: "center", marginBottom: "25px" }}>
+                        <span className="index">{index}</span>
+                        <div className="supplierName">
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <img style={{ width: "25px", marginRight: "25px" }} src={profile} alt="" />
+                            <span className="suplier">{supplier.name}</span>
+                          </div>
+
+                          <span className="suppplierType">{supplier.type + " Vendor"}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ width: "50%" }}>
+                      <span className="postalAddress">{supplier.postalAddress}</span>
+                    </div>
+                  </div>
+                ))
+                }
+              </div>
+            )}
+            <div className="buttons">
               <button className="backBtn" onClick={() => { setopenSelectSuplier(false) }}>Close</button>
-              <button className="saveBtn" disabled>Save</button>
+              <button className="saveBtn" onClick={() => { setopenSelectSuplier(false); setOpenEditTargets(true) }}>Next</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {openSetRating && (
+        <div>
+          <div className="editTargetsContainer1">
+            <div className="editTitle">
+              <span className="edittargetName" >Set Rating</span>
+            </div>
+            <div>
+              <table className="table text-align-left noTopRadius" style={{ background: "unset" }}>
+                <thead>
+                  <tr style={{ fontFamily: "open sans", fontWeight: "bold", color: "#707070" }}>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Targets</th>
+                    <th scope="col">Minimim</th>
+                    <th scope="col">Maximun</th>
+                  </tr>
+                </thead>
+                <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Return Rate</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Lead Time</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      >
+                        <option value="">Select</option>
+                        {
+                          dates.map((date, index) => (
+                            <option key={index} value={date}>{date}</option>
+                          ))
+
+                        }
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Breakage Bottle %</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                        style={{ boxShadow: "0px 4px 8px #54265e26" }}
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Dirty Bottle</td>
+                    <td>
+                      <select
+                        className="filterSelect-1 mt-2"
+                        value="Select"
+                      >
+                        <option value="">Select</option>
+                        {persentages.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#000000" }}>WAREHOUSE DETAILS</td>
+                    <td></td>
+                    <td>20%</td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Storage Capacity</td>
+                    <td><input className="filterSelect-1" type="number" /></td>
+                  </tr>
+                  <tr>
+                    <td scope="row" style={{ color: "#A20134" }}>Bottle Capacity</td>
+                    <td><input className="filterSelect-1" type="number" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="buttons">
+              <button className="backBtn" onClick={() => { setOpenEditTargets(false) }}>Close</button>
+              <button className="saveBtn">Save</button>
             </div>
           </div>
         </div>
