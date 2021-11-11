@@ -762,7 +762,7 @@ const Analytics = (props) => {
                         value={state}
                       // onChange={onStateChange}
                       >
-                        <option value="">Select State</option>
+                        <option value={state}>Select State</option>
                         {props.states?.map((state, index) => (
                           <option key={index} value={state}>
                             {state}

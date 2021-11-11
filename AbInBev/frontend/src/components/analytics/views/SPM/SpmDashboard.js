@@ -17,7 +17,8 @@ const SpmDashboard = (props) => {
   const [state, setState] = useState('');
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState('');
-  const [openSetRating, setOpenSetRating] = useState(false)
+  const [openSetRating, setOpenSetRating] = useState(false);
+  const [forNextBtn, setForNextBtn] = useState(false);
   // const []
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const SpmDashboard = (props) => {
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
       <div className="viewTargets">
-        <button className="targetsBtn" onClick={() => setopenSelectSuplier(true)}>Set Targets</button>
+        <button className="targetsBtn" onClick={() => { setopenSelectSuplier(true); setForNextBtn(true) }}>Set Targets</button>
       </div>
       <div className="tableDetals">
         <table className="table text-align-left" style={{ background: "unset" }}>
@@ -341,7 +342,7 @@ const SpmDashboard = (props) => {
             </div>
             <div className="buttons">
               <button className="backBtn" onClick={() => { setOpenEditTargets(false) }}>Close</button>
-              <button className="saveBtn">Save</button>
+              <button className="saveBtn" onClick={() => { setOpenSetRating(true) }}>{`${forNextBtn ? `Next` : `Save`}`}</button>
             </div>
           </div>
         )
@@ -452,6 +453,20 @@ const SpmDashboard = (props) => {
                   </tr>
                 </thead>
                 <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
+                  <tr >
+                    <td scope="row"></td>
+                    <td></td>
+                    <td className="subTitle">
+                      <span style={{ fontFamily: "unset", fontWeight: 'unset' }}>Set Range</span>
+                      <span style={{ fontFamily: "unset", fontWeight: 'unset' }}>Set Value</span>
+                      <span style={{ fontFamily: "unset", fontWeight: 'unset' }}>Rating</span>
+                    </td>
+                    <td style={{ fontWeight: "unset", fontFamily: "unset" }}>
+                      <span style={{ fontFamily: "unset", fontWeight: 'unset' }}>Set Range</span>
+                      <span style={{ marginLeft: "30px", fontFamily: "unset", fontWeight: 'unset' }}>Set Value</span>
+                      <span style={{ marginLeft: "30px", fontFamily: "unset", fontWeight: 'unset' }}>Rating</span>
+                    </td>
+                  </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Return Rate</td>
                     <td>
@@ -465,7 +480,46 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td>20%</td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                        {["<", ">", "<=", ">=", "="].map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                        {persentages.map((item, index) => (
+                          <option value={item} key={index}>{item}</option>
+                        ))}
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                        {["1", "2", "3", "4", "5"].map((item, index) => (
+                          <option value={item} key={index}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                        {["<", ">", "<=", ">=", "="].map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                        {persentages.map((item, index) => (
+                          <option value={item} key={index}>{item}</option>
+                        ))}
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                        {["1", "2", "3", "4", "5"].map((item, index) => (
+                          <option value={item} key={index}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Lead Time</td>
@@ -483,7 +537,28 @@ const SpmDashboard = (props) => {
                         }
                       </select>
                     </td>
-                    <td>20%</td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Breakage Bottle %</td>
@@ -500,7 +575,28 @@ const SpmDashboard = (props) => {
 
                       </select>
                     </td>
-                    <td>20%</td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Dirty Bottle</td>
@@ -515,27 +611,113 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td>20%</td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#000000" }}>WAREHOUSE DETAILS</td>
                     <td></td>
-                    <td>20%</td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Storage Capacity</td>
                     <td><input className="filterSelect-1" type="number" /></td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>Bottle Capacity</td>
                     <td><input className="filterSelect-1" type="number" /></td>
+                    <td className="middleTextField" style={{ display: "flex" }}>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "15px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                      <select className="filterSelect-1 mt-2" style={{ width: "30%", position: "relative", left: "28px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="filterSelect-2 mt-2">
+                        <option>{"<"}</option>
+                      </select >
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "30px" }}>
+                        <option >{"<"}</option>
+                      </select>
+                      <select className="filterSelect-2 mt-2" style={{ marginLeft: "20px" }}>
+                        <option>{"<"}</option>
+                      </select>
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div className="buttons">
-              <button className="backBtn" onClick={() => { setOpenEditTargets(false) }}>Close</button>
-              <button className="saveBtn">Save</button>
+              <button className="backBtn" onClick={() => { setOpenEditTargets(false); setOpenSetRating(false) }}>Close</button>
+              <button className="saveBtn" onClick={() => { setForNextBtn(false) }}>Save</button>
             </div>
           </div>
         </div>

@@ -32,7 +32,7 @@
 }
 .editTargetsContainer1 {
     width: 64rem;
-    height: 40rem;
+    height: 48rem;
     background-color: #e5e0e9;
     /* display: flex; */
     /* justify-content: center; */
@@ -59,7 +59,7 @@
     border: none;
     box-shadow: 0px 4px 8px #54265e26;
     border-radius: 10px;
-    width: 35%;
+    width: 45%;
   }
 
   .buttons {
@@ -235,4 +235,28 @@
     border-radius: 5px;
     padding: 2px;
     font-size: 12px;
+  }
+  .subTitle {
+    // font-family: unset;
+    // font-weight: unset;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    right: 5.8rem;
+  }
+  .middleTextField {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    right: 6rem;
+  }
+
+  .filterSelect-2 {
+    padding: 9px 17px;
+    border: none;
+    box-shadow: 0px 4px 8px #54265e26;
+    border-radius: 10px;
+    width: 25%;
   }
