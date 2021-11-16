@@ -1,11 +1,7 @@
 const redis = require("redis");
 const config = require("./config/config");
 const { promisify } = require("util");
-const client = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT || 6379,
-  password: process.env.REDIS_PASSWORD,
-});
+const client = redis.createClient(config.REDIS_URL);
 const existsAsync = promisify(client.exists).bind(client);
 client.on("error", function (error) {
   console.error(error);
