@@ -328,7 +328,7 @@ exports.getAnalytics = [
           },
         },
       ]);
-      data.batchNearExpiration = batchNearExpiration[0].total;
+      data.batchNearExpiration = batchNearExpiration[0]?.total || 0;
 
       const inventorySupplier = await ShipmentModel.count({
         "supplier.id": warehouseId,
