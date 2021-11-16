@@ -40,7 +40,7 @@ services:
       - traefik.enable=true
       - traefik.docker.network=proxy
       - traefik.tcp.routers.cache.entrypoints=redis
-      - traefik.tcp.routers.cache.rule=HostSNI(`test.abinbev.statledger.io`)
+      - traefik.tcp.routers.cache.rule=HostSNI(`abinbev.statledger.io`)
       - traefik.tcp.routers.cache.tls=true
       - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
     command: ["redis-server", "--requirepass", "StaTwig2021"]
