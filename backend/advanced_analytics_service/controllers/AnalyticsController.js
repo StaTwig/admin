@@ -2720,3 +2720,33 @@ exports.updateTargetSales = [
     }
   }
 ]
+
+exports.getTargetSales = [
+  auth,
+  async function (req ,res) {
+    try {
+      const depots = await AnalyticsModel.aggregate(
+        [
+          {
+            $group:
+              {
+                _id : { depot: "$depot" },
+                totalTarget: { $sum: "$targetSales" },
+                totalSales: { $sum: "$sales" },
+              }
+          },
+        {
+         $project : {
+           depot : 1,
+           percentage : { $multiply : [{ $divide: ["$totalTarget", "$totalSales"] } ,100 ] }
+         }
+        }
+        ]
+     )
+     return apiResponse.successResponseWithData(res,"Depot targets",depots)
+    }
+    catch(err){
+      return apiResponse.ErrorResponse(res, err)
+    }
+  }
+]

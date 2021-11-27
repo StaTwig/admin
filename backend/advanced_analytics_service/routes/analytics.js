@@ -32,6 +32,7 @@ router.get("/getInventoryByBrand/:brand/:state/", AnalyticsController.getAllStat
 router.get("/getMonthlySalesOfSkuByBrand", AnalyticsController.getMonthlySalesOfSkuByBrand)
 router.get("/getSalesTotalOfAllBrands", AnalyticsController.getSalesTotalOfAllBrands);
 router.post("/updateTargetSales", AnalyticsController.updateTargetSales)
+router.get("/getDepotTargets", AnalyticsController.getTargetSales)
 /*
 /getProductsById --> Get Product details --> Product Service
 
