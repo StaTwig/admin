@@ -2694,3 +2694,29 @@ exports.getMonthlySalesOfSkuByBrand = [
     }
   },
 ];
+
+exports.updateTargetSales = [
+  auth,
+  async function (req, res) {
+    try {
+      for(uniqueTarget of req.body){
+      const Analytics = await AnalyticsModel.updateMany(
+        { depot: { $in: [...uniqueTarget.depot] } },
+        [
+        {
+          $set: {
+            "targetSales": {
+              $divide: [{ $multiply: ["$sales", parseInt(uniqueTarget.percentage, 10)] }, 100]
+            }
+          }
+        }
+      ]
+      )
+    }
+      return apiResponse.successResponse(res, `Updated Target Sales`)
+    }
+    catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]
