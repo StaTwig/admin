@@ -33,6 +33,8 @@ router.get("/getMonthlySalesOfSkuByBrand", AnalyticsController.getMonthlySalesOf
 router.get("/getSalesTotalOfAllBrands", AnalyticsController.getSalesTotalOfAllBrands);
 router.post("/updateTargetSales", AnalyticsController.updateTargetSales)
 router.get("/getDepotTargets", AnalyticsController.getTargetSales)
+router.post("/setNewConfig" , AnalyticsController.setNewConfiguration)
+router.get("/getNewConfig", AnalyticsController.getAllConfiguration)
 /*
 /getProductsById --> Get Product details --> Product Service
 
