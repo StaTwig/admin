@@ -7,8 +7,10 @@ import LandingPage from "../containers/landingpage";
 import OverView from "../containers/overview";
 import Shipment from "../containers/shipments";
 import NewShipment from "../containers/newshipment";
+import CreateShipment from "../containers/createshipment";
 import NewOrder from "../containers/neworder";
 import ViewShipment from "../containers/viewShipment";
+import ViewGMRShipment from "../containers/viewGmrShipment";
 import VerifyShipment from "../containers/verifyshipment";
 import VerifyInventory from "../containers/verifyinventory";
 import Inventory from "../containers/inventory";
@@ -64,7 +66,9 @@ const routes = (
     <Route path='/adminprofile' component={requireAuth(AdminProfile)} />
     <Route path='/shipments' component={requireAuth(Shipment)} />
     <Route path='/newshipment' component={requireAuth(NewShipment)} />
+    <Route path='/createshipment' component={requireAuth(CreateShipment)} />
     <Route path='/viewshipment/:id' component={requireAuth(ViewShipment)} />
+    <Route path='/viewgmrshipment/:id' component={requireAuth(ViewGMRShipment)} />
     <Route path='/reviewshipment' component={requireAuth(VerifyShipment)} />
     <Route path='/inventory' component={requireAuth(Inventory)} />
     <Route path='/productlist/:id' component={requireAuth(ProductList)} />

@@ -56,13 +56,13 @@ const Table = (props) => {
               statusStyle = "bg-success";
               status = "Delivered";
             }
-            let supplierAddress = shipment.supplier.warehouse.warehouseAddress;
+            let supplierAddress = props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.locationId : shipment.supplier.warehouse.warehouseAddress;
             let wLocation = shipment.supplier.warehouse?.location;
             if (wLocation?.length) {
               supplierAddress =
                 wLocation.firstLine + wLocation.secondLine + wLocation.city;
             }
-            let receiverAddress = shipment.receiver.warehouse.warehouseAddress;
+            let receiverAddress = props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.locationId : shipment.receiver.warehouse.warehouseAddress;
             let wrLocation = shipment.receiver.warehouse?.location;
             if (wrLocation?.length) {
               supplierAddress =
@@ -105,10 +105,10 @@ const Table = (props) => {
                   style={{ position: "relative", left: "10%" }}
                 >
                   <p className='mb-0'>
-                    {shipment.supplier.org ? shipment.supplier.org.name : "-"}
+                    {shipment.supplier.org ? shipment.supplier.org.name : props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.id : "-"}
                   </p>
                   <p className='address mb-0 text-muted'>{`${
-                    supplierAddress.firstLine ? supplierAddress.firstLine : ""
+                    supplierAddress.firstLine ? supplierAddress.firstLine : props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.locationId : ""
                   } ${
                     supplierAddress.secondLine ? supplierAddress.secondLine : ""
                   } ${supplierAddress.city ? supplierAddress.city : ""}\n ${
@@ -122,10 +122,10 @@ const Table = (props) => {
                   style={{ position: "relative", left: "12%" }}
                 >
                   <p className='mb-0'>
-                    {shipment.receiver.org ? shipment.receiver.org.name : "-"}
+                    {shipment.receiver.org ? shipment.receiver.org.name : props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.id : "-"}
                   </p>
                   <p className='mb-0 address text-muted'>{`${
-                    receiverAddress.firstLine ? receiverAddress.firstLine : ""
+                    receiverAddress.firstLine ? receiverAddress.firstLine : props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.locationId : ""
                   }  ${
                     receiverAddress.secondLine ? receiverAddress.secondLine : ""
                   } ${receiverAddress.city ? receiverAddress.city : ""} \n ${
@@ -148,6 +148,7 @@ const Table = (props) => {
                 >
                   <button
                     className='button btn-primary text-light btn-sm ml-1'
+                    disabled={props.user.emailId === 'gmr@statledger.io' ? true : false}
                     onClick={() => {
                       const data = shipments[index];
                       dispatch(setTracingShipments(data));
@@ -167,7 +168,7 @@ const Table = (props) => {
                   style={{ position: "relative", left: "4.5%" }}
                 >
                   <Link
-                    to={`/viewshipment/${shipment.id}`}
+                    to={`/${shipment.isCustom === true ? `viewgmrshipment`: `viewshipment`}/${shipment.id}`}
                     className='button btn-sm'
                     style={{ width: "60px" }}
                   >

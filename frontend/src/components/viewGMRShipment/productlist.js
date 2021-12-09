@@ -29,25 +29,11 @@ const ProductList = (props) => {
               <li className='mb-1'>{product?.batchNumber}</li>
               <li className='mb-1'>
                 {product.productQuantity}
-                <span>{"  ("}</span>
-                {product.unitofMeasure && product.unitofMeasure.name ? (
-                  <span>{product.unitofMeasure.name}</span>
-                ) : (
-                  ""
-                )}
-                <span>{")"}</span>
               </li>
               <li className='mb-1'>
                 {product["productQuantityDelivered"]
                   ? product["productQuantityDelivered"]
                   : ""}
-                <span>{"  ("}</span>
-                {product.unitofMeasure && product.unitofMeasure.name ? (
-                  <span>{product.unitofMeasure.name}</span>
-                ) : (
-                  ""
-                )}
-                <span>{")"}</span>
               </li>
               <li className='mb-1'>{props.shipments.label.labelId}</li>
             </ul>

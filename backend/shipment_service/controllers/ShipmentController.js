@@ -846,6 +846,106 @@ exports.createShipment = [
   },
 ];
 
+exports.newShipment = [
+  auth,
+  async (req, res) => {
+    try {
+      let data = req.body;
+      data.originalReceiver = data.receiver;
+      if (req.body.shippingDate.includes("/")) {
+        var shipmentData = req.body.shippingDate.split("/");
+        const shippingDate =
+          shipmentData[2] +
+          "-" +
+          shipmentData[1] +
+          "-" +
+          shipmentData[0] +
+          "T00:00:00.000Z";
+        data.shippingDate = shippingDate;
+      }
+      data.shippingDate = new Date(data.shippingDate);
+      const shipmentCounter = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "shipmentId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      ).select({ counters: { $elemMatch: { name: "shipmentId" } } });
+      const shipmentId =
+        shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
+      data.id = shipmentId;
+
+      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+      const updates = {
+        updatedOn: currDateTime,
+        status: "CREATED",
+        products: data.products,
+      };
+      data.shipmentUpdates = updates;
+      const shipment = new ShipmentModel(data);
+      const result = await shipment.save();
+      if (result == null) {
+        return apiResponse.ErrorResponse(res, "Shipment Not saved");
+      }
+
+      //Blockchain Integration
+      const bc_data = {
+        Id: data.id,
+        CreatedOn: "",
+        CreatedBy: "",
+        IsDelete: true,
+        ShippingOrderId: "",
+        PoId: "",
+        Label: JSON.stringify(data.label),
+        ExternalShipping: "",
+        Supplier: JSON.stringify(data.supplier),
+        Receiver: JSON.stringify(data.receiver),
+        ImageDetails: "",
+        TaggedShipments: JSON.stringify(data.taggedShipments),
+        TaggedShipmentsOutward: "",
+        ShipmentUpdates: JSON.stringify(data.shipmentUpdates),
+        AirwayBillNo: data.airWayBillNo,
+        ShippingDate: data.shippingDate,
+        ExpectedDelDate: data.expectedDeliveryDate,
+        ActualDelDate: data.actualDeliveryDate,
+        Status: data.status,
+        TransactionIds: "",
+        RejectionRate: "",
+        Products: JSON.stringify(data.products),
+        Misc: "",
+      };
+
+      let token =
+        req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+
+      const bc_response = await axios.post(
+        `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+        bc_data,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      return apiResponse.successResponseWithData(
+        res,
+        "Shipment Created Successfully",
+        result
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 exports.receiveShipment = [
   auth,
   async (req, res) => {
@@ -1821,6 +1921,41 @@ exports.viewShipment = [
   },
 ];
 
+exports.viewShipmentGmr = [
+  auth,
+  async (req, res) => {
+    try {
+      const { role } = req.user;
+      const permission_request = {
+        role: role,
+        permissionRequired: ["viewShipment"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
+          await ShipmentModel.findOne({id: req.query.shipmentId})
+            .then( (shipment) => {
+              return apiResponse.successResponseWithData(
+                res,
+                "Shipment",
+                shipment
+              );
+            })
+            .catch((err) => {
+              return apiResponse.ErrorResponse(res, err.message);
+            });
+        } else {
+          return apiResponse.forbiddenResponse(
+            res,
+            "User does not have enough Permissions"
+          );
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 exports.fetchAllShipments = [
   auth,
   async (req, res) => {
@@ -1830,6 +1965,26 @@ exports.fetchAllShipments = [
         res,
         "All Shipments",
         shipments
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.fetchGMRShipments = [
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      const count = await ShipmentModel.count({ isCustom: true });
+      const shipments = await ShipmentModel.find({isCustom: true}).skip(parseInt(skip))
+          .limit(parseInt(limit))
+          .sort({ createdAt: -1 });
+      return apiResponse.successResponseWithData(
+        res,
+        "GMR Shipments",
+        {data: shipments, count: count}
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
