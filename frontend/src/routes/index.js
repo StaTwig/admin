@@ -7,8 +7,10 @@ import LandingPage from "../containers/landingpage";
 import OverView from "../containers/overview";
 import Shipment from "../containers/shipments";
 import NewShipment from "../containers/newshipment";
+import CreateShipment from "../containers/createshipment";
 import NewOrder from "../containers/neworder";
 import ViewShipment from "../containers/viewShipment";
+import ViewGMRShipment from "../containers/viewGmrShipment";
 import VerifyShipment from "../containers/verifyshipment";
 import VerifyInventory from "../containers/verifyinventory";
 import Inventory from "../containers/inventory";
@@ -52,33 +54,35 @@ import AddProductContainer from "../containers/addproduct";
 
 const routes = (
   <Switch>
-    <Route exact path="/" component={Home} />
-    <Route exact path="/login" component={Login} />
-    <Route path="/verify" component={Verify} />
-    <Route path="/signup" component={Signup} />
-    <Route path="/overview" component={requireAuth(OverView)} />
-    <Route path="/forgotPassword" component={ForgotPassword} />
-    <Route path="/resetPassword" component={resetPasswordPage} />
-    <Route path="/landingpage" component={requireAuth(LandingPage)} />
-    <Route path="/profile" component={requireAuth(Profile)} />
-    <Route path="/settings" component={requireAuth(SettingsContainer)} />
-    <Route path="/adminprofile" component={requireAuth(AdminProfile)} />
-    <Route path="/shipments" component={requireAuth(Shipment)} />
-    <Route path="/newshipment" component={requireAuth(NewShipment)} />
-    <Route path="/viewshipment/:id" component={requireAuth(ViewShipment)} />
-    <Route path="/reviewshipment" component={requireAuth(VerifyShipment)} />
-    <Route path="/inventory" component={requireAuth(Inventory)} />
-    <Route path="/productlist/:id" component={requireAuth(ProductList)} />
-    <Route path="/dashboard" component={requireAuth(DashBoard)} />
-    <Route path="/addproduct" component={requireAuth(AddProduct)} />
-    <Route path="/qrcode" component={requireAuth(QrCode)} />
-    <Route path="/newinventory" component={requireAuth(NewInventory)} />
-    <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
-    <Route path="/track" component={requireAuth(Track)} />
-    <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
-    <Route path="/tracing/:id" component={requireAuth(Track)} />
-    <Route path="/producttracing" component={requireAuth(ProductTracing)} />
-    <Route path="/network" component={requireAuth(Network)} />
+    <Route exact path='/' component={Home} />
+    <Route exact path='/login' component={Login} />
+    <Route path='/verify' component={Verify} />
+    <Route path='/signup' component={Signup} />
+    <Route path='/overview' component={requireAuth(OverView)} />
+    <Route path='/forgotPassword' component={ForgotPassword} />
+    <Route path='/resetPassword' component={resetPasswordPage} />
+    <Route path='/landingpage' component={requireAuth(LandingPage)} />
+    <Route path='/profile' component={requireAuth(Profile)} />
+    <Route path='/settings' component={requireAuth(SettingsContainer)} />
+    <Route path='/adminprofile' component={requireAuth(AdminProfile)} />
+    <Route path='/shipments' component={requireAuth(Shipment)} />
+    <Route path='/newshipment' component={requireAuth(NewShipment)} />
+    <Route path='/createshipment' component={requireAuth(CreateShipment)} />
+    <Route path='/viewshipment/:id' component={requireAuth(ViewShipment)} />
+    <Route path='/viewgmrshipment/:id' component={requireAuth(ViewGMRShipment)} />
+    <Route path='/reviewshipment' component={requireAuth(VerifyShipment)} />
+    <Route path='/inventory' component={requireAuth(Inventory)} />
+    <Route path='/productlist/:id' component={requireAuth(ProductList)} />
+    <Route path='/dashboard' component={requireAuth(DashBoard)} />
+    <Route path='/addproduct' component={requireAuth(AddProduct)} />
+    <Route path='/qrcode' component={requireAuth(QrCode)} />
+    <Route path='/newinventory' component={requireAuth(NewInventory)} />
+    <Route path='/reviewinventory' component={requireAuth(VerifyInventory)} />
+    <Route path='/track' component={requireAuth(Track)} />
+    <Route path='/trackAndTrace' component={requireAuth(trackAndTrace)} />
+    <Route path='/tracing/:id' component={requireAuth(Track)} />
+    <Route path='/producttracing' component={requireAuth(ProductTracing)} />
+    <Route path='/network' component={requireAuth(Network)} />
     <Route
       path="/transactionHistory"
       component={requireAuth(TransactionHistory)}

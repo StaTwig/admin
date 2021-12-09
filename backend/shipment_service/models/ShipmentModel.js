@@ -61,6 +61,7 @@ const ShipmentSchema = new mongoose.Schema(
       },
     ],
     acceptedRequests: [String],
+    isCustom: false,
   },
   { timestamps: true }
 );

@@ -34,8 +34,8 @@ const ShipmentSummary = (props) => {
               ? props.shipments.shippingDate
               : formatDate(props.shipments.shippingDate)}{" "}
           </li>
-          <li className='mb-1'>{props.shipments.supplier?.org?.name}</li>
-          <li className='mb-1'>{props.shipments.receiver?.org?.name}</li>
+          <li className='mb-1'>{props.shipments.supplier?.id}</li>
+          <li className='mb-1'>{props.shipments.receiver?.id}</li>
         </ul>
         <div>
           <span

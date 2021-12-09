@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import ViewShipment from "../../components/viewShipment";
+import ViewGMRShipment from "../../components/viewGMRShipment";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import {
-  getViewShipment,
-  fetchIotEnabledApiResponse
+  fetchIotEnabledApiResponse,
+  getViewShipmentGmr
 } from "../../actions/shipmentActions";
 import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
 import { config } from "../../config";
 
-const ViewGMRShipmentContainer = (props) => {
+const ViewShipmentContainer = (props) => {
   const [trackData, setTrackData] = useState({});
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
     useState([]);
@@ -23,9 +23,11 @@ const ViewGMRShipmentContainer = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await dispatch(getViewShipment(props.match.params.id));
+      const result = await dispatch(getViewShipmentGmr(props.match.params.id));
+      console.log(result, "result")
       if (result) {
         setTrackData(result);
+        setShippmentChainOfCustodyData([result]);
       } else {
         setTrackData({});
       }
@@ -33,19 +35,19 @@ const ViewGMRShipmentContainer = (props) => {
     fetchData();
   }, [dispatch, props.match.params.id]);
 
-  useEffect(() => {
-    async function fetchData() {
-      const result = await chainOfCustody(props.match.params.id);
-      if (result && result?.status === 200) {
-        setShippmentChainOfCustodyData(
-          result.data.data["shipmentChainOfCustody"]
-        );
-      } else {
-        setShippmentChainOfCustodyData([]);
-      }
-    }
-    fetchData();
-  }, [props.match.params.id]);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const result = await chainOfCustody(props.match.params.id);
+  //     if (result && result?.status === 200) {
+  //       setShippmentChainOfCustodyData(
+  //         result.data.data["shipmentChainOfCustody"]
+  //       );
+  //     } else {
+  //       setShippmentChainOfCustodyData([]);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [props.match.params.id]);
 
   useEffect(() => {
     async function fetchData() {
@@ -100,7 +102,7 @@ const ViewGMRShipmentContainer = (props) => {
       <div className='d-flex'>
         <Sidebar {...props} />
         <div className='content'>
-          <ViewShipment
+          <ViewGMRShipment
             trackData={trackData}
             shippmentChainOfCustodyData={shippmentChainOfCustodyData}
             imagesData={imagesData}
@@ -115,4 +117,4 @@ const ViewGMRShipmentContainer = (props) => {
     </div>
   );
 };
-export default ViewGMRShipmentContainer;
+export default ViewShipmentContainer;

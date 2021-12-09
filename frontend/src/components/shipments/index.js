@@ -16,6 +16,7 @@ import {
   getOutboundShipments,
   getSupplierAndReceiverList,
   getShipmentIds,
+  getGMRShipments
 } from "../../actions/shipmentActions";
 import Received from "../../assets/icons/Received1.svg";
 import Sent from "../../assets/icons/Sent.png";
@@ -53,32 +54,41 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (visible === "one") {
-        const inboundRes = await getInboundShipments(
-          "",
-          "",
-          "",
-          "",
-          "",
-          0,
-          limit
-        ); // id, from, to, dateFilter, status, skip, limit
-        setInboundShipments(inboundRes.data.inboundShipments);
+      if (props.user.emailId === 'gmr@statledger.io') {
+        const inboundRes = await getGMRShipments(
+            0,
+            limit
+        );
+        setOutboundShipments(inboundRes.data.data);
         setCount(inboundRes.data.count);
-      } else {
-        const outboundRes = await getOutboundShipments(
-          "",
-          "",
-          "",
-          "",
-          "",
-          0,
-          limit
-        ); // id, from, to, dateFilter, status, skip, limit
-        setOutboundShipments(outboundRes.data.outboundShipments);
-        setCount(outboundRes.data.count);
       }
-
+      else {
+        if (visible === "one") {
+          const inboundRes = await getInboundShipments(
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            limit
+          ); // id, from, to, dateFilter, status, skip, limit
+          setInboundShipments(inboundRes.data.inboundShipments);
+          setCount(inboundRes.data.count);
+        } else {
+          const outboundRes = await getOutboundShipments(
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            limit
+          ); // id, from, to, dateFilter, status, skip, limit
+          setOutboundShipments(outboundRes.data.outboundShipments);
+          setCount(outboundRes.data.count);
+        }
+      }
       const supplierReceiverListRes = await getSupplierAndReceiverList();
       setSupplierReceiverList(supplierReceiverListRes.data);
 
@@ -89,36 +99,46 @@ const ShipmentAnalytic = (props) => {
     fetchData();
     // dispatch(resetShipments());
     dispatch(getAllUsers());
-  }, [dispatch, limit, visible]);
+  }, [dispatch, limit, visible, props]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
 
     setSkip(recordSkip);
-    if (visible === "one") {
-      const inboundRes = await getInboundShipments(
-        idFilter,
-        fromFilter,
-        toFilter,
-        dateFilter,
-        statusFilter,
+    if (props.user.emailId === 'gmr@statledger.io') {
+      const inboundRes = await getGMRShipments(
         recordSkip,
         limit
-      ); // id, from, to, dateFilter, status, skip, limit
-      setInboundShipments(inboundRes.data.inboundShipments);
+      );
+      setInboundShipments(inboundRes.data.data);
       setCount(inboundRes.data.count);
-    } else {
-      const outboundRes = await getOutboundShipments(
-        idFilter,
-        fromFilter,
-        toFilter,
-        dateFilter,
-        statusFilter,
-        recordSkip,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
-      setOutboundShipments(outboundRes.data.outboundShipments);
-      setCount(outboundRes.data.count);
+    }
+    else {
+      if (visible === "one") {
+        const inboundRes = await getInboundShipments(
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilter,
+          recordSkip,
+          limit
+        ); // id, from, to, dateFilter, status, skip, limit
+        setInboundShipments(inboundRes.data.inboundShipments);
+        setCount(inboundRes.data.count);
+      } else {
+        const outboundRes = await getOutboundShipments(
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilter,
+          recordSkip,
+          limit
+        ); // id, from, to, dateFilter, status, skip, limit
+        setOutboundShipments(outboundRes.data.outboundShipments);
+        setCount(outboundRes.data.count);
+      }
     }
     setData(visible);
   };
@@ -294,6 +314,8 @@ const ShipmentAnalytic = (props) => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
+    if (props.user.emailId === 'gmr@statledger.io')
+      rtnArr = outboundShipments;
     return rtnArr ? rtnArr : [];
   };
 
@@ -391,23 +413,25 @@ const ShipmentAnalytic = (props) => {
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") && (
+      {isAuthenticated("shipmentAnalytics") && (props.user.emailId !== 'gmr@statledger.io') && (
         <Tiles {...props} setData={setData} />
       )}
-      <div className='mt-4'>
-        <Tabs
-          {...props}
-          isAuthenticated={isAuthenticated}
-          setvisible={setvisible}
-          visible={visible}
-          setShowExportFilter={setShowExportFilter}
-        />
-      </div>
+      { (props.user.emailId !== 'gmr@statledger.io') && 
+        <div className='mt-4'>
+          <Tabs
+            {...props}
+            isAuthenticated={isAuthenticated}
+            setvisible={setvisible}
+            visible={visible}
+            setShowExportFilter={setShowExportFilter}
+          />
+        </div>
+      }
       <div className='full-width-ribben mt-4'>
         <TableFilter
           data={headers}
           shipmentIdList={shipmentIdList}
-          supplierReceiverList={supplierReceiverList}
+          supplierReceiverList={props.user.emailId === 'gmr@statledger.io' ? [] : supplierReceiverList}
           setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
