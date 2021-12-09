@@ -10,9 +10,10 @@ import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { formatDate } from "../../utils/dateHelper";
 import Batch from "../../assets/icons/batch.png";
 
-const ViewInventory = (props) => {
+const ViewExpiry = (props) => {
   const [data, setData] = useState([]);
-  const { inventories } = props;
+  const exps = [props.location.state.data];
+  console.log(exps);
   const [more, setMore] = useState([]);
   const dispatch = useDispatch();
 
@@ -21,6 +22,8 @@ const ViewInventory = (props) => {
       dispatch(turnOn());
       let result = await getBatchDetailsByWareHouse(inventory_id, product_id);
       setData(result);
+      console.log("hiii");
+      console.log(result);
       dispatch(turnOff());
     }
     let new_arr = !enable ? [] : [...more];
@@ -35,58 +38,87 @@ const ViewInventory = (props) => {
         <h1 className="breadcrumb">PRODUCT LIST</h1>
       </div>
       <div className="row">
-        <div className="p-2 full-width-ribbon">
-          <div className="row filter">
-            <div className="col-3">
-              <img src={Product} width="16" height="16" alt="Product Name" />
+        <div className=" p-2 rounded full-width-ribbon">
+          <div className=" row filter">
+            <div style={{ width: "14%" }}>
+              <img src={Product} width="24" height="24" alt="Product Name" />
               <span className="ml-2 font-small">Product Name</span>
             </div>
-            <div className="col-3">
+            <div style={{ width: "16%" }}>
               <img
                 src={Quantity}
-                width="25"
-                height="16"
+                width="35"
+                height="24"
                 alt="Product Category"
               />
               <span className="ml-2 font-small">Product Category</span>
             </div>
-            <div className="col-2">
-              <img src={user} width="16" height="16" alt="Manufacturer" />
+            <div style={{ width: "15%" }}>
+              <img src={user} width="16" height="24" alt="Manufacturer" />
               <span className="ml-2 font-small">Manufacturer</span>
             </div>
-            <div className="col-2">
-              <img src={Quantity} width="25" height="16" alt="Quantity" />
+            <div style={{ width: "12%" }} className="p-0">
+              <img src={Quantity} width="35" height="24" alt="Quantity" />
               <span className="ml-2 font-small">Quantity</span>
+            </div>
+            <div style={{ width: "13%" }}>
+              <img src={Quantity} width="35" height="24" alt="Batch Number" />
+              <span className="ml-2 font-small">Batch Number</span>
+            </div>
+            <div style={{ width: "11%" }} className="pl-0">
+              <img src={calender} width="35" height="24" alt="Mfg Date" />
+              <span className="ml-1 font-small">Mfg Date</span>
+            </div>
+            <div style={{ width: "12%" }} className="p-0">
+              <img src={calender} width="35" height="24" alt="Exp Date" />
+              <span className="ml-1 font-small">Exp Date</span>
             </div>
           </div>
         </div>
         <div className="w-100 pt-5 mt-2">
-          {inventories.map((inv, i) => (
+          {exps.map((exp, i) => (
             <>
               <div
                 key={i}
-                className="col-12 p-2 mb-3 rounded row bg-white shadow"
+                className="col-12 p-3 mb-3 rounded row bg-white shadow"
               >
-                <div className="col-3 txt txtBlue">{inv.products.name}</div>
-                <div className="col-3 txt1 ml-3">{inv.products.type}</div>
-                <div className="col-2 txt1">{inv.products.manufacturer}</div>
-                <div className="col-2 txt1">
-                  {inv.inventoryDetails.quantity
-                    ? inv.inventoryDetails.quantity
-                    : 0}
+                <div style={{ width: "14%" }} className="txt txtBlue">
+                  {exp.products.name}
+                </div>
+                <div style={{ width: "16%" }} className="txt1 ">
+                  {exp.products.type}
+                </div>
+                <div style={{ width: "15%" }} className="txt1 ">
+                  {exp.products.manufacturer}
+                </div>
+                <div style={{ width: "12%" }} className="txt1 ">
+                  {exp?.quantity ? exp.quantity : 0}
                   {" ("}
-                  {inv.products.unitofMeasure
-                    ? inv.products.unitofMeasure.name
+                  {exp.products.unitofMeasure
+                    ? exp.products.unitofMeasure.name
                     : "N/A"}
                   {")"}
                 </div>
-                <div className="col-0 txt">
+                <div style={{ width: "14%" }} className="txt1 ">
+                  {exp.batchNumbers[0]}
+                </div>
+                <div style={{ width: "12%" }} className="txt1 ">
+                  {exp.attributeSet.mfgDate
+                    ? formatDate(exp.attributeSet.mfgDate, "mmyyyy")
+                    : ""}
+                </div>
+                <div style={{ width: "8%" }} className="txt1 ">
+                  {exp.attributeSet.expDate
+                    ? formatDate(exp.attributeSet.expDate, "mmyyyy")
+                    : ""}
+                </div>
+                <div style={{ width: "9%" }} className="txt mt-2">
                   {more[i] ? (
                     <div className="col-0 txt">
                       <button
                         type="button"
                         onClick={() =>
-                          toggleShowMore(inv.id, inv.products.id, i, more[i])
+                          toggleShowMore(exp?.id, exp?.productId, i, more[i])
                         }
                         className="btn btn-outline-primary"
                       >
@@ -98,7 +130,7 @@ const ViewInventory = (props) => {
                       <button
                         type="button"
                         onClick={() =>
-                          toggleShowMore(inv.id, inv.products.id, i, more[i])
+                          toggleShowMore(exp?.id, exp?.productId, i, more[i])
                         }
                         className="btn btn-outline-primary"
                       >
@@ -121,7 +153,7 @@ const ViewInventory = (props) => {
                         />
                         <span className="ml-2 font-small">Product Name</span>
                       </div>
-                      <div className="col">
+                      <div className="col-2">
                         <img
                           src={Quantity}
                           width="25"
@@ -151,13 +183,10 @@ const ViewInventory = (props) => {
                         <span className="ml-2 font-small">Quantity</span>
                       </div>
                       <div className="col">
-                        <img
-                          src={Batch}
-                          width="16"
-                          height="16"
-                          alt="Batch Number"
-                        />
                         <span className="ml-2 font-small">Batch Number</span>
+                      </div>
+                      <div className="col">
+                        <span className="ml-2 font-small">Serial Number</span>
                       </div>
                       <div className="col pl-0">
                         <img
@@ -219,4 +248,4 @@ const ViewInventory = (props) => {
   );
 };
 
-export default ViewInventory;
+export default ViewExpiry;
