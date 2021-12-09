@@ -396,7 +396,7 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to='/newshipment'>
+            <Link to={props.user.emailId === 'gmr@statledger.io' ? `/createshipment` : `/newshipment`}>
               <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
