@@ -64,6 +64,20 @@ export const getAllStates = () => {
   };
 };
 
+export const getAllTargets = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getAllTargets);
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
+
 export const getAnalyticsByBrand = (cond = '') => {
   return async (dispatch) => {
     try {
