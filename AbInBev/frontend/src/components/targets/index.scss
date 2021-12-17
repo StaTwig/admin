@@ -43,13 +43,15 @@
   
   .returTarget{
       width: 33%;
+      margin-left: 30rem;
       display: flex;
       align-items: center;
   }
   .setReturnTarget{
       width: 33%;
+      margin-left: 50rem;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
   }
 
   .saveBtn {
@@ -57,8 +59,6 @@
     box-shadow: 0px 4px 8px #54265e26;
     border-radius: 24px;
     color: #fff;
-    // margin: 20px auto;
-    // display: flex;
     padding: 10px 35px;
     font-weight: bold;
     text-transform: uppercase;
