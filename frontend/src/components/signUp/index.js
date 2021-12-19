@@ -17,8 +17,10 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import TextField from "@material-ui/core/TextField";
 import { verifyEmailAndPhoneNo } from "../../actions/userActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { useTranslation } from 'react-i18next';
 
 const FormPage = (props) => {
+  const { t, i18n } = useTranslation();
   const [organisations, setOrganisations] = useState([]);
   const [organisationsType, setOrganisationsType] = useState([]);
   const [organisationsArr, setOrganisationsArr] = useState([]);
@@ -37,11 +39,12 @@ const FormPage = (props) => {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [checker, setChecker] = useState(true);
+  const other = t('other');
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-
-      orgs.push({ id: "Other", name: "Other" });
+      
+      orgs.push({ id: t('other'), name: t('other') });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
@@ -66,7 +69,7 @@ const FormPage = (props) => {
   });
   const showOrgByType = (value) => {
     let arr = organisations.filter((data) => data.type === value);
-    arr.push({ name: "Other" });
+    arr.push({ name: t('other') });
     return arr;
   };
 
@@ -84,13 +87,13 @@ const FormPage = (props) => {
       organisationsArr.filter(
         (org) => org.name.toLowerCase() === value_new.toLowerCase()
       ).length &&
-      value_new !== "Other"
+      value_new !== t('other')
     )
       props.onOrgChange(false);
     else {
       props.onOrgChange(true);
       if (e) {
-        setValue("Other");
+        setValue(t('other'));
       }
     }
     props.onOrganisationChange({ id: 0, name: value_new });
@@ -121,8 +124,8 @@ const FormPage = (props) => {
           <div className='col-m-6 col-lg-6'>
             <div className='form-content'>
               <img className='logo' src={logo} alt='Logo' />
-              <h1>Welcome,</h1>
-              <p>Signup to continue</p>
+              <h1>{t('welcome')},</h1>
+              <p>{t('signup')} {t('to')} {t('continue').toLowerCase()}</p>
             </div>
           </div>
           <div className='col-m-6 col-lg-6'>
@@ -137,8 +140,7 @@ const FormPage = (props) => {
                     className='align-self-center mt-5 mb-2'
                   />
                   <div className='font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve'>
-                    Request is pending and you will receive an email/sms after
-                    approval
+                    {t('signup_success_message')}
                   </div>
                 </>
               ) : (
@@ -156,10 +158,10 @@ const FormPage = (props) => {
                     validate={(values) => {
                       const errors = {};
                       if (!values.firstName) {
-                        errors.firstName = "Required";
+                        errors.firstName = t('required');
                       }
                       if (!values.lastName) {
-                        errors.lastName = "Required";
+                        errors.lastName = t('required');
                       }
                       //if (!values.email) {
                       // errors.email = "Required";
@@ -168,7 +170,7 @@ const FormPage = (props) => {
                       //    errors.phone = "Required";
                       //  }
                       if (!values.org) {
-                        errors.org = "Required";
+                        errors.org = t('required');
                       }
                       return errors;
                     }}
@@ -190,7 +192,7 @@ const FormPage = (props) => {
                     }) => (
                       <form onSubmit={handleSubmit} className='mb-5'>
                         <div className='login-form mt-1 pl-5 pr-5 ml-5'>
-                          <div className='card-title mr-5'>Signup</div>
+                              <div className='card-title mr-5'>{t('signup')}</div>
                           <div className='form-group flex-column '>
                             <div
                               style={{
@@ -209,7 +211,7 @@ const FormPage = (props) => {
 
                             <TextField
                               id='standard-basic'
-                              label='First Name'
+                              label={t('first_name')}
                               className='form-controll ml-4'
                               name='firstName'
                               value={props.firstName}
@@ -233,7 +235,7 @@ const FormPage = (props) => {
 
                             {firstNameError && (
                               <span className='error-msg text-dangerS'>
-                                First Name is required
+                                {t('first_name')} {t('is')} {t('required')}
                               </span>
                             )}
                           </div>
@@ -258,7 +260,7 @@ const FormPage = (props) => {
                             </div>
                             <TextField
                               id='standard-basic'
-                              label='Last Name'
+                              label={t('last_name')}
                               className=' form-controll ml-4'
                               name='lastName'
                               value={props.lastName}
@@ -282,7 +284,7 @@ const FormPage = (props) => {
 
                             {lastNameError && (
                               <span className='error-msg text-dangerS'>
-                                Last Name is required
+                                {t('last_name')} {t('is')} {t('required')}
                               </span>
                             )}
                           </div>
@@ -307,7 +309,7 @@ const FormPage = (props) => {
                             </div>
                             <TextField
                               id='standard-basic'
-                              label='Email ID'
+                              label={t('email_id')}
                               className='form-controll ml-4'
                               name='email'
                               autoCapitalize='none'
@@ -349,12 +351,12 @@ const FormPage = (props) => {
                             )}
                             {emailError && (
                               <span className='error-msg text-dangerS'>
-                                Email ID Already registered
+                                {t('email_id')} {t('already')} {t('registered')}
                               </span>
                             )}
                             {phoneNumberError && (
                               <span className='error-msg text-dangerS'>
-                                Phone Number or Email ID is required
+                                {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
                               </span>
                             )}
                           </div>
@@ -384,7 +386,7 @@ const FormPage = (props) => {
 
                             <PhoneInput
                               country={"in"}
-                              placeholder='Enter Phone number'
+                              placeholder={t('enter_phone_number')}
                               inputProps={{
                                 name: "phone",
                                 required: false,
@@ -426,12 +428,12 @@ const FormPage = (props) => {
                           )}
                           {phoneError && (
                             <span className='error-msg text-dangerS'>
-                              Mobile No. Already registered
+                              {t('phone_number')} {t('already')} {t('registered')}
                             </span>
                           )}
                           {phoneNumberError && (
                             <span className='error-msg text-dangerS'>
-                              Phone Number or Email ID is required
+                             {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
                             </span>
                           )}
 
@@ -496,7 +498,7 @@ const FormPage = (props) => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label='Organisation Type'
+                                    label={t('organisation') + " " + t('type')}
                                   />
                                 )}
                               />
@@ -603,11 +605,11 @@ const FormPage = (props) => {
                                   }
                                   setFieldValue("org", item);
                                   props.onOrganisationChange(item);
-                                  if (item.name !== "Other") {
+                                  if (item.name !== t('other')) {
                                     setValue(item.name);
                                     props.onOrgChange(false);
                                   }
-                                  if (item.name === "Other") {
+                                  if (item.name === t('other')) {
                                     props.onOrgChange(true);
 
                                     if (
@@ -626,12 +628,12 @@ const FormPage = (props) => {
                                 }}
                                 id='debug'
                                 debug
-                                getOptionLabel={(option) => option.name}
+                                getOptionLabel={(option) => option.name.toLocaleLowerCase()}
                                 options={showOrgByType(selectedType)}
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label='Organisation Name'
+                                    label={t('organisation')+" "+t('name')}
                                   />
                                 )}
                               />
@@ -696,7 +698,7 @@ const FormPage = (props) => {
                             <div className='mt-3 mr-4'>
                               {" "}
                               <Alert variant='filled' severity='error'>
-                                <AlertTitle>Error</AlertTitle>
+                                <AlertTitle>{t('error')}</AlertTitle>
                                 {props.errorMessage}
                               </Alert>
                             </div>
@@ -709,13 +711,13 @@ const FormPage = (props) => {
                               className='buttonS btn btn-primary mr-5'
                               disabled={signupDisable}
                             >
-                              SIGNUP
+                              {t('signup')}
                             </button>
                           </div>
                           <div className='signup-link text-center mt-3 mb-4 mr-5'>
-                            Already have an Account?{" "}
+                                {t('already')} {t('have')} {t('an')} {t('account')}?{" "}
                             <Link to='/login'>
-                              <b>Login</b>
+                              <b>{t('login')}</b>
                             </Link>
                           </div>
                         </div>

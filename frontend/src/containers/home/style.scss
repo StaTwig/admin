@@ -269,6 +269,12 @@
     .poweredby {
       font-size: 13px;
       color: #a8a8a8;
+      .language {
+        padding: 5px;
+        color: #0497e6;
+        border-radius: 10px;
+        border-color: #0098e6;
+      }
     }
   }
 }
