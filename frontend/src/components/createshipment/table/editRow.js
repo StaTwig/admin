@@ -142,8 +142,7 @@ const EditRow = (props) => {
     // console.log("index, ", selectedIndex )
     setModelProduct(prod);
     let res = await axios.get(
-      `${config().fetchBatchesOfInventory}?productId=${
-        prod.id
+      `${config().fetchBatchesOfInventory}?productId=${prod.id
       }&wareId=${warehouseID}`
     );
     // console.log(res.data);
@@ -204,7 +203,7 @@ const EditRow = (props) => {
                     className='form-control text-center'
                     placeholder='Product Category'
                     value={prod.type}
-                    onChange={(e) => 
+                    onChange={(e) =>
                       handleCategoryChange(index, e.target.value)
                     }
                   />
