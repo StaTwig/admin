@@ -17,10 +17,10 @@ const ChartsPage = (props) => {
       const productList = await getProductList();
       const productArray = productList.message;
       const result = productArray.slice(0, 10);
-      const productNames = result.map((product) => product.productName);
-      const quantity = result.map((product) => product.quantity);
+      const productNames = result?.map((product) => product.productName);
+      const quantity = result?.map((product) => product.quantity);
 
-      const productNameShorted = productNames.map((product) => truncate(product, 15));
+      const productNameShorted = productNames?.map((product) => truncate(product, 15));
 
       if (productNames.length > 0) {
         setValiddata(true);
