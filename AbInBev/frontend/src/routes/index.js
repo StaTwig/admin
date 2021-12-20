@@ -6,6 +6,7 @@ import AnalyticsContainer from "../containers/analytics";
 import TransactionHistoryContainer from "../containers/transactionHistory";
 import InventoryContainer from "../containers/inventory";
 import Home from "../containers/home";
+import TargetsContainer from "../containers/targets"
 
 import NoMatch from "../components/NoMatch";
 import InventoryDetailsView from "../components/inventory/InventoryDetails";
@@ -22,6 +23,7 @@ const routes = (
     />
     <Route path="/inventory" component={requireAuth(InventoryContainer)} />
     <Route path="/inventorydetails/:sku" component={requireAuth(InventoryDetailsView)} />
+    <Route path="/targets" component={requireAuth(TargetsContainer)} />
     <Route component={NoMatch} />
   </Switch>
 );
