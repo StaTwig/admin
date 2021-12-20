@@ -1,215 +1,110 @@
-//helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const { body} = require('express-validator');
+const { body } = require("express-validator");
 const auth = require("../middlewares/jwt");
-//models
-const utility = require('../helpers/utility');
-const Alerts = require('../models/AlertModel')
-const Notification = require('../models/NotificationsModel')
-const EmployeeModel = require('../models/EmployeeModel')
-
-exports.getAllAlerts = [
-  auth,
-  async function (req, res) {
-    try {
-      const resPerPage = Number(req.query.limit) || 10; 
-			const page = Number(req.query.page) || 1; 
-			const totalRecords = await Alerts.count({...req.params})
-      let alerts = await Alerts.find({ username: req.user.id }).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage).then(
-        Alerts => {
-          if (Alerts.length > 0) {
-            const finalData = {
-              totalRecords : totalRecords,
-              data : Alerts
-            }
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        }
-      )
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err)
-    }
-  },
-]
-
-exports.getAlertNotifications = [
-  auth,
-  async function (req, res) {
-    try {
-      // let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
-      const resPerPage = Number(req.query.limit) || 10; 
-			const page = Number(req.query.page) || 1; 
-			const totalRecords = await Notification.count({ user : req.user.id})
-      Notification.find({ user : req.user.id, type : req.query.type}).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage).sort({_id: -1}).then(
-        Alerts => {
-          if (Alerts.length > 0) {
-            const finalData = {
-              totalRecords : totalRecords,
-              data : Alerts
-            }
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        }
-      )
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err)
-    }
-  }
-]
-
-exports.getTransactionNotifications = [
-  auth,
-  async function (req, res) {
-    try {
-      Notification.find({ user : req.user.id, type : "TRANSACTION"}).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage).then(
-        Notifications => {
-          if (Notifications.length > 0) {
-            const finalData = {
-              totalRecords : totalRecords,
-              data : Notifications
-            }
-            return apiResponse.successResponseWithData(
-              res,
-              "Operation success",
-              finalData
-            );
-          } else {
-            return apiResponse.successResponseWithData(
-              res,
-              "No Results Found",
-              []
-            );
-          }
-        }
-      )
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err)
-    }
-  }
-]
-
+const utility = require("../helpers/utility");
+const Alerts = require("../models/AlertModel");
+const Notification = require("../models/NotificationsModel");
+const EmployeeModel = require("../models/EmployeeModel");
 
 exports.createNewAlert = [
   auth,
   async function (req, res) {
     try {
-      let eventOptions = ["UPDATE", "DELETE", "ADD" ,"CREATE" , "RECEIVE", "REJECT"]
-      let alertSubscription = req.body.eventSecondary.split(',');
-      let Alert
-      Alert = await Alerts.findOneAndDelete({ username: req.user.id })
-        EmployeeModel.findOne({ id : req.user.id }).then(async (user) => {
-          if (user) {
-            console.log(user)
-            const { id, firstName, lastName, emailId, phoneNumber } = user
-            if(!req.body.eventPrimary){              
-              var alertData = []
-              for(eventSecondary of alertSubscription){
-                console.log("EVENT SECONDARY IS ",eventSecondary)
-                let newAlert;
-                if(eventSecondary!='SHIPMENT'){
-                  for(eventType of eventOptions){
-                    console.log(alertData)
-                    newAlert = {
-                      id: utility.randomNumber(10),
-                      event_type_primary: eventType,
-                      event_type_secondary: eventSecondary,          
-                      actorOrgId: req.body.actorOrgId || req.user.organisationId,
-                      createdBy: req.user.id
-                    }
-                    alertData.push(newAlert)
-                  }
+      let eventOptions = [
+        "UPDATE",
+        "DELETE",
+        "ADD",
+        "CREATE",
+        "RECEIVE",
+        "REJECT",
+      ];
+      let alertSubscription = req.body.eventSecondary.split(",");
+      let Alert;
+      Alert = await Alerts.findOneAndDelete({ username: req.user.id });
+      EmployeeModel.findOne({ id: req.user.id }).then(async (user) => {
+        if (user) {
+          console.log(user);
+          const { id, firstName, lastName, emailId, phoneNumber } = user;
+          if (!req.body.eventPrimary) {
+            var alertData = [];
+            for (eventSecondary of alertSubscription) {
+              console.log("EVENT SECONDARY IS ", eventSecondary);
+              let newAlert;
+              if (eventSecondary != "SHIPMENT") {
+                for (eventType of eventOptions) {
+                  console.log(alertData);
+                  newAlert = {
+                    id: utility.randomNumber(10),
+                    event_type_primary: eventType,
+                    event_type_secondary: eventSecondary,
+                    actorOrgId: req.body.actorOrgId || req.user.organisationId,
+                    createdBy: req.user.id,
+                  };
+                  alertData.push(newAlert);
                 }
-                else{
-                  for(eventType of eventOptions){
-                    newAlert = {
-                      id: utility.randomNumber(10),
-                      event_type_primary: eventType,
-                      event_type_secondary: eventSecondary,          
-                      actorOrgId: req.body.actorOrgId || req.user.organisationId,
-                      createdBy: req.user.id
-                    }
-                    alertData.push(newAlert)
-                  }
-                  for(eventType of eventOptions){
-                    newAlert = {
-                      id: utility.randomNumber(10),
-                      event_type_primary: eventType,
-                      event_type_secondary: "SHIPMENT_TRACKING",          
-                      actorOrgId: req.body.actorOrgId || req.user.organisationId,
-                      createdBy: req.user.id
-                    }
-                    alertData.push(newAlert)
-                  }
-                }
-            }
-            }
-            //console.log(alertData)
-            const alert = new Alerts({
-              id: utility.randomNumber(10),
-              username: req.user.id,
-              label: { labelId: req.body.label || null },
-              user: {
-                user_id: id,
-                user_name: firstName + ' ' + lastName,
-                emailId: emailId,
-                mobile_number: phoneNumber || null,
-              },
-              //transactionIds:[...req.body.transactioId],
-              alerts: alertData,
-              alertMode: {
-                mobile: req.body.alertMobile || false,
-                email: req.body.alertEmail || false,
-                telegram: req.body.alertTelegram || false,
-                web_push: req.body.alertWebPush || false,
-              },
-            })
-            alert.active = alertSubscription;
-            alert.save(function (err, result) {
-              if (err) {
-                console.log(err)
-                apiResponse.ErrorResponse(res, err)
               } else {
-                return apiResponse.successResponse(
-                  res,
-                  'Alert Added successfully',
-                )
+                for (eventType of eventOptions) {
+                  newAlert = {
+                    id: utility.randomNumber(10),
+                    event_type_primary: eventType,
+                    event_type_secondary: eventSecondary,
+                    actorOrgId: req.body.actorOrgId || req.user.organisationId,
+                    createdBy: req.user.id,
+                  };
+                  alertData.push(newAlert);
+                }
+                for (eventType of eventOptions) {
+                  newAlert = {
+                    id: utility.randomNumber(10),
+                    event_type_primary: eventType,
+                    event_type_secondary: "SHIPMENT_TRACKING",
+                    actorOrgId: req.body.actorOrgId || req.user.organisationId,
+                    createdBy: req.user.id,
+                  };
+                  alertData.push(newAlert);
+                }
               }
-            })
+            }
           }
-          else return apiResponse.ErrorResponse(res,"NO USER FOUND")
-        })
+          //console.log(alertData)
+          const alert = new Alerts({
+            id: utility.randomNumber(10),
+            username: req.user.id,
+            label: { labelId: req.body.label || null },
+            user: {
+              user_id: id,
+              user_name: firstName + " " + lastName,
+              emailId: emailId,
+              mobile_number: phoneNumber || null,
+            },
+            //transactionIds:[...req.body.transactioId],
+            alerts: alertData,
+            alertMode: {
+              mobile: req.body.alertMobile || false,
+              email: req.body.alertEmail || false,
+              telegram: req.body.alertTelegram || false,
+              web_push: req.body.alertWebPush || false,
+            },
+          });
+          alert.active = alertSubscription;
+          alert.save(function (err, result) {
+            if (err) {
+              console.log(err);
+              apiResponse.ErrorResponse(res, err);
+            } else {
+              return apiResponse.successResponse(
+                res,
+                "Alert Added successfully"
+              );
+            }
+          });
+        } else return apiResponse.ErrorResponse(res, "NO USER FOUND");
+      });
     } catch (err) {
-      apiResponse.ErrorResponse(res, err)
+      apiResponse.ErrorResponse(res, err);
     }
   },
-]
-
-
-
-
+];
 
 /* 
 exports.createNewAlert = [
@@ -303,19 +198,26 @@ exports.createNewAlert = [
   },
 ]
 */
-exports.deleteAlert= [
+exports.deleteAlert = [
   auth,
   async function (req, res) {
     try {
-      let alerts = await Alerts.updateOne({ username : req.user.id , "alerts.id" : req.params.alertId }, {
-        $unset: {
-          "alerts.$" : ""
+      let alerts = await Alerts.updateOne(
+        { username: req.user.id, "alerts.id": req.params.alertId },
+        {
+          $unset: {
+            "alerts.$": "",
+          },
         }
-      })
+      );
 
-      return apiResponse.successResponseWithData(res, 'Alerts fetched successfully', alerts)
+      return apiResponse.successResponseWithData(
+        res,
+        "Alerts fetched successfully",
+        alerts
+      );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err)
+      return apiResponse.ErrorResponse(res, err);
     }
   },
-]
+];

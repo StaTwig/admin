@@ -17,10 +17,7 @@ import {
   postUserLocation,
 } from "../../actions/userActions";
 import logo from "../../assets/brands/VACCINELEDGER.png";
-import {
-  deleteNotification,
-  getImage,
-} from "../../actions/notificationActions";
+import { getImage } from "../../actions/notificationActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { config } from "../../config";
@@ -333,29 +330,29 @@ const Header = (props) => {
   const imgs = config().fetchProfileImage;
 
   return (
-    <div className="header">
-      <div className="branding">
-        <div className="mobile-menu" onClick={() => openSidebar(true)}>
-          <i className="fa fa-bars" aria-hidden="true" />
+    <div className='header'>
+      <div className='branding'>
+        <div className='mobile-menu' onClick={() => openSidebar(true)}>
+          <i className='fa fa-bars' aria-hidden='true' />
         </div>
         <img
           src={logo}
-          alt="vaccineledger"
-          className="logo"
+          alt='vaccineledger'
+          className='logo'
           onClick={() => props.history.push("/overview")}
         />
       </div>
 
-      <div className="actions">
-        <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
+      <div className='actions'>
+        <div className='search-form' tabIndex='-1' onKeyDown={onkeydown}>
           <Autocomplete
-            id="free-solo-demo"
+            id='free-solo-demo'
             freeSolo
             //value={search}
             options={options}
             getOptionLabel={(option) => option._id}
             filterOptions={filterOptions}
-            placeholder="Search PO ID/ Shipment ID/ Transit Number"
+            placeholder='Search PO ID/ Shipment ID/ Transit Number'
             onFocus={(e) => (e.target.placeholder = "")}
             onBlur={(e) =>
               (e.target.placeholder =
@@ -372,9 +369,9 @@ const Header = (props) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Search PO ID/ Shipment ID/ Transit Number"
-                margin="normal"
-                variant="outlined"
+                label='Search PO ID/ Shipment ID/ Transit Number'
+                margin='normal'
+                variant='outlined'
               />
             )}
           />
@@ -388,43 +385,43 @@ const Header = (props) => {
             className= "form-control search-field"
         /> */}
 
-          <img src={searchingIcon} onClick={onSeach} alt="searching" />
+          <img src={searchingIcon} onClick={onSeach} alt='searching' />
         </div>
         <div>
-          <div className="user-info ">
-            <div className="notifications cursorP">
+          <div className='user-info '>
+            <div className='notifications cursorP'>
               <img
-                id="notification"
-                className="ignore-react-onclickoutside"
+                id='notification'
+                className='ignore-react-onclickoutside'
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
-                alt="notification"
+                alt='notification'
               />
               <div
-                id="notification"
-                className="bellicon-wrap"
+                id='notification'
+                className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                <span className="badge badge-light">
+                <span className='badge badge-light'>
                   {newNotifs ? newNotifs : 0}
                 </span>
               </div>
-              {showNotifications && <div className="triangle-up"></div>}
+              {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
                 <div
                   ref={ref1}
                   outsideClickIgnoreClass={"ignore-react-onclickoutside"}
-                  className="slider-menu"
-                  id="scrollableDiv"
+                  className='slider-menu'
+                  id='scrollableDiv'
                 >
                   <div
-                    className="nheader"
+                    className='nheader'
                     style={{
                       backgroundImage:
                         "linear-gradient(to right, #0092e8, #0a6bc6)",
                     }}
                   >
-                    <div className="user-notification-head">
+                    <div className='user-notification-head'>
                       User Notifications
                     </div>
                     {notifications?.length >= 0 && (
@@ -444,15 +441,15 @@ const Header = (props) => {
                     )}
                     <div>
                       <img
-                        className="setting-notif-icon"
+                        className='setting-notif-icon'
                         src={SettingIcon}
                         onClick={() => props.history.push("/settings")}
-                        alt="settings"
+                        alt='settings'
                       />
                     </div>
 
-                    <div className="tab">
-                      <ul className="nav nav-pills">
+                    <div className='tab'>
+                      <ul className='nav nav-pills'>
                         <li
                           className={
                             visible === "one" ? "nav-item-active" : "nav-item"
@@ -502,7 +499,7 @@ const Header = (props) => {
                       </ul>
                     </div>
                   </div>
-                  <div className="slider-item">
+                  <div className='slider-item'>
                     <InfiniteScroll
                       dataLength={notifications?.length || 0}
                       next={() => changeNotifications(alertType, 10)}
@@ -517,7 +514,7 @@ const Header = (props) => {
                         </h4>
                       }
                       scrollThreshold={1}
-                      scrollableTarget="scrollableDiv"
+                      scrollableTarget='scrollableDiv'
                     >
                       {notifications?.length >= 0 ? (
                         notifications?.map((notifications) =>
@@ -536,19 +533,19 @@ const Header = (props) => {
                                 }
                               >
                                 <div
-                                  className="col-sm-10"
+                                  className='col-sm-10'
                                   style={{ display: "flex" }}
                                 >
                                   <img
-                                    className="notification-icons"
+                                    className='notification-icons'
                                     src={notifIcon(notifications)}
-                                    alt="Icon"
+                                    alt='Icon'
                                   />
-                                  <div className="notification-events">
+                                  <div className='notification-events'>
                                     {notifications.message}
                                   </div>
                                 </div>
-                                <div className="text-secondary notif-time">
+                                <div className='text-secondary notif-time'>
                                   {formatDistanceToNow(
                                     new Date(
                                       parseInt(
@@ -561,35 +558,55 @@ const Header = (props) => {
                                   )}
                                 </div>
                                 <img
-                                  className="toggle-icon"
-                                  alt="Drop Down Icon"
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
                                   src={dropdownIcon}
                                 ></img>
                               </Link>
                             ) : (
-                              <div
-                                className={
-                                  notifications.isRead ? "read" : "unRead"
-                                }
-                                onClick={() => {
-                                  setAlertModalData(notifications);
-                                  setOpenModal(true);
-                                }}
-                              >
+                              <Link>
                                 <div
-                                  className="col-sm-10"
-                                  style={{ display: "flex" }}
+                                  className={
+                                    notifications.isRead ? "read" : "unRead"
+                                  }
+                                  onClick={() => {
+                                    setAlertModalData(notifications);
+                                    setOpenModal(true);
+                                  }}
                                 >
-                                  <img
-                                    className="notification-icons"
-                                    src={notifIcon(notifications)}
-                                    alt="Icon"
-                                  />
-                                  <div className="notification-events">
-                                    {notifications.message}
+                                  <div
+                                    className='col-sm-10'
+                                    style={{ display: "flex" }}
+                                  >
+                                    <img
+                                      className='notification-icons'
+                                      src={notifIcon(notifications)}
+                                      alt='Icon'
+                                    />
+                                    <div className='notification-events'>
+                                      {notifications.message}
+                                    </div>
                                   </div>
+                                  <div className='text-secondary notif-time'>
+                                    {formatDistanceToNow(
+                                      new Date(
+                                        parseInt(
+                                          notifications._id
+                                            .toString()
+                                            .substr(0, 8),
+                                          16
+                                        ) * 1000
+                                      )
+                                    )}{" "}
+                                    ago
+                                  </div>
+                                  <img
+                                    className='toggle-icon'
+                                    alt='Drop Down Icon'
+                                    src={dropdownIcon}
+                                  ></img>
                                 </div>
-                                <div className="text-secondary notif-time">
+                                <div className='text-secondary notif-time'>
                                   {formatDistanceToNow(
                                     new Date(
                                       parseInt(
@@ -599,14 +616,15 @@ const Header = (props) => {
                                         16
                                       ) * 1000
                                     )
-                                  )}
+                                  )}{" "}
+                                  ago
                                 </div>
                                 <img
-                                  className="toggle-icon"
-                                  alt="Drop Down Icon"
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
                                   src={dropdownIcon}
                                 ></img>
-                              </div>
+                              </Link>
                             )
                           ) : (
                             <div
@@ -614,19 +632,19 @@ const Header = (props) => {
                               style={{ cursor: "not-allowed" }}
                             >
                               <div
-                                className="col-sm-10"
+                                className='col-sm-10'
                                 style={{ display: "flex" }}
                               >
                                 <img
-                                  className="notification-icons"
+                                  className='notification-icons'
                                   src={notifIcon(notifications)}
-                                  alt="Icon"
+                                  alt='Icon'
                                 />
-                                <div className="notification-events">
+                                <div className='notification-events'>
                                   {notifications.message}
                                 </div>
                               </div>
-                              <div className="text-secondary notif-time">
+                              <div className='text-secondary notif-time'>
                                 {formatDistanceToNow(
                                   new Date(
                                     parseInt(
@@ -640,11 +658,11 @@ const Header = (props) => {
                           )
                         )
                       ) : (
-                        <div className="slider-item">
-                          <div className="row">
-                            <div className="col text-center mt-3 mr-5">
+                        <div className='slider-item'>
+                          <div className='row'>
+                            <div className='col text-center mt-3 mr-5'>
                               <div>
-                                <span className="no-notification">
+                                <span className='no-notification'>
                                   No notifications
                                 </span>
                               </div>
@@ -661,10 +679,10 @@ const Header = (props) => {
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
-            <span className="divider" />
-            <img className="locationimg" src={Location} alt="Location" />
+            <span className='divider' />
+            <img className='locationimg' src={Location} alt='Location' />
 
-            <div className="userName">
+            <div className='userName'>
               <DropdownButton
                 name={(
                   location?.title +
@@ -683,19 +701,19 @@ const Header = (props) => {
               />
             </div>
 
-            <div className="userName">
-              <p className="cname">{profile?.organisation?.split("/")[0]}</p>
+            <div className='userName'>
+              <p className='cname'>{profile?.organisation?.split("/")[0]}</p>
               {/*  <p className="uname">{profile.warehouseAddress_city}</p> */}
-              <p className="uname">
+              <p className='uname'>
                 {profile.firstName} {profile.lastName}
               </p>
             </div>
 
-            <div className="userPic">
+            <div className='userPic'>
               <img
                 style={{ objectFit: "cover" }}
                 src={`${image}`}
-                alt="profile"
+                alt='profile'
                 className={`rounded rounded-circle ${
                   `${imgs}${profile.photoId}`
                     ? ``
@@ -704,10 +722,10 @@ const Header = (props) => {
                 onClick={() => setMenu(!menu)}
               />
             </div>
-            <div className="userActions">
+            <div className='userActions'>
               <img
                 src={dropdownIcon}
-                alt="actions"
+                alt='actions'
                 onClick={() => setMenu(!menu)}
               />
             </div>
@@ -715,12 +733,12 @@ const Header = (props) => {
           {menu && (
             <div
               style={{ borderRadius: "5px", marginTop: "5px" }}
-              className="slider-menu"
+              className='slider-menu'
               ref={ref}
             >
               {
                 <React.Fragment>
-                  <div className="slider-item-text p-2">
+                  <div className='slider-item-text p-2'>
                     <p>{profile.name}</p>
                     <p>{profile?.organisation?.split("/")[0]}</p>
                   </div>
@@ -732,19 +750,19 @@ const Header = (props) => {
                     }}
                   >
                     <div
-                      className="slider-item border-top-0 p-1"
+                      className='slider-item border-top-0 p-1'
                       onClick={() => props.history.push("/profile")}
                     >
                       My Profile
                     </div>
                     <div
-                      className="slider-item p-1"
+                      className='slider-item p-1'
                       onClick={() => props.history.push("/settings")}
                     >
                       Settings
                     </div>
                     <div
-                      className="slider-item p-1"
+                      className='slider-item p-1'
                       onClick={() => dispatch(logoutUser())}
                     >
                       Logout
@@ -762,12 +780,12 @@ const Header = (props) => {
         {invalidSearch && (
           <Modal
             close={() => closeModalFail()}
-            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <FailedPopUp
               onHide={closeModalFail} //FailurePopUp
               // {...modalProps}
-              message="Invalid Search"
+              message='Invalid Search'
             />
           </Modal>
         )}

@@ -1,6 +1,6 @@
-var express = require("express");
-var alertQueryRouter = require("./alert")
-var app = express();
+const express = require("express");
+const alertQueryRouter = require("./alert");
+const app = express();
 
 app.use("/alert", alertQueryRouter);
 

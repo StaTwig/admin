@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   traefik:
-    image: "traefik:v2.4"
+    image: "traefik"
     container_name: "traefik"
     restart: unless-stopped
     ports:
@@ -12,6 +12,17 @@ services:
       - "./traefik.toml:/traefik.toml"
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      # Dashboard
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`test.traefik.vaccineledger.com`)
+      - traefik.http.routers.traefik.service=api@internal"
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=lets-encrypt
+      - traefik.http.routers.traefik.middlewares=authtraefik
+      - traefik.http.middlewares.authtraefik.basicauth.users=user:admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/
 
   cache:
     image: "redis"

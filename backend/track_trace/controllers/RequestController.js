@@ -190,7 +190,6 @@ exports.updateRequest = [
 ];
 
 exports.createRequest = [
-  auth,
   async (req, res) => {
     try {
       let { labelId, type } = req.body;
@@ -230,7 +229,7 @@ exports.createRequest = [
           let result = await request.save();
           contacts.forEach(async (element) => {
             try {
-              await axios.post(URL, {
+              const resp = await axios.post(URL, {
                 content: `Request #${result.id} made by ${result.from.name} for ${result.type} from ${result.from.warehouseId} on Shipment #${result.shipmentId} Label ${result.label.labelId}`,
                 mobile: element.phoneNumber,
                 email: element.emailId,
@@ -240,6 +239,7 @@ exports.createRequest = [
                 transactionId: result.id,
                 subject: `New Request from ${result.from.name}`,
               });
+              console.log(resp.data);
             } catch (err) {
               console.log(err);
             }
@@ -328,47 +328,45 @@ exports.createRequest = [
   },
 ];
 
-exports.validateRequest = [
-  async (req, res) => {
-    try {
-      const { labelId } = req.query;
-      let requestTypes = [];
-      const shipmentCheck = await ShipmentModel.findOne({
+exports.validateRequest = async (req, res) => {
+  try {
+    const { labelId } = req.query;
+    let requestTypes = [];
+    const shipmentCheck = await ShipmentModel.findOne({
+      "label.labelId": labelId,
+    });
+    if (shipmentCheck != null) {
+      const receiver = await ShipmentModel.findOne({
         "label.labelId": labelId,
-      });
-      if (shipmentCheck != null) {
-        const receiver = await ShipmentModel.findOne({
-          "label.labelId": labelId,
-        }).select("receiver");
-        if (receiver.receiver.id == organisationId) {
-          if (receiver.receiver.locationId !== warehouseId) {
-            requestTypes.push("LOCATION_MISMATCH");
-          }
-        } else {
-          requestTypes.push("ORGANISATION_MISMATCH");
+      }).select("receiver");
+      if (receiver.receiver.id == organisationId) {
+        if (receiver.receiver.locationId !== warehouseId) {
+          requestTypes.push("LOCATION_MISMATCH");
         }
-        const permission_request = {
-          role: role,
-          permissionRequired: ["viewShipment"],
-        };
-        checkPermissions(permission_request, async (permissionResult) => {
-          if (!permissionResult.success) {
-            requestType.push("UNSUFFICIENT_ROLE");
-          }
-        });
-      }
-      if (requestTypes.length > 0) {
-        return apiResponse.successResponseWithData(
-          res,
-          "Scan Invalid with Errors",
-          requestTypes
-        );
       } else {
-        return apiResponse.successResponse(res, "Scan Valid");
+        requestTypes.push("ORGANISATION_MISMATCH");
       }
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      const permission_request = {
+        role: role,
+        permissionRequired: ["viewShipment"],
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (!permissionResult.success) {
+          requestType.push("UNSUFFICIENT_ROLE");
+        }
+      });
     }
-  },
-];
+    if (requestTypes.length > 0) {
+      return apiResponse.successResponseWithData(
+        res,
+        "Scan Invalid with Errors",
+        requestTypes
+      );
+    } else {
+      return apiResponse.successResponse(res, "Scan Valid");
+    }
+  } catch (err) {
+    console.log(err);
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+};
