@@ -1,14 +1,14 @@
 import React from "react";
+import "./style.scss";
 import { setTracingShipments } from "../../../actions/shipmentActions";
 import { useDispatch } from "react-redux";
 import alert from "../../../assets/icons/alert.png";
 import location from "../../../assets/icons/CurrentLocationWhite.svg";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../../utils/dateHelper";
-import "./style.scss";
 import Pagination from "@material-ui/lab/Pagination";
 
-const Table = (props) => {
+function Table(props) {
   const dispatch = useDispatch();
   const { shpmnts } = props;
   const shipments = shpmnts();
@@ -23,28 +23,19 @@ const Table = (props) => {
     props.onPageChange(value);
   };
   return (
-    <div className='table'>
-      <div className='rTable'>
-        {/* <div className="rTableHeading">
-            <div className="rTableHead">Customer</div> 
-            <div className="rTableHead">Shipment ID</div>
-            <div className="rTableHead">Shipment Date</div>
-            
-            <div className="rTableHead">
-              <span>From</span>
-            </div>
-            <div className="rTableHead">
-              <span>To</span>
-            </div>
-            <div className="rTableHead">
-              <span>Status</span>
-            </div>
-            <div className="rTableHead">
-              <span />
-            </div>
-          </div> */}
-        <div className=''>
-          {shipments.length === 0 && (
+    <div>
+      <table class="table">
+        {/* <thead>
+        <tr>
+          <th>Shipment ID</th>
+          <th>Shipment Date</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Status</th>
+        </tr>
+      </thead> */}
+        <tbody>
+          {/* {shipments.length === 0 && (
             <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
               No records found
             </div>
@@ -75,10 +66,10 @@ const Table = (props) => {
               >
                 {" "}
                 {/* rTableRow pt-3 pb-3 */}
-                {/* <div className="rTableCell">
+          {/* <div className="rTableCell">
                   <div className="combine-data">{shipment.receiver.id}</div>
                 </div> */}
-                <div
+          {/* <div
                   className='col-1 txt1'
                   style={{ padding: 0, left: "10px" }}
                 >
@@ -139,7 +130,7 @@ const Table = (props) => {
                   style={{ position: "relative", left: "10%" }}
                 >
                   <div className={`status secondary-bg ml-3 ${statusStyle}`}>
-                    {status}
+                    {status}\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                   </div>
                 </div>
                 <div
@@ -178,27 +169,168 @@ const Table = (props) => {
               </div>
             );
           })}
-          {shipments?.length > 0 && (
-            <div className='d-flex flex-row-reverse'>
-              <Pagination
-                showFirstButton
-                showLastButton
-                color='primary'
-                count={Math.ceil(props.count / 10)}
-                onChange={handlePageChange}
-              />
-              <span
-                className='mx-5 my-1 rounded text-dark'
-                style={{ fontSize: "14px" }}
-              >
-                Total Records {props.count}{" "}
-              </span>
+ */}
+
+          {/* {shipments.length === 0 && (
+            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
+              No records found
+            </div>
+          )} */}
+
+          {shipments.length === 0 && (
+            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
+              No records found
             </div>
           )}
+
+          {shipments.map((shipment, index) => {
+            let statusStyle = "bg-primary";
+            let status = "Shipped";
+            if (shipment.status === "RECEIVED") {
+              statusStyle = "bg-success";
+              status = "Delivered";
+            }
+            let supplierAddress = shipment.supplier.warehouse.warehouseAddress;
+            let wLocation = shipment.supplier.warehouse?.location;
+            if (wLocation?.length) {
+              supplierAddress =
+                wLocation.firstLine + wLocation.secondLine + wLocation.city;
+            }
+            let receiverAddress = shipment.receiver.warehouse.warehouseAddress;
+            let wrLocation = shipment.receiver.warehouse?.location;
+            if (wrLocation?.length) {
+              supplierAddress =
+                wrLocation.firstLine + wrLocation.secondLine + wrLocation.city;
+            }
+            return (
+              <tr>
+                <td>
+                  <div class="user-info">
+                    <h5 class="table-h5-text shipmentId">{shipment.id}</h5>
+                    {shipment?.shipmentAlerts?.length > 0 && (
+                      <span
+                        style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
+                        className="rounded p-1"
+                      >
+                        <img style={{ height: 15 }} src={alert} alt="Alert" />
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div class="user-info">
+                    <h5 class="table-h5-text">
+                      {shipment?.shippingDate?.length === 10
+                        ? shipment.shippingDate
+                        : formatDate(shipment.shippingDate)}
+                    </h5>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-info__basic">
+                    <h5 class="mb-0 table-h5-text">
+                      {shipment.supplier.org ? shipment.supplier.org.name : "-"}
+                    </h5>
+                    <p class="text-muted mb-0 table-p-text">
+                      {`${
+                        supplierAddress.firstLine
+                          ? supplierAddress.firstLine
+                          : ""
+                      } ${
+                        supplierAddress.secondLine
+                          ? supplierAddress.secondLine
+                          : ""
+                      } ${supplierAddress.city ? supplierAddress.city : ""}\n ${
+                        supplierAddress.state ? supplierAddress.state : ""
+                      }\n ${
+                        supplierAddress.country ? supplierAddress.country : ""
+                      } `}
+                    </p>
+                  </div>
+                </td>
+                <td>
+                  <div class="user-info__basic">
+                    <h5 class="mb-0 table-h5-text">
+                      {shipment.receiver.org ? shipment.receiver.org.name : "-"}
+                    </h5>
+                    <p class="text-muted mb-0 table-p-text">
+                      {`${
+                        receiverAddress.firstLine
+                          ? receiverAddress.firstLine
+                          : ""
+                      }  ${
+                        receiverAddress.secondLine
+                          ? receiverAddress.secondLine
+                          : ""
+                      } ${
+                        receiverAddress.city ? receiverAddress.city : ""
+                      } \n ${
+                        receiverAddress.state ? receiverAddress.state : ""
+                      } \n ${
+                        receiverAddress.country ? receiverAddress.country : ""
+                      } `}
+                    </p>
+                  </div>
+                </td>
+                <td>
+                  <div className="table-btns">
+                    <div
+                      className={`status  secondary-bgp p-1 mr-3 ${statusStyle}`}
+                    >
+                      {status}
+                    </div>
+                    <button
+                      className="button btn-primary text-light btn-sm mr-3"
+                      onClick={() => {
+                        const data = shipments[index];
+                        dispatch(setTracingShipments(data));
+                        props.history.push(`/tracing/${shipments[index].id}`);
+                      }}
+                    >
+                      <img
+                        style={{ padding: 1, height: 15 }}
+                        src={location}
+                        alt="Location"
+                      />
+                      <span className="pl-1 text-white">Track</span>
+                    </button>
+                    <Link
+                      to={`/viewshipment/${shipment.id}`}
+                      className="button btn-sm"
+                      style={{
+                        width: "60px",
+                        border: "1px solid #007bff",
+                        borderRadius: "6px",
+                      }}
+                    >
+                      View
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {shipments?.length > 0 && (
+        <div className="d-flex flex-row-reverse">
+          <Pagination
+            showFirstButton
+            showLastButton
+            color="primary"
+            count={Math.ceil(props.count / 10)}
+            onChange={handlePageChange}
+          />
+          <span
+            className="mx-5 my-1 rounded text-dark"
+            style={{ fontSize: "14px" }}
+          >
+            Total Records {props.count}{" "}
+          </span>
         </div>
-      </div>
+      )}
     </div>
   );
-};
+}
 
 export default Table;

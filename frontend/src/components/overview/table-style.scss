@@ -30,7 +30,7 @@
 
     .combine-data {
       position: relative;
-      left: 40%;
+      left: 30%;
       display: flex;
       text-align: center;
       font-size: 12px;
@@ -77,5 +77,11 @@
   display: none !important;
   @media screen and (max-width: 768px) {
     display: flex !important;
+  }
+}
+.table-text {
+  width: 100%;
+  @media screen and (max-width: 1280px) {
+    width: 90%;
   }
 }
