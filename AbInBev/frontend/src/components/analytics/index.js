@@ -71,6 +71,7 @@ const Analytics = (props) => {
   const [annualReportButton, setannualReportButton] = useState('btn active');
   const [inventoryButton, setInventoryButton] = useState('btn');
   const [spm, setSpmButton] = useState('btn');
+  const [selectedType, setSelectedType] = useState('All')
 
   // useEffect(() => {
   //   setMonth(new Date().getMonth() + 1);
@@ -80,7 +81,7 @@ const Analytics = (props) => {
   //     date_filter_type: 'by_yearly',
   //   })
   // }, []);
-  
+
   useEffect(() => {
     setSKU(props?.sku ? props.sku : prop?.externalId ? prop.externalId : '');
   }, [props, prop]);
@@ -353,39 +354,39 @@ const Analytics = (props) => {
                       selectedViewCode == 'SKU_DETAIL_VIEW' ||
                       selectedViewCode == 'BREWERY_DETAIL_VIEW' ||
                       selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && (
-                      <>
-                        <label className="filterSubHeading mt-3">
-                          Select State
-                        </label>
-                        <select
-                          className="filterSelect mt-2"
-                          value={state}
-                          onChange={onStateChange}
-                        >
-                          <option value="">Select State</option>
-                          {props.states?.map((state, index) => (
-                            <option key={index} value={state}>
-                              {state}
-                            </option>
-                          ))}
-                        </select>
-                        <label className="filterSubHeading mt-3">
-                          Select District
-                        </label>
-                        <select
-                          value={district}
-                          className="filterSelect mt-2"
-                          onChange={onDistrictChange}
-                        >
-                          <option value="">Select District</option>
-                          {districts?.map((district, index) => (
-                            <option key={index} value={district}>
-                              {district}
-                            </option>
-                          ))}
-                        </select>
-                      </>
-                    )}
+                        <>
+                          <label className="filterSubHeading mt-3">
+                            Select State
+                          </label>
+                          <select
+                            className="filterSelect mt-2"
+                            value={state}
+                            onChange={onStateChange}
+                          >
+                            <option value="">Select State</option>
+                            {props.states?.map((state, index) => (
+                              <option key={index} value={state}>
+                                {state}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="filterSubHeading mt-3">
+                            Select District
+                          </label>
+                          <select
+                            value={district}
+                            className="filterSelect mt-2"
+                            onChange={onDistrictChange}
+                          >
+                            <option value="">Select District</option>
+                            {districts?.map((district, index) => (
+                              <option key={index} value={district}>
+                                {district}
+                              </option>
+                            ))}
+                          </select>
+                        </>
+                      )}
                     {selectedViewCode == 'SKU_VIEW' && (
                       <>
                         <label className="filterSubHeading mt-3">
@@ -415,47 +416,44 @@ const Analytics = (props) => {
                     )}
                     {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
                       selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (
-                      <>
-                        <label className="filterSubHeading mt-3">
-                          Time Period
-                        </label>
-                        <div className="btn-group filterButton mt-2 mb-4">
-                          <a
-                            href="#!"
-                            className={`btn ${
-                              isActive == 'by_monthly' ? `active` : ``
-                            }`}
-                            onClick={() => {
-                              onTPChange('by_monthly');
-                            }}
-                          >
-                            Monthly
-                          </a>
-                          <a
-                            href="#!"
-                            className={`btn ${
-                              isActive == 'by_quarterly' ? `active` : ``
-                            }`}
-                            onClick={() => {
-                              onTPChange('by_quarterly');
-                            }}
-                          >
-                            Quarterly
-                          </a>
-                          <a
-                            href="#!"
-                            className={`btn ${
-                              isActive == 'by_yearly' ? `active` : ``
-                            }`}
-                            onClick={() => {
-                              onTPChange('by_yearly');
-                            }}
-                          >
-                            Yearly
-                          </a>
-                        </div>
-                      </>
-                    )}
+                        <>
+                          <label className="filterSubHeading mt-3">
+                            Time Period
+                          </label>
+                          <div className="btn-group filterButton mt-2 mb-4">
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_monthly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_monthly');
+                              }}
+                            >
+                              Monthly
+                            </a>
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_quarterly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_quarterly');
+                              }}
+                            >
+                              Quarterly
+                            </a>
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_yearly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_yearly');
+                              }}
+                            >
+                              Yearly
+                            </a>
+                          </div>
+                        </>
+                      )}
                     {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
                       selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
                       (isActive == 'by_monthly' ||
@@ -531,9 +529,8 @@ const Analytics = (props) => {
                             (otype, index) => (
                               <span
                                 key={index}
-                                className={`btn p-2 ${
-                                  Otype == otype ? `active` : ``
-                                }`}
+                                className={`btn p-2 ${Otype == otype ? `active` : ``
+                                  }`}
                                 htmlFor={otype}
                                 onClick={() => changeOType(otype)}
                               >
@@ -577,47 +574,47 @@ const Analytics = (props) => {
                     </label>
                     {(selectedViewCode == 'INVENTORY_SKU_DETAILS' ||
                       selectedViewCode == 'INVENTORY_GRAPHICAL') && (
-                      <>
-                        <label className="filterSubHeading mt-3">
-                          Select State
-                        </label>
-                        <select
-                          className="filterSelect mt-2"
-                          value={state}
-                          onChange={onStateChange}
-                        >
-                          <option value="">Select State</option>
-                          {props.states?.map((state, index) => (
-                            <option key={index} value={state}>
-                              {state}
-                            </option>
-                          ))}
-                        </select>
-                        <label className="filterSubHeading mt-3">
-                          Select District
-                        </label>
+                        <>
+                          <label className="filterSubHeading mt-3">
+                            Select State
+                          </label>
+                          <select
+                            className="filterSelect mt-2"
+                            value={state}
+                            onChange={onStateChange}
+                          >
+                            <option value="">Select State</option>
+                            {props.states?.map((state, index) => (
+                              <option key={index} value={state}>
+                                {state}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="filterSubHeading mt-3">
+                            Select District
+                          </label>
 
-                        <select
-                          value={district}
-                          className="filterSelect mt-2"
-                          onChange={onDistrictChange}
-                        >
-                          {state == '' && (
-                            <option value="">Select District</option>
-                          )}
-                          {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
-                            (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
-                              state != '')) && (
-                            <option value="">All District</option>
-                          )}
-                          {districts?.map((district, index) => (
-                            <option key={index} value={district}>
-                              {district}
-                            </option>
-                          ))}
-                        </select>
-                      </>
-                    )}
+                          <select
+                            value={district}
+                            className="filterSelect mt-2"
+                            onChange={onDistrictChange}
+                          >
+                            {state == '' && (
+                              <option value="">Select District</option>
+                            )}
+                            {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
+                              (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
+                                state != '')) && (
+                                <option value="">All District</option>
+                              )}
+                            {districts?.map((district, index) => (
+                              <option key={index} value={district}>
+                                {district}
+                              </option>
+                            ))}
+                          </select>
+                        </>
+                      )}
                     <label className="filterSubHeading mt-3">Select SKU</label>
                     <select
                       className="filterSelect mt-2"
@@ -642,7 +639,162 @@ const Analytics = (props) => {
                   </>
                 )}
 
-                {/* {selectedModule == 'SPM_DASHBOARD' && <>SPM Filter Section</>} */}
+                {selectedModule == 'SPM_DASHBOARD' && (
+                  <div>
+                    <div>
+                      <label className="radioButton" htmlFor="overall">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="overall"
+                          value="SPM_OVERALL"
+                          // onChange={changeView}
+                          defaultChecked={
+                            selectedViewCode == 'SPM_DASHBOARD'
+                          }
+                        />{' '}
+                        Overall
+                      </label>
+                      <label className="radioButton" htmlFor="returnRate">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="returnRate"
+                          value="SPM_RETURN_RATE"
+                        // onChange={changeView}
+                        />{' '}
+                        Return Rate
+                      </label>
+                      <label className="radioButton" htmlFor="leadTime">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="leadTime"
+                          value="SPM_LEAD_TIME"
+                        // onChange={changeView}
+                        />{' '}
+                        Lead Time
+                      </label>
+                      <label className="radioButton" htmlFor="breakageBottle">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="breakageBottle"
+                          value="SPM_"
+                        // onChange={changeView}
+                        />{' '}
+                        Breakage Bottle %
+                      </label>
+                      <label className="radioButton" htmlFor="dirtyBottles">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="dirtyBottles"
+                          value="SPM_DIRTY_BOTTLES"
+                        // onChange={changeView}
+                        />{' '}
+                        Dirty Bottles
+                      </label>
+                      <label className="radioButton" htmlFor="storeAgeCapacity">
+                        <input
+                          className="radioInput"
+                          type="radio"
+                          name="view"
+                          id="storeAgeCapacity"
+                          value="SPM_STOREAGE_CAPACITY"
+                        // onChange={changeView}
+                        />{' '}
+                        Storage Capacity
+                      </label>
+                    </div>
+                    <div>
+                      <label className="filterSubHeading mt-2">Vendor Type</label>
+                      <div className="btn-group filterButton mt-2">
+                        <a
+                          className={`btn ${selectedType === 'All' ? 'active' : ''
+                            }`}
+                          onClick={() => {
+                            setSelectedType('All')
+                          }}
+                        >
+                          All
+                        </a>
+                        <a
+                          className={`btn ${selectedType === 'S1' ? 'active' : ''
+                            }`}
+                          onClick={() => {
+                            setSelectedType('S1')
+                          }}
+                        >
+                          S1
+                        </a>
+                        <a
+                          className={`btn ${selectedType === 'S2' ? 'active' : ''
+                            }`}
+                          onClick={() => {
+                            setSelectedType('S2')
+                          }}
+                        >
+                          S2
+                        </a>
+                        <a
+                          className={`btn ${selectedType === 'S3' ? 'active' : ''
+                            }`}
+                          onClick={() => {
+                            setSelectedType('S3')
+                          }}
+                        >
+                          S3
+                        </a>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="filterSubHeading mt-3">
+                        Select State
+                      </label>
+                      <select
+                        className="filterSelect mt-2"
+                        value={state}
+                      // onChange={onStateChange}
+                      >
+                        <option value={state}>Select State</option>
+                        {props.states?.map((state, index) => (
+                          <option key={index} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
+                      <label className="filterSubHeading mt-3">
+                        Select District
+                      </label>
+
+                      <select
+                        value={district}
+                        className="filterSelect mt-2"
+                      // onChange={onDistrictChange}
+                      >
+                        {state == '' && (
+                          <option value="">Select District</option>
+                        )}
+                        {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
+                          (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
+                            state != '')) && (
+                            <option value="">All District</option>
+                          )}
+                        {districts?.map((district, index) => (
+                          <option key={index} value={district}>
+                            {district}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
 
                 {/* =================== New Filter Code Ends ================================ */}
 
