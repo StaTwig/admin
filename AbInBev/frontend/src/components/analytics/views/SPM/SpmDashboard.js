@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import profile from '../../../../assets/user.png';
-import { getSupplierPerformanceByOrgType } from '../../../../actions/analyticsAction';
+import { getNewConfig, getSupplierPerformanceByOrgType } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 import './SpmDashBoard.scss'
 import cancelIcon from '../../../../assets/icons/cross.png'
@@ -19,10 +19,10 @@ const SpmDashboard = (props) => {
   const [district, setDistrict] = useState('');
   const [openSetRating, setOpenSetRating] = useState(false);
   const [forNextBtn, setForNextBtn] = useState(false);
+  const [config, setConfig] = useState({});
   // const []
 
   useEffect(() => {
-    debugger
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
       pushdates.push(i + " days")
@@ -45,6 +45,9 @@ const SpmDashboard = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
+      let configs = await dispatch(getNewConfig());
+      console.log(configs)
+      setConfig(configs[0])
       const result = await dispatch(getSupplierPerformanceByOrgType());
       let _spm = result.data;
       if (_spm.length) {
@@ -60,7 +63,6 @@ const SpmDashboard = (props) => {
   }
 
   const onStateChange = async (event) => {
-    debugger
     const selectedState = event.target.value;
     setState(selectedState);
     const result = await props.getDistricts(selectedState);
@@ -72,7 +74,6 @@ const SpmDashboard = (props) => {
     setDistrict(selectedDistrict);
   }
 
-  // debugger
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -171,7 +172,7 @@ const SpmDashboard = (props) => {
                               <th scope="col">Criteria</th>
                               <th scope="col">Details</th>
                               <th scope="col">Weightage</th>
-                              <th scope="col">Rating</th>
+                              <th scope="col">Target</th>
                             </tr>
                           </thead>
                           <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>

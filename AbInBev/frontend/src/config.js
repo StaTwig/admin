@@ -179,6 +179,7 @@ export function config() {
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
       getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
+      getNewConfig: `http://localhost:3016/advancedanalytics/api/analytics/getNewConfig?district=BELGAUM&vendorType=S2`
     },
   };
 

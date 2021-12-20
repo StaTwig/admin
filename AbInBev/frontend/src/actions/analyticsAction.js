@@ -90,6 +90,19 @@ export const getAllBrands = () => {
   };
 };
 
+export const getNewConfig = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getNewConfig);
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
 export const getAllOrganisationStats = (param = '') => {
   return async (dispatch) => {
     try {
