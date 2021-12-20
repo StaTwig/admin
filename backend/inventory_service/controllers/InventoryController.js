@@ -2577,7 +2577,7 @@ exports.getBatchExpired = [
                     $in: [warehouse.warehouseInventory, "$inventoryIds"],
                   },
                 },
-                // {batchNumbers: {$ne: ""}},
+                {batchNumbers: {$ne: ""}},
                 { "attributeSet.mfgDate": { $ne: "" } },
                 { "attributeSet.expDate": { $ne: "" } },
               ],

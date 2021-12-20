@@ -45,7 +45,7 @@ const SummaryTable = (props) => {
                 <b>Shipment ID</b>
               </span>
             </div>
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div>{shipment.id}</div>
@@ -78,7 +78,7 @@ const SummaryTable = (props) => {
                 <b>Type</b>
               </span>
             </div>
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div>
@@ -104,7 +104,7 @@ const SummaryTable = (props) => {
               </span>
             </div>
 
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div className='text-left'>
@@ -129,7 +129,7 @@ const SummaryTable = (props) => {
                 <b>From</b>
               </span>
             </div>
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div className='rTableCell text-left'>
@@ -153,7 +153,7 @@ const SummaryTable = (props) => {
                 <b>To</b>
               </span>
             </div>
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data pl-3' key={index}>
                   <div className='rTableCell text-left'>
@@ -176,7 +176,7 @@ const SummaryTable = (props) => {
                 <b>Status</b>
               </span>
             </div>
-            {shipments.map((shipment, index) =>
+            {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div className='status ' target={shipment.status}>
@@ -190,7 +190,7 @@ const SummaryTable = (props) => {
       )}
       <div className='summaryTable sm-only'>
         <div className='row'>
-          {shipments.map((shipment, index) =>
+          {shipments?.map((shipment, index) =>
             index < 5 ? (
               <div key={index} className='col-sm-12 col-md-6 mb-3'>
                 <div className='combine-data mb-3'>

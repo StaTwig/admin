@@ -23,7 +23,7 @@ exports.getWarehouses = [
   auth,
   async (req, res) => {
     try {
-      const organisations = await WarehouseModel.find({organisationId: req.query.id, status: 'ACTIVE'});
+      const organisations = await WarehouseModel.find({ organisationId: req.query.id, status: 'ACTIVE' });
       return apiResponse.successResponseWithData(
         res,
         'Warehouses',

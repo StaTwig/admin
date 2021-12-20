@@ -2,8 +2,10 @@ import React, { useState, useRef } from "react";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import "../login/style.scss";
 import { Formik } from "formik";
+import { useTranslation } from 'react-i18next';
 
 const FormVerifyPage = (props) => {
+  const { t, i18n } = useTranslation();
   const { onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
   const [otpArray, setOtpArray] = useState(["", "", "", ""]);
   const firstInputRef = useRef(null);
@@ -54,27 +56,27 @@ const FormVerifyPage = (props) => {
           <div className='col-sm-6 col-lg-6'>
             <div className='form-content'>
               <img className='logo' src={logo} alt='VaccineLedger' />
-              <h1>Welcome</h1>
+              <h1>{t('welcome')}</h1>
             </div>
           </div>
           <div className='col-sm-6 col-lg-5'>
             <div className='card'>
               <div className='card-body'>
                 <div className='login-form'>
-                  <div className='card-title mb-5'>Enter OTP</div>
+                  <div className='card-title mb-5'>{t('enter_otp')}</div>
                   <Formik
                     innerRef={formRef}
                     initialValues={{ otp0: "", otp1: "", otp2: "", otp3: "" }}
                     validate={(values) => {
                       const errors = {};
                       if (!values.otp0) {
-                        errors.otp0 = "Required";
+                        errors.otp0 = t('required');
                       } else if (!values.otp1) {
-                        errors.otp1 = "Required";
+                        errors.otp1 = t('required');
                       } else if (!values.otp2) {
-                        errors.otp2 = "Required";
+                        errors.otp2 = t('required');
                       } else if (!values.otp3) {
-                        errors.otp3 = "Required";
+                        errors.otp3 = t('required');
                       }
                       return errors;
                     }}
@@ -149,18 +151,18 @@ const FormVerifyPage = (props) => {
                               errorMessage ? "border-red" : ""
                             }`}
                           >
-                            OTP doesn't match
+                            {t('otp_doesnt_match')}
                           </span>
                         )}
                         <div className='font-weight-bold text-center'>
-                          Didn't receive the OTP?
+                          {t('didnt_receive_the_otp')}?
                         </div>
                         <div
                           className='text-center mt-2 mb-5 text-primary resend'
                           style={{ cursor: "pointer" }}
                           onClick={onResendOtp}
                         >
-                          RESEND CODE
+                          {t('resend_code')}
                         </div>
 
                         {/* {errorMessage && (
@@ -171,7 +173,7 @@ const FormVerifyPage = (props) => {
                             type='submit'
                             className=' buttonS btn btn-primary'
                           >
-                            VERIFY
+                            {t('verify')}
                           </button>
                         </div>
                       </form>

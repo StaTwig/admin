@@ -11,8 +11,10 @@ import {
   fetchStateByCountry,
   fetchCitiesByState,
 } from "../../actions/productActions";
+import { useTranslation } from 'react-i18next';
 
 const OrganisationPopUp = (props) => {
+  const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [message, setMessage] = useState(
@@ -21,10 +23,10 @@ const OrganisationPopUp = (props) => {
 
   const closeModal = () => setShowModal(false);
   const orgTypeArr = [
-    { id: "SUPPLIER", name: "Supplier" },
-    { id: "CUSTOMER", name: "Customer" },
-    { id: "CUSTOMER_SUPPLIER", name: "Both" },
-    { id: "CENTRAL_AUTHORITY", name: "Central authority" },
+    { id: "SUPPLIER", name: t('supplier') },
+    { id: "CUSTOMER", name: t('customer') },
+    { id: "CUSTOMER_SUPPLIER", name: t('both') },
+    { id: "CENTRAL_AUTHORITY", name: t('central')+" "+t('authority') },
   ];
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
@@ -100,9 +102,9 @@ const OrganisationPopUp = (props) => {
       )}
       <div className='d-flex flex-row justify-content-between'>
         <div className='flex-column'>
-          <div className='alert mt-3 p-0 pl-3'>Almost there!</div>
+          <div className='alert mt-3 p-0 pl-3'>{t('almost')} {t('there')}!</div>
           <div className='text-info pl-3'>
-            Add organisation details to continue
+            {t('add')} {t('organisation').toLocaleLowerCase()} {t('details')} {t('to')} {t('continue').toLocaleLowerCase()}
           </div>
         </div>
         <div>
@@ -140,36 +142,36 @@ const OrganisationPopUp = (props) => {
                 country,
               }}
               validate={(values) => {
-                console.log(values, "Values Validate");
+                // console.log(values, "Values Validate");
                 const errors = {};
                 //   if (!values.type) {
                 //     errors.type = "Required";
                 //   }
                 if (!values.name) {
-                  errors.name = "Required";
+                  errors.name = t('required');
                 }
                 if (!values.pincode) {
-                  errors.pincode = "Required";
+                  errors.pincode = t('required');
                 }
                 if (!values.region) {
-                  errors.region = "Required";
+                  errors.region = t('required');
                 }
                 if (!values.line1) {
-                  errors.line1 = "Required";
+                  errors.line1 = t('required');
                 }
                 if (!values.city) {
-                  errors.city = "Required";
+                  errors.city = t('required');
                 }
                 if (!values.state) {
-                  errors.state = "Required";
+                  errors.state = t('required');
                 }
                 if (!values.country) {
-                  errors.country = "Required";
+                  errors.country = t('required');
                 }
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                console.log(values, "Values");
+                // console.log(values, "Values");
                 setClicked(true);
                 setSubmitting(false);
                 props.onSignup(values);
@@ -195,7 +197,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label='Organisation Name'
+                          label={t('organisation')+" "+t('name')}
                           className='form-control2'
                           name='name'
                           value={values.name}
@@ -236,7 +238,7 @@ const OrganisationPopUp = (props) => {
                           options={allregions}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label='Select Region' />
+                            <TextField {...params} label={t('select')+" "+t('region')} />
                           )}
                         />
                         {errors.region && touched.region && (
@@ -283,7 +285,7 @@ const OrganisationPopUp = (props) => {
                           options={allCountries.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label='Select Country' />
+                            <TextField {...params} label={t('select')+" "+t('country')} />
                           )}
                         />
                         {errors.country && touched.country && (
@@ -310,7 +312,7 @@ const OrganisationPopUp = (props) => {
                           options={allState.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label='Select State' />
+                            <TextField {...params} label={t('select')+" "+t('state')} />
                           )}
                         />
                         {errors.state && touched.state && (
@@ -335,7 +337,7 @@ const OrganisationPopUp = (props) => {
                           options={allCity.map((Option) => Option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label='Select City' />
+                            <TextField {...params} label={t('select')+" "+t('city')} />
                           )}
                         />
                         {errors.city && touched.city && (
@@ -363,7 +365,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label='Address Line'
+                          label={t('address')+" "+t('line')}
                           className='form-controll'
                           name='line1'
                           value={values.line1}
@@ -402,7 +404,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label='Pin Code'
+                          label={t('pincode')}
                           type='number'
                           className='form-control2'
                           name='pincode'
@@ -439,7 +441,7 @@ const OrganisationPopUp = (props) => {
                       type='submit'
                       className='btn btn-primary '
                     >
-                      Done
+                      {t('done')}
                     </button>
                   </div>
                 </form>

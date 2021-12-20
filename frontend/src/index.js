@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
 import jwt_decode from "jwt-decode";
 import App from "./App";
+import './i18n';
 import configureStore, { history } from "./configureStore";
 import { setCurrentUser, logoutUser } from "./actions/userActions";
 import setAuthToken from "./utils/setAuthToken";

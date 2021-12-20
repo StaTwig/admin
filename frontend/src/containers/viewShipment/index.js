@@ -4,14 +4,14 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import {
   getViewShipment,
-  fetchIotEnabledApiResponse,
+  fetchIotEnabledApiResponse
 } from "../../actions/shipmentActions";
 import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
 import { config } from "../../config";
 
-const ViewShipmentContainer = (props) => {
+const ViewGMRShipmentContainer = (props) => {
   const [trackData, setTrackData] = useState({});
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
     useState([]);
@@ -115,4 +115,4 @@ const ViewShipmentContainer = (props) => {
     </div>
   );
 };
-export default ViewShipmentContainer;
+export default ViewGMRShipmentContainer;
