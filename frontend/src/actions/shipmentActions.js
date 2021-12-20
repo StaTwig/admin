@@ -68,6 +68,17 @@ export const getSupplierAndReceiverList = async () => {
   }
 };
 
+export const getGMRShipments = async (skip, limit) => {
+  try {
+    const result = await axios.get(
+      `${config().fetchGMRShipmentsUrl}?skip=${skip}&limit=${limit}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getShipmentIds = async () => {
   try {
     const result = await axios.get(
@@ -208,6 +219,26 @@ export const createShipment = async data => {
   } catch (e) {
     return e.response;
   }
+};
+
+export const newShipment = async data => {
+  try {
+    const result = await axios.post(config().newShipmentUrl, data);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getViewShipmentGmr = (id) => {
+  return async dispatch => {
+    try {
+      const result = await axios.get(config().viewShipmentGmrUrl + id);
+      return result.data.data;
+    } catch (e) {
+      return e.response;
+    }
+  };
 };
 
 export const getViewShipment = (id) => {

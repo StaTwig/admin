@@ -13,6 +13,7 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 router.post("/createShipment", ShipmentController.createShipment); // /createShipment => POST data of Shipment
+router.post("/newShipment", ShipmentController.newShipment); // /newShipment => POST data of Shipment
 router.post("/receiveShipment", ShipmentController.receiveShipment); // /receiveShipment => Shipment ID
 router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments => Takes warehouseId from req.user header
 router.get(
@@ -20,6 +21,7 @@ router.get(
   ShipmentController.fetchAllWarehouseShipments
 ); // fetchAllWarehouseShipments => fetch shipments from all warehouses
 router.get("/viewShipment", ShipmentController.viewShipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
+router.get("/viewShipmentGmr", ShipmentController.viewShipmentGmr); // /viewShipmentGmr?ShipmentId=SH7TUC_VZIKD
 
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
 router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger
@@ -60,6 +62,7 @@ router.get(
   ShipmentController.fetchSupplierAndReceiverList
 );
 router.get("/fetchairwayBillNumber", ShipmentController.fetchairwayBillNumber);
+router.get("/fetchGMRShipments", ShipmentController.fetchGMRShipments);
 router.get("/images/:key", ShipmentController.Image);
 router.get(
   "/exportInboundShipments",

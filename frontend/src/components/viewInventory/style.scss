@@ -37,6 +37,10 @@
     height: 35px;
     font-size: 13px;
   }
+  .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 
   .txt {
     font-weight: 600;

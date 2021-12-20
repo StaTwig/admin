@@ -752,6 +752,13 @@ const NewOrder = (props) => {
                             setFieldValue("toOrgLocRegion", v.value);
                             setRegion(v.label);
                             onRegionChange(v.label);
+                            setFieldValue("toOrg", "");
+                            setFieldValue("toOrgName", "");
+                            setFieldValue("toOrgCountry", "");
+                            // setFieldValue("toOrgRegion", "");
+                            setFieldValue("toOrgLoc", "");
+                            // setFieldValue("toOrgLocRegion", "");
+                            setFieldValue("toOrgLocCountry", "");
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesRegion}
@@ -797,6 +804,13 @@ const NewOrder = (props) => {
                             setFieldValue("toOrgLocCountry", v.value);
                             setCountry(v.label);
                             onCountryChange(v.label);
+                            setFieldValue("toOrg", "");
+                            setFieldValue("toOrgName", "");
+                            // setFieldValue("toOrgCountry", "");
+                            // setFieldValue("toOrgRegion", "");
+                            setFieldValue("toOrgLoc", "");
+                            // setFieldValue("toOrgLocRegion", "");
+                            // setFieldValue("toOrgLocCountry", "");
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesCountry}
@@ -857,6 +871,7 @@ const NewOrder = (props) => {
                             setFieldValue("toOrg", v.value);
                             setFieldValue("toOrgName", v.label);
                             onOrgChange(v.value);
+                            setFieldValue("toOrgLoc", "");
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={orgNames}
