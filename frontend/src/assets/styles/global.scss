@@ -39,7 +39,9 @@ body {
 }
 
 .btn-primary {
-  background: transparent linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+  background: transparent
+    linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+    padding-box;
   box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
   border-width: 0;
@@ -72,6 +74,10 @@ body {
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
+}
+.btn-orange:hover {
+  border: 0.5px solid #fff;
+  color: #fff;
 }
 
 .btn-yellow {
@@ -108,11 +114,12 @@ table.table td {
   padding-bottom: 0.5rem;
 }
 
-.form-control:focus, .form-field:focus {
+.form-control:focus,
+.form-field:focus {
   box-shadow: none;
 }
 
-.form-control::placeholder{
+.form-control::placeholder {
   opacity: 0.5;
 }
 
@@ -122,7 +129,7 @@ table.table td {
 //       outline: white;
 // }
 //   .no-border div:nth-child(2){
-    
+
 //   border: none;
 // border-radius: 0 !important;
 //   border-bottom: 2px solid #d6d6d6;

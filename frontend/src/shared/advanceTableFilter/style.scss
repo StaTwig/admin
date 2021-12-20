@@ -1,4 +1,4 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .filter {
   .filter-item {
@@ -10,7 +10,8 @@
     cursor: pointer;
 
     .filterTitle {
-      font-size: 13px;
+      font-size: 15px !important;
+      font-weight: bold;
       color: #000;
       margin-left: 5px;
       margin-right: 5px;
@@ -21,14 +22,13 @@
     }
   }
 
-
-  .text{
-    color:white;
+  .text {
+    color: white;
   }
 
   .divider {
-    height: 50px;
-    border: 1px solid $d6Grey;
+    height: 40px;
+    border: 0.5px solid $d6Grey;
     display: flex;
     align-self: center;
   }
@@ -41,8 +41,36 @@
     align-items: center;
   }
 }
-.filter-dropdown{
-width:180%;
-margin-left:40px;
-margin-top:18px;
+.filter-dropdown {
+  width: 180%;
+  margin-left: 40px;
+  margin-top: 18px;
+}
+.btn-filter-info {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #36c2cf;
+  color: white;
+  padding: 10.5px 10.5px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-filter-blue {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #0093e9;
+  color: white;
+  padding: 10px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: 0px;
+}
+.btn-outline-warning:hover {
+  color: #fff;
+}
+
+#customized-menu {
+  width: 150rem;
 }

@@ -1,16 +1,16 @@
-import React,  { useEffect, useState } from "react";
-import ProductInventory from '../../components/productinventory';
-import Header from '../../shared/header';
-import Sidebar from '../../shared/sidebarMenu';
-import { useDispatch, useSelector } from 'react-redux';
-import { turnOn, turnOff } from '../../actions/spinnerActions';
-import { getProducts } from '../../actions/poActions';
-import { getInventories, getInventory } from "../../actions/inventoryActions";
+import React, { useEffect, useState } from "react";
+import ProductInventory from "../../components/productinventory";
+import Header from "../../shared/header";
+import Sidebar from "../../shared/sidebarMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { getProducts } from "../../actions/poActions";
+import { getInventory } from "../../actions/inventoryActions";
 
-const ProductInventoryContainer = props => {
+const ProductInventoryContainer = (props) => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
-  const inventories = useSelector(state => {
+  const inventories = useSelector((state) => {
     return state.inventoryDetails;
   });
   useEffect(() => {
@@ -22,14 +22,18 @@ const ProductInventoryContainer = props => {
       dispatch(turnOff());
     }
     fetchData();
-  }, []);
+  }, [dispatch]);
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
-          <ProductInventory inventories={inventories} products={products} {...props} />
+        <div className='content'>
+          <ProductInventory
+            inventories={inventories}
+            products={products}
+            {...props}
+          />
         </div>
       </div>
     </div>
@@ -37,4 +41,3 @@ const ProductInventoryContainer = props => {
 };
 
 export default ProductInventoryContainer;
-

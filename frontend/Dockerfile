@@ -7,14 +7,16 @@ COPY package.json /app/
 RUN yarn install
 
 COPY . /app/
+
+ENV ENVIRONMENT=test
+
+ENV NODE_ENV=production
  
 RUN yarn run build 
 
 FROM nginx:stable-alpine
 
-COPY --from=react_build /app /usr/share/nginx/html
-
-# COPY . /usr/share/nginx/html
+COPY --from=react_build /app/build/ /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
 

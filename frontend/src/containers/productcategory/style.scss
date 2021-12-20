@@ -1,96 +1,95 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .inventory {
-    padding-right: 3rem;
-    padding-left: 3rem;
+  padding-right: 3rem;
+  padding-left: 3rem;
 
-    .fix-wrap {
-        flex-wrap: wrap;
+  .fix-wrap {
+    flex-wrap: wrap;
 
-        @media (min-width: 1600px) {
-            flex-wrap: nowrap;
-        }
+    @media (min-width: 1600px) {
+      flex-wrap: nowrap;
+    }
+  }
+
+  .list-container {
+    h4 {
+      color: $OBBlue;
     }
 
-    .list-container {
+    .overflow {
+      overflow: auto;
+      height: 400px;
+    }
+  }
 
-        h4 {
-            color: $OBBlue;
-        }
+  .panel {
+    box-shadow: 0px 3px 6px $grey;
+    border-radius: 15px;
+    background-color: $white;
+    flex-basis: 30%;
+    margin-top: 2rem;
+    margin-right: 1rem;
+    padding: 30px;
 
-        .overflow {
-            overflow: auto;
-            height: 400px;
-        }
+    &:last-child {
+      margin-right: 0;
     }
 
-    .panel {
-        box-shadow: 0px 3px 6px $grey;
-        border-radius: 15px;
-        background-color: $white;
-        flex-basis: 30%;
-        margin-top: 2rem;
-        margin-right: 1rem;
-        padding: 30px;
+    .picture {
+      width: 60px;
+      height: 60px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 2rem;
 
-        &:last-child {
-            margin-right: 0;
-        }
+      img {
+        width: 35px;
+        height: 26px;
+      }
 
-        .picture {
-            width: 60px;
-            height: 60px;
-            box-shadow: 0px 3px 6px #00000029;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 2rem;
+      &.truck-bg {
+        background: $deepGreen;
+      }
 
-            img {
-                width: 35px;
-                height: 26px;
-            }
+      &.sent-bg {
+        background: $lightBlue;
+      }
 
-            &.truck-bg {
-                background: $deepGreen;
-            }
+      &.recived-bg {
+        background: $darkYellow;
+      }
 
-            &.sent-bg {
-                background: $lightBlue;
-            }
-
-            &.recived-bg {
-                background: $darkYellow;
-            }
-
-            &.transit-bg {
-                background: $C0Blue;
-            }
-        }
-
-        .fontSize25 {
-            font-size: 23px;
-        }
-
-        .fontSize30 {
-            font-size: 30px;
-        }
-
-        .truck-text {
-            color: $deepGreen;
-        }
-
-        .sent-text {
-            color: $lightBlue;
-        }
-
-        .recived-text {
-            color: $darkYellow;
-        }
-
-        .transit-text {
-            color: $deepBlue;
-        }
+      &.transit-bg {
+        background: $C0Blue;
+      }
     }
+
+    .fontSize25 {
+      font-size: 23px;
+    }
+
+    .fontSize30 {
+      font-size: 30px;
+    }
+
+    .truck-text {
+      color: $deepGreen;
+    }
+
+    .sent-text {
+      color: $lightBlue;
+    }
+
+    .recived-text {
+      color: $darkYellow;
+    }
+
+    .transit-text {
+      color: $deepBlue;
+    }
+  }
 }

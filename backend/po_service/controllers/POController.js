@@ -7,6 +7,7 @@ const date = require('date-and-time');
 const moment = require('moment');
 const POModel = require('../models/POModel');
 const RecordModel = require('../models/RecordModel');
+const Event = require('../models/EventModal')
 const CounterModel = require('../models/CounterModel')
 const OrganisationModel = require('../models/OrganisationModel')
 const ProductModel = require('../models/ProductModel')
@@ -23,6 +24,7 @@ const dotenv = require('dotenv').config();
 const wrapper = require('../models/DBWrapper')
 const excel = require('node-excel-export');
 const blockchain_service_url = process.env.URL;
+const hf_blockchain_url= process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
 var pdf = require("pdf-creator-node");
@@ -293,80 +295,39 @@ exports.changePOStatus = [
                       $set: {poStatus :status }
                 })
                 try{
-                  let event = Event.findOne({'transactionId': orderID})
-                  
-                  if (status === "ACCEPTED")
-                    event.eventType.primary = "RECEIVE";
-                  else event.eventType.primary = "UPDATE";
-
-                  event.eventType.description = "ORDER";
-                
-                  async function compute(event) {
-                    resultt = await logEvent(event);
-                    return resultt;     
-                  }
-                  console.log(result);
-                  compute(event).then((response) => {
-                    console.log(response);
-          
-                  });
-                }catch(error){
-                  console.log(error);
-                }
-                try{
-                  let event = Event.findOne({'payloadData.data.order_id': orderID})
-                  var evid = Math.random().toString(36).slice(2);
-                  var datee = new Date();
-                  datee = datee.toISOString();
-                  let event_data = {
-                    eventID: null,
-                    eventTime: null,
-                    transactionId: orderID,
-                    eventType: {
-                      primary: "UPDATE",
-                      description: "ORDER",
-                    },
-                    actor: {
-                      actorid: "null",
-                      actoruserid: "null",
-                    },
-                    stackholders: {
-                      ca: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                      actororg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                      secondorg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                      },
-                    },
-                    payload: {
+                  console.log(req.user)
+                  let event = await Event.findOne({'transactionId': orderID})
+                  console.log(event)
+                  let newEvent = {
+                    eventID: 'ev0000' +  Math.random().toString(36).slice(2),
+                    eventTime: new Date(),
+                    transactionId: event.transactionId,
+                    eventTypePrimary: event.eventTypePrimary,
+                    eventTypeDesc: event.eventTypeDesc,
+                    actorId: req.user.id || event.actorId,
+                    actorUserId: req.user.emailId || event.actorUserId,
+                    caId: event.caId,
+                    caName: event.caName,
+                    caAddress: event.caAddress,
+                    actorOrgId: event.actorOrgId,
+                    actorOrgName: event.actorOrgName ,
+                    actorOrgAddress: event.actorOrgAddress ,
+                    actorWarehouseId: event.actorWarehouseId ,
+                    secondaryOrgId: event.secondaryOrgId ,
+                    secondaryOrgName: event.secondaryOrgName ,
+                    secondaryOrgAddress: event.secondaryOrgAddress ,
+                    payloadData: {
                       data: {
-                        data: null,
-                      },
-                    },
-                  };
-                  event_data.eventID = "ev0000" + evid;
-                  event_data.eventTime = datee;
-                  event_data.eventType.primary = "UPDATE";
-                  event_data.eventType.description = "ORDER";
-                  event_data.payloaData = event.payloaData;
-                
-                  async function compute(event_data) {
-                    resultt = await logEvent(event_data);
-                    return resultt;     
+                      }                  
                   }
-                  console.log(result);
-                  compute(event_data).then((response) => {
-                    console.log(response);
-                  });
+                }
+                  if (status === "ACCEPTED")
+                  newEvent.eventTypePrimary = "RECEIVE";
+                  else newEvent.eventTypePrimary = "REJECT";     
+                  newEvent.payloadData.data = req.body       
+                  let event_body = new Event(newEvent);
+                  let result = await event_body.save();
+                  console.log(result)
                 }catch(error){
                   console.log(error);
                 }
@@ -403,8 +364,9 @@ exports.createPurchaseOrder = [
                  console.log("finished re indexing")
                })
              })*/
-      const { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
+      let { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
+      creationDate = new Date(creationDate);
       const purchaseOrder = new RecordModel({
         id: uniqid('po-'),
         externalId,
@@ -864,6 +826,7 @@ exports.createOrder = [
       const user_id = req.user.id;      
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      creationDate = new Date(creationDate);
       products.forEach(async element => {
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type
@@ -882,6 +845,7 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
+      console.log(purchaseOrder)
       const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.supplierOrganisation,
@@ -913,6 +877,34 @@ exports.createOrder = [
              "status":"CREATED"
       }
       purchaseOrder.poUpdates = updates;
+     
+       const bc_data = {
+	  "Id": poId,
+	  "CreatedOn": "",
+	  "CreatedBy": "",
+	  "IsDelete": true,
+	  "Externalid": "",
+	  "Supplier": JSON.stringify(req.body.supplier),
+	  "Customer": JSON.stringify(req.body.customer),
+	  "Products": JSON.stringify(req.body.products),
+	  "Postatus": req.body.poStatus,
+	  "Poupdates": JSON.stringify(updates),
+	  "Lastupdatedby": req.user.id,
+	  "Lastupdatedon": req.body.lastUpdatedOn,
+	  "Country": "",
+	  "Warehouses": "",
+	  "Location": "",
+	  "Supervisors": "",
+	  "Employees": ""
+	}
+	let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+
+	const bc_response =  await axios.post(`${hf_blockchain_url}/api/v1/transactionapi/record/create`, bc_data,
+	        {
+	  headers: {
+	  'Authorization': token
+	  }
+	})
 
       const result = await purchaseOrder.save();
 
@@ -1060,6 +1052,9 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
               let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let fromDate = req.query.fromDate ? req.query.fromDate : undefined
+              let toDate = req.query.toDate ? req.query.toDate : undefined
+              
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1091,7 +1086,12 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if (fromDateFilter) {
                 whereQuery['createdAt'] = { $gte: fromDateFilter }
               }
-
+              if(fromDate && toDate){
+                var firstDate =  new Date(fromDate);
+                var nextDate = new Date(toDate)
+                whereQuery[`creationDate`] = {$gte: firstDate, $lte: nextDate}
+              }
+	      
               if (organisationId) {
                 whereQuery["supplier.supplierOrganisation"] = organisationId
               }
@@ -1204,6 +1204,9 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
               let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let fromDate = req.query.fromDate ? req.query.fromDate : undefined
+              let toDate = req.query.toDate ? req.query.toDate : undefined
+
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1226,6 +1229,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                 default:
                   fromDateFilter = 0;
               }
+
+
 
               let whereQuery = {};
               if (orderId) {
@@ -1251,6 +1256,12 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
 
               if(poStatus){
                 whereQuery["poStatus"]=poStatus
+              }
+
+              if(fromDate && toDate){
+                var firstDate =  new Date(fromDate);
+                var nextDate = new Date(toDate)
+                whereQuery[`creationDate`] = {$gte: firstDate, $lte: nextDate}
               }
 	      
               if (productName) {
@@ -1629,18 +1640,18 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                          rowData ={
                            id: row.id,
                            createdBy : row.createdBy,
-                           supplierOrgId: row?.supplier?.organisation?.id,
+			   supplierOrgId: row?.supplier?.organisation?.id,
                            orderReceiveIncharge: row?.customer?.customerIncharge,
                            orderReceiverOrg: row?.customer?.customerOrganisation,
-                           productCategory: product.type,
+			   productCategory: product.type,
                            productName: product.name,
                            manufacturer: product.manufacturer,
                            productQuantity: product.productQuantity,
                            productId: product.id,
-                          recieverOrgName: row?.customer?.organisation?.name,
-                          recieverOrgId: row?.customer?.organisation?.id,
-                          recieverOrgLocation: row?.customer.organisation?.postalAddress,
-                          status: row.poStatus}
+                            recieverOrgName: row?.customer?.organisation?.name,
+                            recieverOrgId: row?.customer?.organisation?.id,
+                            recieverOrgLocation: row?.customer.organisation?.postalAddress,
+			   status: row.poStatus}
                          data.push(rowData)
                       }
                     }
@@ -1720,7 +1731,7 @@ function buildExcelReport(req,res,dataForExcel){
       width: 220 
     },
     orderReceiveIncharge: {
-      displayName: 'Order Received From',
+      displayName: 'Order Received By',
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen, 
       width: 220 
@@ -1807,7 +1818,7 @@ function buildPdfReport(req,res,data){
   let finalPath = resolve("./models/pdftemplate.html")
     let html = fs.readFileSync(finalPath, "utf8");
     var options = {
-      format: "A3",
+      format: "A4",
       orientation: "landscape",
       border: "10mm",
       header: {

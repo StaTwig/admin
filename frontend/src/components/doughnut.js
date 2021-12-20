@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Doughnut } from "react-chartjs-2";
+// import { Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  defaults
+} from 'chart.js';
+import {
+  Chart, Doughnut
+} from 'react-chartjs-2';
 import { MDBContainer } from "mdbreact";
 import { getProductList } from "../actions/productActions";
-import EmptyInventory from "../assets/icons/EmptyInventory.png";
+import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
 
 const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
-  const [validdata,setValiddata]=useState(false);
-  
+  const [validdata, setValiddata] = useState(false);
+
+  const truncate = (str, n) => {
+		return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+	};
+
   useEffect(() => {
     async function fetchData() {
       const productList = await getProductList();
       const productArray = productList.message;
       const result = productArray.slice(0, 10);
-      const productNames = result.map((product) => product.productName);
-      const quantity = result.map((product) => product.quantity);
-     
-      if(productNames.length>0)
-      {
-        setValiddata(true);
+      const productNames = result?.map((product) => product.productName);
+      const quantity = result?.map((product) => product.quantity);
+
+      const productNameShorted = productNames?.map((product) => truncate(product, 15));
+
+      if (productNames.length > 0) {
         setDoughnut({
-          labels: productNames,
+          labels: productNameShorted,
           datasets: [
             {
               data: quantity,
@@ -34,7 +45,39 @@ const ChartsPage = (props) => {
                 "#F1DDC6",
                 "#BCFFF2",
                 "#FFD0CA",
-                
+                "#63B7AF",
+              ],
+              hoverBackgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+                "#63B7AF",
+              ],
+            },
+          ],
+        });
+        console.log({
+          labels: productNameShorted,
+          datasets: [
+            {
+              data: quantity,
+              backgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+
                 "#63B7AF",
                 "#FFCB91",
                 "#FFEFA1",
@@ -47,7 +90,7 @@ const ChartsPage = (props) => {
                 "#01A9B4",
                 "#87DFD6",
                 "#FBFD8A",
-                
+
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -77,7 +120,7 @@ const ChartsPage = (props) => {
                 "#F1DDC6",
                 "#BCFFF2",
                 "#FFD0CA",
-                
+
                 "#63B7AF",
                 "#F7A440",
                 "#FFCB91",
@@ -91,7 +134,7 @@ const ChartsPage = (props) => {
                 "#01A9B4",
                 "#87DFD6",
                 "#FBFD8A",
-                
+
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -113,55 +156,58 @@ const ChartsPage = (props) => {
               ],
             },
           ],
-        });
+        })
+
+        setValiddata(true);
       }
-     
-     
     }
     fetchData();
   }, []);
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
-  
+
   const option = {
-    maintainAspectRatio: true,
+    cutout:"75%",
+    maintainAspectRatio: false,
     responsive: true,
     layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top:0,
-                bottom:0
-            }
+      padding: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+      },
+    },
+    plugins: {
+      legend: {
+        position: "right",
+        padding: 10,
+        labels: {
+          usePointStyle: true,
+          fontFamily: "Source Sans Pro",
         },
-  legend: {
-  position: 'right',
-  padding:10,
-  labels: {
-  usePointStyle: true,
-  fontFamily: 'Source Sans Pro',
-
-  }
- }
-}
+      },
+    },
+  };
 
   return (
     <div>
-      { validdata  ? 
-  (   
-    <MDBContainer>
-    <Doughnut id="doughnut-chart" data={doughnut} options={option} />
-  </MDBContainer>
-  
-   
-  )   : (
-      <div className="summaryTable justify-content-center ">
-      <div className="d-flex flex-column ">
-        <img src={EmptyInventory} height="200" width="200" />
-      </div>
-      </div>
-     )
-    }
-  </div>
+      {validdata ? (
+        // <MDBContainer>
+        <Doughnut
+          height={250}
+          id="doughnut-chart"
+          data={doughnut}
+          options={option}
+        />
+      ) : (
+        // </MDBContainer>
+        <div className="summaryTable justify-content-center ">
+          <div className="d-flex flex-column ">
+            <img src={EmptyInventory} height="200" width="200" alt="" />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

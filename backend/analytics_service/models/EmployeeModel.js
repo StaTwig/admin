@@ -47,6 +47,7 @@ var EmployeeSchema = new mongoose.Schema({
     default: 'org1234',
   },
   warehouseId: { type: String, required: false, default: 'NA' },
+  pendingWarehouseId: { type: Array, required: false, default: 'NA' },
   affiliatedOrganisations: {
     type: String,
     required: false,

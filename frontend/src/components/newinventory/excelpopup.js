@@ -1,61 +1,62 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import './style.scss';
-import { addInventoriesFromExcel, setReviewinventories } from '../../actions/inventoryActions';
-import { turnOn, turnOff } from '../../actions/spinnerActions';
-import uploadBlue from '../../assets/icons/UploadBlue.svg';
-import Checked from '../../assets/icons/checked.svg';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import "./style.scss";
+import {
+  addInventoriesFromExcel,
+  setReviewinventories,
+} from "../../actions/inventoryActions";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
+import uploadBlue from "../../assets/icons/UploadBlue.svg";
 
-const ExcelPopUp = props => {
-  const [excel, setExcel] = useState('');
+const ExcelPopUp = (props) => {
+  const [excel, setExcel] = useState("");
   const dispatch = useDispatch();
 
-  const setExcelFile = evt => {
+  const setExcelFile = (evt) => {
     setExcel(evt.target.files[0]);
   };
 
   const uploadExcel = async () => {
     let formData = new FormData();
-    formData.append('excel', excel);
+    formData.append("excel", excel);
     console.log(formData);
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
-    // console.log(result);
     if (result.status === 200) {
-      // console.log('success add product');
-      // props.setOpenCreatedInventory(true);
-      //Store in reducer
       dispatch(setReviewinventories(result.data.data));
-
-      //Redirect to review page.
-      props.history.push('/reviewinventory');
+      props.history.push("/reviewinventory");
     }
     dispatch(turnOff());
   };
   return (
-    <div className="excelpopup col">
-      <div className="d-flex flex-column upload mb-5 ml-5">
+    <div className='excelpopup col'>
+      <div className='d-flex flex-column upload mb-5 ml-5'>
         <img
           src={uploadBlue}
-          name="photo"
-          width="50"
-          height="50"
-          className="mt-2"
+          name='photo'
+          width='50'
+          height='50'
+          className='mt-2'
+          alt='Upload'
         />
         <div>"Drag and drop" your Excel file here</div>
         <div>or</div>
-        <input type="file" className="mb-3 excelSpace" onChange={setExcelFile} />
+        <input
+          type='file'
+          className='mb-3 excelSpace'
+          onChange={setExcelFile}
+        />
       </div>
-      <div className="row justify-content-between">
+      <div className='row justify-content-between'>
         <div />
-        <div className="row">
+        <div className='row'>
           <button
-            className="btn-outline-primary btn mr-3"
+            className='btn-outline-primary btn mr-3'
             onClick={props.onHide}
           >
             Cancel
           </button>
-          <button className="btn-primary btn mr-4" onClick={uploadExcel}>
+          <button className='btn-primary btn mr-4' onClick={uploadExcel}>
             Import
           </button>
         </div>

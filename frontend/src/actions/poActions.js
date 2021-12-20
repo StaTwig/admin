@@ -5,7 +5,7 @@ import {
   RESET_REVIEW_PO,
   SET_EDIT_PO,
   RESET_EDIT_PO,
-  SET_POS,
+  // SET_POS,
   RESET_POS
 } from '../constants/poconstants';
 import { turnOn, turnOff } from "./spinnerActions";
@@ -83,6 +83,16 @@ export const getProductsByCategory = async (id) => {
   }
 };
 
+export const searchProduct = async (id, warehouseId) => {
+  try {
+    const result = await axios.get(config().searchProduct + '&productType=' + id + '&warehouseId=' + warehouseId);
+    console.log(result.data.data)
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getManufacturers = async () => {
   try {
     const result = await axios.get(config().getManufacturers);
@@ -94,7 +104,7 @@ export const getManufacturers = async () => {
 
 export const addNewProduct = async data => {
   try {
-    const url = config().addNewProduct;
+    // const url = config().addNewProduct;
     const result = await axios.post(config().addNewProduct, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -198,12 +208,12 @@ export const getOpenOrderIds = async () => {
   }
 };
 
-const setPurchaseOrders = data => {
-  return {
-    type: SET_POS,
-    payload: data,
-  };
-};
+// const setPurchaseOrders = data => {
+//   return {
+//     type: SET_POS,
+//     payload: data,
+//   };
+// };
 
 export const setReviewPos = data => {
   return {

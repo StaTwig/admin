@@ -2,7 +2,6 @@
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
 const ShipmentModel = require("../models/ShipmentModel");
-const InventoryModel = require("../models/InventoryModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -10,9 +9,6 @@ const ProductModel = require("../models/ProductModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const moment = require("moment");
-const { parse } = require("ipaddr.js");
-const { update } = require("../models/ProductSKUModel");
-
 require("dotenv").config();
 
 const BREWERY_ORG = "BREWERY";

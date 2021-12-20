@@ -1,25 +1,31 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .revieworder {
-    position:relative;
-    top:-22px;
-    padding-right: 1rem;
-    padding-left: 2.5rem;
-      @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-    .trackBtn{
-      padding: 0.7rem 3rem;
-    }
-    .shadow{
-      border-radius: 1rem;
-    }
-    .btn-outline-primary:hover{
-     color: white !important;
-     border-color:white !important;
-    }
-    .col{
-      text-align: left;
-    }
+  position: relative;
+  top: -22px;
+  padding-right: 1rem;
+  padding-left: 2.5rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .trackBtn {
+    padding: 0.7rem 3rem;
+  }
+  .shadow {
+    border-radius: 1rem;
+  }
+  .btn-outline-primary:hover {
+    color: white !important;
+    border-color: white !important;
+  }
+  .col {
+    text-align: left;
+  }
+}
+.edit-text{
+ color:#0093E9;
+}
+.edit-text:hover{
+  color:#0093E9;
 }

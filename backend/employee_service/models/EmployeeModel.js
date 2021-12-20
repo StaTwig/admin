@@ -42,11 +42,13 @@ var EmployeeSchema = new mongoose.Schema({
     required: true,
   },
   warehouseId: { type: Array, required: false, default: 'NA' },
+  pendingWarehouseId: { type: Array, required: false, default: 'NA' },
   affiliatedOrganisations: {
     type: Array,
     required: false,
   },
   role: { type: String, required: false, default: 'powerUser' },
+  msp : { type: String, required: false, default: 'org1MSP' },
   postalAddress: {
     type: String,
     required: false,

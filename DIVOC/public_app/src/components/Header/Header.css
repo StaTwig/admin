@@ -8,3 +8,12 @@
     padding-left: 1rem !important;
     padding-right: 1rem !important;
 }
+.divoc-logo{
+    position:relative;
+    top:-15px;
+}
+.vl-logo{
+    position: relative;
+    top:10px;
+    left:-173.5px;
+}

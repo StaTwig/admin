@@ -1,22 +1,21 @@
 # Event Logger (Helper Utility)
 
-This is a utility helper which can be imported into any method and called with the event data in the schema defined below and the helper will validate the data to ensure it is in the right format and then will store it in the Events collection of the MongoDB. 
+This is a utility helper which can be imported into any method and called with the event data in the schema defined below and the helper will validate the data to ensure it is in the right format and then will store it in the Events collection of the MongoDB.
 
 ## Steps to use
 
-1) Update the Mongo URL in the Config FILE | config.js or set "MONGODB_URL" as an env variable
-`let config = {`
-`    MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
-`}`
+1. Update the Mongo URL in the Config FILE | config.js or set "MONGODB_URL" as an env variable
+   `let config = {`
+   ` MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
+   `}`
 
 **--------------------------------------------------------------------------------**
-`export MONGODB_URL = mongodb://place_mongo_url_here`
-2) Import the helper file
-`const logEvent = require('../utils/event_logger/eventLogger.js');`
-3) Call the logEvent method
+`export MONGODB_URL = mongodb://place_mongo_url_here` 2) Import the helper file
+`const logEvent = require('../utils/event_logger/eventLogger.js');` 3) Call the logEvent method
 `result = await logEvent(data)`
 
 ## Schema to Events
+
     {
       "title": "Root",
       "type": "object",

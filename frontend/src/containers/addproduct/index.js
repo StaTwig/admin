@@ -1,19 +1,16 @@
-import { useDispatch} from 'react-redux';
-import React, { useState, useEffect, useSelector } from 'react';
-import AddProduct from '../../components/addproduct';
-import Header from '../../shared/header';
-import Sidebar from '../../shared/sidebarMenu';
+import React from "react";
+import AddProduct from "../../components/addproduct";
+import Header from "../../shared/header";
+import Sidebar from "../../shared/sidebarMenu";
 
-
-
-const AddProductContainer = props => {
+const AddProductContainer = (props) => {
   return (
-    <div className="container-fluid p-0">
+    <div className='container-fluid p-0'>
       <Header {...props} />
-      <div className="d-flex">
+      <div className='d-flex'>
         <Sidebar {...props} />
-        <div className="content">
-          <AddProduct {...props}/>
+        <div className='content'>
+          <AddProduct {...props} />
         </div>
       </div>
     </div>
@@ -21,4 +18,3 @@ const AddProductContainer = props => {
 };
 
 export default AddProductContainer;
-
