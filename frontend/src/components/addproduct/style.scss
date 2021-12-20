@@ -28,13 +28,14 @@
     align-items: center;
   }
   .upload {
-    height: 200px;
-    width: 350px;
+    height: 9rem;
+    width: 9rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     border: 1px dashed #707070;
     border-radius: 8px;
+    margin-bottom: 25px;
 
     .select {
       display: none;
@@ -99,4 +100,22 @@
       cursor: pointer;
     }
   }
+}
+
+.addNewBtn {
+    position: relative;
+    top: 2.5rem;
+    height: 2rem;
+    right: 10rem;
+    background-color: #fa7923;
+    color: #FFFFFF;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 10px;
+    border-width: 0;
+    text-transform: capitalize;
+    padding: 5px 20px;
+}
+
+.addNewBtn:hover{
+  color: #FFFFFF;
 }
