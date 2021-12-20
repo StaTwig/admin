@@ -90,7 +90,7 @@ const AdvanceTableFilter = (props) => {
           </div>
           <StyledMenu
             className='ml-5 mt-3'
-            style={{ width: "140rem" }}
+            style={{ width: "160rem" }}
             id='customized-menu'
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
@@ -135,7 +135,7 @@ const AdvanceTableFilter = (props) => {
                   style={{
                     padding: "10px",
                     height: "40px",
-                    width: "180px",
+                    width: "200px",
                     borderRadius: "10px",
                   }}
                   className='btn btn-outline-warning btn-sm font-weight-bold'

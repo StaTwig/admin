@@ -66,6 +66,7 @@ const Header = (props) => {
   const [limit, setLimit] = useState(10);
   const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [transitNum, setTransitValue] = useState({})
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
     stringify: (option) => option._id,
@@ -95,14 +96,26 @@ const Header = (props) => {
         [
           ...new Set(
             resp.data.data.map((item) => {
-              return item._id;
+              return item;
             })
           ),
-        ].map((item) => {
-          return { _id: item };
-        })
+        ]
+        // .map((item) => {
+        //   return { _id: item };
+        // })
       )
     );
+
+    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) =>
+    setTransitValue(
+        ...new Set(
+          resp.data.data.map((item) => {
+            debugger
+            return item;
+          })
+        ),
+    )
+  );
   }
 
   const closeModalFail = () => {
@@ -179,7 +192,7 @@ const Header = (props) => {
           props.history.replace(`/vieworder/${search}`);
         } else setInvalidSearch(true);
       });
-    } else if (searchType === "transitNumber") {
+    } else if (transitNum.type === "transitNumber") {
       getAllAirwayBillNo().then((result) => {
         dispatch(turnOn());
         let airWayBillNowithshipmentID = result.data;
