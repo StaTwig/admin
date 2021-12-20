@@ -49,6 +49,21 @@ services:
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
       
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.tcp.routers.cache.entrypoints=redis
+      - traefik.tcp.routers.cache.rule=HostSNI(`abinbev.statledger.io`)
+      - traefik.tcp.routers.cache.tls=true
+      - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
+    command: ["redis-server", "--requirepass", "StaTwig2021"]
+
   alert:
     build: './backend/alert_service'
     image: 'alert_service1.0'

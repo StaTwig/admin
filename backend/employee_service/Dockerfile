@@ -10,6 +10,8 @@ WORKDIR /src/backend/service
 
 COPY /backend/employee_service/ .
 
+RUN mkdir uploads
+
 RUN yarn install
 
 EXPOSE 3001
