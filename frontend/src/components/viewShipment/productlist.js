@@ -6,7 +6,7 @@ const ProductList = (props) => {
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
     <div>
-      {props.shipments.products.map((product, index) => (
+      {props.shipments?.products?.map((product, index) => (
         <div
           className={
             props.productHighLight

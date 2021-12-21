@@ -1,7 +1,7 @@
-var express = require("express");
-var poQueryRouter = require("./po")
-var app = express();
+const express = require("express");
+const poQueryRouter = require("./po");
+const app = express();
 
-app.use("/po",poQueryRouter);
+app.use("/po", poQueryRouter);
 
 module.exports = app;

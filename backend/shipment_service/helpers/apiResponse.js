@@ -15,13 +15,19 @@ exports.successResponseWithData = function (res, msg, data) {
   return res.status(200).json(resData);
 };
 
-exports.successResponseWithMultipleData = function (res, msg, data, dataIn, dataOut) {
+exports.successResponseWithMultipleData = function (
+  res,
+  msg,
+  data,
+  dataIn,
+  dataOut
+) {
   var resData = {
     status: 1,
     message: msg,
     data: data,
     inboundShipments: dataIn,
-    outboundShipments: dataOut
+    outboundShipments: dataOut,
   };
   return res.status(200).json(resData);
 };
@@ -60,9 +66,9 @@ exports.unauthorizedResponse = function (res, msg) {
 };
 
 exports.forbiddenResponse = function (res, msg) {
-	var data = {
-		status: 0,
-		message: msg,
-	};
-	return res.status(403).json(data);
-}
+  var data = {
+    status: 0,
+    message: msg,
+  };
+  return res.status(403).json(data);
+};

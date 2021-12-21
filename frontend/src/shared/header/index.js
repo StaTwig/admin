@@ -8,7 +8,7 @@ import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DrawerMenu from "./drawerMenu";
 import { Link } from "react-router-dom";
-import Spinner from "../../components/spinner/index.js"
+import Spinner from "../../components/spinner/index.js";
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -17,14 +17,12 @@ import {
   postUserLocation,
 } from "../../actions/userActions";
 import logo from "../../assets/brands/VACCINELEDGER.png";
-import {
-  deleteNotification,
-  getImage,
-} from "../../actions/notificationActions";
+import { getImage } from "../../actions/notificationActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { config } from "../../config";
 import Modal from "../modal/index";
+import AlertModal from "./AlertModal";
 import FailedPopUp from "../PopUp/failedPopUp";
 import {
   getShippingOrderIds,
@@ -48,6 +46,8 @@ const Header = (props) => {
   // console.log(ABC)
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [AlertModalData, setAlertModalData] = useState({});
   const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState("");
@@ -66,6 +66,7 @@ const Header = (props) => {
   const [limit, setLimit] = useState(10);
   const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [transitNum, setTransitValue] = useState({})
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
     stringify: (option) => option._id,
@@ -75,21 +76,46 @@ const Header = (props) => {
     setMenu(false);
   });
   const ref1 = useRef(null);
-  useOnclickOutside((ref) => {
-    // console.log(ref.target.className)
-    if(ref.target.className !== "ignore-react-onclickoutside" && ref.target.className !== "badge badge-light")
-    setShowNotifications(false);
-  },
-  { refs: [ref1] }
-  )
+  useOnclickOutside(
+    (ref) => {
+      // console.log(ref.target.className)
+      if (
+        ref.target.className !== "ignore-react-onclickoutside" &&
+        ref.target.className !== "badge badge-light"
+      )
+        setShowNotifications(false);
+    },
+    { refs: [ref1] }
+  );
 
   function onSearchChange(e) {
     setSearchString(e._id);
     setSearchType(e.type);
-    axios
-      .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) => setOptions( [...new Set(resp.data.data.map( (item) => {return item._id} ))].map(((item) => {return {_id: item}}))  ));
-     
+    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) =>
+      setOptions(
+        [
+          ...new Set(
+            resp.data.data.map((item) => {
+              return item;
+            })
+          ),
+        ]
+        // .map((item) => {
+        //   return { _id: item };
+        // })
+      )
+    );
+
+    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) =>
+    setTransitValue(
+        ...new Set(
+          resp.data.data.map((item) => {
+            debugger
+            return item;
+          })
+        ),
+    )
+  );
   }
 
   const closeModalFail = () => {
@@ -126,9 +152,9 @@ const Header = (props) => {
       return "/#";
     }
   }
-  async function readNotification(id){
-    let res = axios.get(`${config().readNotification}${id}`)
-    console.log(res)
+  async function readNotification(id) {
+    let res = axios.get(`${config().readNotification}${id}`);
+    console.log(res);
   }
   async function getAllShipmentIDs() {
     dispatch(turnOn());
@@ -166,7 +192,7 @@ const Header = (props) => {
           props.history.replace(`/vieworder/${search}`);
         } else setInvalidSearch(true);
       });
-    } else if (searchType === "transitNumber") {
+    } else if (transitNum.type === "transitNumber") {
       getAllAirwayBillNo().then((result) => {
         dispatch(turnOn());
         let airWayBillNowithshipmentID = result.data;
@@ -230,17 +256,17 @@ const Header = (props) => {
     });
   }
 
-  function changeNotifications(value, num) {   
-    turnOn()        
-    if(num)
-    setLimit(limit+num)
-   axios.get(`${config().getAlerts}${value}&skip=0&limit=${limit}`).then((response)=>{
-      setNewNotifs(response.data?.data?.new)
-      setNotifications(response.data.data?.data?.reverse());
-      if(response.data.data?.data?.length === icount)
-        setHasMore(false)
-      setIcount(response.data.data?.data?.length)
-   })
+  function changeNotifications(value, num) {
+    turnOn();
+    if (num) setLimit(limit + num);
+    axios
+      .get(`${config().getAlerts}${value}&skip=0&limit=${limit}`)
+      .then((response) => {
+        setNewNotifs(response.data?.data?.new);
+        setNotifications(response.data.data?.data?.reverse());
+        if (response.data.data?.data?.length === icount) setHasMore(false);
+        setIcount(response.data.data?.data?.length);
+      });
   }
 
   useEffect(() => {
@@ -252,15 +278,14 @@ const Header = (props) => {
       );
 
       setNotifications(response.data.data?.data?.reverse());
-      console.log(response.data?.data)
-      if(response.data?.data?.totalNew)
-      setNewNotifs(response.data?.data?.totalNew)
-      if(response.data?.data?.totalUnRead)
-      setNewNotifs(response.data?.data?.totalUnRead)
-      else
-      setNewNotifs(response.data?.data?.new)
+      console.log(response.data?.data);
+      if (response.data?.data?.totalNew)
+        setNewNotifs(response.data?.data?.totalNew);
+      if (response.data?.data?.totalUnRead)
+        setNewNotifs(response.data?.data?.totalUnRead);
+      else setNewNotifs(response.data?.data?.new);
       setCount(response.data.data?.totalRecords);
-      setIcount(response.data.data?.data?.length)
+      setIcount(response.data.data?.data?.length);
       const warehouses = await getActiveWareHouses();
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
@@ -288,7 +313,6 @@ const Header = (props) => {
     }
     fetchApi();
   }, [alertType, dispatch]);
-
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -381,7 +405,7 @@ const Header = (props) => {
             <div className='notifications cursorP'>
               <img
                 id='notification'
-                className="ignore-react-onclickoutside"
+                className='ignore-react-onclickoutside'
                 src={bellIcon}
                 onClick={() => setShowNotifications(!showNotifications)}
                 alt='notification'
@@ -391,11 +415,18 @@ const Header = (props) => {
                 className='bellicon-wrap'
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                <span className='badge badge-light'>{newNotifs ? newNotifs : 0}</span>
+                <span className='badge badge-light'>
+                  {newNotifs ? newNotifs : 0}
+                </span>
               </div>
               {showNotifications && <div className='triangle-up'></div>}
               {showNotifications && (
-                <div ref={ref1}  outsideClickIgnoreClass={'ignore-react-onclickoutside'} className='slider-menu' id="scrollableDiv">
+                <div
+                  ref={ref1}
+                  outsideClickIgnoreClass={"ignore-react-onclickoutside"}
+                  className='slider-menu'
+                  id='scrollableDiv'
+                >
                   <div
                     className='nheader'
                     style={{
@@ -422,12 +453,12 @@ const Header = (props) => {
                       </span>
                     )}
                     <div>
-                    <img
-                        className="setting-notif-icon"
+                      <img
+                        className='setting-notif-icon'
                         src={SettingIcon}
                         onClick={() => props.history.push("/settings")}
                         alt='settings'
-                    />
+                      />
                     </div>
 
                     <div className='tab'>
@@ -442,7 +473,7 @@ const Header = (props) => {
                             changeNotifications("ALERT", 1);
                             setVisible("one");
                             setHasMore(true);
-                            ref1.current.scrollTop = 0
+                            ref1.current.scrollTop = 0;
                           }}
                         >
                           <div
@@ -465,7 +496,7 @@ const Header = (props) => {
                             changeNotifications("TRANSACTION", 1);
                             setVisible("two");
                             setHasMore(true);
-                            ref1.current.scrollTop = 0
+                            ref1.current.scrollTop = 0;
                           }}
                         >
                           <div
@@ -490,50 +521,124 @@ const Header = (props) => {
                         flexDirection: "column-reverse",
                       }} //To put endMessage and loader to the top.
                       hasMore={hasMore}
-                      loader={<h4><Spinner /></h4>}
+                      loader={
+                        <h4>
+                          <Spinner />
+                        </h4>
+                      }
                       scrollThreshold={1}
                       scrollableTarget='scrollableDiv'
                     >
                       {notifications?.length >= 0 ? (
                         notifications?.map((notifications) =>
                           notifications.transactionId ? (
-                            <Link
-                              key={notifications.id}
-                              to={notifRouting(notifications)}
-                              // style={{ textDecoration: "none" }}
-                              className={notifications.isRead ? 'read' : 'unRead'}
-                              style={{ textDecoration:"none" }}
-                              onClick={() => readNotification(notifications.id)}
-                            >
-                              <div
-                                className='col-sm-10'
-                                style={{ display: "flex" }}
+                            notifications.eventType !== "REQUEST" ? (
+                              <Link
+                                key={notifications.id}
+                                to={notifRouting(notifications)}
+                                // style={{ textDecoration: "none" }}
+                                className={
+                                  notifications.isRead ? "read" : "unRead"
+                                }
+                                style={{ textDecoration: "none" }}
+                                onClick={() =>
+                                  readNotification(notifications.id)
+                                }
                               >
-                                <img
-                                  className='notification-icons'
-                                  src={notifIcon(notifications)}
-                                  alt='Icon'
-                                />
-                                <div className='notification-events'>
-                                  {notifications.message}
+                                <div
+                                  className='col-sm-10'
+                                  style={{ display: "flex" }}
+                                >
+                                  <img
+                                    className='notification-icons'
+                                    src={notifIcon(notifications)}
+                                    alt='Icon'
+                                  />
+                                  <div className='notification-events'>
+                                    {notifications.message}
+                                  </div>
                                 </div>
-                              </div>
-                              <div className='text-secondary notif-time'>
-                                {formatDistanceToNow(
-                                  new Date(
-                                    parseInt(
-                                      notifications._id.toString().substr(0, 8),
-                                      16
-                                    ) * 1000
-                                  )
-                                )}
-                              </div>
-                              <img
-                                className='toggle-icon'
-                                alt='Drop Down Icon'
-                                src={dropdownIcon}
-                              ></img>
-                            </Link>
+                                <div className='text-secondary notif-time'>
+                                  {formatDistanceToNow(
+                                    new Date(
+                                      parseInt(
+                                        notifications._id
+                                          .toString()
+                                          .substr(0, 8),
+                                        16
+                                      ) * 1000
+                                    )
+                                  )}
+                                </div>
+                                <img
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
+                                  src={dropdownIcon}
+                                ></img>
+                              </Link>
+                            ) : (
+                              <Link>
+                                <div
+                                  className={
+                                    notifications.isRead ? "read" : "unRead"
+                                  }
+                                  onClick={() => {
+                                    setAlertModalData(notifications);
+                                    setOpenModal(true);
+                                  }}
+                                >
+                                  <div
+                                    className='col-sm-10'
+                                    style={{ display: "flex" }}
+                                  >
+                                    <img
+                                      className='notification-icons'
+                                      src={notifIcon(notifications)}
+                                      alt='Icon'
+                                    />
+                                    <div className='notification-events'>
+                                      {notifications.message}
+                                    </div>
+                                  </div>
+                                  <div className='text-secondary notif-time'>
+                                    {formatDistanceToNow(
+                                      new Date(
+                                        parseInt(
+                                          notifications._id
+                                            .toString()
+                                            .substr(0, 8),
+                                          16
+                                        ) * 1000
+                                      )
+                                    )}{" "}
+                                    ago
+                                  </div>
+                                  <img
+                                    className='toggle-icon'
+                                    alt='Drop Down Icon'
+                                    src={dropdownIcon}
+                                  ></img>
+                                </div>
+                                <div className='text-secondary notif-time'>
+                                  {formatDistanceToNow(
+                                    new Date(
+                                      parseInt(
+                                        notifications._id
+                                          .toString()
+                                          .substr(0, 8),
+                                        16
+                                      ) * 1000
+                                    )
+                                  )}{" "}
+                                  ago
+                                </div>
+                                <img
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
+                                  src={dropdownIcon}
+                                ></img>
+                              </Link>
+                            )
                           ) : (
                             <div
                               key={notifications.id}
@@ -696,6 +801,10 @@ const Header = (props) => {
               message='Invalid Search'
             />
           </Modal>
+        )}
+
+        {openModal && (
+          <AlertModal change={setOpenModal} dataPass={AlertModalData} />
         )}
       </div>
     </div>

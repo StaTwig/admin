@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style.scss";
 import { Formik } from "formik";
-import {
-  addNewProduct,
-} from "../../actions/poActions";
+import { addNewProduct } from "../../actions/poActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import { Link } from "react-router-dom";
 import Modal from "../../shared/modal";
@@ -16,6 +14,7 @@ const AddCategory = (props) => {
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [description, setDescription] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [BtnVisible, setBtnVisible] = useState(false);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -33,8 +32,8 @@ const AddCategory = (props) => {
     formData.append("manufacturer", manufacturer);
     let unitofMeasure = {
       id: "N/A",
-      name: "N/A"
-    }
+      name: "N/A",
+    };
     formData.append("name", "category");
     formData.append("shortName", "category");
     formData.append("externalId", Math.random().toString(36).substr(2, 7));
@@ -52,72 +51,75 @@ const AddCategory = (props) => {
   console.log(props);
   return (
     <div>
-      <div className='addproduct' style={{ overflow: "hidden" }}>
-        <h1 className='breadcrumb mt-2'>ADD NEW CATEGORY</h1>
+      <div className="addproduct" style={{ overflow: "hidden" }}>
+        <h1 className="breadcrumb mt-2">ADD NEW CATEGORY</h1>
         {/* <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"805px" }}> 
               <span style={{ color: 'white'}}>+ Add New Category</span>
             </button> */}
-        <div className='card'>
-          <div className='card-body'>
-            <div className='d-flex'>
-              <div className=''>
-                <div className='mb-4'>
-                <div className='d-flex flex-column upload'>
-                <img
-                  src={photoUrl || uploadBlue}
-                  name='photo'
-                  width={photoUrl ? '150' : '50'}
-                  height={photoUrl ? '150' : '50'}
-                  className='mt-3'
-                  alt=''
-                />
+        <div className="card">
+          <div className="card-body">
+            <div className="d-flex">
+              <div className="">
+                <div className="mb-4">
+                  <div className="d-flex flex-column upload">
+                    <img
+                      src={photoUrl || uploadBlue}
+                      name="photo"
+                      width={photoUrl ? "150" : "50"}
+                      height={photoUrl ? "150" : "50"}
+                      className="mt-3"
+                      alt=""
+                    />
 
-                <label className='btn-primary btn browse'>
-                  ADD IMAGE
-                  <input
-                    type='file'
-                    className='select'
-                    onChange={setFile}
-                  />{" "}
-                </label>
-              </div>
-              </div>
+                    <label className="btn-primary btn browse">
+                      ADD IMAGE
+                      <input
+                        type="file"
+                        className="select"
+                        onChange={setFile}
+                      />{" "}
+                    </label>
+                  </div>
+                </div>
               </div>
 
-              <div className='col-8 mt-5'>
-                <div className='form-group'>
+              <div className="col-8 mt-5">
+                <div className="form-group">
                   <label
-                    className='required-field'
-                    htmlFor='shipmentId'
+                    className="required-field"
+                    htmlFor="shipmentId"
                     style={{ textAlign: "right", paddingRight: "50px" }}
                   >
                     {" "}
                     Category Name
                   </label>
                   <input
-                  type='text'
-                  className='form-control'
-                  name='product'
-                  placeholder='Enter Category Name'
-                  onChange={(e) => setcategoryName(e.target.value)}
-                  value={categoryName}
-                />
+                    type="text"
+                    className="form-control"
+                    name="product"
+                    placeholder="Enter Category Name"
+                    onChange={(e) => setcategoryName(e.target.value)}
+                    value={categoryName}
+                  />
                 </div>
-                <div className='form-group'>
+                <div className="form-group">
                   <label
-                    className='required-field'
-                    htmlFor='shipmentId'
+                    className="required-field"
+                    htmlFor="shipmentId"
                     style={{ textAlign: "right", paddingRight: "50px" }}
                   >
                     {" "}
                     Description
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    name='product'
-                    placeholder='Enter Category Description'
-                    onChange={(e) => setDescription(e.target.value)}
+                    type="text"
+                    className="form-control"
+                    name="product"
+                    placeholder="Enter Category Description"
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                      setBtnVisible(true);
+                    }}
                     value={description}
                   />
                 </div>
@@ -125,34 +127,40 @@ const AddCategory = (props) => {
             </div>
           </div>
         </div>
-        <div
-          className="d-flex mt-3"
-          style={{float:"right"}}
-        >
-          <Link to='/productcategory'>
+        <div className="d-flex mt-3" style={{ float: "right" }}>
+          <Link to="/productcategory">
             <button
-              type='button'
-              className='btn btn-white shadow-radius font-bold mr-3'
+              type="button"
+              className="btn btn-white shadow-radius font-bold mr-3"
             >
               Cancel
             </button>
           </Link>
-          <button className='btn btn-orange fontSize20 font-bold mb-2 mt-0'
-          onClick={addProduct}
+          <button
+            className={`btn ${
+              BtnVisible ? "btn-orange" : "add-btn-orange"
+            } fontSize20 font-bold mb-2 mt-0`}
+            // onClick={() => {
+            //   BtnVisible && addProduct;
+            // }}
+            onClick={() => {
+              BtnVisible && addProduct();
+            }}
           >
+            {/* <span>{BtnVisible ? "+ Add New Category T" : "+ Add New Category F"}+ Add New Category</span> */}
             <span>+ Add New Category</span>
           </button>
         </div>
         {openCreatedInventory && (
-              <Modal
-                close={() => closeModal()}
-                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-              >
-                <ProductPopUp
-                  onHide={closeModal} //FailurePopUp
-                />
-              </Modal>
-            )}
+          <Modal
+            close={() => closeModal()}
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          >
+            <ProductPopUp
+              onHide={closeModal} //FailurePopUp
+            />
+          </Modal>
+        )}
       </div>
     </div>
   );

@@ -30,12 +30,12 @@ const ShipmentSummary = (props) => {
           )}
           <li className='mb-1'>
             {" "}
-            {props.shipments.shippingDate.length === 10
+            {props.shipments.shippingDate?.length === 10
               ? props.shipments.shippingDate
               : formatDate(props.shipments.shippingDate)}{" "}
           </li>
-          <li className='mb-1'>{props.shipments.supplier.org.name}</li>
-          <li className='mb-1'>{props.shipments.receiver.org.name}</li>
+          <li className='mb-1'>{props.shipments.supplier?.org?.name}</li>
+          <li className='mb-1'>{props.shipments.receiver?.org?.name}</li>
         </ul>
         <div>
           <span

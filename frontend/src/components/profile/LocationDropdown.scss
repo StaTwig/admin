@@ -1,0 +1,127 @@
+@import "../../assets/styles/global.scss";
+
+.custom-dropdown {
+  width: 15vw;
+  position: relative;
+  right: 0rem;
+  flex-basis: 100%;
+  display: flex;
+  outline: none;
+  position: relative;
+  small {
+    color: $a8Grey;
+  }
+  .btn-custom-dropdown {
+    border: none;
+    display: flex;
+    justify-content: left !important;
+    width: 100%;
+    color: #3b2222;
+    flex-basis: 100%;
+    outline: none;
+    align-items: center;
+    font-size: 15px;
+
+    position: absolute;
+    background: transparent;
+    &.active {
+      color: $primaryBlue;
+    }
+    .textNeg {
+      margin-top: -1.15rem;
+    }
+  }
+    // .textNeg-title{
+    //   margin-left: 45px;
+    //   margin-top: -1.35rem;
+    // }
+    .location-add{
+      position: absolute;
+      top: 10px;
+      // left: -85px;
+      min-width:0rem;
+      font-size: 12px;
+      font-weight: 400;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 113px;
+    }
+  .btn-custom-dropdown img {
+    position: absolute;
+    right: 0;
+  }
+  .btn-custom-dropdown1 {
+    font-weight: bold;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    color: black;
+    flex-basis: 100%;
+    outline: none;
+    align-items: center;
+    font-size: 16px;
+    background: transparent;
+    &.active {
+      color: $primaryBlue;
+    }
+    .textNeg {
+      margin-top: -1.15rem;
+    }
+  }
+  .dropdown-menu {
+    height: 180px;
+    overflow: auto;
+    box-shadow: 0px 3px 10px $grey;
+    border-radius: 8px;
+    border: none;
+    padding: 0.5rem;
+    .dropdown-item {
+      padding: 0;
+      clear: both;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    hr {
+      border-width: 0.5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+  .transform-group {
+    position: absolute;
+    transform: translate3d(0px, 38px, 0px);
+    top: 0;
+    left: 5px;
+    right: -15px;
+    will-change: transform;
+  }
+  .dropdownIcon {
+    position: absolute;
+    left: 21rem;
+    height: 9px;
+    width: 14px;
+  }
+
+  .locationAdress{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+} 
+.regionCountry {
+  color:"#707070";
+  font-size: 12px;
+
+}
+
+.LocationTitle {
+  font-weight: bolder;
+  color: #0093e9;
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}

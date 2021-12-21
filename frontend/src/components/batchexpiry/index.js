@@ -34,60 +34,66 @@ const BatchExpiry = (props) => {
   }, [dispatch, props]);
 
   return (
-    <div className='batchexpiry'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>
+    <div className="batchexpiry">
+      <div className="d-flex justify-content-between">
+        <h1 className="breadcrumb">
           {enable ? "BATCH NEAR EXPIRATION" : "BATCH EXPIRED"}
         </h1>
       </div>
-      <div className='row'>
-        <div className=' p-2 rounded full-width-ribbon'>
-          <div className=' row filter'>
-            <div className='col-2'>
-              <img src={Product} width='24' height='24' alt='Product Name' />
-              <span className='ml-2 font-small'>Product Name</span>
+      <div className="row">
+        <div className=" p-2 rounded full-width-ribbon">
+          <div className=" row filter">
+            <div style={{ width: "14%" }}>
+              <img src={Product} width="24" height="24" alt="Product Name" />
+              <span className="ml-2 font-small">Product Name</span>
             </div>
-            <div className='col-2'>
+            <div style={{ width: "16%" }}>
               <img
                 src={Quantity}
-                width='35'
-                height='24'
-                alt='Product Category'
+                width="35"
+                height="24"
+                alt="Product Category"
               />
-              <span className='ml-2 font-small'>Product Category</span>
+              <span className="ml-2 font-small">Product Category</span>
             </div>
-            <div className='col-2'>
-              <img src={user} width='16' height='24' alt='Manufacturer' />
-              <span className='ml-2 font-small'>Manufacturer</span>
+            <div style={{ width: "15%" }}>
+              <img src={user} width="16" height="24" alt="Manufacturer" />
+              <span className="ml-2 font-small">Manufacturer</span>
             </div>
-            <div className='col-2 p-0'>
-              <img src={Quantity} width='35' height='24' alt='Quantity' />
-              <span className='ml-2 font-small'>Quantity</span>
+            <div style={{ width: "12%" }} className="p-0">
+              <img src={Quantity} width="35" height="24" alt="Quantity" />
+              <span className="ml-2 font-small">Quantity</span>
             </div>
-            <div className='col-2'>
-              <img src={Quantity} width='35' height='24' alt='Batch Number' />
-              <span className='ml-2 font-small'>Batch Number</span>
+            <div style={{ width: "13%" }}>
+              <img src={Quantity} width="35" height="24" alt="Batch Number" />
+              <span className="ml-2 font-small">Batch Number</span>
             </div>
-            <div className='col-1 pl-0'>
-              <img src={calender} width='35' height='24' alt='Mfg Date' />
-              <span className='ml-1 font-small'>Mfg Date</span>
+            <div style={{ width: "11%" }} className="pl-0">
+              <img src={calender} width="35" height="24" alt="Mfg Date" />
+              <span className="ml-1 font-small">Mfg Date</span>
             </div>
-            <div className='col-1 p-0'>
-              <img src={calender} width='35' height='24' alt='Exp Date' />
-              <span className='ml-1 font-small'>Exp Date</span>
+            <div style={{ width: "12%" }} className="p-0">
+              <img src={calender} width="35" height="24" alt="Exp Date" />
+              <span className="ml-1 font-small">Exp Date</span>
             </div>
           </div>
         </div>
-        <div className='ribbon-space col-12 pl-0 pr-0'>
+        <div className="ribbon-space col-12 pl-0 pr-0">
           {data.map((exp, i) => (
             <div
               key={i}
-              className='col-12 p-3 mb-3 rounded row bg-white shadow'
+              className="col-12 p-3 mb-3 rounded row bg-white shadow"
             >
-              <div className='col-2 txt txtBlue'>{exp.products.name}</div>
-              <div className='col-2 txt1 '>{exp.products.type}</div>
-              <div className='col-2 txt1 '>{exp.products.manufacturer}</div>
-              <div className='col-2 txt1 '>
+              <div style={{ width: "14%" }} className="txt txtBlue">
+                {exp.products.name}
+              </div>
+              <div style={{ width: "16%" }} className="txt1 ">
+                {exp.products.type}
+              </div>
+              <div style={{ width: "15%" }} className="txt1 ">
+                {exp.products.manufacturer}
+              </div>
+              <div style={{ width: "12%" }} className="txt1 ">
                 {exp?.quantity ? exp.quantity : 0}
                 {" ("}
                 {exp.products.unitofMeasure
@@ -95,22 +101,35 @@ const BatchExpiry = (props) => {
                   : "N/A"}
                 {")"}
               </div>
-              <div className='col-2 txt1 '>{exp.batchNumbers[0]}</div>
-              <div className='col-1 txt1 '>
+              <div style={{ width: "14%" }} className="txt1 ">
+                {exp.batchNumbers[0]}
+              </div>
+              <div style={{ width: "12%" }} className="txt1 ">
                 {exp.attributeSet.mfgDate
                   ? formatDate(exp.attributeSet.mfgDate, "mmyyyy")
                   : ""}
               </div>
-              <div className='col-1 txt1 '>
+              <div style={{ width: "8%" }} className="txt1 ">
                 {exp.attributeSet.expDate
                   ? formatDate(exp.attributeSet.expDate, "mmyyyy")
                   : ""}
               </div>
+              <div style={{ width: "9%" }} className="txt mt-2">
+                <button
+                  type="button"
+                  className="sm-btn btn-outline-primary"
+                  onClick={() =>
+                    props.history.push(`/viewexpiry`, { data: exp })
+                  }
+                >
+                  Show more
+                </button>
+              </div>
             </div>
           ))}
           {data?.length === 0 && (
-            <div className='col-12 p-3 mb-3 rounded row bg-white shadow'>
-              <div className='col-12 txt text-center txtBlue'>
+            <div className="col-12 p-3 mb-3 rounded row bg-white shadow">
+              <div className="col-12 txt text-center txtBlue">
                 No records found
               </div>
             </div>

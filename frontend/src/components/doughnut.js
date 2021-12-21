@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Doughnut } from "react-chartjs-2";
+// import { Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  defaults
+} from 'chart.js';
+import {
+  Chart, Doughnut
+} from 'react-chartjs-2';
 import { MDBContainer } from "mdbreact";
 import { getProductList } from "../actions/productActions";
 import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
@@ -17,14 +24,45 @@ const ChartsPage = (props) => {
       const productList = await getProductList();
       const productArray = productList.message;
       const result = productArray.slice(0, 10);
-      const productNames = result.map((product) => product.productName);
-      const quantity = result.map((product) => product.quantity);
+      const productNames = result?.map((product) => product.productName);
+      const quantity = result?.map((product) => product.quantity);
 
-      const productNameShorted = productNames.map((product) => truncate(product, 15));
+      const productNameShorted = productNames?.map((product) => truncate(product, 15));
 
       if (productNames.length > 0) {
-        setValiddata(true);
         setDoughnut({
+          labels: productNameShorted,
+          datasets: [
+            {
+              data: quantity,
+              backgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+                "#63B7AF",
+              ],
+              hoverBackgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+                "#63B7AF",
+              ],
+            },
+          ],
+        });
+        console.log({
           labels: productNameShorted,
           datasets: [
             {
@@ -118,7 +156,9 @@ const ChartsPage = (props) => {
               ],
             },
           ],
-        });
+        })
+
+        setValiddata(true);
       }
     }
     fetchData();
