@@ -9,7 +9,7 @@ RUN yarn install
 WORKDIR /src/backend/service
 
 COPY /backend/shipment_service/ .
- 
+
 RUN yarn install
 
 EXPOSE 3002

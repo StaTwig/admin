@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 import Footer from "../footer";
 import HomeIcon from "../../assets/icons/Overview.png";
@@ -13,7 +12,6 @@ import InventorySelectedIcon from "../../assets/icons/Inventoryselected.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkSelectedIcon from "../../assets/icons/NetworkSelected.svg";
 import searchingIcon from "../../assets/icons/searching@2x.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
 import OrderIcon from "../../assets/icons/Orders.png";
 
 import "./menu-style.scss";
@@ -53,7 +51,7 @@ const DrawerMenu = ({ match, location, close }) => {
                 url === "/shipments" ||
                 url === "/newshipment" ||
                 url === "/transactionHistory"
-                  ? OrderSelectedIcon
+                  ? HomeSelectedIcon
                   : OrderIcon
               }
               alt='Shippment'

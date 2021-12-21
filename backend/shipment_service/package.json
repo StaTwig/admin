@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node shipment_server.js",
-    "dev": "nodemon shipment_server.js"
+    "start": "node bin/www",
+    "dev": "nodemon bin/www"
   },
   "dependencies": {
     "aws-sdk": "^2.994.0",
@@ -12,24 +12,23 @@
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "date-and-time": "^2.0.0",
-    "debug": "~4.3.1",
     "dotenv": "^10.0.0",
     "express": "~4.17.1",
-    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^6.0.7",
     "morgan": "~1.10.0",
+    "mqtt": "^4.2.8",
     "multer": "^1.4.2",
     "nanoid": "^3.1.25",
     "node-excel-export": "^1.4.4",
-    "nodemailer": "^6.6.5",
     "pdf-creator-node": "^2.2.3",
     "redis": "^3.1.2",
     "sharp": "^0.29.1",
     "swagger-ui-express": "^4.1.6",
-    "uniqid": "^5.3.0",
-    "winston": "^3.3.3",
-    "winston-logzio": "^5.1.2"
+    "uniqid": "^5.3.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^8.4.1"
+  }
 }
