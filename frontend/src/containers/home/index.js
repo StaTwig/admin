@@ -11,11 +11,20 @@ import icon3 from "../../assets/icons/chain-icon.png";
 import googleStore from "../../assets/brands/Google_store.png";
 import appleStore from "../../assets/brands/Apple_store.png";
 import gitlab from "../../assets/icons/gitlab_logo.png";
+import { useTranslation } from 'react-i18next';
 
 const HomeContainer = (props) => {
+  const { t, i18n } = useTranslation();
   const user = useSelector((state) => {
     return state.user;
   });
+
+  const lang = i18n.language;
+
+  const changeLanguage = (e) => {
+    const lng = e.target.value;
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     if (user) {
@@ -54,13 +63,13 @@ const HomeContainer = (props) => {
             <div className='divider' />
             <li className='nav-item active'>
               <Link className='nav-link' to='/login'>
-                Login <span className='sr-only'>(current)</span>
+                {t('login')} <span className='sr-only'>(current)</span>
               </Link>
             </li>
             <div className='divider' />
             <li className='nav-item'>
               <Link className='nav-link' to='/signup'>
-                Signup
+                {t('signup')}
               </Link>
             </li>
           </ul>
@@ -73,8 +82,7 @@ const HomeContainer = (props) => {
             <div className='col-sm-12 col-md-4'>
               <img src={logo} width='400' height='50' alt='VaccineLedger' />
               <p className='hero-paragraph p-2'>
-                VaccineLedger is a Blockchain based platform to track and trace
-                vaccine's journey across the supply chain
+                {t('description')}
               </p>
               <Link
                 to={{
@@ -112,7 +120,7 @@ const HomeContainer = (props) => {
       </section>
       <section className='OurSolution pb-0'>
         <div className='container solution'>
-          <h2 className='display-4'>Our Solution</h2>
+          <h2 className='display-4'>{t('our_solution')}</h2>
           <div className='row align-items-center'>
             <div className='col'>
               <div className='d-flex flex-column justify-content-center'>
@@ -120,9 +128,9 @@ const HomeContainer = (props) => {
                   <img src={icon} height='50' alt='BlockChain' />
                 </div>
                 <p>
-                  Blockchain based
+                  {t('blockchain_based')}
                   <br />
-                  Platform
+                  {t('platform')}
                 </p>
               </div>
             </div>
@@ -132,9 +140,9 @@ const HomeContainer = (props) => {
                   <img src={icon1} height='50' alt='Temperature' />
                 </div>
                 <p>
-                  Live Temperature
+                  {t('live_temperature')}
                   <br />
-                  Tracking
+                  {t('tracking')}
                 </p>
               </div>
             </div>
@@ -144,8 +152,8 @@ const HomeContainer = (props) => {
                   <img src={icon2} height='50' alt='Location' />
                 </div>
                 <p>
-                  Live Location
-                  <br /> Tracking
+                  {t('live_temperature')}
+                  <br /> {t('tracking')}
                 </p>
               </div>
             </div>
@@ -155,8 +163,8 @@ const HomeContainer = (props) => {
                   <img src={icon3} height='50' alt='Visibility' />
                 </div>
                 <p>
-                  Visibility Across
-                  <br /> Supply Chain
+                  {t('visibility_across')}
+                  <br /> {t('supply_chain')}
                 </p>
               </div>
             </div>
@@ -167,7 +175,7 @@ const HomeContainer = (props) => {
         <div className='container'>
           <div className='row'>
             <div className='col align-text-center mx auto'>
-              <h2 className='display-4'>How it Works</h2>
+              <h2 className='display-4'> {t('how_it_works')}</h2>
               <div className='bg-work-flow'></div>
             </div>
           </div>
@@ -178,28 +186,28 @@ const HomeContainer = (props) => {
         <div className='container d-flex flex-row justify-content-between'>
           <div className='row h-100 align-items-center'>
             <div className='d-flex flex-column'>
-              <h2 className='display-4'>Contact Us</h2>
+              <h2 className='display-4'>{t('contact_us')}</h2>
               <p>
-                Interested in having chat with us about VaccineLedger ?<br />
-                Drop your email below and we will get back to you shortly !
+                {t('contact_us_description.part1')}
+                <br />
+                {t('contact_us_description.part2')}
               </p>
               <div className='form form-inline'>
                 <input
                   type='text'
-                  placeholder='Enter Your Email Address'
+                  placeholder={t('enter_your_email_address')}
                   name='email'
                   className='form-control mr-3'
                 />
-                <button className='btn btn-primary btn-sm'>SUBMIT</button>
+                <button className='btn btn-primary btn-sm'>{t('submit')}</button>
               </div>
             </div>
           </div>
           <div className='row h-100 align-items-center'>
             <div className='d-flex flex-column'>
-              <h2 className='display-4'>Mobile Applications</h2>
+              <h2 className='display-4'>{t('mobile_applications')}</h2>
               <p>
-                Download the VaccineLedger Mobile app for Android Play Store ,
-                iOS App Store
+                {t('mobile_applications_description')}
               </p>
               <div className='mt-1'>
                 <Link
@@ -238,8 +246,14 @@ const HomeContainer = (props) => {
       </section>
       <footer>
         <img src={logo} width='230' height='30' alt='Logo' />
-        <p className='copywrite'>© 2021 STATWIG</p>
-        <p className='poweredby'>Powered by Blockchain</p>
+        <p className='copywrite'>© {new Date().getFullYear()} {t('statwig')}</p>
+        <p className='poweredby'>
+          {t('powered_by_blockchain')} &nbsp;
+          <select className="language" value={lang} onChange={changeLanguage}>
+            <option value="en">{t('english')}</option>
+            <option value="es">{t('spanish')}</option>
+          </select>
+        </p>
       </footer>
     </div>
   );

@@ -83,6 +83,7 @@ const ViewOrder = (props) => {
                   <button
                     className='btn btn-orange fontSize20 font-bold mr-4 mt-2'
                     onClick={() => onPOStatusChange("REJECTED")}
+                    style={{borderRadius:"5px"}}
                   >
                     Reject Order
                   </button>

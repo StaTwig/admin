@@ -251,20 +251,21 @@ input:disabled {
 }
 .Bmanufacturer-add-inventory {
   position: relative;
-  left: 40px;
+  left: 3.5rem;
   //margin-left: 10px;
 }
 .manufacturer-add-inventory {
   position: relative;
-  left: 60px;
+  // right: 20px;
+  left: 1rem;
 }
 .batch-add-inventory{
   position: relative;
-  left: 60px;
+  left: 42px;
 }
 .Bbatch-add-inventory{
   position: relative;
-  left: 60px;
+  left: 5rem;
 }
 .Bproduct-add-inventory {
   position: relative;
@@ -275,7 +276,7 @@ input:disabled {
 }
 .Bproduct-cat-add-inventory {
   position: relative;
-  left: -60px;
+  left: -45px;
 }
 .product-cat-add-inventory {
   position: relative;
@@ -284,11 +285,11 @@ input:disabled {
 }
 .Bquantity-add-inventory {
   position: relative;
-  left: 90px;
+  left: 4rem;
 }
 .quantity-add-inventory {
   position: relative;
-  left: 15px;
+  // left: 15px;
 }
 .mfg-add-inventory {
   position: relative;
@@ -349,9 +350,10 @@ input:disabled {
   color: #495057;
   font-size: 14px;
   position: relative;
-  left: 35px;
+  // left: 35px;
 }
 .select-placeholder-text-prod {
+  width: 14rem;
   color: #495057;
   font-size: 14px;
   position: relative;

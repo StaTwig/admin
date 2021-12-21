@@ -70,7 +70,7 @@ const Table = (props) => {
                   className='col txt1'
                   style={{
                     position: "relative",
-                    left: "11%",
+                    left: "10%",
                     fontSize: "14px",
                   }}
                 >
@@ -81,7 +81,7 @@ const Table = (props) => {
                   className='col txt1 text-right'
                   style={{
                     position: "relative",
-                    left: "14%",
+                    left: "13%",
                     fontSize: "14px",
                   }}
                 >
@@ -100,7 +100,7 @@ const Table = (props) => {
                   className='rTableCell'
                   style={{
                     position: "relative",
-                    left: "14%",
+                    left: "13%",
                     fontWeight: " 600 ",
                   }}
                 >
@@ -119,7 +119,7 @@ const Table = (props) => {
                 </div>
                 <div
                   className=' rTableCell m-1'
-                  style={{ position: "relative", left: "8.5%" }}
+                  style={{ position: "relative", left: "7.5%" }}
                 >
                   <span className='drop-pad rounded-circle '>
                     <img

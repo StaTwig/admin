@@ -1,7 +1,4 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require("dotenv").config();
 const indexRouter = require("./routes/index");
@@ -40,7 +37,6 @@ if (process.env.NODE_ENV !== "test") {
 }
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests

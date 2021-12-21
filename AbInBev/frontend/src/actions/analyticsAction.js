@@ -64,6 +64,20 @@ export const getAllStates = () => {
   };
 };
 
+export const getAllTargets = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getAllTargets);
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
+
 export const getAnalyticsByBrand = (cond = '') => {
   return async (dispatch) => {
     try {
@@ -102,6 +116,16 @@ export const getAllOrganisationStats = (param = '') => {
     }
   };
 };
+
+export const updateTargets = async (data) => {
+  try {
+    const result = await axios.post(config().updateTargets, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 
 export const getAllOrganisationTypeStats = (param = '') => {
   return async (dispatch) => {

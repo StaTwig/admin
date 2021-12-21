@@ -1,112 +1,64 @@
-@import "../../../assets/styles/global.scss";
-
-.orders {
-  .overflow {
-    height: 400px;
-    overflow: auto;
-  }
-
-  .rTable {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    .rTableHeading {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 3rem;
-    }
-
-    .rTableBody {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .rTableRow {
-      display: flex;
-      background: #fff;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding: 0px 0px;
-      border-radius: 10px;
-      box-shadow: 0px 3px 10px #00000029;
-    }
-
-    .rTableFoot {
-      display: table-footer-group;
-      font-weight: bold;
-      background-color: #ddd;
-    }
-
-    .rTableCell,
-    .rTableHead {
-      flex: 1;
-      padding: 3px 10px;
-      align-self: center;
-      font-size: 12px;
-      color: #707070;
-      font-weight: bold;
-    }
-
-    .rTableHead {
-      text-align: center;
-    }
-
-    .rTableCell {
-      color: $black;
-      text-align: left;
-      font-weight: 400;
-      a {
-        color: $black;
-        font-weight: 400;
-      }
-
-      .text-primary {
-        word-wrap: break-word;
-        text-align: left;
-      }
-    }
-
-    .combine-data {
-      text-align: center;
-      display: flex;
-      align-items: center;
-      font-weight: bold;
-
-      color: #0093e9;
-
-      .round-sign {
-        margin-right: 10px;
-        border-radius: 100%;
-        background-color: #ffbcc4;
-        font: Bold 11px Roboto;
-        letter-spacing: 0px;
-        height: 26px;
-        width: 26px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-  }
+.table {
+	border-spacing: 0 15px;
+	border-collapse: separate;
 }
-.ribbon-space {
-  margin-top: 4rem;
+.table thead tr{
+	background-color: #eaeaea;
 }
-.txt {
-  font-weight: 600;
-  font-size: small;
-  align-self: center;
-  overflow: hidden;
+.table thead tr th,
+.table thead tr td,
+.table tbody tr th,
+.table tbody tr td {
+	vertical-align: middle;
+	border: none;
 }
-.txt1 {
-  font-weight: 1000;
-  font-size: small;
-  align-self: center;
-  overflow: hidden;
+.table thead tr th:nth-last-child(1),
+.table thead tr td:nth-last-child(1),
+.table tbody tr th:nth-last-child(1),
+.table tbody tr td:nth-last-child(1) {
+	text-align: center;
 }
-.rounded1 {
-  border-radius: 15px !important;
-  margin-top: 5px;
-  box-shadow: 0px 3px 10px #e4e4e4 !important;
+.table tbody tr {
+	border-radius: 15px;
+    box-shadow: 0px 4px 15px #00000029;
+}
+.table tbody tr td:nth-child(1) {
+	border-radius: 15px 0 0 15px;
+}
+.table tbody tr td:nth-last-child(1) {
+	border-radius: 0 15px 15px 0;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+}
+.user-info__img img {
+	margin-right: 3px;
+	height: 27px;
+	width: 27px;
+	border-radius: 45px;
+	border: 3px solid #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.active-circle {
+	height: 10px;
+	width: 10px;
+	border-radius: 10px;
+	margin-right: 5px;
+	display: inline-block;
+}
+.shipmentId{
+	color:#007bff;
+}
+.table-h5-text{
+	font-size: 14px;
+}
+.table-p-text{
+	font-size: 12px;
+}
+.table-btns{
+	display: flex;
+	align-items: center;
 }

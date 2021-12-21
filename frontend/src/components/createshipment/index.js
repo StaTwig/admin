@@ -93,7 +93,7 @@ const CreateShipment = (props) => {
       return { ...provided, opacity, transition };
     },
   };
-  
+
   const handleSOChange = async (item) => {
     setOrderId(item);
     dispatch(turnOn());
@@ -106,7 +106,7 @@ const CreateShipment = (props) => {
   useEffect(() => {
     async function fetchData() {
 
-      
+
       const result111 = await getProductList();
 
       setProductsList(result111.message);
@@ -125,10 +125,10 @@ const CreateShipment = (props) => {
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-console.log(user.organisation)
+      console.log(user.organisation)
       const orgSplit = user.organisation?.split("/");
-      if(orgSplit?.length)
-      setSenderOrganisation([orgSplit[0]]);
+      if (orgSplit?.length)
+        setSenderOrganisation([orgSplit[0]]);
 
       const organisations = orgs.data;
       setAllOrganisations(
@@ -161,10 +161,10 @@ console.log(user.organisation)
             value: v.id,
             label: v?.warehouseAddress
               ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
+              "/" +
+              v?.warehouseAddress?.firstLine +
+              ", " +
+              v?.warehouseAddress?.city
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -174,11 +174,11 @@ console.log(user.organisation)
       setOrgTypes(
         orgType.data.length > 0
           ? orgType.data[0].organisationTypes.map((item) => {
-              return {
-                value: item.id,
-                label: item.name,
-              };
-            })
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
           : []
       );
 
@@ -189,7 +189,7 @@ console.log(user.organisation)
     }
 
     fetchData();
-  }, [ props.location, user.organisation]);
+  }, [props.location, user.organisation]);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -210,10 +210,10 @@ console.log(user.organisation)
             value: v.id,
             label: v?.warehouseAddress
               ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
+              "/" +
+              v?.warehouseAddress?.firstLine +
+              ", " +
+              v?.warehouseAddress?.city
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -305,8 +305,9 @@ console.log(user.organisation)
     let errorMsg = '';
     products.forEach((p) => {
       if (p.productQuantity < 1) { error = true; errorMsg = 'product quantity'; }
-      else if (!p.batchNumber) {error = true; errorMsg = 'batch number';
-    }
+      else if (!p.batchNumber) {
+        error = true; errorMsg = 'batch number';
+      }
     });
     if (!error) {
       const data = {
@@ -332,16 +333,16 @@ console.log(user.organisation)
         expectedDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-                estimateDeliveryDate.getTime() -
-                  estimateDeliveryDate.getTimezoneOffset() * 60000
-              ).toISOString()
+              estimateDeliveryDate.getTime() -
+              estimateDeliveryDate.getTimezoneOffset() * 60000
+            ).toISOString()
             : "",
         actualDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-                estimateDeliveryDate.getTime() -
-                  estimateDeliveryDate.getTimezoneOffset() * 60000
-              ).toISOString()
+              estimateDeliveryDate.getTime() -
+              estimateDeliveryDate.getTimezoneOffset() * 60000
+            ).toISOString()
             : "",
         status: "CREATED",
         products: products,
@@ -365,8 +366,7 @@ console.log(user.organisation)
         console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
-      } else if(check===2)
-      {
+      } else if (check === 2) {
         setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
       } else {
@@ -395,28 +395,28 @@ console.log(user.organisation)
         // }
 
         // if (i >= nn) {
-          dispatch(turnOn());
-          // const result = await createShipment(data);
-          const result = await newShipment(data);
-          dispatch(turnOff());
-          if (result?.id) {
-            setMessage("Created Shipment Success");
-            setOpenCreatedInventory(true);
-            setModalProps({
-              message: "Created Successfully!",
-              id: result?.id,
-              type: "Success",
-            });
-          } else {
+        dispatch(turnOn());
+        // const result = await createShipment(data);
+        const result = await newShipment(data);
+        dispatch(turnOff());
+        if (result?.id) {
+          setMessage("Created Shipment Success");
+          setOpenCreatedInventory(true);
+          setModalProps({
+            message: "Created Successfully!",
+            id: result?.id,
+            type: "Success",
+          });
+        } else {
 
-            setShipmentError(result.data.message);
-            setOpenShipmentFail(true);
-            setErrorMessage("Create Shipment Failed");
-          }
+          setShipmentError(result.data.message);
+          setOpenShipmentFail(true);
+          setErrorMessage("Create Shipment Failed");
+        }
         // }
       }
     } else {
-      setShipmentError("Check "+errorMsg);
+      setShipmentError("Check " + errorMsg);
       setOpenShipmentFail(true);
     }
   };
@@ -448,7 +448,7 @@ console.log(user.organisation)
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange =  (index, value, setFieldValue) => {
+  const onCategoryChange = (index, value, setFieldValue) => {
     try {
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
@@ -515,10 +515,10 @@ console.log(user.organisation)
     debugger
     axios
       .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) =>{
+      .then((resp) => {
         const value = resp.data.data.length > 0 ? true : false
-         setValidShipmentID(value)
-        })
+        setValidShipmentID(value)
+      })
   }
 
   return (
@@ -542,7 +542,7 @@ console.log(user.organisation)
           shipmentDate: "",
           estimateDeliveryDate: "",
           products: [],
-          reset: OrderId,          
+          reset: OrderId,
         }}
         validate={(values) => {
           const errors = {};
@@ -577,7 +577,7 @@ console.log(user.organisation)
         }}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values, "values");
-          
+
           setSubmitting(false);
           onAssign(values);
         }}
@@ -606,11 +606,10 @@ console.log(user.organisation)
                         Organisation Name*
                       </label>
                       <input
-                        className={`input refship ${
-                          errors.fromOrg && touched.fromOrg
-                            ? "border-danger"
-                            : ""
-                        }`}
+                        className={`input refship ${errors.fromOrg && touched.fromOrg
+                          ? "border-danger"
+                          : ""
+                          }`}
                         type='text'
                         id='organizationName'
                         name='fromOrg'
@@ -625,14 +624,13 @@ console.log(user.organisation)
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orgLocation'>
-                          Organisation Location*
+                        Organisation Location*
                       </label>
-                        <input
-                        className={`input refship ${
-                          errors.fromOrgLoc && touched.fromOrgLoc
-                            ? "border-danger"
-                            : ""
-                        }`}
+                      <input
+                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
+                          ? "border-danger"
+                          : ""
+                          }`}
                         type='text'
                         id='orgLocation'
                         name='fromOrgLoc'
@@ -659,11 +657,10 @@ console.log(user.organisation)
                         Organisation Name*
                       </label>
                       <input
-                        className={`input refship ${
-                          errors.fromOrgLoc && touched.fromOrgLoc
-                            ? "border-danger"
-                            : ""
-                        }`}
+                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
+                          ? "border-danger"
+                          : ""
+                          }`}
                         type='text'
                         id='organizationName'
                         name='toOrg'
@@ -678,14 +675,13 @@ console.log(user.organisation)
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                          Delivery Location*
+                        Delivery Location*
                       </label>
-                        <input
-                        className={`input refship ${
-                          errors.fromOrgLoc && touched.fromOrgLoc
-                            ? "border-danger"
-                            : ""
-                        }`}
+                      <input
+                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
+                          ? "border-danger"
+                          : ""
+                          }`}
                         type='text'
                         id='delLocation'
                         name='toOrgLoc'
@@ -711,11 +707,10 @@ console.log(user.organisation)
                       Transit Number*
                     </label>
                     <input
-                      className={`input refship ${
-                        errors.airWayBillNo && touched.airWayBillNo
-                          ? "border-danger"
-                          : ""
-                      }`}
+                      className={`input refship ${errors.airWayBillNo && touched.airWayBillNo
+                        ? "border-danger"
+                        : ""
+                        }`}
                       type='text'
                       id='referenceShipmentId'
                       name='airWayBillNo'
@@ -737,14 +732,13 @@ console.log(user.organisation)
                         Shipment Date*
                       </label>
                       <div
-                        className={`input refship ${
-                          errors.shipmentDate && touched.shipmentDate
-                            ? "border-danger"
-                            : ""
-                        }`}
+                        className={`input refship ${errors.shipmentDate && touched.shipmentDate
+                          ? "border-danger"
+                          : ""
+                          }`}
                       >
                         <DatePicker
-                        ref={ref1}
+                          ref={ref1}
                           className='date'
                           selected={
                             values.shipmentDate
@@ -782,11 +776,10 @@ console.log(user.organisation)
                       Label Code*
                     </label>
                     <input
-                      className={`input refship ${
-                        errors.labelCode && touched.labelCode
-                          ? "border-danger"
-                          : ""
-                      }`}
+                      className={`input refship ${errors.labelCode && touched.labelCode
+                        ? "border-danger"
+                        : ""
+                        }`}
                       type='text'
                       id='referenceShipmentId'
                       name='labelCode'
@@ -808,12 +801,11 @@ console.log(user.organisation)
                         Estimate Delivery Date
                       </label>
                       <div
-                        className={`input refship ${
-                          errors.estimateDeliveryDate &&
+                        className={`input refship ${errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate
-                            ? "border-danger"
-                            : ""
-                        }`}
+                          ? "border-danger"
+                          : ""
+                          }`}
                       >
                         <DatePicker
                           ref={ref2}
@@ -826,8 +818,8 @@ console.log(user.organisation)
                           selected={
                             values.estimateDeliveryDate
                               ? new Date(
-                                  Date.parse(values.estimateDeliveryDate)
-                                )
+                                Date.parse(values.estimateDeliveryDate)
+                              )
                               : values.estimateDeliveryDate
                           }
                           minDate={new Date()}
@@ -839,7 +831,7 @@ console.log(user.organisation)
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref2.current.setFocus()}/>
+                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref2.current.setFocus()} />
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>
@@ -856,157 +848,157 @@ console.log(user.organisation)
 
             <div className='row mb-3'>
               <label htmlFor='productDetails' className='headsup'>
-                  Product Details
-              </label>              
-                  <EditTable
-                    key={Math.random()}
-                    check='0'
-                    warehouseID={senderOrgId}
-                    product={addProducts}
-                    products={products}
-                    category={category}
-                    handleQuantityChange={(v, i) => {
-                      console.log(v, "v");
-                      
-                      let newArr = [...addProducts];
-                      newArr[i].productQuantity = v;
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                    handleManufacturerChange={(i, v) => {
-                      let newArr = [...addProducts];
-                      newArr[i].manufacturer = v;
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                    handleBatchChange={(v, i) => {
-                      let newArr = [...addProducts];
-                      newArr[i].batchNumber = v;
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                    enableDelete={true}
-                    onRemoveRow={(index) => {
-                      const prodIndex = products.findIndex(
-                        (p) => p.id === addProducts[index].id
-                      );
-                      let newArray = [...products];
-                      newArray[prodIndex] = {
-                        ...newArray[prodIndex],
-                        isSelected: false,
-                      };
-                      setProducts((prod) => [...newArray]);
+                Product Details
+              </label>
+              <EditTable
+                check='0'
+                warehouseID={senderOrgId}
+                product={addProducts}
+                products={products}
+                category={category}
+                handleQuantityChange={(v, i) => {
+                  console.log(v, "v");
 
-                      addProducts.splice(index, 1);
-                      let newArr = [...addProducts];
-                      if (newArr.length > 0)
-                        setFieldValue(
-                          "products",
-                          newArr.map((row) => ({
-                            productCategory: row.type,
-                            // productID: row.id,
-                            productQuantity: row.productQuantity,
-                            batchNumber: row.batchNumber,
-                            productName: row.name,
-                            manufacturer: row.manufacturer,
-                            quantity: row.quantity,
-                          }))
-                        );
-                      else setFieldValue("products", []);
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                    handleProductChange={(i, v) => {
-                      let newArr = [...addProducts];
-                      newArr[i]["name"] = v;
-                      console.log(newArr);
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          // productId: row.id,
-                          batchNumber: row.batchNumber,
-                          // id: row.id,
-                          productQuantity: "",
-                          quantity: "",
-                          name: row.name,
-                          type: row.type,
-                          manufacturer: row.manufacturer,
-                          unitofMeasure: row.unitofMeasure,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                    handleLabelIdChange={handleLabelIdChange}
-                    handleCategoryChange={(i, v) => {
-                      let newArr = [...addProducts];
-                      newArr[i]["type"] = v;
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          // productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-                    }}
-                  />
-                  <div className='d-flex justify-content-between'>
-                    <button
-                      type='button'
-                      className='btn btn-white bg-white shadow-radius mt-3 font-bold'
-                      onClick={() => {
-                        let newArr = {
-                          productName: "",
-                          manufacturer: "",
-                          productQuantity: "",
-                          batchNumber: "",
-                          unitofMeasure: "Kgs",
-                          type: ""
-                        };
-                        setAddProducts((prod) => [...prod, newArr]);
-                      }}
-                    >
-                      +<span> Add Another Product</span>
-                    </button>
-                  </div>
-                
+                  let newArr = [...addProducts];
+                  newArr[i].productQuantity = v;
+                  setFieldValue(
+                    "products",
+                    newArr.map((row) => ({
+                      productCategory: row.type,
+                      productID: row.id,
+                      productQuantity: row.productQuantity,
+                      batchNumber: row.batchNumber,
+                      productName: row.name,
+                      manufacturer: row.manufacturer,
+                      quantity: row.quantity,
+                    }))
+                  );
+                  setAddProducts((prod) => [...newArr]);
+                }}
+                handleManufacturerChange={(i, v) => {
+                  let newArr = [...addProducts];
+                  newArr[i].manufacturer = v;
+                  setFieldValue(
+                    "products",
+                    newArr.map((row) => ({
+                      productCategory: row.type,
+                      productID: row.id,
+                      productQuantity: row.productQuantity,
+                      batchNumber: row.batchNumber,
+                      productName: row.name,
+                      manufacturer: row.manufacturer,
+                      quantity: row.quantity,
+                    }))
+                  );
+                  setAddProducts((prod) => [...newArr]);
+                }}
+                handleBatchChange={(v, i) => {
+                  let newArr = [...addProducts];
+                  newArr[i].batchNumber = v;
+                  setFieldValue(
+                    "products",
+                    newArr.map((row) => ({
+                      productCategory: row.type,
+                      productID: row.id,
+                      productQuantity: row.productQuantity,
+                      batchNumber: row.batchNumber,
+                      productName: row.name,
+                      manufacturer: row.manufacturer,
+                      quantity: row.quantity,
+                    }))
+                  );
+                  setAddProducts((prod) => [...newArr]);
+                }}
+                enableDelete={true}
+                onRemoveRow={(index) => {
+                  const prodIndex = products.findIndex(
+                    (p) => p.id === addProducts[index].id
+                  );
+                  let newArray = [...products];
+                  newArray[prodIndex] = {
+                    ...newArray[prodIndex],
+                    isSelected: false,
+                  };
+                  setProducts((prod) => [...newArray]);
+
+                  addProducts.splice(index, 1);
+                  let newArr = [...addProducts];
+                  if (newArr.length > 0)
+                    setFieldValue(
+                      "products",
+                      newArr.map((row) => ({
+                        productCategory: row.type,
+                        // productID: row.id,
+                        productQuantity: row.productQuantity,
+                        batchNumber: row.batchNumber,
+                        productName: row.name,
+                        manufacturer: row.manufacturer,
+                        quantity: row.quantity,
+                      }))
+                    );
+                  else setFieldValue("products", []);
+                  setAddProducts((prod) => [...newArr]);
+                }}
+                handleProductChange={(i, v) => {
+                  let newArr = [...addProducts];
+                  newArr[i]["name"] = v;
+                  console.log(newArr);
+                  setFieldValue(
+                    "products",
+                    newArr.map((row) => ({
+                      // productId: row.id,
+                      batchNumber: row.batchNumber,
+                      // id: row.id,
+                      productQuantity: "",
+                      quantity: "",
+                      name: row.name,
+                      type: row.type,
+                      manufacturer: row.manufacturer,
+                      unitofMeasure: row.unitofMeasure,
+                    }))
+                  );
+                  setAddProducts((prod) => [...newArr]);
+                }}
+                handleLabelIdChange={handleLabelIdChange}
+                handleCategoryChange={(i, v) => {
+                  console.log('in product type', v)
+                  let newArr = [...addProducts];
+                  newArr[i]["type"] = v;
+                  setFieldValue(
+                    "products",
+                    newArr.map((row) => ({
+                      productCategory: row.type,
+                      // productID: row.id,
+                      productQuantity: row.productQuantity,
+                      batchNumber: row.batchNumber,
+                      productName: row.name,
+                      manufacturer: row.manufacturer,
+                      quantity: row.quantity,
+                    }))
+                  );
+                  setAddProducts((prod) => [...newArr]);
+                }}
+              />
+              <div className='d-flex justify-content-between'>
+                <button
+                  type='button'
+                  className='btn btn-white bg-white shadow-radius mt-3 font-bold'
+                  onClick={() => {
+                    let newArr = {
+                      productName: "",
+                      manufacturer: "",
+                      productQuantity: "",
+                      batchNumber: "",
+                      unitofMeasure: "Kgs",
+                      type: ""
+                    };
+                    setAddProducts((prod) => [...prod, newArr]);
+                  }}
+                >
+                  +<span> Add Another Product</span>
+                </button>
+              </div>
+
               {/* <div className="table productTable mt-2">
                 <div className="rTable">
                   <div className="rTableHeading">
@@ -1020,7 +1012,7 @@ console.log(user.organisation)
                 </div>
               </div> */}
             </div>
-      {errors.products && touched.products && (
+            {errors.products && touched.products && (
               <span className='error-msg text-danger-DD'>
                 {errors.products}
               </span>

@@ -6,6 +6,7 @@ const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const ProductModel = require("../models/ProductModel");
+const ConfigModel = require("../models/ConfigurationModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const moment = require("moment");
@@ -822,6 +823,47 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
   }
 
   return matchCondition;
+}
+
+async function getSupplierRatings(supplierDetails,ratingSchema){
+  let rating;
+  if(ratingSchema!=null){
+      rating = {
+      returnRating : await calculateRating(supplierDetails.returnRate,ratingSchema?.returnRate),
+      leadRating : await calculateRating(supplierDetails?.leadTime ? supplierDetails?.leadTime[0]?.avgLeadTime : null ,ratingSchema?.leadTime),
+      bottleCapacityRating : await calculateRating(supplierDetails.storageCapacity?.bottleCapacity,ratingSchema?.bottleCapacity),
+      storageCapacityRating : await calculateRating(supplierDetails.storageCapacity?.sqft,ratingSchema?.warehouseCapacity),
+      dirtyBottlesRating : await calculateRating(supplierDetails.dirtyBottles,ratingSchema?.dirtyBottle),
+      breakageRating : await calculateRating(supplierDetails?.breakage,ratingSchema?.breakageBottle),
+    }
+  }
+  else{
+    rating = {};
+  }
+  console.log("THE RATING IS",rating)
+  return rating;
+}
+
+async function calculateRating(value,schema){
+  if(value && schema){
+    if(schema){
+      let temp =  value/schema.target < 1 ? ((value/schema.target) * (schema.max.rating - schema.min.rating)) + schema.min.rating : ((value/schema.target) / (schema.max.rating - schema.min.rating)) + schema.min.rating;
+      if(schema.min.operator=="<" && value < schema.min.value){
+        return parseInt(schema.min.rating)
+      }
+      else if(schema.min.operator==">" && value > schema.min.value){
+        return parseInt(schema.min.rating)
+      }
+      else if(schema.max.operator==">" && value > schema.max.value){
+        return parseInt(schema.max.rating)
+      }
+      else if(schema.min.operator=="<" && value < schema.min.value){
+        return parseInt(schema.max.rating)
+      }
+      else return parseInt(temp);
+    }
+  }
+  return 0;
 }
 
 /**
@@ -2233,6 +2275,7 @@ exports.getSupplierPerformance = [
       ]);
 
       for (const supplier of supplierOrgs) {
+        console.log(supplier.postalAddress?.split(',')[1])
         supplier.leadTime = await calculateLeadTimeByOrg(supplier);
         supplier.returnRate = await calculateReturnRateByOrg(supplier);
         supplier.storageCapacity = await calculateStorageCapacityByOrg(
@@ -2241,6 +2284,17 @@ exports.getSupplierPerformance = [
         let dirtyBreakage = await calculateDirtyBottlesAndBreakage(supplier);
         supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
         supplier.breakage = dirtyBreakage.breakage;
+        let supplierDetails = {
+          leadTime : supplier.leadTime,
+          returnRate : supplier.returnRate,
+          storageCapacity : supplier.storageCapacity,
+          dirtyBottles : supplier.dirtyBottles,
+          breakage : supplier.breakage
+        }
+        // console.log({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
+        let ratingSchema = await ConfigModel.findOne({ vendorId : supplier.id  })
+        if(!ratingSchema) ratingSchema = await ConfigModel.findOne({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
+        supplier.rating = await getSupplierRatings(supplierDetails,ratingSchema)
       }
 
       client.set(
@@ -2689,6 +2743,99 @@ exports.getMonthlySalesOfSkuByBrand = [
         "Operation success",
         Analytics
       );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.updateTargetSales = [
+  auth,
+  async function (req, res) {
+    try {
+      for(uniqueTarget of req.body){
+      const Analytics = await AnalyticsModel.updateMany(
+        { depot: { $in: [...uniqueTarget.depot] } },
+        [
+        {
+          $set: {
+            "targetSales": {
+              $divide: [{ $multiply: ["$sales", parseInt(uniqueTarget.percentage, 10)] }, 100]
+            }
+          }
+        }
+      ]
+      )
+    }
+      return apiResponse.successResponse(res, `Updated Target Sales`)
+    }
+    catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]
+
+exports.getTargetSales = [
+  auth,
+  async function (req ,res) {
+    try {
+      const depots = await AnalyticsModel.aggregate(
+        [
+          {
+            $group:
+              {
+                _id : { depot: "$depot" },
+                totalTarget: { $sum: "$targetSales" },
+                totalSales: { $sum: "$sales" },
+              }
+          },
+        {
+         $project : {
+           depot : 1,
+           percentage : { $multiply : [{ $divide: ["$totalTarget", "$totalSales"] } ,100 ] }
+         }
+        }
+        ]
+     )
+     return apiResponse.successResponseWithData(res,"Depot targets",depots)
+    }
+    catch(err){
+      return apiResponse.ErrorResponse(res, err)
+    }
+  }
+]
+
+exports.getAllConfiguration = [
+  auth,
+  async function (req, res) {
+    try {
+      let configuration = await ConfigModel.find(req.query)
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        configuration
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.setNewConfiguration = [
+  auth,
+  async function (req, res) {
+    try {
+      const query = req.body.district? { district : req.body.district, vendorType : req.body.vendorType } : { vendorId : vendorId }
+      const configExists = await ConfigModel.findOne(query)
+      let config;
+      if(!configExists){
+        config = new ConfigModel(req.body);
+        await config.save();
+      }
+      else {
+       config = await ConfigModel.findOneAndUpdate(query, { $set : req.body });
+      }
+      return apiResponse.successResponse(res,"Saved new config")
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }

@@ -179,10 +179,12 @@ export function config() {
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
       getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
+      getAllTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getDepotTargets`,
+      updateTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/updateTargetSales`,
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'abinbevtest'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'ainbevprod'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
