@@ -31,8 +31,8 @@ const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 const { resolve } = require("path");
-var pdf = require("pdf-creator-node");
-
+const pdf = require("pdf-creator-node");
+const logEvent = require("../../../utils/event_logger");
 const inventoryUpdate = async (
   id,
   quantity,
@@ -732,10 +732,10 @@ exports.createShipment = [
           Misc: "",
         };
 
-        let token =
+        const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        const bc_response = await axios.post(
+        await axios.post(
           `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
           bc_data,
           {
@@ -744,28 +744,6 @@ exports.createShipment = [
             },
           }
         );
-
-        /*const userData = {
-          stream: shipment_stream,
-          key: shipmentId,
-          address: req.user.walletAddress,
-          data: data,
-        };
-        const response = await axios.post(
-          `${blockchain_service_url}/publish`,
-          userData
-        );
-        await ShipmentModel.findOneAndUpdate(
-          {
-            id: shipmentId,
-          },
-          {
-            $push: {
-              transactionIds: response.data.transactionId,
-            },
-          }
-        );*/
-
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne(
             {
@@ -795,8 +773,7 @@ exports.createShipment = [
 
           if (!quantityMismatch)
             throw new Error("Tagged product quantity not available");
-
-          const tagUpdate = await ShipmentModel.findOneAndUpdate(
+          await ShipmentModel.findOneAndUpdate(
             {
               id: shipmentId,
             },
@@ -815,14 +792,7 @@ exports.createShipment = [
             );
           }
         }
-        async function compute(event_data) {
-          resultt = await logEvent(event_data);
-          return resultt;
-        }
-        compute(event_data).then((response) => {
-          // console.log(response);
-        });
-
+        await logEvent(event_data);
         return apiResponse.successResponseWithData(
           res,
           "Shipment Created Successfully",
@@ -878,6 +848,9 @@ exports.newShipment = [
         products: data.products,
       };
       data.shipmentUpdates = updates;
+      data.isCustom
+        ? (data.vehicleId = data.airWayBillNo)
+        : (data.vehicleId = null);
       const shipment = new ShipmentModel(data);
       const result = await shipment.save();
       if (result == null) {
@@ -910,10 +883,9 @@ exports.newShipment = [
         Products: JSON.stringify(data.products),
         Misc: "",
       };
-
-      let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-
-      const bc_response = await axios.post(
+      const token =
+        req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+      await axios.post(
         `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
         bc_data,
         {
@@ -922,7 +894,6 @@ exports.newShipment = [
           },
         }
       );
-
       return apiResponse.successResponseWithData(
         res,
         "Shipment Created Successfully",
@@ -1340,13 +1311,8 @@ exports.receiveShipment = [
 
           event_data.payload.data = data;
           console.log(event_data);
-          async function compute(event_data) {
-            resultt = await logEvent(event_data);
-            return resultt;
-          }
-          compute(event_data).then((response) => {
-            console.log(response);
-          });
+
+          await logEvent(event_data);
 
           return apiResponse.successResponseWithData(
             res,
@@ -1913,17 +1879,14 @@ exports.viewShipmentGmr = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          await ShipmentModel.findOne({ id: req.query.shipmentId })
-            .then((shipment) => {
-              return apiResponse.successResponseWithData(
-                res,
-                "Shipment",
-                shipment
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err.message);
-            });
+          const shipment = await ShipmentModel.findOne({
+            id: req.query.shipmentId,
+          });
+          return apiResponse.successResponseWithData(
+            res,
+            "Shipment Details",
+            shipment
+          );
         } else {
           return apiResponse.forbiddenResponse(
             res,
@@ -2124,21 +2087,19 @@ exports.updateTrackingStatus = [
   async (req, res) => {
     try {
       const data = req.body;
-      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      data.shipmentUpdates.updatedOn = currDateTime;
-      data.shipmentUpdates.updatedBy = req.user.id;
-      data.shipmentUpdates.status = "UPDATED";
-
-      const update = await ShipmentModel.update(
+      const currentDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+      data.shipmentUpdates?.updatedOn = currentDateTime;
+      data.shipmentUpdates?.updatedBy = req.user.id;
+      data.shipmentUpdates?.status = "UPDATED";
+      await ShipmentModel.updateOne(
         { id: req.body.id },
         { $push: { shipmentUpdates: data.shipmentUpdates } }
       );
-      var datee = new Date();
-      datee = datee.toISOString();
-      var evid = Math.random().toString(36).slice(2);
-      let event_data = {
+      const currentDate = new Date().toISOString();
+      const evid = Math.random().toString(36).slice(2);
+      const event_data = {
         eventID: "ev0000" + evid,
-        eventTime: datee,
+        eventTime: currentDate,
         actorWarehouseId: req.user.warehouseId,
         transactionId: req.body.id,
         eventType: {
@@ -2170,14 +2131,7 @@ exports.updateTrackingStatus = [
           data: req.body,
         },
       };
-      console.log(event_data);
-      async function compute(event_data) {
-        resultt = await logEvent(event_data);
-        return resultt;
-      }
-      compute(event_data).then((response) => {
-        console.log(response);
-      });
+      await logEvent(event_data);
       return apiResponse.successResponse(res, "Status Updated");
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);

@@ -1,4 +1,13 @@
 const SensorModel = require("../models/SensorModel");
+const ShipmentModel = require("../models/ShipmentModel");
+
+exports.getCurrentShipment = async (vehicleId) => {
+  const shipment = await ShipmentModel.find({
+    vehicleId: vehicleId,
+    status: "CREATED",
+  });
+  return shipment.pop();
+};
 
 exports.saveSensorData = async (sensorData) => {
   const sensor = new SensorModel({
@@ -33,7 +42,7 @@ exports.updateSensorData = async (sensorData) => {
         },
       },
     },
-    { new: true, upsert: true }
+    { new: true, upsert: true, sort: { _id: -1 } }
   );
   return sensor;
 };

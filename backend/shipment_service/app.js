@@ -1,4 +1,5 @@
 const express = require("express");
+const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -6,7 +7,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const swaggerUi = require("swagger-ui-express");
 const openApiDocumentation = require("./openApiDocumentation");
-
+const { MqttConnection } = require("./helpers/mqtt");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
@@ -26,6 +27,9 @@ mongoose
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("Shipment Service is running ... \n");
+      (async () => {
+        await MqttConnection();
+      })();
     }
   })
   .catch((err) => {
@@ -60,4 +64,4 @@ app.use((err, req, res) => {
   }
 });
 
-module.exports = app;
+module.exports = { app, Server };

@@ -9,6 +9,7 @@ const SensorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    shipmentId: String,
     timepstamp: {
       type: Number,
     },

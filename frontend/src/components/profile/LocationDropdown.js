@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import parse from "html-react-parser";
 import useOnclickOutside from "react-cool-onclickoutside";
@@ -6,7 +5,7 @@ import upDownArrow from "../../assets/icons/dropdown.svg";
 import "./LocationDropdown.scss";
 
 const LocationDropdown = (props) => {
-    const [menu, setMenu] = useState(false);
+  const [menu, setMenu] = useState(false);
   const {
     groups,
     name,
@@ -25,8 +24,6 @@ const LocationDropdown = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
-  console.log(name)
-  debugger
   return (
     <div className='custom-dropdown' ref={ref}>
       {isText ? (
@@ -60,17 +57,27 @@ const LocationDropdown = (props) => {
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <div className={`${name?.length > 20 && "textNeg"}`} style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:"300px"}}>
-            {useParse ? parse(name) : name.split("|")[0] }
+          <div
+            className={`${name?.length > 20 && "textNeg"}`}
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "300px",
+            }}
+          >
+            {useParse ? parse(name) : name.split("|")[0]}
           </div>
           <br></br>
-          <div className={`location-add ${name?.length > 20 && "textNeg-title"}`}>
+          <div
+            className={`location-add ${name?.length > 20 && "textNeg-title"}`}
+          >
             {useParse ? parse(name) : name.split("|")[1]}
           </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className= "dropdownIcon"
+            className='dropdownIcon'
           />
         </button>
       )}
@@ -78,32 +85,40 @@ const LocationDropdown = (props) => {
         <div
           ref={ref}
           className={`dropdown-menu show dropdownCard ${dClass}`}
-          style={{width:"23vw"}}
+          style={{ width: "23vw" }}
         >
           {groups &&
             groups.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className="dropdown-item p-1"
+                    className='dropdown-item p-1'
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);
                     }}
                   >
                     {item?.warehouseInventory ? (
-                      <div className="locationAdress">
-                        <span className="LocationTitle" style={{fontWeight: "bolder", color:"#0093e9",width:"50%" }}>
+                      <div className='locationAdress'>
+                        <span
+                          className='LocationTitle'
+                          style={{
+                            fontWeight: "bolder",
+                            color: "#0093e9",
+                            width: "50%",
+                          }}
+                        >
                           {item.title}
                         </span>
-                        
-                        <span className="regionCountry">
-                          {item?.warehouseAddress?.region +
-                            ", " +
-                            item?.warehouseAddress?.country
-                          //  + " " +
-                          //   item.postalAddress
-                            }
+
+                        <span className='regionCountry'>
+                          {
+                            item?.warehouseAddress?.region +
+                              ", " +
+                              item?.warehouseAddress?.country
+                            //  + " " +
+                            //   item.postalAddress
+                          }
                         </span>
                       </div>
                     ) : (
@@ -132,6 +147,6 @@ const LocationDropdown = (props) => {
       )}
     </div>
   );
-}
+};
 
-export default LocationDropdown
+export default LocationDropdown;

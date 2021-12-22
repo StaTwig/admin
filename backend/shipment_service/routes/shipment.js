@@ -22,7 +22,6 @@ router.get(
 ); // fetchAllWarehouseShipments => fetch shipments from all warehouses
 router.get("/viewShipment", ShipmentController.viewShipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
 router.get("/viewShipmentGmr", ShipmentController.viewShipmentGmr); // /viewShipmentGmr?ShipmentId=SH7TUC_VZIKD
-
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
 router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger
 router.post("/updateShipmentStatus", ShipmentController.updateStatus); // /updateShipmentStatus?id=123
@@ -30,7 +29,6 @@ router.get(
   "/getProductsByInventory",
   ShipmentController.getProductsByInventory
 );
-
 router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
 router.get("/trackJourney", ShipmentController.trackJourney);

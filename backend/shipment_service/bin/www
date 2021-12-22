@@ -3,7 +3,8 @@
 "use strict";
 
 const http = require("http");
-const app = require("../app");
+const { app, Server } = require("../app");
+const { MqttConnection } = require("../helpers/mqtt");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -34,6 +35,25 @@ app.set("port", port);
  * Create HTTP server.
  */
 const server = http.createServer(app);
+
+const io = new Server(server, {
+  path: "/shipmentmanagement/api/socket/",
+  transports: ["websocket", "polling"],
+});
+
+io.on("connection", (socket) => {
+  console.log("connected", socket.id);
+  socket.on("join", (shipmentId) => {
+    socket.join(shipmentId);
+  });
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+  });
+});
+
+(async () => {
+  await MqttConnection(io);
+})();
 
 /**
  * Event listener for HTTP server "error" event.
