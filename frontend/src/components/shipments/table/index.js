@@ -190,13 +190,13 @@ function Table(props) {
               statusStyle = "bg-success";
               status = "Delivered";
             }
-            let supplierAddress = shipment.supplier.warehouse.warehouseAddress;
+            let supplierAddress = props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.locationId : shipment.supplier.warehouse.warehouseAddress;
             let wLocation = shipment.supplier.warehouse?.location;
             if (wLocation?.length) {
               supplierAddress =
                 wLocation.firstLine + wLocation.secondLine + wLocation.city;
             }
-            let receiverAddress = shipment.receiver.warehouse.warehouseAddress;
+            let receiverAddress = props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.locationId : shipment.receiver.warehouse.warehouseAddress;
             let wrLocation = shipment.receiver.warehouse?.location;
             if (wrLocation?.length) {
               supplierAddress =
@@ -229,46 +229,36 @@ function Table(props) {
                 <td>
                   <div class="user-info__basic">
                     <h5 class="mb-0 table-h5-text">
-                      {shipment.supplier.org ? shipment.supplier.org.name : "-"}
+                      {shipment.supplier.org ? shipment.supplier.org.name : props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.id : "-"}
                     </h5>
                     <p class="text-muted mb-0 table-p-text">
                       {`${
-                        supplierAddress.firstLine
-                          ? supplierAddress.firstLine
-                          : ""
-                      } ${
-                        supplierAddress.secondLine
-                          ? supplierAddress.secondLine
-                          : ""
-                      } ${supplierAddress.city ? supplierAddress.city : ""}\n ${
-                        supplierAddress.state ? supplierAddress.state : ""
-                      }\n ${
-                        supplierAddress.country ? supplierAddress.country : ""
-                      } `}
+                    supplierAddress.firstLine ? supplierAddress.firstLine : props.user.emailId === 'gmr@statledger.io' ? shipment.supplier.locationId : ""
+                  } ${
+                    supplierAddress.secondLine ? supplierAddress.secondLine : ""
+                  } ${supplierAddress.city ? supplierAddress.city : ""}\n ${
+                    supplierAddress.state ? supplierAddress.state : ""
+                  }\n ${
+                    supplierAddress.country ? supplierAddress.country : ""
+                  } `}
                     </p>
                   </div>
                 </td>
                 <td>
                   <div class="user-info__basic">
                     <h5 class="mb-0 table-h5-text">
-                      {shipment.receiver.org ? shipment.receiver.org.name : "-"}
+                      {shipment.receiver.org ? shipment.receiver.org.name : props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.id : "-"}
                     </h5>
                     <p class="text-muted mb-0 table-p-text">
                       {`${
-                        receiverAddress.firstLine
-                          ? receiverAddress.firstLine
-                          : ""
-                      }  ${
-                        receiverAddress.secondLine
-                          ? receiverAddress.secondLine
-                          : ""
-                      } ${
-                        receiverAddress.city ? receiverAddress.city : ""
-                      } \n ${
-                        receiverAddress.state ? receiverAddress.state : ""
-                      } \n ${
-                        receiverAddress.country ? receiverAddress.country : ""
-                      } `}
+                    receiverAddress.firstLine ? receiverAddress.firstLine : props.user.emailId === 'gmr@statledger.io' ? shipment.receiver.locationId : ""
+                  }  ${
+                    receiverAddress.secondLine ? receiverAddress.secondLine : ""
+                  } ${receiverAddress.city ? receiverAddress.city : ""} \n ${
+                    receiverAddress.state ? receiverAddress.state : ""
+                  } \n ${
+                    receiverAddress.country ? receiverAddress.country : ""
+                  } `}
                     </p>
                   </div>
                 </td>
@@ -295,7 +285,7 @@ function Table(props) {
                       <span className="pl-1 text-white">Track</span>
                     </button>
                     <Link
-                      to={`/viewshipment/${shipment.id}`}
+                      to={`/${shipment.isCustom === true ? `viewgmrshipment`: `viewshipment`}/${shipment.id}`}
                       className="button btn-sm"
                       style={{
                         width: "60px",
