@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style></style>
+    <style>
+      table { 
+    table-layout:fixed;
+}
+      td { 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+    text-size-adjust: inherit;
+}
+th { 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+    text-size-adjust: inherit;
+    font-size: 12px;
+}
+body{
+  font-size:xx-small;
+}
+    </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>    
 <mate charest="utf-8" />
@@ -22,9 +42,9 @@
             <th scope="col">Product ID</td>
             <th scope="col">Quantity</td>
             <th scope="col">Manufacturer</td>
-            <th scope="col">Delivery Organization Name</td>
-            <th scope="col">Delivery Organization ID</td>
-            <th scope="col">Delivery Organization Location Details</td>
+            <th scope="col"><span>Delivery</span> Organization Name</td>
+            <th scope="col"><span>Delivery</span> Organization ID</td>
+            <th scope="col"><span>Delivery</span> Organization Location Details</td>
             <th scope="col" >Status</td>
         </tr>
     </thead>

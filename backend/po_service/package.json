@@ -22,6 +22,7 @@
     "multer": "^1.4.3",
     "node-excel-export": "^1.4.4",
     "pdf-creator-node": "^2.2.4",
+    "pdfmake": "^0.2.2",
     "redis": "^3.1.2",
     "uniqid": "^5.4.0",
     "xlsx": "^0.17.2"

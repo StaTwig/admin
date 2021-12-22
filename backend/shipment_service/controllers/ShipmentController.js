@@ -33,8 +33,19 @@ const util = require("util");
 const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
-resolve = require("path").resolve;
-var pdf = require("pdf-creator-node");
+var PdfPrinter = require('pdfmake');
+resolve = require('path').resolve
+
+var fontDescriptors = {
+  Roboto: {
+    normal: resolve('./controllers/Roboto-Regular.ttf'),
+    bold: resolve('./controllers/Roboto-Medium.ttf'),
+    italics: resolve('./controllers/Roboto-Italic.ttf'),
+    bolditalics: resolve('./controllers/Roboto-MediumItalic.ttf')
+  }
+}
+var printer = new PdfPrinter(fontDescriptors);
+// var pdf = require("pdf-creator-node");
 
 const inventoryUpdate = async (
   id,
@@ -3583,7 +3594,7 @@ exports.exportInboundShipments = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      // const { skip, limit } = req.query;
       const { warehouseId } = req.user;
       let currentDate = new Date();
       let fromDateFilter = 0;
@@ -3669,8 +3680,6 @@ exports.exportInboundShipments = [
       try {
         let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
-          .skip(parseInt(skip))
-          .limit(parseInt(limit))
           .sort({ createdAt: -1 })
           .then((inboundShipmentsList) => {
             let inboundShipmentsRes = [];
@@ -3731,7 +3740,7 @@ exports.exportInboundShipments = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, 'Inbound');
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithData(
@@ -3755,7 +3764,7 @@ exports.exportOutboundShipments = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      // const { skip, limit } = req.query;
       const { warehouseId } = req.user;
       let currentDate = new Date();
       let fromDateFilter = 0;
@@ -3838,8 +3847,6 @@ exports.exportOutboundShipments = [
       try {
         let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
-          .skip(parseInt(skip))
-          .limit(parseInt(limit))
           .sort({ createdAt: -1 })
           .then((outboundShipmentsList) => {
             let outboundShipmentsRes = [];
@@ -3900,7 +3907,7 @@ exports.exportOutboundShipments = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, 'Outbound');
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithMultipleData(
@@ -4078,35 +4085,51 @@ function buildExcelReport(req, res, dataForExcel) {
   return res.send(report);
 }
 
-function buildPdfReport(req, res, data) {
-  let finalPath = resolve("./models/pdftemplate.html");
-  let html = fs.readFileSync(finalPath, "utf8");
-  var options = {
-    format: "A4",
-    orientation: "landscape",
-    border: "10mm",
-    header: {
-      height: "15mm",
-      contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>',
-    },
-  };
-  var document = {
-    html: html,
-    data: {
-      orders: data,
-    },
-    path: "./output.pdf",
-    type: "",
-  };
-  pdf
-    .create(document, options)
-    .then((result) => {
-      console.log(result);
-      return res.sendFile(result.filename);
-    })
-    .catch((error) => {
-      console.error(error);
+function buildPdfReport(req, res, data, orderType) {
+    // console.log(data)
+    var rows = [];
+    rows.push([{text: 'Shipment ID', bold: true}, {text: 'Reference Order ID', bold: true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Batch Number', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'From Organization Name', bold: true}, {text: 'From Organization ID', bold: true}, {text: 'From Organization Location Details', bold: true}, {text: 'Delivery Organization Name', bold: true}, {text: 'Delivery Organization ID', bold: true}, {text: 'Delivery Organization Location Details', bold: true}, {text: 'Transit Number', bold: true}, {text: 'Label Code', bold: true}, {text: 'Shipment Date', bold: true}, {text: 'Shipment Estimate Date', bold: true}]);
+    // console.log(rows[0].length)
+    for(var i = 0; i < data.length; i++) {
+        rows.push([data[i].id || 'N/A', data[i].poId || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productID || 'N/A', data[i].productQuantity || 'N/A', data[i].batchNumber || 'N/A', data[i].manufacturer || 'N/A', data[i].supplierOrgName || 'N/A', data[i].supplierOrgId || 'N/A', data[i].supplierOrgLocation || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].airWayBillNo || 'N/A', data[i].label || 'N/A', data[i].shippingDate || 'N/A', data[i].expectedDeliveryDate || 'N/A']);
+    }
+    
+    var docDefinition = {
+      pageSize: 'A3',
+      pageOrientation: 'landscape',
+      pageMargins: [ 30, 30, 1, 5 ],
+        content: [
+          { text: `${orderType} shipments`, fontSize: 34, style: 'header' },
+          {
+            table: {
+              margin: [ 1, 1, 1, 1 ],
+              headerRows: 1,
+              headerStyle:  'header',
+                     widths: [60, 60, 55, 55, 55, 45, 48, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                    body: rows
+                }
+        }],
+        styles: {
+          header: {
+            bold: true,
+            margin: [10,10,10,10]
+          },
+        }
+    
+    }
+    
+      var options= {fontLayoutCache: true}
+      var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+      var temp123;
+    var pdfFile = pdfDoc.pipe(temp123 = fs.createWriteStream('./output.pdf'))
+    var path = pdfFile.path
+    pdfDoc.end();
+    temp123.on('finish', async function () {
+      // do send PDF file 
+      return res.sendFile(resolve(path))
     });
+    return
+    
 }
 
 exports.trackJourneyOnBlockchain = [
