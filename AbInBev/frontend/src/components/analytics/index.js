@@ -264,7 +264,10 @@ const Analytics = (props) => {
                 <div className="filterHeader mb-3">
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
-                <div className="btn-group filterButton mt-2 mb-4">
+                <div
+                  className="btn-group filterButton mt-2 mb-4"
+                // style={{ width: `${props.location.pathname = "/analytics" ? "96%" : "100%"}` }}
+                >
                   <a
                     href="#!"
                     className={annualReportButton}
@@ -455,7 +458,56 @@ const Analytics = (props) => {
                         </>
                       )}
                     {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                      selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
+                      selectedViewCode == 'ANNUALREPORT_DASHBOARD' ||
+                      selectedViewCode == 'SKU_DETAIL_VIEW' ||
+                      selectedViewCode == 'BREWERY_DETAIL_VIEW' ||
+                      selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && (
+                        <>
+                          <label className="filterSubHeading mt-3">
+                            Time Period
+                          </label>
+                          <div
+                            className="btn-group filterButton mt-2 mb-4"
+                          // style={{ width: `${props.location.pathname = "/analytics" ? "96%" : "100%"}` }}
+                          >
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_monthly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_monthly');
+                              }}
+                            >
+                              Monthly
+                            </a>
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_quarterly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_quarterly');
+                              }}
+                            >
+                              Quarterly
+                            </a>
+                            <a
+                              href="#!"
+                              className={`btn ${isActive == 'by_yearly' ? `active` : ``
+                                }`}
+                              onClick={() => {
+                                onTPChange('by_yearly');
+                              }}
+                            >
+                              Yearly
+                            </a>
+                          </div>
+                        </>
+                      )}
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                      selectedViewCode == 'ANNUALREPORT_DASHBOARD' ||
+                      selectedViewCode == 'SKU_DETAIL_VIEW' ||
+                      selectedViewCode == 'BREWERY_DETAIL_VIEW' ||
+                      selectedViewCode == 'SUPPLIER_DETAIL_VIEW') &&
                       (isActive == 'by_monthly' ||
                         isActive == 'by_yearly' ||
                         isActive == 'by_quarterly') && (
@@ -495,15 +547,19 @@ const Analytics = (props) => {
                             </div>
                           )}
                           {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                            selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
+                            selectedViewCode == 'ANNUALREPORT_DASHBOARD' ||
+                            selectedViewCode == 'SKU_DETAIL_VIEW' ||
+                            selectedViewCode == 'BREWERY_DETAIL_VIEW' ||
+                            selectedViewCode == 'SUPPLIER_DETAIL_VIEW') &&
                             isActive == 'by_quarterly' && (
                               <div className="col-md-5">
                                 <select
                                   className="filterSelect mt-2"
                                   value={qtr}
                                   onChange={onQuarterChange}
+                                  style={{ width: "10vw" }}
                                 >
-                                  <option value="">Select Quarter</option>
+                                  <option value="" style={{ fontSize: "0.9vw" }}>Select Quarter</option>
                                   {[
                                     'Jan - Mar',
                                     'Apr - Jun',

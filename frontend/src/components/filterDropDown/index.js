@@ -2,7 +2,6 @@ import React from "react";
 import "./style.scss";
 
 const FilterDropDown = (props) => {
-  console.log("propd: ", props.type);
   return (
     <div
       className={`card rounded bg-white border-white 
@@ -19,6 +18,7 @@ const FilterDropDown = (props) => {
               className={item.checked ? "li-element-selected" : "li-element"}
               key={item.key}
               onClick={() => {
+                console.log(item)
                 props.onChangeOfFilterDropDown(index, props.type, item.value);
               }}
             >

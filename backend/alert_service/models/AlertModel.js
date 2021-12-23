@@ -1,12 +1,12 @@
-var mongoose = require("mongoose");
-AlertSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const AlertSchema = new mongoose.Schema(
   {
     id: { type: String, unique: true },
     username: String,
     label: {
-      labelId: String, 
+      labelId: String,
     },
-    active : { type: Object},
+    active: { type: Object },
     user: {
       user_id: String,
       user_name: String,
@@ -16,24 +16,27 @@ AlertSchema = new mongoose.Schema(
     transactionIds: [String],
     alerts: [
       {
-        id : String,
+        id: String,
         productID: String,
-        actorOrgId : String,
+        actorOrgId: String,
         event_type_primary: String,
-        event_type_secondary: String, 
-        createdBy: String,    
+        event_type_secondary: String,
+        createdBy: String,
         transactionId: String,
       },
     ],
     alertMode: {
-      mobile : Boolean, default : false,
-      email : Boolean, default : true,
-      telegram : Boolean, default : false, 
-      web_push : Boolean, default : false,
-  }   
+      mobile: Boolean,
+      default: false,
+      email: Boolean,
+      default: true,
+      telegram: Boolean,
+      default: false,
+      web_push: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Alert", AlertSchema);
-

@@ -1,16 +1,17 @@
-var express = require("express");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+const cron = require("node-cron");
+const indexRouter = require("./routes/index");
+const apiRouter = require("./routes/api");
+const apiResponse = require("./helpers/apiResponse");
+const alerts = require("./helpers/alertGenerator");
+const events = require("./models/EventModal");
+const { alertListener } = require("./helpers/listener");
 require("dotenv").config();
-var indexRouter = require("./routes/index");
-var apiRouter = require("./routes/api");
-var apiResponse = require("./helpers/apiResponse");
-var cors = require("cors");
-var alerts = require("./helpers/alertGenerator");
-var events = require("./models/EventModal");
-var cron = require("node-cron");
-var MONGODB_URL = process.env.MONGODB_URL;
-var mongoose = require("mongoose");
+const MONGODB_URL = process.env.MONGODB_URL;
+
+const mongoose = require("mongoose");
 mongoose
   .connect(MONGODB_URL, {
     keepAlive: true,
@@ -18,7 +19,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    //don't show the log when it is test
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("Alert Service is running ... \n");
@@ -28,24 +28,26 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-var db = mongoose.connection;
+const db = mongoose.connection;
+
 const eventEmitter = events.watch();
 eventEmitter.on("change", (change) => {
   if (change.operationType === "insert") {
     const event = change.fullDocument;
-    alerts.generateAlert(event);
+    // alerts.generateAlert(event);
+    alertListener(event);
   } else if (change.operationType === "delete") {
     console.log(
-      "********************************EVENT DELETED********************************",
+      "******************************** EVENT DELETED ********************************",
       change.documentKey._id
     );
   }
 });
 
-const CALCULATE_EXPIRED_CRON_TIME = `00 00 9 * * 1`;
+const CALCULATE_EXPIRED_CRON_TIME = `00 9 * * 1-5`;
 
 cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
-  console.log("Checking Product Expiry", new Date());
+  console.log("RUNNING CRON JOBS ==> ", new Date());
   alerts.checkProductExpiry();
   alerts.checkProductNearExpiry();
 });
@@ -104,7 +106,6 @@ if (process.env.NODE_ENV !== "test") {
 }
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 //To allow cross-origin requests
 app.use(cors());
@@ -113,15 +114,15 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/alertmanagement/api/", apiRouter);
 
-// throw 404 if URL not found
-app.all("*", function (req, res) {
-  return apiResponse.notFoundResponse(res, "API not found");
-});
-
 app.use((err, req, res) => {
   if (err.name == "UnauthorizedError") {
     return apiResponse.unauthorizedResponse(res, err.message);
   }
+});
+
+// throw 404 if URL not found
+app.all("*", function (req, res) {
+  return apiResponse.notFoundResponse(res, "API not found");
 });
 
 module.exports = app;
