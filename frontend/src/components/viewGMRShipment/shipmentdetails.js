@@ -3,8 +3,6 @@ import { formatDate } from "../../utils/dateHelper";
 import "./style.scss";
 
 const ShipmentDetails = (props) => {
-  console.log('Shipment Details');
-  console.log(props.shipments);
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -38,9 +36,7 @@ const ShipmentDetails = (props) => {
             From
           </h6>
           <li className='mb-1'>{props.shipments.supplier?.id}</li>
-            <li className='mb-1'>
-              {props.shipments.supplier?.locationId}
-            </li>
+          <li className='mb-1'>{props.shipments.supplier?.locationId}</li>
           <h6
             className='poheads potext mt-3 mb-3  text-white'
             style={{ visibility: "hidden" }}
@@ -48,9 +44,7 @@ const ShipmentDetails = (props) => {
             To{" "}
           </h6>
           <li className='mb-1'>{props.shipments.receiver?.id}</li>
-            <li className='mb-1'>
-              {props.shipments.receiver?.locationId}
-            </li>
+          <li className='mb-1'>{props.shipments.receiver?.locationId}</li>
           <h6
             className='poheads potext mt-3 mb-3 text-white'
             style={{ visibility: "hidden" }}
@@ -75,12 +69,6 @@ const ShipmentDetails = (props) => {
         </ul>
         <div></div>
       </div>
-      {/* <div className="arrow float-right" onClick={() => {
-           props.setMenuShip(!props.menuShip)
-            props.setHighLight(false);
-          } }><img src={props.menuShip?Down:traceDrop} alt="actions" height="7" width ="12"
-
-          /></div> */}
     </div>
   );
 };

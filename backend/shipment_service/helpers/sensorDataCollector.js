@@ -13,7 +13,8 @@ exports.saveSensorData = async (sensorData) => {
   const sensor = new SensorModel({
     sensorId: sensorData.id,
     vehicleId: sensorData.vehicleID,
-    timepstamp: sensorData.timepstamp,
+    shipmentId: sensorData.shipmentId,
+    timestamp: sensorData.timestamp,
     coordinates: {
       X: sensorData.X,
       Y: sensorData.Y,
@@ -45,4 +46,11 @@ exports.updateSensorData = async (sensorData) => {
     { new: true, upsert: true, sort: { _id: -1 } }
   );
   return sensor;
+};
+
+exports.lastTenSensorData = async (shipmentId) => {
+  const sensorsData = await SensorModel.find({ shipmentId: shipmentId })
+    .sort({ _id: -1 })
+    .limit(10);
+  return sensorsData;
 };

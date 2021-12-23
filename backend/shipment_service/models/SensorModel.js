@@ -1,16 +1,12 @@
 const mongoose = require("mongoose");
 const SensorSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      unique: true,
-    },
     sensorId: {
       type: String,
       required: true,
     },
     shipmentId: String,
-    timepstamp: {
+    timestamp: {
       type: Number,
     },
     coordinates: {
@@ -27,11 +23,11 @@ const SensorSchema = new mongoose.Schema(
       Y: Number,
       Z: Number,
     },
-    vehicleID: String,
+    vehicleId: String,
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("sensor", SensorSchema);
+module.exports = mongoose.model("sensordatalog", SensorSchema);

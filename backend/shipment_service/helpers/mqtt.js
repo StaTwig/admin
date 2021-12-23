@@ -25,17 +25,17 @@ exports.MqttConnection = (io) => {
     client.on("message", async (topic, messageArray) => {
       messageArray = JSON.parse(messageArray.toString());
       for (const message of messageArray) {
-        console.log(message);
         let sensorData;
         if (topic == "/test/vacus/sensor") {
-          message.shipmentId =
-            (await getCurrentShipment(message.vehicleID).id) || null;
+          console.log("Sensor Data:", message);
+          const result = await getCurrentShipment(message.vehicleID);
+          message.shipmentId = result.id || null;
           sensorData = await saveSensorData(message);
+          io.to(sensorData.shipmentId).emit("sensorData", sensorData);
+          console.log(sensorData);
         } else {
           sensorData = await updateSensorData(message);
         }
-        io.to(message.shipmentId).emit("sensorData", sensorData);
-        console.log(sensorData);
       }
     });
   } catch (e) {

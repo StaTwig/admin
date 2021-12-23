@@ -5,6 +5,7 @@
 const http = require("http");
 const { app, Server } = require("../app");
 const { MqttConnection } = require("../helpers/mqtt");
+const { lastTenSensorData } = require("../helpers/sensorDataCollector");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -43,9 +44,13 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
-  socket.on("join", (shipmentId) => {
-    socket.join(shipmentId);
+  socket.on("join", async (shipmentId) => {
+    console.log("join ======== ", shipmentId);
+    await socket.join(shipmentId);
+    // const sensorsData = await lastTenSensorData(shipmentId);
+    // io.to(shipmentId).emit("sensorData", sensorsData);
   });
+
   socket.on("disconnect", () => {
     console.log("disconnected");
   });

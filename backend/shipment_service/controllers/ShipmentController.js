@@ -2088,9 +2088,9 @@ exports.updateTrackingStatus = [
     try {
       const data = req.body;
       const currentDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      data.shipmentUpdates?.updatedOn = currentDateTime;
-      data.shipmentUpdates?.updatedBy = req.user.id;
-      data.shipmentUpdates?.status = "UPDATED";
+      data.shipmentUpdates.updatedOn = currentDateTime;
+      data.shipmentUpdates.updatedBy = req.user.id;
+      data.shipmentUpdates.status = "UPDATED";
       await ShipmentModel.updateOne(
         { id: req.body.id },
         { $push: { shipmentUpdates: data.shipmentUpdates } }
