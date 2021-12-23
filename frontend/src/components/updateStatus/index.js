@@ -8,13 +8,18 @@ import FailPopup from "./failPopup";
 import {
   updateTrackingStatus,
   uploadImage,
+  getViewShipmentGmr
 } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
 import { FormControlLabel, Switch } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
+import { useDispatch } from "react-redux";
+
 const UpdateStatus = (props) => {
+
+  const dispatch = useDispatch();
   const profile = useSelector((state) => {
     return state.user;
   });
@@ -31,6 +36,7 @@ const UpdateStatus = (props) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   // const [isActive, setActive] = useState(false)
+  const [shipment, setShipment] = useState({});
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
@@ -53,6 +59,17 @@ const UpdateStatus = (props) => {
     checked: {},
     track: {},
   })(Switch);
+  React.useEffect(() => {
+    async function fetchData() {
+      const result = await dispatch(getViewShipmentGmr(props.match.params.id));
+      if (result) {
+        setShipment(result);
+      } else {
+        setShipment({});
+      }
+    }
+    fetchData();
+  }, [dispatch, props.match.params.id]);
 
   const clearImage = () => {
     setPhoto("");
@@ -99,7 +116,7 @@ const UpdateStatus = (props) => {
 
   const closeModal = () => {
     setOpenUpdatedStatus(false);
-    props.history.push("/viewshipment/" + id);
+    props.history.push(`/${shipment.isCustom === true ? `viewgmrshipment` : `viewshipment`}/${id}`);
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
@@ -561,7 +578,7 @@ const UpdateStatus = (props) => {
                     <button
                       type='button'
                       className='btn btn-outline-primary mr-3'
-                      onClick={() => props.history.push(`/viewshipment/${id}`)}
+                      onClick={() => props.history.push(`/${shipment.isCustom === true ? `viewgmrshipment` : `viewshipment`}/${id}`)}
                     >
                       Cancel
                     </button>

@@ -305,9 +305,9 @@ const CreateShipment = (props) => {
     let errorMsg = '';
     products.forEach((p) => {
       if (p.productQuantity < 1) { error = true; errorMsg = 'product quantity'; }
-      else if (!p.batchNumber) {
-        error = true; errorMsg = 'batch number';
-      }
+      // else if (!p.batchNumber) {
+      //   error = true; errorMsg = 'batch number';
+      // }
     });
     if (!error) {
       const data = {
@@ -366,10 +366,12 @@ const CreateShipment = (props) => {
         console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
-      } else if (check === 2) {
-        setShipmentError("Check Batch Number");
-        setOpenShipmentFail(true);
-      } else {
+      }
+      // else if (check === 2) {
+      //   setShipmentError("Check Batch Number");
+      //   setOpenShipmentFail(true);
+      // }
+      else {
         // let i, j;
         // let nn = data.products.length;
         // for (i = 0; i < data.products.length; i++) {

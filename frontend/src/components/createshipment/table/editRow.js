@@ -192,9 +192,9 @@ const EditRow = (props) => {
   };
 
   return (
-    <div className='row ml-3 mr-1'>
+    <div className='row ml-1 mr-1'>
       <div className='trow row mr-1 col'>
-        <div className='col pl-4 tcell'>
+        <div className='col tcell'>
           <div className=' p-0'>
             <div className='d-flex flex-column'>
               <div className='title recived-text'>
