@@ -102,7 +102,14 @@ export const getNewConfig = (data) => {
     }
   };
 };
-
+export const setNewConfig = async (data) => {
+  try {
+    const result = await axios.post(config().setNewConfig, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
 export const getAllOrganisationStats = (param = '') => {
   return async (dispatch) => {
     try {

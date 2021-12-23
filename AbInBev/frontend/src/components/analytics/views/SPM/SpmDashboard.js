@@ -3,15 +3,18 @@ import profile from "../../../../assets/user.png";
 import {
   getNewConfig,
   getSupplierPerformanceByOrgType,
+  setNewConfig,
 } from "../../../../actions/analyticsAction";
 import { useDispatch } from "react-redux";
 import "./SpmDashBoard.scss";
 import cancelIcon from "../../../../assets/icons/cross.png";
+import SuccessPopUp from "../../../../shared/PopUp/successPopUp";
 
 const SpmDashboard = (props) => {
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
   const [temp, setTemp] = useState(null);
   const [supplierPerformances, setSupplierPerformances] = useState([]);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [dates, setDates] = useState([]);
   const [persentages, setPercentages] = useState([]);
   const [openEditTargets, setOpenEditTargets] = useState(false);
@@ -71,13 +74,6 @@ const SpmDashboard = (props) => {
     return res;
   };
   useEffect(() => {
-    (async () =>{
-      let configs = await dispatch(getNewConfig({district: 'BELGAUM', vendorType: 'S1'}));
-      // console.log(configs.data[0]);
-      let tmp = config;
-      Object.assign(tmp, configs.data[0]);
-      console.log(tmp);
-    })();
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
       pushdates.push(i);
@@ -95,11 +91,28 @@ const SpmDashboard = (props) => {
     // console.log(dates)
   }, []);
 
-const saveConfig = () => {
-  console.log(state, configDistrict, selectedType)
+const saveConfig = async () => {
+  let temp = config;
+  temp[`district`] = configDistrict;
+  temp[`state`] = state;
+  temp[`vendorType`] = selectedType;
+  let res = await setNewConfig(temp);
+  if(res.status === 200){
+    setOpenSetRating(false);
+    setOpenEditTargets(false);
+    setopenSelectSuplier(false);
+  }
 }
   const dispatch = useDispatch();
   useEffect(() => {
+    (async () =>{
+      let configs = await dispatch(getNewConfig({district: configDistrict, vendorType: selectedType}));
+      // console.log(configs.data[0]);
+      // let tmp = config;
+      // Object.assign(tmp, configs.data[0]);
+      setConfig(configs.data[0]);
+    })();
+
     (async () => {
       const result = await dispatch(getSupplierPerformanceByOrgType());
       let _spm = result.data;
@@ -115,7 +128,7 @@ const saveConfig = () => {
       //   setConfig(configs.data[0]);
       // }
     })();
-  }, []);
+  }, [configDistrict, selectedType]);
 
   const typeSelected = (type) => {
     setSelectedType(type);
@@ -135,6 +148,7 @@ const saveConfig = () => {
 
   return (
     <div>
+      {showSuccessPopup && <SuccessPopUp message={"config set succesfully"}/>}
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
@@ -419,7 +433,7 @@ const saveConfig = () => {
                         setTemp(e.target.value);
                       }}
                     >
-                      <option value="">Select</option>
+                      <option>Select</option>
                       {persentages.map((item, index) => (
                         <option key={index} value={item}>
                           {item}
@@ -437,14 +451,15 @@ const saveConfig = () => {
                     <select
                       className="filterSelect-1 mt-2"
                       value={config.leadTime.target}
+                      name="leadtime"
                       onChange={(e) => {
                         let temp = config;
                         temp.leadTime.target = e.target.value;
                         setConfig(temp);
-                        console.log(temp);
+                        setTemp(e.target.value);
                       }}
                     >
-                      <option value="">Select</option>
+                      <option>Select</option>
                       {dates.map((date, index) => (
                         <option key={index} value={date}>
                           {date}
@@ -468,6 +483,7 @@ const saveConfig = () => {
                         temp.breakageBottle.target = e.target.value;
                         console.log(temp);
                         setConfig(temp);
+                        setTemp(e.target.value);
                         // debugger
                         console.log(config)
                       }}
@@ -495,6 +511,7 @@ const saveConfig = () => {
                         temp.dirtyBottle.target = e.target.value;
                         console.log(temp);
                         setConfig(temp);
+                        setTemp(e.target.value);
                       }}
                     >
                       <option value="">Select</option>
@@ -526,6 +543,7 @@ const saveConfig = () => {
                         let temp = config;
                         temp.warehouseCapacity.target = e.target.value;
                         setConfig(temp);
+                        setTemp(e.target.value);
                       }}
                     />
                   </td>
@@ -542,6 +560,7 @@ const saveConfig = () => {
                         let temp = config;
                         temp.bottleCapacity.target = e.target.value;
                         setConfig(temp);
+                        setTemp(e.target.value);
                       }}
                     />
                   </td>
@@ -783,6 +802,7 @@ const saveConfig = () => {
                               let temp = config;
                               temp.returnRate.target = e.target.value;
                               setConfig(temp);
+                        setTemp(e.target.value);
                             }}
                           >
                             {item}
@@ -799,6 +819,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -820,6 +841,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -841,6 +863,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -859,6 +882,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -876,6 +900,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -893,6 +918,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.returnRate.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -916,6 +942,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.target = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option value="">Select</option>
@@ -934,6 +961,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -951,6 +979,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -972,6 +1001,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -990,6 +1020,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1007,6 +1038,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1024,6 +1056,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.leadTime.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1047,6 +1080,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.target = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                         style={{ boxShadow: "0px 4px 8px #54265e26" }}
                       >
@@ -1066,6 +1100,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1083,6 +1118,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1099,6 +1135,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                         style={{
                           width: "30%",
@@ -1122,6 +1159,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1139,6 +1177,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1156,6 +1195,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.breakageBottle.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1179,6 +1219,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.target = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option value="">Select</option>
@@ -1197,6 +1238,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1214,6 +1256,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1235,6 +1278,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1254,6 +1298,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1271,6 +1316,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1288,6 +1334,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.dirtyBottle.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1318,6 +1365,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.target = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       />
                     </td>
@@ -1329,6 +1377,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1346,6 +1395,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1367,6 +1417,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1385,6 +1436,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1402,6 +1454,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1419,6 +1472,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.warehouseCapacity.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1443,6 +1497,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.target = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       />
                     </td>
@@ -1454,6 +1509,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.min.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1471,6 +1527,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.min.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1492,6 +1549,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.min.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1510,6 +1568,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.max.operator = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1527,6 +1586,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.max.value = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1544,6 +1604,7 @@ const saveConfig = () => {
                           let temp = config;
                           temp.bottleCapacity.max.rating = e.target.value;
                           setConfig(temp);
+                        setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
