@@ -14,6 +14,8 @@ import rightArrow from '../../assets/icons/rightarrow.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../actions/userActions';
 import UploadModal from './UploadModal';
+import TargetIconSelected from '../../assets/icons/selectTarget.svg';
+import TargetIconUnSelect from '../../assets/icons/unSelectTarget.svg'
 
 const Sidebar = (props) => {
   const { history } = props;
@@ -87,6 +89,24 @@ const Sidebar = (props) => {
                 }
               />
               <div onClick={() => history.push('/inventory')}>Inventory</div>
+            </div>
+          </div>
+          <div
+            className={
+              history.location.pathname.includes('targets')
+                ? 'gds-links bord-white'
+                : 'gds-links'
+            }
+          >
+            <div className="gdsl-in">
+              <img
+                src={
+                  history.location.pathname.includes('targets')
+                    ? InventoryIconSelected
+                    : InventoryIcon
+                }
+              />
+              <div onClick={() => history.push('/targets')}>Targets</div>
             </div>
           </div>
           {/* <div className="gds-links">
