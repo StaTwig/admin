@@ -12,6 +12,8 @@ import {
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
+import { FormControlLabel, Switch } from "@material-ui/core";
+import withStyles from "@material-ui/core/styles/withStyles";
 const UpdateStatus = (props) => {
   const profile = useSelector((state) => {
     return state.user;
@@ -19,6 +21,7 @@ const UpdateStatus = (props) => {
   // console.log('Profile');
   // console.log(profile);
   const { id } = props.match.params;
+  const { billNo, quantity, weight } = useState("")
   const [firstName, setFirstName] = useState("");
   const [organisationName, setOrganisationName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -27,10 +30,29 @@ const UpdateStatus = (props) => {
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // const [isActive, setActive] = useState(false)
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
+
+  const onToggle = (value) => {
+    // setActive(value.currentTarget.checked)
+    document.getElementById(value.target.id).checked = value.currentTarget.checked;
+  }
+
+  const CustomSwitch = withStyles({
+    switchBase: {
+      '&$checked': {
+        color: "#0b65c1",
+      },
+      '&$checked + $track': {
+        backgroundColor: "#0b65c1",
+      },
+    },
+    checked: {},
+    track: {},
+  })(Switch);
 
   const clearImage = () => {
     setPhoto("");
@@ -102,6 +124,9 @@ const UpdateStatus = (props) => {
         enableReinitialize={true}
         initialValues={{
           shipmentId: id,
+          airWayBillNo: billNo,
+          quantity: quantity,
+          weight: weight,
           firstName: profile.firstName,
           organisationName: profile.organisation,
           organisationLocation: profile.location,
@@ -160,6 +185,25 @@ const UpdateStatus = (props) => {
                           value={values.shipmentId}
                         />
                       </div>
+                      {props.user.emailId === 'gmr@statledger.io' ? (
+                        <div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Airway Bill No
+                            </label>{values.airWayBillNo}
+                          </div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Quantity
+                            </label>{values.quantity}
+                          </div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Weight
+                            </label>{values.weight}
+                          </div>
+                        </div>
+                      ) : ('')}
                       {/* {errors.shipmentId && touched.shipmentId && (
                         <span className="error-msg text-danger row justify-content-end col-8">
                           {errors.shipmentId}
@@ -229,68 +273,160 @@ const UpdateStatus = (props) => {
                           </span>
                         )} */}
                     </div>
-
-                    <h6 className='poheads potext m-4'>Comment</h6>
-                    <div className='panel commonpanle mb-5'>
-                      <div className='form-group mb-0'>
-                        <input
-                          type='text'
-                          className='form-control mb-2'
-                          name='comments'
-                          //style={{ flexBasis: "100%" }}
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder='Enter comments here...'
-                          value={values.comments}
-                        />
-                      </div>
-                      {errors.comments && touched.comments && (
-                        <span className='error-msg text-danger'>
-                          {errors.comments}
-                        </span>
-                      )}
-                      {/* <div className="row mt-3 justify-content-end">
-                        <span className="col row col-6 justify-content-end text-secondary">
-                          Should send an alert?
-                        </span>
-                        <div className="col col-2 ml-2 custom-control custom-radio">
-                          <input
-                            type="radio"
-                            className="custom-control-input"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value="True"
-                            id="yesradio"
-                            name="alerttrue"
-                          />
-                          <label
-                            className="custom-control-label"
-                            for="yesradio"
-                          >
-                            Yes
-                          </label>
+                    {props.user.emailId === 'gmr@statledger.io' ? (
+                      <div>
+                        <h6 className='poheads potext m-4'>
+                          Shipment Cargo Status
+                        </h6>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>Accepatance Date</label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='acceptanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={values.acceptanceDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div className="appearDate">
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle1"
+                                />
+                              }
+                            />
+                          </div>
                         </div>
-                        <div className="col col-1 pl-2 custom-control custom-radio">
-                          <input
-                            type="radio"
-                            className="custom-control-input"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value="False"
-                            id="noradio"
-                            name="alerttrue"
-                          />
-                          <label className="custom-control-label" for="noradio">
-                            No
-                          </label>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Customs clearance Date
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='customsClearanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={values.customsClearanceDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle2"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Last Status
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='lastStatus'
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              value={values.lastStatus}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle3"
+                                />
+                              }
+                            />
+                          </div>
                         </div>
                       </div>
-                      {errors.alerttrue && touched.alerttrue && (
-                        <span className="error-msg text-danger row justify-content-end col-12">
-                          {errors.alerttrue}
-                        </span>
-                      )} */}
-                    </div>
+                    ) : (
+                      <div>
+                        <h6 className='poheads potext m-4'>Comment</h6>
+                        <div className='panel commonpanle mb-5'>
+                          <div className='form-group mb-0'>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='comments'
+                              //style={{ flexBasis: "100%" }}
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              placeholder='Enter comments here...'
+                              value={values.comments}
+                            />
+                          </div>
+                          {errors.comments && touched.comments && (
+                            <span className='error-msg text-danger'>
+                              {errors.comments}
+                            </span>
+                          )}
+                          {/* <div className="row mt-3 justify-content-end">
+                            <span className="col row col-6 justify-content-end text-secondary">
+                              Should send an alert?
+                            </span>
+                            <div className="col col-2 ml-2 custom-control custom-radio">
+                              <input
+                                type="radio"
+                                className="custom-control-input"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value="True"
+                                id="yesradio"
+                                name="alerttrue"
+                              />
+                              <label
+                                className="custom-control-label"
+                                for="yesradio"
+                              >
+                                Yes
+                              </label>
+                            </div>
+                            <div className="col col-1 pl-2 custom-control custom-radio">
+                              <input
+                                type="radio"
+                                className="custom-control-input"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value="False"
+                                id="noradio"
+                                name="alerttrue"
+                              />
+                              <label className="custom-control-label" for="noradio">
+                                No
+                              </label>
+                            </div>
+                          </div>
+                          {errors.alerttrue && touched.alerttrue && (
+                            <span className="error-msg text-danger row justify-content-end col-12">
+                              {errors.alerttrue}
+                            </span>
+                          )} */}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className='col '>
                     <div className='row'>
@@ -393,6 +529,30 @@ const UpdateStatus = (props) => {
                         </div>
                       )}
                     </div>
+                    {props.user.emailId === 'gmr@statledger.io' ? (
+                      <div>
+                        <h6 className='poheads potext m-4'>Comment</h6>
+                        <div className='panel commonpanle mb-5'>
+                          <div className='form-group mb-0'>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='comments'
+                              //style={{ flexBasis: "100%" }}
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              placeholder='Enter comments here...'
+                              value={values.comments}
+                            />
+                          </div>
+                          {errors.comments && touched.comments && (
+                            <span className='error-msg text-danger'>
+                              {errors.comments}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ) : ('')}
                   </div>
                 </div>
 
