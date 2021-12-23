@@ -63,10 +63,10 @@ const Analytics = (props) => {
   const [isActive, setIsActive] = useState('by_yearly');
   const [Otype, setOtype] = useState('ALL_VENDORS');
   const [selectedViewCode, setSelectedViewCode] = useState(
-    'ANNUALREPORT_DASHBOARD',
+    'SPM_DASHBOARD',
   );
   const [selectedModule, setSelectedModule] = useState(
-    'ANNUALREPORT_DASHBOARD',
+    'SPM_DASHBOARD',
   );
   const [annualReportButton, setannualReportButton] = useState('btn active');
   const [inventoryButton, setInventoryButton] = useState('btn');

@@ -90,11 +90,11 @@ export const getAllBrands = () => {
   };
 };
 
-export const getNewConfig = () => {
+export const getNewConfig = (data) => {
   return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(config().getNewConfig);
+      const result = await axios.get(config().getNewConfig + `?district=${data.district}&vendorType=${data.vendorType}`); //BELGAUM S1
       dispatch(turnOff());
       return result.data;
     } catch (e) {
