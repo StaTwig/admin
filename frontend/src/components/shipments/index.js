@@ -16,7 +16,7 @@ import {
   getOutboundShipments,
   getSupplierAndReceiverList,
   getShipmentIds,
-  getGMRShipments
+  getGMRShipments,
 } from "../../actions/shipmentActions";
 import Received from "../../assets/icons/Received1.svg";
 import Sent from "../../assets/icons/Sent.png";
@@ -54,15 +54,11 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (props.user.emailId === 'gmr@statledger.io') {
-        const inboundRes = await getGMRShipments(
-            0,
-            limit
-        );
+      if (props.user.emailId === "gmr@statledger.io") {
+        const inboundRes = await getGMRShipments(0, limit);
         setOutboundShipments(inboundRes.data.data);
         setCount(inboundRes.data.count);
-      }
-      else {
+      } else {
         if (visible === "one") {
           const inboundRes = await getInboundShipments(
             "",
@@ -105,15 +101,11 @@ const ShipmentAnalytic = (props) => {
     const recordSkip = (pageNum - 1) * limit;
 
     setSkip(recordSkip);
-    if (props.user.emailId === 'gmr@statledger.io') {
-      const inboundRes = await getGMRShipments(
-        recordSkip,
-        limit
-      );
+    if (props.user.emailId === "gmr@statledger.io") {
+      const inboundRes = await getGMRShipments(recordSkip, limit);
       setInboundShipments(inboundRes.data.data);
       setCount(inboundRes.data.count);
-    }
-    else {
+    } else {
       if (visible === "one") {
         const inboundRes = await getInboundShipments(
           idFilter,
@@ -150,7 +142,7 @@ const ShipmentAnalytic = (props) => {
     coloumn4: "To",
     coloumn6: "Status ",
 
-    img1: <img src={mon} width='16' height='16' alt='' />,
+    img1: <img src={mon} width='16' height='16' alt='Monday' />,
     img2: <img src={calender} width='16' height='16' alt='Calender' />,
     img3: <img src={Received} width='16' height='16' alt='Received' />,
     img4: <img src={Sent} width='16' height='16' alt='Sent' />,
@@ -314,8 +306,7 @@ const ShipmentAnalytic = (props) => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    if (props.user.emailId === 'gmr@statledger.io')
-      rtnArr = outboundShipments;
+    if (props.user.emailId === "gmr@statledger.io") rtnArr = outboundShipments;
     return rtnArr ? rtnArr : [];
   };
 
@@ -396,7 +387,13 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to={props.user.emailId === 'gmr@statledger.io' ? `/createshipment` : `/newshipment`}>
+            <Link
+              to={
+                props.user.emailId === "gmr@statledger.io"
+                  ? `/createshipment`
+                  : `/newshipment`
+              }
+            >
               <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
@@ -413,10 +410,11 @@ const ShipmentAnalytic = (props) => {
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") && (props.user.emailId !== 'gmr@statledger.io') && (
-        <Tiles {...props} setData={setData} />
-      )}
-      { (props.user.emailId !== 'gmr@statledger.io') && 
+      {isAuthenticated("shipmentAnalytics") &&
+        props.user.emailId !== "gmr@statledger.io" && (
+          <Tiles {...props} setData={setData} />
+        )}
+      {props.user.emailId !== "gmr@statledger.io" && (
         <div className='mt-4'>
           <Tabs
             {...props}
@@ -426,12 +424,16 @@ const ShipmentAnalytic = (props) => {
             setShowExportFilter={setShowExportFilter}
           />
         </div>
-      }
+      )}
       <div className='full-width-ribben mt-4'>
         <TableFilter
           data={headers}
           shipmentIdList={shipmentIdList}
-          supplierReceiverList={props.user.emailId === 'gmr@statledger.io' ? [] : supplierReceiverList}
+          supplierReceiverList={
+            props.user.emailId === "gmr@statledger.io"
+              ? []
+              : supplierReceiverList
+          }
           setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}

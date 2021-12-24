@@ -152,8 +152,9 @@ export function config() {
       getExportFileForOutboundPurchaseOrdersUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/exportOutboundPurchaseOrders`,
       getAllManageAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/getAllAlerts`,
       createUpdateAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/createNewAlert`,
-      requestModalAlertUrl:`${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/getRequestById?id=`,
-      updateStatusModalAlert:`${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/updateRequest?id=`,
+      requestModalAlertUrl: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/getRequestById?id=`,
+      updateStatusModalAlert: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/updateRequest?id=`,
+      temperatureSocketUrl: `ws://localhost:3002`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -290,8 +291,8 @@ export function config() {
       getExportFileForOutboundPurchaseOrdersUrl: `${TEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
       getAllManageAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
       createUpdateAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
-      requestModalAlertUrl:`${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
-      updateStatusModalAlert:`${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
+      requestModalAlertUrl: `${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
+      updateStatusModalAlert: `${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -419,8 +420,9 @@ export function config() {
       getExportFileForOutboundPurchaseOrdersUrl: `${PROD_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
       getAllManageAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
       createUpdateAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
-      requestModalAlertUrl:`${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
-      updateStatusModalAlert:`${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
+      requestModalAlertUrl: `${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
+      updateStatusModalAlert: `${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
+      temperatureSocketUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/socket/`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -555,12 +557,12 @@ export function config() {
       getExportFileForOutboundPurchaseOrdersUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/exportOutboundPurchaseOrders`,
       getAllManageAlertsUrl: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAllAlerts`,
       createUpdateAlertsUrl: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
-      requestModalAlertUrl:`${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
-      updateStatusModalAlert:`${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
+      requestModalAlertUrl: `${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
+      updateStatusModalAlert: `${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }

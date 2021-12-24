@@ -4,12 +4,11 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import {
   getViewShipment,
-  fetchIotEnabledApiResponse
+  fetchIotEnabledApiResponse,
 } from "../../actions/shipmentActions";
 import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
-import { config } from "../../config";
 
 const ViewGMRShipmentContainer = (props) => {
   const [trackData, setTrackData] = useState({});
@@ -75,20 +74,20 @@ const ViewGMRShipmentContainer = (props) => {
     fetchIotEnabledStatus();
   }, [props.match.params.id]);
 
-  const latestIotShipmentData = useIotShipmentData(
-    config().trackLatestShipmentData.replace(
-      ":shipmentId",
-      props.match.params.id
-    ),
-    iotEnabledStatus
-  );
-  const lastTenIotShipmentData = useIotShipmentData(
-    config().trackLastTenIotShipmentData.replace(
-      ":shipmentId",
-      props.match.params.id
-    ),
-    iotEnabledStatus
-  );
+  // const latestIotShipmentData = useIotShipmentData(
+  //   config().trackLatestShipmentData.replace(
+  //     ":shipmentId",
+  //     props.match.params.id
+  //   ),
+  //   iotEnabledStatus
+  // );
+  // const lastTenIotShipmentData = useIotShipmentData(
+  //   config().trackLastTenIotShipmentData.replace(
+  //     ":shipmentId",
+  //     props.match.params.id
+  //   ),
+  //   iotEnabledStatus
+  // );
 
   const openInTrackingPage = () => {
     props.history.push(`/tracing/${props.match.params.id}?status=shipmentView`);
@@ -104,8 +103,8 @@ const ViewGMRShipmentContainer = (props) => {
             trackData={trackData}
             shippmentChainOfCustodyData={shippmentChainOfCustodyData}
             imagesData={imagesData}
-            latestIotShipmentData={latestIotShipmentData}
-            lastTenIotShipmentData={lastTenIotShipmentData}
+            // latestIotShipmentData={latestIotShipmentData}
+            // lastTenIotShipmentData={lastTenIotShipmentData}
             iotEnabledStatus={iotEnabledStatus}
             openInTrackingPage={openInTrackingPage}
             {...props}

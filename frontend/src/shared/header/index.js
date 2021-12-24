@@ -66,7 +66,7 @@ const Header = (props) => {
   const [limit, setLimit] = useState(10);
   const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [transitNum, setTransitValue] = useState({})
+  const [transitNum, setTransitValue] = useState({});
   const filterOptions = createFilterOptions({
     //matchFrom: "start",
     stringify: (option) => option._id,
@@ -107,15 +107,14 @@ const Header = (props) => {
     );
 
     axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) =>
-    setTransitValue(
+      setTransitValue(
         ...new Set(
           resp.data.data.map((item) => {
-            debugger
             return item;
           })
-        ),
-    )
-  );
+        )
+      )
+    );
   }
 
   const closeModalFail = () => {

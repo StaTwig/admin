@@ -38,16 +38,15 @@ const NewShipment = (props) => {
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
-  const [FromOrgLabel, setFromOrgLabel] = useState("Select Organisation Location");
+  const [FromOrgLabel, setFromOrgLabel] = useState(
+    "Select Organisation Location"
+  );
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
-  const [validShipmentID, setValidShipmentID] = useState(false)
-  // const [senderOrgLoc, setSenderOrgLoc] = useState(
-  //   "Select Organisation Location"
-  // );
+  const [validShipmentID, setValidShipmentID] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
@@ -58,16 +57,12 @@ const NewShipment = (props) => {
   );
   const user = useSelector((state) => state.user);
   const [OrderDetails, setOrderDetails] = useState({});
-  // const  [OrderProduct,setOrderProduct] = useState([]);
-  // const [shipmentDate, setShipmentDate] = useState("");
-  // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [productQuantity] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
-  // const [formatedDate, setformatedDate] = "4-21-2021";
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
@@ -93,7 +88,7 @@ const NewShipment = (props) => {
       return { ...provided, opacity, transition };
     },
   };
-  
+
   const handleSOChange = async (item) => {
     setOrderId(item);
     dispatch(turnOn());
@@ -102,17 +97,14 @@ const NewShipment = (props) => {
     dispatch(turnOff());
   };
 
-
   useEffect(() => {
     async function fetchData() {
-
-      
       const result111 = await getProductList();
 
       setProductsList(result111.message);
       console.log(result111);
       const { search } = props.location;
-      console.log(search)
+      console.log(search);
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
 
@@ -125,10 +117,9 @@ const NewShipment = (props) => {
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-console.log(user.organisation)
+      console.log(user.organisation);
       const orgSplit = user.organisation?.split("/");
-      if(orgSplit?.length)
-      setSenderOrganisation([orgSplit[0]]);
+      if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
 
       const organisations = orgs.data;
       setAllOrganisations(
@@ -189,7 +180,7 @@ console.log(user.organisation)
     }
 
     fetchData();
-  }, [ props.location, user.organisation]);
+  }, [props.location, user.organisation]);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -301,16 +292,20 @@ console.log(user.organisation)
       shipmentID,
       products,
     } = values;
-    let errorMsg = '';
+    let errorMsg = "";
     products.forEach((p) => {
-      if (p.productQuantity < 1) { error = true; errorMsg = 'product quantity'; }
-      else if (!p.batchNumber) {error = true; errorMsg = 'batch number';
-    }
+      if (p.productQuantity < 1) {
+        error = true;
+        errorMsg = "product quantity";
+      } else if (!p.batchNumber) {
+        error = true;
+        errorMsg = "batch number";
+      }
     });
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: reset && reset != 'Select Order ID' ? reset : null,
+        poId: reset && reset != "Select Order ID" ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -363,8 +358,7 @@ console.log(user.organisation)
         console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
-      } else if(check===2)
-      {
+      } else if (check === 2) {
         setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
       } else {
@@ -372,7 +366,6 @@ console.log(user.organisation)
         let nn = data.products.length;
         for (i = 0; i < data.products.length; i++) {
           let prdctName = data.products[i].productName;
-          // let qty = parseInt(data.products[i].productQuantity);
           let flag = false;
 
           for (j = 0; j < productsList.length; j++) {
@@ -386,7 +379,6 @@ console.log(user.organisation)
 
           if (!flag) {
             setShipmentError("The product doesn't exist in this inventory");
-            //setShipmentError("Check product quantity");
             setOpenShipmentFail(true);
             break;
           }
@@ -405,7 +397,6 @@ console.log(user.organisation)
               type: "Success",
             });
           } else {
-
             setShipmentError(result.data.message);
             setOpenShipmentFail(true);
             setErrorMessage("Create Shipment Failed");
@@ -413,11 +404,10 @@ console.log(user.organisation)
         }
       }
     } else {
-      setShipmentError("Check "+errorMsg);
+      setShipmentError("Check " + errorMsg);
       setOpenShipmentFail(true);
     }
   };
-
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -481,37 +471,6 @@ console.log(user.organisation)
     }
   };
 
-  /* const onProductChange = (index, item, setFieldValue) => {
-    addProducts.splice(index, 1);
-    let newArr = [...addProducts];
-    newArr.push(item);
-    setFieldValue(
-      "products",
-      newArr.map((row) => ({
-        productId: row.id,
-        quantity: row?.quantity ? row?.quantity : 0,
-        name: row.name,
-        productCategory: row.type,
-        manufacturer: row.manufacturer,
-
-      }))
-    );
-    setAddProducts((prod) => [...newArr]);
-
-    const prodIndex = products.findIndex((p) => p.id === item.id);
-    let newArray = [...products];
-    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
-    setProducts((prod) => [...newArray]);
-  }; */
-
-  // //console.log(allOrganisations,"All org");
-  // async function fetchShipmentDetails(id){
-  //   const result = await dispatch(getViewShipment(id));
-  //   return result;
-  // }
-  // console.log(products,"1");
-  // console.log(addProducts,"2");
-  // console.log(category,"3");
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(
       JSON.stringify(OrderDetails?.products)
@@ -520,17 +479,13 @@ console.log(user.organisation)
     const cloneOrder = OrderDetails;
     cloneOrder.products = inventoryStateClone;
     setOrderDetails(cloneOrder);
-    // setOrderProduct(inventoryStateClone);
   };
 
   function onSearchChange(e) {
-    debugger
-    axios
-      .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) =>{
-        const value = resp.data.data.length > 0 ? true : false
-         setValidShipmentID(value)
-        })
+    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) => {
+      const value = resp.data.data.length > 0 ? true : false;
+      setValidShipmentID(value);
+    });
   }
 
   return (
@@ -554,7 +509,7 @@ console.log(user.organisation)
           shipmentDate: "",
           estimateDeliveryDate: "",
           products: [],
-          reset: OrderId,          
+          reset: OrderId,
         }}
         validate={(values) => {
           const errors = {};
@@ -741,10 +696,7 @@ console.log(user.organisation)
                               }
                             });
                             setFieldValue("fromOrg", senderOrganisation[0]);
-                            setFieldValue(
-                              "fromOrgLoc",
-                              ""
-                            );
+                            setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
                               result.poDetails[0].customer.organisation.id +
@@ -779,7 +731,7 @@ console.log(user.organisation)
                               "rtype",
                               result.poDetails[0].customer.organisation.type
                             );
-                              console.log(result.poDetails[0].products)
+                            console.log(result.poDetails[0].products);
                             let products_temp = result.poDetails[0].products;
                             for (let i = 0; i < products_temp.length; i++) {
                               if (
@@ -824,7 +776,11 @@ console.log(user.organisation)
                     </div>
                   </div>
                   <div className='col-md-6 com-sm-12'>
-                    <label className='name' htmlFor='shipmentID' style={{position:"relative",top:"0.5rem"}}>
+                    <label
+                      className='name'
+                      htmlFor='shipmentID'
+                      style={{ position: "relative", top: "0.5rem" }}
+                    >
                       Reference Shipment ID
                     </label>
                     <input
@@ -839,134 +795,140 @@ console.log(user.organisation)
                         onSearchChange(newInputValue);
                       }}
                       onChange={(event, newValue) => {
-                        console.log("evnt",event, newValue)
+                        console.log("evnt", event, newValue);
                         handleChange(event);
                         onSearchChange(event.target.value);
                       }}
                     />
-                    </div>
-                    </div>
-                    <div className="fetch">
-                      {values.shipmentID.length > 0 ? (
-                        <span
-                          style={{ height: "25px", width: "50px" }}
-                          className='btn btn-fetch'
-                          onClick={async () => {
-                            // setpofetchdisabled(true);
-                            setProducts((p) => []);
-                            setAddProducts((p) => []);
-                            setOrderIdSelected(true);
-                            dispatch(turnOn());
-                            setDisabled(false);
-                            if (values.shipmentID.length == 0) {
-                              setShipmentError("ShipmentID cannot be Empty");
+                  </div>
+                </div>
+                <div className='fetch'>
+                  {values.shipmentID.length > 0 ? (
+                    <span
+                      style={{ height: "25px", width: "50px" }}
+                      className='btn btn-fetch'
+                      onClick={async () => {
+                        // setpofetchdisabled(true);
+                        setProducts((p) => []);
+                        setAddProducts((p) => []);
+                        setOrderIdSelected(true);
+                        dispatch(turnOn());
+                        setDisabled(false);
+                        if (values.shipmentID.length == 0) {
+                          setShipmentError("ShipmentID cannot be Empty");
+                          setOpenShipmentFail(true);
+                          dispatch(turnOff());
+                        } else {
+                          if (validShipmentID) {
+                            let result = await dispatch(
+                              getViewShipment(values.shipmentID)
+                            );
+
+                            if (result.status !== "RECEIVED") {
+                              values.shipmentID = "";
+                              // alert("The shipment has to be delivered first");
+                              setShipmentError("Shipment has to be delivered");
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
-                            }
-                            else {
-                              if (validShipmentID) {
-                                  let result = await dispatch(
-                                    getViewShipment(values.shipmentID)
-                                  );
-
-                                  if (result.status !== "RECEIVED") {
-                                    values.shipmentID = "";
-                                    // alert("The shipment has to be delivered first");
-                                    setShipmentError("Shipment has to be delivered");
-                                    setOpenShipmentFail(true);
-                                    dispatch(turnOff());
-                                  }
-                                  else 
-                                  {
-                                    for (let i = 0; i < result.products?.length; i++) {
-                                      if (result.products[i].productQuantityShipped) {
-                                        result.products[i].productQuantity =
-                                          parseInt(result.products[i].productQuantity) -
-                                          parseInt(
-                                            result.products[i].productQuantityShipped
-                                          );
-                                      }
-                                      result.products[i].orderedQuantity =
-                                        result.products[i].productQuantity;
-                                    }
-                                    dispatch(turnOff());
-                                    setReceiverOrgLoc();
-                                    setReceiverOrgId();
-                                    setFieldValue("fromOrg", "");
-                                    setFieldValue("fromOrgLoc", "");
-                                    setFieldValue("rtype");
-                                    setFieldValue("toOrg", "");
-
-                                    if (result.status === 500) {
-                                      setShipmentError("Check Shipment Reference ID");
-                                      setOpenShipmentFail(true);
-                                    } else {
-                                      setOrderDetails(result);
-                                      let wa = result.receiver.warehouse;
-                                      setFieldValue("toOrgLoc", "");
-                                      settoOrgLocLabel("");
-                                      // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
-                                      let products_temp = result.products;
-                                      for (let i = 0; i < products_temp.length; i++) {
-                                        products_temp[i].manufacturer =
-                                          result.products[i].manufacturer;
-                                        products_temp[i].name =
-                                          result.products[i].productName;
-                                        products_temp[i].productQuantity =
-                                          result.products[i].productQuantity -
-                                          result.products[i].productQuantityTaggedSent;
-                                        products_temp[i].type =
-                                          result.products[i].productCategory;
-                                        delete products_temp[i].productQuantityDelivered;
-                                        products_temp[i].batchNumber = "";
-                                        products_temp[i].id = result.products[i].productID;
-                                      }
-                                      console.log(products_temp);
-                                      if (result.products.length > 0) {
-                                        setProducts((p) => []);
-                                        setAddProducts((p) => []);
-                                        setFieldValue("products", products_temp);
-                                      } else setFieldValue("products", []);
-                                    }
-                                  }
+                            } else {
+                              for (
+                                let i = 0;
+                                i < result.products?.length;
+                                i++
+                              ) {
+                                if (result.products[i].productQuantityShipped) {
+                                  result.products[i].productQuantity =
+                                    parseInt(
+                                      result.products[i].productQuantity
+                                    ) -
+                                    parseInt(
+                                      result.products[i].productQuantityShipped
+                                    );
+                                }
+                                result.products[i].orderedQuantity =
+                                  result.products[i].productQuantity;
                               }
-                              else {
-                                setShipmentError("Invalid ShipmentID Please Enter a Valid ShipmentID");
+                              dispatch(turnOff());
+                              setReceiverOrgLoc();
+                              setReceiverOrgId();
+                              setFieldValue("fromOrg", "");
+                              setFieldValue("fromOrgLoc", "");
+                              setFieldValue("rtype");
+                              setFieldValue("toOrg", "");
+
+                              if (result.status === 500) {
+                                setShipmentError("Check Shipment Reference ID");
                                 setOpenShipmentFail(true);
-                                dispatch(turnOff());
+                              } else {
+                                setOrderDetails(result);
+                                let wa = result.receiver.warehouse;
+                                setFieldValue("toOrgLoc", "");
+                                settoOrgLocLabel("");
+                                // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
+                                let products_temp = result.products;
+                                for (let i = 0; i < products_temp.length; i++) {
+                                  products_temp[i].manufacturer =
+                                    result.products[i].manufacturer;
+                                  products_temp[i].name =
+                                    result.products[i].productName;
+                                  products_temp[i].productQuantity =
+                                    result.products[i].productQuantity -
+                                    result.products[i]
+                                      .productQuantityTaggedSent;
+                                  products_temp[i].type =
+                                    result.products[i].productCategory;
+                                  delete products_temp[i]
+                                    .productQuantityDelivered;
+                                  products_temp[i].batchNumber = "";
+                                  products_temp[i].id =
+                                    result.products[i].productID;
+                                }
+                                console.log(products_temp);
+                                if (result.products.length > 0) {
+                                  setProducts((p) => []);
+                                  setAddProducts((p) => []);
+                                  setFieldValue("products", products_temp);
+                                } else setFieldValue("products", []);
                               }
                             }
-                          }}
-                        >
-                            <span
-                              style={{
-                                position: "relative",
-                                top: "-6px",
-                                fontSize: "12px",
-                                left: "-11px",
-                              }}
-                            >
-                              Fetch
-                            </span>
-                        </span>
-                      ) : (
-                        <span 
-                          style={{ height: "25px", width: "50px" }}
-                          className='btn fetchDisable'
-                        >
-                          <span
-                              style={{
-                                position: "relative",
-                                top: "-6px",
-                                fontSize: "12px",
-                                left: "-11px",
-                              }}
-                            >
-                              Fetch
-                            </span>
-                        </span>
-                      )}
-                        
+                          } else {
+                            setShipmentError(
+                              "Invalid ShipmentID Please Enter a Valid ShipmentID"
+                            );
+                            setOpenShipmentFail(true);
+                            dispatch(turnOff());
+                          }
+                        }
+                      }}
+                    >
+                      <span
+                        style={{
+                          position: "relative",
+                          top: "-6px",
+                          fontSize: "12px",
+                          left: "-11px",
+                        }}
+                      >
+                        Fetch
+                      </span>
+                    </span>
+                  ) : (
+                    <span
+                      style={{ height: "25px", width: "50px" }}
+                      className='btn fetchDisable'
+                    >
+                      <span
+                        style={{
+                          position: "relative",
+                          top: "-6px",
+                          fontSize: "12px",
+                          left: "-11px",
+                        }}
+                      >
+                        Fetch
+                      </span>
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -1081,7 +1043,7 @@ console.log(user.organisation)
                               return;
                             }
                             setFromOrgLabel(v.label);
-                            console.log(values.fromOrgLoc)
+                            console.log(values.fromOrgLoc);
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
@@ -1100,9 +1062,11 @@ console.log(user.organisation)
                           value={
                             values.fromOrgLoc === ""
                               ? "Select Organisation Location"
-                              : { value: values.fromOrgLoc, label: FromOrgLabel}
+                              : {
+                                  value: values.fromOrgLoc,
+                                  label: FromOrgLabel,
+                                }
                           }
-
                           options={senderWarehouses.filter(
                             (ele, ind) =>
                               ind ===
@@ -1331,7 +1295,7 @@ console.log(user.organisation)
                         }`}
                       >
                         <DatePicker
-                        ref={ref1}
+                          ref={ref1}
                           className='date'
                           selected={
                             values.shipmentDate
@@ -1353,7 +1317,12 @@ console.log(user.organisation)
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref1.current.setFocus()} />
+                        <img
+                          src={CalenderIcon}
+                          alt='calenderIcon'
+                          className='Calender-icon'
+                          onClick={() => ref1.current.setFocus()}
+                        />
                         {/* {errors.shipmentDate && touched.shipmentDate && (
                           <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
@@ -1426,7 +1395,12 @@ console.log(user.organisation)
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref2.current.setFocus()}/>
+                        <img
+                          src={CalenderIcon}
+                          alt='calenderIcon'
+                          className='Calender-icon'
+                          onClick={() => ref2.current.setFocus()}
+                        />
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>
@@ -1488,12 +1462,24 @@ console.log(user.organisation)
                   }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              ) : products?.length <= 0 && (<div>
-                <h4 style={{fontSize: "100%", marginRight: '550px', marginLeft: '-105px', color: 'red'}} className="mt-5 ">*No products available</h4>
-                </div> )
-                }
+              ) : (
+                products?.length <= 0 && (
+                  <div>
+                    <h4
+                      style={{
+                        fontSize: "100%",
+                        marginRight: "550px",
+                        marginLeft: "-105px",
+                        color: "red",
+                      }}
+                      className='mt-5 '
+                    >
+                      *No products available
+                    </h4>
+                  </div>
+                )
+              )}
 
-              
               {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
@@ -1631,7 +1617,7 @@ console.log(user.organisation)
                 </div>
               </div> */}
             </div>
-      {errors.products && touched.products && (
+            {errors.products && touched.products && (
               <span className='error-msg text-danger-DD'>
                 {errors.products}
               </span>
