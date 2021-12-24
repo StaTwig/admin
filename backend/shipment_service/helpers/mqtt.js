@@ -31,7 +31,9 @@ exports.MqttConnection = (io) => {
             const result = await getCurrentShipment(message.vehicleID);
             message.shipmentId = result.id || null;
             sensorData = await saveSensorData(message);
-            io.to(sensorData.shipmentId).emit("sensorData", sensorData);
+            if (sensorData.shipmentId) {
+              io.to(sensorData.shipmentId).emit("sensorData", sensorData);
+            }
           } else {
             sensorData = await updateSensorData(message);
           }
