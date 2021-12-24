@@ -15,7 +15,7 @@ const EditTable = (props) => {
             className='col theader text-center pro mr-5'
             style={{ position: "relative", left: "-60px" }}
           >
-            Batch Number*
+            Batch Number
           </div>
           {props.enableDelete && (
             <div className=' ml-2 bg-light align-self-center '>&nbsp;</div>
