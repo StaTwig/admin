@@ -293,6 +293,7 @@ export function config() {
       createUpdateAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
+      temperatureSocketUrl: `wss://test.vaccineledger.com`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -422,7 +423,7 @@ export function config() {
       createUpdateAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/socket/`,
+      temperatureSocketUrl: `wss://vaccineledger.com`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -562,7 +563,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
