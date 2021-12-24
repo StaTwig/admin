@@ -51,6 +51,21 @@ exports.updateSensorData = async (sensorData) => {
 exports.lastTenSensorData = async (shipmentId) => {
   const sensorsData = await SensorModel.find({ shipmentId: shipmentId })
     .sort({ _id: -1 })
-    .limit(10);
+    .limit(50);
   return sensorsData;
+};
+
+exports.getMinMax = async (shipmentId) => {
+  const sensorsData = await SensorModel.find({ shipmentId: shipmentId }).limit(
+    50
+  );
+  let min = Math.min(
+    ...sensorsData.map((sensor) => sensor.temperature)
+  ).toFixed(2);
+  let max = Math.max(
+    ...sensorsData.map((sensor) => sensor.temperature)
+  ).toFixed(2);
+  max = parseInt(max) + parseInt(max - min);
+  min = parseInt(min) - parseInt(max - min);
+  return { min, max };
 };

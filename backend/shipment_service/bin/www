@@ -5,7 +5,10 @@
 const http = require("http");
 const { app, Server } = require("../app");
 const { MqttConnection } = require("../helpers/mqtt");
-const { lastTenSensorData } = require("../helpers/sensorDataCollector");
+const {
+  lastTenSensorData,
+  getMinMax,
+} = require("../helpers/sensorDataCollector");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -43,17 +46,24 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected", socket.id);
-  socket.on("join", async (shipmentId) => {
-    console.log("join ======== ", shipmentId);
-    await socket.join(shipmentId);
-    // const sensorsData = await lastTenSensorData(shipmentId);
-    // io.to(shipmentId).emit("sensorData", sensorsData);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-  });
+  try {
+    console.log("connected ====== > ", socket.id);
+    socket.on("join", async (shipmentId) => {
+      console.log("join ======== > ", shipmentId);
+      await socket.join(shipmentId);
+      const sensorsData = await lastTenSensorData(shipmentId);
+      const minMax = await getMinMax(shipmentId);
+      io.to(shipmentId).emit("graphMeta", minMax);
+      for (const data of sensorsData) {
+        io.to(shipmentId).emit("sensorData", data);
+      }
+    });
+    socket.on("disconnect", () => {
+      console.log("disconnected");
+    });
+  } catch (error) {
+    console.log("SOCKET-IO ERROR", error);
+  }
 });
 
 (async () => {

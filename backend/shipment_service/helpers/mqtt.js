@@ -23,19 +23,21 @@ exports.MqttConnection = (io) => {
     });
 
     client.on("message", async (topic, messageArray) => {
-      messageArray = JSON.parse(messageArray.toString());
-      for (const message of messageArray) {
-        let sensorData;
-        if (topic == "/test/vacus/sensor") {
-          console.log("Sensor Data:", message);
-          const result = await getCurrentShipment(message.vehicleID);
-          message.shipmentId = result.id || null;
-          sensorData = await saveSensorData(message);
-          io.to(sensorData.shipmentId).emit("sensorData", sensorData);
-          console.log(sensorData);
-        } else {
-          sensorData = await updateSensorData(message);
+      try {
+        messageArray = JSON.parse(messageArray.toString());
+        for (const message of messageArray) {
+          let sensorData;
+          if (topic == "/test/vacus/sensor") {
+            const result = await getCurrentShipment(message.vehicleID);
+            message.shipmentId = result.id || null;
+            sensorData = await saveSensorData(message);
+            io.to(sensorData.shipmentId).emit("sensorData", sensorData);
+          } else {
+            sensorData = await updateSensorData(message);
+          }
         }
+      } catch (error) {
+        console.log("SOCKET-IO MQTT ERROR", error);
       }
     });
   } catch (e) {

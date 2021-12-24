@@ -5,19 +5,16 @@ import "./style.scss";
 
 const Chart = (props) => {
   return (
-    <div>
-      <LineChart
-        colors={["#FA7923", "#666"]}
-        id='users-chart'
-        height='220px'
-        data={props.lastTemperatureData}
-        labels={"Temp"}
-        ytitle='Temperature'
-        xtitle='Time'
-        min={30}
-        max={40}
-      />
-    </div>
+    <LineChart
+      colors={["#FA7923", "#666"]}
+      id='users-chart'
+      height='240px'
+      data={props.lastTemperatureData}
+      ytitle='Temperature'
+      xtitle='Time'
+      min={props.metaData.min}
+      max={props.metaData.max}
+    />
   );
 };
 export default Chart;
