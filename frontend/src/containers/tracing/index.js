@@ -4,8 +4,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { trackProduct } from "../../actions/shipmentActions";
 import { chainOfCustody } from "../../actions/shipmentActions";
+import { useTranslation } from 'react-i18next';
 
 const TracingContainer = (props) => {
+const { t, i18n } = useTranslation();
   const [trackData, setTrackData] = useState({});
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
@@ -50,14 +52,15 @@ const TracingContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
           <Tracing
             trackData={trackData}
             poChainOfCustodyData={poChainOfCustodyData}
             shippmentChainOfCustodyData={shippmentChainOfCustodyData}
+            t={t}
             {...props}
           />
         </div>

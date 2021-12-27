@@ -9,10 +9,10 @@ import Modal from "../../shared/modal";
 import LocationDropdown from "./LocationDropdown";
 
 const PopUpLocation = (props) => {
-  console.log(props)
+  const { t } = props;
   // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse] = useState({});
-  const [selectLocation, setSelectLocation] = useState("Select Location");
+  const [selectLocation, setSelectLocation] = useState(t('select_location'));
   const [addedLocationModal, setAddedLocationModal] = useState(false);
   const [alertFlag, setAlertFlag] = useState(false);
 
@@ -54,7 +54,7 @@ const PopUpLocation = (props) => {
     <div className='addLocation'>
       <center>
         <h1 className='addLocationText'>
-          <b>Add Location</b>
+          <b>{t('add_location')}</b>
         </h1>
       </center>
 
@@ -69,7 +69,7 @@ const PopUpLocation = (props) => {
               alt='Location'
             />
             <span className="buttonS">
-              <b>Add New Location</b>
+              <b>{t('add_new_location')}</b>
             </span>
           </button>
         </Link>
@@ -79,7 +79,7 @@ const PopUpLocation = (props) => {
         <center>
           <h6>
             {" "}
-            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
+            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; {t('or')} &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
           </h6>
         </center>
       </div>
@@ -93,7 +93,7 @@ const PopUpLocation = (props) => {
               alt='Location'
             ></img>
             <label htmlFor='Select Location' className='addLocModal pt-3'>
-              <b>Select Location</b>
+              <b>{t('select_location')}</b>
             </label>
             <div
               className={`form-controlAddLoc mr-5 ${
@@ -120,14 +120,14 @@ const PopUpLocation = (props) => {
 
       <div className='wrapper1'>
         <button
-          disabled={selectLocation === "Select Location"}
+          disabled={selectLocation === t('select_location')}
           style={{backgroundColor: '#A6A6A6'}}
-          className={selectLocation === "Select Location" ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
+          className={selectLocation === t('select_location') ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
           onClick={() => {
             updateStatus(wareHouse);
           }}
         >
-          <span>CONTINUE</span>
+          <span>{t('continue')}</span>
         </button>
       </div>
       {addedLocationModal && (

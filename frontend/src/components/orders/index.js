@@ -28,8 +28,7 @@ import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Orders = (props) => {
-
-
+  const { t } = props;
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
@@ -144,12 +143,12 @@ const Orders = (props) => {
   };
 
   const headers = {
-    coloumn1: visible === "one" ? "Order Sent To" : "Order CreatedBy",
-    coloumn2: "Order Date",
-    coloumn3: "Order ID",
-    coloumn4: "Product",
-    coloumn5: "Delivery Location",
-    coloumn6: "Status",
+    coloumn1: visible === "one" ? t('order_sent_to') : t('order_created_by'),
+    coloumn2: t('order_date'),
+    coloumn3: t('order_id'),
+    coloumn4: t('product'),
+    coloumn5: t('delivery_location'),
+    coloumn6: t('status'),
 
     img1: <img src={mon} width='16' height='16' alt='' />,
     img2: <img src={calender} width='16' height='16' alt='' />,
@@ -376,9 +375,9 @@ const Orders = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: "Excel", checked: false },
-      { key: "pdf", value: "PDF", checked: false },
-      { key: "email", value: "Mail", checked: false },
+      { key: "excel", value: t('excel'), checked: false },
+      { key: "pdf", value: t('pdf'), checked: false },
+      { key: "email", value: t('mail'), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -420,7 +419,7 @@ const Orders = (props) => {
   return (
     <div className='orders'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>YOUR ORDERS</h1>
+        <h1 className='breadcrumb'>{t('your_orders')}</h1>
         <div className='d-flex'>
           {isAuthenticated("createOrder") && (
             <Link to='/neworder'>
@@ -433,7 +432,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span style={{ color: "white" }}>
-                  <b>Create New Order</b>
+                  <b>{t('create_new_order')}</b>
                 </span>
               </button>
             </Link>
@@ -454,7 +453,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span>
-                  <b>Import</b>
+                  <b>{t('import')}</b>
                 </span>
                 <img
                   src={dropdownIcon}
@@ -473,14 +472,14 @@ const Orders = (props) => {
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
-                Excel
+                {t('excel')}
               </button>
-              <button className=' btn btn-outline-info'> Other</button>
+              <button className=' btn btn-outline-info'> {t('other')}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
-              title='Import'
+              title={t('import')}
               close={() => closeExcelModal()}
               size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
@@ -527,6 +526,7 @@ const Orders = (props) => {
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
           isReportDisabled={!isAuthenticated("orderExportReport")}
+          t={t}
         />
       </div>
       <div className='ribben-space'>

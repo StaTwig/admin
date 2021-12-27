@@ -3,6 +3,7 @@ import "./style.scss";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Tabs = (props) => {
+  const { t } = props;
   return (
     <div className='tabs'>
       <ul className='nav nav-pills'>
@@ -19,7 +20,7 @@ const Tabs = (props) => {
                 props.visible === "one" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              Orders Sent
+              {t('orders_sent')}
             </div>
           </li>
         )}
@@ -38,7 +39,7 @@ const Tabs = (props) => {
                 props.visible === "two" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              Orders Received
+              {t('orders_received')}
             </div>
           </li>
         )}

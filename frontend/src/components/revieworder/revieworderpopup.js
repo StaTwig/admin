@@ -2,6 +2,7 @@ import React from "react";
 import "./style.scss";
 import Checked from "../../assets/icons/checked.svg";
 const ReviewOrderPopUp = (props) => {
+  const { t } = props;
   return (
     <div className='inventorypopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -13,15 +14,15 @@ const ReviewOrderPopUp = (props) => {
           alt='Checked'
         />
         <div className='alert'>
-          <b> Success!</b>
+          <b> {t('success')}!</b>
         </div>
-        <div className='data'>The New Order has been Created</div>
-        <div className='data mb-4'>Successfully!</div>
+        <div className='data'>{t('order_success')}</div>
+        <div className='data mb-4'>{t('successfully')}!</div>
         <div className='data mb-4'>
-          Order ID-<b>{props.OrderId}</b>
+          {t('order_id')}-<b>{props.OrderId}</b>
         </div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          OK
+          {t('ok')}
         </button>
       </div>
     </div>

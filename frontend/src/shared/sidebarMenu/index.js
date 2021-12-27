@@ -12,7 +12,7 @@ import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 import "./style.scss";
-const SideBar = ({ match, location, user }) => {
+const SideBar = ({ match, location, user, t }) => {
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
@@ -30,7 +30,7 @@ const SideBar = ({ match, location, user }) => {
                 src={url === "/overview" ? HomeIcon : HomeIcon}
                 alt='Overview'
               />
-              <span className='ml-2'>Overview</span>
+              <span className='ml-2'>{t('overview')}</span>
             </Link>
           </li>
         )}
@@ -48,7 +48,7 @@ const SideBar = ({ match, location, user }) => {
                 }
                 alt='Orders'
               />
-              <span className='ml-2'>Orders</span>
+              <span className='ml-2'>{t('orders')}</span>
             </Link>
           </li>
         )}
@@ -83,7 +83,7 @@ const SideBar = ({ match, location, user }) => {
                 }
                 alt='Inventory'
               />
-              <span className='ml-2'>Inventory</span>
+              <span className='ml-2'>{t('inventory')}</span>
             </Link>
           </li>
         )}
@@ -109,7 +109,7 @@ const SideBar = ({ match, location, user }) => {
                 }
                 alt='Shippment'
               />
-              <span className='ml-2'>Shipments</span>
+              <span className='ml-2'>{t('shipments')}</span>
             </Link>
           </li>
         )}
@@ -120,7 +120,7 @@ const SideBar = ({ match, location, user }) => {
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
                 alt='Shippment'
               />
-              <span className='ml-2'>Network</span>
+              <span className='ml-2'>{t('network')}</span>
             </Link>
           </li>
         )}
@@ -131,7 +131,7 @@ const SideBar = ({ match, location, user }) => {
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
                 alt='Track & Trace'
               />
-              <span className='ml-2'>Track & Trace</span>
+              <span className='ml-2'>{t('trackntrace')}</span>
             </Link>
           </li>
         )}
@@ -143,7 +143,7 @@ const SideBar = ({ match, location, user }) => {
                 alt='lastMile'
               />
 
-              <span className='ml-2'>Last Mile</span>
+              <span className='ml-2'>{t('lastmile')}</span>
             </Link>
           </li>
         }

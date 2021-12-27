@@ -43,6 +43,7 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
+  const { t } = props;
   // console.log(ABC)
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
@@ -341,6 +342,7 @@ const Header = (props) => {
     }
   };
   const imgs = config().fetchProfileImage;
+  const search_placeholder = t('search') + ' ' + t('po_id') + '/' + t('shipment_id') + ' /' + t('transit_no');
 
   return (
     <div className='header'>
@@ -365,11 +367,10 @@ const Header = (props) => {
             options={options}
             getOptionLabel={(option) => option._id}
             filterOptions={filterOptions}
-            placeholder='Search PO ID/ Shipment ID/ Transit Number'
+            placeholder={search_placeholder}
             onFocus={(e) => (e.target.placeholder = "")}
             onBlur={(e) =>
-              (e.target.placeholder =
-                "Search PO ID/ Shipment ID/ Transit Number")
+              (e.target.placeholder =search_placeholder)
             }
             inputValue={search}
             onInputChange={(event, newInputValue) => {
@@ -382,7 +383,7 @@ const Header = (props) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label='Search PO ID/ Shipment ID/ Transit Number'
+                label={search_placeholder}
                 margin='normal'
                 variant='outlined'
               />
@@ -435,7 +436,7 @@ const Header = (props) => {
                     }}
                   >
                     <div className='user-notification-head'>
-                      User Notifications
+                      {t('user_notification')}
                     </div>
                     {notifications?.length >= 0 && (
                       <span
@@ -449,7 +450,7 @@ const Header = (props) => {
                           fontSize: "14px",
                         }}
                       >
-                        {newNotifs} new
+                        {newNotifs} {t('new')}
                       </span>
                     )}
                     <div>
@@ -483,7 +484,7 @@ const Header = (props) => {
                                 : "nav-link tab-text"
                             }
                           >
-                            Alerts
+                            {t('alerts')}
                           </div>
                         </li>
                         <li
@@ -506,7 +507,7 @@ const Header = (props) => {
                                 : "nav-link tab-text"
                             }
                           >
-                            Transactions
+                            {t('transactions')}
                           </div>
                         </li>
                       </ul>
@@ -611,7 +612,7 @@ const Header = (props) => {
                                         ) * 1000
                                       )
                                     )}{" "}
-                                    ago
+                                    {t('ago')}
                                   </div>
                                   <img
                                     className='toggle-icon'
@@ -630,7 +631,7 @@ const Header = (props) => {
                                       ) * 1000
                                     )
                                   )}{" "}
-                                  ago
+                                  {t('ago')}
                                 </div>
                                 <img
                                   className='toggle-icon'
@@ -676,7 +677,7 @@ const Header = (props) => {
                             <div className='col text-center mt-3 mr-5'>
                               <div>
                                 <span className='no-notification'>
-                                  No notifications
+                                  {t('no_notifications')}
                                 </span>
                               </div>
                             </div>
@@ -766,19 +767,19 @@ const Header = (props) => {
                       className='slider-item border-top-0 p-1'
                       onClick={() => props.history.push("/profile")}
                     >
-                      My Profile
+                      {t('my_profile')}
                     </div>
                     <div
                       className='slider-item p-1'
                       onClick={() => props.history.push("/settings")}
                     >
-                      Settings
+                      {t('settings')}
                     </div>
                     <div
                       className='slider-item p-1'
                       onClick={() => dispatch(logoutUser())}
                     >
-                      Logout
+                      {t('logout')}
                     </div>
                   </div>
                 </React.Fragment>
