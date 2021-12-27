@@ -288,7 +288,7 @@ const ReceiveShipment = (props) => {
         </div>
         <div className='col-sm-4'>
           <h6 className='heading mt-3 mb-3 ml-3'>Comments</h6>
-          <div className='col panel commonpanle' >
+          <div className='col panel commonpanle'>
             <div className=' pt-2 pb-2 d-flex row'>
               <span
                 onClick={() => setCommentEnabled(false)}
@@ -372,9 +372,7 @@ const ReceiveShipment = (props) => {
               <span style={{ fontSize: "15px" }}>Upload</span>
             </button>
           </div>
-          <div
-            className='upload bg-white panel commonpanle mt-0'
-          >
+          <div className='upload bg-white panel commonpanle mt-0'>
             {photo ? (
               <div>
                 <div
@@ -488,14 +486,13 @@ const ReceiveShipment = (props) => {
           </div>
         </div>
       </div>
-      
+
       <div className='row'>
-        <div className="col-sm-4">
-          <h6 class="heading mt-3 mb-3 ml-3">Product Details</h6>
+        <div className='col-sm-4'>
+          <h6 className='heading mt-3 mb-3 ml-3'>Product Details</h6>
         </div>
       </div>
       <div className='row'>
-
         <ProductList
           shipments={tracking}
           productHighLight={productHighLight}

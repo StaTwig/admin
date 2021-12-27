@@ -61,7 +61,8 @@ const ShipmentSchema = new mongoose.Schema(
       },
     ],
     acceptedRequests: [String],
-    isCustom: false,
+    isCustom: { type: Boolean, default: false },
+    vehicleId: String,
   },
   { timestamps: true }
 );

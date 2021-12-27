@@ -1,22 +1,22 @@
-import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import jwt_decode from 'jwt-decode';
-import Waiting from '../../assets/icons/waiting.png';
+import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import jwt_decode from "jwt-decode";
+import Waiting from "../../assets/icons/waiting.png";
 
-import Selection from './selection';
-import Login from './login';
-import VerifyPassword from './verifyPassword';
-import SignUp from './signUp';
-import './style.scss';
+import Selection from "./selection";
+import Login from "./login";
+import VerifyPassword from "./verifyPassword";
+import SignUp from "./signUp";
+import "./style.scss";
 import {
   sendOtp,
   verifyOtp,
   setCurrentUser,
   registerUser,
-  getUserInfoUpdated
-} from '../../actions/userActions';
-import { turnOff, turnOn } from '../../actions/spinnerActions';
-import setAuthToken from '../../utils/setAuthToken';
+  getUserInfoUpdated,
+} from "../../actions/userActions";
+import { turnOff, turnOn } from "../../actions/spinnerActions";
+import setAuthToken from "../../utils/setAuthToken";
 
 const Home = (props) => {
   const [showSignUpCompletedMessage, setShowSignUpCompletedMessage] =
@@ -24,8 +24,8 @@ const Home = (props) => {
   const [buttonActive, setButtonActive] = useState(0);
   const [steps, setSteps] = useState(1);
   const [continueClick, setContinueClick] = useState(false);
-  const [email, setEmail] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
   const onSendOtp = useCallback(async (email) => {
@@ -65,14 +65,14 @@ const Home = (props) => {
       const token = result.data.data.token;
       setAuthToken(token);
       const decoded = jwt_decode(token);
-      localStorage.setItem('theAbInBevToken', token);
+      localStorage.setItem("theAbInBevToken", token);
       dispatch(setCurrentUser(decoded));
       dispatch(turnOn());
       const r = await getUserInfoUpdated();
       dispatch(turnOff());
-      
-      localStorage.setItem('type', r.data.data.type);
-      props.history.push('/analytics');
+
+      localStorage.setItem("type", r.data.data.type);
+      props.history.push("/analytics");
     } else {
       const err = result.data.message;
       setErrorMessage(err);
@@ -111,7 +111,7 @@ const Home = (props) => {
     } else {
       isEmail = false;
     }
-    var data = {
+    const data = {
       firstName: values.firstName,
       lastName: values.lastName,
       authority: values.authority,
@@ -121,7 +121,7 @@ const Home = (props) => {
         line1: values.line1,
         city: values.district,
         state: values.state,
-        country: '',
+        country: "",
         pincode: values.pincode,
       },
     };
@@ -156,16 +156,16 @@ const Home = (props) => {
   };
 
   return (
-    <div className="home">
-      <div className="container centered scroll-y">
-        <div className="selectUser centered">
+    <div className='home'>
+      <div className='container centered scroll-y'>
+        <div className='selectUser centered'>
           {steps != 1 && (
             <button
-              type="button"
-              className="btn btn-primary btn-circle btn-lg back-button"
+              type='button'
+              className='btn btn-primary btn-circle btn-lg back-button'
               onClick={goBackButton}
             >
-              <i className="fa fa-angle-left"></i>
+              <i className='fa fa-angle-left'></i>
             </button>
           )}
           {steps == 1 && (
@@ -208,27 +208,27 @@ const Home = (props) => {
           {steps == 5 && (
             <>
               {showSignUpCompletedMessage && (
-                <div className="col-sm-6 col-lg-5">
-                  <div className="card">
+                <div className='col-sm-6 col-lg-5'>
+                  <div className='card'>
                     <img
-                      alt=""
+                      alt=''
                       src={Waiting}
-                      height="150"
-                      width="150"
-                      className="align-self-center mt-1 mb-4"
+                      height='150'
+                      width='150'
+                      className='align-self-center mt-1 mb-4'
                     />
-                    <div className="font-weight-bold align-self-center text-center ml-2 mr-2 approve">
+                    <div className='font-weight-bold align-self-center text-center ml-2 mr-2 approve'>
                       Request is pending and you will receive an email/sms after
                       approval
                     </div>
-                    <h4 className="mb-5 text-center">
-                      Click{' '}
+                    <h4 className='mb-5 text-center'>
+                      Click{" "}
                       <a
-                        href="#"
+                        href='#'
                         onClick={() => {
                           setSteps(2);
                         }}
-                        className="btn btn-warning loginButton signUpLink"
+                        className='btn btn-warning loginButton signUpLink'
                       >
                         here
                       </a>

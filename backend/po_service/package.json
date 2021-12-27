@@ -21,7 +21,6 @@
     "move-file": "2.0.0",
     "multer": "^1.4.4",
     "node-excel-export": "^1.4.4",
-    "pdf-creator-node": "^2.2.4",
     "pdfmake": "^0.2.4",
     "redis": "^4.0.1",
     "uniqid": "^5.4.0",

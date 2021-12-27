@@ -13,11 +13,8 @@ const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
 const ProductModel = require("../models/ProductModel");
 const AtomModel = require("../models/AtomModel");
-const logEvent = require("../../../utils/event_logger");
 const Event = require("../models/EventModal");
-const init = require("../logging/init");
 const moment = require("moment");
-const logger = init.getLog();
 const CENTRAL_AUTHORITY_ID = null;
 const CENTRAL_AUTHORITY_NAME = null;
 const CENTRAL_AUTHORITY_ADDRESS = null;
@@ -33,10 +30,9 @@ const util = require("util");
 const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
+const { resolve } = require("path");
 var PdfPrinter = require('pdfmake');
-resolve = require('path').resolve
-
-var fontDescriptors = {
+const fontDescriptors = {
   Roboto: {
     normal: resolve('./controllers/Roboto-Regular.ttf'),
     bold: resolve('./controllers/Roboto-Medium.ttf'),
@@ -44,17 +40,14 @@ var fontDescriptors = {
     bolditalics: resolve('./controllers/Roboto-MediumItalic.ttf')
   }
 }
-var printer = new PdfPrinter(fontDescriptors);
-// var pdf = require("pdf-creator-node");
-
+const printer = new PdfPrinter(fontDescriptors);
 const inventoryUpdate = async (
   id,
   quantity,
   suppId,
   recvId,
   poId,
-  shipmentStatus,
-  next
+  shipmentStatus
 ) => {
   if (shipmentStatus == "CREATED") {
     const suppUpdate = await InventoryModel.update(
@@ -125,7 +118,6 @@ const inventoryUpdate = async (
       }
     );
   }
-  // next("Success")
 };
 
 const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
@@ -178,12 +170,7 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
     event_data.eventType.description = "ORDER";
     if (event) event_data.payload.data = event.payloadData;
 
-    async function compute(event_data) {
-      resultt = await logEvent(event_data);
-      return resultt;
-    }
-    let response = await compute(event_data);
-    console.log("response is", response);
+    await logEvent(event_data);
 
     if (shipmentStatus == "CREATED") {
       const poUpdateShipped = await RecordModel.update(
@@ -592,7 +579,7 @@ exports.createShipment = [
         var products = data.products;
         for (count = 0; count < products.length; count++) {
           data.products[count]["productId"] = data.products[count].productID;
-          inventoryUpdate(
+          await inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,
             suppInventoryId,
@@ -753,10 +740,10 @@ exports.createShipment = [
           Misc: "",
         };
 
-        let token =
+        const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        const bc_response = await axios.post(
+        await axios.post(
           `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
           bc_data,
           {
@@ -765,28 +752,6 @@ exports.createShipment = [
             },
           }
         );
-
-        /*const userData = {
-          stream: shipment_stream,
-          key: shipmentId,
-          address: req.user.walletAddress,
-          data: data,
-        };
-        const response = await axios.post(
-          `${blockchain_service_url}/publish`,
-          userData
-        );
-        await ShipmentModel.findOneAndUpdate(
-          {
-            id: shipmentId,
-          },
-          {
-            $push: {
-              transactionIds: response.data.transactionId,
-            },
-          }
-        );*/
-
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne(
             {
@@ -795,7 +760,7 @@ exports.createShipment = [
             {
               _id: 0,
               taggedShipments: 1,
-              products: 1
+              products: 1,
             }
           );
           let quantityMismatch = false;
@@ -816,8 +781,7 @@ exports.createShipment = [
 
           if (!quantityMismatch)
             throw new Error("Tagged product quantity not available");
-
-          const tagUpdate = await ShipmentModel.findOneAndUpdate(
+          await ShipmentModel.findOneAndUpdate(
             {
               id: shipmentId,
             },
@@ -836,14 +800,7 @@ exports.createShipment = [
             );
           }
         }
-        async function compute(event_data) {
-          resultt = await logEvent(event_data);
-          return resultt;
-        }
-        compute(event_data).then((response) => {
-          // console.log(response);
-        });
-
+        await logEvent(event_data);
         return apiResponse.successResponseWithData(
           res,
           "Shipment Created Successfully",
@@ -899,6 +856,9 @@ exports.newShipment = [
         products: data.products,
       };
       data.shipmentUpdates = updates;
+      data.isCustom
+        ? (data.vehicleId = data.airWayBillNo)
+        : (data.vehicleId = null);
       const shipment = new ShipmentModel(data);
       const result = await shipment.save();
       if (result == null) {
@@ -931,11 +891,9 @@ exports.newShipment = [
         Products: JSON.stringify(data.products),
         Misc: "",
       };
-
-      let token =
+      const token =
         req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-
-      const bc_response = await axios.post(
+      await axios.post(
         `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
         bc_data,
         {
@@ -944,7 +902,6 @@ exports.newShipment = [
           },
         }
       );
-
       return apiResponse.successResponseWithData(
         res,
         "Shipment Created Successfully",
@@ -1152,7 +1109,7 @@ exports.receiveShipment = [
             shipmentRejectionRate =
               ((totalProducts - totalReturns) / totalProducts) * 100;
             data.products[count]["productId"] = data.products[count].productID;
-            inventoryUpdate(
+            await inventoryUpdate(
               products[count].productID,
               products[count].productQuantity,
               suppInventoryId,
@@ -1362,13 +1319,8 @@ exports.receiveShipment = [
 
           event_data.payload.data = data;
           console.log(event_data);
-          async function compute(event_data) {
-            resultt = await logEvent(event_data);
-            return resultt;
-          }
-          compute(event_data).then((response) => {
-            console.log(response);
-          });
+
+          await logEvent(event_data);
 
           return apiResponse.successResponseWithData(
             res,
@@ -1385,10 +1337,6 @@ exports.receiveShipment = [
         return apiResponse.forbiddenResponse(res, "Access denied");
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1812,10 +1760,6 @@ exports.fetchShipments = [
         outboundShipments
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1943,17 +1887,14 @@ exports.viewShipmentGmr = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          await ShipmentModel.findOne({id: req.query.shipmentId})
-            .then( (shipment) => {
-              return apiResponse.successResponseWithData(
-                res,
-                "Shipment",
-                shipment
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err.message);
-            });
+          const shipment = await ShipmentModel.findOne({
+            id: req.query.shipmentId,
+          });
+          return apiResponse.successResponseWithData(
+            res,
+            "Shipment Details",
+            shipment
+          );
         } else {
           return apiResponse.forbiddenResponse(
             res,
@@ -1989,14 +1930,14 @@ exports.fetchGMRShipments = [
     try {
       const { skip, limit } = req.query;
       const count = await ShipmentModel.count({ isCustom: true });
-      const shipments = await ShipmentModel.find({isCustom: true}).skip(parseInt(skip))
-          .limit(parseInt(limit))
-          .sort({ createdAt: -1 });
-      return apiResponse.successResponseWithData(
-        res,
-        "GMR Shipments",
-        {data: shipments, count: count}
-      );
+      const shipments = await ShipmentModel.find({ isCustom: true })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .sort({ createdAt: -1 });
+      return apiResponse.successResponseWithData(res, "GMR Shipments", {
+        data: shipments,
+        count: count,
+      });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -2154,21 +2095,19 @@ exports.updateTrackingStatus = [
   async (req, res) => {
     try {
       const data = req.body;
-      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      data.shipmentUpdates.updatedOn = currDateTime;
+      const currentDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+      data.shipmentUpdates.updatedOn = currentDateTime;
       data.shipmentUpdates.updatedBy = req.user.id;
       data.shipmentUpdates.status = "UPDATED";
-
-      const update = await ShipmentModel.update(
+      await ShipmentModel.updateOne(
         { id: req.body.id },
         { $push: { shipmentUpdates: data.shipmentUpdates } }
       );
-      var datee = new Date();
-      datee = datee.toISOString();
-      var evid = Math.random().toString(36).slice(2);
-      let event_data = {
+      const currentDate = new Date().toISOString();
+      const evid = Math.random().toString(36).slice(2);
+      const event_data = {
         eventID: "ev0000" + evid,
-        eventTime: datee,
+        eventTime: currentDate,
         actorWarehouseId: req.user.warehouseId,
         transactionId: req.body.id,
         eventType: {
@@ -2200,14 +2139,7 @@ exports.updateTrackingStatus = [
           data: req.body,
         },
       };
-      console.log(event_data);
-      async function compute(event_data) {
-        resultt = await logEvent(event_data);
-        return resultt;
-      }
-      compute(event_data).then((response) => {
-        console.log(response);
-      });
+      await logEvent(event_data);
       return apiResponse.successResponse(res, "Status Updated");
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
@@ -3000,10 +2932,6 @@ exports.fetchOutboundShipments = [
         return apiResponse.ErrorResponse(res, err.message);
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -3572,10 +3500,6 @@ exports.fetchairwayBillNumber = [
           return apiResponse.ErrorResponse(res, err.message);
         });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < fetchairwayBillNumber : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -3921,10 +3845,6 @@ exports.exportOutboundShipments = [
         return apiResponse.ErrorResponse(res, err.message);
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -4414,186 +4334,195 @@ exports.trackJourneyOnBlockchain = [
 ];
 
 function matchConditionShipmentOnBlockchain(filters) {
-    console.log("mc", filters)
-    let matchCondition = {
-        $and: []
-    };
-    if (filters.orgType && filters.orgType !== "") {
-        if (
-            filters.orgType === "BREWERY" ||
-            filters.orgType === "S1" ||
-            filters.orgType === "S2" ||
-            filters.orgType === "S3"
-        ) {
-            matchCondition.$and.push({
-                $or: [{
-                        "supplier.org.type": filters.orgType
-                    },
-                    {
-                        "receiver.org.type": filters.orgType
-                    },
-                ],
-            });
-        } else if (filters.orgType === "ALL_VENDORS") {
-            matchCondition.$and.push({
-                $or: [{
-                        "supplier.org.type": "S1"
-                    },
-                    {
-                        "supplier.org.type": "S2"
-                    },
-                    {
-                        "supplier.org.type": "S3"
-                    },
-                    {
-                        "receiver.org.type": "S1"
-                    },
-                    {
-                        "receiver.org.type": "S2"
-                    },
-                    {
-                        "receiver.org.type": "S3"
-                    },
-                ],
-            });
-        }
+  console.log("mc", filters);
+  let matchCondition = {
+    $and: [],
+  };
+  if (filters.orgType && filters.orgType !== "") {
+    if (
+      filters.orgType === "BREWERY" ||
+      filters.orgType === "S1" ||
+      filters.orgType === "S2" ||
+      filters.orgType === "S3"
+    ) {
+      matchCondition.$and.push({
+        $or: [
+          {
+            "supplier.org.type": filters.orgType,
+          },
+          {
+            "receiver.org.type": filters.orgType,
+          },
+        ],
+      });
+    } else if (filters.orgType === "ALL_VENDORS") {
+      matchCondition.$and.push({
+        $or: [
+          {
+            "supplier.org.type": "S1",
+          },
+          {
+            "supplier.org.type": "S2",
+          },
+          {
+            "supplier.org.type": "S3",
+          },
+          {
+            "receiver.org.type": "S1",
+          },
+          {
+            "receiver.org.type": "S2",
+          },
+          {
+            "receiver.org.type": "S3",
+          },
+        ],
+      });
     }
+  }
 
-    if (filters.state && filters.state.length) {
-        matchCondition.$and.push({
-            $or: [{
-                    "supplier.warehouse.warehouseAddress.state": filters.state.toUpperCase(),
-                },
-                {
-                    "receiver.warehouse.warehouseAddress.state": filters.state.toUpperCase(),
-                },
-            ],
-        });
-    }
-    if (filters.district && filters.district.length) {
-        matchCondition.$and.push({
-            $or: [{
-                    "supplier.warehouse.warehouseAddress.city": filters.district.toUpperCase(),
-                },
-                {
-                    "receiver.warehouse.warehouseAddress.city": filters.district.toUpperCase(),
-                },
-            ],
-        });
-    }
-    console.log("mcres", JSON.stringify(matchCondition))
-    return matchCondition;
+  if (filters.state && filters.state.length) {
+    matchCondition.$and.push({
+      $or: [
+        {
+          "supplier.warehouse.warehouseAddress.state":
+            filters.state.toUpperCase(),
+        },
+        {
+          "receiver.warehouse.warehouseAddress.state":
+            filters.state.toUpperCase(),
+        },
+      ],
+    });
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.$and.push({
+      $or: [
+        {
+          "supplier.warehouse.warehouseAddress.city":
+            filters.district.toUpperCase(),
+        },
+        {
+          "receiver.warehouse.warehouseAddress.city":
+            filters.district.toUpperCase(),
+        },
+      ],
+    });
+  }
+  console.log("mcres", JSON.stringify(matchCondition));
+  return matchCondition;
 }
 
 function getShipmentFilterConditionOnBlockhain(filters, warehouseIds) {
-    let matchCondition = {};
-    if (filters.organization && filters.organization !== "") {
-        if (filters.txn_type === "ALL") {
-            matchCondition.$or = [{
-                    "supplier.id": filters.organization,
-                },
-                {
-                    "receiver.id": filters.organization,
-                },
-            ];
-        } else if (filters.txn_type === "SENT") {
-            matchCondition["supplier.id"] = filters.organization;
-        } else if (filters.txn_type === "RECEIVED") {
-            matchCondition["receiver.id"] = filters.organization;
-        }
+  let matchCondition = {};
+  if (filters.organization && filters.organization !== "") {
+    if (filters.txn_type === "ALL") {
+      matchCondition.$or = [
+        {
+          "supplier.id": filters.organization,
+        },
+        {
+          "receiver.id": filters.organization,
+        },
+      ];
+    } else if (filters.txn_type === "SENT") {
+      matchCondition["supplier.id"] = filters.organization;
+    } else if (filters.txn_type === "RECEIVED") {
+      matchCondition["receiver.id"] = filters.organization;
     }
+  }
 
-    if (filters.txn_type && filters.txn_type !== "") {
-        if (filters.txn_type === "SENT") {
-            matchCondition.Status = {
-                $in: ["CREATED", "SENT"]
-            };
-        } else if (filters.txn_type === "RECEIVED") {
-            matchCondition.Status = "RECEIVED";
-        }
+  if (filters.txn_type && filters.txn_type !== "") {
+    if (filters.txn_type === "SENT") {
+      matchCondition.Status = {
+        $in: ["CREATED", "SENT"],
+      };
+    } else if (filters.txn_type === "RECEIVED") {
+      matchCondition.Status = "RECEIVED";
     }
+  }
 
-    if (filters.date_filter_type && filters.date_filter_type.length) {
-        const DATE_FORMAT = "YYYY-MM-DD";
-        if (filters.date_filter_type === "by_range") {
-            let startDate = filters.start_date ? filters.start_date : new Date();
-            let endDate = filters.end_date ? filters.end_date : new Date();
-            matchCondition.createdOn = {
-                $gte: new Date(`${startDate}T00:00:00.0Z`),
-                $lt: new Date(`${endDate}T23:59:59.0Z`),
-            };
-        } else if (filters.date_filter_type === "by_monthly") {
-            let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-            let startDateOfTheMonth = moment(startDateOfTheYear)
-                .add(filters.month - 1, "months")
-                .format(DATE_FORMAT);
-            let endDateOfTheMonth = moment(startDateOfTheMonth)
-                .endOf("month")
-                .format(DATE_FORMAT);
-            console.log(startDateOfTheMonth, endDateOfTheMonth);
-            matchCondition.createdOn = {
-                $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
-                $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`),
-            };
-        } else if (filters.date_filter_type === "by_quarterly") {
-            let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-            let startDateOfTheQuarter = moment(startDateOfTheYear)
-                .quarter(filters.quarter)
-                .startOf("quarter")
-                .format(DATE_FORMAT);
-            let endDateOfTheQuarter = moment(startDateOfTheYear)
-                .quarter(filters.quarter)
-                .endOf("quarter")
-                .format(DATE_FORMAT);
-            console.log(startDateOfTheQuarter, endDateOfTheQuarter);
-            matchCondition.createdOn = {
-                $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
-                $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`),
-            };
-        } else if (filters.date_filter_type === "by_yearly") {
-            const currentDate = moment().format(DATE_FORMAT);
-            const currentYear = moment().year();
+  if (filters.date_filter_type && filters.date_filter_type.length) {
+    const DATE_FORMAT = "YYYY-MM-DD";
+    if (filters.date_filter_type === "by_range") {
+      let startDate = filters.start_date ? filters.start_date : new Date();
+      let endDate = filters.end_date ? filters.end_date : new Date();
+      matchCondition.createdOn = {
+        $gte: new Date(`${startDate}T00:00:00.0Z`),
+        $lt: new Date(`${endDate}T23:59:59.0Z`),
+      };
+    } else if (filters.date_filter_type === "by_monthly") {
+      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+      let startDateOfTheMonth = moment(startDateOfTheYear)
+        .add(filters.month - 1, "months")
+        .format(DATE_FORMAT);
+      let endDateOfTheMonth = moment(startDateOfTheMonth)
+        .endOf("month")
+        .format(DATE_FORMAT);
+      console.log(startDateOfTheMonth, endDateOfTheMonth);
+      matchCondition.createdOn = {
+        $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`),
+      };
+    } else if (filters.date_filter_type === "by_quarterly") {
+      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+      let startDateOfTheQuarter = moment(startDateOfTheYear)
+        .quarter(filters.quarter)
+        .startOf("quarter")
+        .format(DATE_FORMAT);
+      let endDateOfTheQuarter = moment(startDateOfTheYear)
+        .quarter(filters.quarter)
+        .endOf("quarter")
+        .format(DATE_FORMAT);
+      console.log(startDateOfTheQuarter, endDateOfTheQuarter);
+      matchCondition.createdOn = {
+        $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`),
+      };
+    } else if (filters.date_filter_type === "by_yearly") {
+      const currentDate = moment().format(DATE_FORMAT);
+      const currentYear = moment().year();
 
-            let startDateOfTheYear = moment([filters.year]).format(
-                "YYYY-MM-DDTHH:mm:ss"
-            );
-            let endDateOfTheYear = moment([filters.year])
-                .endOf("year")
-                .format("YYYY-MM-DDTHH:mm:ss");
+      let startDateOfTheYear = moment([filters.year]).format(
+        "YYYY-MM-DDTHH:mm:ss"
+      );
+      let endDateOfTheYear = moment([filters.year])
+        .endOf("year")
+        .format("YYYY-MM-DDTHH:mm:ss");
 
-            if (filters.year === currentYear) {
-                endDateOfTheYear = currentDate;
-            }
-            console.log(startDateOfTheYear, endDateOfTheYear);
-            matchCondition.createdOn = {
-                $gte: new Date(startDateOfTheYear),
-                $lte: new Date(endDateOfTheYear),
-            };
-        }
+      if (filters.year === currentYear) {
+        endDateOfTheYear = currentDate;
+      }
+      console.log(startDateOfTheYear, endDateOfTheYear);
+      matchCondition.createdOn = {
+        $gte: new Date(startDateOfTheYear),
+        $lte: new Date(endDateOfTheYear),
+      };
     }
-    return matchCondition;
+  }
+  return matchCondition;
 }
 
 exports.fetchShipmentsForAbInBevOnBlockchain = [
-    auth,
-    async (req, res) => {
-        try {
-            const {
-                skip,
-                limit
-            } = req.query;
-            var shipmentsArray = [];
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      var shipmentsArray = [];
 
-            const filters = req.query;
-            try {
-                let warehouseIds = [];
+      const filters = req.query;
+      try {
+        let warehouseIds = [];
 
-                const shipmentQuery = {
-                    selector: getShipmentFilterConditionOnBlockhain(filters, warehouseIds)
-                    //selector:  matchConditionShipment(filters)
-                }
-                //Blockchain
-                /*const shipmentQuery = {
+        const shipmentQuery = {
+          selector: getShipmentFilterConditionOnBlockhain(
+            filters,
+            warehouseIds
+          ),
+          //selector:  matchConditionShipment(filters)
+        };
+        //Blockchain
+        /*const shipmentQuery = {
    selector: {
       ShippingDate: {
         $gte: "2021-07-25T00:00:00Z",
@@ -4601,13 +4530,13 @@ exports.fetchShipmentsForAbInBevOnBlockchain = [
       }
    }
 }*/
-                /*        const shipmentQuery =
+        /*        const shipmentQuery =
 {
    selector: {
 Status: { "$in": ["RECEIVED"] }
    }
 }*/
-                /* const shipmentQuery = {
+        /* const shipmentQuery = {
    "selector": {
       "Supplier": {
                 "$regex": "ORG10017"
@@ -4615,7 +4544,7 @@ Status: { "$in": ["RECEIVED"] }
    }
 }*/
 
-                /*const shipmentQuery = {
+        /*const shipmentQuery = {
                   "selector": {
                                                         "$or": [
                                                             { "Supplier": {"$regex": "ORG10017"} },
@@ -4624,210 +4553,212 @@ Status: { "$in": ["RECEIVED"] }
                                                 }
                                                 }*/
 
-                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+        let token =
+          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-                const shipmentResult = await axios.post(
-                    `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
-                    shipmentQuery, {
-                        headers: {
-                            Authorization: token,
-                        },
-                    }
-                );
-                const len = shipmentResult.data.data;
-                for (count = 0; count < len.length; count++) {
-                    const supplierDetails = JSON.parse(
-                        shipmentResult.data.data[count].Supplier
-                    );
-                    const receiverDetails = JSON.parse(
-                        shipmentResult.data.data[count].Receiver
-                    );
+        const shipmentResult = await axios.post(
+          `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+          shipmentQuery,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        const len = shipmentResult.data.data;
+        for (count = 0; count < len.length; count++) {
+          const supplierDetails = JSON.parse(
+            shipmentResult.data.data[count].Supplier
+          );
+          const receiverDetails = JSON.parse(
+            shipmentResult.data.data[count].Receiver
+          );
 
-                    const supplierWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`, {
-                            headers: {
-                                Authorization: token,
-                            },
-                        }
-                    );
-
-                    const supplierOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
-                      {
-                        headers: {
-                          Authorization: token,
-                        },
-                      }
-                    );
-
-                    const receiverWarehouseDetails = await axios.get(
-                        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`, {
-                            headers: {
-                                Authorization: token,
-                            },
-                        }
-                    );
-
-                    const receiverOrgDetails = await axios.get(
-                      `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
-                      {
-                        headers: {
-                          Authorization: token,
-                        },
-                      }
-                    );
-
-                    const shipmentInwardData = {
-                        Shipmentdata: shipmentResult.data.data[count],
-                        supplierWarehouseDetails: supplierWarehouseDetails.data.data,
-                        //supplierOrgDetails: supplierOrgDetails.data.data,
-                        receiverWarehouseDetails: receiverWarehouseDetails.data.data,
-                        //receiverOrgDetails: receiverOrgDetails.data.data,
-                    };
-                    //                console.log("123",shipmentInwardData)
-                    shipmentsArray.push(shipmentInwardData);
-                }
-
-
-                              //path: "$supplier.org.S1",
-                          //{ $match: matchConditionShipment(filters) },
-
-                return apiResponse.successResponseWithMultipleData(
-                    res,
-                    "Shipments Table",
-                    shipmentsArray
-                );
-            } catch (err) {
-                return apiResponse.ErrorResponse(res, err.message);
+          const supplierWarehouseDetails = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`,
+            {
+              headers: {
+                Authorization: token,
+              },
             }
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
+          );
+
+          const supplierOrgDetails = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const receiverWarehouseDetails = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const receiverOrgDetails = await axios.get(
+            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          const shipmentInwardData = {
+            Shipmentdata: shipmentResult.data.data[count],
+            supplierWarehouseDetails: supplierWarehouseDetails.data.data,
+            //supplierOrgDetails: supplierOrgDetails.data.data,
+            receiverWarehouseDetails: receiverWarehouseDetails.data.data,
+            //receiverOrgDetails: receiverOrgDetails.data.data,
+          };
+          //                console.log("123",shipmentInwardData)
+          shipmentsArray.push(shipmentInwardData);
         }
-    },
+
+        //path: "$supplier.org.S1",
+        //{ $match: matchConditionShipment(filters) },
+
+        return apiResponse.successResponseWithMultipleData(
+          res,
+          "Shipments Table",
+          shipmentsArray
+        );
+      } catch (err) {
+        return apiResponse.ErrorResponse(res, err.message);
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
 ];
 
-
 exports.warehousesOrgsExportToBlockchain = [
-    auth,
-    async (req, res) => {
-        try {
-            const warehouses = await WarehouseModel.find({
-                "status": "ACTIVE"
-            });
+  auth,
+  async (req, res) => {
+    try {
+      const warehouses = await WarehouseModel.find({
+        status: "ACTIVE",
+      });
+      for (const warehouse of warehouses) {
+        const supplierWarehouseDetails = await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${warehouse.id}`,
+          {
+            headers: {
+              Authorization: req.headers["x-access-token"],
+            },
+          }
+        );
 
-            for (i = 0; i < warehouses.length; i++) {
+        if (supplierWarehouseDetails.data.status == false) {
+          const warehouseDetails = await WarehouseModel.findOne({
+            id: s,
+          });
 
-                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-                var s = warehouses[i].id
-                const supplierWarehouseDetails = await axios.get(
-                    `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${s}`, {
-                        headers: {
-                            Authorization: token,
-                        },
-                    }
-                );
+          const bc_data = {
+            Id: warehouseDetails.id,
+            Participant_id: "",
+            CreatedOn: "",
+            CreatedBy: "",
+            IsDelete: true,
+            OrganizationId: warehouseDetails.organisationId,
+            PostalAddress:
+              warehouseDetails.postalAddress == null
+                ? ""
+                : warehouseDetails.postalAddress,
+            Region: JSON.stringify(warehouseDetails.region),
+            Country: JSON.stringify(warehouseDetails.country),
+            Location: JSON.stringify(warehouseDetails.location),
+            Supervisors: warehouseDetails.supervisors,
+            Employees: warehouseDetails.employees,
+            WarehouseInventory: warehouseDetails.warehouseInventory,
+            Name: warehouseDetails.title,
+            Gender: "",
+            Age: "",
+            Aadhar: "",
+            Vaccineid: "",
+            Title: warehouseDetails.title,
+            Warehouseaddr: warehouseDetails.warehouseAddress,
+            Status: warehouseDetails.status,
+            Misc1: "",
+            Misc2: "",
+          };
 
-                if (supplierWarehouseDetails.data.status == false) {
-                    const warehouseDetails = await WarehouseModel.findOne({
-                        id: s
-                    });
-
-                    const bc_data = {
-                        "Id": warehouseDetails.id,
-                        "Participant_id": "",
-                        "CreatedOn": "",
-                        "CreatedBy": "",
-                        "IsDelete": true,
-                        "OrganizationId": warehouseDetails.organisationId,
-                        "PostalAddress": (warehouseDetails.postalAddress == null) ? "" : warehouseDetails.postalAddress,
-                        "Region": JSON.stringify(warehouseDetails.region),
-                        "Country": JSON.stringify(warehouseDetails.country),
-                        "Location": JSON.stringify(warehouseDetails.location),
-                        "Supervisors": warehouseDetails.supervisors,
-                        "Employees": warehouseDetails.employees,
-                        "WarehouseInventory": warehouseDetails.warehouseInventory,
-                        "Name": warehouseDetails.title,
-                        "Gender": "",
-                        "Age": "",
-                        "Aadhar": "",
-                        "Vaccineid": "",
-                        "Title": warehouseDetails.title,
-                        "Warehouseaddr": warehouseDetails.warehouseAddress,
-                        "Status": warehouseDetails.status,
-                        "Misc1": "",
-                        "Misc2": ""
-
-                    }
-
-                    const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`, bc_data, {
-                        headers: {
-                           'Authorization': token,
-                        },
-                   }
-                )
-                }
+          const bc_response = await axios.post(
+            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
+            bc_data,
+            {
+              headers: {
+                Authorization: token,
+              },
             }
-  
-            const orgs = await OrganisationModel.find({
-                "status": "ACTIVE"
-            });
-
-            for (i = 0; i < orgs.length; i++) {
-
-                let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-                var s = orgs[i].id
-                const supplierOrgDetails = await axios.get(
-                    `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${s}`, {
-                        headers: {
-                            Authorization: token,
-                        },
-                    }
-                );
-
-                if (supplierOrgDetails.data.status == false) {
-                    const orgDetails = await OrganisationModel.findOne({
-                        id: s
-                    });
-
-                    const bc_data = {
-                        "Id": orgDetails.id,
-                        "Participant_id": "",
-                        "CreatedOn": "",
-                        "CreatedBy": "",
-                        "IsDelete": true,
-                        "OrganizationName": orgDetails.name,
-                        "PostalAddress": orgDetails.postalAddress,
-                        "Region": JSON.stringify(orgDetails.region),
-                        "Country": JSON.stringify(orgDetails.country),
-                        "Location": JSON.stringify(orgDetails.location),
-                        "PrimaryContractId": orgDetails.primaryContactId,
-                        "Logoid": "",
-                        "Type": orgDetails.type,
-                        "Status": 'ACTIVE',
-                        "Configuration_id": orgDetails.configuration_id,
-                        "Warehouses": orgDetails.warehouses,
-                        "Supervisors": orgDetails.supervisors,
-                        "WarehouseEmployees": orgDetails.warehouseEmployees,
-                        "Authority": ""
-                    }
-
-
-                    const bc_response = await axios.post(`${hf_blockchain_url}/api/v1/participantapi/Organizations/create`, bc_data, {
-                        headers: {
-                           'Authorization': token,
-                        },
-                   }
-                )
-                }
-            }
-            return apiResponse.successResponseWithData(
-                res,
-                "Export success",
-                orgs
-            );
-
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
+          );
         }
-    },
+      }
+
+      const orgs = await OrganisationModel.find({
+        status: "ACTIVE",
+      });
+
+      for (i = 0; i < orgs.length; i++) {
+        let token =
+          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+        var s = orgs[i].id;
+        const supplierOrgDetails = await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${s}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        if (supplierOrgDetails.data.status == false) {
+          const orgDetails = await OrganisationModel.findOne({
+            id: s,
+          });
+
+          const bc_data = {
+            Id: orgDetails.id,
+            Participant_id: "",
+            CreatedOn: "",
+            CreatedBy: "",
+            IsDelete: true,
+            OrganizationName: orgDetails.name,
+            PostalAddress: orgDetails.postalAddress,
+            Region: JSON.stringify(orgDetails.region),
+            Country: JSON.stringify(orgDetails.country),
+            Location: JSON.stringify(orgDetails.location),
+            PrimaryContractId: orgDetails.primaryContactId,
+            Logoid: "",
+            Type: orgDetails.type,
+            Status: "ACTIVE",
+            Configuration_id: orgDetails.configuration_id,
+            Warehouses: orgDetails.warehouses,
+            Supervisors: orgDetails.supervisors,
+            WarehouseEmployees: orgDetails.warehouseEmployees,
+            Authority: "",
+          };
+
+          const bc_response = await axios.post(
+            `${hf_blockchain_url}/api/v1/participantapi/Organizations/create`,
+            bc_data,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+        }
+      }
+      return apiResponse.successResponseWithData(res, "Export success", orgs);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
 ];

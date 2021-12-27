@@ -49,67 +49,67 @@
     -->
   </body>
   <script>
-    function GetSupportedBrowser() {
-      var e = window.navigator.userAgent,
-        n = e.indexOf("MSIE");
-      return n > 0
-        ? parseInt(e.substring(n + 5, e.indexOf(".", n)))
-        : navigator.userAgent.match(/Trident\/7\./)
-        ? 11
-        : 0;
-    }
-    function injectZiplyneEmbed(e) {
-      if (GetSupportedBrowser() > 0)
-        console.log("Ziplyne on IE is Not Supported");
-      else {
-        for (var n = !1, o = 0; ; )
-          if (
-            (new Promise(function (e) {
-              setTimeout(e, 100);
-            }),
-            ++o > 30)
-          ) {
-            n = !0;
-            break;
-          }
-        n &&
-          !document.querySelector("#khotta") &&
-          fetch("https://api.ziplyne.com/api/client/embedScript", {
-            headers: { allowdomain: e },
-            body: null,
-            method: "GET",
-          })
-            .then(function (e) {
-              return e.json();
-            })
-            .then(function (e) {
-              if (e.allowed) {
-                var n = document.createElement("script");
-                (n.src =
-                  "https://cdn.ziplyne.com/scripts/" +
-                  e.version +
-                  "/ziplyneEmbed.js"),
-                  document.head.appendChild(n),
-                  console.log("Ziplyne loaded successfully");
-              } else e.message ? console.log(e.message) : console.log("Ziplyne Disabled (Kill Switch is Active)");
-            })
-            .catch(function (e) {
-              console.log("Ziplyne Not Loaded");
-            });
-      }
-    }
-    function getLocation() {
-      if (window === window.top) injectZiplyneEmbed(window.location.host);
-      else {
-        let e =
-          document.location.ancestorOrigins[
-            document.location.ancestorOrigins.length - 1
-          ];
-        if (e) {
-          injectZiplyneEmbed(new URL(e)?.host);
-        }
-      }
-    }
-    getLocation();
+    // function GetSupportedBrowser() {
+    //   var e = window.navigator.userAgent,
+    //     n = e.indexOf("MSIE");
+    //   return n > 0
+    //     ? parseInt(e.substring(n + 5, e.indexOf(".", n)))
+    //     : navigator.userAgent.match(/Trident\/7\./)
+    //     ? 11
+    //     : 0;
+    // }
+    // function injectZiplyneEmbed(e) {
+    //   if (GetSupportedBrowser() > 0)
+    //     console.log("Ziplyne on IE is Not Supported");
+    //   else {
+    //     for (var n = !1, o = 0; ; )
+    //       if (
+    //         (new Promise(function (e) {
+    //           setTimeout(e, 100);
+    //         }),
+    //         ++o > 30)
+    //       ) {
+    //         n = !0;
+    //         break;
+    //       }
+    //     n &&
+    //       !document.querySelector("#khotta") &&
+    //       fetch("https://api.ziplyne.com/api/client/embedScript", {
+    //         headers: { allowdomain: e },
+    //         body: null,
+    //         method: "GET",
+    //       })
+    //         .then(function (e) {
+    //           return e.json();
+    //         })
+    //         .then(function (e) {
+    //           if (e.allowed) {
+    //             var n = document.createElement("script");
+    //             (n.src =
+    //               "https://cdn.ziplyne.com/scripts/" +
+    //               e.version +
+    //               "/ziplyneEmbed.js"),
+    //               document.head.appendChild(n),
+    //               console.log("Ziplyne loaded successfully");
+    //           } else e.message ? console.log(e.message) : console.log("Ziplyne Disabled (Kill Switch is Active)");
+    //         })
+    //         .catch(function (e) {
+    //           console.log("Ziplyne Not Loaded");
+    //         });
+    //   }
+    // }
+    // function getLocation() {
+    //   if (window === window.top) injectZiplyneEmbed(window.location.host);
+    //   else {
+    //     let e =
+    //       document.location.ancestorOrigins[
+    //         document.location.ancestorOrigins.length - 1
+    //       ];
+    //     if (e) {
+    //       injectZiplyneEmbed(new URL(e)?.host);
+    //     }
+    //   }
+    // }
+    // getLocation();
   </script>
 </html>

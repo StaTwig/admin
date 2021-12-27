@@ -43,7 +43,7 @@ const Selection = (props) => {
         <button
           onClick={() => {
             if (buttonActive == 1) {
-              var url = window.location.href;
+              const url = window.location.href;
               if (url.indexOf("test") !== -1) {
                 window.location = "https://test.admin.abinbev.statledger.io/";
               } else if (url.indexOf("abinbev.statledger.io") !== -1) {
