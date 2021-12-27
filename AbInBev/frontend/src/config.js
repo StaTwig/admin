@@ -102,6 +102,10 @@ export function config() {
       getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
       getStatsBySKUOrgTypeUrl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
+      getNewConfig: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getNewConfig`,
+      setNewConfig: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/setNewConfig`,
+      getAllTargets: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getDepotTargets`,
+      updateTargets: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/updateTargetSales`,
     },
     abinbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -186,7 +190,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'ainbevprod'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'abinbevprod'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
