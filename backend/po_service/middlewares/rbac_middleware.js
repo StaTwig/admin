@@ -6,8 +6,9 @@ const client = redis.createClient({
 });
 
 client.on("connect", () => {
-  console.log("Connected to Redis");
+  console.log("Connected to Redis Cache");
 });
+
 client.on("error", (err) => {
   console.log("Error " + err);
 });
@@ -72,7 +73,39 @@ const checkPermissionAwait = async (request) => {
     return false;
   }
 };
+
 module.exports = {
   checkPermissions: checkPermissions,
   checkPermissionAwait: checkPermissionAwait,
 };
+
+/*
+const { createClient } = require("redis");
+
+(async () => {
+  try {
+    console.log(
+      process.env.REDIS_HOST,
+      process.env.REDIS_PORT,
+      process.env.REDIS_PASSWORD
+    );
+    const client = createClient({
+      socket: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT || 6379,
+      },
+      password: process.env.REDIS_PASSWORD,
+    });
+
+    client.on("error", (err) => console.log("Redis Client Error", err));
+
+    await client.connect();
+
+    await client.set("key", "value");
+    const value = await client.get("key");
+    console.log("value", value);
+  } catch (err) {
+    console.log(err);
+  }
+})();
+*/
