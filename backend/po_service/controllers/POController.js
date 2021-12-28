@@ -1752,7 +1752,7 @@ exports.exportOutboundPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-      const { organisationId, role, id } = req.user;
+      const { organisationId, id } = req.user;
       // let { skip, limit } = req.query;
       let currentDate = new Date();
       let fromDateFilter = 0;

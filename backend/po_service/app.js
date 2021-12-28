@@ -4,7 +4,6 @@ const logger = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
 const mongoose = require("mongoose");
-
 require("dotenv").config();
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
@@ -24,7 +23,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    //don't show the log when it is test
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("PO Service is running ... \n");
