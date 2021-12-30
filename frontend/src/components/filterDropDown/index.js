@@ -18,7 +18,6 @@ const FilterDropDown = (props) => {
               className={item.checked ? "li-element-selected" : "li-element"}
               key={item.key}
               onClick={() => {
-                console.log(item)
                 props.onChangeOfFilterDropDown(index, props.type, item.value);
               }}
             >

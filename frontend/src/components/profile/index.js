@@ -217,7 +217,6 @@ class Profile extends React.Component {
         axios
           .post(config().upload, formData, configs)
           .then((response) => {
-            alert("Profile Picture updated Successfully");
             this.setState({ profile_picture: response.data.data });
           })
           .catch((error) => {
