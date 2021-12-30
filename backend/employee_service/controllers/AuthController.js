@@ -1,7 +1,7 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const { check, validationResult } = require("express-validator");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
@@ -14,64 +14,60 @@ const { uploadFile } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-const moment = require('moment');
+const moment = require("moment");
 const EmailContent = require("../components/EmailContent");
 
-const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailRegex =
+  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{10}$/;
 
-function getUserCondition(query,orgId){
+function getUserCondition(query, orgId) {
   let matchCondition = {};
-  matchCondition.organisationId = orgId
-  matchCondition.accountStatus = { $ne: "NOTAPPROVED" }
-  if(query.role && query.role!=''){
+  matchCondition.organisationId = orgId;
+  matchCondition.accountStatus = { $ne: "NOTAPPROVED" };
+  if (query.role && query.role != "") {
     matchCondition.role = query.role;
   }
-  if(query.status && query.status!=''){
+  if (query.status && query.status != "") {
     matchCondition.accountStatus = query.status;
   }
-  if(query.creationFilter && query.creationFilter=='true'){
+  if (query.creationFilter && query.creationFilter == "true") {
     let now = moment();
-    let oneDayAgo = moment().subtract(1, 'day')
-    let oneMonthAgo = moment().subtract(1, 'months')
-    let threeMonthsAgo = moment().subtract(3, 'months')
-    let oneYearAgo = moment().subtract(1, 'years')
-    let oneWeek = moment().subtract(1, 'weeks')
-    let sixMonths = moment().subtract(6, 'months')
-    if(query.dateRange=='today'){
+    let oneDayAgo = moment().subtract(1, "day");
+    let oneMonthAgo = moment().subtract(1, "months");
+    let threeMonthsAgo = moment().subtract(3, "months");
+    let oneYearAgo = moment().subtract(1, "years");
+    let oneWeek = moment().subtract(1, "weeks");
+    let sixMonths = moment().subtract(6, "months");
+    if (query.dateRange == "today") {
       matchCondition.createdAt = {
         $gte: new Date(oneDayAgo),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
-    }
-    else if(query.dateRange=='thisMonth'){
+    } else if (query.dateRange == "thisMonth") {
       matchCondition.createdAt = {
         $gte: new Date(oneMonthAgo),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
-    }
-    else if(query.dateRange=='threeMonths'){
+    } else if (query.dateRange == "threeMonths") {
       matchCondition.createdAt = {
         $gte: new Date(threeMonthsAgo),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
-    }
-    else if(query.dateRange=='thisYear'){
+    } else if (query.dateRange == "thisYear") {
       matchCondition.createdAt = {
         $gte: new Date(oneYearAgo),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
-    }
-    else if(query.dateRange=='thisWeek'){
+    } else if (query.dateRange == "thisWeek") {
       matchCondition.createdAt = {
         $gte: new Date(oneWeek),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
-    }
-    else if(query.dateRange=='sixMonths'){
+    } else if (query.dateRange == "sixMonths") {
       matchCondition.createdAt = {
         $gte: new Date(sixMonths),
-        $lte: new Date(now)
+        $lte: new Date(now),
       };
     }
   }
@@ -221,49 +217,37 @@ exports.verifyOtp = [
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
           if (user.role == "powerUser" || user.role == "admin") {
-            EmployeeModel.updateOne(query, { otp: null })
-              .then(() => {
-                OrganisationModel.findOne({ id: user.organisationId })
-                  .select("name type")
-                  .then((OrgName) => {
-                    let userData = {
-                      id: user.id,
-                      firstName: user.firstName,
-                      emailId: user.emailId,
-                      role: user.role,
-                      warehouseId: user.warehouseId,
-                      organisationId: user.organisationId,
-                      organisationName: OrgName.name,
-                      organisationType: OrgName.type,
-                    };
-                    //Prepare JWT token for authentication
-                    const jwtPayload = userData;
-                    const jwtData = {
-                      expiresIn: process.env.JWT_TIMEOUT_DURATION,
-                    };
-                    const secret = process.env.JWT_SECRET;
-                    //Generated JWT token with Payload and secret.
-                    userData.token = JWT.sign(jwtPayload, secret, jwtData);
-                    return apiResponse.successResponseWithData(
-                      res,
-                      "Login Success",
-                      userData
-                    );
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    return apiResponse.ErrorResponse(res, err);
-                  });
-              })
-              .catch((err) => {
-                console.log(err);
-                return apiResponse.ErrorResponse(res, err);
-              });
+            await EmployeeModel.updateOne(query, { otp: null });
+            const OrgName = await OrganisationModel.findOne({
+              id: user.organisationId,
+            }).select("name type");
+            let userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: user.warehouseId,
+              organisationId: user.organisationId,
+              organisationName: OrgName.name,
+              organisationType: OrgName.type,
+            };
+            //Prepare JWT token for authentication
+            const jwtPayload = userData;
+            const jwtData = {
+              expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            };
+            const secret = process.env.JWT_SECRET;
+            //Generated JWT token with Payload and secret.
+            userData.token = JWT.sign(jwtPayload, secret, jwtData);
+            return apiResponse.successResponseWithData(
+              res,
+              "Login Success",
+              userData
+            );
           } else {
-            console.log(err);
             return apiResponse.ErrorResponse(
               res,
-              `User dosen't have enough Permission for Admin Module`
+              `User doesn't have enough Permission for Admin Module`
             );
           }
         } else {
@@ -272,8 +256,7 @@ exports.verifyOtp = [
       }
     } catch (err) {
       console.log(err);
-
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -341,15 +324,9 @@ exports.updateProfile = [
       const employee = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      const {
-        firstName,
-        lastName,
-        phoneNumber,
-        warehouseId,
-        organisation,
-      } = req.body;
+      const { firstName, lastName, phoneNumber, warehouseId, organisation } =
+        req.body;
       const organisationId = organisation.split("/")[1];
-      const organisationName = organisation.split("/")[0];
       employee.firstName = firstName;
       employee.lastName = lastName;
       employee.phoneNumber = phoneNumber;
@@ -410,10 +387,10 @@ exports.getOrgUsers = [
   auth,
   async (req, res) => {
     try {
-      console.log(getUserCondition(req.query,req.user.organisationId))
+      console.log(getUserCondition(req.query, req.user.organisationId));
       const users = await EmployeeModel.aggregate([
         {
-          $match: getUserCondition(req.query,req.user.organisationId),
+          $match: getUserCondition(req.query, req.user.organisationId),
         },
         {
           $lookup: {
@@ -447,7 +424,7 @@ exports.getOrgUsers = [
         users
       );
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },

@@ -9,9 +9,7 @@ const AddUserEmail = require("../components/AddUser");
 const checkToken = require("../middlewares/middleware").checkToken;
 const apiResponse = require("../helpers/apiResponse");
 const axios = require("axios");
-const uniqid = require("uniqid");
-const dotenv = require("dotenv").config();
-const { URL } = require('url')
+require("dotenv").config();
 const blockchain_service_url = process.env.URL;
 
 exports.getApprovals = [
@@ -38,7 +36,7 @@ exports.getApprovals = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {
@@ -61,68 +59,67 @@ exports.acceptApproval = [
           })
             .then((employee) => {
               if (employee) {
-                try{
+                try {
                   axios
-                  .get(`${blockchain_service_url}/createUserAddress`)
-                  .then((response) => {
-                    const walletAddress = response.data.items;
-                    const userData = {
-                      walletAddress,
-                    }
-                    axios
-                    .post(
-                      `${blockchain_service_url}/grantPermission`,
-                      userData
-                    )
-                    .then(() => console.log("posted"))
-                    .catch((err)=>{
-                      console.log(err);
-                      errorList.push(err);
-                    });
-                    EmployeeModel.findOneAndUpdate(
-                      { id: id },
-                      {
-                        $set: {
-                          accountStatus: "ACTIVE",
-                          isConfirmed: true,
-                          walletAddress,
-                          role
-                        },
-                        $push: {warehouseId}
-                      },
-                      { new: true }
-                    )
-                      .exec()
-                      .then((emp) => {
-                        let emailBody = RequestApproved({
-                          name: emp.firstName,
-                          organisation: organisationName,
+                    .get(`${blockchain_service_url}/createUserAddress`)
+                    .then((response) => {
+                      const walletAddress = response.data.items;
+                      const userData = {
+                        walletAddress,
+                      };
+                      axios
+                        .post(
+                          `${blockchain_service_url}/grantPermission`,
+                          userData
+                        )
+                        .then(() => console.log("posted"))
+                        .catch((err) => {
+                          console.log(err);
+                          errorList.push(err);
                         });
-                        // Send confirmation email
-                        try {
-                          mailer.send(
-                            constants.appovalEmail.from,
-                            emp.emailId,
-                            constants.appovalEmail.subject,
-                            emailBody
+                      EmployeeModel.findOneAndUpdate(
+                        { id: id },
+                        {
+                          $set: {
+                            accountStatus: "ACTIVE",
+                            isConfirmed: true,
+                            walletAddress,
+                            role,
+                          },
+                          $push: { warehouseId },
+                        },
+                        { new: true }
+                      )
+                        .exec()
+                        .then((emp) => {
+                          let emailBody = RequestApproved({
+                            name: emp.firstName,
+                            organisation: organisationName,
+                          });
+                          // Send confirmation email
+                          try {
+                            mailer.send(
+                              constants.appovalEmail.from,
+                              emp.emailId,
+                              constants.appovalEmail.subject,
+                              emailBody
+                            );
+                          } catch (mailError) {
+                            console.log(mailError);
+                            errorList.push(mailError);
+                          }
+                          return apiResponse.successResponseWithData(
+                            res,
+                            `User Verified`,
+                            emp
                           );
-                        } catch (mailError) {
-                          console.log(mailError);
-                          errorList.push(mailError);
-                        }
-                        return apiResponse.successResponseWithData(
-                          res,
-                          `User Verified`,
-                          emp
-                        );
-                      });
-                  }  
-                  ).catch((err)=>{
+                        });
+                    })
+                    .catch((err) => {
                       console.log(err);
                       errorList.push(errorList);
-                    })
-                }
-                catch(error){
+                    });
+                } catch (error) {
                   console.log(error);
                   errorList.push(error);
                 }
@@ -135,11 +132,11 @@ exports.acceptApproval = [
               return apiResponse.ErrorResponse(res, errorList);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {
-      errorList.push(err)
+      errorList.push(err);
       return apiResponse.ErrorResponse(res, errorList);
     }
   },
@@ -184,10 +181,12 @@ exports.rejectApproval = [
                     } catch (err) {
                       console.log(err);
                     }
-                    try{
-                      EmployeeModel.findOneAndDelete({id}).then(()=>console.log("deleted"))
-                    }catch(err){
-                      console.log(err)
+                    try {
+                      EmployeeModel.findOneAndDelete({ id }).then(() =>
+                        console.log("deleted")
+                      );
+                    } catch (err) {
+                      console.log(err);
                       return apiResponse.ErrorResponse(res, err);
                     }
                     return apiResponse.successResponseWithData(
@@ -207,7 +206,7 @@ exports.rejectApproval = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {
@@ -226,18 +225,26 @@ exports.addUser = [
           const email = req.body.emailId;
           const warehouse = req.body.warehouse;
           const firstName = email.split("@")[0];
-          
-          const incrementCounterEmployee = await CounterModel.update({
-                  'counters.name': "employeeId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
 
-          const employeeCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.$":1})
-          var employeeId = employeeCounter.counters[0].format + employeeCounter.counters[0].value;
-          
+          const incrementCounterEmployee = await CounterModel.update(
+            {
+              "counters.name": "employeeId",
+            },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            }
+          );
+
+          const employeeCounter = await CounterModel.findOne(
+            { "counters.name": "employeeId" },
+            { "counters.$": 1 }
+          );
+          var employeeId =
+            employeeCounter.counters[0].format +
+            employeeCounter.counters[0].value;
+
           const user = new EmployeeModel({
             firstName: firstName,
             lastName: firstName,
@@ -247,8 +254,7 @@ exports.addUser = [
             accountStatus: "ACTIVE",
             warehouseId: warehouse,
             isConfirmed: true,
-            id : employeeId
-            //id: uniqid("emp-"),
+            id: employeeId,
           });
           await user.save();
           let emailBody = AddUserEmail({
@@ -267,7 +273,7 @@ exports.addUser = [
           }
           return apiResponse.successResponse(res, "User Added");
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {
@@ -355,7 +361,7 @@ exports.activateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {
@@ -404,7 +410,7 @@ exports.deactivateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res, "Auth Failed")
+          return apiResponse.unauthorizedResponse(res, "Auth Failed");
         }
       });
     } catch (err) {

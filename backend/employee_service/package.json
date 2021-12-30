@@ -24,7 +24,9 @@
     "nodemon": "^2.0.12",
     "uniqid": "^5.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^8.5.0"
+  },
   "main": "app.js",
   "author": "",
   "license": "ISC",
