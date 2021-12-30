@@ -145,7 +145,7 @@ exports.fetchPurchaseOrders = [
                 }
               );
               await Promise.all(
-                poDetails[0].products.map(async (element) => {
+                poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({
                     id: element.id,
                   });
@@ -1276,7 +1276,6 @@ exports.fetchInboundPurchaseOrders = [
             };
           }
 
-          console.log("whereQuery ======>", whereQuery);
           try {
             let inboundPOsCount = await RecordModel.count(whereQuery);
             RecordModel.find(whereQuery)
@@ -1303,7 +1302,7 @@ exports.fetchInboundPurchaseOrders = [
                     id: inboundPO.createdBy,
                   });
                   let creatorOrganisation = await OrganisationModel.findOne({
-                    id: creator.organisationId,
+                    id: creator?.organisationId,
                   });
 
                   let supplierOrganisation = await OrganisationModel.findOne({
