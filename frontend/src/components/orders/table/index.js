@@ -25,7 +25,7 @@ function Table(props) {
 
   return (
     <div>
-      <table className='table'>
+      <table className="table">
         {/* <thead>
         <tr>
           <th>Order Sent To</th>
@@ -39,7 +39,7 @@ function Table(props) {
       </thead> */}
         <tbody>
           {orders.length === 0 && (
-            <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
+            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
               No records found
             </div>
           )}
@@ -72,17 +72,17 @@ function Table(props) {
             return (
               <tr>
                 <td>
-                  <div className='user-info'>
-                    <div className='user-info__img'>
-                      <img src={user} alt='User' />
+                  <div className="user-info">
+                    <div className="user-info__img">
+                      <img src={user} alt="User" />
                     </div>
-                    <div className='user-info__basic shipmentId'>
-                      <h5 className='mb-0 table-h5-text '>
+                    <div className="user-info__basic shipmentId">
+                      <h5 className="mb-0 table-h5-text ">
                         {visible === "two"
                           ? creatorOrganisation?.name
                           : supplier.organisation.name}
                       </h5>
-                      <p className='mb-0 table-p-text '>
+                      <p className="mb-0 table-p-text ">
                         {visible === "two"
                           ? creatorOrganisation?.id
                           : supplier.organisation.id}
@@ -91,21 +91,21 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div className='user-info'>
-                    <h5 className='table-h5-text'>
+                  <div className="user-info">
+                    <h5 className="table-h5-text">
                       {" "}
                       {formatDate(order.creationDate)}
                     </h5>
                   </div>
                 </td>
                 <td>
-                  <div className='user-info'>
-                    <h5 className='table-h5-text text-muted'>{order.id}</h5>
+                  <div className="user-info">
+                    <h5 className="table-h5-text text-muted">{order.id}</h5>
                   </div>
                 </td>
                 <td>
-                  <div className='user-info'>
-                    <h5 className='table-h5-text text-muted'>
+                  <div className="user-info">
+                    <h5 className="table-h5-text text-muted">
                       {truncate(
                         products[0]?.name +
                           (products.length > 1
@@ -117,11 +117,11 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div className='user-info__basic'>
-                    <h5 className='mb-0 table-h5-text'>
+                  <div className="user-info__basic">
+                    <h5 className="mb-0 table-h5-text">
                       {customer.warehouse.title}
                     </h5>
-                    <p className='text-muted mb-0 table-p-text'>
+                    <p className="text-muted mb-0 table-p-text">
                       {customer.warehouse && customer.warehouse.warehouseAddress
                         ? customer.warehouse.warehouseAddress.firstLine +
                           " " +
@@ -146,7 +146,7 @@ function Table(props) {
                 <td>
                   <Link
                     to={`/vieworder/${order.id}`}
-                    className='button px-2 py-1'
+                    className="button btn-view-link px-2 py-1"
                     style={{
                       border: "1px solid #007bff",
                       borderRadius: "6px",
@@ -162,16 +162,16 @@ function Table(props) {
         </tbody>
       </table>
       {orders?.length > 0 && (
-        <div className='d-flex flex-row-reverse'>
+        <div className="d-flex flex-row-reverse">
           <Pagination
             showFirstButton
             showLastButton
-            color='primary'
+            color="primary"
             count={Math.ceil(props.count / 10)}
             onChange={handlePageChange}
           />
           <span
-            className='mx-5 my-1 rounded text-dark'
+            className="mx-5 my-1 rounded text-dark"
             style={{ fontSize: "14px" }}
           >
             Total Records {props.count}{" "}

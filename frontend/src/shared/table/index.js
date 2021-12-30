@@ -141,7 +141,7 @@ const Table = (props) => {
               <AccordionDetails>
                 <Typography>
                   <TableContainer>
-                    <Tablee className='table-borderless lg'>
+                    <Tablee className='table-borderless lg acc-table'>
                       <TableBody>
                         {inventory.eventTypePrimary === "CREATE" ||
                         inventory.eventTypePrimary === "RECEIVE" ? (
