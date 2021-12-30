@@ -145,7 +145,7 @@ exports.fetchPurchaseOrders = [
                 }
               );
               await Promise.all(
-                poDetails[0].products.map(async (element) => {
+                poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({
                     id: element.id,
                   });
@@ -1276,7 +1276,6 @@ exports.fetchInboundPurchaseOrders = [
             };
           }
 
-          console.log("whereQuery ======>", whereQuery);
           try {
             let inboundPOsCount = await RecordModel.count(whereQuery);
             RecordModel.find(whereQuery)
@@ -1303,7 +1302,7 @@ exports.fetchInboundPurchaseOrders = [
                     id: inboundPO.createdBy,
                   });
                   let creatorOrganisation = await OrganisationModel.findOne({
-                    id: creator.organisationId,
+                    id: creator?.organisationId,
                   });
 
                   let supplierOrganisation = await OrganisationModel.findOne({
@@ -1847,84 +1846,75 @@ exports.exportOutboundPurchaseOrders = [
           },
         };
       }
-
-      try {
-        let outboundPOsCount = await RecordModel.count(whereQuery);
-        RecordModel.find(whereQuery)
-          .sort({ createdAt: -1 })
-          .then((outboundPOList) => {
-            let outboundPORes = [];
-            let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
-              let outboundPOData = JSON.parse(JSON.stringify(outboundPO));
-              outboundPOData[`productDetails`] = [];
-              let outboundProductsArray = outboundPOData.products;
-              let productRes = outboundProductsArray.map(async (product) => {
-                let productDetails = await ProductModel.findOne({
-                  id: product.productId,
-                });
-                return productDetails;
+      let outboundPOsCount = await RecordModel.count(whereQuery);
+      RecordModel.find(whereQuery)
+        .sort({ createdAt: -1 })
+        .then((outboundPOList) => {
+          let outboundPORes = [];
+          let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
+            let outboundPOData = JSON.parse(JSON.stringify(outboundPO));
+            outboundPOData[`productDetails`] = [];
+            let outboundProductsArray = outboundPOData.products;
+            let productRes = outboundProductsArray.map(async (product) => {
+              let productDetails = await ProductModel.findOne({
+                id: product.productId,
               });
-              Promise.all(productRes).then(async function (productList) {
-                outboundPOData[`productDetails`] = await productList;
-              });
-
-              let supplierOrganisation = await OrganisationModel.findOne({
-                id: outboundPO.supplier.supplierOrganisation,
-              });
-              let customerOrganisation = await OrganisationModel.findOne({
-                id: outboundPOData.customer.customerOrganisation,
-              });
-              let customerWareHouse = await WarehouseModel.findOne({
-                organisationId: outboundPOData.customer.customerOrganisation,
-              });
-              outboundPOData.supplier[`organisation`] = supplierOrganisation;
-              outboundPOData.customer[`organisation`] = customerOrganisation;
-              outboundPOData.customer[`warehouse`] = customerWareHouse;
-              outboundPORes.push(outboundPOData);
+              return productDetails;
+            });
+            Promise.all(productRes).then(async function (productList) {
+              outboundPOData[`productDetails`] = await productList;
             });
 
-            Promise.all(findOutboundPOData).then(function (results) {
-              let data = [];
-              let rowData;
-              for (const row of outboundPORes) {
-                for (const product of row.products) {
-                  rowData = {
-                    id: row.id,
-                    createdBy: row.createdBy,
-                    supplierOrgId: row?.supplier?.organisation?.id,
-                    orderReceiveIncharge: row?.customer?.customerIncharge,
-                    orderReceiverOrg: row?.customer?.customerOrganisation,
-                    productCategory: product.type,
-                    productName: product.name,
-                    manufacturer: product.manufacturer,
-                    productQuantity: product.productQuantity,
-                    productId: product.id,
-                    recieverOrgName: row?.customer?.organisation?.name,
-                    recieverOrgId: row?.customer?.organisation?.id,
-                    recieverOrgLocation:
-                      row?.customer.organisation?.postalAddress,
-                    status: row.poStatus,
-                  };
-                  data.push(rowData);
-                }
-              }
-              if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data, "Outbound");
-              } else {
-                res = buildExcelReport(req, res, data);
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Outbound PO Records"
-                );
-              }
+            let supplierOrganisation = await OrganisationModel.findOne({
+              id: outboundPO.supplier.supplierOrganisation,
             });
+            let customerOrganisation = await OrganisationModel.findOne({
+              id: outboundPOData.customer.customerOrganisation,
+            });
+            let customerWareHouse = await WarehouseModel.findOne({
+              organisationId: outboundPOData.customer.customerOrganisation,
+            });
+            outboundPOData.supplier[`organisation`] = supplierOrganisation;
+            outboundPOData.customer[`organisation`] = customerOrganisation;
+            outboundPOData.customer[`warehouse`] = customerWareHouse;
+            outboundPORes.push(outboundPOData);
           });
-      } catch (err) {
-        return apiResponse.ErrorResponse(res, err);
-      }
+
+          Promise.all(findOutboundPOData).then(function (results) {
+            let data = [];
+            let rowData;
+            for (const row of outboundPORes) {
+              for (const product of row.products) {
+                rowData = {
+                  id: row.id,
+                  createdBy: row.createdBy,
+                  supplierOrgId: row?.supplier?.organisation?.id,
+                  orderReceiveIncharge: row?.customer?.customerIncharge,
+                  orderReceiverOrg: row?.customer?.customerOrganisation,
+                  productCategory: product.type,
+                  productName: product.name,
+                  manufacturer: product.manufacturer,
+                  productQuantity: product.productQuantity,
+                  productId: product.id,
+                  recieverOrgName: row?.customer?.organisation?.name,
+                  recieverOrgId: row?.customer?.organisation?.id,
+                  recieverOrgLocation:
+                    row?.customer.organisation?.postalAddress,
+                  status: row.poStatus,
+                };
+                data.push(rowData);
+              }
+            }
+            if (req.query.type == "pdf") {
+              res = buildPdfReport(req, res, data, "Outbound");
+            } else {
+              res = buildExcelReport(req, res, data);
+            }
+          });
+        });
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2055,7 +2045,6 @@ function buildExcelReport(req, res, dataForExcel) {
 }
 
 async function buildPdfReport(req, res, data, orderType) {
-  console.log(data);
   const rows = [];
   rows.push([
     { text: "Order Id", bold: true },
