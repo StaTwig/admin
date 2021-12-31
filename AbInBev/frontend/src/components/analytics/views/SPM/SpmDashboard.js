@@ -59,20 +59,7 @@ const SpmDashboard = (props) => {
       target: null,
     },
   });
-  // const []
-  const getWeightage = (type, value) => {
-    let res = 0;
-    if (!config[`${type}`]) return 0;
-    if (value > config[`${type}`]?.max.value) res = 5;
-    else if (
-      value < config[`${type}`]?.max.value &&
-      value > config[`${type}`]?.min.value
-    )
-      res = 2;
-    else res = 0;
 
-    return res;
-  };
   useEffect(() => {
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
@@ -319,10 +306,7 @@ const saveConfig = async () => {
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
                               <td>
-                                {getWeightage(
-                                  perf.returnRate ? perf.returnRate : 0,
-                                  "returnRate"
-                                )}
+                                {""}
                               </td>
                               <td>{config?.returnRate?.target}</td>
                             </tr>
