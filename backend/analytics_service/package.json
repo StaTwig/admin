@@ -10,11 +10,11 @@
     "cors": "^2.8.5",
     "debug": "^4.3.2",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "express-jwt": "^6.1.0",
-    "mongoose": "^6.0.13",
+    "mongoose": "^6.1.4",
     "morgan": "^1.10.0",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {}
 }

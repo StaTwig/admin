@@ -63,8 +63,8 @@ const ReceiveShipment = (props) => {
     console.log(evt.target.files);
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
-    setPhotoUrl2(URL.createObjectURL(evt.target.files[1]));
-    setPhoto2(evt.target.files[1]);
+    // setPhotoUrl2(URL.createObjectURL(evt.target.files[1]));
+    // setPhoto2(evt.target.files[1]);
   };
 
   const clearImage = () => {
@@ -376,7 +376,7 @@ const ReceiveShipment = (props) => {
             {photo ? (
               <div>
                 <div
-                  className='ml-2 mt-2 d-flex row'
+                  className='images-preview'
                   style={{
                     margin: "auto",
                     display: "table",
@@ -396,21 +396,6 @@ const ReceiveShipment = (props) => {
                     small={photoUrl}
                     showRotate={true}
                     name='photo'
-                    className='mt-1 modal-image'
-                    // style={{ margin: "auto", display: "table" }}
-                  />
-                  <img
-                    onClick={clearImage2}
-                    width='20'
-                    height='20'
-                    src={crossIcon}
-                    className='cross-img shadow border-none rounded-circle'
-                    alt='Clear'
-                  />
-                  <ModalImage
-                    large={photoUrl2}
-                    small={photoUrl2}
-                    showRotate={true}
                     className='mt-1 modal-image'
                     // style={{ margin: "auto", display: "table" }}
                   />

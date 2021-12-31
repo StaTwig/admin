@@ -21,7 +21,7 @@
     "multer": "^1.4.3",
     "pdfmake": "^0.2.2",
     "qrcode": "^1.4.4",
-    "redis": "^3.1.2",
+    "redis": "3.1.2",
     "swagger-ui-express": "^4.1.6",
     "uniqid": "^5.4.0",
     "winston": "^3.3.3",
