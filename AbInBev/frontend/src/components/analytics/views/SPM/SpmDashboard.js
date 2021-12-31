@@ -97,29 +97,40 @@ const saveConfig = async () => {
       // console.log(configs.data[0]);
       // let tmp = config;
       // Object.assign(tmp, configs.data[0]);
+      if(configs.data.length)
       setConfig(configs.data[0]);
     })();
-
     (async () => {
       const result = await dispatch(getSupplierPerformanceByOrgType());
       let _spm = result.data;
       if (_spm.length) {
-        setSupplierPerformances(_spm);
+        sortSupplierPeformances(_spm);
       } else {
-        setSupplierPerformances([]);
+        sortSupplierPeformances([]);
       }
-
-      // if (configDistrict !== "") {
-      //   let configs = await dispatch(getNewConfig());
-      //   console.log(configs.data[0]);
-      //   setConfig(configs.data[0]);
-      // }
     })();
   }, [configDistrict, selectedType]);
 
   const typeSelected = (type) => {
     setSelectedType(type);
   };
+  console.log(props.selectedType)
+  function compare( a, b ) {
+    if ( a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`] ){
+      return 1;
+    }
+    if ( a.rating[`${props.sortByValue}`] > b.rating[`${props.sortByValue}`] ){
+      return -1;
+    }
+    return 0;
+  }
+  function sortSupplierPeformances(arr){
+    arr.sort(compare)
+    if(props.selectedType === 'All')
+    setSupplierPerformances(arr);
+    else
+    setSupplierPerformances(arr.filter(item => item.type === props.selectedType))
+  }
 
   const onStateChange = async (event) => {
     const selectedState = event.target.value;
@@ -132,7 +143,6 @@ const saveConfig = async () => {
     const selectedDistrict = event.target.value;
     setDistrict(selectedDistrict);
   };
-
   return (
     <div>
       {showSuccessPopup && <SuccessPopUp message={"config set succesfully"}/>}
