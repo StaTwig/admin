@@ -53,6 +53,7 @@ const EnterId = (props) => {
     options: shipmentArray.map((option) => option.id),
   };
   const [shipmentId, setShipmentId] = useState(null);
+  const [shipmentId2, setShipmentId2] = useState(null);
   const [enableSearch, setenableSearch] = useState(false);
   const [errorShipment, seterrorShipment] = useState(false);
   const [errorShipment1, seterrorShipment1] = useState(false);
@@ -60,6 +61,8 @@ const EnterId = (props) => {
   const [value1, setValue1] = React.useState();
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
+  console.log(inputValue1);
+  console.log(shipmentId2);
   const dispatch = useDispatch();
   async function getShipmentStatus(id) {
     let result = await dispatch(getViewShipment(id));
@@ -83,9 +86,9 @@ const EnterId = (props) => {
     console.log("shipmentid", shipmentId);
   }
   const billNoCheck = (bno) => {
-    console.log("transitnoarray", transitNumberArray);
     let val = transitNumberArray.filter((e) => e.airWayBillNo == bno);
     console.log("val", val);
+    setShipmentId2(val[0]?.id);
     console.log("val status", val[0]?.status);
     if (val[0]?.status == "RECEIVED") {
       setshipdisabled(true);
@@ -98,9 +101,9 @@ const EnterId = (props) => {
     }
   };
   return (
-    <div className='updateStatus'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>UPDATE SHIPMENT</h1>
+    <div className="updateStatus">
+      <div className="d-flex justify-content-between">
+        <h1 className="breadcrumb">UPDATE SHIPMENT</h1>
       </div>
       <Formik
         enableReinitialize={true}
@@ -146,14 +149,14 @@ const EnterId = (props) => {
         }) => (
           <form
             onSubmit={handleSubmit}
-            className=''
+            className=""
             style={{ height: "600px" }}
           >
-            <div className=''>
-              <div className='row'>
-                <div className=''>
+            <div className="">
+              <div className="row">
+                <div className="">
                   <div
-                    className='panel commonpanle'
+                    className="panel commonpanle"
                     style={{ height: "60%", width: "114%" }}
                   >
                     <div
@@ -161,11 +164,11 @@ const EnterId = (props) => {
                         errors.shipmentId && touched.shipmentId && ``
                       }`}
                     >
-                      <label className='text-secondary'>Shipment ID</label>
-                      <div className='mb-2' style={{ width: 300 }}>
+                      <label className="text-secondary">Shipment ID</label>
+                      <div className="mb-2" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps}
-                          id='auto-complete'
+                          id="auto-complete"
                           value={value}
                           onChange={(event, newValue) => {
                             setValue(newValue);
@@ -179,20 +182,20 @@ const EnterId = (props) => {
                               : (setshipdisabled(true),
                                 seterrorShipment(false));
                           }}
-                          id='controllable-states-demo'
+                          id="controllable-states-demo"
                           autoComplete
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              name='shipmentId'
-                              margin='normal'
-                              variant='outlined'
+                              name="shipmentId"
+                              margin="normal"
+                              variant="outlined"
                             />
                           )}
                         />
                         {errorShipment && (
                           <span
-                            className='error-msg text-danger mt-3 '
+                            className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
                           >
                             This shipment has been already delivered.
@@ -223,26 +226,26 @@ const EnterId = (props) => {
                       )} */}
                   </div>
                 </div>
-                <div className='col-1 ml-3 mr-4'>
+                <div className="col-1 ml-3 mr-4">
                   <h6
-                    className='or'
+                    className="or"
                     style={{ position: "absolute", left: "4px", top: "25px" }}
                   >
                     <b>OR</b>
                   </h6>
                 </div>
 
-                <div className=''>
+                <div className="">
                   <div
-                    className='panel commonpanle ml-5'
+                    className="panel commonpanle ml-5"
                     style={{ height: "60%", width: "110%" }}
                   >
-                    <div className='form-group'>
-                      <label className='text-secondary'>Transit No.</label>
-                      <div className='' style={{ width: 300 }}>
+                    <div className="form-group">
+                      <label className="text-secondary">Transit No.</label>
+                      <div className="" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps1}
-                          id='billNo'
+                          id="billNo"
                           value1={value1}
                           onChange={(event, newValue) => {
                             setValue1(newValue);
@@ -259,15 +262,15 @@ const EnterId = (props) => {
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              name='billNo'
-                              margin='normal'
-                              variant='outlined'
+                              name="billNo"
+                              margin="normal"
+                              variant="outlined"
                             />
                           )}
                         />
                         {errorShipment1 && (
                           <span
-                            className='error-msg text-danger mt-3 '
+                            className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
                           >
                             This shipment has been already delivered.
@@ -286,7 +289,7 @@ const EnterId = (props) => {
                     </div>
                   </div>
                   <div
-                    className='col'
+                    className="col"
                     style={{
                       position: "relative",
                       left: "16.5rem",
@@ -294,15 +297,15 @@ const EnterId = (props) => {
                     }}
                   >
                     <button
-                      type='button'
-                      className='btn btn-outline-primary mr-4 '
+                      type="button"
+                      className="btn btn-outline-primary mr-4 "
                       onClick={() => props.history.push(`/shipments`)}
                     >
                       Cancel
                     </button>
                     <button
                       disabled={shipdisabled}
-                      className='btn btn-orange fontSize20 font-bold mr-4 product'
+                      className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={() => {
                         if (shipmentId) {
                           if (
@@ -312,15 +315,15 @@ const EnterId = (props) => {
                             props.history.push(`/updatestatus/${shipmentId}`);
                           }
                         } else {
-                          props.history.push(`/updatestatus/${billno}`);
+                          props.history.push(`/updatestatus/${shipmentId2}`);
                         }
                       }}
                     >
                       <img
                         src={update}
-                        width='20'
-                        height='17'
-                        className='mr-2 mb-1'
+                        width="20"
+                        height="17"
+                        className="mr-2 mb-1"
                       />
                       <span>Update Shipment</span>
                     </button>

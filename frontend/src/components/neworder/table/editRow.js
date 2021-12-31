@@ -39,12 +39,13 @@ const EditRow = (props) => {
     }
   };
   return (
-    <div className='row ml-3'>
-      <div className='trow row text-dark col'>
-        <div className='col-3 ml-3 tcell'>
-          <div className=''>
-            <div className='col-13 d-flex flex-column'>
-              <div className='title recived-text'>
+    <div className="row ml-3">
+      <div className="trow row text-dark col">
+        <div className="col-3 ml-3 tcell">
+          <div className="">
+            <div className="col-13 d-flex flex-column">
+
+              <div className="title recived-text">
                 {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
@@ -53,9 +54,9 @@ const EditRow = (props) => {
 
                 {console.log(prod.type)}
                 <Select
-                  className='no-border'
+                  className="no-border"
                   placeholder={
-                    <div className='select-placeholder-text'>
+                    <div className="select-placeholder-text">
                       Select Product Category
                     </div>
                   }
@@ -74,20 +75,20 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className='divider1'></div>
-        <div className='col-4 tcell text-center justify-content-center'>
-          <div className=''>
-            <div className='d-flex flex-row justify-content-between'>
-              <div className='col-10 title recived-text w-50'>
+        <div className="divider1"></div>
+        <div className="col-4 tcell text-center justify-content-center">
+          <div className="">
+            <div className="d-flex flex-row justify-content-between">
+              <div className="col-10 title recived-text w-50">
                 {/* <DropdownButton
                   name={prod.name ? prod.name : "Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
                 <Select
-                  className='no-border mr-3 text-left'
+                  className="no-border mr-3 text-left"
                   placeholder={
-                    <div className='select-placeholder-text'>
+                    <div className="select-placeholder-text">
                       {" "}
                       Product Name{" "}
                     </div>
@@ -107,14 +108,14 @@ const EditRow = (props) => {
                 />
               </div>
               <div
-                className='col-3 title recived-text align-self-center'
+                className="col-3 title recived-text align-self-center"
                 style={{ position: "relative", right: "30px" }}
               >
                 {prod.id ? (
                   prod.id
                 ) : (
                   <div
-                    className=''
+                    className=""
                     style={{
                       fontSize: "14px",
                       lineHeight: "21px",
@@ -128,20 +129,20 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className='col-2 text-center justify-content-center '>
+        <div className="col-2 text-center justify-content-center ">
           {prod.manufacturer ? (
             prod.manufacturer
           ) : (
-            <div className='select-placeholder-text'>Manufacturer</div>
+            <div className="select-placeholder-text">Manufacturer</div>
           )}
         </div>
-        <div className='divider1'></div>
-        <div className='col-2 tcell text-center justify-content-center p-2'>
-          <div className=''>
+        <div className="divider1"></div>
+        <div className="col-2 tcell text-center justify-content-center p-2">
+          <div className="">
             <input
               style={{ position: "relative", left: "-20px" }}
-              className='form-control text-center'
-              placeholder='Enter Quantity'
+              className="form-control text-center"
+              placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : ""}
               onChange={(e) => {
@@ -151,7 +152,7 @@ const EditRow = (props) => {
           </div>
         </div>
         <div
-          className='title recived-text align-self-center'
+          className="title recived-text align-self-center"
           style={{ position: "absolute", right: "20px" }}
         >
           {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
@@ -162,17 +163,17 @@ const EditRow = (props) => {
                 : prod.unitofMeasure.name}
             </div>
           ) : (
-            <div className='select-placeholder-text'>Unit</div>
+            <div className="select-placeholder-text">Unit</div>
           )}
         </div>
       </div>
-      {props.product.length > 0 && (
-        <div className=' m-3 bg-light'>
+      {props.product.length > 1 && (
+        <div className=" m-3 bg-light">
           <span
-            className='del-pad shadow border-none rounded-circle ml-2 '
+            className="del-pad shadow border-none rounded-circle ml-2 "
             onClick={() => onRemoveRow(index)}
           >
-            <img className=' cursorP  p-1' height='30' src={Delete} alt='' />
+            <img className=" cursorP  p-1" height="30" src={Delete} alt="" />
           </span>
         </div>
       )}
