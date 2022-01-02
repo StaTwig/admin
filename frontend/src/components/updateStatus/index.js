@@ -8,7 +8,7 @@ import FailPopup from "./failPopup";
 import {
   updateTrackingStatus,
   uploadImage,
-  getViewShipmentGmr
+  getViewShipmentGmr,
 } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import "./style.scss";
@@ -16,7 +16,6 @@ import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 
 const UpdateStatus = (props) => {
-
   const dispatch = useDispatch();
   const profile = useSelector((state) => {
     return state.user;
@@ -33,6 +32,8 @@ const UpdateStatus = (props) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [shipment, setShipment] = useState({});
+  const [comment, setComment] = useState("");
+  const [commentEnabled, setCommentEnabled] = useState(false);
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
@@ -95,15 +96,19 @@ const UpdateStatus = (props) => {
 
   const closeModal = () => {
     setOpenUpdatedStatus(false);
-    props.history.push(`/${shipment.isCustom === true ? `viewgmrshipment`: `viewshipment`}/${id}`);
+    props.history.push(
+      `/${
+        shipment.isCustom === true ? `viewgmrshipment` : `viewshipment`
+      }/${id}`
+    );
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
   };
   return (
-    <div className='updateStatus'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>UPDATE STATUS</h1>
+    <div className="updateStatus">
+      <div className="d-flex justify-content-between">
+        <h1 className="breadcrumb">UPDATE STATUS</h1>
         {/* <div className="d-flex">
           <button className="btn btn-primary font-weight-bold">
             <img
@@ -160,20 +165,20 @@ const UpdateStatus = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className='mb-3'>
-            <div className='card bg-light border-0'>
-              <div className='card-body'>
-                <div className='row justify-content-between'>
-                  <div className='col '>
-                    <div className='panel commonpanle'>
-                      <div className='form-group'>
-                        <label className='mt-3 text-secondary'>
+          <form onSubmit={handleSubmit} className="mb-3">
+            <div className="card bg-light border-0">
+              <div className="card-body">
+                <div className="row justify-content-between">
+                  <div className="col ">
+                    <div className="panel commonpanle">
+                      <div className="form-group">
+                        <label className="mt-3 text-secondary">
                           Shipment ID
                         </label>
                         <input
-                          type='text'
-                          className='form-control'
-                          name='shipmentId'
+                          type="text"
+                          className="form-control"
+                          name="shipmentId"
                           onBlur={handleBlur}
                           value={values.shipmentId}
                         />
@@ -184,29 +189,29 @@ const UpdateStatus = (props) => {
                         </span>
                       )} */}
                     </div>
-                    <h6 className='poheads potext m-4'>
+                    <h6 className="poheads potext m-4">
                       Account Holder Details
                     </h6>
-                    <div className='panel commonpanle'>
-                      <div className='form-group'>
-                        <label className='mb-1 text-secondary'>User Name</label>
+                    <div className="panel commonpanle">
+                      <div className="form-group">
+                        <label className="mb-1 text-secondary">User Name</label>
                         <input
-                          type='text'
-                          className='form-control mb-2'
-                          name='firstName'
+                          type="text"
+                          className="form-control mb-2"
+                          name="firstName"
                           onChange={(e) => setFirstName(e.target.value)}
                           value={profile.firstName}
                           readonly
                         />
                       </div>
-                      <div className='form-group'>
-                        <label className='mb-1 text-secondary'>
+                      <div className="form-group">
+                        <label className="mb-1 text-secondary">
                           Organisation Name
                         </label>
                         <input
-                          type='text'
-                          className='form-control mb-2'
-                          name='organisationName'
+                          type="text"
+                          className="form-control mb-2"
+                          name="organisationName"
                           onChange={(e) => setOrganisationName(e.target.value)}
                           value={profile.organisation}
                           readonly
@@ -227,14 +232,14 @@ const UpdateStatus = (props) => {
                           readonly
                         />
                       </div> */}
-                      <div className='form-group mb-0'>
-                        <label className='mb-1 text-secondary'>
+                      <div className="form-group mb-0">
+                        <label className="mb-1 text-secondary">
                           Update Status Location
                         </label>
                         <input
-                          type='text'
-                          className='form-control mb-2'
-                          name='updateStatusLocation'
+                          type="text"
+                          className="form-control mb-2"
+                          name="updateStatusLocation"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
@@ -248,9 +253,9 @@ const UpdateStatus = (props) => {
                         )} */}
                     </div>
 
-                    <h6 className='poheads potext m-4'>Comment</h6>
-                    <div className='panel commonpanle mb-5'>
-                      <div className='form-group mb-0'>
+                    <h6 className="poheads potext m-4">Comments</h6>
+                    <div className="panel commonpanle mb-5">
+                      {/* <div className='form-group mb-0'>
                         <input
                           type='text'
                           className='form-control mb-2'
@@ -261,12 +266,73 @@ const UpdateStatus = (props) => {
                           placeholder='Enter comments here...'
                           value={values.comments}
                         />
+                      </div> */}
+
+                      <div className=" pt-2 pb-2 d-flex row">
+                        <span
+                          onClick={() => setCommentEnabled(false)}
+                          className="txt-outline text-muted"
+                        >
+                          Damaged in transit
+                        </span>
+                        <span
+                          onClick={() => setCommentEnabled(false)}
+                          className="txt-outline text-muted"
+                        >
+                          Miscount
+                        </span>
+                        <span
+                          onClick={() => setCommentEnabled(false)}
+                          className="txt-outline text-muted"
+                        >
+                          Shipment Stolen
+                        </span>
+                        <span
+                          onClick={() => setCommentEnabled(false)}
+                          className="txt-outline text-muted"
+                        >
+                          Wrong Shipment
+                        </span>
+                        <span
+                          onClick={() => setCommentEnabled(true)}
+                          className="txt-outline text-muted"
+                        >
+                          Other
+                        </span>
                       </div>
+                      <div
+                        className="form-group"
+                        style={{ width: "150%", height: "60px" }}
+                      >
+                        {commentEnabled && (
+                          <input
+                            disabled={!commentEnabled}
+                            style={{
+                              fontSize: "14px",
+                              resize: "none",
+                              //borderBottom: "none",
+                              marginTop: "40px",
+                              //marginBottom:"10px"
+                            }}
+                            type="text"
+                            className="form-control"
+                            name="Comment"
+                            onChange={(e) => setComment(e.target.value)}
+                            size="40"
+                            cols="120"
+                            rows="7"
+                            placeholder="Enter Comment"
+                            value={comment}
+                          />
+                        )}
+                      </div>
+
                       {errors.comments && touched.comments && (
-                        <span className='error-msg text-danger'>
+                        <span className="error-msg text-danger">
                           {errors.comments}
                         </span>
                       )}
+
                       {/* <div className="row mt-3 justify-content-end">
                         <span className="col row col-6 justify-content-end text-secondary">
                           Should send an alert?
@@ -310,85 +376,85 @@ const UpdateStatus = (props) => {
                       )} */}
                     </div>
                   </div>
-                  <div className='col '>
-                    <div className='row'>
-                      <h6 className='col font-weight-bold mt-4'>
+                  <div className="col ">
+                    <div className="row">
+                      <h6 className="col font-weight-bold mt-4">
                         Upload Image
                       </h6>
                       <button
-                        type='button'
-                        className='col col-3 btn btn-primary font-weight-bold mr-5 mb-3'
+                        type="button"
+                        className="col col-3 btn btn-primary font-weight-bold mr-5 mb-3"
                         onClick={uploadPhoto}
                       >
                         <img
                           src={uploadWhite}
-                          width='20'
-                          height='17'
-                          className='mr-2 mb-1'
-                          alt='Upload'
+                          width="20"
+                          height="17"
+                          className="mr-2 mb-1"
+                          alt="Upload"
                         />
                         <span>Upload</span>
                       </button>
                     </div>
-                    <div className='d-flex flex-column upload bg-white col-9 p-5'>
+                    <div className="d-flex flex-column upload bg-white col-9 p-5">
                       {photo ? (
                         <div>
                           <div
-                            className='row'
+                            className="row"
                             style={{ margin: "auto", display: "table" }}
                           >
                             <img
                               onClick={clearImage}
-                              width='20'
-                              height='20'
+                              width="20"
+                              height="20"
                               src={crossIcon}
                               style={{ position: "relative", left: "15vw" }}
-                              alt='Clear'
+                              alt="Clear"
                             />
                             <img
                               src={photoUrl}
-                              name='photo'
-                              width='250'
-                              height='125'
-                              className='mt-1'
+                              name="photo"
+                              width="250"
+                              height="125"
+                              className="mt-1"
                               style={{ margin: "auto", display: "table" }}
-                              alt='PhotoURL'
+                              alt="PhotoURL"
                             />
                           </div>
                         </div>
                       ) : (
                         <div>
                           <div
-                            className='row'
+                            className="row"
                             style={{ margin: "auto", display: "table" }}
                           >
                             {/* <label>{photo.name?photo.name:""}</label> */}
                             <img
                               src={uploadBlue}
-                              name='photo'
-                              width='50'
-                              height='50'
-                              className='mt-1'
+                              name="photo"
+                              width="50"
+                              height="50"
+                              className="mt-1"
                               style={{ margin: "auto", display: "table" }}
-                              alt='Upload'
+                              alt="Upload"
                             />
                             <label>
                               Drag and drop files here{" "}
                               <input
-                                type='file'
-                                className='select'
+                                type="file"
+                                className="select"
                                 onChange={setFile}
                               />{" "}
                             </label>
                           </div>
                           <div
-                            className='row mb-3'
+                            className="row mb-3"
                             style={{ margin: "auto", display: "table" }}
                           >
                             OR
                           </div>
                           <div
-                            className='row'
+                            className="row"
                             style={{
                               margin: "auto",
                               display: "table",
@@ -397,13 +463,13 @@ const UpdateStatus = (props) => {
                             }}
                           >
                             <label
-                              className='btn btn-primary'
+                              className="btn btn-primary"
                               style={{ margin: 0, height: "5vh" }}
                             >
                               Browse Files
                               <input
-                                type='file'
-                                className='select'
+                                type="file"
+                                className="select"
                                 onChange={setFile}
                               />{" "}
                             </label>
@@ -414,17 +480,25 @@ const UpdateStatus = (props) => {
                   </div>
                 </div>
 
-                <div className='d-flex flex-row-reverse justify-content-between'>
+                <div className="d-flex flex-row-reverse justify-content-between">
                   <div>
                     <button
-                      type='button'
-                      className='btn btn-outline-primary mr-3'
-                      onClick={() => props.history.push(`/${shipment.isCustom === true ? `viewgmrshipment`: `viewshipment`}/${id}`)}
+                      type="button"
+                      className="btn btn-outline-primary mr-3"
+                      onClick={() =>
+                        props.history.push(
+                          `/${
+                            shipment.isCustom === true
+                              ? `viewgmrshipment`
+                              : `viewshipment`
+                          }/${id}`
+                        )
+                      }
                     >
                       Cancel
                     </button>
                     <button
-                      className='btn btn-orange fontSize20 font-bold mr-4 product'
+                      className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >
                       <span>Update Status</span>
@@ -439,7 +513,7 @@ const UpdateStatus = (props) => {
       {openUpdatedStatus && (
         <Modal
           close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModal} //FailurePopUp
@@ -449,7 +523,7 @@ const UpdateStatus = (props) => {
       {openShipmentFail && (
         <Modal
           close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailPopup
             onHide={closeModalFail} //FailurePopUp

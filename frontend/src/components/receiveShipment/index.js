@@ -10,9 +10,11 @@ import ProductList from "./productlist";
 import ShipmentDetails from "./shipmentdetails";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import SuccessPopup from "./successPopup";
+import FailedPopup from "./failPopup";
 import { fetchairwayBillNumber } from "../../actions/shipmentActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ModalImage from "react-modal-image";
+import ShipmentFailPopUp from "../newShipment/shipmentFailPopUp";
 
 const ReceiveShipment = (props) => {
   // let shipmentDetails = props.trackData.shipmentDetails;
@@ -36,11 +38,15 @@ const ReceiveShipment = (props) => {
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
+  const [ErrorMsg, setErrorMsg] = useState("");
+  const [FailPopUp, setFailPopUp] = useState(false);
   const [commentEnabled, setCommentEnabled] = useState(false);
   const id = props.match.params.id;
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
+
+  console.log(ErrorMsg);
 
   useEffect(() => {
     async function fetchairwayBill() {
@@ -140,6 +146,8 @@ const ReceiveShipment = (props) => {
       setreceiveShipmentModal(true);
     } else {
       console.log(result);
+      setErrorMsg(result.data);
+      setFailPopUp(true);
     }
     dispatch(turnOff());
   };
@@ -187,14 +195,14 @@ const ReceiveShipment = (props) => {
   };
 
   return (
-    <div className='receiveShipment'>
-      <div className='d-flex flex-column justify-content-between'>
-        <div className='d-flex flex-row justify-content-between'>
-          <h1 className='breadcrumb mt-3'>RECEIVE SHIPMENT</h1>
-          <div className='d-flex flex-row justify-content-between'>
+    <div className="receiveShipment">
+      <div className="d-flex flex-column justify-content-between">
+        <div className="d-flex flex-row justify-content-between">
+          <h1 className="breadcrumb mt-3">RECEIVE SHIPMENT</h1>
+          <div className="d-flex flex-row justify-content-between">
             <div>
               <button
-                className='btn btn-outline-primary mr-4 mt-3'
+                className="btn btn-outline-primary mr-4 mt-3"
                 onClick={() => props.history.push(`/viewshipment/${id}`)}
               >
                 Cancel
@@ -202,48 +210,57 @@ const ReceiveShipment = (props) => {
             </div>
             <div>
               <button
-                className='btn-primary btn fontSize20 font-bold mr-2 mt-3'
+                className="btn-primary btn fontSize20 font-bold mr-2 mt-3"
                 onClick={receiveShipment}
                 disabled={isDisabled}
               >
                 <img
                   src={returnShipment}
-                  width='16'
-                  height='16'
-                  className='mr-2 mb-1'
-                  alt='Return Shipment'
+                  width="16"
+                  height="16"
+                  className="mr-2 mb-1"
+                  alt="Return Shipment"
                 />
                 <span>Receive Shipment</span>
               </button>
             </div>
+
+            {FailPopUp && (
+              <Modal
+                close={() => closeModalShipment()}
+                size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+              >
+                <FailedPopup onHide={closeModalShipment} ErrorMsg={ErrorMsg} />
+              </Modal>
+            )}
             {openUpdatedStatus && (
               <Modal
                 close={() => closeModal()}
-                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+                size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
               ></Modal>
             )}
           </div>
         </div>
-        <div className='d-flex  flex-auto'>
-          <div className='panel commonpanle mr-4' style={{ width: "32%" }}>
-            <div className='form-group pt-2'>
-              <label className='mb-1 text-secondary pt-2'>Shipment ID:</label>
+        <div className="d-flex  flex-auto">
+          <div className="panel commonpanle mr-4" style={{ width: "32%" }}>
+            <div className="form-group pt-2">
+              <label className="mb-1 text-secondary pt-2">Shipment ID:</label>
               <input
-                name='id'
-                type='text'
-                className='form-control ml-5 '
+                name="id"
+                type="text"
+                className="form-control ml-5 "
                 //onChange={(e) => setshipmentId(e.target.value)}
-                size='35'
+                size="35"
                 value={id}
               />
             </div>
           </div>
           <div
-            className='panel commonpanle'
+            className="panel commonpanle"
             style={{ width: "32%", height: "100px" }}
           >
-            <div className='form-group pt-2'>
-              <label className='text-secondary pt-2'>Transit No.</label>
+            <div className="form-group pt-2">
+              <label className="text-secondary pt-2">Transit No.</label>
               {/* <div className="mb-2" style={{width: 300 }}>
                         <Autocomplete 
                           {...defaultProps}
@@ -262,22 +279,22 @@ const ReceiveShipment = (props) => {
                         />
                         </div> */}
               <input
-                type='text'
-                className='form-control ml-5'
-                name='billNo'
+                type="text"
+                className="form-control ml-5"
+                name="billNo"
                 //onChange={(e) => setBillNo(e.target.value)}
-                size='35'
+                size="35"
                 value={props.trackData.airWayBillNo}
               />
             </div>
           </div>
         </div>
       </div>
-      <div className='row'>
-        <div className='col-sm-4'>
+      <div className="row">
+        <div className="col-sm-4">
           {/* <h6 className="heading mb-3">SHIPMENT SUMMARY</h6> */}
           {/* <ShipmentSummary shipments={tracking} /> */}
-          <h6 className='heading mt-3 mb-3 ml-3'>Shipment Details</h6>
+          <h6 className="heading mt-3 mb-3 ml-3">Shipment Details</h6>
           <ShipmentDetails
             shipments={tracking}
             setMenuShip={setMenuShip}
@@ -286,49 +303,43 @@ const ReceiveShipment = (props) => {
             setHighLight={setHighLight}
           />
         </div>
-        <div className='col-sm-4'>
-          <h6 className='heading mt-3 mb-3 ml-3'>Comments</h6>
-          <div className='col panel commonpanle'>
-            <div className=' pt-2 pb-2 d-flex row'>
+        <div className="col-sm-4">
+          <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>
+          <div className="col panel commonpanle">
+            <div className=" pt-2 pb-2 d-flex row">
               <span
                 onClick={() => setCommentEnabled(false)}
-                className='txt-outline text-muted'
+                className="txt-outline text-muted"
               >
-                Reason 1
+                Damaged in transit
               </span>
               <span
                 onClick={() => setCommentEnabled(false)}
-                className='txt-outline text-muted'
+                className="txt-outline text-muted"
               >
-                Reason 2
+                Miscount
               </span>
               <span
                 onClick={() => setCommentEnabled(false)}
-                className='txt-outline text-muted'
+                className="txt-outline text-muted"
               >
-                Reason 3
+                Shipment Stolen
               </span>
               <span
                 onClick={() => setCommentEnabled(false)}
-                className='txt-outline text-muted'
+                className="txt-outline text-muted"
               >
-                Reason 4
-              </span>
-              <span
-                onClick={() => setCommentEnabled(false)}
-                className='txt-outline text-muted'
-              >
-                Reason 5
+                Wrong Shipment
               </span>
               <span
                 onClick={() => setCommentEnabled(true)}
-                className='txt-outline text-muted'
+                className="txt-outline text-muted"
               >
                 Other
               </span>
             </div>
             <div
-              className='form-group'
+              className="form-group"
               style={{ width: "150%", height: "60px" }}
             >
               {commentEnabled && (
@@ -341,14 +352,14 @@ const ReceiveShipment = (props) => {
                     marginTop: "40px",
                     //marginBottom:"10px"
                   }}
-                  type='text'
-                  className='form-control'
-                  name='Comment'
+                  type="text"
+                  className="form-control"
+                  name="Comment"
                   onChange={(e) => setComment(e.target.value)}
-                  size='40'
-                  cols='120'
-                  rows='7'
-                  placeholder='Enter Comment'
+                  size="40"
+                  cols="120"
+                  rows="7"
+                  placeholder="Enter Comment"
                   value={comment}
                 />
               )}
@@ -356,11 +367,11 @@ const ReceiveShipment = (props) => {
           </div>
           {/* <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button> */}
         </div>
-        <div className='col-sm-4'>
-          <div className='row justify-content-between'>
-            <h6 className='heading mt-3 mb-3 ml-4'>Upload Image</h6>
+        <div className="col-sm-4">
+          <div className="row justify-content-between">
+            <h6 className="heading mt-3 mb-3 ml-4">Upload Image</h6>
             <button
-              className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
+              className="btn btn-orange font-weight-bold mr-4 pl-4 pr-4"
               onClick={uploadPhoto}
               style={{ position: "relative", bottom: "10px" }}
             >
@@ -372,11 +383,11 @@ const ReceiveShipment = (props) => {
               <span style={{ fontSize: "15px" }}>Upload</span>
             </button>
           </div>
-          <div className='upload bg-white panel commonpanle mt-0'>
+          <div className="upload bg-white panel commonpanle mt-0">
             {photo ? (
               <div>
                 <div
-                  className='images-preview'
+                  className="images-preview"
                   style={{
                     margin: "auto",
                     display: "table",
@@ -385,22 +396,22 @@ const ReceiveShipment = (props) => {
                 >
                   <img
                     onClick={clearImage}
-                    width='20'
-                    height='20'
+                    width="20"
+                    height="20"
                     src={crossIcon}
-                    className='cross-img shadow rounded-circle'
-                    alt='Clear'
+                    className="cross-img shadow rounded-circle"
+                    alt="Clear"
                   />
                   <ModalImage
                     large={photoUrl}
                     small={photoUrl}
                     showRotate={true}
-                    name='photo'
-                    className='mt-1 modal-image'
+                    name="photo"
+                    className="mt-1 modal-image"
                     // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
-                <button type='button' className='btn btn-link float-right'>
+                <button type="button" className="btn btn-link float-right">
                   View All
                 </button>
                 {/* <div className="row">
@@ -420,32 +431,32 @@ const ReceiveShipment = (props) => {
             ) : (
               <div>
                 <div
-                  className='row '
+                  className="row "
                   style={{ margin: "auto", display: "table" }}
                 >
                   {/* <label>{photo.name?photo.name:""}</label> */}
                   <img
                     src={uploadBlue}
-                    name='photo'
-                    width='50'
-                    height='50'
-                    className='mt-1'
+                    name="photo"
+                    width="50"
+                    height="50"
+                    className="mt-1"
                     style={{ margin: "auto", display: "table" }}
-                    alt='Upload'
+                    alt="Upload"
                   />
-                  <label className='mt-3'>
+                  <label className="mt-3">
                     Drag and drop files here{" "}
-                    <input type='file' className='select' onChange={setFile} />{" "}
+                    <input type="file" className="select" onChange={setFile} />{" "}
                   </label>
                 </div>
                 <div
-                  className='row mb-3'
+                  className="row mb-3"
                   style={{ margin: "auto", display: "table" }}
                 >
                   OR
                 </div>
                 <div
-                  className='row'
+                  className="row"
                   style={{
                     margin: "auto",
                     display: "table",
@@ -454,14 +465,14 @@ const ReceiveShipment = (props) => {
                   }}
                 >
                   <label
-                    className='btn btn-primary'
+                    className="btn btn-primary"
                     style={{ margin: 0, height: "max-content" }}
                   >
                     Browse Files
                     <input
-                      type='file'
+                      type="file"
                       multiple={true}
-                      className='select'
+                      className="select"
                       onChange={setFile}
                     />{" "}
                   </label>
@@ -472,12 +483,12 @@ const ReceiveShipment = (props) => {
         </div>
       </div>
 
-      <div className='row'>
-        <div className='col-sm-4'>
-          <h6 className='heading mt-3 mb-3 ml-3'>Product Details</h6>
+      <div className="row">
+        <div className="col-sm-4">
+          <h6 className="heading mt-3 mb-3 ml-3">Product Details</h6>
         </div>
       </div>
-      <div className='row'>
+      <div className="row">
         <ProductList
           shipments={tracking}
           productHighLight={productHighLight}
@@ -492,7 +503,7 @@ const ReceiveShipment = (props) => {
       {receiveShipmentModal && (
         <Modal
           close={() => closeModalShipment()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModalShipment} //FailurePopUp
@@ -510,9 +521,9 @@ const ReceiveShipment = (props) => {
           </Modal>
         )}   */}
       {message && (
-        <div className='d-flex justify-content-center mt-3'>
+        <div className="d-flex justify-content-center mt-3">
           {" "}
-          <Alert severity='success'>
+          <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
             {message}
           </Alert>
