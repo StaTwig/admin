@@ -5,7 +5,6 @@ import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import "./style.scss";
 import { withStyles } from "@material-ui/core/styles";
-import button from "@material-ui/core/button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
