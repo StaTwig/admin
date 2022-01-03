@@ -108,9 +108,9 @@ function Table(props) {
                     <h5 className="table-h5-text text-muted">
                       {truncate(
                         products[0]?.name +
-                          (products.length > 1
-                            ? " + " + (products.length - 1) + " more"
-                            : ""),
+                        (products.length > 1
+                          ? " + " + (products.length - 1) + " more"
+                          : ""),
                         15
                       )}
                     </h5>
@@ -124,8 +124,8 @@ function Table(props) {
                     <p className="text-muted mb-0 table-p-text">
                       {customer.warehouse && customer.warehouse.warehouseAddress
                         ? customer.warehouse.warehouseAddress.firstLine +
-                          " " +
-                          customer.warehouse.warehouseAddress.city
+                        " " +
+                        customer.warehouse.warehouseAddress.city
                         : null}
                     </p>
                   </div>
@@ -158,7 +158,6 @@ function Table(props) {
               </tr>
             );
           })}
-          ;
         </tbody>
       </table>
       {orders?.length > 0 && (
