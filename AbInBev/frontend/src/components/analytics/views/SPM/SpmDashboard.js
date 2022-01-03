@@ -59,20 +59,7 @@ const SpmDashboard = (props) => {
       target: null,
     },
   });
-  // const []
-  const getWeightage = (type, value) => {
-    let res = 0;
-    if (!config[`${type}`]) return 0;
-    if (value > config[`${type}`]?.max.value) res = 5;
-    else if (
-      value < config[`${type}`]?.max.value &&
-      value > config[`${type}`]?.min.value
-    )
-      res = 2;
-    else res = 0;
 
-    return res;
-  };
   useEffect(() => {
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
@@ -110,29 +97,40 @@ const saveConfig = async () => {
       // console.log(configs.data[0]);
       // let tmp = config;
       // Object.assign(tmp, configs.data[0]);
+      if(configs.data.length)
       setConfig(configs.data[0]);
     })();
-
     (async () => {
       const result = await dispatch(getSupplierPerformanceByOrgType());
       let _spm = result.data;
       if (_spm.length) {
-        setSupplierPerformances(_spm);
+        sortSupplierPeformances(_spm);
       } else {
-        setSupplierPerformances([]);
+        sortSupplierPeformances([]);
       }
-
-      // if (configDistrict !== "") {
-      //   let configs = await dispatch(getNewConfig());
-      //   console.log(configs.data[0]);
-      //   setConfig(configs.data[0]);
-      // }
     })();
   }, [configDistrict, selectedType]);
 
   const typeSelected = (type) => {
     setSelectedType(type);
   };
+  console.log(props.selectedType)
+  function compare( a, b ) {
+    if ( a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`] ){
+      return 1;
+    }
+    if ( a.rating[`${props.sortByValue}`] > b.rating[`${props.sortByValue}`] ){
+      return -1;
+    }
+    return 0;
+  }
+  function sortSupplierPeformances(arr){
+    arr.sort(compare)
+    if(props.selectedType === 'All')
+    setSupplierPerformances(arr);
+    else
+    setSupplierPerformances(arr.filter(item => item.type === props.selectedType))
+  }
 
   const onStateChange = async (event) => {
     const selectedState = event.target.value;
@@ -145,7 +143,6 @@ const saveConfig = async () => {
     const selectedDistrict = event.target.value;
     setDistrict(selectedDistrict);
   };
-
   return (
     <div>
       {showSuccessPopup && <SuccessPopUp message={"config set succesfully"}/>}
@@ -319,10 +316,7 @@ const saveConfig = async () => {
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
                               <td>
-                                {getWeightage(
-                                  perf.returnRate ? perf.returnRate : 0,
-                                  "returnRate"
-                                )}
+                                {""}
                               </td>
                               <td>{config?.returnRate?.target}</td>
                             </tr>

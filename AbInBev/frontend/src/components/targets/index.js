@@ -60,7 +60,7 @@ const Targets = (props) => {
     },
   ]);
   useEffect(() => {
-    if (props.depots) setDisplayDistricts(props.depots);
+    if (props.depots) setDisplayDistricts(props.depots.sort());
   }, [props.depots]);
   // console.log()
   const onStateChange = async (event) => {
@@ -70,7 +70,7 @@ const Targets = (props) => {
     filter.state = selectedState;
     const result = await props.getDistricts(selectedState);
     setDistricts(result.data);
-    setDisplayDistricts(props.depots);
+    setDisplayDistricts(props.depots.sort());
     setParams(filter);
   };
 
@@ -81,7 +81,7 @@ const Targets = (props) => {
     const values = { ...params };
     values.district = selectedDistrict;
     filter.push(selectedDistrict);
-    setDisplayDistricts(props.depots);
+    setDisplayDistricts(props.depots.filter(item => item._id.depot === selectedDistrict));
     setParams(values);
     // console.log(displayDistricts)
   };
@@ -99,7 +99,7 @@ const Targets = (props) => {
   const resetFilters = () => {
     // setState('');
     setDistrict("");
-    setDisplayDistricts(props.depots);
+    setDisplayDistricts(props.depots.sort());
   };
 
   const selectCheckBox = (event, value, index) => {
@@ -138,13 +138,12 @@ const Targets = (props) => {
     if (checkedAllDis) {
       let data = [
         {
-          depot: props.targetDistricts,
+          depot: displayDistricts.map((item) => item._id.depot),
           percentage: returnTarget,
         },
       ];
       updateTargets(data);
     }
-    console.log(props.targetDistricts);
     let arr = [];
     selectedArray.map((e) =>
       arr.push({
@@ -152,7 +151,6 @@ const Targets = (props) => {
         percentage: parseInt(displayDistricts[e.index].percentage),
       })
     );
-    console.log(isChecked);
     updateTargets(arr);
     props.refreshPage();
     setIsChecked([]);
@@ -189,7 +187,8 @@ const Targets = (props) => {
               <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center'>
                 <h1 className='h2'>Targets</h1>
                 <button
-                  className='saveBtn'
+                  className={!(countChecked || checkedAllDis) ? 'saveBtnDisabled' : 'saveBtn'}
+                  disabled={!(countChecked || checkedAllDis)}
                   onClick={() => {
                     onSave();
                   }}
@@ -242,15 +241,14 @@ const Targets = (props) => {
                           checked={isChecked.indexOf(index) !== -1}
                         />
                       )}
-
                       <span>{district._id.depot}</span>
                       <div className='returTarget'>
                         <span style={{ marginBottom: "20px" }}>
                           {district.percentage}%
                         </span>
                       </div>
+
                       <div className='setReturnTarget'>
-                        <div style={{ marginBottom: "20px" }}>
                           <select
                             value={`${district.percentage}`}
                             style={{ borderRadius: "10px" }}
@@ -267,7 +265,6 @@ const Targets = (props) => {
                               <option value={item.value}>{item.value}%</option>
                             ))}
                           </select>
-                        </div>
                       </div>
                     </div>
                   ))}
