@@ -1,5 +1,4 @@
 const fs = require("fs");
-const moveFile = require("move-file");
 const XLSX = require("xlsx");
 const PdfPrinter = require("pdfmake");
 const { resolve } = require("path");
@@ -433,12 +432,7 @@ exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
     try {
-      const dir = `uploads`;
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-      await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
-      const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+      const workbook = XLSX.readFile(req.file.path);
       const sheet_name_list = workbook.SheetNames;
       const data = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheet_name_list[0]],
@@ -484,6 +478,7 @@ exports.addPOsFromExcel = [
           lastUpdatedBy: createdBy,
         };
       });
+      console.log(poDataArray);
       var incrementCounter = await CounterModel.update(
         {
           "counters.name": "poId",
@@ -505,6 +500,7 @@ exports.addPOsFromExcel = [
             externalId: poDataArray[i].externalId,
           });
           if (duplicate != null) {
+            console.log("****** Duplicate PO");
             delete poDataArray[i];
             i--;
           } else {
