@@ -395,7 +395,106 @@ const UpdateStatus = (props) => {
                           )}
                         </div>
                       </div>
-                    ) : ('')}
+                    ) : (
+                      <div>
+                        <h6 className='poheads potext m-4'>
+                          Shipment Cargo Status
+                        </h6>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>Accepatance Date</label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='acceptanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={values.acceptanceDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div className="appearDate">
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle1"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="col col-1 pl-2 custom-control custom-radio">
+                          <input
+                            type="radio"
+                            className="custom-control-input"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value="False"
+                            id="noradio"
+                            name="alerttrue"
+                          />
+                        </div>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Customs clearance Date
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='customsClearanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={values.customsClearanceDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle2"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Last Status
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type='date'
+                              className='form-control mb-2'
+                              name='lastStatus'
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              value={values.lastStatus}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle3"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>)}
                   </div>
                   <div className='col '>
                     <div className='row'>
