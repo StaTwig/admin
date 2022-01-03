@@ -1,16 +1,13 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 require("dotenv").config();
-var indexRouter = require("./routes/index");
-var apiRouter = require("./routes/api");
-var apiResponse = require("./helpers/apiResponse");
-var cors = require("cors");
-
-// DB connection
-var MONGODB_URL = process.env.MONGODB_URL;
-var mongoose = require("mongoose");
+const indexRouter = require("./routes/index");
+const apiRouter = require("./routes/api");
+const apiResponse = require("./helpers/apiResponse");
+const cors = require("cors");
+const MONGODB_URL = process.env.MONGODB_URL;
+const mongoose = require("mongoose");
 mongoose
   .connect(MONGODB_URL, {
     keepAlive: true,
@@ -18,7 +15,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    //don't show the log when it is test
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("Event Service is running ... \n");
@@ -28,9 +24,8 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-var db = mongoose.connection;
 
-var app = express();
+const app = express();
 
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {

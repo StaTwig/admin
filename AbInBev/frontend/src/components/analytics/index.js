@@ -63,15 +63,16 @@ const Analytics = (props) => {
   const [isActive, setIsActive] = useState('by_yearly');
   const [Otype, setOtype] = useState('ALL_VENDORS');
   const [selectedViewCode, setSelectedViewCode] = useState(
-    'SPM_DASHBOARD',
+    'ANNUALREPORT_DASHBOARD',
   );
   const [selectedModule, setSelectedModule] = useState(
-    'SPM_DASHBOARD',
+    'ANNUALREPORT_DASHBOARD',
   );
   const [annualReportButton, setannualReportButton] = useState('btn active');
   const [inventoryButton, setInventoryButton] = useState('btn');
   const [spm, setSpmButton] = useState('btn');
   const [selectedType, setSelectedType] = useState('All')
+  const [sortByValue, setSortByValue] = useState('');
 
   // useEffect(() => {
   //   setMonth(new Date().getMonth() + 1);
@@ -257,6 +258,8 @@ const Analytics = (props) => {
                 sku={SKU}
                 viewName={selectedViewCode}
                 onViewChange={onViewChange}
+                sortByValue={sortByValue}
+                selectedType={selectedType}
               ></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
@@ -705,7 +708,7 @@ const Analytics = (props) => {
                           name="view"
                           id="overall"
                           value="SPM_OVERALL"
-                          // onChange={changeView}
+                          onClick={(e)=>setSortByValue('returnRating')}
                           defaultChecked={
                             selectedViewCode == 'SPM_DASHBOARD'
                           }
@@ -719,7 +722,7 @@ const Analytics = (props) => {
                           name="view"
                           id="returnRate"
                           value="SPM_RETURN_RATE"
-                        // onChange={changeView}
+                          onClick={(e)=>setSortByValue('returnRating')}
                         />{' '}
                         Return Rate
                       </label>
@@ -730,7 +733,7 @@ const Analytics = (props) => {
                           name="view"
                           id="leadTime"
                           value="SPM_LEAD_TIME"
-                        // onChange={changeView}
+                          onClick={(e)=>setSortByValue('leadRating')}
                         />{' '}
                         Lead Time
                       </label>
@@ -741,7 +744,7 @@ const Analytics = (props) => {
                           name="view"
                           id="breakageBottle"
                           value="SPM_"
-                        // onChange={changeView}
+                          onClick={(e)=>setSortByValue('breakageRating')}
                         />{' '}
                         Breakage Bottle %
                       </label>
@@ -752,7 +755,7 @@ const Analytics = (props) => {
                           name="view"
                           id="dirtyBottles"
                           value="SPM_DIRTY_BOTTLES"
-                        // onChange={changeView}
+                          onClick={(e)=>setSortByValue('dirtyBottlesRating')}
                         />{' '}
                         Dirty Bottles
                       </label>
@@ -763,7 +766,7 @@ const Analytics = (props) => {
                           name="view"
                           id="storeAgeCapacity"
                           value="SPM_STOREAGE_CAPACITY"
-                        // onChange={changeView}
+                          onClick={(e)=>setSortByValue('storageCapacityRating')}
                         />{' '}
                         Storage Capacity
                       </label>
