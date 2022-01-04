@@ -20,6 +20,8 @@ const ProductInventory = (props) => {
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
 
+    const categoryArrayNew = [category, ...categoryArray.filter((value) => value !== category)]
+
   console.log(inventories);
   useEffect(() => {
     if (props.match && props.match.params && props.match.params.category) {
@@ -121,7 +123,7 @@ const ProductInventory = (props) => {
             className="row ml-0 flex-nowrap"
             ref={ref}
           >
-            {categoryArray.map((cat) => (
+            {categoryArrayNew.map((cat) => (
               <div
                 className={`panel m-2 ${category === cat && `active`}`}
                 onClick={() => changeType(cat)}
