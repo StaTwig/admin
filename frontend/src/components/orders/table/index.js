@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../../../utils/dateHelper";
 import Pagination from "@material-ui/lab/Pagination";
 import "./style.scss";
+import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
   const { ordrs, visible } = props;
@@ -26,17 +27,26 @@ function Table(props) {
   return (
     <div>
       <table className="table">
-        {/* <thead>
-        <tr>
-          <th>Order Sent To</th>
-          <th>Order Date</th>
-          <th>Order ID</th>
-          <th>Product</th>
-          <th>Delivery To</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead> */}
+      <AdvanceTableFilter
+          visible={props.visible}
+          data={props.data}
+          poOrderIdList={props.poOrderIdList}
+          poDeliveryLocationsList={props.poDeliveryLocationsList}
+          poProductsList={props.poProductsList}
+          poOrganisationsList={props.poOrganisationsList}
+          setFromToFilterOnSelect={props.setFromToFilterOnSelect}
+          setOrderIdNameFilterOnSelect={props.setOrderIdNameFilterOnSelect}
+          setStatusFilterOnSelect={props.setStatusFilterOnSelect}
+          setProductNameFilterOnSelect={props.setProductNameFilterOnSelect}
+          setLocationFilterOnSelect={props.setLocationFilterOnSelect}
+          setDateFilterOnSelect={props.setDateFilterOnSelect}
+          fb={props.fb}
+          showExportFilter={props.showExportFilter}
+          setShowExportFilter={props.setShowExportFilter}
+          exportFilterData={props.exportFilterData}
+          onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
+          isReportDisabled={props.isReportDisabled}
+        />
         <tbody>
           {orders.length === 0 && (
             <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
