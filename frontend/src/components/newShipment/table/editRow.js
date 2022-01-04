@@ -37,12 +37,12 @@ const EditRow = (props) => {
     coloumn5: "Exp Date",
     coloumn6: "Quantity",
 
-    img1: <img src={Product} width='15' height='15' alt='' />,
-    img2: <img src={user} width='15' height='15' alt='' />,
-    img3: <img src={Batch} width='15' height='15' alt='' />,
-    img4: <img src={date} width='15' height='15' alt='' />,
-    img5: <img src={date} width='15' height='15' alt='' />,
-    img6: <img src={Quantity} width='20' height='15' alt='' />,
+    img1: <img src={Product} width="15" height="15" alt="" />,
+    img2: <img src={user} width="15" height="15" alt="" />,
+    img3: <img src={Batch} width="15" height="15" alt="" />,
+    img4: <img src={date} width="15" height="15" alt="" />,
+    img5: <img src={date} width="15" height="15" alt="" />,
+    img6: <img src={Quantity} width="20" height="15" alt="" />,
   };
   // console.log(prod,"Edit rowt",index);
   const [editButtonStatus, setEditButtonStatus] = useState(false);
@@ -207,14 +207,14 @@ const EditRow = (props) => {
   // };
 
   return (
-    <div className='row ml-3 mr-1'>
-      <div className='trow row mr-1 col'>
-        <div className='col pl-4 tcell'>
-          <div className=' p-0'>
+    <div className="row ml-3 mr-1">
+      <div className="trow row mr-1 col">
+        <div className="col pl-4 tcell">
+          <div className=" p-0">
             {/* <div className="profileIconRound recived-bg">OPV</div> */}
 
-            <div className='d-flex flex-column'>
-              <div className='title recived-text'>
+            <div className="d-flex flex-column">
+              <div className="title recived-text">
                 {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
@@ -222,9 +222,9 @@ const EditRow = (props) => {
                 /> */}
                 {enableDelete ? (
                   <Select
-                    className='no-border'
+                    className="no-border"
                     placeholder={
-                      <div className='select-placeholder-text'>
+                      <div className="select-placeholder-text">
                         Select Product Category
                       </div>
                     }
@@ -247,11 +247,11 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className='Divider1'></div>
-        <div className='col tcell'>
-          <div className=' p-0'>
-            <div className='col tcell text-center justify-content-center pl-0'>
-              <div className='title recived-text'>
+        <div className="Divider1"></div>
+        <div className="col tcell">
+          <div className=" p-0">
+            <div className="col tcell text-center justify-content-center pl-0">
+              <div className="title recived-text">
                 {/* {enableDelete ?
                 <DropdownButton
                   //name={prod.name == '' ? "Select product" : prod.name}
@@ -263,9 +263,9 @@ const EditRow = (props) => {
                 } */}
                 {enableDelete ? (
                   <Select
-                    className='no-border'
+                    className="no-border"
                     placeholder={
-                      <div className='select-placeholder-text'>
+                      <div className="select-placeholder-text">
                         {" "}
                         Product Name{" "}
                       </div>
@@ -292,20 +292,20 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className='col tcell text-center justify-content-center p-2'>
+        <div className="col tcell text-center justify-content-center p-2">
           {prod.manufacturer ? (
             prod.manufacturer
           ) : (
-            <div className='select-placeholder-text'>Manufacturer</div>
+            <div className="select-placeholder-text">Manufacturer</div>
           )}
         </div>
 
-        <div className='col tcell text-center justify-content-center p-2'>
-          <div className=''>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
             <input
-              className='form-control text-center'
-              id='checker'
-              placeholder='Quantity'
+              className="form-control text-center"
+              id="checker"
+              placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
@@ -315,22 +315,22 @@ const EditRow = (props) => {
           </div>
         </div>
         <div
-          className='title recived-text align-self-center'
+          className="title recived-text align-self-center"
           style={{ position: "relative", right: "40px" }}
         >
           {prod.unitofMeasure && prod.unitofMeasure.name ? (
             <div>{prod.unitofMeasure.name}</div>
           ) : (
-            <div className='placeholder_id'>Unit</div>
+            <div className="placeholder_id">Unit</div>
           )}
         </div>
 
-        <div className='col tcell text-center justify-content-center p-2'>
-          <div className=''>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
             <input
-              className='form-control text-center'
-              id='checker'
-              placeholder='Batch number'
+              className="form-control text-center"
+              id="checker"
+              placeholder="Batch number"
               value={prod.batchNumber}
               onChange={(e) => {
                 handleBatchChange(e.target.value, index);
@@ -339,10 +339,10 @@ const EditRow = (props) => {
             />
           </div>
         </div>
-        <div className='d-flex'>
+        <div className="d-flex">
           <button
-            type='button'
-            className='btn btn-outline-primary mr-2 ml-2'
+            type="button"
+            className="btn btn-outline-primary mr-2 ml-2"
             style={{ height: "30px", width: "60px" }}
             onClick={() => {
               setShowModal(true);
@@ -355,169 +355,172 @@ const EditRow = (props) => {
               Fetch
             </div>
           </button>
-          <div className=''>
+          <div className="">
             {showModal && (
               <div>
                 <Modal
                   close={closeModal}
-                  title='FETCH SERIAL NUMBERS'
-                  size='modal-xl' //for other size's use `modal-lg, modal-md, modal-sm`
+                  title="FETCH SERIAL NUMBERS"
+                  size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                 >
-                  <div className=''>
-                    <TableFilter data={headers} fb='140%' />
+                  <div className="">
+                    <TableFilter data={headers} fb="140%" />
                   </div>
-
-                  {batches.length === 0 ? (
-                    <div className='rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none'>
-                      No records found
-                    </div>
-                  ) : (
-                    batches.map((product, index) => (
-                      <div className='rTable pt-1'>
-                        <div>
+                  <div className="overflow">
+                    {batches.length === 0 ? (
+                      <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">
+                        No records found
+                      </div>
+                    ) : (
+                      batches.map((product, index) => (
+                        <div className="rTable pt-1">
                           <div>
-                            <div className='rTableRow mb-1'>
-                              <input
-                                className='txt2 ml-3'
-                                type='checkbox'
-                                id={index}
-                                onChange={(e) => {
-                                  handleChange({
-                                    quant: product.quantity,
-                                    bnp: product.batchNumbers[0],
-                                  });
-                                  editBatchSelected(
-                                    index,
-                                    "selected",
-                                    !batches[index].selected
-                                  );
-                                  editBatchSelected(index, "editable", false);
-                                }}
-                              ></input>
-                              {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
-                              <div
-                                className='col txt'
-                                style={{ position: "relative", left: "0%" }}
-                              >
-                                {ModelProd?.name}
-                              </div>
-                              <div
-                                className='col txt1'
-                                style={{ position: "relative", left: "6%" }}
-                              >
-                                {ModelProd?.manufacturer}
-                              </div>
-                              <div
-                                className='col txt1'
-                                style={{ position: "relative", left: "8%" }}
-                              >
-                                {product.batchNumbers[0]}
-                              </div>
-                              <div
-                                className='col txt1'
-                                style={{ position: "relative", left: "8%" }}
-                              >
-                                {product.attributeSet.mfgDate.length > 0
-                                  ? formatDate(
-                                      product.attributeSet.mfgDate,
-                                      "mmyyyy"
-                                    )
-                                  : "-"}
-                              </div>
-                              <div
-                                className='col txt1'
-                                style={{ position: "relative", left: "8%" }}
-                              >
-                                {product.attributeSet.expDate.length > 0
-                                  ? formatDate(
-                                      product.attributeSet.expDate,
-                                      "mmyyyy"
-                                    )
-                                  : "-"}
-                              </div>
-                              <div
-                                className='col txt1'
-                                style={{ position: "relative", left: "4%" }}
-                              >
-                                <div className='txt1'>
-                                  <input
-                                    className='form-control text-center input1'
-                                    id='checker'
-                                    placeholder='Quantity'
-                                    onKeyPress={numbersOnly}
-                                    value={product.quantity}
-                                    disabled={!product.editable}
-                                    onChange={(e) =>
-                                      editQuantity(e.target.value, index)
-                                    }
-                                  />
+                            <div>
+                              <div className="rTableRow mb-1">
+                                <input
+                                  className="txt2 ml-3"
+                                  type="checkbox"
+                                  id={index}
+                                  onChange={(e) => {
+                                    handleChange({
+                                      quant: product.quantity,
+                                      bnp: product.batchNumbers[0],
+                                    });
+                                    editBatchSelected(
+                                      index,
+                                      "selected",
+                                      !batches[index].selected
+                                    );
+                                    editBatchSelected(index, "editable", false);
+                                  }}
+                                ></input>
+                                {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
+                                <div
+                                  className="col txt"
+                                  style={{ position: "relative", left: "0%" }}
+                                >
+                                  {ModelProd?.name}
                                 </div>
-                              </div>
-                              <div className='txt1 title recived-text align-self-left mr-4' style={{left: '-10px'}}>
-                                {prod.unitofMeasure.name}
-                              </div>
-
-                              <div className='txt1 mr-3'>
-                                <div >
-                                  {editButtonStatus ? (
-                                    <div>
-                                      {addnew ? (
-                                        <button
-                                          type='submit'
-                                          className='btn-sm btn-yellow d-width'
-                                          onClick={onSaveClick}
-                                        >
-                                          <i className='fa fa-pencil text-center'></i>
-                                          <span className=''>
-                                            {changebtn ? "" : ""}
-                                          </span>
-                                        </button>
-                                      ) : (
-                                        <button
-                                          className='btn-sm btn-yellow d-width'
-                                          onClick={onEditClick}
-                                        >
-                                          <i className='fa fa-pencil text-center'></i>
-                                          {/* <span className="ml-1"></span> */}
-                                        </button>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <button
-                                      type='button'
-                                      className='btn-sm btn-yellow d-width'
-                                      disabled={!batches[index].selected}
-                                      onClick={(e) =>
-                                        editBatchSelected(
-                                          index,
-                                          "editable",
-                                          !batches[index].editable
-                                        )
+                                <div
+                                  className="col txt1"
+                                  style={{ position: "relative", left: "6%" }}
+                                >
+                                  {ModelProd?.manufacturer}
+                                </div>
+                                <div
+                                  className="col txt1"
+                                  style={{ position: "relative", left: "8%" }}
+                                >
+                                  {product.batchNumbers[0]}
+                                </div>
+                                <div
+                                  className="col txt1"
+                                  style={{ position: "relative", left: "8%" }}
+                                >
+                                  {product.attributeSet.mfgDate.length > 0
+                                    ? formatDate(
+                                        product.attributeSet.mfgDate,
+                                        "mmyyyy"
+                                      )
+                                    : "-"}
+                                </div>
+                                <div
+                                  className="col txt1"
+                                  style={{ position: "relative", left: "8%" }}
+                                >
+                                  {product.attributeSet.expDate.length > 0
+                                    ? formatDate(
+                                        product.attributeSet.expDate,
+                                        "mmyyyy"
+                                      )
+                                    : "-"}
+                                </div>
+                                <div
+                                  className="col txt1"
+                                  style={{ position: "relative", left: "4%" }}
+                                >
+                                  <div className="txt1">
+                                    <input
+                                      className="form-control text-center input1"
+                                      id="checker"
+                                      placeholder="Quantity"
+                                      onKeyPress={numbersOnly}
+                                      value={product.quantity}
+                                      disabled={!product.editable}
+                                      onChange={(e) =>
+                                        editQuantity(e.target.value, index)
                                       }
-                                    >
-                                      <i className='fa fa-pencil text-center'></i>
-                                      {/* <span className="ml-1"></span> */}
-                                    </button>
-                                  )}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                              {/* <div className="pr-3">
+                                <div
+                                  className="txt1 title recived-text align-self-left mr-4"
+                                  style={{ left: "-10px" }}
+                                >
+                                  {prod.unitofMeasure.name}
+                                </div>
+
+                                <div className="txt1 mr-3">
+                                  <div>
+                                    {editButtonStatus ? (
+                                      <div>
+                                        {addnew ? (
+                                          <button
+                                            type="submit"
+                                            className="btn-sm btn-yellow d-width"
+                                            onClick={onSaveClick}
+                                          >
+                                            <i className="fa fa-pencil text-center"></i>
+                                            <span className="">
+                                              {changebtn ? "" : ""}
+                                            </span>
+                                          </button>
+                                        ) : (
+                                          <button
+                                            className="btn-sm btn-yellow d-width"
+                                            onClick={onEditClick}
+                                          >
+                                            <i className="fa fa-pencil text-center"></i>
+                                            {/* <span className="ml-1"></span> */}
+                                          </button>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        className="btn-sm btn-yellow d-width"
+                                        disabled={!batches[index].selected}
+                                        onClick={(e) =>
+                                          editBatchSelected(
+                                            index,
+                                            "editable",
+                                            !batches[index].editable
+                                          )
+                                        }
+                                      >
+                                        <i className="fa fa-pencil text-center"></i>
+                                        {/* <span className="ml-1"></span> */}
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                                {/* <div className="pr-3">
                       <button className="bg-white btn-outline-primary d-width">
                         <i className="fa fa-pencil"></i>
                         <span className="ml-1"></span>
                       </button>
                 </div> */}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
-                  )}
-
-                  <div className='d-flex flex-row-reverse p-3'>
+                      ))
+                    )}
+                  </div>
+                  <div className="d-flex flex-row-reverse p-3">
                     <button
-                      type='button'
-                      className='ml-3 btn btn-orange'
+                      type="button"
+                      className="ml-3 btn btn-orange"
                       onClick={() => {
                         changeBatch(selectedBatch, selectedIndex);
                         closeModal();
@@ -526,13 +529,13 @@ const EditRow = (props) => {
                       Next
                     </button>
                     <button
-                      type='button'
+                      type="button"
                       onClick={() => {
                         closeModal();
                         setBatchSelected(false);
                         setDisabled(true);
                       }}
-                      className='btn btn-outline-dark'
+                      className="btn btn-outline-dark"
                     >
                       CANCEL
                     </button>
@@ -552,18 +555,18 @@ const EditRow = (props) => {
 
       {props.product.length > 1 && (
         <div
-          className='m-2 pl-3 pt-1'
+          className="m-2 pl-3 pt-1"
           style={{ position: "relative", left: "10px" }}
         >
           <span
-            className='del-pad shadow border-none rounded-circle mr-1'
+            className="del-pad shadow border-none rounded-circle mr-1"
             onClick={() => props.onRemoveRow(index)}
           >
             <img
-              className='cursorP p-1'
-              height='30'
+              className="cursorP p-1"
+              height="30"
               src={Delete}
-              alt='Delete'
+              alt="Delete"
             />
           </span>
         </div>
