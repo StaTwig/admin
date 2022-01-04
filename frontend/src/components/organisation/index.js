@@ -9,14 +9,15 @@ import "./style.scss";
 
 import SearchBar from "../searchBar";
 import DropDownFilter from "../dropDownFilter";
+import NoRecordsFound from "../NoRecordsFound";
 
 const Organisations = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
 
-  const {  modifyOrg, setShowModals, addOrg, organisationList, 
-    countryData, orgTypeData, regionData, statusData, 
+  const { modifyOrg, setShowModals, addOrg, organisationList,
+    countryData, orgTypeData, regionData, statusData,
     filterOrganisationListBasedOnTopPanelSearchInput,
     onChangeOfSearchForFilterInput,
     onSelectionOfDropdownValue,
@@ -30,7 +31,7 @@ const Organisations = (props) => {
     setShowDropDownForRegion,
     setShowDropDownForCountry,
     setShowDropDownForType
-   } = props;
+  } = props;
 
 
 
@@ -66,16 +67,16 @@ const Organisations = (props) => {
       <div className='full-width'>
         <div className='filter'>
           <div className='row'>
-            <div className='box col-1 ml-5 mr-5 headerText headerTitles' style={{position:"relative",left:"1.1rem"}}>Name</div>
+            <div className='box col-1 ml-5 mr-5 headerText headerTitles' style={{ position: "relative", left: "1.1rem" }}>Name</div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText headerTitles' style={{marginLeft:"12px"}}>
-              <span className="headerText" 
-                  onClick={() => {
-                    setShowDropDownForType(!showDropDownForType);
-                  }}
-                  
-                 style={{cursor:"pointer"}}>{'Type'}
+            <div className='box col-2 headerText headerTitles' style={{ marginLeft: "12px" }}>
+              <span className="headerText"
+                onClick={() => {
+                  setShowDropDownForType(!showDropDownForType);
+                }}
+
+                style={{ cursor: "pointer" }}>{'Type'}
               </span>
               <img
                 class='headerText'
@@ -84,7 +85,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '68px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -104,17 +105,17 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText headerTitles' style={{marginLeft:"15px"}}>Postal address</div>
+            <div className='box col-2 headerText headerTitles' style={{ marginLeft: "15px" }}>Postal address</div>
             <div class="vl text-center"></div>
 
 
-            <div className='box ml-2 mr-2 headerText headerTitles' style={{flex:"0 0 10.333333%", maxWidth:"10.333333%"}}>
-              <span className="headerText"  
-                  onClick={() => {
-                    setShowDropDownForCountry(!showDropDownForCountry);
-                  }}
-                  style={{cursor:"pointer"}}>{'Country'}
-                </span>
+            <div className='box ml-2 mr-2 headerText headerTitles' style={{ flex: "0 0 10.333333%", maxWidth: "10.333333%" }}>
+              <span className="headerText"
+                onClick={() => {
+                  setShowDropDownForCountry(!showDropDownForCountry);
+                }}
+                style={{ cursor: "pointer" }}>{'Country'}
+              </span>
               <img
                 class='headerText'
                 style={{
@@ -122,7 +123,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '50px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -142,9 +143,9 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
             <div className='box col-1 headerText ml-2 mr-2 headerTitles'>
-              <span className="headerText" 
-                    onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
-                    style={{cursor:"pointer"}}>{'Region'}
+              <span className="headerText"
+                onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
+                style={{ cursor: "pointer" }}>{'Region'}
               </span>
               <img
                 class='headerText'
@@ -153,7 +154,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '50px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -161,7 +162,7 @@ const Organisations = (props) => {
               />
               {showDropDownForRegion &&
                 <DropDownFilter
-                  setShowDropDownForRegion = {setShowDropDownForRegion}
+                  setShowDropDownForRegion={setShowDropDownForRegion}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={regionData}
                   type={'region'}
@@ -172,11 +173,11 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col ml-2 mr-2 headerText headerTitles'>
-              <span className="headerText" 
-                  onClick={() => {
-                    setShowDropDownForStatus(!showDropDownForStatus);
-                  }}
-                  style={{cursor:"pointer"}}>{'Status'}
+              <span className="headerText"
+                onClick={() => {
+                  setShowDropDownForStatus(!showDropDownForStatus);
+                }}
+                style={{ cursor: "pointer" }}>{'Status'}
               </span>
               <img
                 class='headerText'
@@ -185,7 +186,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '68px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -195,7 +196,7 @@ const Organisations = (props) => {
               />
               {showDropDownForStatus &&
                 <DropDownFilter
-                  setShowDropDownForStatus = {setShowDropDownForStatus}
+                  setShowDropDownForStatus={setShowDropDownForStatus}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={statusData}
                   type={'status'}
@@ -206,11 +207,11 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col ml-2  headerText headerTitles'>
-              <span className="headerText" 
+              <span className="headerText"
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
                 }}
-                style={{cursor:"pointer"}}>{'Created on'}
+                style={{ cursor: "pointer" }}>{'Created on'}
               </span>
               <img
                 class='headerText'
@@ -219,7 +220,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '38px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -229,7 +230,7 @@ const Organisations = (props) => {
               />
               {showDropDownForCreatedOn &&
                 <DropDownFilter
-                  setShowDropDownForCreatedOn = {setShowDropDownForCreatedOn}
+                  setShowDropDownForCreatedOn={setShowDropDownForCreatedOn}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={[]}
                   type={'createdOn'}
@@ -239,7 +240,7 @@ const Organisations = (props) => {
             {/* <div className='box col headerText'>
               <span className="headerText" style={{ marginRight: '72px' }}>{''}</span>
             </div> */}
-            </div>
+          </div>
         </div>
       </div>
       <div className="details-card">
@@ -253,7 +254,10 @@ const Organisations = (props) => {
             types={orgTypeData}
             onClickOfDropDownItem={onSelectionOfDropdownValue}
           />
-        }) : <div>{'loading....'}</div>}
+        }) :
+          <div className="col recordsMsg justify-content">
+            <NoRecordsFound dClass="w-50" />
+          </div>}
       </div>
     </div>
   );
