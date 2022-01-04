@@ -1,5 +1,5 @@
 exports.successResponse = function (res, msg) {
-  var data = {
+  const data = {
     status: 1,
     message: msg,
   };
@@ -7,7 +7,7 @@ exports.successResponse = function (res, msg) {
 };
 
 exports.successResponseWithData = function (res, msg, data) {
-  var resData = {
+  const resData = {
     status: 1,
     message: msg,
     data: data,
@@ -22,7 +22,7 @@ exports.successResponseWithMultipleData = function (
   dataIn,
   dataOut
 ) {
-  var resData = {
+  const resData = {
     status: 1,
     message: msg,
     data: data,
@@ -33,7 +33,7 @@ exports.successResponseWithMultipleData = function (
 };
 
 exports.ErrorResponse = function (res, msg) {
-  var data = {
+  const data = {
     status: 0,
     message: msg,
   };
@@ -41,7 +41,7 @@ exports.ErrorResponse = function (res, msg) {
 };
 
 exports.notFoundResponse = function (res, msg) {
-  var data = {
+  const data = {
     status: 0,
     message: msg,
   };
@@ -49,7 +49,7 @@ exports.notFoundResponse = function (res, msg) {
 };
 
 exports.validationErrorWithData = function (res, msg, data) {
-  var resData = {
+  const resData = {
     status: 0,
     message: msg,
     data: data,
@@ -58,7 +58,7 @@ exports.validationErrorWithData = function (res, msg, data) {
 };
 
 exports.unauthorizedResponse = function (res, msg) {
-  var data = {
+  const data = {
     status: 0,
     message: msg,
   };
@@ -66,7 +66,7 @@ exports.unauthorizedResponse = function (res, msg) {
 };
 
 exports.forbiddenResponse = function (res, msg) {
-  var data = {
+  const data = {
     status: 0,
     message: msg,
   };

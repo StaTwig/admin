@@ -1,33 +1,31 @@
-const fs = require('fs');
-const moveFile = require('move-file');
-const XLSX = require('xlsx');
-var PdfPrinter = require('pdfmake');
-resolve = require('path').resolve
-
-var fontDescriptors = {
+const fs = require("fs");
+const moveFile = require("move-file");
+const XLSX = require("xlsx");
+const PdfPrinter = require("pdfmake");
+const { resolve } = require("path");
+const fontDescriptors = {
   Roboto: {
-    normal: resolve('./controllers/Roboto-Regular.ttf'),
-    bold: resolve('./controllers/Roboto-Medium.ttf'),
-    italics: resolve('./controllers/Roboto-Italic.ttf'),
-    bolditalics: resolve('./controllers/Roboto-MediumItalic.ttf')
-  }
-}
-var printer = new PdfPrinter(fontDescriptors);
-const axios = require('axios');
-const uniqid = require('uniqid');
-const date = require('date-and-time');
-const moment = require('moment');
-const POModel = require('../models/POModel');
-const RecordModel = require('../models/RecordModel');
-const Event = require('../models/EventModal')
-const CounterModel = require('../models/CounterModel')
-const OrganisationModel = require('../models/OrganisationModel')
-const ProductModel = require('../models/ProductModel')
-const EmployeeModel = require('../models/EmployeeModel')
+    normal: resolve("./controllers/Roboto-Regular.ttf"),
+    bold: resolve("./controllers/Roboto-Medium.ttf"),
+    italics: resolve("./controllers/Roboto-Italic.ttf"),
+    bolditalics: resolve("./controllers/Roboto-MediumItalic.ttf"),
+  },
+};
+const printer = new PdfPrinter(fontDescriptors);
+const axios = require("axios");
+const uniqid = require("uniqid");
+const date = require("date-and-time");
+const moment = require("moment");
+const POModel = require("../models/POModel");
+const RecordModel = require("../models/RecordModel");
+const Event = require("../models/EventModal");
+const CounterModel = require("../models/CounterModel");
+const OrganisationModel = require("../models/OrganisationModel");
+const ProductModel = require("../models/ProductModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
-//this helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const checkPermissions =
@@ -36,91 +34,88 @@ const wrapper = require("../models/DBWrapper");
 const excel = require("node-excel-export");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
-const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
-var pdf = require("pdf-creator-node");
-const products = require('../data/products');
-const manufacturers = require('../data/manufacturers');
-const CENTRAL_AUTHORITY_ID = null
-const CENTRAL_AUTHORITY_NAME = null
-const CENTRAL_AUTHORITY_ADDRESS = null
-const init = require('../logging/init');
-const logger = init.getLog();
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
-const userPurchaseOrders = async ( mode,orgMode, organisationId, type, id, skip, limit, callback) => {
-        var matchCondition = {};
-        if (orgMode != "")
-        var criteria = mode + "." + orgMode;
-        else{
-        var criteria = mode;
-        }
-       let newObj = {}
-      if(type=="outbound")
-      {
-            newObj[criteria] = organisationId;
-            matchCondition["$or"] = [newObj,{"createdBy": id }];
-       }
-       else
-       matchCondition[criteria] = organisationId;
-        var  poDetails = [];
-            poDetails = await RecordModel.aggregate([{
-                $match: matchCondition,
-            },
-	    {
-                $lookup: {
-                    from: "organisations",
-                    localField: "supplier.supplierOrganisation",
-                    foreignField: "id",
-                    as: "supplier.organisation",
-                },
-            },
-            {
-                $unwind: {
-                    path: "$supplier.organisation",
-                },
-            },
-            {
-                $lookup: {
-                    from: "organisations",
-                    localField: "customer.customerOrganisation",
-                    foreignField: "id",
-                    as: "customer.organisation",
-                },
-            },
-            {
-                $unwind: {
-                    path: "$customer.organisation",
-                },
-            },
-            {
-                $lookup: {
-                    from: "warehouses",
-                    localField: "customer.shippingAddress.shippingAddressId",
-                    foreignField: "id",
-                    as: "customer.warehouse",
-                },
-            },
-            {
-                $unwind: {
-                    path: "$customer.warehouse",
-                },
-            },
-            {
-                $lookup: {
-                    from: "products",
-                    localField: "products.productId",
-                    foreignField: "id",
-                    as: "productDetails",
-                },
-            },
-            ]).sort({
-            createdAt: -1
-        }).skip(parseInt(skip))
-        .limit(parseInt(limit));
-        callback(undefined, poDetails)
-}
-
-
+const userPurchaseOrders = async (
+  mode,
+  orgMode,
+  organisationId,
+  type,
+  id,
+  skip,
+  limit,
+  callback
+) => {
+  let criteria;
+  let matchCondition = {};
+  orgMode != "" ? (criteria = mode + "." + orgMode) : (criteria = mode);
+  let newObj = {};
+  if (type == "outbound") {
+    newObj[criteria] = organisationId;
+    matchCondition["$or"] = [newObj, { createdBy: id }];
+  } else matchCondition[criteria] = organisationId;
+  const poDetails = await RecordModel.aggregate([
+    {
+      $match: matchCondition,
+    },
+    {
+      $lookup: {
+        from: "organisations",
+        localField: "supplier.supplierOrganisation",
+        foreignField: "id",
+        as: "supplier.organisation",
+      },
+    },
+    {
+      $unwind: {
+        path: "$supplier.organisation",
+      },
+    },
+    {
+      $lookup: {
+        from: "organisations",
+        localField: "customer.customerOrganisation",
+        foreignField: "id",
+        as: "customer.organisation",
+      },
+    },
+    {
+      $unwind: {
+        path: "$customer.organisation",
+      },
+    },
+    {
+      $lookup: {
+        from: "warehouses",
+        localField: "customer.shippingAddress.shippingAddressId",
+        foreignField: "id",
+        as: "customer.warehouse",
+      },
+    },
+    {
+      $unwind: {
+        path: "$customer.warehouse",
+      },
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "products.productId",
+        foreignField: "id",
+        as: "productDetails",
+      },
+    },
+  ])
+    .sort({
+      createdAt: -1,
+    })
+    .skip(parseInt(skip))
+    .limit(parseInt(limit));
+  callback(undefined, poDetails);
+};
 
 exports.fetchPurchaseOrders = [
   auth,
@@ -134,10 +129,10 @@ exports.fetchPurchaseOrders = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          var inboundPOs, outboundPOs, poDetails;
+          let inboundPOs, outboundPOs, poDetails;
           try {
             if (poId != null) {
-              const POs = await userPurchaseOrders(
+              await userPurchaseOrders(
                 "id",
                 "",
                 poId,
@@ -149,16 +144,16 @@ exports.fetchPurchaseOrders = [
                   poDetails = data;
                 }
               );
-              //  console.log(poDetails[0].products)
               await Promise.all(
                 poDetails[0].products.map(async (element) => {
-                  var product = await ProductModel.findOne({ id: element.id });
+                  const product = await ProductModel.findOne({
+                    id: element.id,
+                  });
                   element.unitofMeasure = product.unitofMeasure;
                 })
               );
-              //  console.log(poDetails[0].products)
             } else {
-              const supplierPOs = await userPurchaseOrders(
+              await userPurchaseOrders(
                 "supplier",
                 "supplierOrganisation",
                 organisationId,
@@ -170,8 +165,7 @@ exports.fetchPurchaseOrders = [
                   inboundPOs = data;
                 }
               );
-
-              const customerPOs = await userPurchaseOrders(
+              await userPurchaseOrders(
                 "customer",
                 "customerOrganisation",
                 organisationId,
@@ -184,7 +178,6 @@ exports.fetchPurchaseOrders = [
                 }
               );
             }
-
             return apiResponse.successResponseWithData(res, "Shipments Table", {
               inboundPOs: inboundPOs,
               outboundPOs: outboundPOs,
@@ -320,60 +313,71 @@ exports.changePOStatus = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          const { orderID, status } = req.body;
-          const po = await RecordModel.findOne({ id: orderID });
-          if (po && po.customer.customer_incharge === address) {
-            const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-            const updates = {
-              updatedOn: currDateTime,
-              status: status,
-            };
-            const updateData = await RecordModel.findOneAndUpdate(
-              { id: orderID },
-              {
-                $push: { poUpdates: updates },
-                $set: { poStatus: status },
-              },
-              { new: true }
-            );
-            const event = await Event.findOne({ transactionId: orderID });
-            let newEvent = {
-              eventID: "ev0000" + Math.random().toString(36).slice(2),
-              eventTime: new Date(),
-              transactionId: event.transactionId,
-              eventTypePrimary: event.eventTypePrimary,
-              eventTypeDesc: event.eventTypeDesc,
-              actorId: req.user.id || event.actorId,
-              actorUserId: req.user.emailId || event.actorUserId,
-              caId: event.caId,
-              caName: event.caName,
-              caAddress: event.caAddress,
-              actorOrgId: event.actorOrgId,
-              actorOrgName: event.actorOrgName,
-              actorOrgAddress: event.actorOrgAddress,
-              actorWarehouseId: event.actorWarehouseId,
-              secondaryOrgId: event.secondaryOrgId,
-              secondaryOrgName: event.secondaryOrgName,
-              secondaryOrgAddress: event.secondaryOrgAddress,
-              payloadData: {
-                data: {},
-              },
-            };
-            if (status === "ACCEPTED") newEvent.eventTypePrimary = "RECEIVE";
-            else newEvent.eventTypePrimary = "REJECT";
-            newEvent.payloadData.data = req.body;
-            const event_body = new Event(newEvent);
-            await event_body.save();
-            return apiResponse.successResponseWithData(
-              res,
-              "PO Status",
-              updateData
-            );
-          } else {
-            return apiResponse.ErrorResponse(
-              res,
-              "You are not authorised to change the status"
-            );
+          try {
+            const { orderID, status } = req.body;
+            const po = await RecordModel.findOne({ id: orderID });
+            if (po && po.customer.customer_incharge === address) {
+              const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+              const updates = {
+                updatedOn: currDateTime,
+                status: status,
+              };
+              await RecordModel.findOneAndUpdate(
+                { id: orderID },
+                {
+                  $push: { poUpdates: updates },
+                  $set: { poStatus: status },
+                }
+              );
+              try {
+                console.log(req.user);
+                let event = await Event.findOne({ transactionId: orderID });
+                console.log(event);
+                let newEvent = {
+                  eventID: "ev0000" + Math.random().toString(36).slice(2),
+                  eventTime: new Date(),
+                  transactionId: event.transactionId,
+                  eventTypePrimary: event.eventTypePrimary,
+                  eventTypeDesc: event.eventTypeDesc,
+                  actorId: req.user.id || event.actorId,
+                  actorUserId: req.user.emailId || event.actorUserId,
+                  caId: event.caId,
+                  caName: event.caName,
+                  caAddress: event.caAddress,
+                  actorOrgId: event.actorOrgId,
+                  actorOrgName: event.actorOrgName,
+                  actorOrgAddress: event.actorOrgAddress,
+                  actorWarehouseId: event.actorWarehouseId,
+                  secondaryOrgId: event.secondaryOrgId,
+                  secondaryOrgName: event.secondaryOrgName,
+                  secondaryOrgAddress: event.secondaryOrgAddress,
+                  payloadData: {
+                    data: {},
+                  },
+                };
+                if (status === "ACCEPTED")
+                  newEvent.eventTypePrimary = "RECEIVE";
+                else newEvent.eventTypePrimary = "REJECT";
+                newEvent.payloadData.data = req.body;
+                let event_body = new Event(newEvent);
+                let result = await event_body.save();
+                console.log(result);
+              } catch (error) {
+                console.log(error);
+              }
+              return apiResponse.successResponseWithData(
+                res,
+                "PO Status",
+                "Success"
+              );
+            } else {
+              return apiResponse.ErrorResponse(
+                res,
+                "You are not authorised to change the status"
+              );
+            }
+          } catch (e) {
+            return apiResponse.ErrorResponse(res, e.message);
           }
         } else {
           return apiResponse.forbiddenResponse(
@@ -383,7 +387,6 @@ exports.changePOStatus = [
         }
       });
     } catch (err) {
-      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -421,8 +424,7 @@ exports.createPurchaseOrder = [
         result.id
       );
     } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -431,14 +433,7 @@ exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
     try {
-      // const permission_request = {
-      //   role: req.user.role,
-      //   permissionRequired: ['createPO'],
-      // };
-      // checkPermissions(permission_request, async permissionResult => {
-      //   if (permissionResult.success) {
       try {
-        console.log(req.user);
         const dir = `uploads`;
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir);
@@ -450,8 +445,7 @@ exports.addPOsFromExcel = [
           workbook.Sheets[sheet_name_list[0]],
           { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
         );
-        //console.log(data)
-        const createdBy = (lastUpdatedBy = req.user.id);
+        const createdBy = req.user.id;
         let poDataArray = [];
         poDataArray = data.map((po) => {
           return {
@@ -463,7 +457,6 @@ exports.addPOsFromExcel = [
             supplier: {
               supplierOrganisation: po["Vendor"],
               name: po["Vendor Name"],
-              // "supplierIncharge": po['Supplier Incharge']
             },
             customer: {
               customerOrganisation: po["IP Code"],
@@ -471,7 +464,6 @@ exports.addPOsFromExcel = [
               country: po["Country Name"],
               region: po["Region Name"],
               address: "NA",
-              // "customerIncharge": po['Customer Incharge'],
               shippingAddress: {
                 shippingAddressId: po["Plant"],
                 shipmentReceiverId: po["Shipment Receiver Id"] || "NA",
@@ -490,7 +482,7 @@ exports.addPOsFromExcel = [
               },
             ],
             createdBy: createdBy,
-            lastUpdatedBy: lastUpdatedBy,
+            lastUpdatedBy: createdBy,
           };
         });
         var incrementCounter = await CounterModel.update(
@@ -510,7 +502,7 @@ exports.addPOsFromExcel = [
         let dataRows = 0;
         for (let i in poDataArray) {
           if (poDataArray[i].externalId != null) {
-            duplicate = await RecordModel.findOne({
+            const duplicate = await RecordModel.findOne({
               externalId: poDataArray[i].externalId,
             });
             if (duplicate != null) {
@@ -588,7 +580,7 @@ exports.addPOsFromExcel = [
                   { "counters.name": "orgId" },
                   { "counters.$": 1 }
                 );
-                organisationId =
+                const organisationId =
                   orgCounter.counters[0].format + orgCounter.counters[0].value;
                 const incrementCounterWarehouse = await CounterModel.update(
                   {
@@ -614,17 +606,16 @@ exports.addPOsFromExcel = [
                   { "counters.name": "warehouseId" },
                   { "counters.$": 1 }
                 );
-                warehouseId =
+                const warehouseId =
                   warehouseCounter.counters[0].format +
                   warehouseCounter.counters[0].value;
                 const empCounter = await CounterModel.findOne(
                   { "counters.name": "employeeId" },
                   { "counters.$": 1 }
                 );
-                var employeeId =
+                const employeeId =
                   empCounter.counters[0].format + empCounter.counters[0].value;
-                var employeeStatus = "NOTAPPROVED";
-                let addr = "";
+                const employeeStatus = "NOTAPPROVED";
                 const emailId =
                   moment().format("YYYY-MM-DDTHH:mm:ss") + "@statledger.com";
                 let phone = "";
@@ -663,7 +654,7 @@ exports.addPOsFromExcel = [
                   authority: req.body?.authority,
                   externalId: poDataArray[i].customer.customerOrganisation,
                 });
-                const createdOrg = await org.save();
+                await org.save();
                 poDataArray[i].customer.customerOrganisation = organisationId;
                 const incrementCounterInv = await CounterModel.update(
                   {
@@ -764,7 +755,7 @@ exports.addPOsFromExcel = [
                   { "counters.name": "orgId" },
                   { "counters.$": 1 }
                 );
-                organisationId =
+                const organisationId =
                   orgCounter.counters[0].format + orgCounter.counters[0].value;
                 const incrementCounterWarehouse = await CounterModel.update(
                   {
@@ -790,17 +781,16 @@ exports.addPOsFromExcel = [
                   { "counters.name": "warehouseId" },
                   { "counters.$": 1 }
                 );
-                warehouseId =
+                const warehouseId =
                   warehouseCounter.counters[0].format +
                   warehouseCounter.counters[0].value;
                 const empCounter = await CounterModel.findOne(
                   { "counters.name": "employeeId" },
                   { "counters.$": 1 }
                 );
-                var employeeId =
+                const employeeId1 =
                   empCounter.counters[0].format + empCounter.counters[0].value;
-                var employeeStatus = "NOTAPPROVED";
-                let addr = "";
+                const employeeStatus1 = "NOTAPPROVED";
                 const emailId =
                   moment().format("YYYY-MM-DDTHH:mm:ss") + "@statledger.com";
                 let phone = "";
@@ -811,21 +801,21 @@ exports.addPOsFromExcel = [
                   emailId: phone ? "" : emailId,
                   phoneNumber: phone,
                   organisationId: organisationId,
-                  id: employeeId,
+                  id: employeeId1,
                   postalAddress: address,
-                  accountStatus: employeeStatus,
+                  accountStatus: employeeStatus1,
                   warehouseId: [warehouseId],
                 });
                 await user.save();
                 const org = new OrganisationModel({
-                  primaryContactId: employeeId ? employeeId : null,
+                  primaryContactId: employeeId1 ? employeeId1 : null,
                   name: poDataArray[i].supplier.name,
                   id: organisationId,
                   type: "CUSTOMER_SUPPLIER",
                   status: "NOTVERIFIED",
                   postalAddress: address,
                   warehouses: [warehouseId],
-                  warehouseEmployees: [employeeId],
+                  warehouseEmployees: [employeeId1],
                   country: {
                     countryId: "001",
                     countryName: country,
@@ -906,7 +896,6 @@ exports.addPOsFromExcel = [
           "Upload Result",
           poDataArray
         );
-        //else return apiResponse.ErrorResponse(res,'Data Already Exists')
       } catch (e) {
         console.log(e);
         if (e.code == "11000") {
@@ -917,10 +906,6 @@ exports.addPOsFromExcel = [
           );
         } else return apiResponse.ErrorResponse(res, e);
       }
-      //     } else {
-      //       res.json('Sorry! User does not have enough Permissions');
-      //     }
-      //  });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -931,11 +916,8 @@ exports.addPOsFromExcel = [
 exports.success = [
   async (req, res) => {
     try {
-      const data = req.body;
-      const { phone, payuMoneyId, amount, productinfo } = data;
       // This check is important as sometimes payumoney is sending multiple success responses
       const redirectUrl = "http://localhost:3000/shipments";
-
       return res.redirect(redirectUrl);
     } catch (err) {
       //throw error in json response with status 500.
@@ -981,7 +963,7 @@ exports.createOrder = [
         element.unitofMeasure = product?.unitofMeasure;
         console.log(product);
       });
-      const createdBy = (lastUpdatedBy = req.user.id);
+      const createdBy = req.user.id;
       const purchaseOrder = new RecordModel({
         id: poId,
         externalId,
@@ -991,7 +973,7 @@ exports.createOrder = [
         products,
         lastUpdatedOn,
         createdBy,
-        lastUpdatedBy,
+        lastUpdatedBy: createdBy,
       });
       console.log(purchaseOrder);
       const supplierID = req.body.supplier.supplierOrganisation;
@@ -1044,8 +1026,7 @@ exports.createOrder = [
         Employees: "",
       };
       let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-
-      const bc_response = await axios.post(
+      await axios.post(
         `${hf_blockchain_url}/api/v1/transactionapi/record/create`,
         bc_data,
         {
@@ -1054,8 +1035,7 @@ exports.createOrder = [
           },
         }
       );
-
-      const result = await purchaseOrder.save();
+      await purchaseOrder.save();
 
       try {
         var evid = Math.random().toString(36).slice(2);
@@ -1113,16 +1093,9 @@ exports.createOrder = [
         event_data.payload.data = req.body;
         event_data.payload.data.order_id = poId;
         event_data.transactionId = poId;
-        async function compute(event_data) {
-          resultt = await logEvent(event_data);
-          return resultt;
-        }
-        console.log(result);
-        compute(event_data).then((response) => {
-          console.log(response);
-          return apiResponse.successResponseWithData(res, "Created order", {
-            poId: poId,
-          });
+        await logEvent(event_data);
+        return apiResponse.successResponseWithData(res, "Created order", {
+          poId: poId,
         });
       } catch (error) {
         console.log(error);
@@ -1152,8 +1125,7 @@ exports.getOrderIds = [
 
       return apiResponse.successResponseWithData(res, "Order Ids", orderID);
     } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -1186,8 +1158,7 @@ exports.getOpenOrderIds = [
         orderID
       );
     } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -1596,42 +1567,63 @@ exports.exportInboundPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-              const { organisationId, role } = req.user;
-              // const { skip, limit } = req.query;
-              let currentDate = new Date();
-              let fromDateFilter = 0;
-              let fromCustomer = req.query.from ? req.query.from : undefined;
-              let productName = req.query.productName ? req.query.productName : undefined;
-              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
-              let orderId = req.query.orderId ? req.query.orderId : undefined;
-              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
-              switch (req.query.dateFilter) {
-                case "today":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-                  break;
-                case "week":
-                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
-                  break;
-                case "month":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
-                  break;
-                case "threeMonth":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
-                  break;
-                case "sixMonth":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
-                  break;
-                case "year":
-                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
-                  break;
-                default:
-                  fromDateFilter = 0;
-              }
-
-              let whereQuery = {};
-              if (orderId) {
-                whereQuery['id'] = orderId;
-              }
+      const { organisationId } = req.user;
+      // const { skip, limit } = req.query;
+      let currentDate = new Date();
+      let fromDateFilter = 0;
+      let fromCustomer = req.query.from ? req.query.from : undefined;
+      let productName = req.query.productName
+        ? req.query.productName
+        : undefined;
+      let deliveryLocation = req.query.deliveryLocation
+        ? req.query.deliveryLocation
+        : undefined;
+      let orderId = req.query.orderId ? req.query.orderId : undefined;
+      let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      switch (req.query.dateFilter) {
+        case "today":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate()
+          );
+          break;
+        case "week":
+          fromDateFilter = new Date(
+            currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+          ).toUTCString();
+          break;
+        case "month":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 1,
+            currentDate.getDate()
+          );
+          break;
+        case "threeMonth":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 3,
+            currentDate.getDate()
+          );
+          break;
+        case "sixMonth":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 6,
+            currentDate.getDate()
+          );
+          break;
+        case "year":
+          fromDateFilter = new Date(
+            currentDate.getFullYear() - 1,
+            currentDate.getMonth(),
+            currentDate.getDate()
+          );
+          break;
+        default:
+          fromDateFilter = 0;
+      }
 
       let whereQuery = {};
       if (orderId) {
@@ -1659,88 +1651,27 @@ exports.exportInboundPurchaseOrders = [
         whereQuery["poStatus"] = poStatus;
       }
 
-          
-              try {
-                let inboundPOsCount = await RecordModel.count(whereQuery);
-                RecordModel.find(whereQuery).sort({ createdAt: -1 }).then((inboundPOList) => {
-                  let inboundPORes = [];
-                  let findInboundPOData = inboundPOList.map(async (inboundPO) => {
-                    let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
-                    inboundPOData[`productDetails`] = [];
-                    let inboundProductsArray = inboundPOData.products;
-                    let productRes = inboundProductsArray.map(async (product) => {
-                      let productDetails = await ProductModel.findOne(
-                        {
-                          id: product.productId
-                        });
-                      return productDetails;
-                    });
-                    Promise.all(productRes).then(async function (productList) {
-                      inboundPOData[`productDetails`] = await productList;
-                    });
-                    
-                           let creator = await EmployeeModel.findOne(
-                      {
-                        id: inboundPO.createdBy
-                      });
-                           let creatorOrganisation = await OrganisationModel.findOne(
-                      {
-                              id: creator?.organisationId
-                      });
+      if (productName) {
+        whereQuery.products = {
+          $elemMatch: {
+            productId: productName,
+          },
+        };
+      }
 
-                    let supplierOrganisation = await OrganisationModel.findOne(
-                      {
-                        id: inboundPO.supplier.supplierOrganisation
-                      });
-                    let customerOrganisation = await OrganisationModel.findOne(
-                      {
-                        id: inboundPOData.customer.customerOrganisation
-                      });
-                    let customerWareHouse = await WarehouseModel.findOne(
-                      {
-                        organisationId: inboundPOData.customer.customerOrganisation
-                      });
-                    inboundPOData.creatorOrganisation= creatorOrganisation;
-                    inboundPOData.supplier[`organisation`] = supplierOrganisation;
-                    inboundPOData.customer[`organisation`] = customerOrganisation;
-                    inboundPOData.customer[`warehouse`] = customerWareHouse;
-                    inboundPORes.push(inboundPOData);
-                  });
-
-                  Promise.all(findInboundPOData).then(function (results) {
-                    let data = []
-                    let rowData;
-                   for(row of inboundPORes){
-                      for(product of row.products){
-                         rowData ={
-                           id: row.id,
-                           createdBy : row.createdBy,
-                           supplierOrgId: row?.supplier?.organisation?.id,
-                           orderReceiveIncharge: row?.customer?.customerIncharge,
-                           orderReceiverOrg: row?.customer?.customerOrganisation,
-                           productCategory: product.type,
-                           productName: product.name,
-                           manufacturer: product.manufacturer,
-                           productQuantity: product.productQuantity,
-                           productId: product.id,
-                          recieverOrgName: row?.customer?.organisation?.name,
-                          recieverOrgId: row?.customer?.organisation?.id,
-                          recieverOrgLocation: row?.customer.organisation?.postalAddress,
-                          status: row.poStatus}
-                         data.push(rowData)
-                      }
-                    }
-                    if(req.query.type=='pdf'){
-                      res = buildPdfReport(req,res,data, 'Inbound')
-                      }
-                      else {
-                        res = buildExcelReport(req,res,data)
-                      return apiResponse.successResponseWithData(
-                        res,
-                        "Outbound PO Records",
-                      );
-                      }
-                  });
+      try {
+        let inboundPOsCount = await RecordModel.count(whereQuery);
+        RecordModel.find(whereQuery)
+          .sort({ createdAt: -1 })
+          .then((inboundPOList) => {
+            let inboundPORes = [];
+            let findInboundPOData = inboundPOList.map(async (inboundPO) => {
+              let inboundPOData = JSON.parse(JSON.stringify(inboundPO));
+              inboundPOData[`productDetails`] = [];
+              let inboundProductsArray = inboundPOData.products;
+              let productRes = inboundProductsArray.map(async (product) => {
+                let productDetails = await ProductModel.findOne({
+                  id: product.productId,
                 });
                 return productDetails;
               });
@@ -1752,7 +1683,7 @@ exports.exportInboundPurchaseOrders = [
                 id: inboundPO.createdBy,
               });
               let creatorOrganisation = await OrganisationModel.findOne({
-                id: creator.organisationId,
+                id: creator?.organisationId,
               });
 
               let supplierOrganisation = await OrganisationModel.findOne({
@@ -1774,8 +1705,8 @@ exports.exportInboundPurchaseOrders = [
             Promise.all(findInboundPOData).then(function (results) {
               let data = [];
               let rowData;
-              for (row of inboundPORes) {
-                for (product of row.products) {
+              for (const row of inboundPORes) {
+                for (const product of row.products) {
                   rowData = {
                     id: row.id,
                     createdBy: row.createdBy,
@@ -1797,7 +1728,7 @@ exports.exportInboundPurchaseOrders = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, "Inbound");
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithData(
@@ -1811,8 +1742,7 @@ exports.exportInboundPurchaseOrders = [
         return apiResponse.ErrorResponse(res, err);
       }
     } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -1822,42 +1752,63 @@ exports.exportOutboundPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-              const { organisationId, role, id } = req.user;
-              // let { skip, limit } = req.query;
-              let currentDate = new Date();
-              let fromDateFilter = 0;
-              let toSupplier = req.query.to ? req.query.to : undefined;
-              let productName = req.query.productName ? req.query.productName : undefined;
-              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
-              let orderId = req.query.orderId ? req.query.orderId : undefined;
-              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
-              switch (req.query.dateFilter) {
-                case "today":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-                  break;
-                case "week":
-                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
-                  break;
-                case "month":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
-                  break;
-                case "threeMonth":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
-                  break;
-                case "sixMonth":
-                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
-                  break;
-                case "year":
-                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
-                  break;
-                default:
-                  fromDateFilter = 0;
-              }
-
-              let whereQuery = {};
-              if (orderId) {
-                whereQuery['id'] = orderId;
-              }
+      const { organisationId, role, id } = req.user;
+      // let { skip, limit } = req.query;
+      let currentDate = new Date();
+      let fromDateFilter = 0;
+      let toSupplier = req.query.to ? req.query.to : undefined;
+      let productName = req.query.productName
+        ? req.query.productName
+        : undefined;
+      let deliveryLocation = req.query.deliveryLocation
+        ? req.query.deliveryLocation
+        : undefined;
+      let orderId = req.query.orderId ? req.query.orderId : undefined;
+      let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      switch (req.query.dateFilter) {
+        case "today":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate()
+          );
+          break;
+        case "week":
+          fromDateFilter = new Date(
+            currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+          ).toUTCString();
+          break;
+        case "month":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 1,
+            currentDate.getDate()
+          );
+          break;
+        case "threeMonth":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 3,
+            currentDate.getDate()
+          );
+          break;
+        case "sixMonth":
+          fromDateFilter = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 6,
+            currentDate.getDate()
+          );
+          break;
+        case "year":
+          fromDateFilter = new Date(
+            currentDate.getFullYear() - 1,
+            currentDate.getMonth(),
+            currentDate.getDate()
+          );
+          break;
+        default:
+          fromDateFilter = 0;
+      }
 
       let whereQuery = {};
       if (orderId) {
@@ -1885,24 +1836,9 @@ exports.exportOutboundPurchaseOrders = [
         whereQuery["supplier.supplierOrganisation"] = toSupplier;
       }
 
-              try {
-                let outboundPOsCount = await RecordModel.count(whereQuery);
-                RecordModel.find(whereQuery).sort({ createdAt: -1 }).then((outboundPOList) => {
-                  let outboundPORes = [];
-                  let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
-                    let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
-                    outboundPOData[`productDetails`] = [];
-                    let outboundProductsArray = outboundPOData.products;
-                    let productRes = outboundProductsArray.map(async (product) => {
-                      let productDetails = await ProductModel.findOne(
-                        {
-                          id: product.productId
-                        });
-                      return productDetails;
-                    });
-                    Promise.all(productRes).then(async function (productList) {
-                      outboundPOData[`productDetails`] = await productList;
-                    });
+      if (poStatus) {
+        whereQuery["poStatus"] = poStatus;
+      }
 
       if (productName) {
         whereQuery.products = {
@@ -1912,40 +1848,19 @@ exports.exportOutboundPurchaseOrders = [
         };
       }
 
-                  Promise.all(findOutboundPOData).then(function (results) {
-                    let data = []
-                    let rowData;
-                   for(row of outboundPORes){
-                      for(product of row.products){
-                         rowData ={
-                           id: row.id,
-                           createdBy : row.createdBy,
-			   supplierOrgId: row?.supplier?.organisation?.id,
-                           orderReceiveIncharge: row?.customer?.customerIncharge,
-                           orderReceiverOrg: row?.customer?.customerOrganisation,
-			   productCategory: product.type,
-                           productName: product.name,
-                           manufacturer: product.manufacturer,
-                           productQuantity: product.productQuantity,
-                           productId: product.id,
-                            recieverOrgName: row?.customer?.organisation?.name,
-                            recieverOrgId: row?.customer?.organisation?.id,
-                            recieverOrgLocation: row?.customer.organisation?.postalAddress,
-			   status: row.poStatus}
-                         data.push(rowData)
-                      }
-                    }
-                    if(req.query.type=='pdf'){
-                    res = buildPdfReport(req,res,data, 'Outbound')
-                    }
-                    else {
-                      res = buildExcelReport(req,res,data)
-                    return apiResponse.successResponseWithData(
-                      res,
-                      "Outbound PO Records",
-                    );
-                    }
-                  });
+      try {
+        let outboundPOsCount = await RecordModel.count(whereQuery);
+        RecordModel.find(whereQuery)
+          .sort({ createdAt: -1 })
+          .then((outboundPOList) => {
+            let outboundPORes = [];
+            let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
+              let outboundPOData = JSON.parse(JSON.stringify(outboundPO));
+              outboundPOData[`productDetails`] = [];
+              let outboundProductsArray = outboundPOData.products;
+              let productRes = outboundProductsArray.map(async (product) => {
+                let productDetails = await ProductModel.findOne({
+                  id: product.productId,
                 });
                 return productDetails;
               });
@@ -1971,8 +1886,8 @@ exports.exportOutboundPurchaseOrders = [
             Promise.all(findOutboundPOData).then(function (results) {
               let data = [];
               let rowData;
-              for (row of outboundPORes) {
-                for (product of row.products) {
+              for (const row of outboundPORes) {
+                for (const product of row.products) {
                   rowData = {
                     id: row.id,
                     createdBy: row.createdBy,
@@ -1994,7 +1909,7 @@ exports.exportOutboundPurchaseOrders = [
                 }
               }
               if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data);
+                res = buildPdfReport(req, res, data, "Outbound");
               } else {
                 res = buildExcelReport(req, res, data);
                 return apiResponse.successResponseWithData(
@@ -2009,7 +1924,7 @@ exports.exportOutboundPurchaseOrders = [
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -2139,80 +2054,78 @@ function buildExcelReport(req, res, dataForExcel) {
   return res.send(report);
 }
 
+async function buildPdfReport(req, res, data, orderType) {
+  console.log(data);
+  const rows = [];
+  rows.push([
+    { text: "Order Id", bold: true },
+    { text: "Order created By", bold: true },
+    { text: "Creator Org Id", bold: true },
+    { text: "Creator Org Name", bold: true },
+    { text: "ORG ID - Receiver", bold: true },
+    { text: "Product Category", bold: true },
+    { text: "Product Name", bold: true },
+    { text: "Product ID", bold: true },
+    { text: "Quantity", bold: true },
+    { text: "Manufacturer", bold: true },
+    { text: "Delivery Organization Name", bold: true },
+    { text: "Delivery Organization ID", bold: true },
+    { text: "Delivery Organization Location Details", bold: true },
+    { text: "Status", bold: true },
+  ]);
+  for (let i = 0; i < data.length; i++) {
+    let OrgName = await OrganisationModel.findOne({
+      id: data[i].supplierOrgId,
+    });
+    OrgName = OrgName?.name;
+    rows.push([
+      data[i].id || "N/A",
+      data[i].createdBy || "N/A",
+      data[i].supplierOrgId || "N/A",
+      OrgName || "N/A",
+      data[i].orderReceiverOrg || "N/A",
+      data[i].productCategory || "N/A",
+      data[i].productName || "N/A",
+      data[i].productId || "N/A",
+      data[i].productQuantity || "N/A",
+      data[i].manufacturer || "N/A",
+      data[i].recieverOrgName || "N/A",
+      data[i].recieverOrgId || "N/A",
+      data[i].recieverOrgLocation || "N/A",
+      data[i].status || "N/A",
+    ]);
+  }
 
-async function buildPdfReport(req,res,data, orderType){
-  console.log(data)
-  var rows = [];
-rows.push([{text: 'Order Id', bold: true}, {text: 'Order created By', bold: true}, {text: 'Creator Org Id', bold: true}, {text: 'Creator Org Name', bold: true}, {text: 'ORG ID - Receiver', bold:  true}, {text: 'Product Category', bold: true}, {text: 'Product Name', bold: true}, {text: 'Product ID', bold: true}, {text: 'Quantity', bold: true}, {text: 'Manufacturer', bold: true}, {text: 'Delivery Organization Name', bold: true}, {text: 'Delivery Organization ID', bold: true}, {text: 'Delivery Organization Location Details', bold: true}, {text: 'Status', bold: true}]);
-for(var i = 0; i < data.length; i++) {
-    let OrgName = await OrganisationModel.findOne({id: data[i].supplierOrgId})
-    OrgName = OrgName?.name
-    rows.push([data[i].id || 'N/A', data[i].createdBy || 'N/A', data[i].supplierOrgId || 'N/A', OrgName|| 'N/A', data[i].orderReceiverOrg || 'N/A', data[i].productCategory || 'N/A', data[i].productName || 'N/A', data[i].productId || 'N/A', data[i].productQuantity || 'N/A', data[i].manufacturer || 'N/A', data[i].recieverOrgName || 'N/A', data[i].recieverOrgId || 'N/A', data[i].recieverOrgLocation || 'N/A', data[i].status || 'N/A']);
-}
-
-var docDefinition = {
-  pageSize: 'A3',
-  pageOrientation: 'landscape',
+  const docDefinition = {
+    pageSize: "A3",
+    pageOrientation: "landscape",
     content: [
-      { text: `${orderType} Purchase order`, fontSize: 34, style: 'header' },
+      { text: `${orderType} Purchase order`, fontSize: 34, style: "header" },
       {
-      
         table: {
           headerRows: 1,
-          headerStyle:  'header',
-                 widths: [70, 70, 70, 70, 70,70, 70, 70, 70, 70, 70, 70, 70, 70],
-                body: rows
-            }
-    }],
+          headerStyle: "header",
+          widths: [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70],
+          body: rows,
+        },
+      },
+    ],
     styles: {
       header: {
         bold: true,
-        margin: [10,10,10,10]
+        margin: [10, 10, 10, 10],
       },
-    }
+    },
+  };
 
-}
-
-  var options= {fontLayoutCache: true}
-  var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-  var temp123;
-var pdfFile = pdfDoc.pipe(temp123 = fs.createWriteStream('./output.pdf'))
-var path = pdfFile.path
-pdfDoc.end();
-temp123.on('finish', async function () {
-  // do send PDF file 
-  return res.sendFile(resolve(path))
-});
-return
-
-
-  // let finalPath = resolve("./models/pdftemplate.html")
-  //   let html = fs.readFileSync(finalPath, "utf8");
-  //   var options = {
-  //     format: "A3",
-  //     orientation: "landscape",
-  //     border: "6mm",
-  //     header: {
-  //         height: "15mm",
-  //         contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
-  //     },
-  // };
-  // var document = {
-  //   html: html,
-  //   data: {
-  //     orders: data,
-  //   },
-  //   path: "./output.pdf",
-  //   type: "",
-  // };
-  // pdf
-  // .create(document, options)
-  // .then((result) => {
-  //   console.log(result);
-    
-  //   return res.sendFile(result.filename)
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
+  const options = { fontLayoutCache: true };
+  const pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+  let temp123;
+  const pdfFile = pdfDoc.pipe((temp123 = fs.createWriteStream("./output.pdf")));
+  const path = pdfFile.path;
+  pdfDoc.end();
+  temp123.on("finish", async function () {
+    return res.sendFile(resolve(path));
+  });
+  return;
 }

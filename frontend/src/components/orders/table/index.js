@@ -20,13 +20,13 @@ function Table(props) {
   });
 
   const truncate = (str, n) => {
-		return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-	};
+    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+  };
 
   return (
     <div>
-    <table class="table">
-      {/* <thead>
+      <table className='table'>
+        {/* <thead>
         <tr>
           <th>Order Sent To</th>
           <th>Order Date</th>
@@ -68,61 +68,13 @@ function Table(props) {
             status = t('partiallyfilled');
           }
 
-          const { customer, products, supplier, creatorOrganisation } = order;
-          return (
-            <tr>
-              <td>
-                <div class="user-info">
-                  <div class="user-info__img">
-                    <img src={user}
-                      alt="User" />
-                  </div>
-                  <div class="user-info__basic shipmentId">
-                    <h5 class="mb-0 table-h5-text ">{visible === "two"
-                          ? creatorOrganisation?.name
-                          : supplier.organisation.name}</h5>
-                    <p class="mb-0 table-p-text ">{visible === "two"
-                          ? creatorOrganisation?.id
-                          : supplier.organisation.id}</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="user-info">
-                  <h5 class="table-h5-text"> {formatDate(order.creationDate)}</h5>
-                </div>
-              </td>
-              <td>
-                <div class="user-info">
-                  <h5 class="table-h5-text text-muted">{order.id}</h5>
-                </div>
-              </td>
-              <td>
-                <div class="user-info">
-                  <h5 class="table-h5-text text-muted">{truncate(products[0]?.name +
-                      (products.length > 1
-                        ? " + " + (products.length - 1) + " more"
-                        : "") , 15)}</h5>
-                </div>
-              </td>
-              <td>
-                <div class="user-info__basic">
-                  <h5 class="mb-0 table-h5-text">{customer.warehouse.title}</h5>
-                  <p class="text-muted mb-0 table-p-text">
-                  {customer.warehouse && customer.warehouse.warehouseAddress
-                      ? customer.warehouse.warehouseAddress.firstLine +
-                        " " +
-                        customer.warehouse.warehouseAddress.city
-                      : null}
-                  </p>
-                </div>
-              </td>
-              <td>
-                    <div
-                      className={`status secondary-bg ${statusStyle} py-1`}
-                      style={{ width: "122px",textAlign:"center",color:"#fff",borderRadius:"5px"} }
-                    >
-                      {status}
+            const { customer, products, supplier, creatorOrganisation } = order;
+            return (
+              <tr>
+                <td>
+                  <div className='user-info'>
+                    <div className='user-info__img'>
+                      <img src={user} alt='User' />
                     </div>
               </td>
               <td>

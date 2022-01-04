@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import profile from '../../../../assets/user.png';
 import StarRatings from 'react-star-ratings';
 
 const SpmDashboardDetails = (props) => {
+
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">

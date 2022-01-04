@@ -4,7 +4,7 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import {
   fetchIotEnabledApiResponse,
-  getViewShipmentGmr
+  getViewShipmentGmr,
 } from "../../actions/shipmentActions";
 import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
@@ -20,13 +20,11 @@ const { t, i18n } = useTranslation();
   const [imagesData, setImagesData] = useState([]);
   const [iotEnabledStatus, setIotEnabledStatus] = useState(false);
   const [imageData, setImageData] = useState([]);
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     async function fetchData() {
       const result = await dispatch(getViewShipmentGmr(props.match.params.id));
-      console.log(result, "result")
+      console.log(result, "result");
       if (result) {
         setTrackData(result);
         setShippmentChainOfCustodyData([result]);

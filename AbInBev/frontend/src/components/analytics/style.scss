@@ -476,7 +476,7 @@ body {
 }
 .selectedSupplier {
   // background-color: gray;
-  background: #0d6efd40 !important;
+  background: #DCDFF1 !important;
   // border-radius: 15px !important;
   padding: 15px !important;
 }
@@ -488,7 +488,7 @@ body {
   border-bottom-right-radius: 0px !important;
 }
 .selectedRow {
-  background: #0d6efd40 !important;
+  background: #DCDFF1 !important;
   border-radius: 15px !important;
   border: none !important;
 }
@@ -662,7 +662,7 @@ body {
   }
   .tableProfileIconCard {
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: flex-start !important;
     .profileIcon {
       margin-right: 25px;
@@ -1215,11 +1215,11 @@ body {
     }
   }
   .profileName {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
     width: 200px;
-    text-align: left;
+    // text-align: left;
     .profileTitle {
       text-decoration: underline;
       font-weight: 600;

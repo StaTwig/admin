@@ -104,6 +104,26 @@ export const getAllBrands = () => {
   };
 };
 
+export const getNewConfig = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getNewConfig + `?district=${data.district}&vendorType=${data.vendorType}`); //BELGAUM S1
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+export const setNewConfig = async (data) => {
+  try {
+    const result = await axios.post(config().setNewConfig, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
 export const getAllOrganisationStats = (param = '') => {
   return async (dispatch) => {
     try {

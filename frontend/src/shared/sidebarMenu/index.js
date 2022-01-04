@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../footer";
-import HomeIcon from "../../assets/icons/Overviewselected.png";
+import HomeIcon from "../../assets/icons/Overviewselected.svg";
 import shipIcon from "../../assets/icons/Shippmentselected.png";
 import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";

@@ -4,7 +4,7 @@ import Add from "../../assets/icons/createshipment.png";
 import CalenderIcon from "../../assets/icons/date_icon.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
-import { createShipment, getViewShipment, newShipment } from "../../actions/shipmentActions";
+import { newShipment } from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getShippingOrderById,
@@ -19,7 +19,6 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
 import { getProducts, searchProduct } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
@@ -32,42 +31,24 @@ const CreateShipment = (props) => {
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [senderWarehouses, setSenderWarehouses] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
-  const [disabled, setDisabled] = useState(false);
-  const [fetchdisabled, setfetchdisabled] = useState(false);
   const [pofetchdisabled] = useState(false);
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
-  const [FromOrgLabel, setFromOrgLabel] = useState("Select Organisation Location");
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
-  const [validShipmentID, setValidShipmentID] = useState(false)
-  // const [senderOrgLoc, setSenderOrgLoc] = useState(
-  //   "Select Organisation Location"
-  // );
-  const [selectedWarehouse, setSelectedWarehouse] = useState("");
-  const [receiverOrgId, setReceiverOrgId] = useState(
-    "Select Organisation Name"
-  );
-  const [toOrgLocLabel, settoOrgLocLabel] = useState("");
-  const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-    "Select Delivery Location"
-  );
+  const [validShipmentID, setValidShipmentID] = useState(false);
   const user = useSelector((state) => state.user);
-  const [OrderDetails, setOrderDetails] = useState({});
-  // const  [OrderProduct,setOrderProduct] = useState([]);
-  // const [shipmentDate, setShipmentDate] = useState("");
-  // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [OrderDetails, setOrderDetails] = useState({});
   const [productQuantity] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
-  // const [formatedDate, setformatedDate] = "4-21-2021";
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
@@ -102,18 +83,14 @@ const CreateShipment = (props) => {
     dispatch(turnOff());
   };
 
-
   useEffect(() => {
     async function fetchData() {
-
-
       const result111 = await getProductList();
 
       setProductsList(result111.message);
       console.log(result111);
       const { search } = props.location;
-      console.log(search)
-      // const result = await getShippingOrderIds();
+      console.log(search);
       const result = await getOpenOrderIds();
 
       const ids = result.map((item) => {
@@ -123,12 +100,10 @@ const CreateShipment = (props) => {
         };
       });
       setOrderIds(ids);
-
       const orgs = await getAllOrganisations();
-      console.log(user.organisation)
+      console.log(user.organisation);
       const orgSplit = user.organisation?.split("/");
-      if (orgSplit?.length)
-        setSenderOrganisation([orgSplit[0]]);
+      if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
 
       const organisations = orgs.data;
       setAllOrganisations(
@@ -161,10 +136,10 @@ const CreateShipment = (props) => {
             value: v.id,
             label: v?.warehouseAddress
               ? v?.title +
-              "/" +
-              v?.warehouseAddress?.firstLine +
-              ", " +
-              v?.warehouseAddress?.city
+                "/" +
+                v?.warehouseAddress?.firstLine +
+                ", " +
+                v?.warehouseAddress?.city
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -174,11 +149,11 @@ const CreateShipment = (props) => {
       setOrgTypes(
         orgType.data.length > 0
           ? orgType.data[0].organisationTypes.map((item) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })
+              return {
+                value: item.id,
+                label: item.name,
+              };
+            })
           : []
       );
 
@@ -210,10 +185,10 @@ const CreateShipment = (props) => {
             value: v.id,
             label: v?.warehouseAddress
               ? v?.title +
-              "/" +
-              v?.warehouseAddress?.firstLine +
-              ", " +
-              v?.warehouseAddress?.city
+                "/" +
+                v?.warehouseAddress?.firstLine +
+                ", " +
+                v?.warehouseAddress?.city
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -256,39 +231,8 @@ const CreateShipment = (props) => {
     }
   };
 
-  // const dates = ["shipmentDate", "estimateDeliveryDate"];
-
-  // const dateValidation = (date) => {
-  //   try {
-  //     let error = false;
-  //     let a = eval(date[0]);
-  //     let b = eval(date[1]);
-
-  //     if (a > b) {
-  //       setShipmentError("Check deliveryDate");
-  //       setOpenShipmentFail(true);
-  //       error = true;
-  //     }
-  //     return error;
-  //   } catch (err) {
-  //     setOpenShipmentFail(true);
-  //   }
-
-  //   let error = false;
-  //   let a = eval(date[0]);
-  //   let b = eval(date[1]);
-
-  //   if (a > b) {
-  //     setShipmentError("Check deliveryDate");
-  //     setOpenShipmentFail(true);
-  //     error = true;
-  //   }
-  //   return error;
-  // };
-
   const onAssign = async (values) => {
     let error = false;
-    // dates.forEach(date => { if (!error) dateValidation(date) });
     const {
       fromOrg,
       toOrg,
@@ -302,17 +246,20 @@ const CreateShipment = (props) => {
       shipmentID,
       products,
     } = values;
-    let errorMsg = '';
+    let errorMsg = "";
     products.forEach((p) => {
-      if (p.productQuantity < 1) { error = true; errorMsg = 'product quantity'; }
-      // else if (!p.batchNumber) {
-      //   error = true; errorMsg = 'batch number';
-      // }
+      if (p.productQuantity < 1) {
+        error = true;
+        errorMsg = "product quantity";
+      } else if (!p.batchNumber) {
+        error = true;
+        errorMsg = "batch number";
+      }
     });
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: reset && reset != 'Select Order ID' ? reset : null,
+        poId: reset && reset !== "Select Order ID" ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -333,26 +280,25 @@ const CreateShipment = (props) => {
         expectedDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
             : "",
         actualDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
             : "",
         status: "CREATED",
         products: products,
         isCustom: true,
-        // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      var check = 0;
+      let check = 0;
 
-      for (var i = 0; i < data.products.length; i++) {
+      for (let i = 0; i < data.products.length; i++) {
         if (typeof data.products[i].productQuantity === "undefined") {
           check = 1;
           break;
@@ -366,39 +312,11 @@ const CreateShipment = (props) => {
         console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
-      }
-      // else if (check === 2) {
-      //   setShipmentError("Check Batch Number");
-      //   setOpenShipmentFail(true);
-      // }
-      else {
-        // let i, j;
-        // let nn = data.products.length;
-        // for (i = 0; i < data.products.length; i++) {
-        //   let prdctName = data.products[i].productName;
-        //   // let qty = parseInt(data.products[i].productQuantity);
-        //   let flag = false;
-
-        //   for (j = 0; j < productsList.length; j++) {
-        //     if (productsList[j].productName === prdctName) {
-        //       flag = true;
-        //       break;
-        //     } else {
-        //       flag = false;
-        //     }
-        //   }
-
-        //   if (!flag) {
-        //     setShipmentError("The product doesn't exist in this inventory");
-        //     //setShipmentError("Check product quantity");
-        //     setOpenShipmentFail(true);
-        //     break;
-        //   }
-        // }
-
-        // if (i >= nn) {
+      } else if (check === 2) {
+        setShipmentError("Check Batch Number");
+        setOpenShipmentFail(true);
+      } else {
         dispatch(turnOn());
-        // const result = await createShipment(data);
         const result = await newShipment(data);
         dispatch(turnOff());
         if (result?.id) {
@@ -410,19 +328,16 @@ const CreateShipment = (props) => {
             type: "Success",
           });
         } else {
-
           setShipmentError(result.data.message);
           setOpenShipmentFail(true);
           setErrorMessage("Create Shipment Failed");
         }
-        // }
       }
     } else {
       setShipmentError("Check " + errorMsg);
       setOpenShipmentFail(true);
     }
   };
-
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -471,37 +386,6 @@ const CreateShipment = (props) => {
     }
   };
 
-  /* const onProductChange = (index, item, setFieldValue) => {
-    addProducts.splice(index, 1);
-    let newArr = [...addProducts];
-    newArr.push(item);
-    setFieldValue(
-      "products",
-      newArr.map((row) => ({
-        productId: row.id,
-        quantity: row?.quantity ? row?.quantity : 0,
-        name: row.name,
-        productCategory: row.type,
-        manufacturer: row.manufacturer,
-
-      }))
-    );
-    setAddProducts((prod) => [...newArr]);
-
-    const prodIndex = products.findIndex((p) => p.id === item.id);
-    let newArray = [...products];
-    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
-    setProducts((prod) => [...newArray]);
-  }; */
-
-  // //console.log(allOrganisations,"All org");
-  // async function fetchShipmentDetails(id){
-  //   const result = await dispatch(getViewShipment(id));
-  //   return result;
-  // }
-  // console.log(products,"1");
-  // console.log(addProducts,"2");
-  // console.log(category,"3");
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(
       JSON.stringify(OrderDetails?.products)
@@ -510,17 +394,13 @@ const CreateShipment = (props) => {
     const cloneOrder = OrderDetails;
     cloneOrder.products = inventoryStateClone;
     setOrderDetails(cloneOrder);
-    // setOrderProduct(inventoryStateClone);
   };
 
   function onSearchChange(e) {
-    debugger
-    axios
-      .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) => {
-        const value = resp.data.data.length > 0 ? true : false
-        setValidShipmentID(value)
-      })
+    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) => {
+      const value = resp.data.data.length > 0 ? true : false;
+      setValidShipmentID(value);
+    });
   }
 
   return (
@@ -569,17 +449,12 @@ const CreateShipment = (props) => {
           if (!values.shipmentDate) {
             errors.shipmentDate = "Required";
           }
-          // if (!values.estimateDeliveryDate) {
-          //   errors.estimateDeliveryDate = "Required";
-          // }
           if (!orderIdSelected && values.products.length === 0) {
             errors.products = "Required";
           }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(values, "values");
-
           setSubmitting(false);
           onAssign(values);
         }}
@@ -608,10 +483,11 @@ const CreateShipment = (props) => {
                         Organisation Name*
                       </label>
                       <input
-                        className={`input refship ${errors.fromOrg && touched.fromOrg
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.fromOrg && touched.fromOrg
+                            ? "border-danger"
+                            : ""
+                        }`}
                         type='text'
                         id='organizationName'
                         name='fromOrg'
@@ -629,10 +505,11 @@ const CreateShipment = (props) => {
                         Organisation Location*
                       </label>
                       <input
-                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.fromOrgLoc && touched.fromOrgLoc
+                            ? "border-danger"
+                            : ""
+                        }`}
                         type='text'
                         id='orgLocation'
                         name='fromOrgLoc'
@@ -659,10 +536,11 @@ const CreateShipment = (props) => {
                         Organisation Name*
                       </label>
                       <input
-                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.fromOrgLoc && touched.fromOrgLoc
+                            ? "border-danger"
+                            : ""
+                        }`}
                         type='text'
                         id='organizationName'
                         name='toOrg'
@@ -680,10 +558,11 @@ const CreateShipment = (props) => {
                         Delivery Location*
                       </label>
                       <input
-                        className={`input refship ${errors.fromOrgLoc && touched.fromOrgLoc
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.fromOrgLoc && touched.fromOrgLoc
+                            ? "border-danger"
+                            : ""
+                        }`}
                         type='text'
                         id='delLocation'
                         name='toOrgLoc'
@@ -709,10 +588,11 @@ const CreateShipment = (props) => {
                       Transit Number*
                     </label>
                     <input
-                      className={`input refship ${errors.airWayBillNo && touched.airWayBillNo
-                        ? "border-danger"
-                        : ""
-                        }`}
+                      className={`input refship ${
+                        errors.airWayBillNo && touched.airWayBillNo
+                          ? "border-danger"
+                          : ""
+                      }`}
                       type='text'
                       id='referenceShipmentId'
                       name='airWayBillNo'
@@ -734,10 +614,11 @@ const CreateShipment = (props) => {
                         Shipment Date*
                       </label>
                       <div
-                        className={`input refship ${errors.shipmentDate && touched.shipmentDate
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.shipmentDate && touched.shipmentDate
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         <DatePicker
                           ref={ref1}
@@ -752,22 +633,20 @@ const CreateShipment = (props) => {
                           }
                           minDate={new Date()}
                           placeholderText='Enter Shipment Date'
-                          //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
                           onChange={(date) => {
                             setFieldValue("shipmentDate", date);
-                            // setShipmentDate(date);
                           }}
                           showYearDropdown
                           dateFormatCalendar='MMMM'
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref1.current.setFocus()} />
-                        {/* {errors.shipmentDate && touched.shipmentDate && (
-                          <span className="error-msg text-danger-SD">
-                            {errors.shipmentDate}
-                          </span>
-                        )} */}
+                        <img
+                          src={CalenderIcon}
+                          alt='calenderIcon'
+                          className='Calender-icon'
+                          onClick={() => ref1.current.setFocus()}
+                        />
                       </div>
                     </div>
                   </div>
@@ -778,10 +657,11 @@ const CreateShipment = (props) => {
                       Label Code*
                     </label>
                     <input
-                      className={`input refship ${errors.labelCode && touched.labelCode
-                        ? "border-danger"
-                        : ""
-                        }`}
+                      className={`input refship ${
+                        errors.labelCode && touched.labelCode
+                          ? "border-danger"
+                          : ""
+                      }`}
                       type='text'
                       id='referenceShipmentId'
                       name='labelCode'
@@ -803,11 +683,12 @@ const CreateShipment = (props) => {
                         Estimate Delivery Date
                       </label>
                       <div
-                        className={`input refship ${errors.estimateDeliveryDate &&
+                        className={`input refship ${
+                          errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate
-                          ? "border-danger"
-                          : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         <DatePicker
                           ref={ref2}
@@ -820,8 +701,8 @@ const CreateShipment = (props) => {
                           selected={
                             values.estimateDeliveryDate
                               ? new Date(
-                                Date.parse(values.estimateDeliveryDate)
-                              )
+                                  Date.parse(values.estimateDeliveryDate)
+                                )
                               : values.estimateDeliveryDate
                           }
                           minDate={new Date()}
@@ -833,7 +714,12 @@ const CreateShipment = (props) => {
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
-                        <img src={CalenderIcon} alt="calenderIcon" className="Calender-icon" onClick={() => ref2.current.setFocus()} />
+                        <img
+                          src={CalenderIcon}
+                          alt='calenderIcon'
+                          className='Calender-icon'
+                          onClick={() => ref2.current.setFocus()}
+                        />
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
                             <span className='error-msg text-danger-DD'>
@@ -963,7 +849,7 @@ const CreateShipment = (props) => {
                 }}
                 handleLabelIdChange={handleLabelIdChange}
                 handleCategoryChange={(i, v) => {
-                  console.log('in product type', v)
+                  console.log("in product type", v);
                   let newArr = [...addProducts];
                   newArr[i]["type"] = v;
                   setFieldValue(
@@ -992,7 +878,7 @@ const CreateShipment = (props) => {
                       productQuantity: "",
                       batchNumber: "",
                       unitofMeasure: "Kgs",
-                      type: ""
+                      type: "",
                     };
                     setAddProducts((prod) => [...prod, newArr]);
                   }}
@@ -1030,9 +916,7 @@ const CreateShipment = (props) => {
                   Cancel
                 </button>
 
-                <button
-                  className='btn btn-orange fontSize20 font-bold'
-                >
+                <button className='btn btn-orange fontSize20 font-bold'>
                   <img
                     src={Add}
                     width='20'
@@ -1076,11 +960,3 @@ const CreateShipment = (props) => {
 };
 
 export default CreateShipment;
-
-/* {message && (
-  <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-)} 
-
-{errorMessage && (
-  <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-)} */

@@ -626,8 +626,7 @@ const EditLocation = (props) => {
                 </div> */}
                   <div className='d-flex flex-row-reverse'>
                     <button
-                      class='close'
-                      className='btn btn-yellow float-right font-weight-bold'
+                      className='close btn btn-yellow float-right font-weight-bold'
                       disabled={
                         !(
                           values.country &&
@@ -664,7 +663,6 @@ const EditLocation = (props) => {
         </div>
         <div>
           {/* <button
-            class="close"
             className="btn btn-blue btn-lg float-right"
             style={{ position: "relative", top: "-65vh", right: "22px" }}
           >
