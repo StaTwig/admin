@@ -5,7 +5,6 @@ import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import "./style.scss";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
@@ -73,229 +72,202 @@ const AdvanceTableFilter = (props) => {
   const renderColumn6 = (columnData) => {
     if (columnData === "Status") {
       return (
-        <div className='box col-1'>
-          <span className='divider' />
-          <div
-            className='filter-item ml-4'
-            onClick={handleInventoryStatusClick}
-          >
-            <div className='icon mr-2'>{props.data.img6}</div>
-            <div className='filterTitle'>{props.data.coloumn6}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='Arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleInventoryStatusClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img6}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn6}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            className='ml-5 mt-3'
+            className="ml-5 mt-3"
             style={{ width: "160rem" }}
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
             onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-success btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-success btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("ACCEPTED")}
                 >
                   Accepted
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
                   {props.visible === "one" ? "Sent" : "Received"}
-                </Button>
+                </button>
               </StyledMenuItem>
 
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "200px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-warning btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-warning btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() =>
                     setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")
                   }
                 >
                   Transit & Partially Fulfilled
-                </Button>
+                </button>
               </StyledMenuItem>
 
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-info btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-info btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() =>
                     setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")
                   }
                 >
                   {t('transitfullyfilled')}
-                </Button>
+                </button>
               </StyledMenuItem>
 
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-info btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-info btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("FULLYFULFILLED")}
                 >
                   {t('fullyfilled')}
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "180px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-secondary btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-outline-secondary btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("REJECTED")}
                 >
                   {t('rejected')}
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  color='primary'
+                <button
+                  className="btn btn-link btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
                   {t('clear')}
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
-      //   return (  <div className="box col">
-      //   <span className="divider" />
-      //   <div className="filter-item">
-      //     <div className="icon mr-2">
-      //       {props.data.img6}
-      //     </div>
-      //     <div className="filterTitle">{props.data.coloumn6}</div>
-      //     <div className="filterAction">
-      //       {/* <img src={updownarrow} width="9" height="9" /> */}
-      //      </div>
-      //   </div>
-      // </div>
-      //   );
     } else {
       return (
-        <div className='box col'>
-          <span className='divider' />
-          <div
-            className='filter-item ml-4'
-            onClick={handleInventoryStatusClick}
-          >
-            <div className='icon mr-2'>{props.data.img6}</div>
-            <div className='filterTitle'>{props.data.coloumn6}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='Arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleInventoryStatusClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img6}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn6}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            className='filter-dropdown'
+            className="filter-dropdown"
             style={{ width: "100rem" }}
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
             onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "0px",
                     height: "40px",
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
                   {t('shipped')}
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "0px",
                     height: "40px",
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-success btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-success btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
                 >
                   {t('delivered')}
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  color='primary'
+                <button
+                  className="btn btn-link btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
                   {t('clear')}
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     }
   };
@@ -311,10 +283,6 @@ const AdvanceTableFilter = (props) => {
     props.setDateFilterOnSelect(selectedVal);
     handleClose();
   };
-
-  // const handleStatusClick = (event) => {
-  //   setStatusAnchorEl(event.currentTarget);
-  // };
 
   const handleStatusClose = () => {
     setStatusAnchorEl(null);
@@ -340,8 +308,86 @@ const AdvanceTableFilter = (props) => {
   const renderColumn5 = (columnData) => {
     if (columnData === "Status") {
       return (
+        // <th
+        //   className="cursorP table-border-right col-2"
+        //   onClick={handleInventoryStatusClick}
+        // >
+        //   <div className="cursorP d-flex align-items-center">
+        //     <div className="icon">{props.data.img5}</div>
+        //     <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
+        //     <img src={updownarrow} height="10" width="15" alt="" />
+        //   </div>
+        //   <StyledMenu
+        //     className="mt-3"
+        //     id="customized-menu"
+        //     anchorEl={inventoryStatusAnchorEl}
+        //     keepMounted
+        //     open={Boolean(inventoryStatusAnchorEl)}
+        //     onClose={handleInventoryStatusClose}
+        //   >
+        //     <div className="d-flex flex-column align-items-center">
+        //       <StyledMenuItem>
+        //         <button
+        //           style={{
+        //             padding: "10px",
+        //             height: "40px",
+        //             width: "130px",
+        //             borderRadius: "10px",
+        //           }}
+        //           className="btn btn-outline-primary btn-sm font-weight-bold"
+        //           variant="outlined"
+        //           color="primary"
+        //           onClick={() => setInventoryStatusFilterOnSelect("ADD")}
+        //         >
+        //           Added
+        //         </button>
+        //       </StyledMenuItem>
+        //       <StyledMenuItem>
+        //         <button
+        //           style={{
+        //             padding: "10px",
+        //             height: "40px",
+        //             width: "130px",
+        //             borderRadius: "10px",
+        //           }}
+        //           className="btn btn-outline-warning btn-sm font-weight-bold"
+        //           variant="outlined"
+        //           color="primary"
+        //           onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
+        //         >
+        //           Sent
+        //         </button>
+        //       </StyledMenuItem>
+        //       <StyledMenuItem>
+        //         <button
+        //           style={{
+        //             padding: "10px",
+        //             height: "40px",
+        //             width: "130px",
+        //             borderRadius: "10px",
+        //           }}
+        //           className="btn btn-outline-success btn-sm font-weight-bold"
+        //           variant="outlined"
+        //           color="primary"
+        //           onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}
+        //         >
+        //           Received
+        //         </button>
+        //       </StyledMenuItem>
+        //       <StyledMenuItem>
+        //         <button
+        //           className="btn btn-link btn-sm font-weight-bold"
+        //           color="primary"
+        //           onClick={() => setInventoryStatusFilterOnSelect("")}
+        //         >
+        //           Clear
+        //         </button>
+        //       </StyledMenuItem>
+        //     </div>
+        //   </StyledMenu>
+        // </th>
+
         <div className='box col-2'>
-          {/* <span className="divider" /> */}
           <div
             className='filter-item mr-5'
             onClick={handleInventoryStatusClick}
@@ -363,10 +409,11 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
           >
             <div className='d-flex flex-column align-items-center'>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
@@ -379,10 +426,10 @@ const AdvanceTableFilter = (props) => {
                   onClick={() => setInventoryStatusFilterOnSelect("ADD")}
                 >
                   Added
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
@@ -395,10 +442,10 @@ const AdvanceTableFilter = (props) => {
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
                 >
                   Sent
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
@@ -411,156 +458,112 @@ const AdvanceTableFilter = (props) => {
                   onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}
                 >
                   Received
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
         </div>
       );
-      //   return (  <div className="box col">
-      //   <span className="divider" />
-      //   <div className="filter-item">
-      //     <div className="icon mr-2">
-      //       {props.data.img6}
-      //     </div>
-      //     <div className="filterTitle">{props.data.coloumn6}</div>
-      //     <div className="filterAction">
-      //       {/* <img src={updownarrow} width="9" height="9" /> */}
-      //      </div>
-      //   </div>
-      // </div>
-      //   );
     } else if (columnData === "Status") {
       return (
-        <div className='box col'>
-          {/* <span className="divider" /> */}
-          <div className='filter-item' onClick={handleInventoryStatusClick}>
-            <div className='icon mr-2'>{props.data.img5}</div>
-            <div className='filterTitle'>{props.data.coloumn5}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='Arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleInventoryStatusClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img5}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            className='filter-dropdown'
-            id='customized-menu'
+            className="filter-dropdown"
+            id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
             onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
                   Shipped
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{
                     padding: "10px",
                     height: "40px",
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
                 >
                   Delivered
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  color='primary'
+                <button
+                  className="btn btn-link btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "Delivery Location") {
       return (
-        <div className='box col'>
-          <div
-            className='filter-item ml-5'
-            onClick={handlePoDeliveryLocationClick}
-            style={{ position: "relative", left: "-35px" }}
-          >
-            <div className='icon mr-2'>{props.data.img5}</div>
-            <div className='filterTitle'>{props.data.coloumn5}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "20px" }}
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handlePoDeliveryLocationClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img5}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
-            className='filter-dropdown'
+            id="customized-menu"
+            className="filter-dropdown"
             anchorEl={poDeliveryLocationAnchorEl}
             keepMounted
             open={Boolean(poDeliveryLocationAnchorEl)}
             onClose={handlePoDeliveryLocationClose}
+            onBlur={handlePoDeliveryLocationClose}
           >
-            <div className='d-flex flex-column align-items-center'>
-              {/* <StyledMenuItem>
-                <Button
-                  // style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
-                  onClick={() => setPoDeliveryLocationFilterOnSelect("")}
-                >
-                  Clear
-                </Button>
-              </StyledMenuItem> */}
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem style={{ width: "100%" }}>
                 {poDeliveryLocationAnchorEl ? (
-                  // props.poDeliveryLocationsList.map((location) => {
-                  //   return (
-                  //     <div>
-                  //       <StyledMenuItem>
-                  //         <Button variant="outlined" color="primary" onClick={() => setPoDeliveryLocationFilterOnSelect(location.id)}>{location.id}</Button>
-                  //       </StyledMenuItem>
-                  //     </div>
-                  //   )
-                  // })
                   <Autocomplete
-                    id='toShipment'
+                    id="toShipment"
                     options={props.poDeliveryLocationsList}
                     getOptionLabel={(options) =>
                       options.title
@@ -580,7 +583,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Location"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -589,30 +592,28 @@ const AdvanceTableFilter = (props) => {
                 )}
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                <button
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setPoDeliveryLocationFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else {
       return (
-        <div className='box col'>
-          <div className='filter-item'>
-            <div className='icon mr-2'>{props.data.img5}</div>
-            <div className='filterTitle'>{props.data.coloumn5}</div>
-            <div className='filterAction'>
-              {/* <img src={updownarrow} width="9" height="9" /> */}
-            </div>
+        <th className="cursorP table-border-right">
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img5}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
+            {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
-        </div>
+        </th>
       );
     }
   };
@@ -664,36 +665,28 @@ const AdvanceTableFilter = (props) => {
   const renderColumn4 = (columnData) => {
     if (columnData === "To") {
       return (
-        <div className='col-3'>
-          <div
-            className='d-flex justify-content-between'
-            onClick={handleToShipmentClick}
-            // style={{ display: "flex", position: "relative", left: "-80px" }}
-          >
-            <div className='my-3'>
-              <span className='icon mr-2'>{props.data.img4}</span>
-              <span className='filterTitle mr-4'>{props.data.coloumn4}</span>
-            </div>
-            <img
-              className='my-4'
-              src={updownarrow}
-              width='10'
-              height='10'
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleToShipmentClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img4}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <img src={updownarrow} height="10" width="15" alt="icon" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={toShipmentAnchorEl}
             keepMounted
             open={Boolean(toShipmentAnchorEl)}
             onClose={handleToShipmentClose}
+            onBlur={handleToShipmentClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               {toShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
-                    id='toShipment'
+                    id="toShipment"
                     options={props.supplierReceiverList}
                     getOptionLabel={(options) => options.name}
                     onChange={(event, newValue) => {
@@ -704,7 +697,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Org. Name"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -713,52 +706,45 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setToShipmentFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "Product") {
       return (
-        <div className='box col-3'>
-          <div
-            className='filter-item'
-            onClick={handlePoProductNameClick}
-            style={{ position: "relative", left: "-50px" }}
-          >
-            <div className='icon mr-2'>{props.data.img4}</div>
-            <div className='filterTitle'>{props.data.coloumn4}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "100px" }}
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handlePoProductNameClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img4}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <img src={updownarrow} height="10" width="15" alt="icon" />
           </div>
           <StyledMenu
-            className='filter-dropdown'
-            id='customized-menu'
+            className="filter-dropdown"
+            id="customized-menu"
             anchorEl={poProductNameAnchorEl}
             keepMounted
             open={Boolean(poProductNameAnchorEl)}
             onClose={handlePoProductNameClose}
+            onBlur={handlePoProductNameClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               {poProductNameAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
-                    id='fromShipment'
+                    id="fromShipment"
                     options={props.poProductsList}
                     getOptionLabel={(options) =>
                       options.name
@@ -773,7 +759,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Product"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -782,81 +768,86 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setPoProductNameFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "Status") {
       return (
-        <div className='box col'>
-          <div className='filter-item' onClick={handleInventoryStatusClick}>
-            <div className='icon mr-2'>{props.data.img4}</div>
-            <div className='filterTitle'>{props.data.coloumn4}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleInventoryStatusClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img4}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryfiFilterOnSelect("ADD")}
                 >
                   Add
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
                 >
                   Create
-                </Button>
+                </button>
               </StyledMenuItem>
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
-    } else {
+    } else if (columnData === "Quantity") {
       return (
+        // <th className="cursorP table-border-right col-2">
+        //   <div className="cursorP d-flex align-items-center">
+        //     <div className="icon">{props.data.img4}</div>
+        //     <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+        //     <img src={updownarrow} height="10" width="15" alt="" />
+        //   </div>
+        // </th>
         <div className='box col'>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img4}</div>
@@ -866,6 +857,16 @@ const AdvanceTableFilter = (props) => {
             </div>
           </div>
         </div>
+      );
+    } else {
+      return (
+        <th className="cursorP table-border-right">
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img4}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
+          </div>
+        </th>
       );
     }
   };
@@ -903,36 +904,29 @@ const AdvanceTableFilter = (props) => {
   const renderColumn3 = (columnData) => {
     if (columnData === "From") {
       return (
-        <div className='box col-4'>
-          <div
-            className='filter-item'
-            onClick={handleFromShipmentClick}
-            style={{ position: "relative", left: "-100px" }}
-          >
-            <div className='icon mr-0'>{props.data.img3}</div>
-            <div className='filterTitle'>{props.data.coloumn3}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "205px" }}
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleFromShipmentClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img3}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={fromShipmentAnchorEl}
             keepMounted
             open={Boolean(fromShipmentAnchorEl)}
             onClose={handleFromShipmentClose}
+            onBlur={handleFromShipmentClose}
             style={{ marginLeft: "4rem" }}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               {fromShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
-                    id='fromShipment'
+                    id="fromShipment"
                     options={props.supplierReceiverList}
                     getOptionLabel={(options) => options.name}
                     onChange={(event, newValue) => {
@@ -943,7 +937,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Supplier Name"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -952,46 +946,44 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setFromShipmentFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "Order ID") {
       return (
-        <div className='box col-2'>
-          <div className='filter-item' onClick={handlePoOrderIdClick}>
-            <div className='icon mr-2'>{props.data.img3}</div>
-            <div className='filterTitle'>{props.data.coloumn3}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handlePoOrderIdClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img3}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={poOrderIdAnchorEl}
             keepMounted
             open={Boolean(poOrderIdAnchorEl)}
             onClose={handlePoOrderIdClose}
+            onBlur={handlePoOrderIdClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               {poOrderIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
-                    id='idOrder'
+                    id="idOrder"
                     options={props.poOrderIdList}
                     getOptionLabel={(options) => options.id}
                     onChange={(event, newValue) => {
@@ -1002,7 +994,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Order"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -1011,62 +1003,28 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                <button
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setPoOrderIdFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
-    }
-    // else if (columnData == "Manufacturer") {
-    //   return (<div className="box col">
-    //     <div className="filter-item" onClick={handleInventoryManufacturerClick}>
-    //       <div className="icon mr-2">
-    //         {props.data.img3}
-    //       </div>
-    //       <div className="filterTitle">{props.data.coloumn3}</div>
-    //       <img src={updownarrow} width="10" height="10" className="ml-3" alt="arrow" />
-    //     </div>
-    //     <StyledMenu
-    //       id="customized-menu"
-    //       anchorEl={inventoryManufacturerAnchorEl}
-    //       keepMounted
-    //       open={Boolean(inventoryManufacturerAnchorEl)}
-    //       onClose={handleInventoryManufacturerClose}
-    //     >
-    //       <div className="d-flex flex-column align-items-center">
-    //         <StyledMenuItem>
-    //           <Button variant="outlined" color="primary" onClick={() => setInventoryManufacturerFilterOnSelect("")}>Clear</Button>
-    //         </StyledMenuItem>
-    //         {inventoryManufacturerAnchorEl ?
-    //           <Autocomplete
-    //             id="Manufacturer"
-    //             options={props.inventoryFilterData}
-    //             getOptionLabel={(options) => options.manufacturer}
-    //             onChange={(event, newValue) => {
-    //               setInventoryManufacturerFilterOnSelect(newValue.manufacturer)
-    //             }}
-    //             style={{ width: '100%' }}
-    //             renderInput={(params) => <TextField {...params} label={'Search Manufacturer'} variant="outlined" />}
-    //           />
-    //           :
-    //           <div>
-    //             Empty List
-    //         </div>
-    //         }
-    //       </div>
-    //     </StyledMenu>
-    //   </div>);
-    // }
-    else {
+    } else if (columnData === "Date") {
       return (
+        // <th className="cursorP table-border-right col-2">
+        //   <div className="cursorP d-flex align-items-center">
+        //     <div className="icon">{props.data.img3}</div>
+        //     <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+        //     <img src={updownarrow} height="10" width="15" alt="" />
+        //   </div>
+        // </th>
         <div className='box col'>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img3}</div>
@@ -1076,6 +1034,16 @@ const AdvanceTableFilter = (props) => {
             </div>
           </div>
         </div>
+      );
+    } else {
+      return (
+        <th className="cursorP table-border-right">
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img3}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+            {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
+          </div>
+        </th>
       );
     }
   };
@@ -1095,7 +1063,8 @@ const AdvanceTableFilter = (props) => {
   const renderColumn2 = (columnData) => {
     if (columnData === "Product Category") {
       return (
-        <div className='box col-3'>
+        <>
+        {props.filterPage === "inventory" ? (<div className='box col-3'>
           <div
             className='filter-item'
             onClick={handleInventoryProductCategoryClick}
@@ -1117,6 +1086,7 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(inventoryProductCategoryAnchorEl)}
             onClose={handleInventoryProductCategoryClose}
+            onBlur={handleInventoryProductCategoryClose}
           >
             <div className='d-flex flex-column align-items-center'>
               {inventoryProductCategoryAnchorEl ? (
@@ -1142,7 +1112,7 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
@@ -1150,21 +1120,76 @@ const AdvanceTableFilter = (props) => {
                   onClick={() => setInventoryProductCategoryFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </div>) : (<th
+          className="cursorP table-border-right col-3"
+          onClick={handleInventoryProductCategoryClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img2}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn2}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
+          </div>
+          <StyledMenu
+            id="customized-menu"
+            anchorEl={inventoryProductCategoryAnchorEl}
+            keepMounted
+            open={Boolean(inventoryProductCategoryAnchorEl)}
+            onClose={handleInventoryProductCategoryClose}
+            onBlur={handleInventoryProductCategoryClose}
+          >
+            <div className="d-flex flex-column align-items-center">
+              {inventoryProductCategoryAnchorEl ? (
+                <StyledMenuItem>
+                  <Autocomplete
+                    id="ProductCategory"
+                    options={props.inventoryFilterData}
+                    getOptionLabel={(options) => options.name}
+                    onChange={(event, newValue) => {
+                      setInventoryProductCategoryFilterOnSelect(newValue.id);
+                    }}
+                    style={{ width: "14rem" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Search Category"}
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                </StyledMenuItem>
+              ) : (
+                <div>Empty List</div>
+              )}
+              <StyledMenuItem>
+                <button
+                  style={{ padding: "10px", height: "40px", width: "130px" }}
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => setInventoryProductCategoryFilterOnSelect("")}
+                >
+                  Clear
+                </button>
+              </StyledMenuItem>
+            </div>
+          </StyledMenu>
+        </th>)}
+        </>
+        
       );
     } else {
       return (
-        <div className='box col-2'>
-          <div className='filter-item'>
-            <div className='icon mr-1'>{props.data.img2}</div>
-            <div className='filterTitle'>{props.data.coloumn2}</div>
-            <div className='filterAction'></div>
+        <th className="cursorP table-border-right">
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img2}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn2}</div>
+            {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
-        </div>
+        </th>
       );
     }
   };
@@ -1223,34 +1248,29 @@ const AdvanceTableFilter = (props) => {
   const renderColumn1 = (columnData) => {
     if (columnData === "Shipment ID") {
       return (
-        <div className='box col-2'>
-          <div
-            className='filter-item ml-4 mr-3'
-            onClick={handleShipmentIdClick}
-          >
-            <div className='icon'>{props.data.img1}</div>
-            <div className='filterTitle'>{props.data.coloumn1}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-1'
-              alt='arrow'
-            />
+        <th
+          className="cursorP table-border-right"
+          onClick={handleShipmentIdClick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img1}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={shipmentIdAnchorEl}
             keepMounted
             open={Boolean(shipmentIdAnchorEl)}
             onClose={handleShipmentIdClose}
+            onBlur={handleShipmentIdClose}
             style={{ width: "150rem" }}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               {shipmentIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
-                    id='idShipment'
+                    id="idShipment"
                     options={props.shipmentIdList}
                     getOptionLabel={(options) => options.id}
                     onChange={(event, newValue) => {
@@ -1261,7 +1281,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Shipment"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -1270,56 +1290,47 @@ const AdvanceTableFilter = (props) => {
                 <div>Empty List</div>
               )}
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "100%" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setShipmentIdFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "To") {
       return (
-        <div
-          className='box col'
-          style={{ position: "relative", left: "-30px" }}
-        >
-          <div className='filter-item ml-4' onClick={handlePoToClick}>
-            <div className='icon mr-2'>{props.data.img1}</div>
-            <div className='filterTitle'>{props.data.coloumn1}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "70px" }}
-              alt='updownarrow'
-            />
+        <th className="cursorP table-border-right" onClick={handlePoToClick}>
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img1}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={poToAnchorEl}
             keepMounted
             open={Boolean(poToAnchorEl)}
             onClose={handlePoToClose}
+            onBlur={handlePoToClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setPoToFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
               {poToAnchorEl ? (
                 // props.poOrganisationsList.map((org) => {
@@ -1327,14 +1338,14 @@ const AdvanceTableFilter = (props) => {
                 //   return (
                 //     <div>
                 //       <StyledMenuItem>
-                //         <Button variant="outlined" color="primary" onClick={() => setPoToFilterOnSelect(org.id)}>{orgNameDisplay}</Button>
+                //         <button variant="outlined" color="primary" onClick={() => setPoToFilterOnSelect(org.id)}>{orgNameDisplay}</button>
                 //       </StyledMenuItem>
                 //     </div>
                 //   )
                 // })
                 <StyledMenuItem>
                   <Autocomplete
-                    id='toOrder'
+                    id="toOrder"
                     options={props.poOrganisationsList}
                     getOptionLabel={(options) => options?.name}
                     onChange={(event, newValue) => {
@@ -1345,7 +1356,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Customer"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -1355,40 +1366,35 @@ const AdvanceTableFilter = (props) => {
               )}
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "From") {
       return (
-        <div className='box col-2'>
-          <div className='filter-item ml-4' onClick={handlePoFromClick}>
-            <div className='icon mr-2'>{props.data.img1}</div>
-            <div className='filterTitle'>{props.data.coloumn1}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='arrow'
-            />
+        <th className="cursorP table-border-right" onClick={handlePoFromClick}>
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img1}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id='customized-menu'
+            id="customized-menu"
             anchorEl={poFromAnchorEl}
             keepMounted
             open={Boolean(poFromAnchorEl)}
             onClose={handlePoFromClose}
+            onBlur={handlePoFromClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-                <Button
+                <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setPoFromFilterOnSelect("")}
                 >
                   Clear
-                </Button>
+                </button>
               </StyledMenuItem>
               {poFromAnchorEl ? (
                 // props.poOrganisationsList.map((org) => {
@@ -1396,14 +1402,14 @@ const AdvanceTableFilter = (props) => {
                 //   return (
                 //     <div>
                 //       <StyledMenuItem>
-                //         <Button variant="outlined" color="primary" onClick={() => setPoFromFilterOnSelect(org.id)}>{orgNameDisplay}</Button>
+                //         <button variant="outlined" color="primary" onClick={() => setPoFromFilterOnSelect(org.id)}>{orgNameDisplay}</button>
                 //       </StyledMenuItem>
                 //     </div>
                 //   )
                 // })
                 <StyledMenuItem>
                   <Autocomplete
-                    id='fromOrder'
+                    id="fromOrder"
                     options={props.poOrganisationsList}
                     getOptionLabel={(options) => options?.name}
                     onChange={(event, newValue) => {
@@ -1414,7 +1420,7 @@ const AdvanceTableFilter = (props) => {
                       <TextField
                         {...params}
                         label={"Search Supplier"}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     )}
                   />
@@ -1424,311 +1430,461 @@ const AdvanceTableFilter = (props) => {
               )}
             </div>
           </StyledMenu>
-        </div>
+        </th>
       );
     } else if (columnData === "Product Name") {
       return (
-        <div className='box col-4'>
-          <div
-            className='filter-item ml-4'
-            onClick={handleInventoryProductNameClick}
-            style={{ position: "relative", left: "-70px" }}
-          >
-            <div className='icon mr-2'>{props.data.img1}</div>
-            <div className='filterTitle'>{props.data.coloumn1}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "140px" }}
-              alt='arrow'
-            />
-          </div>
-          <StyledMenu
-            id='customized-menu'
-            anchorEl={inventoryProductNameAnchorEl}
-            keepMounted
-            open={Boolean(inventoryProductNameAnchorEl)}
-            onClose={handleInventoryProductNameClose}
-            style={{ marginLeft: "3rem", width: "175rem" }}
-          >
-            <div className='d-flex flex-column align-items-center'>
-              {inventoryProductNameAnchorEl ? (
-                <StyledMenuItem>
-                  <Autocomplete
-                    id='ProductName'
-                    options={props.inventoryFilterData}
-                    getOptionLabel={(options) => options?.name}
-                    onChange={(event, newValue) => {
-                      setInventoryProductNameFilterOnSelect(newValue.id);
-                    }}
-                    style={{ width: "14rem" }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={"Search Product"}
-                        variant='outlined'
+        <>
+          {props.filterPage === "inventory" ? (
+            <div className="box col-4">
+              <div
+                className="filter-item ml-4"
+                onClick={handleInventoryProductNameClick}
+                style={{ position: "relative", left: "-70px" }}
+              >
+                <div className="icon mr-2">{props.data.img1}</div>
+                <div className="filterTitle">{props.data.coloumn1}</div>
+                <img
+                  src={updownarrow}
+                  width="10"
+                  height="10"
+                  className="ml-3"
+                  style={{ position: "relative", left: "140px" }}
+                  alt="arrow"
+                />
+              </div>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={inventoryProductNameAnchorEl}
+                keepMounted
+                open={Boolean(inventoryProductNameAnchorEl)}
+                onClose={handleInventoryProductNameClose}
+                onBlur={handleInventoryProductNameClose}
+                style={{ marginLeft: "3rem", width: "175rem" }}
+              >
+                <div className="d-flex flex-column align-items-center">
+                  {inventoryProductNameAnchorEl ? (
+                    <StyledMenuItem>
+                      <Autocomplete
+                        id="ProductName"
+                        options={props.inventoryFilterData}
+                        getOptionLabel={(options) => options?.name}
+                        onChange={(event, newValue) => {
+                          setInventoryProductNameFilterOnSelect(newValue.id);
+                        }}
+                        style={{ width: "14rem" }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={"Search Product"}
+                            variant="outlined"
+                          />
+                        )}
                       />
-                    )}
-                  />
-                </StyledMenuItem>
-              ) : (
-                <div>Empty List</div>
-              )}
-              <StyledMenuItem>
-                <Button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
-                  onClick={() => setInventoryProductNameFilterOnSelect("")}
-                >
-                  Clear
-                </Button>
-              </StyledMenuItem>
+                    </StyledMenuItem>
+                  ) : (
+                    <div>Empty List</div>
+                  )}
+                  <StyledMenuItem>
+                    <button
+                      style={{
+                        padding: "10px",
+                        height: "40px",
+                        width: "130px",
+                      }}
+                      className="btn btn-link btn-sm font-weight-bold"
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => setInventoryProductNameFilterOnSelect("")}
+                    >
+                      Clear
+                    </button>
+                  </StyledMenuItem>
+                </div>
+              </StyledMenu>
             </div>
-          </StyledMenu>
-        </div>
+          ) : (
+            <th
+              className="cursorP table-border-right col-3"
+              onClick={handleInventoryProductNameClick}
+            >
+              <div className="cursorP d-flex align-items-center">
+                <div className="icon">{props.data.img1}</div>
+                <div className="mx-2 table-text-filter">
+                  {props.data.coloumn1}
+                </div>
+                <img src={updownarrow} height="10" width="15" alt="" />
+              </div>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={inventoryProductNameAnchorEl}
+                keepMounted
+                open={Boolean(inventoryProductNameAnchorEl)}
+                onClose={handleInventoryProductNameClose}
+                onBlur={handleInventoryProductNameClose}
+                style={{ marginLeft: "3rem", width: "175rem" }}
+              >
+                <div className="d-flex flex-column align-items-center">
+                  {inventoryProductNameAnchorEl ? (
+                    <StyledMenuItem>
+                      <Autocomplete
+                        id="ProductName"
+                        options={props.inventoryFilterData}
+                        getOptionLabel={(options) => options?.name}
+                        onChange={(event, newValue) => {
+                          setInventoryProductNameFilterOnSelect(newValue.id);
+                        }}
+                        style={{ width: "14rem" }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={"Search Product"}
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </StyledMenuItem>
+                  ) : (
+                    <div>Empty List</div>
+                  )}
+                  <StyledMenuItem>
+                    <button
+                      style={{
+                        padding: "10px",
+                        height: "40px",
+                        width: "130px",
+                      }}
+                      className="btn btn-link btn-sm font-weight-bold"
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => setInventoryProductNameFilterOnSelect("")}
+                    >
+                      Clear
+                    </button>
+                  </StyledMenuItem>
+                </div>
+              </StyledMenu>
+            </th>
+          )}
+        </>
       );
     } else {
       return (
-        <div className='box col'>
-          <div className='filter-item'>
-            <div className='icon mr-2'>{props.data.img1}</div>
-            <div className='filterTitle'>{props.data.coloumn1}</div>
-            <div className='filterAction'>
-              {/* <img src={updownarrow} width="9" height="9" /> */}
-            </div>
+        <th className="cursorP table-border-right">
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img1}</div>
+            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
-        </div>
+        </th>
       );
     }
   };
 
   return (
-    <div className='filter'>
-      <div className='d-flex justify-content-between'>
-        <div className='row' style={{ flexBasis: props.fb }}>
-          {/* <div className="box col">
-            <div className="filter-item">
-              <div className="icon mr-2">
-                {props.data.img1}
-              </div>
-              <div className="filterTitle">{props.data.coloumn1}</div>
-              <div className="filterAction"> */}
-          {/* <img src={updownarrow} width="9" height="9" /> */}
-          {/* </div>
-            </div>
-          </div> */}
-          {props.data.img1 ? renderColumn1(props.data.coloumn1) : null}
-          <span className='divider' />
-          {/* <div className="box col">
-            <div className="filter-item">
-              <div className="icon mr-2">
-                {props.data.img2}
-              </div>
-              <div className="filterTitle">{props.data.coloumn2}</div>
-              <div className="filterAction">
-              </div>
-            </div>
-          </div> */}
-          {props.data.img2 ? renderColumn2(props.data.coloumn2) : null}
-          <span className='divider' />
+    <>
+      {props.filterPage === "inventory" ? (
+        <div className="filter">
+          <div className="d-flex justify-content-between">
+            <div className="row" style={{ flexBasis: props.fb }}>
+              {props.data.img1 ? renderColumn1(props.data.coloumn1) : null}
+              <span className="divider" />
 
-          {/* <div className="box col">
-            <div className="filter-item">
-              <div className="icon mr-2">
-                {props.data.img3}
-              </div>
-              <div className="filterTitle">{props.data.coloumn3}</div>
-              <div className="filterAction"> */}
-          {/* <img src={updownarrow} width="9" height="9" /> */}
-          {/* </div>
+              {props.data.img2 ? renderColumn2(props.data.coloumn2) : null}
+              <span className="divider" />
+
+              {props.data.img3 ? renderColumn3(props.data.coloumn3) : null}
+              {props.data.img4 ? <span className="divider" /> : null}
+              {props.data.img4 ? renderColumn4(props.data.coloumn4) : null}
+              {props.data.img5 ? <span className="divider" /> : null}
+              {props.data.img5 ? renderColumn5(props.data.coloumn5) : null}
             </div>
-          </div> */}
-          {props.data.img3 ? renderColumn3(props.data.coloumn3) : null}
-          {props.data.img4 ? <span className='divider' /> : null}
-          {props.data.img4
-            ? // <div className="box col">
-              //   <div className="filter-item">
-              //     <div className="icon mr-2">
-              //       {props.data.img4}
-              //     </div>
-              //     <div className="filterTitle">{props.data.coloumn4}</div>
-              //     <div className="filterAction">
-              //       {/* <img src={updownarrow} width="9" height="9" /> */}
-              //     </div>
-              //   </div>
-              // </div>
-              renderColumn4(props.data.coloumn4)
-            : null}
-          {props.data.img5 ? <span className='divider' /> : null}
-          {props.data.img5
-            ? // <div className="box col">
-              //   <div className="filter-item">
-              //       <div className="icon mr-2">
-              //         {props.data.img5}
-              //       </div>
-              //       <div className="filterTitle">{props.data.coloumn5}</div>
-              //     <div className="filterAction">
-              //       {/* <img src={updownarrow} width="9" height="9" /> */}
-              //     </div>
-              //   </div>
-              // </div>
-              renderColumn5(props.data.coloumn5)
-            : null}
-        </div>
-        {props.data.img6 ? renderColumn6(props.data.coloumn6) : null}
-        {/* <div className="box col">
-          <span className="divider" />
-          <div className="filter-item">
-            <div className="icon mr-2">
-              {props.data.img6}
-            </div>
-            <div className="filterTitle">{props.data.coloumn6}</div>
-            <div className="filterAction">
-              {/* <img src={updownarrow} width="9" height="9" /> */}
-        {/* </div>
-          </div>
-        </div> */}
-        <div className=''>
-          <div className='box col'>
-            {/* <button className="btn btn-md btn-blue mr-2">
-            <div className="d-flex align-items-center">
-              <img src={FilterIcon} width="10" height="10" className="mr-3" />
-              <span className="text">Filter</span>
-              <img src={dropdownIcon} width="10" height="10" className="ml-3" />
-            </div>
-          </button> */}
-            <button className='btn-filter-info' onClick={handleClick}>
-              <div className='d-flex align-items-center'>
-                <img
-                  src={FilterIcon}
-                  width='14'
-                  height='14'
-                  className='mr-2'
-                  alt='FilterIcon'
-                />
-                <span className='text'>{t('filter')}</span>
-                <img
-                  src={dropdownIcon}
-                  width='10'
-                  height='10'
-                  className='ml-2'
-                  alt='Drop Down Icon'
-                />
-              </div>
-            </button>
-            <StyledMenu
-              id='customized-menu'
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <div className='d-flex flex-column align-items-center'>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ padding: "10px", height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("today")}
-                  >
-                    <b>{t('today')}</b>
-                  </Button>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("week")}
-                  >
-                    <b>{t('this_week')}</b>
-                  </Button>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("month")}
-                  >
-                    <b>{t('this_month')}</b>
-                  </Button>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("threeMonth")}
-                  >
-                    <b>{t('last_three_months')}</b>
-                  </Button>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("sixMonth")}
-                  >
-                    <b>{t('last_six_months')}</b>
-                  </Button>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <Button
-                    type='button'
-                    style={{ height: "40px", width: "130px" }}
-                    className='btn btn-outline-primary btn-sm'
-                    onClick={() => setDateFilterOnSelect("year")}
-                  >
-                    <b>{t('this_year')}</b>
-                  </Button>
-                </StyledMenuItem>
-              </div>
-            </StyledMenu>
-            {!props?.isReportDisabled && (
-              <button
-                className='btn-filter-blue ml-2'
-                onClick={() =>
-                  props.setShowExportFilter(!props.showExportFilter)
-                }
-              >
-                <div className='d-flex  align-items-center'>
-                  <img
-                    src={ExportIcon}
-                    width='14'
-                    height='14'
-                    className='mr-2'
-                    alt='Export Icon'
-                  />
-                  <span>{t('export')}</span>
-                  <img
-                    src={dropdownIcon}
-                    width='10'
-                    height='10'
-                    className='ml-2'
-                    alt='DropDownIcon'
-                  />
-                  {props.showExportFilter && props.exportFilterData && (
-                    <FilterDropDown
-                      data={props.exportFilterData}
-                      onChangeOfFilterDropDown={
-                        props.onSelectionOfDropdownValue
-                      }
-                      type={"export"}
+            {props.data.img6 ? renderColumn6(props.data.coloumn6) : null}
+            <div className="">
+              <div className="box col">
+                <button className="btn-filter-info" onClick={handleClick}>
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={FilterIcon}
+                      width="14"
+                      height="14"
+                      className="mr-2"
+                      alt="FilterIcon"
                     />
+                    <span className="text">{t('filter')}</span>
+                    <img
+                      src={dropdownIcon}
+                      width="10"
+                      height="10"
+                      className="ml-2"
+                      alt="Drop Down Icon"
+                    />
+                  </div>
+                </button>
+                <StyledMenu
+                  id="customized-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  onBlur={handleClose}
+                >
+                  <div className="d-flex flex-column align-items-center">
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{
+                          padding: "10px",
+                          height: "40px",
+                          width: "130px",
+                        }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("today")}
+                      >
+                        <b>{t('today')}</b>
+                      </button>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{ height: "40px", width: "130px" }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("week")}
+                      >
+                        <b>{t('this_week')}</b>
+                      </button>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{ height: "40px", width: "130px" }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("month")}
+                      >
+                        <b>{t('this_month')}</b>
+                      </button>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{ height: "40px", width: "130px" }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("threeMonth")}
+                      >
+                        <b>{t('last_three_months')}</b>
+                      </button>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{ height: "40px", width: "130px" }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("sixMonth")}
+                      >
+                        <b>{t('last_six_months')}</b>
+                      </button>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <button
+                        type="button"
+                        style={{ height: "40px", width: "130px" }}
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => setDateFilterOnSelect("year")}
+                      >
+                        <b>{t('this_year')}</b>
+                      </button>
+                    </StyledMenuItem>
+                  </div>
+                </StyledMenu>
+                {!props?.isReportDisabled && (
+                  <button
+                    className="btn-filter-blue ml-2"
+                    onClick={() =>
+                      props.setShowExportFilter(!props.showExportFilter)
+                    }
+                  >
+                    <div className="d-flex Export-fil align-items-center">
+                      <img
+                        src={ExportIcon}
+                        width="14"
+                        height="14"
+                        className="mr-2"
+                        alt="Export Icon"
+                      />
+                      <span>{t('export')}</span>
+                      <img
+                        src={dropdownIcon}
+                        width="10"
+                        height="10"
+                        className="ml-2"
+                        alt="DropDownIcon"
+                      />
+                      {props.showExportFilter && props.exportFilterData && (
+                        <FilterDropDown
+                          data={props.exportFilterData}
+                          onChangeOfFilterDropDown={
+                            props.onSelectionOfDropdownValue
+                          }
+                          type={"export"}
+                        />
+                      )}
+                    </div>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <thead>
+          <tr className="circle-border">
+            {props.data.img1 ? renderColumn1(props.data.coloumn1) : null}
+            {props.data.img2 ? renderColumn2(props.data.coloumn2) : null}
+            {props.data.img3 ? renderColumn3(props.data.coloumn3) : null}
+            {props.data.img4 ? null : null}
+            {props.data.img4 ? renderColumn4(props.data.coloumn4) : null}
+            {props.data.img5 ? null : null}
+            {props.data.img5 ? renderColumn5(props.data.coloumn5) : null}
+            {props.data.img6 ? renderColumn6(props.data.coloumn6) : null}
+            {props.filterss === "no" ? null : (
+              <th>
+                <div className="d-flex px-3">
+                  <button className="btn-filter-info" onClick={handleClick}>
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={FilterIcon}
+                        width="14"
+                        height="14"
+                        className="mr-2"
+                        alt="FilterIcon"
+                      />
+                      <span className="text">Filter</span>
+                      <img
+                        src={dropdownIcon}
+                        width="10"
+                        height="10"
+                        className="ml-2"
+                        alt="Drop Down Icon"
+                      />
+                    </div>
+                  </button>
+                  <StyledMenu
+                    id="customized-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    onBlur={handleClose}
+                  >
+                    <div className="d-flex flex-column align-items-center">
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{
+                            padding: "10px",
+                            height: "40px",
+                            width: "130px",
+                          }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("today")}
+                        >
+                          <b>Today</b>
+                        </button>
+                      </StyledMenuItem>
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{ height: "40px", width: "130px" }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("week")}
+                        >
+                          <b>This Week</b>
+                        </button>
+                      </StyledMenuItem>
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{ height: "40px", width: "130px" }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("month")}
+                        >
+                          <b>This Month</b>
+                        </button>
+                      </StyledMenuItem>
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{ height: "40px", width: "130px" }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("threeMonth")}
+                        >
+                          <b>Last 3 Months</b>
+                        </button>
+                      </StyledMenuItem>
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{ height: "40px", width: "130px" }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("sixMonth")}
+                        >
+                          <b>Last 6 Months</b>
+                        </button>
+                      </StyledMenuItem>
+                      <StyledMenuItem>
+                        <button
+                          type="button"
+                          style={{ height: "40px", width: "130px" }}
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setDateFilterOnSelect("year")}
+                        >
+                          <b>This Year</b>
+                        </button>
+                      </StyledMenuItem>
+                    </div>
+                  </StyledMenu>
+                  {!props?.isReportDisabled && (
+                    <button
+                      className="btn-filter-blue ml-2"
+                      onClick={() =>
+                        props.setShowExportFilter(!props.showExportFilter)
+                      }
+                    >
+                      <div className="d-flex  align-items-center">
+                        <img
+                          src={ExportIcon}
+                          width="14"
+                          height="14"
+                          className="mr-2"
+                          alt="Export Icon"
+                        />
+                        <span>Export</span>
+                        <img
+                          src={dropdownIcon}
+                          width="10"
+                          height="10"
+                          className="ml-2"
+                          alt="DropDownIcon"
+                        />
+                        {props.showExportFilter && props.exportFilterData && (
+                          <FilterDropDown
+                            data={props.exportFilterData}
+                            onChangeOfFilterDropDown={
+                              props.onSelectionOfDropdownValue
+                            }
+                            type={"export"}
+                          />
+                        )}
+                      </div>
+                    </button>
                   )}
                 </div>
-              </button>
+              </th>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </tr>
+        </thead>
+      )}
+    </>
   );
 };
 export default AdvanceTableFilter;

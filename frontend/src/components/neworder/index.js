@@ -131,7 +131,7 @@ const NewOrder = (props) => {
       // setSenderWarehouses(warehouses.data);
 
       const result = await getProducts();
-      let res = result.filter(item => item.name !== 'category')
+      let res = result.filter((item) => item.name !== "category");
       setProducts(
         res.map((item) => {
           return {
@@ -516,10 +516,10 @@ const NewOrder = (props) => {
                 }
                 t={t}
               />
-              <div className='d-flex justify-content-between'>
+              <div className="d-flex justify-content-between">
                 <button
-                  type='button'
-                  className='btn btn-white bg-white shadow-radius font-bold mb-1'
+                  type="button"
+                  className="btn btn-white bg-white shadow-radius font-bold mb-1"
                   onClick={() => {
                     let arr = addProducts.filter(
                       (p) =>
@@ -550,11 +550,18 @@ const NewOrder = (props) => {
                     +<span> {t('add_another_product')}</span>
                   </div>
                 </button>
+                {errors.products && touched.products && (
+                  <span className="error-msg text-danger1">
+                    {errors.products}
+                  </span>
+                )}
               </div>
             </div>
-            {errors.products && touched.products && (
-              <span className='error-msg text-danger1'>{errors.products}</span>
-            )}
+            {/* {errors.products && touched.products && (
+              <span className="my-required-field error-msg text-danger1">
+                "heloooo"{errors.products}
+              </span>
+            )} */}
 
             <div className='row mb-3'>
               <div className='col bg-white formContainer low'>
@@ -573,8 +580,8 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
                             <div className='select-placeholder-text'>
                               {t('select_organisation_type')}
@@ -622,8 +629,8 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
                             <div className='select-placeholder-text'>
                               {t('select_organisation_name')}
@@ -660,7 +667,7 @@ const NewOrder = (props) => {
                       <label className='org' htmlFor='orgLocation'>
                         {t('organisation_id')}*
                       </label>
-                      <div className='orgV border-0'>{values.fromOrg}</div>
+                      <div className="orgV border-0">{values.fromOrg}</div>
                     </div>
                   </div>
                 </div>
@@ -685,8 +692,8 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           styles={customStyles}
                           placeholder={
                             <div className='select-placeholder-text'>
@@ -733,8 +740,8 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
                             <div className='select-placeholder-text'>
                               {t('select_delivery_location')}
@@ -850,8 +857,8 @@ const NewOrder = (props) => {
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         /> */}
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
                             <div className='select-placeholder-text'>
                               {t('select_organisation_name')}
@@ -890,7 +897,7 @@ const NewOrder = (props) => {
                       <label className='org' htmlFor='delLocation'>
                         {t('organisation_id')}*
                       </label>
-                      <div className='orgV border-0'>{values.toOrg}</div>
+                      <div className="orgV border-0">{values.toOrg}</div>
                     </div>
                   </div>
                 </div>
@@ -932,8 +939,8 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
                             <div className='select-placeholder-text'>
                               {t('select_delivery_location')}
@@ -962,12 +969,12 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-            <div className='d-flex pt-4 justify-content-between mb-1'>
-              <div className='value'>{quantity}</div>
-              <div className='d-flex'>
+            <div className="d-flex pt-4 justify-content-between mb-1">
+              <div className="value">{quantity}</div>
+              <div className="d-flex">
                 <button
-                  type='button'
-                  className='btn btn-outline-primary font-bold mr-2 mt-3'
+                  type="button"
+                  className="btn btn-outline-primary font-bold mr-2 mt-3"
                   onClick={() => {
                     dispatch(resetReviewPos({}));
                     props.history.push("/orders");
@@ -976,13 +983,13 @@ const NewOrder = (props) => {
                   <b>{t('cancel')}</b>
                 </button>
 
-                <button className='btn btn-orange fontSize20 font-bold mt-3'>
+                <button className="btn btn-orange fontSize20 font-bold mt-3">
                   <img
                     src={OrderIcon}
-                    width='20'
-                    height='17'
-                    className='mr-2 mb-1'
-                    alt='Order'
+                    width="20"
+                    height="17"
+                    className="mr-2 mb-1"
+                    alt="Order"
                   />
                   <span>
                     <b>{t('review_order')}</b>
@@ -996,7 +1003,7 @@ const NewOrder = (props) => {
       {openOrder && (
         <Modal
           close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
             onHide={closeModal} //FailurePopUp
@@ -1007,7 +1014,7 @@ const NewOrder = (props) => {
       {failedPop && (
         <Modal
           close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
             onHide={closeModalFail} //FailurePopUp
@@ -1019,7 +1026,7 @@ const NewOrder = (props) => {
       {addAnotherProductFailed && (
         <Modal
           close={() => closeModalFailedAddAnotherProduct()}
-          size='modal-md'
+          size="modal-md"
         >
           <ShipmentFailPopUp
             onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
@@ -1029,7 +1036,7 @@ const NewOrder = (props) => {
       )}
 
       {message && (
-        <div className='d-flex justify-content-center mt-3'>
+        <div className="d-flex justify-content-center mt-3">
           {" "}
           <Alert severity='success'>
             <AlertTitle>{t('success')}</AlertTitle>
@@ -1039,7 +1046,7 @@ const NewOrder = (props) => {
       )}
 
       {errorMessage && (
-        <div className='d-flex justify-content-center mt-3'>
+        <div className="d-flex justify-content-center mt-3">
           {" "}
           <Alert severity='error'>
             <AlertTitle>{t('error')}</AlertTitle>

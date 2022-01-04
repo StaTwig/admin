@@ -1,7 +1,7 @@
-var express = require("express");
-var inventoryQueryRouter = require("./inventory")
-var app = express();
+const express = require("express");
+const inventoryQueryRouter = require("./inventory");
+const app = express();
 
-app.use("/inventory",inventoryQueryRouter);
+app.use("/inventory", inventoryQueryRouter);
 
 module.exports = app;

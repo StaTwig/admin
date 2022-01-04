@@ -14,7 +14,7 @@ const AddCategory = (props) => {
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [description, setDescription] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
-  const [BtnVisible, setBtnVisible] = useState(false);
+  const [BtnVisible, setBtnVisible] = useState(true);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -25,26 +25,47 @@ const AddCategory = (props) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
+
+  const [catNameErr, setCategoryNameErr] = useState(false);
+  const [catDescErr, setDescErr] = useState(false);
+  const validation = () => {
+    if (categoryName === "" || description === "") {
+      if (categoryName === "") {
+        setCategoryNameErr(true);
+        setBtnVisible(false);
+      }
+      if (description === "") {
+        setDescErr(true);
+        setBtnVisible(false)
+      }
+    }
+    else {
+      return true;
+    }
+  };
   const addProduct = async () => {
     // const data = { manufacturer, categoryName, productCategory: category, productSubCategory: subCategory, storageConditions, description };
-    let formData = new FormData();
+    const isValid = validation();
+    if (isValid) {
+      let formData = new FormData();
 
-    formData.append("manufacturer", manufacturer);
-    let unitofMeasure = {
-      id: "N/A",
-      name: "N/A",
-    };
-    formData.append("name", "category");
-    formData.append("shortName", "category");
-    formData.append("externalId", Math.random().toString(36).substr(2, 7));
-    formData.append("type", categoryName);
-    formData.append("unitofMeasure", JSON.stringify(unitofMeasure));
-    formData.append("description", description);
-    formData.append("photo", photo);
-    const result = await addNewProduct(formData);
-    if (result.status === 1) {
-      setOpenCreatedInventory(true);
-      console.log("success add product");
+      formData.append("manufacturer", manufacturer);
+      let unitofMeasure = {
+        id: "N/A",
+        name: "N/A",
+      };
+      formData.append("name", "category");
+      formData.append("shortName", "category");
+      formData.append("externalId", Math.random().toString(36).substr(2, 7));
+      formData.append("type", categoryName);
+      formData.append("unitofMeasure", JSON.stringify(unitofMeasure));
+      formData.append("description", description);
+      formData.append("photo", photo);
+      const result = await addNewProduct(formData);
+      if (result.status === 1) {
+        setOpenCreatedInventory(true);
+        console.log("success add product");
+      }
     }
   };
 
@@ -95,10 +116,11 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${catNameErr ? "border-danger" : ""
+                      }`}
                     name="product"
                     placeholder="Enter Category Name"
-                    onChange={(e) => setcategoryName(e.target.value)}
+                    onChange={(e) => { setBtnVisible(true); setCategoryNameErr(false); setcategoryName(e.target.value) }}
                     value={categoryName}
                   />
                 </div>
@@ -113,12 +135,14 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${catDescErr ? "border-danger" : ""
+                      }`}
                     name="product"
                     placeholder="Enter Category Description"
                     onChange={(e) => {
-                      setDescription(e.target.value);
                       setBtnVisible(true);
+                      setDescErr(false)
+                      setDescription(e.target.value);
                     }}
                     value={description}
                   />
@@ -137,14 +161,13 @@ const AddCategory = (props) => {
             </button>
           </Link>
           <button
-            className={`btn ${
-              BtnVisible ? "btn-orange" : "add-btn-orange"
-            } fontSize20 font-bold mb-2 mt-0`}
+            className={`btn ${BtnVisible ? "btn-orange" : "add-btn-orange"
+              } fontSize20 font-bold mb-2 mt-0`}
             // onClick={() => {
             //   BtnVisible && addProduct;
             // }}
             onClick={() => {
-              BtnVisible && addProduct();
+              if (BtnVisible) addProduct();
             }}
           >
             {/* <span>{BtnVisible ? "+ Add New Category T" : "+ Add New Category F"}+ Add New Category</span> */}

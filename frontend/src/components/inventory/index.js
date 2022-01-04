@@ -486,6 +486,7 @@ const Inventory = (props) => {
           }
           fb='80%'
           t={t}
+          filterPage="inventory"
         />
       </div>
       <div className='ribben-space'>

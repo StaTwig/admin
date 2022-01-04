@@ -1,7 +1,7 @@
-var express = require("express");
-var eventRouter = require("./events");
+const express = require("express");
+const eventRouter = require("./events");
 
-var app = express();
+const app = express();
 
 app.use("/event/", eventRouter);
 

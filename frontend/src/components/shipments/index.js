@@ -425,7 +425,7 @@ const ShipmentAnalytic = (props) => {
           />
         </div>
       )}
-      <div className='full-width-ribben mt-4'>
+      {/* <div className='full-width-ribben mt-4'>
         <TableFilter
           data={headers}
           shipmentIdList={shipmentIdList}
@@ -446,7 +446,7 @@ const ShipmentAnalytic = (props) => {
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
           isReportDisabled={!isAuthenticated("shipmentExportReport")}
         />
-      </div>
+      </div> */}
       <div className='ribben-space'>
         <Table
           {...props}
@@ -454,6 +454,24 @@ const ShipmentAnalytic = (props) => {
           shpmnts={sendData}
           count={count}
           onPageChange={onPageChange}
+          data={headers}
+          shipmentIdList={shipmentIdList}
+          supplierReceiverList={
+            props.user.emailId === "gmr@statledger.io"
+              ? []
+              : supplierReceiverList
+          }
+          setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
+          setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
+          setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
+          setStatusFilterOnSelect={setStatusFilterOnSelect}
+          setDateFilterOnSelect={setDateFilterOnSelect}
+          fb='80%'
+          showExportFilter={showExportFilter}
+          setShowExportFilter={setShowExportFilter}
+          exportFilterData={exportFilterData}
+          onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          isReportDisabled={!isAuthenticated("shipmentExportReport")}
         />
       </div>
     </div>

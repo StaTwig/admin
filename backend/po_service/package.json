@@ -1,5 +1,5 @@
 {
-  "name": "theledgershippingservice",
+  "name": "po_service",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,8 +10,7 @@
     "axios": "^0.21.1",
     "cookie-parser": "~1.4.5",
     "cors": "^2.8.5",
-    "date-and-time": "^2.0.0",
-    "debug": "~4.3.2",
+    "date-and-time": "^2.0.1",
     "dotenv": "^10.0.0",
     "express": "~4.17.1",
     "express-jwt": "^6.1.0",
@@ -21,9 +20,8 @@
     "move-file": "^2.0.0",
     "multer": "^1.4.3",
     "node-excel-export": "^1.4.4",
-    "pdf-creator-node": "^2.2.4",
-    "pdfmake": "^0.2.2",
-    "redis": "^3.1.2",
+    "pdfmake": "^0.2.4",
+    "redis": "3.1.2",
     "uniqid": "^5.4.0",
     "xlsx": "^0.17.2"
   },

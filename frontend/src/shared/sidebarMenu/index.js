@@ -7,7 +7,7 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
@@ -16,10 +16,9 @@ const SideBar = ({ match, location, user, t }) => {
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
-  if (user?.emailId === 'gmr@statledger.io')
-    setEnable(false);
-  }, [user])
-  
+    if (user?.emailId === "gmr@statledger.io") setEnable(false);
+  }, [user]);
+
   return (
     <div className='sidebar'>
       <ul>
@@ -35,23 +34,26 @@ const SideBar = ({ match, location, user, t }) => {
           </li>
         )}
         {(isAuthenticated("viewInboundOrders") ||
-          isAuthenticated("viewOutboundOrders")) && enable && (
-          <li
-            className={url === "/orders" || url === "/neworder" ? "active" : ""}
-          >
-            <Link to='/orders' className='d-inline-block'>
-              <img
-                src={
-                  url === "/orders" || url === "/neworder"
-                    ? OrderSelectedIcon
-                    : OrderSelectedIcon
-                }
-                alt='Orders'
-              />
-              <span className='ml-2'>{t('orders')}</span>
-            </Link>
-          </li>
-        )}
+          isAuthenticated("viewOutboundOrders")) &&
+          enable && (
+            <li
+              className={
+                url === "/orders" || url === "/neworder" ? "active" : ""
+              }
+            >
+              <Link to='/orders' className='d-inline-block'>
+                <img
+                  src={
+                    url === "/orders" || url === "/neworder"
+                      ? OrderSelectedIcon
+                      : OrderSelectedIcon
+                  }
+                  alt='Orders'
+                />
+                <span className='ml-2'>{t('orders')}</span>
+              </Link>
+            </li>
+          )}
         {isAuthenticated("viewInventory") && enable && (
           <li
             className={
@@ -135,7 +137,7 @@ const SideBar = ({ match, location, user, t }) => {
             </Link>
           </li>
         )}
-        {enable &&
+        {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>
             <Link to='/lastMile' className='d-inline-block'>
               <img
@@ -146,7 +148,7 @@ const SideBar = ({ match, location, user, t }) => {
               <span className='ml-2'>{t('lastmile')}</span>
             </Link>
           </li>
-        }
+        )}
       </ul>
       <Footer />
     </div>

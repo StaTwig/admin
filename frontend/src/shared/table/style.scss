@@ -259,11 +259,11 @@ input:disabled {
   // right: 20px;
   left: 1rem;
 }
-.batch-add-inventory{
+.batch-add-inventory {
   position: relative;
   left: 42px;
 }
-.Bbatch-add-inventory{
+.Bbatch-add-inventory {
   position: relative;
   left: 5rem;
 }
@@ -359,8 +359,8 @@ input:disabled {
   position: relative;
   left: 15px;
 }
-.css-1s2u09g-control{
-  border:0 !important;
+.css-1s2u09g-control {
+  border: 0 !important;
 }
 /* .btn{
       width: 60px;
@@ -371,3 +371,11 @@ input:disabled {
     .btn:hover{
       background-color: none;
     } */
+
+.acc-table {
+  tbody {
+    tr {
+      box-shadow: none !important;
+    }
+  }
+}
