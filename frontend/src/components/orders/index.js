@@ -507,8 +507,14 @@ const Orders = (props) => {
           setShowExportFilter={setShowExportFilter}
         />
       </div>
-      <div className='full-width-ribben mt-4'>
-        <TableFilter
+      <div className='ribben-space'>
+        <Table
+          {...props}
+          skip={skip}
+          ordrs={sendData}
+          visible={visible}
+          count={count}
+          onPageChange={onPageChange}
           visible={visible}
           data={headers}
           poOrderIdList={poOrderIdList}
@@ -527,16 +533,6 @@ const Orders = (props) => {
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
           isReportDisabled={!isAuthenticated("orderExportReport")}
-        />
-      </div>
-      <div className='ribben-space'>
-        <Table
-          {...props}
-          skip={skip}
-          ordrs={sendData}
-          visible={visible}
-          count={count}
-          onPageChange={onPageChange}
         />
       </div>
     </div>
