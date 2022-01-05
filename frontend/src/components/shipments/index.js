@@ -25,6 +25,7 @@ import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
 import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const ShipmentAnalytic = (props) => {
   const [visible, setvisible] = useState("one");
@@ -412,7 +413,8 @@ const ShipmentAnalytic = (props) => {
       </div>
       {isAuthenticated("shipmentAnalytics") &&
         props.user.emailId !== "gmr@statledger.io" && (
-          <Tiles {...props} setData={setData} />
+          // <Tiles {...props} setData={setData} />
+          <Cards {...props} setData={setData} />
         )}
       {props.user.emailId !== "gmr@statledger.io" && (
         <div className='mt-4'>

@@ -26,6 +26,7 @@ import {
 import { config } from "../../config";
 import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const Orders = (props) => {
 
@@ -497,7 +498,8 @@ const Orders = (props) => {
         </div>
       </div>
       {isAuthenticated("orderAnalytics") && (
-        <Tiles {...props} setData={setData} />
+        // <Tiles {...props} setData={setData} />
+        <Cards {...props} setData={setData} />
       )}
       <div className='mt-4'>
         <Tabs

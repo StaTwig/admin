@@ -44,7 +44,7 @@ function Table(props) {
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
-          isReportDisabled= {props.isReportDisabled}
+          isReportDisabled={props.isReportDisabled}
         />
         <tbody>
           {/* {shipments.length === 0 && (
