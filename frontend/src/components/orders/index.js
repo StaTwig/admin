@@ -397,6 +397,20 @@ const Orders = (props) => {
       }?type=${value.toLowerCase()}`;
     }
 
+    // console.log('visible', visible);
+
+    var today = new Date();
+
+    var nameOfFile;
+
+    if(visible=='one'){
+      nameOfFile = 'ordersoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+      // console.log(name, name);
+    }
+    else if(visible=='two'){
+      nameOfFile = 'ordersinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+    }
+
     getExportFile(url).then((response) => {
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
@@ -406,10 +420,11 @@ const Orders = (props) => {
         link.href = downloadUrl;
         link.setAttribute(
           "download",
-          `${uuid()}.${
+          `${nameOfFile}.${
             value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
+        console.log('Link', link);
         document.body.appendChild(link);
         link.click();
         link.remove();
