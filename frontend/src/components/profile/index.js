@@ -783,8 +783,8 @@ class Profile extends React.Component {
                                       <span>N/A</span>
                                     )}
                                   </div>
-                                  <div className="full-address">
-                                    {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
+                                  {/* <div className="full-address">
+                                   
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.secondLine ? (
                                       <span>
@@ -794,7 +794,7 @@ class Profile extends React.Component {
                                         }
                                       </span>
                                     ) : null}
-                                  </div>
+                                  </div> */}
                                   <div className="pin-code">
                                     Zipcode :{" "}
                                     {this.state.warehouseLocations[id]
