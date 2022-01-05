@@ -213,21 +213,6 @@ const Organisations = (props) => {
                 }}
                 style={{ cursor: "pointer" }}>{'Created on'}
               </span>
-              <img
-                class='headerText'
-                style={{
-                  width: '7px',
-                  height: '10px',
-                  marginTop: '0px',
-                  marginLeft: '38px',
-                  cursor: "pointer"
-                }}
-                src={sortIcon}
-                alt='roleSortIcon'
-                onClick={() => {
-                  setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
-                }}
-              />
               {showDropDownForCreatedOn &&
                 <DropDownFilter
                   setShowDropDownForCreatedOn={setShowDropDownForCreatedOn}
