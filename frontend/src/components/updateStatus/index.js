@@ -402,7 +402,7 @@ const UpdateStatus = (props) => {
                         </h6>
                         <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
                           <div className="cargoLabels">
-                            <label className='mb-1 text-secondary'>Accepatance Date</label>
+                            <label className='mb-1 text-secondary'>Acceptance Date</label>
                           </div>
                           <div>
                             <input
