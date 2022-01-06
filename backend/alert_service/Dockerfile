@@ -1,10 +1,14 @@
 FROM node:lts-alpine3.13
 
+ENV NODE_ENV=production
+
 WORKDIR /src
 
-COPY . /src
+COPY package.json .
 
-RUN yarn install
+RUN yarn --production
+
+COPY . .
 
 EXPOSE 3004
 

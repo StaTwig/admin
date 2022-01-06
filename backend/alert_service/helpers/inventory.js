@@ -85,13 +85,13 @@ exports.inventoryNearExpiry = async (event) => {
   }
 };
 exports.inventoryExpired = async (event) => {
-  let txnId = event.transactionId;
-  let template = `"Inventory - ${txnId}" has expired`;
+  const txnId = event.transactionId;
+  const template = `"Inventory - ${txnId}" has expired`;
   const warehouseId = await WarehouseModel.find({ warehouseInventory: txnId });
-  for (warehouse of warehouseId) {
+  for (const warehouse of warehouseId) {
     const employees = await getEligibleUsers(warehouse.id);
-    asyncForEach(employees, async (employee) => {
-      let dataReceiver = {
+    await asyncForEach(employees, async (user) => {
+      const dataReceiver = {
         user: user.id,
         email: user.emailId,
         mobile: user.phoneNumber,

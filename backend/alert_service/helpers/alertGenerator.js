@@ -2,6 +2,7 @@ const Alert = require("../models/AlertModel");
 const Atoms = require("../models/AtomsModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const OrderModel = require("../models/RecordModel");
 const {
   alertMobile,
   alertEmail,
@@ -96,10 +97,9 @@ async function generateAlert(event) {
 
 async function checkProductExpiry() {
   try {
-    let params = {
+    const params = {
       "attributeSet.expDate": { $lt: moment().format() },
     };
-    console.log(params);
     for await (const product of Atoms.find({
       ...params,
     })) {
@@ -139,7 +139,7 @@ async function checkProductNearExpiry() {
 }
 
 async function productExpired(productId, quantity, owner, expired) {
-  for (inventoryId of owner) {
+  for (const inventoryId of owner) {
     for await (const inventory of WarehouseModel.find({
       warehouseInventory: inventoryId,
     })) {
@@ -162,7 +162,7 @@ async function productExpiryEvent(
   expired
 ) {
   for await (const user of EmployeeModel.find({ warehouseId: warehouse })) {
-    eventData = {
+    const eventData = {
       actorOrgId: organisation,
       eventTypePrimary: expired,
       eventTypeDesc: "INVENTORY",
@@ -184,15 +184,14 @@ async function productExpiryEvent(
 
 async function ordersPending() {
   try {
-    for await (const order of OrderModel.find({
-      poStatus: "CREATED",
-    })) {
-      let event = {
+    const orders = await OrderModel.find({ poStatus: "CREATED" });
+    for (const order of orders) {
+      const event = {
         transactionId: order.id,
         actorOrgId: order.supplier.supplierOrganisation,
         secondaryOrgId: order.customer.customerOrganisation,
-        eventTypePrimary: "ORDER",
-        eventTypeDesc: "PENDING",
+        eventTypePrimary: "PENDING",
+        eventTypeDesc: "ORDER",
       };
       alertListener(event);
     }

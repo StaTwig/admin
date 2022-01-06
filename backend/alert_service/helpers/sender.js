@@ -30,7 +30,7 @@ exports.sendNotification = async function (data) {
 };
 
 exports.sendMessage = async function (data) {
-  const { mobile, content, subject } = data;
+  const { mobile, content, subject, email } = data;
   let res = await axios.post(process.env.MESSAGE, {
     whatsapp: false,
     content,
