@@ -101,7 +101,7 @@ const saveConfig = async () => {
       setConfig(configs.data[0]);
     })();
     (async () => {
-      const result = await dispatch(getSupplierPerformanceByOrgType());
+      const result = await dispatch(getSupplierPerformanceByOrgType({orgType: props.selectedType.toUpperCase(), location: props.location})); //
       let _spm = result.data;
       if (_spm.length) {
         sortSupplierPeformances(_spm);
@@ -126,10 +126,10 @@ const saveConfig = async () => {
   }
   function sortSupplierPeformances(arr){
     arr.sort(compare)
-    if(props.selectedType === 'All')
+    // if(props.selectedType === 'All')
     setSupplierPerformances(arr);
-    else
-    setSupplierPerformances(arr.filter(item => item.type === props.selectedType))
+    // else
+    // setSupplierPerformances(arr.filter(item => item.type === props.selectedType))
   }
 
   const onStateChange = async (event) => {
