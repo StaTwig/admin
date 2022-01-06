@@ -2223,12 +2223,20 @@ exports.getSupplierPerformance = [
       });
 
       let matchCondition = {};
+      // let matchQuery = {
+      //   $match: {
+         
+      //   },
+      // }
+
       if (!orgType || orgType === "ALL") {
         matchCondition = {
           $or: [{ type: "S1" }, { type: "S2" }, { type: "S3" }],
+          postalAddress: { $regex: req.query.location ? req.query.location : "", $options: "i" },
         };
       } else {
         matchCondition.type = orgType;
+        matchCondition[`postalAddress`] =  { $regex: req.query.location ? req.query.location : "", $options: "i" };
       }
       matchCondition.status = "ACTIVE";
       const supplierOrgs = await OrganisationModel.aggregate([
@@ -2275,7 +2283,6 @@ exports.getSupplierPerformance = [
       ]);
 
       for (const supplier of supplierOrgs) {
-        console.log(supplier.postalAddress?.split(',')[1])
         supplier.leadTime = await calculateLeadTimeByOrg(supplier);
         supplier.returnRate = await calculateReturnRateByOrg(supplier);
         supplier.storageCapacity = await calculateStorageCapacityByOrg(

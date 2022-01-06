@@ -35,6 +35,7 @@ const ReceiveShipment = (props) => {
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [photo2, setPhoto2] = useState("");
   const [photoUrl2, setPhotoUrl2] = useState(undefined);
+  const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
@@ -46,7 +47,7 @@ const ReceiveShipment = (props) => {
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
 
-  console.log(ErrorMsg);
+  console.log(comment);
 
   useEffect(() => {
     async function fetchairwayBill() {
@@ -306,38 +307,68 @@ const ReceiveShipment = (props) => {
         <div className="col-sm-4">
           <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>
           <div className="col panel commonpanle">
-            <div className=" pt-2 pb-2 d-flex row">
-              <span
-                onClick={() => setCommentEnabled(false)}
-                className="txt-outline text-muted"
-              >
-                Damaged in transit
-              </span>
-              <span
-                onClick={() => setCommentEnabled(false)}
-                className="txt-outline text-muted"
-              >
-                Miscount
-              </span>
-              <span
-                onClick={() => setCommentEnabled(false)}
-                className="txt-outline text-muted"
-              >
-                Shipment Stolen
-              </span>
-              <span
-                onClick={() => setCommentEnabled(false)}
-                className="txt-outline text-muted"
-              >
-                Wrong Shipment
-              </span>
-              <span
-                onClick={() => setCommentEnabled(true)}
-                className="txt-outline text-muted"
-              >
-                Other
-              </span>
-            </div>
+          <div className=" pt-2 pb-2 d-flex row">
+                        <span
+                          onClick={() => {
+                            setCount("r1");
+                            setCommentEnabled(false);
+                            setComment("Damaged in transit");
+                          }}
+                          className={`txt-outline ${
+                            count === "r1" && "comment-active"
+                          }`}
+                        >
+                          Damaged in transit
+                        </span>
+                        <span
+                          onClick={() => {
+                            setCount("r2");
+                            setCommentEnabled(false);
+                            setComment("Miscount");
+                          }}
+                          className={`txt-outline ${
+                            count === "r2" && "comment-active"
+                          }`}
+                        >
+                          Miscount
+                        </span>
+                        <span
+                          onClick={() => {
+                            setCount("r3");
+                            setCommentEnabled(false);
+                            setComment("Shipment Stolen");
+                          }}
+                          className={`txt-outline ${
+                            count === "r3" && "comment-active"
+                          }`}
+                        >
+                          Shipment Stolen
+                        </span>
+                        <span
+                          onClick={() => {
+                            setCount("r4");
+                            setCommentEnabled(false);
+                            setComment("Wrong Shipment");
+                          }}
+                          className={`txt-outline ${
+                            count === "r4" && "comment-active"
+                          }`}
+                        >
+                          Wrong Shipment
+                        </span>
+                        <span
+                          onClick={() => {
+                            setCount("r5");
+                            setCommentEnabled(true);
+                            setComment("");
+                          }}
+                          className={`txt-outline ${
+                            count === "r5" && "comment-active"
+                          }`}
+                        >
+                          Other
+                        </span>
+                      </div>
             <div
               className="form-group"
               style={{ width: "150%", height: "60px" }}

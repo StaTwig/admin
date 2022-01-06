@@ -2,19 +2,20 @@
 
 .inventory {
   position: relative;
-  top:-10px;
-    padding-right: 22px;
-    padding-left: 55px;
-    overflow: hidden;
+  top: -10px;
+  padding-right: 22px;
+  padding-left: 55px;
+  overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
   }
 
-  a, a:focus{
+  a,
+  a:focus {
     text-decoration: none;
   }
-  .card{
+  .card {
     height: 100%;
   }
 
@@ -23,6 +24,7 @@
     left: -110px;
     right: -25px;
     background-color: #eaeaea;
+    padding: 0.3rem 0;
     .filter {
       margin-left: 9rem;
       margin-right: 3rem;
@@ -42,16 +44,16 @@
     }
   }
 
-  .rTableHeader{
+  .rTableHeader {
     font-weight: bold;
     text-align: center;
   }
   .table .rTable .rTableCell {
-      color: $black;
-      text-align: left;
-      //font-weight: 600;
- }
-  
+    color: $black;
+    text-align: left;
+    //font-weight: 600;
+  }
+
   .list-container {
     h4 {
       color: $OBBlue;
@@ -65,15 +67,15 @@
     }
 
     .overflow {
-      .col-sm-6{
+      .col-sm-6 {
         height: 100px;
         padding: 0px 15px 0px 20px;
         margin: 10px 0px 10px;
-     }
+      }
     }
 
-    .product{
-      font-size:12px;
+    .product {
+      font-size: 12px;
     }
     .round-sign {
       border-radius: 100%;
@@ -89,8 +91,8 @@
       align-items: center;
       margin-top: 1px;
     }
-    .qty{
-      font: Bold 12px "Source Sans Pro"; 
+    .qty {
+      font: Bold 12px "Source Sans Pro";
       color: #014721;
       text-align: center;
       align-items: center;
@@ -150,7 +152,7 @@
       border-radius: 50%;
       justify-content: center;
       align-items: center;
-      margin-right: 15px;            //-----tabs icons
+      margin-right: 15px; //-----tabs icons
       display: flex;
       @media (min-width: $xl) {
         width: 60px;
@@ -162,10 +164,9 @@
         height: 30px;
       }
 
-     
       &.truck-bg {
-        background:  #e8f4f8;
-      }                                       
+        background: #e8f4f8;
+      }
 
       &.sent-bg {
         background: #d4ebf2;
@@ -173,7 +174,6 @@
 
       &.recived-bg {
         background: #fff2e5;
-        
       }
 
       &.transit-bg {
@@ -190,16 +190,16 @@
         margin-right: 3px;
         cursor: pointer;
       }
-        .tab-item:hover {
-          border-bottom: 2px solid black;
-          color:	rgb(0,0,0);
-          font-size: 10px; 
-        }  
-   }
+      .tab-item:hover {
+        border-bottom: 2px solid black;
+        color: rgb(0, 0, 0);
+        font-size: 10px;
+      }
+    }
     .title {
       font-size: 14px;
       position: relative;
-      top:-7px;
+      top: -7px;
       line-height: 8px;
       //font-weight: bold;
       color: #707070;
@@ -208,9 +208,6 @@
       @media (min-width: $xl) {
         font-size: 14px;
       }
-      @media (min-width: $sm,$md,$lg) {
-        font-size: 12px;
-      }
     }
 
     .count {
@@ -218,7 +215,7 @@
       font-size: 35px;
       margin-top: 3px;
       font-weight: bold;
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .dayStatus {
@@ -233,16 +230,15 @@
     }
 
     .truck-text {
-      color: #2BA3AE;
+      color: #2ba3ae;
     }
 
     .sent-text {
-      color: #0093E9;
+      color: #0093e9;
     }
 
     .recived-text {
-      color: #FA7923;
-      
+      color: #fa7923;
     }
 
     .transit-text {

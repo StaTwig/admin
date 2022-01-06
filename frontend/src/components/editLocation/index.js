@@ -141,11 +141,11 @@ const EditLocation = (props) => {
   // };
   return (
     <div>
-      <div className='addproduct'>
-        <h1 className='breadcrumb'>EDIT LOCATION</h1>
+      <div className="addproduct">
+        <h1 className="breadcrumb">EDIT LOCATION</h1>
 
-        <div className='card'>
-          <div className='card-body'>
+        <div className="card">
+          <div className="card-body">
             <Formik
               enableReinitialize={true}
               initialValues={{
@@ -202,11 +202,11 @@ const EditLocation = (props) => {
                 setFieldValue,
                 dirty,
               }) => (
-                <form onSubmit={handleSubmit} className='mb-3'>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressTitle'>
+                <form onSubmit={handleSubmit} className="mb-3">
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressTitle">
                           Address Title*
                         </label>
 
@@ -223,11 +223,11 @@ const EditLocation = (props) => {
                       /> */}
                         <input
                           style={{ flexBasis: "47%" }}
-                          className='editlocP'
-                          id='standard-basic'
-                          type='text'
-                          name='addressTitle'
-                          placeholder='Enter Address Title'
+                          className="editlocP"
+                          id="standard-basic"
+                          type="text"
+                          name="addressTitle"
+                          placeholder="Enter Address Title"
                           value={values.addressTitle}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -235,7 +235,7 @@ const EditLocation = (props) => {
                           }}
                         />
                         {errors.addressTitle && touched.addressTitle && (
-                          <span className='error-msg text-danger-EL'>
+                          <span className="error-msg text-danger-EL">
                             {errors.addressTitle}
                           </span>
                         )}
@@ -243,19 +243,19 @@ const EditLocation = (props) => {
                     </div>
                   </div>
                   {console.log(values)}
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='region'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="region">
                           Region*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
                             value={values.region}
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
+                              <div className="select-placeholder-text">
                                 Select Region
                               </div>
                             }
@@ -271,7 +271,7 @@ const EditLocation = (props) => {
                             renderInput={(params) => <TextField {...params} />}
                           />
                           {errors.region && touched.region && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.region}
                             </span>
                           )}
@@ -279,19 +279,19 @@ const EditLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='country'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="country">
                           Country*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
                             value={values.country}
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
+                              <div className="select-placeholder-text">
                                 Select Country
                               </div>
                             }
@@ -306,7 +306,7 @@ const EditLocation = (props) => {
                             }}
                             options={allCountries.map((option) => option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select Country' />
+                              <TextField {...params} label="Select Country" />
                             )}
                           />
                           {/* <Autocomplete
@@ -326,7 +326,7 @@ const EditLocation = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select Country"  />}
                         /> */}
                           {errors.country && touched.country && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.country}
                             </span>
                           )}
@@ -334,18 +334,18 @@ const EditLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='state'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="state">
                           State*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
+                              <div className="select-placeholder-text">
                                 Select State
                               </div>
                             }
@@ -358,7 +358,7 @@ const EditLocation = (props) => {
                             }}
                             options={allState.map((option) => option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select State' />
+                              <TextField {...params} label="Select State" />
                             )}
                           />
                           {/* <Autocomplete
@@ -375,7 +375,7 @@ const EditLocation = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
                         /> */}
                           {errors.state && touched.state && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.state}
                             </span>
                           )}
@@ -384,18 +384,18 @@ const EditLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='city'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="city">
                           City*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
+                              <div className="select-placeholder-text">
                                 Select City
                               </div>
                             }
@@ -405,7 +405,7 @@ const EditLocation = (props) => {
                             }}
                             options={allCity.map((Option) => Option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select City' />
+                              <TextField {...params} label="Select City" />
                             )}
                           />
                           {/* <Autocomplete
@@ -419,7 +419,7 @@ const EditLocation = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         /> */}
                           {errors.city && touched.city && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.city}
                             </span>
                           )}
@@ -428,18 +428,18 @@ const EditLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressLine'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressLine">
                           Address Line*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          className='editlocP mt-2'
-                          name='addressTitle'
-                          placeholder='Enter Address Line'
+                          id="standard-basic"
+                          className="editlocP mt-2"
+                          name="addressTitle"
+                          placeholder="Enter Address Line"
                           value={values.addressLine}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -465,19 +465,19 @@ const EditLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-16'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='Select Location'>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-16">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="Select Location">
                           Pincode*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          type='number'
-                          className='editlocP mt-2'
-                          name='pincode'
-                          placeholder='Enter Pincode'
+                          id="standard-basic"
+                          type="number"
+                          className="editlocP mt-2"
+                          name="pincode"
+                          placeholder="Enter Pincode"
                           value={values.pincode}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -624,9 +624,9 @@ const EditLocation = (props) => {
                     </div>
                   </div>
                 </div> */}
-                  <div className='d-flex flex-row-reverse'>
+                  <div className="d-flex flex-row-reverse">
                     <button
-                      className='close btn btn-yellow float-right font-weight-bold'
+                      className="btn btn-yellow float-right font-weight-bold"
                       disabled={
                         !(
                           values.country &&
@@ -637,13 +637,13 @@ const EditLocation = (props) => {
                           values.pincode
                         )
                       }
-                      type='submit'
+                      type="submit"
                     >
                       <span>Request Admin For Approval</span>
                     </button>
                     <button
-                      type='button'
-                      className='btn btn-white shadow-radius font-bold mr-3 font-weight-bold'
+                      type="button"
+                      className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold"
                       onClick={() => {
                         props.history.push({
                           pathname: "/profile",
@@ -673,7 +673,7 @@ const EditLocation = (props) => {
         {addedLocationModal && (
           <Modal
             close={() => closeModalAddedLocation()}
-            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <SuccessPopup
               onHide={closeModalAddedLocation} //FailurePopUp

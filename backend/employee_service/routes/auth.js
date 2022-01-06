@@ -1,20 +1,20 @@
-var express = require("express");
+const express = require("express");
 const AuthController = require("../controllers/AuthController");
-const cuid = require('cuid');
-var multer = require("multer");
-// var upload = multer({ dest: "uploads/" });
+const cuid = require("cuid");
+const multer = require("multer");
+
+// const upload = multer({ dest: "uploads/" }); // for single file with same name as uploaded file
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
     callback(null, "uploads/");
   },
   filename(req, file, callback) {
-    callback(null, cuid()+Date.now() + '.jpg');
+    callback(null, cuid() + Date.now() + ".jpg");
   },
 });
-
 const upload = multer({ storage: Storage });
 
-var router = express.Router();
+const router = express.Router();
 
 router.post("/check", AuthController.checkEmail);
 router.post("/register", AuthController.register);
@@ -31,17 +31,30 @@ router.post("/pushWarehouse", AuthController.pushWarehouse);
 router.post("/updateWarehouse", AuthController.updateWarehouseAddress);
 router.post("/switchLocation", AuthController.switchLocation);
 router.get("/getAllRegisteredUsers", AuthController.getAllRegisteredUsers);
-router.get("/getAllUsersByOrganisation/:organisationId", AuthController.getAllUsersByOrganisation);
-router.get("/getAllUsersByWarehouse/:warehouseId", AuthController.getAllUsersByWarehouse);
-router.post("/uploadImage", upload.single('photo'), AuthController.uploadImage);
+router.get(
+  "/getAllUsersByOrganisation/:organisationId",
+  AuthController.getAllUsersByOrganisation
+);
+router.get(
+  "/getAllUsersByWarehouse/:warehouseId",
+  AuthController.getAllUsersByWarehouse
+);
+router.post("/uploadImage", upload.single("photo"), AuthController.uploadImage);
 router.get("/fetchImage", AuthController.fetchImage);
 router.get("/getUserWarehouses", AuthController.getUserWarehouses);
-router.get("/abinbev/getOrganizationsByType", AuthController.getOrganizationsByTypeForAbInBev);
+router.get(
+  "/abinbev/getOrganizationsByType",
+  AuthController.getOrganizationsByTypeForAbInBev
+);
 router.get("/getOrganizationsByType", AuthController.getOrganizationsByType);
 router.get("/getwarehouseByType", AuthController.getwarehouseByType);
 router.get("/getwarehouseinfo", AuthController.getwarehouseinfo);
-router.get("/getOrganizationsTypewithauth", AuthController.getOrganizationsTypewithauth);
+router.get(
+  "/getOrganizationsTypewithauth",
+  AuthController.getOrganizationsTypewithauth
+);
 router.get("/emailverify", AuthController.emailverify);
 router.post("/registerTwillio", AuthController.createTwilioBinding);
-router.get("/images/:key", AuthController.Image)
+router.get("/images/:key", AuthController.Image);
+
 module.exports = router;
