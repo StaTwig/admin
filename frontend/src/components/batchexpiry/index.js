@@ -27,7 +27,8 @@ const BatchExpiry = (props) => {
         setEnable(false);
         result = await getExpiredProductsByBatch();
       }
-      setData(result);
+      if(Array.isArray(result))
+        setData(result);
       dispatch(turnOff());
     }
     fetchData();
@@ -79,7 +80,7 @@ const BatchExpiry = (props) => {
           </div>
         </div>
         <div className="ribbon-space col-12 pl-0 pr-0">
-          {data.map((exp, i) => (
+          {data?.map((exp, i) => (
             <div
               key={i}
               className="col-12 p-3 mb-3 rounded row bg-white shadow"
