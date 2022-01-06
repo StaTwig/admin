@@ -10,7 +10,7 @@ const {
   pushNotification,
 } = require("./alertSender");
 const moment = require("moment");
-const { alertListener } = require("./listener");
+const { alertListener, inventoryListener } = require("./listener");
 
 async function processShipmentEvents(event) {
   try {
@@ -140,14 +140,14 @@ async function checkProductNearExpiry() {
 
 async function productExpired(productId, quantity, owner, expired) {
   for (const inventoryId of owner) {
-    for await (const inventory of WarehouseModel.find({
+    for await (const warehouse of WarehouseModel.find({
       warehouseInventory: inventoryId,
     })) {
       productExpiryEvent(
         productId,
         quantity,
-        inventory.id,
-        inventory.organisationId,
+        warehouse.id,
+        warehouse.organisationId,
         expired
       );
     }
@@ -158,28 +158,18 @@ async function productExpiryEvent(
   productId,
   quantity,
   warehouse,
-  organisation,
+  organization,
   expired
 ) {
-  for await (const user of EmployeeModel.find({ warehouseId: warehouse })) {
-    const eventData = {
-      actorOrgId: organisation,
-      eventTypePrimary: expired,
-      eventTypeDesc: "INVENTORY",
-      quantity: quantity,
-      transactionId: productId,
-    };
-    console.log("ALERTING USER", user);
-    pushNotification(eventData, user.id, "ALERT", productId);
-    alertPushNotification(eventData, user.id);
-    let alertData = Alert.findOne({ username: user.id });
-    // alertEmail(eventData,"gmail@sanathswaroop.com")
-    // alertMobile(eventData,"+919392848111")
-    if (alertData?.alertMode?.mobile == true)
-      alertMobile(eventData, user.phoneNumber);
-    if (alertData?.alertMode?.email == true)
-      alertEmail(eventData, user.emailId);
-  }
+  const eventData = {
+    actorOrgId: organization,
+    actorWarehouseId: warehouse,
+    eventTypePrimary: expired,
+    eventTypeDesc: "INVENTORY",
+    quantity: quantity,
+    transactionId: productId,
+  };
+  inventoryListener(eventData);
 }
 
 async function ordersPending() {
