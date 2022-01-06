@@ -7,6 +7,7 @@ import location from "../../../assets/icons/CurrentLocationWhite.svg";
 import { Link } from "react-router-dom";
 import { formatDate } from "../../../utils/dateHelper";
 import Pagination from "@material-ui/lab/Pagination";
+import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
   const dispatch = useDispatch();
@@ -25,15 +26,26 @@ function Table(props) {
   return (
     <div>
       <table class="table">
-        {/* <thead>
-        <tr>
-          <th>Shipment ID</th>
-          <th>Shipment Date</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Status</th>
-        </tr>
-      </thead> */}
+        <AdvanceTableFilter
+          data={props.data}
+          shipmentIdList={props.shipmentIdList}
+          supplierReceiverList={
+            props.user.emailId === "gmr@statledger.io"
+              ? []
+              : props.supplierReceiverList
+          }
+          setShipmentIdFilterOnSelect={props.setShipmentIdFilterOnSelect}
+          setFromShipmentFilterOnSelect={props.setFromShipmentFilterOnSelect}
+          setToShipmentFilterOnSelect={props.setToShipmentFilterOnSelect}
+          setStatusFilterOnSelect={props.setStatusFilterOnSelect}
+          setDateFilterOnSelect={props.setDateFilterOnSelect}
+          fb="80%"
+          showExportFilter={props.showExportFilter}
+          setShowExportFilter={props.setShowExportFilter}
+          exportFilterData={props.exportFilterData}
+          onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
+          isReportDisabled= {props.isReportDisabled}
+        />
         <tbody>
           {/* {shipments.length === 0 && (
             <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
@@ -297,6 +309,10 @@ function Table(props) {
                     >
                       {status}
                     </div>
+                  </div>
+                </td>
+                <td>
+                  <div className="table-btns">
                     <button
                       className="button btn-primary text-light btn-sm mr-3"
                       onClick={() => {
