@@ -29,9 +29,9 @@ const InventoryContainer = (props) => {
       const inventoryFilterDataRes = await getTransactionFilterList();
       setInventoryFilterData(inventoryFilterDataRes);
     }
+    fetchData();
     dispatch(resetInventories());
     dispatch(getInventories(0, 10, "", "", "", "")); //(skip, limit, dateFilter, productName, productCategory, status)
-    fetchData();
   }, [dispatch]);
 
   // const onLoadMore = async () => {

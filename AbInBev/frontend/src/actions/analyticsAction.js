@@ -30,12 +30,15 @@ export const getOrgTypeStats = (param) => {
   };
 };
 
-export const getSupplierPerformanceByOrgType = (orgType) => {
+export const getSupplierPerformanceByOrgType = (data) => {
   let queryParam = '';
-  if (orgType && orgType.length && orgType !== '') {
-    queryParam = queryParam + '?supplierType=' + orgType;
-  } else {
-    queryParam = queryParam + '?supplierType=ALL';
+  if (data && data.orgType && data.orgType?.length && data.orgType !== '') {
+    queryParam = queryParam + '?supplierType=' + data.orgType;
+  } 
+  console.log(queryParam)
+
+  if (data && data.location && data.location?.length && data.location !== '') {
+    queryParam = queryParam + ((data.orgType && data.orgType?.length && data.orgType !== '') ? '&' : '?') +'location=' + data.location;
   }
   return async (dispatch) => {
     try {
