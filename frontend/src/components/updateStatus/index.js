@@ -74,6 +74,10 @@ const UpdateStatus = (props) => {
 
   const updateStatus = async (values) => {
     const { shipmentId, comments, updateStatusLocation } = values;
+
+    if(updateStatusLocation==""){
+      setErrorMessage('Require Update Status Location');
+    }
     const data = {
       id: shipmentId,
       shipmentUpdates: {
@@ -241,7 +245,7 @@ const UpdateStatus = (props) => {
                           type="text"
                           // className="form-control mb-2"
                           className={`form-control mb-2 ${
-                            errors.updateStatusLocation && touched.updateStatusLocation
+                            values.updateStatusLocation==""
                               ? "border-danger"
                               : ""
                           }`}
@@ -249,7 +253,13 @@ const UpdateStatus = (props) => {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
+                          placeholder={` ${values.updateStatusLocation==""?'Required':''}`}
                         />
+                        {/* {errors.updateStatusLocation && touched.updateStatusLocation && (
+                          <label className="error-msg text-danger mb-1">
+                            {errors.updateStatusLocation}
+                          </label>
+                        )} */}
                       </div>
                     </div>
 
