@@ -7,7 +7,7 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
@@ -58,13 +58,13 @@ const SideBar = ({ match, location, user }) => {
           <li
             className={
               url === "/inventory" ||
-              url === "/newinventory" ||
-              url === "/productcategory" ||
-              url === "/batchexpired" ||
-              url === "/batchnearexpiry/product" ||
-              url === "/productoutofstock" ||
-              url === "/addproduct" ||
-              url === "/productlist/all"
+                url === "/newinventory" ||
+                url === "/productcategory" ||
+                url === "/batchexpired" ||
+                url === "/batchnearexpiry/product" ||
+                url === "/productoutofstock" ||
+                url === "/addproduct" ||
+                url === "/productlist/all"
                 ? "active"
                 : ""
             }
@@ -73,13 +73,13 @@ const SideBar = ({ match, location, user }) => {
               <img
                 src={
                   url === "/inventory" ||
-                  url === "/newinventory" ||
-                  url === "/productcategory" ||
-                  url === "/batchexpired" ||
-                  url === "/batchnearexpiry/product" ||
-                  url === "/productoutofstock" ||
-                  url === "/addproduct" ||
-                  url === "/productlist/all"
+                    url === "/newinventory" ||
+                    url === "/productcategory" ||
+                    url === "/batchexpired" ||
+                    url === "/batchnearexpiry/product" ||
+                    url === "/productoutofstock" ||
+                    url === "/addproduct" ||
+                    url === "/productlist/all"
                     ? InventoryIcon
                     : InventoryIcon
                 }
@@ -91,30 +91,30 @@ const SideBar = ({ match, location, user }) => {
         )}
         {(isAuthenticated("inboundShipments") ||
           isAuthenticated("outboundShipments")) && (
-          <li
-            className={
-              url === "/shipments" ||
-              url === "/newshipment" ||
-              url === "/transactionHistory"
-                ? "active"
-                : ""
-            }
-          >
-            <Link to='/shipments' className='d-inline-block'>
-              <img
-                src={
-                  url === "/shipments" ||
+            <li
+              className={
+                url === "/shipments" ||
                   url === "/newshipment" ||
                   url === "/transactionHistory"
-                    ? shipIcon
-                    : shipIcon
-                }
-                alt='Shippment'
-              />
-              <span className='ml-2'>Shipments</span>
-            </Link>
-          </li>
-        )}
+                  ? "active"
+                  : ""
+              }
+            >
+              <Link to='/shipments' className='d-inline-block'>
+                <img
+                  src={
+                    url === "/shipments" ||
+                      url === "/newshipment" ||
+                      url === "/transactionHistory"
+                      ? shipIcon
+                      : shipIcon
+                  }
+                  alt='Shippment'
+                />
+                <span className='ml-2'>Shipments</span>
+              </Link>
+            </li>
+          )}
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>

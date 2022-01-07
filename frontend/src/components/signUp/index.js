@@ -39,11 +39,17 @@ const FormPage = (props) => {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [checker, setChecker] = useState(true);
+  const [emailErrorMsg, setEmailErrorMsg] = useState("");
+  const [phoneErrorMsg, setPhoneErrorMsg] = useState("");
+  const [validEmailErr, setValidEmailErr] = useState("");
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const phoneRegex = /^\d{12}$/;
   const other = t('other');
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-      
+
       orgs.push({ id: t('other'), name: t('other') });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
@@ -72,6 +78,52 @@ const FormPage = (props) => {
     arr.push({ name: t('other') });
     return arr;
   };
+
+  const handleEmailVerification = () => {
+    if (props.email) {
+      if (props.email.match(emailRegex) === null) {
+        setEmailErrorMsg("E-MailId is not valid")
+      } else {
+        setEmailErrorMsg("")
+        verifyEmailAndPhoneNo(
+          `emailId=${props.email}`
+        ).then((v) => {
+          if (v.data.length) {
+            setemailerror(true);
+            //setemailerror(true);
+            setsignupDisable(true);
+          } else {
+            setemailerror(false);
+            setEmailErrorMsg("")
+            //setsignupDisable(false);
+            //setsignupDisable(false);
+          }
+        })
+      }
+    }
+  }
+
+  const handlePhoneVerification = () => {
+    if (props.phone) {
+      if (props.phone.match(phoneRegex) === null) {
+        setPhoneErrorMsg("Invalid mobile number")
+      } else {
+        setPhoneErrorMsg("")
+        verifyEmailAndPhoneNo(
+          `phoneNumber=${props.phone}`
+        ).then((v) => {
+          if (v.data[0].phoneNumber) {
+            setphoneerror(true);
+            // setsignupDisable(true);
+          } else {
+            setphoneerror(false);
+            setPhoneErrorMsg("")
+            //setsignupDisable(false);
+          }
+        })
+      }
+    }
+  }
 
   async function verifyEmailandPhoneNo(value) {
     let result = await verifyEmailAndPhoneNo(value);
@@ -190,9 +242,12 @@ const FormPage = (props) => {
                       setFieldValue,
                       dirty,
                     }) => (
-                      <form onSubmit={handleSubmit} className='mb-5'>
+                      <form onSubmit={handleSubmit} onKeyDown={(e) =>
+                        e.keyCode === 13 && e.preventDefault()
+                      }
+                        className='mb-5'>
                         <div className='login-form mt-1 pl-5 pr-5 ml-5'>
-                              <div className='card-title mr-5'>{t('signup')}</div>
+                          <div className='card-title mr-5'>{t('signup')}</div>
                           <div className='form-group flex-column '>
                             <div
                               style={{
@@ -312,11 +367,13 @@ const FormPage = (props) => {
                               label={t('email_id')}
                               className='form-controll ml-4'
                               name='email'
+                              type="email"
                               autoCapitalize='none'
                               value={props.email.toLowerCase()}
                               onChange={(e) => {
                                 setChecker(true);
                                 if (e.target.value.length > 0) {
+                                  setEmailErrorMsg("")
                                   setPhoneNumberError(false);
                                   setMailError(false);
                                 } else {
@@ -326,23 +383,7 @@ const FormPage = (props) => {
                                 props.onEmailChange(e);
                                 handleChange(e);
                               }}
-                              handleBlur={
-                                props.email
-                                  ? verifyEmailAndPhoneNo(
-                                      `emailId=${props.email}`
-                                    ).then((v) => {
-                                      if (v.data.length) {
-                                        setemailerror(true);
-                                        //setemailerror(true);
-                                        setsignupDisable(true);
-                                      } else {
-                                        setemailerror(false);
-                                        //setsignupDisable(false);
-                                        //setsignupDisable(false);
-                                      }
-                                    })
-                                  : null
-                              }
+                              handleBlur={handleEmailVerification()}
                             />
                             {errors.email && touched.email && (
                               <span className='error-msg text-dangerS'>
@@ -354,7 +395,12 @@ const FormPage = (props) => {
                                 {t('email_id')} {t('already')} {t('registered')}
                               </span>
                             )}
-                            {phoneNumberError && (
+                            {(emailErrorMsg !== '') && (
+                              <span className='error-msg text-dangerS'>
+                                {emailErrorMsg}
+                              </span>
+                            )}
+                            {phoneNumberError && email.length <= 0 && mobileNumber.length <= 0 && (
                               <span className='error-msg text-dangerS'>
                                 {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
                               </span>
@@ -393,6 +439,7 @@ const FormPage = (props) => {
                                 // defaultCountry: "IN",
                                 // enableSearch: true,
                               }}
+                              maxLength="10"
                               value={props.phone}
                               onChange={(e) => {
                                 setChecker(true);
@@ -404,21 +451,7 @@ const FormPage = (props) => {
                                 setMobileNumber(e);
                                 props.onphoneChange(e);
                               }}
-                              handleBlur={
-                                props.phone
-                                  ? verifyEmailAndPhoneNo(
-                                      `phoneNumber=${props.phone}`
-                                    ).then((v) => {
-                                      if (v.data[0].phoneNumber) {
-                                        setphoneerror(true);
-                                        // setsignupDisable(true);
-                                      } else {
-                                        setphoneerror(false);
-                                        //setsignupDisable(false);
-                                      }
-                                    })
-                                  : null
-                              }
+                              onKeyDown={handlePhoneVerification()}
                             />
                           </div>
                           {errors.phone && touched.phone && (
@@ -431,9 +464,14 @@ const FormPage = (props) => {
                               {t('phone_number')} {t('already')} {t('registered')}
                             </span>
                           )}
-                          {phoneNumberError && (
+                          {(phoneErrorMsg !== '') && (
                             <span className='error-msg text-dangerS'>
-                             {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
+                              {phoneErrorMsg}
+                            </span>
+                          )}
+                          {phoneNumberError && mobileNumber.length <= 0 && email.length <= 0 && (
+                            <span className='error-msg text-dangerS'>
+                              {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
                             </span>
                           )}
 
@@ -480,7 +518,7 @@ const FormPage = (props) => {
                                     setLastNameError(true);
                                   }
                                   if (
-                                    mobileNumber.length <= 0 &&
+                                    mobileNumber.length <= 0 ||
                                     email.length <= 0
                                   ) {
                                     setPhoneNumberError(true);
@@ -586,7 +624,7 @@ const FormPage = (props) => {
                               style={{
                                 position: "relative",
                                 bottom: "25px",
-                                width: "345px",
+                                width: "345px"
                               }}
                             >
                               <Autocomplete
@@ -598,7 +636,7 @@ const FormPage = (props) => {
                                     setLastNameError(true);
                                   }
                                   if (
-                                    mobileNumber.length <= 0 &&
+                                    mobileNumber.length <= 0 ||
                                     email.length <= 0
                                   ) {
                                     setPhoneNumberError(true);
@@ -630,10 +668,14 @@ const FormPage = (props) => {
                                 debug
                                 getOptionLabel={(option) => option.name.toLocaleLowerCase()}
                                 options={showOrgByType(selectedType)}
+                                // disabled={lastNameError && firstNameError
+                                //   && phoneNumberError && emailErrorMsg
+                                //   && phoneErrorMsg && emailError
+                                //   && phoneError ? true : false}
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation')+" "+t('name')}
+                                    label={t('organisation') + " " + t('name')}
                                   />
                                 )}
                               />
@@ -693,6 +735,11 @@ const FormPage = (props) => {
                                 {errors.org}
                               </span>
                             )}
+                            {(validEmailErr !== '') && (
+                              <span className='error-msg text-dangerON'>
+                                {validEmailErr}
+                              </span>
+                            )}
                           </div>
                           {props.errorMessage && (
                             <div className='mt-3 mr-4'>
@@ -715,7 +762,7 @@ const FormPage = (props) => {
                             </button>
                           </div>
                           <div className='signup-link text-center mt-3 mb-4 mr-5'>
-                                {t('already')} {t('have')} {t('an')} {t('account')}?{" "}
+                            {t('already')} {t('have')} {t('an')} {t('account')}?{" "}
                             <Link to='/login'>
                               <b>{t('login')}</b>
                             </Link>
