@@ -484,6 +484,7 @@ const Inventory = (props) => {
             setInventoryProductCategoryFilterOnSelect
           }
           fb='80%'
+          filterPage="inventory"
         />
       </div>
       <div className='ribben-space'>

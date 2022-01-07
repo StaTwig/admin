@@ -9,7 +9,7 @@ import Modal from "../../shared/modal";
 import LocationDropdown from "./LocationDropdown";
 
 const PopUpLocation = (props) => {
-  console.log(props)
+  console.log(props);
   // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse] = useState({});
   const [selectLocation, setSelectLocation] = useState("Select Location");
@@ -19,7 +19,7 @@ const PopUpLocation = (props) => {
   const closeModalAddedLocation = () => {
     console.log(props.history);
     setAddedLocationModal(false);
-    props.closeModal()
+    props.closeModal();
     props.history.push("/profile");
   };
 
@@ -51,22 +51,22 @@ const PopUpLocation = (props) => {
   };
 
   return (
-    <div className='addLocation'>
+    <div className="addLocation">
       <center>
-        <h1 className='addLocationText'>
+        <h1 className="addLocationText">
           <b>Add Location</b>
         </h1>
       </center>
 
-      <div className='wrapper1'>
+      <div className="wrapper1">
         <Link to={"/Addlocation"}>
-          <button className='btn btn-orange fontSize18' type='button'>
+          <button className="btn btn-orange fontSize18" type="button">
             <img
               src={Location1}
-              width='20'
-              height='20'
-              className='mr-2 mb-1'
-              alt='Location'
+              width="20"
+              height="20"
+              className="mr-2 mb-1"
+              alt="Location"
             />
             <span className="buttonS">
               <b>Add New Location</b>
@@ -75,24 +75,25 @@ const PopUpLocation = (props) => {
         </Link>
       </div>
 
-      <div className='line'>
-        <center>
-          <h6>
-            {" "}
-            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
-          </h6>
-        </center>
+      <div className="line text-center">
+        <h6 class="text-center">
+          {" "}
+          ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
+        </h6>
       </div>
       <br></br>
-      <div className='ml-5'>
-        <div className='col-md-12'>
-          <div className='form-group' style={{position:"relative",bottom:"2rem"}}>
+      <div className="ml-5">
+        <div className="col-md-12">
+          <div
+            className="form-group-2"
+            style={{ position: "relative", bottom: "2rem" }}
+          >
             <img
               src={Location}
-              className='addLocModalImg pt-2'
-              alt='Location'
+              className="addLocModalImg pt-2"
+              alt="Location"
             ></img>
-            <label htmlFor='Select Location' className='addLocModal pt-3'>
+            <label htmlFor="Select Location" className="addLocModal pt-3">
               <b>Select Location</b>
             </label>
             <div
@@ -118,11 +119,15 @@ const PopUpLocation = (props) => {
         </div>
       </div>
 
-      <div className='wrapper1'>
+      <div className="wrapper1">
         <button
           disabled={selectLocation === "Select Location"}
-          style={{backgroundColor: '#A6A6A6'}}
-          className={selectLocation === "Select Location" ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
+          style={{ backgroundColor: "#A6A6A6" }}
+          className={
+            selectLocation === "Select Location"
+              ? "continueDisabled buttonS btn mt-3"
+              : "continueDisabled buttonS btn btn-primary mt-3"
+          }
           onClick={() => {
             updateStatus(wareHouse);
           }}
@@ -133,7 +138,7 @@ const PopUpLocation = (props) => {
       {addedLocationModal && (
         <Modal
           close={() => closeModalAddedLocation()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModalAddedLocation} //FailurePopUp
