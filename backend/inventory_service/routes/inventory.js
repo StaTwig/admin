@@ -152,4 +152,7 @@ router.post(
   upload.single("excel"),
   InventoryController.addInventoriesFromExcel
 );
+
+router.get('/getProductDetails',
+  InventoryController.getProductDetails);
 module.exports = router;

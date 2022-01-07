@@ -239,19 +239,18 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control mb-2"
+                          // className="form-control mb-2"
+                          className={`form-control mb-2 ${
+                            errors.updateStatusLocation && touched.updateStatusLocation
+                              ? "border-danger"
+                              : ""
+                          }`}
                           name="updateStatusLocation"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
                         />
                       </div>
-                      {/* {errors.updateStatusLocation &&
-                        touched.updateStatusLocation && (
-                          <span className="error-msg text-danger-US row justify-content-end col-8">
-                            {errors.updateStatusLocation}
-                          </span>
-                        )} */}
                     </div>
 
                     <h6 className="poheads potext m-4">Comments</h6>
@@ -529,6 +528,7 @@ const UpdateStatus = (props) => {
                       Cancel
                     </button>
                     <button
+                      disabled={!values.updateStatusLocation}
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >

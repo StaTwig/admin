@@ -2891,3 +2891,16 @@ exports.fetchBatchesOfInventory = [
     }
   },
 ];
+
+
+exports.getProductDetails = [
+  auth,
+  async (req, res) => {
+    try{
+      
+    } catch(err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+];
