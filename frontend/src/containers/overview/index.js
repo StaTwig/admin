@@ -63,6 +63,8 @@ const DashBoardContainer = (props) => {
       result.data.sort(function (a, b) {
         return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
       });
+
+      console.log('GetLocationApproval',result);
       setLocationApprovals(result.data);
     }
     loadData();
