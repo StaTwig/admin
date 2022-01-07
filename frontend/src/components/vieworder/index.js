@@ -208,17 +208,17 @@ const ViewOrder = (props) => {
             </div>
           </div>
         </div>
-        <div className='m-3 ml-5 mt-5'>
+        <div className='mt-4'>
           <span className='p-1 text-info font-weight-bold'>
             Product Details
           </span>
           <div className='row mt-3'>
             {order?.products?.map((product, index) => (
               <div
-                className={`bg-white shadow ${
-                  index >= 0 ? "ml-5 mb-5" : ""
-                }  p-3`}
-                style={{ width: "25%" }}
+                className={`bg-white shadow padding-added ${
+                  index >= 0 ? "mb-5 mr-4" : ""
+                } `}
+                style={{ width: "27%"}}
                 key={index}
               >
                 <span className=' p-1 font-weight-normal text-primary '>

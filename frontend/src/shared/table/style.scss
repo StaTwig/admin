@@ -252,7 +252,18 @@ input:disabled {
 .Bmanufacturer-add-inventory {
   position: relative;
   left: 3.5rem;
-  //margin-left: 10px;
+  @media screen and (min-width: (1366px)) {
+    position: relative;
+    left: 5.5rem;
+  }
+  @media screen and (min-width: (1566px)) {
+    position: relative;
+    left: 8rem;
+  }
+  @media screen and (min-width: (1766px)) {
+    position: relative;
+    left: 10rem;
+  }
 }
 .manufacturer-add-inventory {
   position: relative;
@@ -266,6 +277,18 @@ input:disabled {
 .Bbatch-add-inventory {
   position: relative;
   left: 5rem;
+  @media screen and (min-width: (1366px)) {
+    position: relative;
+    left: 8rem;
+  }
+  @media screen and (min-width: (1566px)) {
+    position: relative;
+    left: 10rem;
+  }
+  @media screen and (min-width: (1766px)) {
+    position: relative;
+    left: 12rem;
+  }
 }
 .Bproduct-add-inventory {
   position: relative;
@@ -286,6 +309,18 @@ input:disabled {
 .Bquantity-add-inventory {
   position: relative;
   left: 4rem;
+  @media screen and (min-width: (1366px)) {
+    position: relative;
+    left: 5.5rem;
+  }
+  @media screen and (min-width: (1566px)) {
+    position: relative;
+    left: 8rem;
+  }
+  @media screen and (min-width: (1766px)) {
+    position: relative;
+    left: 10rem;
+  }
 }
 .quantity-add-inventory {
   position: relative;

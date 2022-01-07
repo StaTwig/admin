@@ -302,8 +302,8 @@ function Table(props) {
                     </p>
                   </div>
                 </td>
-                <td>
-                  <div className="table-btns">
+                <td >
+                  <div className="table-btns d-flex align-items-center justify-content-center">
                     <div
                       className={`status  secondary-bgp p-1 mr-3 ${statusStyle}`}
                     >
@@ -311,8 +311,8 @@ function Table(props) {
                     </div>
                   </div>
                 </td>
-                <td>
-                  <div className="table-btns">
+                <td >
+                  <div className="table-btns d-flex align-items-center justify-content-center">
                     <button
                       className="button btn-primary text-light btn-sm mr-3"
                       onClick={() => {
@@ -334,9 +334,8 @@ function Table(props) {
                           ? `viewgmrshipment`
                           : `viewshipment`
                       }/${shipment.id}`}
-                      className="button btn-view-link btn-sm"
+                      className="button btn-view-link btn-sm px-4"
                       style={{
-                        width: "60px",
                         border: "1px solid #007bff",
                         borderRadius: "6px",
                       }}
