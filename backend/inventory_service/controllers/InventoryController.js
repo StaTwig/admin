@@ -2696,8 +2696,8 @@ exports.searchProduct = [
         if (permissionResult.success) {
           const { productName, productType } = req.query;
           req.query.warehouseId
-            ? (warehouseId = req.user.warehouseId)
-            : (warehouseId = req.query.warehouseId);
+            ? (warehouseId = req.query.warehouseId)
+            : (warehouseId = req.user.warehouseId);
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};

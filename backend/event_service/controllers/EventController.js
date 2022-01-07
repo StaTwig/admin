@@ -63,7 +63,7 @@ exports.deleteEventById = [
   param("eventID", "eventId must not be empty.").isLength({ min: 1 }).trim(),
   async function (req, res) {
     try {
-      console.log(req.params);
+      // console.log(req.params);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
@@ -81,7 +81,7 @@ exports.deleteEventById = [
         });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -290,7 +290,7 @@ exports.getAllEventsWithFilter = [
           let inventoryRecords = [];
           await Promise.all(
             eventRecords.map(async function (event) {
-              console.log(event);
+              // console.log(event);
               let eventRecord = JSON.parse(JSON.stringify(event));
               let payloadRecord = event.payloadData;
               eventRecord[`inventoryQuantity`] =
@@ -321,7 +321,7 @@ exports.getAllEventsWithFilter = [
           });
         });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -343,7 +343,7 @@ exports.fetchProductDetailsList = [
         );
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },

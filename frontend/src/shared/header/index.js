@@ -123,8 +123,8 @@ const Header = (props) => {
   );
 
   function onSearchChange(e) {
-    setSearchString(e._id);
-    setSearchType(e.type);
+    setSearchString(e?._id);
+    setSearchType(e?.type);
     axios
       .get(`${config().getSuggestions}?searchString=${e}`)
       .then((resp) => setOptions([...resp.data.data]));
@@ -186,14 +186,15 @@ const Header = (props) => {
     dispatch(turnOff());
     return result;
   }
-
+  console.log(props.match.params.id, search)
   const onSeach = () => {
     if (search.substring(0, 2) === "SH") {
+      
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
         if (shippingIds.indexOf(search) !== -1) {
-          props.history.push("/overview");
-          props.history.replace(`/viewshipment/${search}`);
+          // props.history.push("/overview");
+          props.history.push(`/viewshipment/${search}`);
         } else setInvalidSearch(true);
       });
     } else if (search.substring(0, 2) === "PO") {
@@ -432,6 +433,7 @@ const Header = (props) => {
                   }}
                   onChange={(event, newValue) => {
                     onSearchChange(newValue);
+                    onSeach()
                   }}
                   renderInput={(params) => (
                     <TextField
