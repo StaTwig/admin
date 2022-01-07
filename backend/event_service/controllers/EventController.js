@@ -63,7 +63,6 @@ exports.deleteEventById = [
   param("eventID", "eventId must not be empty.").isLength({ min: 1 }).trim(),
   async function (req, res) {
     try {
-      console.log(req.params);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
@@ -92,7 +91,8 @@ exports.getAllEventsWithFilter = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) || 20;
       const organisationId = req.user.organisationId;
       let currentDate = new Date();
       let fromDateFilter = 0;

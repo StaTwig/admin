@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var EventSchema = new mongoose.Schema(
+const EventSchema = new mongoose.Schema(
   {
     eventID: { type: String, required: true },
     transactionId: { type: String, required: false },
