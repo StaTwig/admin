@@ -16,6 +16,7 @@ import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 
 const UpdateStatus = (props) => {
+  const { t } = props;
   const dispatch = useDispatch();
   const profile = useSelector((state) => {
     return state.user;
@@ -109,7 +110,7 @@ const UpdateStatus = (props) => {
   return (
     <div className="updateStatus">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">UPDATE STATUS</h1>
+        <h1 className="breadcrumb">{t('update_status')}</h1>
         {/* <div className="d-flex">
           <button className="btn btn-primary font-weight-bold">
             <img
@@ -174,7 +175,7 @@ const UpdateStatus = (props) => {
                     <div className="panel commonpanle">
                       <div className="form-group">
                         <label className="mt-3 text-secondary">
-                          Shipment ID
+                            {t('shipment_id')}
                         </label>
                         <input
                           type="text"
@@ -191,11 +192,11 @@ const UpdateStatus = (props) => {
                       )} */}
                     </div>
                     <h6 className="poheads potext m-4">
-                      Account Holder Details
+                        {t('account_holder_details')}
                     </h6>
                     <div className="panel commonpanle">
                       <div className="form-group">
-                        <label className="mb-1 text-secondary">User Name</label>
+                          <label className="mb-1 text-secondary">{t('user_name')}</label>
                         <input
                           type="text"
                           className="form-control mb-2"
@@ -207,7 +208,7 @@ const UpdateStatus = (props) => {
                       </div>
                       <div className="form-group">
                         <label className="mb-1 text-secondary">
-                          Organisation Name
+                           {t('organisation_name')}
                         </label>
                         <input
                           type="text"
@@ -235,7 +236,7 @@ const UpdateStatus = (props) => {
                       </div> */}
                       <div className="form-group mb-0">
                         <label className="mb-1 text-secondary">
-                          Update Status Location
+                            {t('update_status')+" "+t('location')}
                         </label>
                         <input
                           type="text"
@@ -254,7 +255,7 @@ const UpdateStatus = (props) => {
                         )} */}
                     </div>
 
-                    <h6 className="poheads potext m-4">Comments</h6>
+                      <h6 className="poheads potext m-4">{t('comment')}</h6>
                     <div className="panel commonpanle mb-5">
                       {/* <div className='form-group mb-0'>
                         <input
@@ -280,7 +281,7 @@ const UpdateStatus = (props) => {
                             count === "r1" && "comment-active"
                           }`}
                         >
-                          Damaged in transit
+                          {t('damaged_in_transit')}
                         </span>
                         <span
                           onClick={() => {
@@ -292,7 +293,7 @@ const UpdateStatus = (props) => {
                             count === "r2" && "comment-active"
                           }`}
                         >
-                          Miscount
+                               {t('miscount')}
                         </span>
                         <span
                           onClick={() => {
@@ -304,7 +305,7 @@ const UpdateStatus = (props) => {
                             count === "r3" && "comment-active"
                           }`}
                         >
-                          Shipment Stolen
+                               {t('shipment_stolen')}
                         </span>
                         <span
                           onClick={() => {
@@ -316,7 +317,7 @@ const UpdateStatus = (props) => {
                             count === "r4" && "comment-active"
                           }`}
                         >
-                          Wrong Shipment
+                          {t('wrong_shipment')}
                         </span>
                         <span
                           onClick={() => {
@@ -328,7 +329,7 @@ const UpdateStatus = (props) => {
                             count === "r5" && "comment-active"
                           }`}
                         >
-                          Other
+                            {t('other')}
                         </span>
                       </div>
                       <div
@@ -352,7 +353,7 @@ const UpdateStatus = (props) => {
                             size="40"
                             cols="120"
                             rows="7"
-                            placeholder="Enter Comment"
+                            placeholder={t('enter')+' '+t('comment')}
                             value={comment}
                           />
                         )}
@@ -410,7 +411,7 @@ const UpdateStatus = (props) => {
                   <div className="col ">
                     <div className="row">
                       <h6 className="col font-weight-bold mt-4">
-                        Upload Image
+                          {t('upload_image')}
                       </h6>
                       <button
                         type="button"
@@ -424,7 +425,7 @@ const UpdateStatus = (props) => {
                           className="mr-2 mb-1"
                           alt="Upload"
                         />
-                        <span>Upload</span>
+                          <span>{t('upload')}</span>
                       </button>
                     </div>
                     <div className="d-flex flex-column upload bg-white col-9 p-5">
@@ -470,7 +471,7 @@ const UpdateStatus = (props) => {
                               alt="Upload"
                             />
                             <label>
-                              Drag and drop files here{" "}
+                              {t('drag_drop') + " " + t("files_here")}{" "}
                               <input
                                 type="file"
                                 className="select"
@@ -482,7 +483,7 @@ const UpdateStatus = (props) => {
                             className="row mb-3"
                             style={{ margin: "auto", display: "table" }}
                           >
-                            OR
+                            {t('or')}
                           </div>
                           <div
                             className="row"
@@ -497,7 +498,7 @@ const UpdateStatus = (props) => {
                               className="btn btn-primary"
                               style={{ margin: 0, height: "5vh" }}
                             >
-                              Browse Files
+                                  {t('browse_files')}
                               <input
                                 type="file"
                                 className="select"
@@ -526,13 +527,13 @@ const UpdateStatus = (props) => {
                         )
                       }
                     >
-                      Cancel
+                        {t('cancel')}
                     </button>
                     <button
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >
-                      <span>Update Status</span>
+                        <span>{t('update_status')}</span>
                     </button>
                   </div>
                 </div>

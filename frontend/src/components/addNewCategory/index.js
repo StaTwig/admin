@@ -8,6 +8,7 @@ import Modal from "../../shared/modal";
 import ProductPopUp from "./productPopUp";
 
 const AddCategory = (props) => {
+  const { t } = props;
   const [manufacturer, setManufacturer] = useState("Select Manufacturer");
   const [categoryName, setcategoryName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -73,7 +74,7 @@ const AddCategory = (props) => {
   return (
     <div>
       <div className="addproduct" style={{ overflow: "hidden" }}>
-        <h1 className="breadcrumb mt-2">ADD NEW CATEGORY</h1>
+        <h1 className="breadcrumb mt-2">{t('add_new_category')}</h1>
         {/* <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"805px" }}> 
               <span style={{ color: 'white'}}>+ Add New Category</span>
             </button> */}
@@ -93,7 +94,7 @@ const AddCategory = (props) => {
                     />
 
                     <label className="btn-primary btn browse">
-                      ADD IMAGE
+                      {t('add_image')}
                       <input
                         type="file"
                         className="select"
@@ -112,14 +113,14 @@ const AddCategory = (props) => {
                     style={{ textAlign: "right", paddingRight: "50px" }}
                   >
                     {" "}
-                    Category Name
+                    {t('category_name')}
                   </label>
                   <input
                     type="text"
                     className={`form-control ${catNameErr ? "border-danger" : ""
                       }`}
                     name="product"
-                    placeholder="Enter Category Name"
+                    placeholder={t('enter')+' '+t('category_name')}
                     onChange={(e) => { setBtnVisible(true); setCategoryNameErr(false); setcategoryName(e.target.value) }}
                     value={categoryName}
                   />
@@ -131,14 +132,14 @@ const AddCategory = (props) => {
                     style={{ textAlign: "right", paddingRight: "50px" }}
                   >
                     {" "}
-                    Description
+                    {t('category_description')}
                   </label>
                   <input
                     type="text"
                     className={`form-control ${catDescErr ? "border-danger" : ""
                       }`}
                     name="product"
-                    placeholder="Enter Category Description"
+                    placeholder={t('enter') + ' ' + t('category_description')}
                     onChange={(e) => {
                       setBtnVisible(true);
                       setDescErr(false)
@@ -157,7 +158,7 @@ const AddCategory = (props) => {
               type="button"
               className="btn btn-white shadow-radius font-bold mr-3"
             >
-              Cancel
+              {t('cancel')}
             </button>
           </Link>
           <button
@@ -171,7 +172,7 @@ const AddCategory = (props) => {
             }}
           >
             {/* <span>{BtnVisible ? "+ Add New Category T" : "+ Add New Category F"}+ Add New Category</span> */}
-            <span>+ Add New Category</span>
+            <span>+ {t('add_new_category')}</span>
           </button>
         </div>
         {openCreatedInventory && (

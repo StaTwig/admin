@@ -5,6 +5,7 @@ import Modal from "../../shared/modal";
 import FailPopup from "./failPopup";
 import "./style.scss";
 const ProductList = (props) => {
+  const { t } = props;
   const [deliveredProduct, setDeliveredProduct] = useState();
   const [isVisible, setIsVisible] = useState(true);
   const [error, setError] = useState(false);
@@ -109,7 +110,7 @@ const ProductList = (props) => {
                     }}
                     className='btn btn-outline-warning mt-2 mr-1 p-1'
                   >
-                    {deliveredProduct ? `Save` : `Edit`}
+                    {deliveredProduct ? t('save') : t('edit')}
                   </button>
                 ) : (
                   <span> &nbsp;</span>
@@ -118,7 +119,7 @@ const ProductList = (props) => {
             </div>
             <div className='row'>
               <div className='col-sm mb-1 text-secondary styler'>
-                Product Name
+                  {t('product_name')}
               </div>
               <div className='col-sm mb-1 text-secondary styler'>
                 {product.productName}
@@ -126,7 +127,7 @@ const ProductList = (props) => {
             </div>
             <div className='row'>
               <div className='col-sm mb-1 text-secondary styler'>
-                Manufacturer
+                  {t('manufacturer')}
               </div>
               <div className='col-sm mb-1 text-secondary styler'>
                 {product.manufacturer}
@@ -134,7 +135,7 @@ const ProductList = (props) => {
             </div>
             <div className='row'>
               <div className='col-sm mb-1 text-secondary styler'>
-                Quantity Sent
+                {t('quantity') + ' ' + t('sent')}
               </div>
               <div className='col-sm mb-3 text-secondary styler'>
                 {product.productQuantity}
@@ -149,7 +150,7 @@ const ProductList = (props) => {
             </div>
             <div className='row'>
               <div className='col-sm mb-0 text-secondary styler'>
-                Quantity Received
+                {t('quantity') + ' ' + t('received')}
               </div>
               <div className='col-sm text-secondary styler'>
                 {product["productQuantityDelivered"] ? (
@@ -178,14 +179,14 @@ const ProductList = (props) => {
             </div>
             <div className='row'>
               <div className='col-sm mb-1 text-secondary styler'>
-                Batch Number
+                 {t('batch_no')}
               </div>
               <div className='col-sm mb-1 text-secondary styler'>
                 {props.shipments.products[0].batchNumber}
               </div>
             </div>
             <div className='row'>
-              <div className='col-sm mb-3 text-secondary styler'>Label ID</div>
+                <div className='col-sm mb-3 text-secondary styler'>{t('label_code')}</div>
               <div className='col-sm mb-3 text-secondary styler'>
                 {props.shipments.label.labelId}
               </div>

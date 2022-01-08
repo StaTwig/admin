@@ -2,6 +2,7 @@ import React from "react";
 import "./style.scss";
 
 const ProductList = (props) => {
+  const { t } = props;
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -16,12 +17,12 @@ const ProductList = (props) => {
         >
           <div className='d-flex flex-row '>
             <ul className='w-75 elemens'>
-              <li className='mb-1 text-secondary'>Product Name</li>
-              <li className='mb-1 text-secondary'>Manufacturer</li>
-              <li className='mb-1 text-secondary'>Batch Number</li>
-              <li className='mb-1 text-secondary'>Quantity Sent</li>
-              <li className='mb-1 text-secondary'>Quantity Received</li>
-              <li className='mb-1 text-secondary'>Label ID</li>
+              <li className='mb-1 text-secondary'>{t('product_name')}</li>
+              <li className='mb-1 text-secondary'> {t('manufacturer')}</li>
+              <li className='mb-1 text-secondary'>{t('batch_no')}</li>
+              <li className='mb-1 text-secondary'>{t('quantity')+" "+t("sent")} </li>
+              <li className='mb-1 text-secondary'>{t('quantity') + " " + t("received")}</li>
+              <li className='mb-1 text-secondary'>{t('label_code')}</li>
             </ul>
             <ul className='elemens w-75'>
               <li className='mb-1'>{product.productName}</li>

@@ -3,6 +3,7 @@ import { formatDate } from "../../utils/dateHelper";
 import "./style.scss";
 
 const ShipmentDetails = (props) => {
+  const { t } = props;
   // console.log('Shipment Details');
   // console.log(props.shipments);
   return Object.keys(props.shipments).length === 0 ? (
@@ -17,17 +18,17 @@ const ShipmentDetails = (props) => {
     >
       <div className='d-flex flex-row'>
         <ul className='mr-1 w-50 elemens'>
-          <h6 className='poheads potext mt-3 mb-3'>From</h6>
-          <li className='mb-1 text-secondary'>Organisation Name</li>
-          <li className='mb-1 text-secondary'>Organisation Location</li>
-          <h6 className='poheads potext mt-3 mb-3'>To</h6>
-          <li className='mb-1 text-secondary'>Organisation Name</li>
-          <li className='mb-1 text-secondary'>Organisation Location</li>
-          <h6 className='poheads potext mt-3 mb-3'>Delivery Details</h6>
-          <li className='mb-1 text-secondary'>Transit Number</li>
-          <li className='mb-1 text-secondary'>Label Code</li>
-          <li className='mb-1 text-secondary'>Shipment Date</li>
-          <li className='mb-1 text-secondary'>Estimate Delivery Date</li>
+            <h6 className='poheads potext mt-3 mb-3'>{t('from')}</h6>
+            <li className='mb-1 text-secondary'>{t('organisation_name')}</li>
+            <li className='mb-1 text-secondary'>{t('organisation_location')}</li>
+            <h6 className='poheads potext mt-3 mb-3'>{t('to')}</h6>
+            <li className='mb-1 text-secondary'>{t('organisation_name')}</li>
+            <li className='mb-1 text-secondary'>{t('organisation_location')}</li>
+            <h6 className='poheads potext mt-3 mb-3'>{t('delivery_details')}</h6>
+            <li className='mb-1 text-secondary'>{t('transit_no')}</li>
+            <li className='mb-1 text-secondary'>{t('label_code')}</li>
+            <li className='mb-1 text-secondary'>{t('shipment_date')}</li>
+            <li className='mb-1 text-secondary'>{t('estimated_delivery_date')}</li>
         </ul>
         {/* <li  className="mb-1">{props.shipments.supplier.org.postalAddress.split(',')[0]}</li> */}
         <ul className='w-50 elemens'>
@@ -35,7 +36,7 @@ const ShipmentDetails = (props) => {
             className='poheads potext mt-3 mb-3 text-white'
             style={{ visibility: "hidden" }}
           >
-            From
+              {t('from')}
           </h6>
           <li className='mb-1'>{props.shipments.supplier?.org?.name}</li>
           {props.shipments.supplier?.org?.postalAddress == null ? (
@@ -51,7 +52,7 @@ const ShipmentDetails = (props) => {
             className='poheads potext mt-3 mb-3  text-white'
             style={{ visibility: "hidden" }}
           >
-            To{" "}
+              {t('to')}{" "}
           </h6>
           <li className='mb-1'>{props.shipments.receiver?.org?.name}</li>
           {props.shipments.supplier?.org?.postalAddress == null ? (
@@ -67,7 +68,7 @@ const ShipmentDetails = (props) => {
             className='poheads potext mt-3 mb-3 text-white'
             style={{ visibility: "hidden" }}
           >
-            Delivery Details
+              {t('delivery_details')}
           </h6>
           <li className='mb-1'>{props.shipments.airWayBillNo}</li>
           <li className='mb-1'>{props.shipments.label?.labelId}</li>

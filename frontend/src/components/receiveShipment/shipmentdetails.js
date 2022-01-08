@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.scss";
 const ShipmentDetails = (props) => {
+  const { t } = props;
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -34,7 +35,7 @@ const ShipmentDetails = (props) => {
       }
       <div className='container'>
         <div className='row'>
-          <div className='col-sm mb-1 text-secondary styler'>Shipment Date</div>
+            <div className='col-sm mb-1 text-secondary styler'>{t('shipment_date')}</div>
           <div className='col-sm mb-1 styler'>
             {props.shipments.shippingDate.split("T")[0].split("-")[2] +
               "/" +
@@ -46,14 +47,14 @@ const ShipmentDetails = (props) => {
         <div className='row'>
           <div className='col-sm' style={{ padding: 0 }}>
             <h6 className='poheads potext mt-3 mb-3 ml-2 styler_header'>
-              From
+              {t('from')}
             </h6>
           </div>
           <div className='col-sm'></div>
         </div>
         <div className='row'>
           <div className='col-sm mb-1 text-secondary styler'>
-            Organisation Name
+           {t('organisation_name')}
           </div>
           <div className='col-sm mb-1 styler'>
             {props.shipments.supplier.org.name}
@@ -61,7 +62,7 @@ const ShipmentDetails = (props) => {
         </div>
         <div className='row'>
           <div className='col-sm mb-1 text-secondary styler'>
-            Organisation Location
+              {t('organisation_location')}
           </div>
           <div className='col-sm mb-1 styler'>
             {props.shipments.supplier.warehouse.title}
@@ -69,13 +70,13 @@ const ShipmentDetails = (props) => {
         </div>
         <div className='row'>
           <div className='col-sm' style={{ padding: 0 }}>
-            <h6 className='poheads potext mt-3 mb-3 ml-2'>To</h6>
+              <h6 className='poheads potext mt-3 mb-3 ml-2'>{t('to')}</h6>
           </div>
           <div className='col-sm'></div>
         </div>
         <div className='row'>
           <div className='col-sm mb-1 text-secondary styler'>
-            Organisation Name
+              {t('organisation_name')}
           </div>
           <div className='col-sm mb-1 styler'>
             {props.shipments.receiver.org.name}
@@ -83,7 +84,7 @@ const ShipmentDetails = (props) => {
         </div>
         <div className='row'>
           <div className='col-sm mb-1 text-secondary styler'>
-            Organisation Location
+              {t('organisation_location')}
           </div>
           <div className='col-sm mb-1 styler'>
             {/* {props.shipments.receiver.org.postalAddress.split(',')[0]} */}

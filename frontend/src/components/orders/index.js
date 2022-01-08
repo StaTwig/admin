@@ -496,7 +496,7 @@ const Orders = (props) => {
         </div>
       </div>
       {isAuthenticated("orderAnalytics") && (
-        <Tiles {...props} setData={setData} />
+        <Tiles {...props} setData={setData} t={t} />
       )}
       <div className='mt-4'>
         <Tabs
@@ -504,6 +504,7 @@ const Orders = (props) => {
           setvisible={setvisible}
           visible={visible}
           setShowExportFilter={setShowExportFilter}
+          t={t}
         />
       </div>
       <div className='ribben-space'>

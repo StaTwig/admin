@@ -104,7 +104,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("ACCEPTED")}
                 >
-                  Accepted
+                  {t('accepted')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -119,7 +119,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
-                  {props.visible === "one" ? "Sent" : "Received"}
+                  {props.visible === "one" ? t('sent') : t('received')}
                 </button>
               </StyledMenuItem>
 
@@ -137,7 +137,7 @@ const AdvanceTableFilter = (props) => {
                     setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")
                   }
                 >
-                  Transit & Partially Fulfilled
+                  {t('transitpartiallyfilled')}
                 </button>
               </StyledMenuItem>
 
@@ -425,7 +425,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("ADD")}
                 >
-                  Added
+                  {t('added')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -441,7 +441,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
                 >
-                  Sent
+                  {t('sent')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -457,7 +457,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}
                 >
-                  Received
+                  {t('received')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -466,7 +466,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
                 >
-                  Clear
+                  {t('clear')}
                 </button>
               </StyledMenuItem>
             </div>
@@ -507,7 +507,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
-                  Shipped
+                  {t('shipped')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -523,7 +523,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
                 >
-                  Delivered
+                  {t('delivered')}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -532,7 +532,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
-                  Clear
+                  {t('clear')}
                 </button>
               </StyledMenuItem>
             </div>
@@ -588,7 +588,7 @@ const AdvanceTableFilter = (props) => {
                     )}
                   />
                 ) : (
-                  <div>Empty List</div>
+                  <div>{t('empty_list')}</div>
                 )}
               </StyledMenuItem>
               <StyledMenuItem>
@@ -598,7 +598,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setPoDeliveryLocationFilterOnSelect("")}
                 >
-                  Clear
+                  {t('clear')}
                 </button>
               </StyledMenuItem>
             </div>
@@ -1758,7 +1758,7 @@ const AdvanceTableFilter = (props) => {
                         className="mr-2"
                         alt="FilterIcon"
                       />
-                      <span className="text">Filter</span>
+                        <span className="text">{t('filter')}</span>
                       <img
                         src={dropdownIcon}
                         width="10"
@@ -1788,7 +1788,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("today")}
                         >
-                          <b>Today</b>
+                            <b>{t('today')}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1798,7 +1798,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("week")}
                         >
-                          <b>This Week</b>
+                            <b>{t('this_week')}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1808,7 +1808,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("month")}
                         >
-                          <b>This Month</b>
+                            <b>{t('this_month')}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1818,7 +1818,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("threeMonth")}
                         >
-                          <b>Last 3 Months</b>
+                            <b>{t('last_three_months')}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1828,7 +1828,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("sixMonth")}
                         >
-                          <b>Last 6 Months</b>
+                            <b>{t('last_six_months')}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1838,7 +1838,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("year")}
                         >
-                          <b>This Year</b>
+                            <b>{t('this_year')}</b>
                         </button>
                       </StyledMenuItem>
                     </div>
@@ -1858,7 +1858,7 @@ const AdvanceTableFilter = (props) => {
                           className="mr-2"
                           alt="Export Icon"
                         />
-                        <span>Export</span>
+                          <span>{t('export')}</span>
                         <img
                           src={dropdownIcon}
                           width="10"
