@@ -22,7 +22,7 @@ const VerifyInventory = (props) => {
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
   });
-  //console.log("reviewInventories",reviewInventories);
+  console.log("reviewInventories",reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -33,6 +33,7 @@ const VerifyInventory = (props) => {
     dispatch(turnOn());
 
     const postData = reviewInventories.map((inventory) => {
+      console.log('Inventory details', inventory);
       return {
         productId: inventory.productId,
         batchNumber: inventory.batchNumber,
@@ -40,9 +41,11 @@ const VerifyInventory = (props) => {
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber,
-        // unitofMeasure:unitofMeasure.name
+        unitOfMeasure:inventory.unitOfMeasure.name
       };
     });
+
+    // console.log('PostData', postData);
     const result = await addProductsToInventory({
       products: postData,
     });
@@ -113,7 +116,9 @@ const VerifyInventory = (props) => {
                 <span className='ml-1 text-muted'>Serial Numbers</span>
               </span>
             </div>
-            {reviewInventories.map((reviewInventory) => (
+            {reviewInventories.map((reviewInventory) => {
+              console.log('Individual Details', reviewInventory);
+              return (
               <div className='row p-1 mt-4'>
                 <span className='col-3'>{reviewInventory.productName}</span>
                 <span className='col-2'>
@@ -125,9 +130,9 @@ const VerifyInventory = (props) => {
                   className='col-1 text-right'
                   style={{ position: "relative", left: "-50px" }}
                 >
-                  {reviewInventory.quantity}
+                  {reviewInventory['quantity']}
                   <span>{"("}</span>
-                  {reviewInventory.unitofMeasure?.name}
+                  {reviewInventory['unitOfMeasure.name']}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>
@@ -164,7 +169,8 @@ const VerifyInventory = (props) => {
                   {reviewInventory.serialNumber}
                 </span>
               </div>
-            ))}
+            );
+          })}
           </div>
 
           <hr />
