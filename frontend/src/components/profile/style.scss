@@ -3,7 +3,7 @@
 .profile {
   position: relative;
   top: -22px;
-  padding-right: 25px;
+  padding-right: 20px;
   padding-left: 55px;
   overflow: hidden;
   @media (max-width: $md) {
@@ -29,15 +29,13 @@
     border-radius: 15px;
   }
 
-  .form-group,
-  .input-group {
+  .form-group-2{
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     label {
       color: #707070;
-      text-align: center;
       font-size: 17px;
     }
 
@@ -50,6 +48,51 @@
       flex-basis: 35%;
       flex-grow: inherit;
       font-size: 16px;
+      width: 65%;
+    }
+    .form-controll {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 43%;
+      margin-right: 55px;
+      margin-top: 10px;
+    }
+    .lineP {
+      border-bottom: 2px solid #d6d6d6;
+      padding: 0;
+      color: $black;
+      flex-basis: 35%;
+      font-size: 14px;
+    }
+    .wallet {
+      border-bottom: none;
+    }
+  }
+
+  .form-group,
+  .input-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 35%;
+      flex-grow: inherit;
+      font-size: 16px;
+      width: 65%;
     }
     .form-controll {
       border: none;
@@ -204,7 +247,6 @@
         border: 0vh;
       }
       .full-address {
-        width: 45vh;
         font-size: 13px;
         color: #707070;
         padding-bottom: 2vh;
@@ -236,12 +278,12 @@
 .edit-button {
   height: 5vh !important;
 }
-.continueDisabled{
-  border:none;
-  background-color: #A6A6A6 !important;
-  color:#fff;
+.continueDisabled {
+  border: none;
+  background-color: #a6a6a6 !important;
+  color: #fff;
   border-radius: 10px;
-  padding:10px;
+  padding: 10px;
 }
 
 .role {
@@ -260,11 +302,11 @@
   font-size: 16px;
   padding-bottom: 1vh;
 }
-.date-joined{
+.date-joined {
   font-size: 15px;
   margin-bottom: 30px;
   margin-top: -10px;
-  color:#A8A8A8;
+  color: #a8a8a8;
 }
 
 .location {
@@ -319,12 +361,12 @@
   color: #dc3545;
   font-size: 12px;
 }
-.btn-edit{
-  border:1px solid #0093e9;
-  color:#0093e9;
-  border-radius:10px;
+.btn-edit {
+  border: 1px solid #0093e9;
+  color: #0093e9;
+  border-radius: 10px;
   background-color: #fff;
 }
-.btn-edit:hover{
-  border:1.4px solid #006dac;
+.btn-edit:hover {
+  border: 1.4px solid #006dac;
 }

@@ -1,13 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
-require("dotenv").config();
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const openApiDocumentation = require("./openApiDocumentation");
-// DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
 mongoose
@@ -27,9 +26,8 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-const db = mongoose.connection;
 
-var app = express();
+const app = express();
 
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {

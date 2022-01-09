@@ -19,7 +19,7 @@ const PopUpLocation = (props) => {
   const closeModalAddedLocation = () => {
     console.log(props.history);
     setAddedLocationModal(false);
-    props.closeModal()
+    props.closeModal();
     props.history.push("/profile");
   };
 
@@ -51,22 +51,22 @@ const PopUpLocation = (props) => {
   };
 
   return (
-    <div className='addLocation'>
+    <div className="addLocation">
       <center>
         <h1 className='addLocationText'>
           <b>{t('add_location')}</b>
         </h1>
       </center>
 
-      <div className='wrapper1'>
+      <div className="wrapper1">
         <Link to={"/Addlocation"}>
-          <button className='btn btn-orange fontSize18' type='button'>
+          <button className="btn btn-orange fontSize18" type="button">
             <img
               src={Location1}
-              width='20'
-              height='20'
-              className='mr-2 mb-1'
-              alt='Location'
+              width="20"
+              height="20"
+              className="mr-2 mb-1"
+              alt="Location"
             />
             <span className="buttonS">
               <b>{t('add_new_location')}</b>
@@ -84,13 +84,16 @@ const PopUpLocation = (props) => {
         </center>
       </div>
       <br></br>
-      <div className='ml-5'>
-        <div className='col-md-12'>
-          <div className='form-group' style={{position:"relative",bottom:"2rem"}}>
+      <div className="ml-5">
+        <div className="col-md-12">
+          <div
+            className="form-group-2"
+            style={{ position: "relative", bottom: "2rem" }}
+          >
             <img
               src={Location}
-              className='addLocModalImg pt-2'
-              alt='Location'
+              className="addLocModalImg pt-2"
+              alt="Location"
             ></img>
             <label htmlFor='Select Location' className='addLocModal pt-3'>
               <b>{t('select_location')}</b>
@@ -118,7 +121,7 @@ const PopUpLocation = (props) => {
         </div>
       </div>
 
-      <div className='wrapper1'>
+      <div className="wrapper1">
         <button
           disabled={selectLocation === t('select_location')}
           style={{backgroundColor: '#A6A6A6'}}
@@ -133,7 +136,7 @@ const PopUpLocation = (props) => {
       {addedLocationModal && (
         <Modal
           close={() => closeModalAddedLocation()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModalAddedLocation} //FailurePopUp

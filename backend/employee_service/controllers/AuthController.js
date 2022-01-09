@@ -1,4 +1,4 @@
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const EmployeeModel = require("../models/EmployeeModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const logEvent = require("../../../utils/event_logger");
@@ -9,7 +9,7 @@ const ConfigurationModel = require("../models/ConfigurationModel");
 const CounterModel = require("../models/CounterModel");
 const RbacModel = require("../models/RbacModel");
 const { body, validationResult } = require("express-validator");
-//helper file to prepare responses.
+const { getLatLongByCity } = require("../helpers/getLatLong");
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const jwt = require("jsonwebtoken");
@@ -22,15 +22,13 @@ const twilio_service_id = process.env.TWILIO_SERVICE_ID;
 const client = require("twilio")(accountSid, authToken, {
   lazyLoading: true,
 });
+const cuid = require("cuid");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
-const init = require("../logging/init");
-const logger = init.getLog();
-const EmailContent = require("../components/EmailContent");
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRgex = /^\d{12}$/;
+const phoneRegex = /^\d{12}$/;
 
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
@@ -40,35 +38,34 @@ const unlinkFile = util.promisify(fs.unlink);
 /**
  * Uniques email check
  *
- * @param {string}      email
+ * @param {string}     email
  *
  * @returns {Object}
  */
 exports.checkEmail = [
-  // Validate fields.
   body("firstName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified."),
+    .withMessage("Name must be specified"),
   body("lastName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified."),
+    .withMessage("Name must be specified"),
   body("organisationId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Organisation must be specified."),
+    .withMessage("Organization must be specified"),
   body("emailId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Email must be specified.")
-    // .isEmail()
-    // .withMessage('Email must be a valid email address.')
+    .withMessage("Email must be specified")
+    .isEmail()
+    .withMessage("Email must be a valid email address")
     .custom(async (value) => {
       const emailId = value.toLowerCase().replace(" ", "");
       let user;
       let phone = "";
-      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
+      if (!emailId.match(phoneRegex) && !emailId.match(emailRegex))
         return Promise.reject("E-mail/Mobile is not valid");
 
       if (emailId.indexOf("@") > -1)
@@ -77,57 +74,37 @@ exports.checkEmail = [
         phone = "+" + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
-      // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
       if (user) {
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel"
-        );
         return Promise.reject("Account already in use");
       }
-      // });
     }),
-  // Process request after validation and sanitization.
   async (req, res) => {
     try {
       if (
         !req.body.firstName.match("[A-Za-z0-9]") ||
         !req.body.lastName.match("[A-Za-z0-9]")
       ) {
-        logger.log(
-          "warn",
-          "<<<<< UserService < AuthController < register : Name should only consist of letters"
-        );
         return apiResponse.ErrorResponse(res, "Name should be specified");
       }
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Display sanitized values/errors messages.
-        logger.log(
-          "error",
-          "<<<<< UserService < AuthController < register : Validation error"
-        );
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
+          "Validation Error",
           errors.array()
         );
       }
       if (!mailer.validateEmail(req.body.emailId)) {
         return apiResponse.ErrorResponse(
           res,
-          "Your email id is not eligible to register."
+          "Your email id is not eligible to register"
         );
       } else {
-        return apiResponse.successResponseWithData(res, "Continue", []);
+        return apiResponse.successResponse(res, "Email is valid");
       }
     } catch (err) {
-      //throw error in json response with status 500.
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < register : Error in catch block 2"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -142,135 +119,74 @@ exports.checkEmail = [
  * @returns {Object}
  */
 exports.register = [
-  // Validate fields.
   body("firstName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified."),
+    .withMessage("Name must be specified"),
   body("lastName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified."),
-  // body('authority')
-  //   .isLength({ min: 1 })
-  //   .trim()
-  //   .withMessage('authority must be specified.'),
+    .withMessage("Name must be specified"),
   body("organisationId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Organisation must be specified."),
-  body("emailId").custom(async (value) => {
-    if (value) {
-      const emailId = value.toLowerCase().replace("", "");
-      let user;
-      if (!emailId.match(emailRegex))
-        return Promise.reject("E-MailId is not valid");
-      if (emailId.indexOf("@") > -1)
-        user = await EmployeeModel.findOne({ emailId });
-      if (user) {
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel"
-        );
-        return Promise.reject("E-mail/Mobile already in use");
+    .withMessage("Organization must be specified"),
+  body("emailId")
+    .trim()
+    .toLowerCase()
+    .custom(async (value) => {
+      if (value) {
+        const emailId = value.toLowerCase().replace("", "");
+        let user;
+        if (!emailId.match(emailRegex))
+          return Promise.reject("E-MailId is not valid");
+        if (emailId.indexOf("@") > -1)
+          user = await EmployeeModel.findOne({ emailId });
+        if (user) {
+          return Promise.reject("E-mail already in use");
+        }
       }
-    }
-  }),
+    }),
   body("phoneNumber").custom(async (value) => {
     if (value) {
       const emailId = value.toLowerCase().replace("", "");
       let phone = "";
       let user;
-      if (!emailId.match(phoneRgex))
+      if (!emailId.match(phoneRegex))
         return Promise.reject("Mobile number is not valid");
       phone = "+" + value;
       console.log(phone);
       user = await EmployeeModel.findOne({ phoneNumber: phone });
       if (user) {
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < register : Phone Number is already present in EmployeeModel"
-        );
         return Promise.reject("Mobile already in use");
       }
     }
   }),
-  // body('emailId')
-  //   .isLength({ min: 1 })
-  //   .trim()
-  //   .withMessage('Email must be specified.')
-  //   // .isEmail()
-  //   // .withMessage('Email must be a valid email address.')
-  //   .custom(async (value) => {
-  //     const emailId = value.toLowerCase().replace(' ', '');
-  //     let user;
-  //     let phone = '';
-  //     if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
-  //       return Promise.reject('E-mail/Mobile not in valid');
-  //     if (emailId.indexOf('@') > -1)
-  //       user = await EmployeeModel.findOne({ emailId });
-  //     else {
-  //       phone = '+' + emailId;
-  //       user = await EmployeeModel.findOne({ phoneNumber: phone });
-  //     }
-  //     // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
-  //     if (user) {
-  //       logger.log(
-  //         'info',
-  //         '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
-  //       );
-  //       return Promise.reject('E-mail/Mobile already in use');
-  //     }
-  //     // });
-  //   }),
-  // Process request after validation and sanitization.
   async (req, res) => {
     try {
       if (
         !req.body.firstName.match("[A-Za-z0-9]") ||
         !req.body.lastName.match("[A-Za-z0-9]")
       ) {
-        logger.log(
-          "warn",
-          "<<<<< UserService < AuthController < register : Name should only consist of letters"
-        );
         return apiResponse.ErrorResponse(res, "Name should be specified");
       }
-      /*EmployeeModel.collection.dropIndexes(function(){
-        EmployeeModel.collection.reIndex(function(finished){
-                 console.log("finished re indexing")
-               })
-             })*/
-      //EmployeeModel.createIndexes();
-      // Extract the validation errors from a request.
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Display sanitized values/errors messages.
-        logger.log(
-          "error",
-          "<<<<< UserService < AuthController < register : Validation error"
-        );
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
+          "Validation Error",
           errors.array()
         );
       }
       if (!mailer.validateEmail(req.body.emailId)) {
         return apiResponse.ErrorResponse(
           res,
-          "Your email id is not eligible to register."
+          "Your email id is not eligible to register"
         );
       } else {
-        //hash input password
-        // generate OTP for confirmation
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < register : Generating Hash for Input Password"
-        );
-        var organisationId = req.body.organisationId;
-        var warehouseId = "NA";
-        const incrementCounterEmp = await CounterModel.update(
+        let organisationId = req.body.organisationId;
+        let warehouseId = "NA";
+        const empCounter = await CounterModel.findOneAndUpdate(
           {
             "counters.name": "employeeId",
           },
@@ -278,16 +194,12 @@ exports.register = [
             $inc: {
               "counters.$.value": 1,
             },
-          }
+          },
+          { new: true }
         );
-        const empCounter = await CounterModel.findOne(
-          { "counters.name": "employeeId" },
-          { "counters.$": 1 }
-        );
-        var employeeId =
+        const employeeId =
           empCounter.counters[0].format + empCounter.counters[0].value;
-        //var employeeId = uniqid('emp-');
-        var employeeStatus = "NOTAPPROVED";
+        const employeeStatus = "NOTAPPROVED";
         let addr = "";
         //create organisation if doesn't exists
         if (req.body.organisationName) {
@@ -298,12 +210,6 @@ exports.register = [
           if (organisation) {
             organisationId = organisation.id;
           } else {
-            // employeeStatus = 'ACTIVE';
-            // const centralOrg = await OrganisationModel.findOne({ type: 'CENTRAL_AUTHORITY' });
-            // if (centralOrg) {
-            //   if (centralOrg.configuration_id) {
-            //   }
-            // }
             const country = req.body?.address?.country
               ? req.body.address?.country
               : "India";
@@ -319,41 +225,29 @@ exports.register = [
               address.state +
               ", " +
               address.pincode;
-            const incrementCounterOrg = await CounterModel.update(
-              {
-                "counters.name": "orgId",
-              },
+            const orgCounter = await CounterModel.findOneAndUpdate(
+              { "counters.name": "orgId" },
               {
                 $inc: {
                   "counters.$.value": 1,
                 },
-              }
-            );
-            const orgCounter = await CounterModel.findOne(
-              { "counters.name": "orgId" },
-              { "counters.$": 1 }
+              },
+              { new: true }
             );
             organisationId =
               orgCounter.counters[0].format + orgCounter.counters[0].value;
-            //organisationId = uniqid('org-');
-            const incrementCounterWarehouse = await CounterModel.update(
-              {
-                "counters.name": "warehouseId",
-              },
+            const warehouseCounter = await CounterModel.findOneAndUpdate(
+              { "counters.name": "warehouseId" },
               {
                 $inc: {
                   "counters.$.value": 1,
                 },
-              }
-            );
-            const warehouseCounter = await CounterModel.findOne(
-              { "counters.name": "warehouseId" },
-              { "counters.$": 1 }
+              },
+              { new: true }
             );
             warehouseId =
               warehouseCounter.counters[0].format +
               warehouseCounter.counters[0].value;
-            //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
@@ -374,23 +268,19 @@ exports.register = [
               authority: req.body?.authority,
             });
             await org.save();
-            const incrementCounterInv = await CounterModel.update(
-              {
-                "counters.name": "inventoryId",
-              },
+            const invCounter = await CounterModel.findOneAndUpdate(
+              { "counters.name": "inventoryId" },
               {
                 $inc: {
                   "counters.$.value": 1,
                 },
+              },
+              {
+                new: true,
               }
-            );
-            const invCounter = await CounterModel.findOne(
-              { "counters.name": "inventoryId" },
-              { "counters.$": 1 }
             );
             const inventoryId =
               invCounter.counters[0].format + invCounter.counters[0].value;
-            //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
             const loc = await getLatLongByCity(
@@ -402,7 +292,6 @@ exports.register = [
               warehouseInventory: inventoryId,
               organisationId: organisationId,
               location: loc,
-              // postalAddress: address,
               warehouseAddress: {
                 firstLine: address.line1,
                 secondLine: "",
@@ -431,12 +320,6 @@ exports.register = [
 
         let phoneNumber = null;
         if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
-
-        // if (emailId.indexOf('@') === -1)
-        //   phoneNumber = '+' + emailId;
-        // if(phoneNumber.indexOf('+')===-1)
-        //    phone='+' + phoneNumber;
-        // Create User object with escaped and trimmed data
         const user = new EmployeeModel({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -458,125 +341,45 @@ exports.register = [
           email: emailId,
         };
 
-        const bc_response = await axios.post(
-          `${hf_blockchain_url}/api/v1/register`,
-          bc_data
-        );
-
-        try {
-          var evid = Math.random().toString(36).slice(2);
-          var datee = new Date();
-          datee = datee.toISOString();
-          let event_data = {
-            eventID: evid,
-            eventTime: datee,
-            actorWarehouseId: "null",
-            eventType: {
-              primary: "CREATE",
-              description: "USER",
+        await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+        const event_data = {
+          eventID: cuid(),
+          eventTime: new Date().toISOString(),
+          actorWarehouseId: null,
+          eventType: {
+            primary: "CREATE",
+            description: "USER",
+          },
+          actor: {
+            actorid: null,
+            actoruserid: null,
+          },
+          stackholders: {
+            ca: {
+              id: null,
+              name: null,
+              address: null,
             },
-            actor: {
-              actorid: "null",
-              actoruserid: "null",
+            actororg: {
+              id: req.body.organisationId ? req.body.organisationId : null,
+              name: null,
+              address: null,
             },
-            stackholders: {
-              ca: {
-                id: "null",
-                name: "null",
-                address: "null",
-              },
-              actororg: {
-                id: req.body.organisationId ? req.body.organisationId : "null",
-                name: "null",
-                address: "null",
-              },
-              secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
-              },
+            secondorg: {
+              id: null,
+              name: null,
+              address: null,
             },
-            payload: {
-              data: {
-                data: null,
-              },
-            },
-          };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "CREATE";
-          event_data.eventType.description = "USER";
-          event_data.payload.data = req.body;
-
-          async function compute(event_data) {
-            resultt = await logEvent(event_data);
-            return resultt;
-          }
-          compute(event_data).then((response) => {
-            console.log(response);
-          });
-        } catch (error) {
-          console.log(error);
-        }
-
+          },
+          payload: {
+            data: req.body,
+          },
+        };
+        await logEvent(event_data);
         return apiResponse.successResponse(res, "User registered Success");
-        // Html email body
-        /* let html = EmailContent({
-           name: req.body.name,
-           origin: req.headers.origin,
-           otp,
-         });
-         // Send confirmation email
-         mailer
-           .send(
-             constants.confirmEmails.from,
-             req.body.emailId,
-             constants.confirmEmails.subject,
-             html,
-           )
-           .then(function() {
-             // Save user.
-             user.save(function(err) {
-               if (err) {
-                 logger.log(
-                   'info',
-                   '<<<<< UserService < AuthController < register : Error while saving User',
-                 );
-                 return apiResponse.ErrorResponse(res, err);
-               }
-               let userData = {
-                 id: user.id,
-                 firstName: user.firstName,
-                 lastName: user.lastName,
-                 emailId: user.emailId,
-                 warehouseId:user.warehouseId,
-               };
-               logger.log(
-                 'info',
-                 '<<<<< UserService < AuthController < register : Successfully saving User',
-               );
-               return apiResponse.successResponseWithData(
-                 res,
-                 'Registration Success.',
-                 userData,
-               );
-             });
-           })
-           .catch(err => {
-             logger.log(
-               'error',
-               '<<<<< UserService < AuthController < register : Error in catch block 1',
-             );
-             return apiResponse.ErrorResponse(res, err);
-           });*/
       }
     } catch (err) {
       console.log(err);
-      //throw error in json response with status 500.
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < register : Error in catch block 2"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -594,14 +397,14 @@ exports.sendOtp = [
   body("emailId")
     .isLength({ min: 10 })
     .trim()
-    .withMessage("Email/Mobile must be specified."),
+    .withMessage("Email/Mobile must be specified"),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
+          "Validation Error",
           errors.array()
         );
       } else {
@@ -656,7 +459,7 @@ exports.sendOtp = [
                   if (response.status === 200) {
                     return apiResponse.successResponseWithData(
                       res,
-                      "OTP Sent Success.",
+                      "OTP Sent Success",
                       { email: user.emailId }
                     );
                   } else {
@@ -670,7 +473,7 @@ exports.sendOtp = [
           } else {
             return apiResponse.unauthorizedResponse(
               res,
-              "Account is not Approved. Please contact admin."
+              "Account is not Approved. Please contact admin"
             );
           }
         } else {
@@ -680,7 +483,7 @@ exports.sendOtp = [
     } catch (err) {
       return apiResponse.ErrorResponse(
         res,
-        err.message || "Some error occurred while login."
+        err.message || "Some error occurred while login"
       );
     }
   },
@@ -698,34 +501,29 @@ exports.verifyOtp = [
   body("emailId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Email/Mobile must be specified."),
-  // .isEmail()
-  // .withMessage('Email must be a valid email address.'),
-  body("otp").isLength({ min: 1 }).trim().withMessage("OTP must be specified."),
+    .toLowerCase()
+    .withMessage("Email/Mobile must be specified"),
+  body("otp").isLength({ min: 4 }).trim().withMessage("OTP must be specified"),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
+          "Validation Error",
           errors.array()
         );
       } else {
-        const emailId = req.body.emailId.toLowerCase();
-        var query = { emailId };
-        let t_res = {};
-        if (emailId.indexOf("@") === -1) {
-          let phone = "+" + emailId;
+        let query = {};
+        if (req.body.emailId.indexOf("@") === -1) {
+          let phone = "+" + req.body.emailId;
           query = { phoneNumber: phone };
-          // t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
-          // .verificationChecks
-          // .create({to: phone, code: req.body.otp});
+        } else {
+          query = { emailId: req.body.emailId };
         }
         const user = await EmployeeModel.findOne(query);
-        // if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
         if (user && user.otp == req.body.otp) {
-          var address;
+          let address;
           if (
             user.walletAddress == null ||
             user.walletAddress == "wallet12345address"
@@ -737,10 +535,6 @@ exports.verifyOtp = [
             const userData = {
               address,
             };
-            logger.log(
-              "info",
-              "<<<<< UserService < AuthController < verifyConfirm : granting permission to user"
-            );
             await axios.post(
               `${blockchain_service_url}/grantPermission`,
               userData
@@ -766,7 +560,7 @@ exports.verifyOtp = [
             ],
           });
 
-          var userData;
+          let userData;
           if (activeWarehouse.length > 0) {
             let activeWarehouseId = 0;
             const activeWRs = activeWarehouse.filter(
@@ -804,7 +598,6 @@ exports.verifyOtp = [
           const jwtPayload = userData;
           const jwtData = {
             expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            //expiresIn: "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -820,10 +613,7 @@ exports.verifyOtp = [
             email: user.emailId,
           };
 
-          const bc_response = await axios.post(
-            `${hf_blockchain_url}/api/v1/register`,
-            bc_data
-          );
+          await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
           return apiResponse.successResponseWithData(
             res,
             "Login Success",
@@ -835,117 +625,109 @@ exports.verifyOtp = [
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(
+        res,
+        err.message || "Some error occurred"
+      );
     }
   },
 ];
 
 exports.userInfo = [
   auth,
-  (req, res) => {
+  async (req, res) => {
     try {
-      EmployeeModel.findOne({ id: req.user.id }).then(async (user) => {
-        if (user) {
-          logger.log(
-            "info",
-            "<<<<< UserService < AuthController < userInfo : user exist"
-          );
-          const {
-            id,
+      const user = await EmployeeModel.findOne({ id: req.user.id });
+      if (user) {
+        const {
+          id,
+          firstName,
+          lastName,
+          emailId,
+          phoneNumber,
+          walletAddress,
+          affiliatedOrganisations,
+          organisationId,
+          warehouseId,
+          accountStatus,
+          role,
+          photoId,
+          postalAddress,
+          createdAt,
+        } = user;
+        const permissions = await RbacModel.findOne({ role });
+        const org = await OrganisationModel.findOne(
+          { id: organisationId },
+          "name configuration_id type"
+        );
+        const warehouse = await EmployeeModel.findOne(
+          { id },
+          { _id: 0, warehouseId: 1, pendingWarehouseId: 1 }
+        );
+        const warehouseArray = await WarehouseModel.find({
+          $or: [
+            { id: { $in: warehouse.warehouseId } },
+            { id: { $in: warehouse.pendingWarehouseId } },
+          ],
+        });
+        let user_data;
+        if (org) {
+          user_data = {
             firstName,
             lastName,
             emailId,
             phoneNumber,
             walletAddress,
             affiliatedOrganisations,
-            organisationId,
+            organisation: `${org.name}/${organisationId}`,
             warehouseId,
             accountStatus,
             role,
             photoId,
-            postalAddress,
-            createdAt,
-          } = user;
-          const permissions = await RbacModel.findOne({ role });
-          const org = await OrganisationModel.findOne(
-            { id: organisationId },
-            "name configuration_id type"
-          );
-          const warehouse = await EmployeeModel.findOne(
-            { id },
-            { _id: 0, warehouseId: 1, pendingWarehouseId: 1 }
-          );
-          // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
-          const warehouseArray = await WarehouseModel.find({
-             $or: [{ id: { $in: warehouse.warehouseId } }, { id: { $in: warehouse.pendingWarehouseId } }],
-          });
-          var user_data;
-          if (org) {
-            user_data = {
-              firstName,
-              lastName,
-              emailId,
-              phoneNumber,
-              walletAddress,
-              affiliatedOrganisations,
-              organisation: `${org.name}/${organisationId}`,
-              warehouseId,
-              accountStatus,
-              role,
-              photoId,
-              configuration_id: org.configuration_id,
-              type: org.type,
-              location: postalAddress,
-              warehouses: warehouseArray,
-              signup_date: createdAt,
-              permissions: permissions,
-              pendingWarehouseId: warehouse.pendingWarehouseId
-            };
-          } else {
-            user_data = {
-              firstName,
-              lastName,
-              emailId,
-              phoneNumber,
-              walletAddress,
-              affiliatedOrganisations,
-              organisation: `NOT_ASSIGNED`,
-              warehouseId,
-              accountStatus,
-              role,
-              photoId,
-              configuration_id: null,
-              type: null,
-              location: postalAddress,
-              warehouses: warehouseArray,
-              signup_date: createdAt,
-              permissions: permissions,
-              pendingWarehouseId: warehouse.pendingWarehouseId
-            };
-          }
-          logger.log(
-            "info",
-            "<<<<< UserService < AuthController < userInfo : sending profile"
-          );
-          return apiResponse.successResponseWithData(
-            res,
-            "Sent Profile",
-            user_data
-          );
+            configuration_id: org.configuration_id,
+            type: org.type,
+            location: postalAddress,
+            warehouses: warehouseArray,
+            signup_date: createdAt,
+            permissions: permissions,
+            pendingWarehouseId: warehouse.pendingWarehouseId,
+          };
         } else {
-          logger.log(
-            "error",
-            "<<<<< UserService < AuthController < userInfo : error while sending user info"
-          );
-          return apiResponse.ErrorResponse(res);
+          user_data = {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisation: `NOT_ASSIGNED`,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            configuration_id: null,
+            type: null,
+            location: postalAddress,
+            warehouses: warehouseArray,
+            signup_date: createdAt,
+            permissions: permissions,
+            pendingWarehouseId: warehouse.pendingWarehouseId,
+          };
         }
-      });
+        return apiResponse.successResponseWithData(
+          res,
+          "User Profile",
+          user_data
+        );
+      } else {
+        return apiResponse.notFoundResponse(res, "User not found");
+      }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < userInfo : error (catch block)"
+      console.log(err);
+      return apiResponse.ErrorResponse(
+        res,
+        err.message || "Some error occurred"
       );
-      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -957,9 +739,6 @@ exports.updateProfile = [
       const employee = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      // let phoneNumber = null
-      // if(req.body?.phoneNumber)
-      //    phoneNumber='+'+req.body?.phoneNumber;
       const {
         firstName,
         lastName,
@@ -969,11 +748,8 @@ exports.updateProfile = [
       } = req.body;
 
       const organisationId = organisation.split("/")[1];
-      const organisationName = organisation.split("/")[0];
-
       employee.firstName = firstName;
       employee.lastName = lastName;
-      //employee.phoneNumber = phoneNumber;
       employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
@@ -1002,14 +778,11 @@ exports.updateProfile = [
       }
       return apiResponse.successResponseWithData(
         res,
-        "Employee Profile update Success",
+        "Employee Profile Updated",
         returnData
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < updateProfile : error (catch block)"
-      );
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1018,10 +791,6 @@ exports.updateProfile = [
 exports.createUserAddress = [
   async (req, res) => {
     try {
-      logger.log(
-        "info",
-        "<<<<< UserService < AuthController < createUserAddress : creating user address"
-      );
       const response = await axios.get(
         `${blockchain_service_url}/createUserAddress`
       );
@@ -1029,21 +798,15 @@ exports.createUserAddress = [
       const userData = {
         address,
       };
-      const response_grant = await axios.post(
-        `${blockchain_service_url}/grantPermission`,
-        userData
+      await axios.post(`${blockchain_service_url}/grantPermission`, userData);
+      return apiResponse.successResponseWithData(
+        res,
+        "User Address Created",
+        address
       );
-      logger.log(
-        "info",
-        "<<<<< UserService < AuthController < createUserAddress : created user address"
-      );
-      res.json({ address: address });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < createUserAddress : error(catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1057,21 +820,14 @@ exports.getAllUsers = [
         "firstName walletAddress emailId"
       );
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
-      logger.log(
-        "info",
-        "<<<<< UserService < AuthController < getAllUsers : retrieved users successfully"
-      );
       return apiResponse.successResponseWithData(
         res,
         "Users Retrieved Success",
         confirmedUsers
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < getAllUsers : error(catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1079,7 +835,7 @@ exports.getAllUsers = [
 exports.assignProductConsumer = [
   async (req, res) => {
     try {
-      var user = new ConsumerModel({
+      const user = new ConsumerModel({
         shipmentId: req.body.consumer.shipmentId,
         name: req.body.consumer.name,
         gender: req.body.consumer.gender,
@@ -1096,11 +852,11 @@ exports.assignProductConsumer = [
         ShipmentId: user.ShipmentId,
       };
 
-      let date_ob = new Date();
-      let date = ("0" + date_ob.getDate()).slice(-2);
-      let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-      let year = date_ob.getFullYear();
-      var today = date + "-" + month + "-" + year;
+      const date_ob = new Date();
+      const date = ("0" + date_ob.getDate()).slice(-2);
+      const month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+      const year = date_ob.getFullYear();
+      const today = date + "-" + month + "-" + year;
 
       const userData1 = {
         stream: stream_name,
@@ -1125,7 +881,7 @@ exports.assignProductConsumer = [
       }
       return apiResponse.successResponseWithData(
         res,
-        "Registration Success.",
+        "Registration Success",
         userData
       );
     } catch (err) {
@@ -1148,6 +904,7 @@ exports.getUserWarehouses = [
       });
       return apiResponse.successResponseWithData(res, "User warehouses", users);
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1157,11 +914,9 @@ exports.pushWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const {
-        warehouseId,
-      } = req.body;
+      const { warehouseId } = req.body;
 
-      await EmployeeModel.findOneAndUpdate(
+      await EmployeeModel.updateOne(
         {
           id: req.user.id,
         },
@@ -1171,12 +926,10 @@ exports.pushWarehouse = [
           },
         }
       );
-      return apiResponse.successResponseWithData(
-        res,
-        "Warehouse added"
-      );
+      return apiResponse.successResponseWithData(res, "Warehouse added");
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1185,20 +938,14 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const incrementCounterInv = await CounterModel.update(
-        {
-          "counters.name": "inventoryId",
-        },
+      const invCounter = await CounterModel.findOneAndUpdate(
+        { "counters.name": "inventoryId" },
         {
           $inc: {
             "counters.$.value": 1,
           },
-        }
-      );
-
-      const invCounter = await CounterModel.findOne(
-        { "counters.name": "inventoryId" },
-        { "counters.$": 1 }
+        },
+        { new: true }
       );
       const inventoryId =
         invCounter.counters[0].format + invCounter.counters[0].value;
@@ -1210,27 +957,22 @@ exports.addWarehouse = [
         title,
         region,
         country,
-        location,
         warehouseAddress,
         supervisors,
         employees,
         bottleCapacity,
         sqft,
       } = req.body;
-      const incrementCounterWarehouse = await CounterModel.update(
-        {
-          "counters.name": "warehouseId",
-        },
+      const warehouseCounter = await CounterModel.findOne(
+        { "counters.name": "warehouseId" },
         {
           $inc: {
             "counters.$.value": 1,
           },
+        },
+        {
+          new: true,
         }
-      );
-
-      const warehouseCounter = await CounterModel.findOne(
-        { "counters.name": "warehouseId" },
-        { "counters.$": 1 }
       );
       const warehouseId =
         warehouseCounter.counters[0].format +
@@ -1255,14 +997,17 @@ exports.addWarehouse = [
         warehouseInventory: inventoryResult.id,
         status: "NOTVERIFIED",
       });
-      const s = await warehouse.save();
-      /*await OrganisationModel.findOneAndUpdate({
-                      id: organisationId
-                }, {
-                    $push: {
-                        warehouses: warehouseId
-                    }
-                });*/
+      await warehouse.save();
+      await OrganisationModel.findOneAndUpdate(
+        {
+          id: organisationId,
+        },
+        {
+          $push: {
+            warehouses: warehouseId,
+          },
+        }
+      );
       await EmployeeModel.findOneAndUpdate(
         {
           id: req.user.id,
@@ -1293,106 +1038,69 @@ exports.addWarehouse = [
         Age: "",
         Aadhar: "",
         Vaccineid: "",
-        Title:title,
-        Warehouseaddr:warehouseAddress,
-        Status:"NOTVERIFIED",
-        Misc1:"",
-        Misc2:""
+        Title: title,
+        Warehouseaddr: warehouseAddress,
+        Status: "NOTVERIFIED",
+        Misc1: "",
+        Misc2: "",
       };
-
-      let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-
-      // const bc_response = await axios.post(
-      //   `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
-      //   bc_data,
-      //   {
-      //     headers: {
-      //       Authorization: token,
-      //     },
-      //   }
-      // );
-
-      try {
-        var evid = Math.random().toString(36).slice(2);
-        var datee = new Date();
-        datee = datee.toISOString();
-        let event_data = {
-          eventID: null,
-          eventTime: null,
-          actorWarehouseId: "null",
-          eventType: {
-            primary: "ADD",
-            description: "WAREHOUSE",
+      const token =
+        req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+      await axios.post(
+        `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
+        bc_data,
+        {
+          headers: {
+            Authorization: token,
           },
-          actor: {
-            actorid: req.user.id ? req.user.id : "null",
-            actoruserid: req.user.emailId ? req.user.emailId : "null",
-          },
-          stackholders: {
-            ca: {
-              id: "null",
-              name: "null",
-              address: "null",
-            },
-            actororg: {
-              id: organisationId ? organisationId : "null",
-              name: "null",
-              address: postalAddress ? postalAddress : "null",
-            },
-            secondorg: {
-              id: "null",
-              name: "null",
-              address: "null",
-            },
-          },
-          payload: {
-            data: {
-              data: null,
-            },
-          },
-        };
-        event_data.eventID = "ev0000" + evid;
-        event_data.eventTime = datee;
-        event_data.eventType.primary = "CREATE";
-        event_data.eventType.description = "WAREHOUSE";
-        event_data.payload.data = req.body;
-
-        async function compute(event_data) {
-          resultt = await logEvent(event_data);
-          return resultt;
         }
-        compute(event_data).then((response) => {
-          console.log(response);
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      );
+
+      const event_data = {
+        eventID: cuid(),
+        eventTime: new Date().toISOString(),
+        actorWarehouseId: warehouseId,
+        eventType: {
+          primary: "CREATE",
+          description: "WAREHOUSE",
+        },
+        actor: {
+          actorid: req.user.id ? req.user.id : null,
+          actoruserid: req.user.emailId ? req.user.emailId : null,
+        },
+        stackholders: {
+          ca: {
+            id: null,
+            name: null,
+            address: null,
+          },
+          actororg: {
+            id: organisationId ? organisationId : null,
+            name: null,
+            address: postalAddress ? postalAddress : null,
+          },
+          secondorg: {
+            id: null,
+            name: null,
+            address: null,
+          },
+        },
+        payload: {
+          data: req.body,
+        },
+      };
+      await logEvent(event_data);
       return apiResponse.successResponseWithData(
         res,
-        "Warehouse added success",
+        "Warehouse Added Successfully",
         warehouse
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message || "Error");
     }
   },
 ];
-
-const getLatLongByCity = async (param) => {
-  try {
-    const result = await axios.get(
-      `https://geocode.search.hereapi.com/v1/geocode?q=${param}&apiKey=BCRdhsq4jB8NxBG7vTWpVbNxCb6b50j98_f_bwiy7Qw`
-    );
-    return result.data.items.length
-      ? {
-          latitude: result.data.items[0].position.lat,
-          longitude: result.data.items[0].position.lng,
-        }
-      : { latitude: 0, longitude: 0 };
-  } catch (e) {
-    return e.response;
-  }
-};
 
 exports.updateWarehouseAddress = [
   auth,
@@ -1519,7 +1227,7 @@ exports.uploadImage = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD "
+          "Please check the type action you want to perform STOREID/KYCNEW/KYCUPLOAD"
         );
       }
     } catch (err) {
@@ -1535,6 +1243,7 @@ exports.fetchImage = [
     try {
       const { emailId } = req.user;
       const { type } = req.query;
+      const resArray = [];
       const findRecord = await EmployeeModel.findOne({
         $and: [
           {
@@ -1561,8 +1270,7 @@ exports.fetchImage = [
             "userDocuments.$.imageDetails": 1,
           }
         );
-        var resArray = [];
-        for (i = 0; i < imageArray.length; i++) {
+        for (let i = 0; i < imageArray.length; i++) {
           const s = "/images/" + imageArray[i];
           resArray.push(s);
         }
@@ -1591,17 +1299,16 @@ exports.getAllRegisteredUsers = [
       const resPerPage = 10; // results per page
       const page = req.query.page || 1; // Page
       const totalRecords = await EmployeeModel.count({});
+      /* 
+      Performance Bottleneck 
+      */
       const users = await EmployeeModel.find({})
         .skip(resPerPage * page - resPerPage)
         .limit(resPerPage);
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
       if (confirmedUsers.length > 0) {
-        logger.log(
-          "info",
-          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`
-        );
-        var users_data = [];
-        for (var i in confirmedUsers) {
+        let users_data = [];
+        for (let i in confirmedUsers) {
           let {
             firstName,
             lastName,
@@ -1657,29 +1364,17 @@ exports.getAllRegisteredUsers = [
           totalRecords: totalRecords,
           data: users_data,
         };
-        logger.log(
-          "info",
-          "<<<<< UserService < AuthController < userInfo : sending profile"
-        );
         return apiResponse.successResponseWithData(
           res,
           "Sent Profile",
           finalData
         );
       } else {
-        logger.log(
-          "error",
-          "<<<<< EmployeeService < AuthController < userInfo : error while sending user info"
-        );
         return apiResponse.ErrorResponse(res, "No users found");
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< EmployeeService < AuthController < userInfo : error (catch block)"
-      );
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1703,12 +1398,8 @@ exports.getAllUsersByWarehouse = [
         id: req.params.warehouseId,
       });
       if (confirmedUsers.length > 0) {
-        logger.log(
-          "info",
-          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`
-        );
-        var users_data = [];
-        for (var i in confirmedUsers) {
+        let users_data = [];
+        for (let i in confirmedUsers) {
           let {
             firstName,
             lastName,
@@ -1763,30 +1454,17 @@ exports.getAllUsersByWarehouse = [
           totalRecords: totalRecords,
           data: users_data,
         };
-        logger.log(
-          "info",
-          "<<<<< EmployeeService < AuthController < userInfo : sending profile"
-        );
         return apiResponse.successResponseWithData(
           res,
           "Sent Profile",
           finalData
         );
       } else {
-        logger.log(
-          "error",
-          "<<<<< EmployeeService < AuthController < userInfo : error while sending user info"
-        );
         return apiResponse.ErrorResponse(res, "No users found");
       }
     } catch (err) {
       console.log(err);
-      logger.log(
-        "error",
-        "<<<<< EmployeeService < AuthController < userInfo : error (catch block)"
-      );
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1811,12 +1489,8 @@ exports.getAllUsersByOrganisation = [
         "name"
       );
       if (confirmedUsers.length > 0) {
-        logger.log(
-          "info",
-          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`
-        );
-        var users_data = [];
-        for (var i in confirmedUsers) {
+        let users_data = [];
+        for (let i in confirmedUsers) {
           let {
             firstName,
             lastName,
@@ -1868,29 +1542,17 @@ exports.getAllUsersByOrganisation = [
           totalRecords: totalRecords,
           data: users_data,
         };
-        logger.log(
-          "info",
-          "<<<<< EmployeeService < AuthController < userInfo : sending profile"
-        );
         return apiResponse.successResponseWithData(
           res,
           "Sent Profile",
           finalData
         );
       } else {
-        logger.log(
-          "error",
-          "<<<<< EmployeeService < AuthController < userInfo : error while sending user info"
-        );
         return apiResponse.ErrorResponse(res, "No users found");
       }
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< EmployeeService < AuthController < userInfo : error (catch block)"
-      );
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1899,40 +1561,35 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
-      console.log("REGISTERING");
-      console.log(req.user);
-      client.notify
-        .services(twilio_service_id)
-        .bindings.create({
-          identity: req.user.id,
-          bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
-          address: req.body.token_id,
-        })
-        .then((binding) => console.log(binding));
-      return apiResponse.successResponse(res, "Succesfully Registered");
+      await client.notify.services(twilio_service_id).bindings.create({
+        identity: req.user.id,
+        bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
+        address: req.body.token_id,
+      });
+      return apiResponse.successResponse(res, "Successfully Registered");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
 
 exports.getOrganizationsByType = [
-  //without auth for new user register
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find(
+      const organizations = await ConfigurationModel.find(
         { id: organisationId },
         "organisationTypes.id organisationTypes.name"
       );
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
-        organisations
+        "List of Organisation Types",
+        organizations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1961,8 +1618,7 @@ exports.getOrganizationsByTypeForAbInBev = [
       } else {
         matchCondition.type = filters.type;
       }
-      console.log(matchCondition, matchWarehouseCondition);
-      const organisations = await OrganisationModel.aggregate([
+      const organizations = await OrganisationModel.aggregate([
         {
           $match: matchCondition,
         },
@@ -1990,11 +1646,12 @@ exports.getOrganizationsByTypeForAbInBev = [
       ]);
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
-        organisations
+        "Get Organisations by Type",
+        organizations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2004,17 +1661,18 @@ exports.getwarehouseByType = [
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find(
+      const organizations = await ConfigurationModel.find(
         { id: organisationId },
         "warehouseTypes.id warehouseTypes.name"
       );
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
-        organisations
+        "List of Warehouse Types",
+        organizations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2028,7 +1686,7 @@ exports.getwarehouseinfo = [
 
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
+        "Warehouse Info",
         warehouseinfo
       );
     } catch (err) {
@@ -2042,14 +1700,14 @@ exports.getOrganizationsTypewithauth = [
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find(
+      const organizations = await ConfigurationModel.find(
         { id: organisationId },
         "organisationTypes.id organisationTypes.name"
       );
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
-        organisations
+        "Organisation Types",
+        organizations
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
@@ -2058,7 +1716,6 @@ exports.getOrganizationsTypewithauth = [
 ];
 
 exports.emailverify = [
-  // auth,
   async (req, res) => {
     try {
       const emailId = req.query.emailId;
@@ -2070,15 +1727,12 @@ exports.emailverify = [
 
       return apiResponse.successResponseWithData(
         res,
-        "Operation success",
+        "Email Verification",
         email
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< EmployeeService < AuthController < emailverify : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2126,10 +1780,7 @@ exports.switchLocation = [
         returnData
       );
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< UserService < AuthController < updateProfile : error (catch block)"
-      );
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

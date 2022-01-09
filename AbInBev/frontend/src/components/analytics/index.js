@@ -73,7 +73,7 @@ const Analytics = (props) => {
   const [spm, setSpmButton] = useState('btn');
   const [selectedType, setSelectedType] = useState('All')
   const [sortByValue, setSortByValue] = useState('');
-
+  const [location, setLocation] = useState('');
   // useEffect(() => {
   //   setMonth(new Date().getMonth() + 1);
   //   setYear(new Date().getFullYear());
@@ -142,6 +142,7 @@ const Analytics = (props) => {
     setState(selectedState);
     const filter = { ...params };
     filter.state = selectedState;
+    setLocation(selectedState);
     const result = await props.getDistricts(selectedState);
     setDistricts(result.data);
     setParams(filter);
@@ -150,6 +151,7 @@ const Analytics = (props) => {
   const onDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
     setDistrict(selectedDistrict);
+    setLocation(selectedDistrict);
     const filter = { ...params };
     filter.district = selectedDistrict;
     setParams(filter);
@@ -227,7 +229,7 @@ const Analytics = (props) => {
 
   const resetFilters = () => {
     setSKU('');
-    // setProp({});
+    setLocation('');
     setState('');
     setDistrict('');
     setIsActive('by_yearly');
@@ -260,6 +262,7 @@ const Analytics = (props) => {
                 onViewChange={onViewChange}
                 sortByValue={sortByValue}
                 selectedType={selectedType}
+                location={location}
               ></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
@@ -819,9 +822,9 @@ const Analytics = (props) => {
                       <select
                         className="filterSelect mt-2"
                         value={state}
-                      // onChange={onStateChange}
+                      onChange={onStateChange}
                       >
-                        <option value={state}>Select State</option>
+                        <option value="">Select State</option>
                         {props.states?.map((state, index) => (
                           <option key={index} value={state}>
                             {state}
@@ -835,7 +838,7 @@ const Analytics = (props) => {
                       <select
                         value={district}
                         className="filterSelect mt-2"
-                      // onChange={onDistrictChange}
+                      onChange={onDistrictChange}
                       >
                         {state == '' && (
                           <option value="">Select District</option>
