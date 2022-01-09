@@ -267,5 +267,21 @@
     "upload_image": "cargar imagen",
     "upload": "cargar",
     "files_here": "archivos aquí",
-    "browse_files": "Búsqueda de archivos"
+    "browse_files": "Búsqueda de archivos",
+    "your_network": "TU RED",
+    "storage_location": "Ubicación de almacenamiento",
+    "location_id": "ID de ubicación",
+    "country_id": "Identificación del país",
+    "location_name": "Nombre del lugar",
+    "show": "Show",
+    "less": "menos",
+    "more": "más",
+    "back_to_search": "Volver a Buscar",
+    "last_mile": "última milla",
+    "beneficiary_details":"detalles del beneficiario",
+    "id_proof":"Prueba de Identificación",
+    "mobile_no":"No móviles",
+    "date_time": "Fecha y hora",
+    "version": "versión",
+    "made_with_care": "Hecho con cuidado"
 }

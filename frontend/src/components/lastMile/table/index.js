@@ -3,10 +3,10 @@ import Pagination from "@material-ui/lab/Pagination";
 import user from "../../../assets/icons/user.svg";
 import "./style.scss";
 const Table = (props) => {
+  const { t } = props;
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };
-  console.log(props);
   var orgTypeArray = [...props.lastMile];
   return (
     <div className='producttable'>
@@ -55,7 +55,7 @@ const Table = (props) => {
                 onChange={handlePageChange}
               />
               <span className='mx-5 my-1 rounded text-dark'>
-                Total Records {props.count}{" "}
+                {t('total_records')} {props.count}{" "}
               </span>
             </div>
           )}

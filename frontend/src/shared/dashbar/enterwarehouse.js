@@ -14,7 +14,7 @@ const EnterWareHouse = (props) => {
     return state.user;
   });
   const { warehouse, productArray } = props?.dashBarData;
-  const { dashBarData } = props;
+  const { dashBarData, t } = props;
 
   return (
     <div className='dashbar'>
@@ -39,7 +39,7 @@ const EnterWareHouse = (props) => {
       <div className='panel mb-3 searchpanel'>
         <div>
           {props.visible
-            ? "Shipment ID: " + dashBarData.id
+            ? t('shipment_id')+": " + dashBarData.id
             : warehouse?.warehouseName}
         </div>
         <div>
@@ -57,10 +57,10 @@ const EnterWareHouse = (props) => {
         {!props.visible && (
           <div className='d-flex text-white flex-row mt-2'>
             <ul className='mr-3 text-light'>
-              <li className='mb-1'>Country ID</li>
-              <li className='mb-1'>Country</li>
-              <li className='mb-1'>Location</li>
-              <li className='mb-1'>Location Name</li>
+              <li className='mb-1'>{t('country_id')}</li>
+              <li className='mb-1'>{t('country')}</li>
+              <li className='mb-1'>{t('location')}</li>
+              <li className='mb-1'>{t('location_name')}</li>
             </ul>
             <ul className='text-light'>
               <li className='mb-1'>{warehouse?.warehouseCountryId}&nbsp;</li>
@@ -73,7 +73,7 @@ const EnterWareHouse = (props) => {
       </div>
       {props.visible && (
         <div className='d-flex flex-row justify-content-between prod mt-3 mb-2'>
-          <div className='font-size-one'>Shipment Details</div>
+          <div className='font-size-one'>{t('shipment_details')}</div>
           <button
             className='button btn-primary d-flex text-light pl-3 pr-3 pt-2 pb-2'
             onClick={() => {
@@ -85,7 +85,7 @@ const EnterWareHouse = (props) => {
               src={location}
               alt='location'
             />
-            <span className='pl-1 text-white'>Track</span>
+            <span className='pl-1 text-white'>{t('track')}</span>
           </button>
         </div>
       )}
@@ -94,45 +94,45 @@ const EnterWareHouse = (props) => {
           <>
             <div className='row'>
               <img src={PinGrey} height='20' width='15' alt='Pin' />
-              <div className='ml-2 text-secondary'>Address</div>
+              <div className='ml-2 text-secondary'>{t('address')}</div>
             </div>
             <div>{warehouse?.warehouseAddress}</div>
           </>
         ) : (
           <div className=''>
-            <h6>From</h6>
+            <h6>{t('from')}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Organisation Name</div>
+              <div className='col text-muted'>{t('organisation_name')}</div>
               <div className='col'>{dashBarData.supplier.org.name}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Organisation Location</div>
+              <div className='col text-muted'>{t('organisation_location')}</div>
               <div className='col'>
                 {dashBarData.supplier.warehouse.warehouseAddress.city}
               </div>
             </div>
-            <h6 className='pt-2'>To</h6>
+            <h6 className='pt-2'>{t('to')}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Organisation Name</div>
+              <div className='col text-muted'>{t('organisation_name')}</div>
               <div className='col'>{dashBarData.receiver?.org?.name}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Organisation Location</div>
+              <div className='col text-muted'>{t('organisation_location')}</div>
               <div className='col'>
                 {dashBarData.receiver?.warehouse?.warehouseAddress?.city}
               </div>
             </div>
-            <h6 className='pt-2'>Delivery Details</h6>
+            <h6 className='pt-2'>{t('delivery_details')}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Transit Number</div>
+              <div className='col text-muted'>{t('transit_no')}</div>
               <div className='col'>{dashBarData.airWayBillNo}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Label Code</div>
+              <div className='col text-muted'>{t('label_code')}</div>
               <div className='col'>{dashBarData.label.labelId}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Shipment Date</div>
+              <div className='col text-muted'>{t('shipment_date')}</div>
               <div className='col'>
                 {dashBarData.shippingDate?.length === 10
                   ? dashBarData.shippingDate
@@ -140,7 +140,7 @@ const EnterWareHouse = (props) => {
               </div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>Estimated Delivery Date</div>
+              <div className='col text-muted'>{t('estimated_delivery_date')}</div>
               <div className='col'>
                 {dashBarData.actualDeliveryDate?.length === 10
                   ? dashBarData.actualDeliveryDate
@@ -152,7 +152,7 @@ const EnterWareHouse = (props) => {
       </div>
       <div className='d-flex flex-row justify-content-between prod mt-3 mb-2'>
         <div className='font-size-one'>
-          {props.visible ? "Product Details" : "Inventory"}
+          {props.visible ? t('product_details') : t('inventory')}
         </div>
         <Link
           to={
@@ -161,17 +161,17 @@ const EnterWareHouse = (props) => {
               : "/viewinventory/" + warehouse?.warehouseId
           }
         >
-          <div className='text-primary '>View All</div>
+          <div className='text-primary '>{t('view_all')}</div>
         </Link>
       </div>
 
       <div className='panel address searchpanel prodpanel d-flex flex-column inventoryDashboard'>
         {productArray?.length > 0
           ? productArray?.map((product, index) => (
-              <Product product={product} index={index} key={index} />
+              <Product product={product} index={index} t={t} key={index} />
             ))
           : dashBarData?.products?.map((product, index) => (
-              <Product product={product} index={index} key={index} />
+              <Product product={product} index={index} t={t} key={index} />
             ))}
         {productArray?.length === 0 && (
           <center>
@@ -182,7 +182,7 @@ const EnterWareHouse = (props) => {
                 textAlign: "center",
               }}
             >
-              No Items to show
+              {t('no_records_found')}
             </h5>
           </center>
         )}

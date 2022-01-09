@@ -88,6 +88,7 @@ const DashBoardContainer = (props) => {
               warehouses={wareHouses}
               shipmentIds={shipmentIds}
               t={t}
+              lang={i18n.resolvedLanguage}
             />
           </div>
           {dashVisible && (

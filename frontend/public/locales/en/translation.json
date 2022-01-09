@@ -268,5 +268,21 @@
     "upload_image": "Upload Image",
     "upload": "Upload",
     "files_here": "files here",
-    "browse_files": "Browse Files"
+    "browse_files": "Browse Files",
+    "your_network": "YOUR NETWORK",
+    "storage_location": "Storage Location",
+    "location_id": "Location ID",
+    "country_id": "Country ID",
+    "location_name": "Location Name",
+    "show": "Show",
+    "less": "less",
+    "more": "more",
+    "back_to_search": "Back to Search",
+    "last_mile": "LAST MILE",
+    "beneficiary_details":"Beneficiary Details",
+    "id_proof":"ID Proof",
+    "mobile_no":"Mobile No",
+    "date_time": "Date & Time",
+    "version": "Version",
+    "made_with_care": "Made with Care"
 }

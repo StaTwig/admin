@@ -150,7 +150,7 @@ const SideBar = ({ match, location, user, t }) => {
           </li>
         )}
       </ul>
-      <Footer />
+      <Footer t={t} />
     </div>
   );
 };

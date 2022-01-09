@@ -158,6 +158,7 @@ const { t, i18n } = useTranslation();
             navigateBackToTracingPage={navigateBackToTracingPage}
             lastTenIotShipmentData={lastTenIotShipmentData}
             t={t}
+            lang={i18n.resolvedLanguage}
             {...props}
           />
         </div>
