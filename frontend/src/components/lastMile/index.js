@@ -52,12 +52,12 @@ const LastMile = (props) => {
     coloumn4: "Product",
     coloumn5: "Date & Time",
 
-    img1: <img src={patient} width='15' height='20' className='pb-1' alt='' />,
-    img2: <img src={idprrof} width='20' height='20' className='pb-1' alt='' />,
-    img3: <img src={mobile} width='16' height='25' className='pb-1' alt='' />,
-    img4: <img src={Product} width='20' height='22' className='pb-1' alt='' />,
+    img1: <img src={patient} width="15" height="20" className="pb-1" alt="" />,
+    img2: <img src={idprrof} width="20" height="20" className="pb-1" alt="" />,
+    img3: <img src={mobile} width="16" height="25" className="pb-1" alt="" />,
+    img4: <img src={Product} width="20" height="22" className="pb-1" alt="" />,
     img5: (
-      <img src={Date_time} width='19' height='22' className='pb-1' alt='' />
+      <img src={Date_time} width="19" height="22" className="pb-1" alt="" />
     ),
   };
 
@@ -202,23 +202,23 @@ const LastMile = (props) => {
     <div>
       <div>
         <div
-          className='lastmile'
+          className="lastmile"
           style={{ position: "relative", left: "-22px", top: "-20px" }}
         >
-          <h1 className='breadcrumb'>LAST MILE</h1>
+          <h1 className="breadcrumb">LAST MILE</h1>
           {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
 </button> */}
-          <div className='row'>
-            <div className='col tab' style={{ width: "76%" }}>
-              <div className=''>
-                <TableFilter data={headers} fb='85%' />
+          <div className="row">
+            <div className="col tab" style={{ width: "76%" }}>
+              <div className="">
+                <TableFilter data={headers} fb="85%" />
               </div>
             </div>
           </div>
-          <div className='ribben-space' style={{ width: "76%" }}>
+          <div className="ribben-space" style={{ width: "76%" }}>
             <Table
               {...props}
               cardFill={cardFill}
@@ -229,15 +229,15 @@ const LastMile = (props) => {
           </div>
         </div>
 
-        <div className='col-xl-3'>
-          <div className='dashbar'>
-            <div className='d-flex flex-column mb-2 region pt-4'>
-              <div className='form-group row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+        <div className="col-xl-3">
+          <div className="dashbar">
+            <div className="d-flex flex-column mb-2 region pt-4 border-none">
+              <div className="wrap form-group row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   Region
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -247,15 +247,16 @@ const LastMile = (props) => {
                       setRegion(item);
                       onFilter("region", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
-              <div className='form-group row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+              <div className="wrap form-group row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   Country
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -265,15 +266,16 @@ const LastMile = (props) => {
                       setCountry(item);
                       onFilter("country", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
-              <div className='form-group row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+              <div className="wrap form-group row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   State
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -283,15 +285,16 @@ const LastMile = (props) => {
                       setstate(item);
                       onFilter("state", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
-              <div className='form-group row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+              <div className="wrap form-group row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   District
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -301,15 +304,16 @@ const LastMile = (props) => {
                       setdistrict(item);
                       onFilter("city", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
-              <div className='form-group row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+              <div className="wrap form-group row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   Location
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -319,15 +323,16 @@ const LastMile = (props) => {
                       setlocation(item);
                       onFilter("location", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
-              <div className='form-group mb-4 row mr-1'>
-                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+              <div className="wrap form-group mb-4 row mr-1">
+                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
                   Product
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -337,12 +342,13 @@ const LastMile = (props) => {
                       setproduct(item);
                       onFilter("product", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
             </div>
-            <div className='mainsearchwarehouse'>
-              <div className=' panel  mb-3 searchpanel'>
+            <div className="mainsearchwarehouse">
+              <div className=" panel  mb-3 searchpanel">
                 <div>{warehouseTitle}</div>
                 {/* <div>
                         <u>
@@ -352,29 +358,29 @@ const LastMile = (props) => {
                             </small>
                         </u>
                     </div> */}
-                <div className='d-flex text-white mt-2 flex-row '>
-                  <ul className='mr-3 text-light'>
+                <div className="d-flex text-white mt-2 flex-row ">
+                  <ul className="mr-3 text-light">
                     {/* <li className="mb-1">Country ID</li> */}
-                    <li className='mb-3'>Country</li>
-                    <li className='mb-3'>Location</li>
-                    <li className='mb-3'>Location Name</li>
+                    <li className="mb-3">Country</li>
+                    <li className="mb-3">Location</li>
+                    <li className="mb-3">Location Name</li>
                   </ul>
-                  <ul className='text-light'>
+                  <ul className="text-light">
                     {/* <li className="mb-1">{countryId}</li> */}
-                    <li className='mb-3'>{locationCountry}</li>
-                    <li className='mb-3'>{locationState}</li>
-                    <li className='mb-3'>{locationName}</li>
+                    <li className="mb-3">{locationCountry}</li>
+                    <li className="mb-3">{locationState}</li>
+                    <li className="mb-3">{locationName}</li>
                   </ul>
                 </div>
               </div>
-              <div className='panel address searchpanel mb-2 mt-3 ml-1 mr-1'>
-                <div className='row'>
-                  <img src={pingrey} height='20' width='15' alt=''></img>
-                  <div className='ml-2' style={{ fontSize: "13px" }}>
+              <div className="panel address searchpanel mb-2 mt-3 ml-1 mr-1">
+                <div className="row">
+                  <img src={pingrey} height="20" width="15" alt=""></img>
+                  <div className="ml-2" style={{ fontSize: "13px" }}>
                     Address
                   </div>
                 </div>
-                <div className='ml-2'>{Address}</div>
+                <div className="ml-2">{Address}</div>
               </div>
             </div>
           </div>

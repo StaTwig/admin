@@ -190,6 +190,7 @@ const EnterId = (props) => {
                               name="shipmentId"
                               margin="normal"
                               variant="outlined"
+                              placeholder="Enter Shipment ID"
                             />
                           )}
                         />
@@ -265,6 +266,7 @@ const EnterId = (props) => {
                               name="billNo"
                               margin="normal"
                               variant="outlined"
+                              placeholder="Enter Transit No"
                             />
                           )}
                         />

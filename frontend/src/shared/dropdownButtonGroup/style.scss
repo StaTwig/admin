@@ -31,15 +31,15 @@
       margin-top: -1.15rem;
     }
   }
-    // .textNeg-title{
-    //   margin-left: 45px;
-    //   margin-top: -1.35rem;
-    // }
-  .location-add{
+  // .textNeg-title{
+  //   margin-left: 45px;
+  //   margin-top: -1.35rem;
+  // }
+  .location-add {
     position: absolute;
     top: 10px;
     // left: -85px;
-    min-width:0rem;
+    min-width: 0rem;
     font-size: 12px;
     font-weight: 400;
   }
@@ -96,5 +96,23 @@
     left: 122px;
     height: 9px;
     width: 14px;
+  }
+}
+.lastmile-drop-img {
+  position: absolute;
+  left: 165px;
+  height: 9px;
+  width: 14px;
+  @media screen and (min-width:"1266px"){
+    left: 180px;
+  }
+  @media screen and (min-width:"1366px"){
+    left: 200px;
+  }
+  @media screen and (min-width:"1566px"){
+    left: 225px;
+  }
+  @media screen and (min-width:"1766px"){
+    left: 245px;
   }
 }

@@ -117,8 +117,23 @@
   .orgV {
     position: relative;
     top: 10px;
-    right: 400px;
+    right: 220px;
     color: #333333;
+    @media screen and (min-width:"1166px"){
+      right: 280px;
+    }
+    @media screen and (min-width:"1266px"){
+      right: 340px;
+    }
+    @media screen and (min-width:"1366px"){
+      right: 400px;
+    }
+    @media screen and (min-width:"1466px"){
+      right: 420px;
+    }
+    @media screen and (min-width:"1566px"){
+      right: 500px;
+    }
   }
 
   .input-group {
@@ -141,7 +156,7 @@
     font-weight: 1000;
     margin-top: -1rem;
     padding-bottom: 0rem;
-    padding-left: 1.5rem;
+    padding-left: 16px;
   }
   .headsup {
     font-size: 15px;
