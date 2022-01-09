@@ -18,6 +18,7 @@ import Serial from "../../assets/icons/serial.png";
 import "./style.scss";
 
 const VerifyInventory = (props) => {
+  const { t } = props;
   const dispatch = useDispatch();
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
@@ -66,54 +67,54 @@ const VerifyInventory = (props) => {
   return (
     <div className='verifyinventory'>
       <div className='d-flex flex-row justify-content-between'>
-        <h1 className='breadcrumb mt-2'>REVIEW INVENTORY</h1>
+        <h1 className='breadcrumb mt-2'>{t('review_inventory')}</h1>
         {/* <button type="button" className="btn btn-outline-info">
           Export
         </button> */}
       </div>
       <div className='card'>
         <div className='card-body'>
-          <h5 className='head ml-1'>Description Of Goods </h5>
+          <h5 className='head ml-1'>{t('description_of_goods')}</h5>
           <div>
             <div className='row p1-1 mt-4'>
               <span className='col-3'>
                 <img src={Product} width='15' height='15' alt='Product' />
-                <span className='ml-1 text-muted'>Product Name</span>
+                <span className='ml-1 text-muted'>{t('product_name')}</span>
               </span>
               <span className='col-2'>
                 <img
                   src={Manufacturer}
                   width='15'
                   height='15'
-                  alt='Manufacturer'
+                  alt={t('manufacturer')}
                 />
-                <span className='ml-1 text-muted'>Manufacturer</span>
+                <span className='ml-1 text-muted'>{t('manufacturer')}</span>
               </span>
               <span
                 className='col-1'
                 style={{ position: "relative", left: "-40px" }}
               >
                 <img src={Quantity} width='24' height='15' alt='Quantity' />
-                <span className='ml-1 text-muted'>Quantity</span>
+                <span className='ml-1 text-muted'>{t('quantity')}</span>
               </span>
               <span className='col-1'>
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
-                <span className='ml-1 text-muted'>Mfg Date </span>
+                <span className='ml-1 text-muted'>{t('mfg_date')}</span>
               </span>
               <span className='col-1'>
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
-                <span className='ml-1 text-muted'>Exp Date</span>
+                <span className='ml-1 text-muted'>{t('exp_date')}</span>
               </span>
               <span className='col-2'>
                 <img src={Batch} width='15' height='15' alt='Batch' />
-                <span className='ml-1 text-muted'>Batch Number</span>
+                <span className='ml-1 text-muted'>{t('batch_no')}</span>
               </span>
               <span
                 className='col-2'
                 style={{ position: "relative", left: "-60px" }}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
-                <span className='ml-1 text-muted'>Serial Numbers</span>
+                <span className='ml-1 text-muted'>{t('serial_numbers')}</span>
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
@@ -177,7 +178,7 @@ const VerifyInventory = (props) => {
           <div className=''>
             <div className='d-flex flex-row-reverse'>
               <button className='btn-primary btn' onClick={onAssign}>
-                <b>SAVE</b>
+                <b>{t('save')}</b>
               </button>
               {reviewInventories.length > 0 &&
                 reviewInventories[0].manufacturer && (
@@ -190,10 +191,10 @@ const VerifyInventory = (props) => {
                       width='15'
                       height='15'
                       className='mr-3'
-                      alt='Edit'
+                      alt={t('edit')}
                     />
                     <span>
-                      <b>EDIT</b>
+                    <b>{t('edit')}</b>
                     </span>
                   </button>
                 )}

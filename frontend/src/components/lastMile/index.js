@@ -20,6 +20,7 @@ import {
 
 import Table from "./table";
 const LastMile = (props) => {
+  const { t } = props;
   const dispatch = useDispatch();
   // var lastmile = props.lastMile;
   const lastMileCount = useSelector((state) => {
@@ -46,11 +47,11 @@ const LastMile = (props) => {
   const [warehouseTitle, setwarehouseTitle] = useState("");
   // const [skip, setSkip] = useState(0);
   const headers = {
-    coloumn1: "Beneficiary Details",
-    coloumn2: "ID Proof",
-    coloumn3: "Mobile No",
-    coloumn4: "Product",
-    coloumn5: "Date & Time",
+    coloumn1: t('beneficiary_details'),
+    coloumn2: t('id_proof'),
+    coloumn3: t('mobile_no'),
+    coloumn4: t('product'),
+    coloumn5: t('date_time'),
 
     img1: <img src={patient} width="15" height="20" className="pb-1" alt="" />,
     img2: <img src={idprrof} width="20" height="20" className="pb-1" alt="" />,
@@ -205,7 +206,7 @@ const LastMile = (props) => {
           className="lastmile"
           style={{ position: "relative", left: "-22px", top: "-20px" }}
         >
-          <h1 className="breadcrumb">LAST MILE</h1>
+          <h1 className='breadcrumb'> {t('last_mile')} </h1>
           {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
@@ -225,23 +226,24 @@ const LastMile = (props) => {
               lastMile={props.lastMile}
               count={lastMileCount}
               onPageChange={onPageChange}
+              t={t}
             />
           </div>
         </div>
 
-        <div className="col-xl-3">
-          <div className="dashbar">
-            <div className="d-flex flex-column mb-2 region pt-4 border-none">
-              <div className="wrap form-group row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  Region
+        <div className='col-xl-3'>
+          <div className='dashbar'>
+            <div className='d-flex flex-column mb-2 region pt-4'>
+              <div className='form-group row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('region')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={region === "" ? "Region" : region}
+                    name={region === "" ? t('select')+' '+t('region') : region}
                     groups={regions}
                     onSelect={(item) => {
                       setRegion(item);
@@ -251,16 +253,16 @@ const LastMile = (props) => {
                   />
                 </div>
               </div>
-              <div className="wrap form-group row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  Country
+              <div className='form-group row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('country')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={country === "" ? "Select Country" : country}
+                    name={country === "" ? t('select')+' '+t('country') : country}
                     groups={countries}
                     onSelect={(item) => {
                       setCountry(item);
@@ -270,16 +272,16 @@ const LastMile = (props) => {
                   />
                 </div>
               </div>
-              <div className="wrap form-group row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  State
+              <div className='form-group row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('state')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={state === "" ? "Select State" : state}
+                    name={state === "" ? t('select')+' '+t('state') : state}
                     groups={states}
                     onSelect={(item) => {
                       setstate(item);
@@ -289,16 +291,16 @@ const LastMile = (props) => {
                   />
                 </div>
               </div>
-              <div className="wrap form-group row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  District
+              <div className='form-group row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('district')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={district === "" ? "Select District" : district}
+                    name={district === "" ? t('select')+' '+t('district') : district}
                     groups={cities}
                     onSelect={(item) => {
                       setdistrict(item);
@@ -308,16 +310,16 @@ const LastMile = (props) => {
                   />
                 </div>
               </div>
-              <div className="wrap form-group row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  Location
+              <div className='form-group row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('location')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={location === "" ? "Select Location" : location}
+                    name={location === "" ? t('select')+' '+t('location') : location}
                     groups={locations}
                     onSelect={(item) => {
                       setlocation(item);
@@ -327,16 +329,16 @@ const LastMile = (props) => {
                   />
                 </div>
               </div>
-              <div className="wrap form-group mb-4 row mr-1">
-                <label htmlFor="shipmentId" className="mt-2 col-4 text-left">
-                  Product
+              <div className='form-group mb-4 row mr-1'>
+                <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
+                  {t('product')}
                 </label>
                 <div
                   className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={product === "" ? "Select Product" : product}
+                    name={product === "" ? t('select')+' '+t('product') : product}
                     groups={products}
                     onSelect={(item) => {
                       setproduct(item);
@@ -361,9 +363,9 @@ const LastMile = (props) => {
                 <div className="d-flex text-white mt-2 flex-row ">
                   <ul className="mr-3 text-light">
                     {/* <li className="mb-1">Country ID</li> */}
-                    <li className="mb-3">Country</li>
-                    <li className="mb-3">Location</li>
-                    <li className="mb-3">Location Name</li>
+                    <li className='mb-3'>{t('country')}</li>
+                    <li className='mb-3'>{t('location')}</li>
+                    <li className='mb-3'>{t('location_name')}</li>
                   </ul>
                   <ul className="text-light">
                     {/* <li className="mb-1">{countryId}</li> */}
@@ -373,11 +375,11 @@ const LastMile = (props) => {
                   </ul>
                 </div>
               </div>
-              <div className="panel address searchpanel mb-2 mt-3 ml-1 mr-1">
-                <div className="row">
-                  <img src={pingrey} height="20" width="15" alt=""></img>
-                  <div className="ml-2" style={{ fontSize: "13px" }}>
-                    Address
+              <div className='panel address searchpanel mb-2 mt-3 ml-1 mr-1'>
+                <div className='row'>
+                  <img src={pingrey} height='20' width='15' alt=''></img>
+                  <div className='ml-2' style={{ fontSize: "13px" }}>
+                    {t('address')}
                   </div>
                 </div>
                 <div className="ml-2">{Address}</div>

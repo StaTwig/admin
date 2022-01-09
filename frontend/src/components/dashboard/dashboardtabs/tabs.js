@@ -16,6 +16,7 @@ const Tabs = (props) => {
     warehouseArr,
     setWarehouseArr,
     setDashBarData,
+    t
   } = props;
   const [isClicked, setIsClicked] = useState(false);
 
@@ -33,7 +34,7 @@ const Tabs = (props) => {
           }}
         >
           <div className={visible ? "nav-link text-secondary" : "nav-link"}>
-            Storage Location
+            {t('storage_location')}
           </div>
         </li>
         <li
@@ -47,7 +48,7 @@ const Tabs = (props) => {
           }}
         >
           <div className={visible ? "nav-link" : "nav-link text-secondary"}>
-            Shipment
+            {t('shipment')}
           </div>
         </li>
         <li>
@@ -59,7 +60,7 @@ const Tabs = (props) => {
                 if (isClicked) setIsClicked(false);
                 onWarehouseChange(e.target.value);
               }}
-              placeholder={visible ? "Enter Shipment ID" : "Enter Location ID"}
+              placeholder={visible ? t('enter') + " " + t('shipment_id') : t('enter') + " " + t('location_id')}
               className='form-control search-field'
             />
             <img
@@ -104,7 +105,7 @@ const Tabs = (props) => {
                 setDashVisible(true);
               }}
             >
-              Search Location
+              {t('search') + ' ' + t('location')}
             </button>
           )}
         </li>

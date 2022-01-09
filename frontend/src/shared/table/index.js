@@ -15,7 +15,7 @@ import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Divider from "@material-ui/core/Divider";
 
 const Table = (props) => {
-  const { inventoryDetails, inventoryCount } = props;
+  const { inventoryDetails, inventoryCount, t } = props;
   // const [display, setDisplay] = useState(false);
 
   const handlePageChange = (event, value) => {
@@ -108,13 +108,13 @@ const Table = (props) => {
                     inventory.eventTypePrimary === "RECEIVE" ? (
                       <div className='status secondary-bg bg-success'>
                         {" "}
-                        Received
+                        {t('received')}
                       </div>
                     ) : (
-                      <div className='status secondary-bg bg-warning'>Sent</div>
+                      <div className='status secondary-bg bg-warning'>{t('sent')}</div>
                     )
                   ) : (
-                    <div className='status secondary-bg bg-primary'>Added</div>
+                    <div className='status secondary-bg bg-primary'>{t('added')}</div>
                   )}
                 </div>
                 <div
@@ -148,7 +148,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>Shipment ID</div>
+                                <div className='d-head'>{t('shipment_id')}</div>
                               </TableCell>
                               <div>
                                 <TableCell align='left'>
@@ -160,8 +160,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? "To Organisation"
-                                    : "From Organisation"}
+                                    ? t('to_organisation')
+                                    : t('from_organisation')}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -176,8 +176,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? "To Location"
-                                    : "From Location"}
+                                    ? t('to_location')
+                                    : t('from_location')}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -193,7 +193,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>Mfg Date</div>
+                                <div className='d-head'>{t('mfg_date')}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -206,7 +206,7 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>Exp Date</div>
+                                <div className='d-head'>{t('exp_date')}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -219,7 +219,7 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>Batch</div>
+                                <div className='d-head'>{t('batch')}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -252,7 +252,7 @@ const Table = (props) => {
                                 );
                               }}
                             >
-                              View Shipment
+                              {t('view_shipment')}
                             </button>
                           ) : (
                             ""
@@ -304,7 +304,7 @@ const Table = (props) => {
               className='mx-5 my-1 rounded text-dark'
               style={{ fontWeight: "400", fontSize: "14px" }}
             >
-              Total Records {inventoryCount}{" "}
+              {t('total_records')} {inventoryCount}{" "}
             </span>
           </div>
         )}

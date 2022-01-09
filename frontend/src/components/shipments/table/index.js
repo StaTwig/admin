@@ -11,7 +11,7 @@ import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
   const dispatch = useDispatch();
-  const { shpmnts } = props;
+  const { shpmnts, t } = props;
   const shipments = shpmnts();
   shipments.sort(function (a, b) {
     if (a.id > b.id) {
@@ -44,7 +44,8 @@ function Table(props) {
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
-          isReportDisabled= {props.isReportDisabled}
+          isReportDisabled={props.isReportDisabled}
+          t={t}
         />
         <tbody>
           {/* {shipments.length === 0 && (
@@ -191,16 +192,16 @@ function Table(props) {
 
           {shipments.length === 0 && (
             <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
-              No records found
+              {t('no_records_found')}
             </div>
           )}
 
           {shipments.map((shipment, index) => {
             let statusStyle = "bg-primary";
-            let status = "Shipped";
+            let status = t('shipped');
             if (shipment.status === "RECEIVED") {
               statusStyle = "bg-success";
-              status = "Delivered";
+              status = t('delivered');
             }
             let supplierAddress =
               props.user.emailId === "gmr@statledger.io"
@@ -326,7 +327,7 @@ function Table(props) {
                         src={location}
                         alt="Location"
                       />
-                      <span className="pl-1 text-white">Track</span>
+                      <span className="pl-1 text-white">{t('track')}</span>
                     </button>
                     <Link
                       to={`/${
@@ -340,7 +341,7 @@ function Table(props) {
                         borderRadius: "6px",
                       }}
                     >
-                      View
+                      {t('view')}
                     </Link>
                   </div>
                 </td>
@@ -362,7 +363,7 @@ function Table(props) {
             className="mx-5 my-1 rounded text-dark"
             style={{ fontSize: "14px" }}
           >
-            Total Records {props.count}{" "}
+            {t('total_records')} {props.count}{" "}
           </span>
         </div>
       )}

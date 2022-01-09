@@ -11,6 +11,7 @@ import { formatDate } from "../../utils/dateHelper";
 import Batch from "../../assets/icons/batch.png";
 
 const ViewInventory = (props) => {
+  const { t } = props;
   const [data, setData] = useState([]);
   const { inventories } = props;
   const [more, setMore] = useState([]);
@@ -32,14 +33,14 @@ const ViewInventory = (props) => {
   return (
     <div className="viewinventory">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">PRODUCT LIST</h1>
+        <h1 className="breadcrumb">{t('product_list')}</h1>
       </div>
       <div className="row">
         <div className="p-2 full-width-ribbon">
           <div className="row filter">
             <div className="col-3">
               <img src={Product} width="16" height="16" alt="Product Name" />
-              <span className="ml-2 font-small">Product Name</span>
+              <span className="ml-2 font-small">{t('product_name')}</span>
             </div>
             <div className="col-3">
               <img
@@ -48,15 +49,15 @@ const ViewInventory = (props) => {
                 height="16"
                 alt="Product Category"
               />
-              <span className="ml-2 font-small">Product Category</span>
+              <span className="ml-2 font-small">{t('product_category')}</span>
             </div>
             <div className="col-2">
               <img src={user} width="16" height="16" alt="Manufacturer" />
-              <span className="ml-2 font-small">Manufacturer</span>
+              <span className="ml-2 font-small">{t('manufacturer')}</span>
             </div>
             <div className="col-2">
               <img src={Quantity} width="25" height="16" alt="Quantity" />
-              <span className="ml-2 font-small">Quantity</span>
+              <span className="ml-2 font-small">{t('quantity')}</span>
             </div>
           </div>
         </div>
@@ -90,7 +91,7 @@ const ViewInventory = (props) => {
                         }
                         className="btn btn-outline-primary"
                       >
-                        Show {more[i] ? `less` : `more`}
+                        {t('show')} {more[i] ? t('less') : t('more')}
                       </button>
                     </div>
                   ) : (
@@ -102,7 +103,7 @@ const ViewInventory = (props) => {
                         }
                         className="btn btn-outline-primary"
                       >
-                        Show {more[i] ? `less` : `more`}
+                          {t('show')} {more[i] ? t('less') : t('more')}
                       </button>
                     </div>
                   )}
@@ -119,7 +120,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Product Name"
                         />
-                        <span className="ml-2 font-small">Product Name</span>
+                        <span className="ml-2 font-small">{t('product_name')}</span>
                       </div>
                       <div className="col">
                         <img
@@ -129,7 +130,7 @@ const ViewInventory = (props) => {
                           alt="Product Category"
                         />
                         <span className="ml-2 font-small">
-                          Product Category
+                          {t('product_category')}
                         </span>
                       </div>
                       <div className="col">
@@ -139,7 +140,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Manufacturer"
                         />
-                        <span className="ml-2 font-small">Manufacturer</span>
+                        <span className="ml-2 font-small">{t('manufacturer')}</span>
                       </div>
                       <div className="col p-0">
                         <img
@@ -148,7 +149,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Quantity"
                         />
-                        <span className="ml-2 font-small">Quantity</span>
+                        <span className="ml-2 font-small">{t('quantity')}</span>
                       </div>
                       <div className="col">
                         <img
@@ -157,7 +158,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Batch Number"
                         />
-                        <span className="ml-2 font-small">Batch Number</span>
+                        <span className="ml-2 font-small">{t('batch_no')}</span>
                       </div>
                       <div className="col pl-0">
                         <img
@@ -166,7 +167,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Mfg Date"
                         />
-                        <span className="ml-1 font-small">Mfg Date</span>
+                        <span className="ml-1 font-small">{t('mfg_date')}</span>
                       </div>
                       <div className="col p-0">
                         <img
@@ -175,7 +176,7 @@ const ViewInventory = (props) => {
                           height="16"
                           alt="Exp Date"
                         />
-                        <span className="ml-1 font-small">Exp Date</span>
+                        <span className="ml-1 font-small">{t('exp_date')}</span>
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import quantity from "../../../assets/icons/TotalInventoryAdded_2.png";
 import "./style.scss";
 
 const EditTable = (props) => {
+  const { t } = props;
   return (
     <div className='table productTable mb-0 mt-1'>
       <div className='d-flex flex-column'>
@@ -15,28 +16,28 @@ const EditTable = (props) => {
             style={{ position: "relative", left: "-40px" }}
           >
             <img src={Package} width='16' height='16' alt='' />
-            <span className='ml-2 text-muted'>Product Category*</span>
+            <span className='ml-2 text-muted'>{t('product_category')}*</span>
           </div>
           <div
             className='col-3 theader text-center'
             style={{ position: "relative", left: "-40px" }}
           >
             <img src={Package} width='16' height='16' alt='' />
-            <span className='ml-2 text-muted'>Product*</span>
+            <span className='ml-2 text-muted'>{t('product')}*</span>
           </div>
           <div
             className='col theader text-center ml-2'
             style={{ position: "relative", left: "10px" }}
           >
             <img src={mon} width='16' height='16' alt='' />
-            <span className='ml-2 text-muted'>Manufacturer</span>
+            <span className='ml-2 text-muted'>{t('manufacturer')}</span>
           </div>
           <div
             className='col theader text-center mr-5'
             style={{ position: "relative", left: "0px" }}
           >
             <img src={quantity} width='25' height='16' alt='' />
-            <span className='ml-2 text-muted'>Quantity*</span>
+            <span className='ml-2 text-muted'>{t('quantity')}*</span>
           </div>
         </div>
         <div className=''>

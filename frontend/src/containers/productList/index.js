@@ -8,8 +8,10 @@ import {
   resetInventories,
   getInventoryByBatchNumber,
 } from "../../actions/inventoryActions";
+import { useTranslation } from 'react-i18next';
 
 const ProductListContainer = (props) => {
+const { t, i18n } = useTranslation();
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
@@ -41,14 +43,15 @@ const ProductListContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
           <ProductList
             inventories={inventories}
             loadMore={loadMore}
             onLoadMore={onLoadMore}
+            t={t}
             {...props}
           />
         </div>

@@ -3,11 +3,12 @@ import { formatDate } from "../../utils/dateHelper";
 import "./style.scss";
 
 const ShipmentSummary = (props) => {
+  const { t } = props;
   let statusStyle = "bg-primary";
-  let status = "Shipped";
+  let status = t("shipped");
   if (props.shipments.status === "RECEIVED") {
     statusStyle = "bg-success";
-    status = "Delivered";
+    status = t("delivered");
   }
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
@@ -15,13 +16,13 @@ const ShipmentSummary = (props) => {
     <div className='panel commonpanle'>
       <div className='d-flex flex-row  '>
         <ul className='mr-1 elemens w-50'>
-          <li className='mb-1 text-secondary'>Shipment ID</li>
+          <li className='mb-1 text-secondary'>{t("shipment_id")}</li>
           {props.shipments.poId && (
-            <li className='mb-1 text-secondary'>PO ID</li>
+            <li className='mb-1 text-secondary'>{t("po_id")}</li>
           )}
-          <li className='mb-1 text-secondary'>Shipment Date</li>
-          <li className='mb-1 text-secondary'>From</li>
-          <li className='mb-1 text-secondary'>To</li>
+          <li className='mb-1 text-secondary'>{t("shipment_date")}</li>
+          <li className='mb-1 text-secondary'>{t("from")}</li>
+          <li className='mb-1 text-secondary'>{t("to")}</li>
         </ul>
         <ul className='elemens'>
           <li className='mb-1'>{props.shipments.id}</li>

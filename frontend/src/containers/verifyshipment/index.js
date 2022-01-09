@@ -2,15 +2,17 @@ import React from "react";
 import VerifyShipment from "../../components/verifyshipment";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
+import { useTranslation } from 'react-i18next';
 
 const VerifyShipmentContainer = (props) => {
+const { t, i18n } = useTranslation();
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <VerifyShipment {...props} />
+          <VerifyShipment {...props} t={t}/>
         </div>
       </div>
     </div>

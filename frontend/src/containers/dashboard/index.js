@@ -11,10 +11,12 @@ import {
 } from "../../actions/inventoryActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { getViewShipment } from "../../actions/shipmentActions";
+import { useTranslation } from 'react-i18next';
 
 const DashBoard = React.lazy(() => import("../../components/dashboard"));
 
 const DashBoardContainer = (props) => {
+  const { t, i18n } = useTranslation();
   const [dashVisible, setDashVisible] = useState(false);
   const [content, setContent] = useState(true);
   const [dashBarData, setDashBarData] = useState({});
@@ -64,9 +66,9 @@ const DashBoardContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t} />
         <Suspense fallback={<div>Loading ...</div>}>
           <div className='content'>
             <DashBoard
@@ -85,6 +87,8 @@ const DashBoardContainer = (props) => {
               setDashBarData={setDashBarData}
               warehouses={wareHouses}
               shipmentIds={shipmentIds}
+              t={t}
+              lang={i18n.resolvedLanguage}
             />
           </div>
           {dashVisible && (
@@ -103,6 +107,7 @@ const DashBoardContainer = (props) => {
               setWarehouseArr={setWarehouseArr}
               warehouses={wareHouses}
               shipmentIds={shipmentIds}
+              t={t}
             />
           )}
         </Suspense>
