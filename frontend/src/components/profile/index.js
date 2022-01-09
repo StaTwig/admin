@@ -786,7 +786,7 @@ class Profile extends React.Component {
                                         }
                                       </span>
                                     ) : null}
-                                  </div>
+                                      </div>*/}
                                   <div className="pin-code">
                                     {t('pincode')} :{" "}
                                     {this.state.warehouseLocations[id]
@@ -845,7 +845,7 @@ class Profile extends React.Component {
                     className="buttonS btn-orange btn"
                     onClick={this.onSubmit}
                   >
-                    {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
+                    {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}>  */}
                     <span>{t('save')}</span>
                   </button>
                 </div>

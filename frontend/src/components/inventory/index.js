@@ -243,10 +243,10 @@ const Inventory = (props) => {
   const setInventoryProductCategoryFilterOnSelect = async (
     categoryFilterSelected
   ) => {
-    console.log(
-      "setInventoryProductCategoryFilterOnSelect =========>",
-      categoryFilterSelected
-    );
+    // console.log(
+    //   "setInventoryProductCategoryFilterOnSelect =========>",
+    //   categoryFilterSelected
+    // );
     setProductCategoryFilter(categoryFilterSelected);
     // setSkip(0);
     dispatch(
