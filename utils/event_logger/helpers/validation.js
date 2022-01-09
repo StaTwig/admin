@@ -37,13 +37,10 @@ const eventSchema = Joi.object().keys({
 
 function validate(data) {
   const result = eventSchema.validate(data);
-  const { value, error } = result;
-  const valid = error == null;
-  if (!valid) {
-    console.log(error);
+  if (result?.error) {
+    console.log(result.error);
     return false;
   } else {
-    console.log("success");
     return true;
   }
 }

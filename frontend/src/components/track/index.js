@@ -138,7 +138,7 @@ const Track = (props) => {
                       placeholder='Enter Order ID or Serial No. or Shipment No. or Transit No.'
                       onChange={onSearchChange}
                       //className="form-control border border-primary search-field"
-                      className='form-control search-field border-8'
+                      className='form-control border-blue search-field border-8'
                     />
                     <img
                       src={searchingIcon}

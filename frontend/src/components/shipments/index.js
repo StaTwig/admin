@@ -339,11 +339,11 @@ const ShipmentAnalytic = (props) => {
     var nameOfFile;
 
     if(visible=='one'){
-      nameOfFile = 'shipmentoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+      nameOfFile = 'shipmentinbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
       // console.log(name, name);
     }
     else if(visible=='two'){
-      nameOfFile = 'shipmentinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+      nameOfFile = 'shipmentoutbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
     }
     getExportFile(url, value).then((response) => {
       console.log(response);

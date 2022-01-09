@@ -96,7 +96,7 @@ const ReviewOrder = (props) => {
       <div className=''>
         <div className=' p-3 m-3 bg-white shadow'>
           <span
-            className='mt-5 ml-3 font-weight-bold'
+            className='mt-5 font-weight-bold'
             style={{ color: "black" }}
           >
             {t('product_details')}

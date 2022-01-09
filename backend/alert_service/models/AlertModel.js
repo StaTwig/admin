@@ -26,14 +26,22 @@ const AlertSchema = new mongoose.Schema(
       },
     ],
     alertMode: {
-      mobile: Boolean,
-      default: false,
-      email: Boolean,
-      default: true,
-      telegram: Boolean,
-      default: false,
-      web_push: Boolean,
-      default: false,
+      mobile: {
+        type: Boolean,
+        default: false,
+      },
+      email: {
+        type: Boolean,
+        default: true,
+      },
+      telegram: {
+        type: Boolean,
+        default: false,
+      },
+      web_push: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
   { timestamps: true }

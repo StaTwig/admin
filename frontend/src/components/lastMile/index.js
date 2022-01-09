@@ -53,12 +53,12 @@ const LastMile = (props) => {
     coloumn4: t('product'),
     coloumn5: t('date_time'),
 
-    img1: <img src={patient} width='15' height='20' className='pb-1' alt='' />,
-    img2: <img src={idprrof} width='20' height='20' className='pb-1' alt='' />,
-    img3: <img src={mobile} width='16' height='25' className='pb-1' alt='' />,
-    img4: <img src={Product} width='20' height='22' className='pb-1' alt='' />,
+    img1: <img src={patient} width="15" height="20" className="pb-1" alt="" />,
+    img2: <img src={idprrof} width="20" height="20" className="pb-1" alt="" />,
+    img3: <img src={mobile} width="16" height="25" className="pb-1" alt="" />,
+    img4: <img src={Product} width="20" height="22" className="pb-1" alt="" />,
     img5: (
-      <img src={Date_time} width='19' height='22' className='pb-1' alt='' />
+      <img src={Date_time} width="19" height="22" className="pb-1" alt="" />
     ),
   };
 
@@ -203,7 +203,7 @@ const LastMile = (props) => {
     <div>
       <div>
         <div
-          className='lastmile'
+          className="lastmile"
           style={{ position: "relative", left: "-22px", top: "-20px" }}
         >
           <h1 className='breadcrumb'> {t('last_mile')} </h1>
@@ -212,14 +212,14 @@ const LastMile = (props) => {
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
 </button> */}
-          <div className='row'>
-            <div className='col tab' style={{ width: "76%" }}>
-              <div className=''>
-                <TableFilter data={headers} fb='85%' />
+          <div className="row">
+            <div className="col tab" style={{ width: "76%" }}>
+              <div className="">
+                <TableFilter data={headers} fb="85%" />
               </div>
             </div>
           </div>
-          <div className='ribben-space' style={{ width: "76%" }}>
+          <div className="ribben-space" style={{ width: "76%" }}>
             <Table
               {...props}
               cardFill={cardFill}
@@ -239,7 +239,7 @@ const LastMile = (props) => {
                   {t('region')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -249,6 +249,7 @@ const LastMile = (props) => {
                       setRegion(item);
                       onFilter("region", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
@@ -257,7 +258,7 @@ const LastMile = (props) => {
                   {t('country')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -267,6 +268,7 @@ const LastMile = (props) => {
                       setCountry(item);
                       onFilter("country", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
@@ -275,7 +277,7 @@ const LastMile = (props) => {
                   {t('state')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -285,6 +287,7 @@ const LastMile = (props) => {
                       setstate(item);
                       onFilter("state", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
@@ -293,7 +296,7 @@ const LastMile = (props) => {
                   {t('district')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -303,6 +306,7 @@ const LastMile = (props) => {
                       setdistrict(item);
                       onFilter("city", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
@@ -311,7 +315,7 @@ const LastMile = (props) => {
                   {t('location')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -321,6 +325,7 @@ const LastMile = (props) => {
                       setlocation(item);
                       onFilter("location", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
@@ -329,7 +334,7 @@ const LastMile = (props) => {
                   {t('product')}
                 </label>
                 <div
-                  className='form-control col'
+                  className="form-control col"
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
@@ -339,12 +344,13 @@ const LastMile = (props) => {
                       setproduct(item);
                       onFilter("product", item);
                     }}
+                    labelType="lastmile"
                   />
                 </div>
               </div>
             </div>
-            <div className='mainsearchwarehouse'>
-              <div className=' panel  mb-3 searchpanel'>
+            <div className="mainsearchwarehouse">
+              <div className=" panel  mb-3 searchpanel">
                 <div>{warehouseTitle}</div>
                 {/* <div>
                         <u>
@@ -354,18 +360,18 @@ const LastMile = (props) => {
                             </small>
                         </u>
                     </div> */}
-                <div className='d-flex text-white mt-2 flex-row '>
-                  <ul className='mr-3 text-light'>
+                <div className="d-flex text-white mt-2 flex-row ">
+                  <ul className="mr-3 text-light">
                     {/* <li className="mb-1">Country ID</li> */}
                     <li className='mb-3'>{t('country')}</li>
                     <li className='mb-3'>{t('location')}</li>
                     <li className='mb-3'>{t('location_name')}</li>
                   </ul>
-                  <ul className='text-light'>
+                  <ul className="text-light">
                     {/* <li className="mb-1">{countryId}</li> */}
-                    <li className='mb-3'>{locationCountry}</li>
-                    <li className='mb-3'>{locationState}</li>
-                    <li className='mb-3'>{locationName}</li>
+                    <li className="mb-3">{locationCountry}</li>
+                    <li className="mb-3">{locationState}</li>
+                    <li className="mb-3">{locationName}</li>
                   </ul>
                 </div>
               </div>
@@ -376,7 +382,7 @@ const LastMile = (props) => {
                     {t('address')}
                   </div>
                 </div>
-                <div className='ml-2'>{Address}</div>
+                <div className="ml-2">{Address}</div>
               </div>
             </div>
           </div>

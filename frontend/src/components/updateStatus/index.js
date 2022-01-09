@@ -75,6 +75,10 @@ const UpdateStatus = (props) => {
 
   const updateStatus = async (values) => {
     const { shipmentId, comments, updateStatusLocation } = values;
+
+    if(updateStatusLocation==""){
+      setErrorMessage('Require Update Status Location');
+    }
     const data = {
       id: shipmentId,
       shipmentUpdates: {
@@ -240,19 +244,24 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control mb-2"
+                          // className="form-control mb-2"
+                          className={`form-control mb-2 ${
+                            values.updateStatusLocation==""
+                              ? "border-danger"
+                              : ""
+                          }`}
                           name="updateStatusLocation"
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
+                          placeholder={` ${values.updateStatusLocation==""?'Required':''}`}
                         />
-                      </div>
-                      {/* {errors.updateStatusLocation &&
-                        touched.updateStatusLocation && (
-                          <span className="error-msg text-danger-US row justify-content-end col-8">
+                        {/* {errors.updateStatusLocation && touched.updateStatusLocation && (
+                          <label className="error-msg text-danger mb-1">
                             {errors.updateStatusLocation}
-                          </span>
+                          </label>
                         )} */}
+                      </div>
                     </div>
 
                       <h6 className="poheads potext m-4">{t('comment')}</h6>
@@ -530,6 +539,7 @@ const UpdateStatus = (props) => {
                         {t('cancel')}
                     </button>
                     <button
+                      disabled={!values.updateStatusLocation}
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >

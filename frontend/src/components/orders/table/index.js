@@ -141,7 +141,7 @@ function Table(props) {
                     </p>
                   </div>
                 </td>
-                <td>
+                <td className="d-flex align-items-center justify-content-center">
                   <div
                     className={`status secondary-bg ${statusStyle} py-1`}
                     style={{
@@ -157,7 +157,7 @@ function Table(props) {
                 <td>
                   <Link
                     to={`/vieworder/${order.id}`}
-                    className="button btn-view-link px-2 py-1"
+                    className="button btn-view-link px-4 py-1"
                     style={{
                       border: "1px solid #007bff",
                       borderRadius: "6px",

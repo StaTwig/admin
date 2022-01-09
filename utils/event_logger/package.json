@@ -8,7 +8,9 @@
     "joi": "^17.4.0",
     "mongoose": "^6.1.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^8.6.0"
+  },
   "scripts": {
     "test": "npm test"
   },
