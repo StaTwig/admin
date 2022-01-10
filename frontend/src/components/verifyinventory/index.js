@@ -42,7 +42,7 @@ const VerifyInventory = (props) => {
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber,
-        unitOfMeasure:inventory.unitOfMeasure.name
+        unitOfMeasure:inventory.unitofMeasure.name
       };
     });
 
@@ -51,7 +51,7 @@ const VerifyInventory = (props) => {
       products: postData,
     });
     setOpenCreatedInventory(true);
-    if (result.status === 1) {
+    if (result.success) {
       setSuccessMessage(result.message);
     } else {
       setErrorMessage(result.data.message);
@@ -133,7 +133,7 @@ const VerifyInventory = (props) => {
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
-                  {reviewInventory['unitOfMeasure.name']}
+                  {reviewInventory.unitofMeasure.name}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>
