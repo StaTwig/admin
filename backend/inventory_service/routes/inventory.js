@@ -152,3 +152,5 @@ router.post(
   upload.single("excel"),
   InventoryController.addInventoriesFromExcel
 );
+
+module.exports = router;
