@@ -47,6 +47,7 @@ function Table(props) {
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
           isReportDisabled={props.isReportDisabled}
           t={t}
+          filterPage="orders"
         />
         <tbody>
           {orders.length === 0 && (
