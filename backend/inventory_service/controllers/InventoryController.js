@@ -2345,8 +2345,8 @@ exports.getBatchNearExpiration = [
     try {
       let warehouseId;
       req.query.warehouseId
-        ? (warehouseId = req.user.warehouseId)
-        : (warehouseId = req.query.warehouseId);
+        ? (warehouseId = req.query.warehouseId)
+        : (warehouseId = req.user.warehouseId);
 
       const today = new Date();
       const nextMonth = new Date();
@@ -2409,8 +2409,8 @@ exports.getBatchExpired = [
     try {
       let warehouseId;
       req.query.warehouseId
-        ? (warehouseId = req.user.warehouseId)
-        : (warehouseId = req.query.warehouseId);
+        ? (warehouseId = req.query.warehouseId)
+        : (warehouseId = req.user.warehouseId);
       const warehouse = await WarehouseModel.findOne({ id: warehouseId });
       if (warehouse) {
         const result = await AtomModel.aggregate([
@@ -2696,8 +2696,8 @@ exports.searchProduct = [
         if (permissionResult.success) {
           const { productName, productType } = req.query;
           req.query.warehouseId
-            ? (warehouseId = req.user.warehouseId)
-            : (warehouseId = req.query.warehouseId);
+            ? (warehouseId = req.query.warehouseId)
+            : (warehouseId = req.user.warehouseId);
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};

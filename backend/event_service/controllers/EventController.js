@@ -80,7 +80,7 @@ exports.deleteEventById = [
         });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -290,7 +290,7 @@ exports.getAllEventsWithFilter = [
           let inventoryRecords = [];
           await Promise.all(
             eventRecords.map(async function (event) {
-              console.log(event);
+              // console.log(event);
               let eventRecord = JSON.parse(JSON.stringify(event));
               let payloadRecord = event.payloadData;
               eventRecord[`inventoryQuantity`] =
@@ -321,7 +321,7 @@ exports.getAllEventsWithFilter = [
           });
         });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -343,7 +343,7 @@ exports.fetchProductDetailsList = [
         );
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
