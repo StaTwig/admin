@@ -27,15 +27,16 @@ const EditRow = (props) => {
     products,
     check,
     warehouseID,
+    t
   } = props;
 
   const headers = {
-    coloumn1: "Product Name",
-    coloumn2: "Manufacturer",
-    coloumn3: "Batch Number",
-    coloumn4: "Mfg Date",
-    coloumn5: "Exp Date",
-    coloumn6: "Quantity",
+    coloumn1: t('product_name'),
+    coloumn2: t('manufacturer'),
+    coloumn3: t('batch_no'),
+    coloumn4: t("mfg_date"),
+    coloumn5: t("exp_date"),
+    coloumn6: t("quantity"),
 
     img1: <img src={Product} width="15" height="15" alt="" />,
     img2: <img src={user} width="15" height="15" alt="" />,
@@ -225,7 +226,7 @@ const EditRow = (props) => {
                     className="no-border"
                     placeholder={
                       <div className="select-placeholder-text">
-                        Select Product Category
+                        {t('select_product_category')}
                       </div>
                     }
                     value={
@@ -267,7 +268,7 @@ const EditRow = (props) => {
                     placeholder={
                       <div className="select-placeholder-text">
                         {" "}
-                        Product Name{" "}
+                        {t('product_name')}
                       </div>
                     }
                     value={
@@ -296,7 +297,7 @@ const EditRow = (props) => {
           {prod.manufacturer ? (
             prod.manufacturer
           ) : (
-            <div className="select-placeholder-text">Manufacturer</div>
+              <div className="select-placeholder-text">{t('manufacturer')}</div>
           )}
         </div>
 
@@ -305,7 +306,7 @@ const EditRow = (props) => {
             <input
               className="form-control text-center"
               id="checker"
-              placeholder="Quantity"
+              placeholder={t('quantity')}
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
@@ -321,7 +322,7 @@ const EditRow = (props) => {
           {prod.unitofMeasure && prod.unitofMeasure.name ? (
             <div>{prod.unitofMeasure.name}</div>
           ) : (
-            <div className="placeholder_id">Unit</div>
+            <div className="placeholder_id">{t('unit')}</div>
           )}
         </div>
 
@@ -330,7 +331,7 @@ const EditRow = (props) => {
             <input
               className="form-control text-center"
               id="checker"
-              placeholder="Batch number"
+              placeholder={t('batch_no')}
               value={prod.batchNumber}
               onChange={(e) => {
                 handleBatchChange(e.target.value, index);
@@ -352,7 +353,7 @@ const EditRow = (props) => {
             <div
               style={{ position: "relative", fontSize: "12px", left: "-6px" }}
             >
-              Fetch
+              {t('fetch')}
             </div>
           </button>
           <div className="">
@@ -360,7 +361,7 @@ const EditRow = (props) => {
               <div>
                 <Modal
                   close={closeModal}
-                  title="FETCH SERIAL NUMBERS"
+                  title={t('fetch')+' '+t('serial_numbers')}
                   size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                 >
                   <div className="">
@@ -369,7 +370,7 @@ const EditRow = (props) => {
                   <div className="overflow">
                     {batches.length === 0 ? (
                       <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">
-                        No records found
+                        {t('no_records_found')}
                       </div>
                     ) : (
                       batches.map((product, index) => (

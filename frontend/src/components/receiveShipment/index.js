@@ -17,6 +17,7 @@ import ModalImage from "react-modal-image";
 import ShipmentFailPopUp from "../newShipment/shipmentFailPopUp";
 
 const ReceiveShipment = (props) => {
+  const { t } = props;
   // let shipmentDetails = props.trackData.shipmentDetails;
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
@@ -46,8 +47,6 @@ const ReceiveShipment = (props) => {
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
-
-  console.log(comment);
 
   useEffect(() => {
     async function fetchairwayBill() {
@@ -199,14 +198,14 @@ const ReceiveShipment = (props) => {
     <div className="receiveShipment">
       <div className="d-flex flex-column justify-content-between">
         <div className="d-flex flex-row justify-content-between">
-          <h1 className="breadcrumb mt-3">RECEIVE SHIPMENT</h1>
+          <h1 className="breadcrumb mt-3">{t('receive_shipment')}</h1>
           <div className="d-flex flex-row justify-content-between">
             <div>
               <button
                 className="btn btn-outline-primary mr-4 mt-3"
                 onClick={() => props.history.push(`/viewshipment/${id}`)}
               >
-                Cancel
+                {t('cancel')}
               </button>
             </div>
             <div>
@@ -222,7 +221,7 @@ const ReceiveShipment = (props) => {
                   className="mr-2 mb-1"
                   alt="Return Shipment"
                 />
-                <span>Receive Shipment</span>
+                <span>{t('receive_shipment')}</span>
               </button>
             </div>
 
@@ -245,7 +244,7 @@ const ReceiveShipment = (props) => {
         <div className="d-flex  flex-auto">
           <div className="panel commonpanle mr-4" style={{ width: "32%" }}>
             <div className="form-group pt-2">
-              <label className="mb-1 text-secondary pt-2">Shipment ID:</label>
+              <label className="mb-1 text-secondary pt-2">{t('shipment_id')}:</label>
               <input
                 name="id"
                 type="text"
@@ -261,7 +260,7 @@ const ReceiveShipment = (props) => {
             style={{ width: "32%", height: "100px" }}
           >
             <div className="form-group pt-2">
-              <label className="text-secondary pt-2">Transit No.</label>
+              <label className="text-secondary pt-2">{t('transit_no')}.</label>
               {/* <div className="mb-2" style={{width: 300 }}>
                         <Autocomplete 
                           {...defaultProps}
@@ -295,17 +294,18 @@ const ReceiveShipment = (props) => {
         <div className="col-sm-4">
           {/* <h6 className="heading mb-3">SHIPMENT SUMMARY</h6> */}
           {/* <ShipmentSummary shipments={tracking} /> */}
-          <h6 className="heading mt-3 mb-3 ml-3">Shipment Details</h6>
+          <h6 className="heading mt-3 mb-3 ml-3">{t('shipment_details')}</h6>
           <ShipmentDetails
             shipments={tracking}
             setMenuShip={setMenuShip}
             menuShip={menuShip}
             highLight={highLight}
             setHighLight={setHighLight}
+            t={t}
           />
         </div>
         <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>
+          <h6 className="heading mt-3 mb-3 ml-3">{t('comment')}</h6>
           <div className="col panel commonpanle">
           <div className=" pt-2 pb-2 d-flex row">
                         <span
@@ -318,7 +318,7 @@ const ReceiveShipment = (props) => {
                             count === "r1" && "comment-active"
                           }`}
                         >
-                          Damaged in transit
+                {t('damaged_in_transit')}
                         </span>
                         <span
                           onClick={() => {
@@ -330,7 +330,7 @@ const ReceiveShipment = (props) => {
                             count === "r2" && "comment-active"
                           }`}
                         >
-                          Miscount
+                {t('miscount')}
                         </span>
                         <span
                           onClick={() => {
@@ -342,7 +342,7 @@ const ReceiveShipment = (props) => {
                             count === "r3" && "comment-active"
                           }`}
                         >
-                          Shipment Stolen
+                {t('shipment_stolen')}
                         </span>
                         <span
                           onClick={() => {
@@ -354,7 +354,7 @@ const ReceiveShipment = (props) => {
                             count === "r4" && "comment-active"
                           }`}
                         >
-                          Wrong Shipment
+                {t('wrong_shipment')}
                         </span>
                         <span
                           onClick={() => {
@@ -366,7 +366,7 @@ const ReceiveShipment = (props) => {
                             count === "r5" && "comment-active"
                           }`}
                         >
-                          Other
+                {t('other')}
                         </span>
                       </div>
             <div
@@ -390,7 +390,7 @@ const ReceiveShipment = (props) => {
                   size="40"
                   cols="120"
                   rows="7"
-                  placeholder="Enter Comment"
+                  placeholder={t('enter') + ' ' + t('comment')}
                   value={comment}
                 />
               )}
@@ -400,7 +400,7 @@ const ReceiveShipment = (props) => {
         </div>
         <div className="col-sm-4">
           <div className="row justify-content-between">
-            <h6 className="heading mt-3 mb-3 ml-4">Upload Image</h6>
+            <h6 className="heading mt-3 mb-3 ml-4"> {t('upload_image')}e</h6>
             <button
               className="btn btn-orange font-weight-bold mr-4 pl-4 pr-4"
               onClick={uploadPhoto}
@@ -411,7 +411,7 @@ const ReceiveShipment = (props) => {
                     width="35"
                     height="17"
                   /> */}
-              <span style={{ fontSize: "15px" }}>Upload</span>
+              <span style={{ fontSize: "15px" }}> {t('upload')}</span>
             </button>
           </div>
           <div className="upload bg-white panel commonpanle mt-0">
@@ -443,7 +443,7 @@ const ReceiveShipment = (props) => {
                   />
                 </div>
                 <button type="button" className="btn btn-link float-right">
-                  View All
+                  {t('view_all')}
                 </button>
                 {/* <div className="row">
                                 {photoUrl >
@@ -476,7 +476,7 @@ const ReceiveShipment = (props) => {
                     alt="Upload"
                   />
                   <label className="mt-3">
-                    Drag and drop files here{" "}
+                      {t('drag_drop') + " " + t("files_here")}{" "}
                     <input type="file" className="select" onChange={setFile} />{" "}
                   </label>
                 </div>
@@ -484,7 +484,7 @@ const ReceiveShipment = (props) => {
                   className="row mb-3"
                   style={{ margin: "auto", display: "table" }}
                 >
-                  OR
+                    {t('or')}
                 </div>
                 <div
                   className="row"
@@ -499,7 +499,7 @@ const ReceiveShipment = (props) => {
                     className="btn btn-primary"
                     style={{ margin: 0, height: "max-content" }}
                   >
-                    Browse Files
+                      {t('browse_files')}
                     <input
                       type="file"
                       multiple={true}
@@ -516,7 +516,7 @@ const ReceiveShipment = (props) => {
 
       <div className="row">
         <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3 ml-3">Product Details</h6>
+          <h6 className="heading mt-3 mb-3 ml-3"> {t('product_deetails')}</h6>
         </div>
       </div>
       <div className="row">
@@ -529,6 +529,7 @@ const ReceiveShipment = (props) => {
           setDelivered={setDelivered}
           setIndex={setIndex}
           onQuantityChange={(index, value) => qtyChange(index, value)}
+          t={t}
         />
       </div>
       {receiveShipmentModal && (

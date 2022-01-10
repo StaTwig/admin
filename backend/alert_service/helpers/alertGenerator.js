@@ -2,6 +2,7 @@ const Alert = require("../models/AlertModel");
 const Atoms = require("../models/AtomsModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const OrderModel = require("../models/RecordModel");
 const {
   alertMobile,
   alertEmail,
@@ -9,7 +10,7 @@ const {
   pushNotification,
 } = require("./alertSender");
 const moment = require("moment");
-const { alertListener } = require("./listener");
+const { alertListener, inventoryListener } = require("./listener");
 
 async function processShipmentEvents(event) {
   try {
@@ -96,10 +97,9 @@ async function generateAlert(event) {
 
 async function checkProductExpiry() {
   try {
-    let params = {
+    const params = {
       "attributeSet.expDate": { $lt: moment().format() },
     };
-    console.log(params);
     for await (const product of Atoms.find({
       ...params,
     })) {
@@ -139,15 +139,15 @@ async function checkProductNearExpiry() {
 }
 
 async function productExpired(productId, quantity, owner, expired) {
-  for (inventoryId of owner) {
-    for await (const inventory of WarehouseModel.find({
+  for (const inventoryId of owner) {
+    for await (const warehouse of WarehouseModel.find({
       warehouseInventory: inventoryId,
     })) {
       productExpiryEvent(
         productId,
         quantity,
-        inventory.id,
-        inventory.organisationId,
+        warehouse.id,
+        warehouse.organisationId,
         expired
       );
     }
@@ -158,41 +158,30 @@ async function productExpiryEvent(
   productId,
   quantity,
   warehouse,
-  organisation,
+  organization,
   expired
 ) {
-  for await (const user of EmployeeModel.find({ warehouseId: warehouse })) {
-    eventData = {
-      actorOrgId: organisation,
-      eventTypePrimary: expired,
-      eventTypeDesc: "INVENTORY",
-      quantity: quantity,
-      transactionId: productId,
-    };
-    console.log("ALERTING USER", user);
-    pushNotification(eventData, user.id, "ALERT", productId);
-    alertPushNotification(eventData, user.id);
-    let alertData = Alert.findOne({ username: user.id });
-    // alertEmail(eventData,"gmail@sanathswaroop.com")
-    // alertMobile(eventData,"+919392848111")
-    if (alertData?.alertMode?.mobile == true)
-      alertMobile(eventData, user.phoneNumber);
-    if (alertData?.alertMode?.email == true)
-      alertEmail(eventData, user.emailId);
-  }
+  const eventData = {
+    actorOrgId: organization,
+    actorWarehouseId: warehouse,
+    eventTypePrimary: expired,
+    eventTypeDesc: "INVENTORY",
+    quantity: quantity,
+    transactionId: productId,
+  };
+  inventoryListener(eventData);
 }
 
 async function ordersPending() {
   try {
-    for await (const order of OrderModel.find({
-      poStatus: "CREATED",
-    })) {
-      let event = {
+    const orders = await OrderModel.find({ poStatus: "CREATED" });
+    for (const order of orders) {
+      const event = {
         transactionId: order.id,
         actorOrgId: order.supplier.supplierOrganisation,
         secondaryOrgId: order.customer.customerOrganisation,
-        eventTypePrimary: "ORDER",
-        eventTypeDesc: "PENDING",
+        eventTypePrimary: "PENDING",
+        eventTypeDesc: "ORDER",
       };
       alertListener(event);
     }

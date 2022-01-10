@@ -81,22 +81,6 @@ services:
       - "traefik.http.routers.analytics.rule=Host(`vaccineledger.com`) && PathPrefix(`/analyticsmanagement/`)"
       - "traefik.http.routers.analytics.tls=true"
       - "traefik.http.routers.analytics.tls.certresolver=lets-encrypt"
-
-  blockchain:
-    build: "./backend/blockchain_service"
-    image: "blockchain_service1.0"
-    container_name: "blockchain_service1.0"
-    restart: always
-    env_file:
-      - ./env/ledger.env
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.blockchain.entrypoints=websecure"
-      - "traefik.http.routers.blockchain.rule=Host(`vaccineledger.com`) && PathPrefix(`/blockchainmanagement/`)"
-      - "traefik.http.routers.blockchain.tls=true"
-      - "traefik.http.routers.blockchain.tls.certresolver=lets-encrypt"
-
   employee:
     build:
       context: .

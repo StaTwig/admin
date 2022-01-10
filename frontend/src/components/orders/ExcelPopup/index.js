@@ -9,6 +9,7 @@ import SuccessOrderPopUp from "./SuccessOrder/SuccessOrder";
 import FailPopup from "../../../shared/PopUp/failedPopUp";
 
 const ExcelPopUp = (props) => {
+  const { t } = props;
   const [excel, setExcel] = useState("");
   const dispatch = useDispatch();
   const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
@@ -64,13 +65,20 @@ const ExcelPopUp = (props) => {
           className='mt-2'
           alt=''
         />
-        <div>"Drag and drop" your Excel file here</div>
-        <div>or</div>
-        <input
-          type='file'
-          className='mb-3 excelSpace'
-          onChange={setExcelFile}
-        />
+        <div>"{t('drag_drop')}" {t('your_excel_file_here')}</div>
+        <div>{t('or')}</div>
+        <div className='mb-3 excelSpace mt-4'>
+          <label htmlFor="fileE" 
+            className='mb-3 excelSpace' >{t('select_a_file')}</label>
+        
+          <input
+            type='file'
+            id="fileE"
+            style={{visibility: 'hidden'}}
+            className='mb-3 excelSpace'
+            onChange={setExcelFile}
+            />
+        </div>
       </div>
       <div className='row justify-content-between'>
         <div />
@@ -79,10 +87,10 @@ const ExcelPopUp = (props) => {
             className='btn-outline-primary btn mr-3'
             onClick={props.onHide}
           >
-            Cancel
+            {t('cancel')}
           </button>
           <button className='btn-primary btn mr-4' onClick={uploadExcel}>
-            Import
+            {t('import')}
           </button>
           {openSuccesfulOrder && (
             <Modal

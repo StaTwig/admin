@@ -117,7 +117,7 @@ export class MapContainer extends Component {
     );
   }
 }
-
-export default GoogleApiWrapper({
+export default GoogleApiWrapper( (props) => ({
   apiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
-})(MapContainer);
+  language: props.lang
+}))(MapContainer);

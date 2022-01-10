@@ -19,12 +19,13 @@ import { getInventories } from "../../actions/inventoryActions";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Inventory = (props) => {
+  const { t } = props;
   const headers = {
-    coloumn1: "Product Name",
-    coloumn2: "Product Category",
-    coloumn3: "Date",
-    coloumn4: "Quantity",
-    coloumn5: "Status",
+    coloumn1: t('product_name'),
+    coloumn2: t('product_category'),
+    coloumn3: t('date'),
+    coloumn4: t('quantity'),
+    coloumn5: t('status'),
 
     img1: <img src={Product} width='16' height='16' alt='Product' />,
     img2: <img src={Quantity} width='24' height='16' alt='Quantity' />,
@@ -35,9 +36,9 @@ const Inventory = (props) => {
 
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
-    coloumn1: "Product Name",
-    coloumn2: "Product Category",
-    coloumn3: "Quantity",
+    coloumn1: t('product_name'),
+    coloumn2: t('product_category'),
+    coloumn3: t('quantity'),
   };
   const MAX_LENGTH = 20;
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState("");
@@ -179,10 +180,10 @@ const Inventory = (props) => {
   };
 
   const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
-    console.log(
-      "setInventoryStatusFilterOnSelect =========>",
-      statusFilterSelected
-    );
+    // console.log(
+    //   "setInventoryStatusFilterOnSelect =========>",
+    //   statusFilterSelected
+    // );
     setStatusFilter(statusFilterSelected);
     // setSkip(0);
     dispatch(
@@ -200,10 +201,10 @@ const Inventory = (props) => {
   const setInventoryProductNameFilterOnSelect = async (
     productNameFilterSelected
   ) => {
-    console.log(
-      "setInventoryProductNameFilterOnSelect =========>",
-      productNameFilterSelected
-    );
+    // console.log(
+    //   "setInventoryProductNameFilterOnSelect =========>",
+    //   productNameFilterSelected
+    // );
     setProductNameFilter(productNameFilterSelected);
     // setSkip(0);
     dispatch(
@@ -221,10 +222,10 @@ const Inventory = (props) => {
   const setInventoryManufacturerFilterOnSelect = async (
     manufacturerFilterSelected
   ) => {
-    console.log(
-      "setInventoryManufacturerFilterOnSelect =========>",
-      manufacturerFilterSelected
-    );
+    // console.log(
+    //   "setInventoryManufacturerFilterOnSelect =========>",
+    //   manufacturerFilterSelected
+    // );
     // setManufacturerFilter(manufacturerFilterSelected);
     // setSkip(0);
     dispatch(
@@ -242,10 +243,10 @@ const Inventory = (props) => {
   const setInventoryProductCategoryFilterOnSelect = async (
     categoryFilterSelected
   ) => {
-    console.log(
-      "setInventoryProductCategoryFilterOnSelect =========>",
-      categoryFilterSelected
-    );
+    // console.log(
+    //   "setInventoryProductCategoryFilterOnSelect =========>",
+    //   categoryFilterSelected
+    // );
     setProductCategoryFilter(categoryFilterSelected);
     // setSkip(0);
     dispatch(
@@ -262,14 +263,14 @@ const Inventory = (props) => {
   return (
     <div className='inventory'>
       <div className='d-flex justify-content-between'>
-        <h2 className='breadcrumb'>INVENTORY </h2>
+        <h2 className='breadcrumb'>{t('inventory')} </h2>
         <div className='d-flex'>
           {isAuthenticated("addInventory") && (
             <Link to='/newinventory'>
               <button className='btn btn-yellow mt-2'>
                 <img src={Add} width='13' height='13' className='mr-2' alt='' />
                 <span>
-                  <b>Add Inventory</b>
+                  <b>{t('add_inventory')}</b>
                 </span>
               </button>
             </Link>
@@ -286,7 +287,7 @@ const Inventory = (props) => {
                 </div>
                 <div className='d-flex flex-column'>
                   <div className='title truck-text font-weight-bold'>
-                    Total Product Category
+                    {t('total_product_category')}
                   </div>
 
                   <div className='count truck-text'>
@@ -305,7 +306,7 @@ const Inventory = (props) => {
                 </div>
                 <div className='d-flex flex-column'>
                   <div className='title sent-text font-weight-bold'>
-                    Product Out Of Stock
+                    {t('product_out_of_stock')}
                   </div>
                   <div className='sent-text count'>
                     {currentInventoriesCount}
@@ -324,7 +325,7 @@ const Inventory = (props) => {
                 </div>
                 <div className='d-flex flex-column'>
                   <div className='title recived-text font-weight-bold'>
-                    Batch near Expiration
+                    {t('batch_near_expiration')}
                   </div>
                   {/* <div className="tab-container">
                 <div
@@ -399,7 +400,7 @@ const Inventory = (props) => {
                 </div>
                 <div className='d-flex flex-column'>
                   <div className='title transit-text font-weight-bold'>
-                    Batch Expired
+                    {t('batch_expired')}
                   </div>
                   {/* <div className="tab-container">
                 <div
@@ -484,6 +485,7 @@ const Inventory = (props) => {
             setInventoryProductCategoryFilterOnSelect
           }
           fb='80%'
+          t={t}
           filterPage="inventory"
         />
       </div>
@@ -503,11 +505,11 @@ const Inventory = (props) => {
               <div className='list-container'>
                 <div className='d-flex justify-content-between align-items-center ml-3'>
                   <h4>
-                    <b>Product List</b>
+                    <b>{t('product_list')}</b>
                   </h4>
                   <Link to='/productcategory'>
                     <button className='btn btn-link mr-1'>
-                      <b>View all</b>
+                      <b>{t('view_all')}</b>
                     </button>
                   </Link>
                 </div>
@@ -535,7 +537,7 @@ const Inventory = (props) => {
 
                           {/* <p className="product">{product.productName}</p> */}
                           <h3 className='qty'>
-                            Qty : {product.quantity}
+                            {t('quantity')} : {product.quantity}
                             <span>{"  ("}</span>
                             {product.unitofMeasure &&
                             product.unitofMeasure.name ? (

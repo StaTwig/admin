@@ -9,10 +9,10 @@ import Modal from "../../shared/modal";
 import LocationDropdown from "./LocationDropdown";
 
 const PopUpLocation = (props) => {
-  console.log(props);
+  const { t } = props;
   // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse] = useState({});
-  const [selectLocation, setSelectLocation] = useState("Select Location");
+  const [selectLocation, setSelectLocation] = useState(t('select_location'));
   const [addedLocationModal, setAddedLocationModal] = useState(false);
   const [alertFlag, setAlertFlag] = useState(false);
 
@@ -53,8 +53,8 @@ const PopUpLocation = (props) => {
   return (
     <div className="addLocation">
       <center>
-        <h1 className="addLocationText">
-          <b>Add Location</b>
+        <h1 className='addLocationText'>
+          <b>{t('add_location')}</b>
         </h1>
       </center>
 
@@ -69,17 +69,19 @@ const PopUpLocation = (props) => {
               alt="Location"
             />
             <span className="buttonS">
-              <b>Add New Location</b>
+              <b>{t('add_new_location')}</b>
             </span>
           </button>
         </Link>
       </div>
 
-      <div className="line text-center">
-        <h6 class="text-center">
-          {" "}
-          ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
-        </h6>
+      <div className='line'>
+        <center>
+          <h6>
+            {" "}
+            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; {t('or')} &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
+          </h6>
+        </center>
       </div>
       <br></br>
       <div className="ml-5">
@@ -93,8 +95,8 @@ const PopUpLocation = (props) => {
               className="addLocModalImg pt-2"
               alt="Location"
             ></img>
-            <label htmlFor="Select Location" className="addLocModal pt-3">
-              <b>Select Location</b>
+            <label htmlFor='Select Location' className='addLocModal pt-3'>
+              <b>{t('select_location')}</b>
             </label>
             <div
               className={`form-controlAddLoc mr-5 ${
@@ -121,18 +123,14 @@ const PopUpLocation = (props) => {
 
       <div className="wrapper1">
         <button
-          disabled={selectLocation === "Select Location"}
-          style={{ backgroundColor: "#A6A6A6" }}
-          className={
-            selectLocation === "Select Location"
-              ? "continueDisabled buttonS btn mt-3"
-              : "continueDisabled buttonS btn btn-primary mt-3"
-          }
+          disabled={selectLocation === t('select_location')}
+          style={{backgroundColor: '#A6A6A6'}}
+          className={selectLocation === t('select_location') ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
           onClick={() => {
             updateStatus(wareHouse);
           }}
         >
-          <span>CONTINUE</span>
+          <span>{t('continue')}</span>
         </button>
       </div>
       {addedLocationModal && (

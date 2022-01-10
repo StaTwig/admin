@@ -10,7 +10,7 @@ const client = require("twilio")(accountSid, authToken, {
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const fromMobile = process.env.FROMNO;
-var uuid = require("uuid");
+const cuid = require("cuid");
 
 function sendEmail(subject, content, emailId) {
   mailer
@@ -109,7 +109,7 @@ exports.createTwilioBinding = [
         })
         .then((binding) => console.log(binding))
         .catch((err) => console.log(err));
-      return apiResponse.successResponse(res, "Succesfully Registered");
+      return apiResponse.successResponse(res, "Successfully Registered");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -183,7 +183,7 @@ async function pushNotification(body) {
   try {
     const { content, user, type, transactionId, eventType } = body;
     let notification = new Notification({
-      id: uuid.v4(),
+      id: cuid(),
       title: "Vaccine Ledger Alert",
       message: content,
       user: user,

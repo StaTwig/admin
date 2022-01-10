@@ -27,6 +27,7 @@ import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const ShipmentAnalytic = (props) => {
+  const { t } = props;
   const [visible, setvisible] = useState("one");
   const [skip, setSkip] = useState(0);
   const [limit] = useState(10);
@@ -136,11 +137,11 @@ const ShipmentAnalytic = (props) => {
   };
 
   const headers = {
-    coloumn1: "Shipment ID",
-    coloumn2: "Shipment Date",
-    coloumn3: "From",
-    coloumn4: "To",
-    coloumn6: "Status ",
+    coloumn1: t('shipment_id'),
+    coloumn2: t("shipment_date"),
+    coloumn3: t("from"),
+    coloumn4: t("to"),
+    coloumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='Monday' />,
     img2: <img src={calender} width='16' height='16' alt='Calender' />,
@@ -312,9 +313,9 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: "Excel", checked: false },
-      { key: "pdf", value: "PDF", checked: false },
-      { key: "email", value: "Mail", checked: false },
+      { key: "excel", value: t('excel'), checked: false },
+      { key: "pdf", value: t('pdf'), checked: false },
+      { key: "email", value: t('mail'), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -338,11 +339,11 @@ const ShipmentAnalytic = (props) => {
     var nameOfFile;
 
     if(visible=='one'){
-      nameOfFile = 'shipmentoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+      nameOfFile = 'shipmentinbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
       // console.log(name, name);
     }
     else if(visible=='two'){
-      nameOfFile = 'shipmentinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+      nameOfFile = 'shipmentoutbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
     }
     getExportFile(url, value).then((response) => {
       console.log(response);
@@ -368,7 +369,7 @@ const ShipmentAnalytic = (props) => {
   return (
     <div className='shipment'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>SHIPMENT</h1>
+        <h1 className='breadcrumb'>{t('shipments')}</h1>
         <div className='d-flex'>
           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
@@ -393,7 +394,7 @@ const ShipmentAnalytic = (props) => {
                   alt='UpdateShipment'
                 />
                 <span>
-                  <b>Update Shipment</b>
+                  <b>{t('update_shipment')}</b>
                 </span>
               </button>
             </Link>
@@ -415,7 +416,7 @@ const ShipmentAnalytic = (props) => {
                   alt='CreateShipment'
                 />
                 <span>
-                  <b>Create Shipment</b>
+                  <b>{t('create_shipment')}</b>
                 </span>
               </button>
             </Link>
@@ -484,6 +485,7 @@ const ShipmentAnalytic = (props) => {
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
           isReportDisabled={!isAuthenticated("shipmentExportReport")}
+          t={t}
         />
       </div>
     </div>

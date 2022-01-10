@@ -68,7 +68,7 @@ const DropdownButtonGroup = (props) => {
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className={ "customwh"}
+            className={`${props.labelType === "lastmile" ? "lastmile-drop-img" : "customwh"}`}
           />
         </button>
       )}

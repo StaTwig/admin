@@ -16,7 +16,7 @@ const SummaryTable = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
-  const { shipments } = props;
+  const { shipments, t } = props;
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
@@ -42,7 +42,7 @@ const SummaryTable = (props) => {
                   className='mr-2'
                   alt=''
                 ></img>
-                <b>Shipment ID</b>
+                <b>{t('shipment_id')}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
@@ -75,7 +75,7 @@ const SummaryTable = (props) => {
                   className='mr-2'
                   alt=''
                 ></img>
-                <b>Type</b>
+                <b>{t('type')}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
@@ -100,7 +100,7 @@ const SummaryTable = (props) => {
                   className='mr-1'
                   alt=''
                 ></img>
-                <span style={{ fontWeight: 600 }}>Shipping Date</span>
+                <span style={{ fontWeight: 600 }}>{t('shipping_date')}</span>
               </span>
             </div>
 
@@ -126,7 +126,7 @@ const SummaryTable = (props) => {
                   className='mr-2'
                   alt='Received Shipments'
                 ></img>
-                <b>From</b>
+                <b>{t('from')}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
@@ -150,7 +150,7 @@ const SummaryTable = (props) => {
                   className='mr-2'
                   alt='Sent Shipments'
                 ></img>
-                <b>To</b>
+                <b>{t('to')}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
@@ -173,14 +173,14 @@ const SummaryTable = (props) => {
                   className='mr-2'
                   alt='Status'
                 ></img>
-                <b>Status</b>
+                <b>{t('status')}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
               index < 5 ? (
                 <div className='row combine-data' key={index}>
                   <div className='status ' target={shipment.status}>
-                    {shipment.status === "CREATED" ? "Shipped" : "Delivered"}
+                    {shipment.status === "CREATED" ? t('shipped') : t('delivered')}
                   </div>
                 </div>
               ) : null
@@ -199,11 +199,11 @@ const SummaryTable = (props) => {
                   </div>
                 </div>
                 <div className='d-flex'>
-                  <div className='mr-3'>Shipment ID</div>
+                  <div className='mr-3'>{t('shipment_id')}</div>
                   <div className='font-weight-bold'>{shipment.id}</div>
                 </div>
                 <div className='d-flex'>
-                  <div className='mr-3'>Shipping Date</div>
+                  <div className='mr-3'>{t('shipping_date')}</div>
                   <div className='font-weight-bold'>
                     {shipment.shippingDate.split("T")[0].split("-")[2] +
                       "/" +
@@ -213,17 +213,17 @@ const SummaryTable = (props) => {
                   </div>
                 </div>
                 <div className='d-flex'>
-                  <div className='mr-3'>From</div>
+                  <div className='mr-3'>{t('from')}</div>
                   <div className='rTableCell'>
                     <p className='mb-0 bold'>{shipment.supplier.org.name}</p>
                   </div>
                 </div>
                 <div className='d-flex'>
-                  <div className='mr-3'>Type</div>
+                  <div className='mr-3'>{t('type')}</div>
                   <div className='font-weight-bold'>Inbound</div>
                 </div>
                 <div className='d-flex'>
-                  <div className='mr-3'>Status</div>
+                  <div className='mr-3'>{t('status')}</div>
                   <div className='font-weight-bold'>
                     <div className='status' target={shipment.status}>
                       {shipment.status === "CREATED" ? "Shipped" : "Delivered"}

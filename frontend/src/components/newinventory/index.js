@@ -19,6 +19,7 @@ import { getProducts } from "../../actions/poActions";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const NewInventory = (props) => {
+  const { t } = props;
   const editInventories = useSelector((state) => {
     return state.reviewInventory;
   });
@@ -239,7 +240,7 @@ const NewInventory = (props) => {
   return (
     <div className='Newinventory'>
       <div className='d-flex justify-content-between mb-0'>
-        <h1 className='breadcrumb mt-3'>ADD INVENTORY</h1>
+        <h1 className='breadcrumb mt-3'>{t('add_inventory')}</h1>
         <div className='d-flex flex-column align-items-center'>
           {isAuthenticated("importInventory") && (
             <button
@@ -256,7 +257,7 @@ const NewInventory = (props) => {
                   alt='Export'
                 />
                 <span>
-                  <b>Import</b>
+                  <b>{t('import')}</b>
                 </span>
                 <img
                   src={dropdownIcon}
@@ -275,14 +276,14 @@ const NewInventory = (props) => {
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
-                Excel
+                {t('excel')}
               </button>
-              <button className=' btn btn-outline-info'> Other</button>
+              <button className=' btn btn-outline-info'> {t('other')}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
-              title='Import'
+              title={t('import')}
               close={() => closeExcelModal()}
               size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
@@ -303,6 +304,7 @@ const NewInventory = (props) => {
         category={category}
         handleCategoryChange={onCategoryChange}
         prods={products}
+        t={t}
       />
 
       <div className='d-flex justify-content-between'>
@@ -313,7 +315,7 @@ const NewInventory = (props) => {
           <div style={{ fontSize: "14px" }}>
             +
             <span>
-              <b>Add Another Product</b>
+              <b>{t('add_another_product')}</b>
             </span>
           </div>
         </button>
@@ -326,7 +328,7 @@ const NewInventory = (props) => {
         <button className='btn-orange btn' onClick={onProceedToReview}>
           <img src={review} width='20' className='' alt='' />
           <span className='ml-1'>
-            <b>Review Product</b>
+            <b>{t('review_product')}</b>
           </span>
         </button>
         <button
@@ -337,7 +339,7 @@ const NewInventory = (props) => {
             props.history.push("/inventory");
           }}
         >
-          <b>Cancel</b>
+          <b>{t('cancel')}</b>
         </button>
       </div>
       {openCreatedInventory && (

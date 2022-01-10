@@ -27,6 +27,7 @@ import { config } from "../../config";
 import axios from "axios";
 
 const NewShipment = (props) => {
+  const { t } = props;
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
@@ -53,7 +54,7 @@ const NewShipment = (props) => {
   );
   const [toOrgLocLabel, settoOrgLocLabel] = useState("");
   const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-    "Select Delivery Location"
+    t('select_delivery_location')
   );
   const user = useSelector((state) => state.user);
   const [OrderDetails, setOrderDetails] = useState({});
@@ -395,6 +396,7 @@ const NewShipment = (props) => {
               message: "Created Successfully!",
               id: result?.id,
               type: "Success",
+              t:t
             });
           } else {
             setShipmentError(result.data.message);
@@ -490,7 +492,7 @@ const NewShipment = (props) => {
 
   return (
     <div className='NewShipment'>
-      <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
+      <h1 className='breadcrumb'>{t('create_shipment')}</h1>
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -565,7 +567,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 col-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orderID'>
-                        Order ID
+                        {t('order_id')}
                       </label>
                       <div className='line'>
                         {/* <DropdownButton
@@ -637,7 +639,7 @@ const NewShipment = (props) => {
                       /> */}
                         <Select
                           styles={customStyles}
-                          placeholder='Select Order ID'
+                          placeholder={t('enter')+' '+t('order_id')}
                           onChange={async (v) => {
                             setfetchdisabled(true);
                             setProducts((p) => []);
@@ -781,7 +783,7 @@ const NewShipment = (props) => {
                       htmlFor='shipmentID'
                       style={{ position: "relative", top: "0.5rem" }}
                     >
-                      Reference Shipment ID
+                      {t('reference_shipment_id')}
                     </label>
                     <input
                       className='refship' //input
@@ -790,7 +792,7 @@ const NewShipment = (props) => {
                       name='shipmentID'
                       value={values.shipmentID}
                       onBlur={handleBlur}
-                      placeholder='Enter Reference Shipment ID'
+                      placeholder={t('enter')+' '+t('reference_shipment_id')}
                       onInputChange={(event, newInputValue) => {
                         onSearchChange(newInputValue);
                       }}
@@ -909,7 +911,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        Fetch
+                        {t('fetch')}
                       </span>
                     </span>
                   ) : (
@@ -925,7 +927,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        Fetch
+                        {t('fetch')}
                       </span>
                     </span>
                   )}
@@ -936,7 +938,7 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  From
+                  {t('from')}
                 </label>
                 {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
@@ -965,7 +967,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                        Organisation Name*
+                        {t('organisation_name')}*
                       </label>
                       <div className='line'>
                         {/* <DropdownButton
@@ -995,7 +997,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orgLocation'>
-                        Organisation Location*
+                        {t('organisation_location')}*
                       </label>
                       <div
                         className={`line ${
@@ -1031,19 +1033,19 @@ const NewShipment = (props) => {
                           groups={senderWarehouses}
                         /> */}
                         <Select
-                          styles={customStyles}
-                          isDisabled={false}
-                          placeholder='Select Organisation Location'
+                            styles={customStyles}
+                            isDisabled={false}
+                            placeholder={t('select') + ' ' + t('organisation_location')}
                           onChange={async (v) => {
                             let res = await onWarehouseChange(
                               v.warehouseInventory
                             );
-                            console.log(res);
+                            // console.log(res);
                             if (!res) {
                               return;
                             }
                             setFromOrgLabel(v.label);
-                            console.log(values.fromOrgLoc);
+                            // console.log(values.fromOrgLoc);
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
@@ -1061,7 +1063,7 @@ const NewShipment = (props) => {
                           }}
                           value={
                             values.fromOrgLoc === ""
-                              ? "Select Organisation Location"
+                              ? t('select') + ' ' + t('organisation_location')
                               : {
                                   value: values.fromOrgLoc,
                                   label: FromOrgLabel,
@@ -1090,13 +1092,13 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  To
+                  {t('to')}
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationType'>
-                        Organisation Type*
+                        {t('organisation_type')}*
                       </label>
                       <div
                         className={`line ${
@@ -1107,7 +1109,7 @@ const NewShipment = (props) => {
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={
-                            disabled ? values.rtype : "Select Organisation Type"
+                            disabled ? values.rtype : t('select') + ' ' + t('organisation_type')
                           }
                           onChange={(v) => {
                             setFieldValue("rtype", v?.value);
@@ -1130,7 +1132,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                        Organisation Name*
+                          {t('organisation_name')}*
                       </label>
                       <div
                         className={`line ${
@@ -1156,12 +1158,12 @@ const NewShipment = (props) => {
                           placeholder={
                             disabled
                               ? values.toOrg.split("/")[1]
-                              : "Select Organisation Name"
+                              : t('select') + ' ' + t('organisation_name')
                           }
                           //placeholder={"Select Organisation Name"}
                           value={
                             values.toOrg === ""
-                              ? "Select Organisation Name"
+                              ? t('select') + ' ' + t('organisation_name')
                               : { value: values.toOrg, label: receiverOrgId }
                           }
                           onChange={(v) => {
@@ -1187,7 +1189,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        Delivery Location*
+                        {t('delivery_location')}*
                       </label>
                       <div
                         className={`line ${
@@ -1218,12 +1220,12 @@ const NewShipment = (props) => {
                           placeholder={
                             disabled
                               ? values.toOrgLoc.split("/")[1]
-                              : "Select Delivery Location"
+                              : t('select_delivery_location')
                           }
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgLoc === ""
-                              ? "Select Delivery Loction"
+                              ? t('select_delivery_location')
                               : { value: values.toOrgLoc, label: toOrgLocLabel }
                           }
                           onChange={(v) => {
@@ -1254,12 +1256,12 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  Delivery Details:
+                  {t('delivery_details')}:
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12 mt-2'>
                     <label className='name' htmlFor='organizationName'>
-                      Transit Number*
+                      {t('transit_no')}*
                     </label>
                     <input
                       className={`input refship ${
@@ -1272,7 +1274,7 @@ const NewShipment = (props) => {
                       name='airWayBillNo'
                       value={values.airWayBillNo}
                       onBlur={handleBlur}
-                      placeholder='Enter Transit Number'
+                      placeholder={t('enter')+' '+t('transit_no')}
                       onChange={handleChange}
                     />
                     {/* {errors.airWayBillNo && touched.airWayBillNo && (
@@ -1285,7 +1287,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12 mt-3'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        Shipment Date*
+                        {t('shipment_date')}*
                       </label>
                       <div
                         className={`input refship ${
@@ -1306,7 +1308,7 @@ const NewShipment = (props) => {
                             e.keyCode !== 8 && e.preventDefault()
                           }
                           minDate={new Date()}
-                          placeholderText='Enter Shipment Date'
+                          placeholderText={t('enter')+' '+t('shipment_date')}
                           //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
                           onChange={(date) => {
                             setFieldValue("shipmentDate", date);
@@ -1335,7 +1337,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <label className='name' htmlFor='organizationName'>
-                      Label Code*
+                      {t('label_code')}*
                     </label>
                     <input
                       className={`input refship ${
@@ -1348,7 +1350,7 @@ const NewShipment = (props) => {
                       name='labelCode'
                       value={values.labelCode}
                       onBlur={handleBlur}
-                      placeholder='Enter Label Code'
+                      placeholder={t('enter')+' '+t('label_code')}
                       onChange={handleChange}
                     />
                     {/* {errors.labelCode && touched.labelCode && (
@@ -1361,7 +1363,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='shipmentId '>
-                        Estimate Delivery Date
+                        {t('estimated_delivery_date')}
                       </label>
                       <div
                         className={`input refship ${
@@ -1374,7 +1376,7 @@ const NewShipment = (props) => {
                         <DatePicker
                           ref={ref2}
                           className='date'
-                          placeholderText='Enter Delivery Date'
+                          placeholderText={t('enter_delivery_date')}
                           onChange={(date) => {
                             setFieldValue("estimateDeliveryDate", date);
                             // setEstimateDeliveryDate(date);
@@ -1417,7 +1419,7 @@ const NewShipment = (props) => {
 
             <div className='row mb-3'>
               <label htmlFor='productDetails' className='headsup'>
-                Product Details
+                {t('product_details')}
               </label>
               {OrderDetails?.products?.length > 0 ? (
                 <EditTable
@@ -1474,7 +1476,7 @@ const NewShipment = (props) => {
                       }}
                       className='mt-5 '
                     >
-                      *No products available
+                      *{t('no_products_available')}
                     </h4>
                   </div>
                 )
@@ -1486,6 +1488,7 @@ const NewShipment = (props) => {
                     check='0'
                     warehouseID={senderOrgId}
                     product={addProducts}
+                    t={t}
                     products={products}
                     category={category}
                     handleQuantityChange={(v, i) => {
@@ -1599,7 +1602,7 @@ const NewShipment = (props) => {
                         setAddProducts((prod) => [...prod, newArr]);
                       }}
                     >
-                      +<span> Add Another Product</span>
+                      +<span> {t('add_another_product')}</span>
                     </button>
                   </div>
                 </>
@@ -1630,7 +1633,7 @@ const NewShipment = (props) => {
                   className='btn btn-outline-primary font-bold mr-2'
                   onClick={() => props.history.push("/shipments")}
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
 
                 <button
@@ -1644,7 +1647,7 @@ const NewShipment = (props) => {
                     className='mr-2 mb-1'
                     alt=''
                   />
-                  <span>Create Shipment</span>
+                    <span>{t('create_shipment')}</span>
                 </button>
               </div>
             </div>

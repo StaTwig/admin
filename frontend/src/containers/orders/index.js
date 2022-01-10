@@ -4,10 +4,12 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch } from "react-redux";
 import { getPOs, resetPOs } from "../../actions/poActions";
+import { useTranslation } from 'react-i18next';
 
 const OrdersContainer = (props) => {
   const [orders, setOrders] = useState([]);
   const dispatch = useDispatch();
+const { t, i18n } = useTranslation();
 
   // const orders = useSelector(state => state.pos);
 
@@ -22,11 +24,11 @@ const OrdersContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <Orders orders={orders} setOrders={setOrders} {...props} />
+          <Orders orders={orders} setOrders={setOrders} {...props} t={t}/>
         </div>
       </div>
     </div>

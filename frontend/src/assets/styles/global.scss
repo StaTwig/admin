@@ -74,9 +74,10 @@ body {
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
+  transition: 0.2s ease-in-out;
 }
 .btn-orange:hover {
-  border: 0.5px solid #fa7923;
+  background-color: #fc9551;
   color: #fff;
 }
 
@@ -87,15 +88,18 @@ body {
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
+  transition: 0.2s ease-in-out;
 
+  &:hover {
+    background-color: #fcb842;
+    color: $white;
+  }
   a {
     color: $white;
   }
 }
 
 .btn-outline-primary {
-  //color: $primaryBlue !important;
-  //border-color:#229aca !important;
   border-width: 1px !important;
   border-radius: 10px !important;
 }

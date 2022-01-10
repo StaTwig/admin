@@ -10,8 +10,10 @@ import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
 import { config } from "../../config";
+import { useTranslation } from 'react-i18next';
 
 const ViewShipmentContainer = (props) => {
+const { t, i18n } = useTranslation();
   const [trackData, setTrackData] = useState({});
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
     useState([]);
@@ -96,9 +98,9 @@ const ViewShipmentContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
           <ViewGMRShipment
             trackData={trackData}
@@ -108,6 +110,7 @@ const ViewShipmentContainer = (props) => {
             lastTenIotShipmentData={lastTenIotShipmentData}
             iotEnabledStatus={iotEnabledStatus}
             openInTrackingPage={openInTrackingPage}
+            t={t}
             {...props}
           />
         </div>
