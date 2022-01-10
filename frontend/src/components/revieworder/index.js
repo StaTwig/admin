@@ -230,6 +230,7 @@ const ReviewOrder = (props) => {
               >
                 <ReviewOrderPopUp
                   onHide={closeModal} // onHide={closeModal} //FailurePopUp
+                  t={t}
                   {...modalProps}
                 />
               </Modal>
