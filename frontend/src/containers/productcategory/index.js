@@ -5,8 +5,10 @@ import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { getProducts } from "../../actions/poActions";
+import { useTranslation } from 'react-i18next';
 
 const ProductCategoryContainer = (props) => {
+const { t, i18n } = useTranslation();
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -21,11 +23,11 @@ const ProductCategoryContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <ProductCategory products={products} {...props} />
+          <ProductCategory products={products} {...props} t={t}/>
         </div>
       </div>
     </div>

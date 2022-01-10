@@ -5,8 +5,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { getShipments } from "../../actions/shipmentActions";
 import { getInventories } from "../../actions/inventoryActions";
+import { useTranslation } from 'react-i18next';
 
 const OverviewContainer = (props) => {
+const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const shipments = useSelector((state) => {
     return state.shipments;
@@ -27,15 +29,16 @@ const OverviewContainer = (props) => {
   }, [dispatch]);
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t} />
         <div className='content'>
           <OverView
             shipments={shipments}
             inventories={inventories}
             shipmentsCount={shipmentsCount}
             inventoriesCount={inventoriesCount}
+            t={t}
             {...props}
           />
         </div>

@@ -8,6 +8,7 @@ import "./style.scss";
 import { getShipmentAnalytics } from "../../actions/analyticsAction";
 
 const Tiles = (props) => {
+  const { t } = props;
   const [shipmentAnalytics, setShipmentAnalytics] = useState({});
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +27,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title recived-text font-weight-bold'>
-              Inbound Shipments
+              {t('inbound_shipments')}
             </div>
             <div className='recived-text count'>
               {shipmentAnalytics.inboundShipments}
@@ -41,7 +42,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title sent-text font-weight-bold'>
-              Outbound Shipments
+              {t('outbound_shipments')}
             </div>
             <div className='sent-text count'>
               {shipmentAnalytics.outboundShipments}
@@ -60,7 +61,7 @@ const Tiles = (props) => {
 
           <div className='d-flex flex-column'>
             <div className='title inbound-text font-weight-bold'>
-              Inbound Alert
+              {t('inbound_alert')}
             </div>
             <div className='inbound-text count'>
               {shipmentAnalytics.inboundAlerts}
@@ -78,7 +79,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title outbound-text font-weight-bold'>
-              Outbound Alert
+              {t('outbound_alert')}
             </div>
             <div className='outbound-text count'>
               {shipmentAnalytics.outboundAlerts}

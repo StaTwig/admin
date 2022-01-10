@@ -9,8 +9,10 @@ import moment from "moment";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
 import { config } from "../../config";
 import queryString from "query-string";
+import { useTranslation } from 'react-i18next';
 
 const TrackContainer = (props) => {
+const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
@@ -136,9 +138,9 @@ const TrackContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
           <Track
             searchData={searchData}
@@ -155,6 +157,8 @@ const TrackContainer = (props) => {
             zoomOutTemperatureGraph={zoomOutTemperatureGraph}
             navigateBackToTracingPage={navigateBackToTracingPage}
             lastTenIotShipmentData={lastTenIotShipmentData}
+            t={t}
+            lang={i18n.resolvedLanguage}
             {...props}
           />
         </div>

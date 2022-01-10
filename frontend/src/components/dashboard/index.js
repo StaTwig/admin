@@ -5,6 +5,7 @@ import Tabs from "./dashboardtabs/tabs";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const DashBoard = (props) => {
+  const { t,lang } = props;
   const {
     warehouses,
     warehouseArr,
@@ -38,7 +39,7 @@ const DashBoard = (props) => {
   return (
     <div className='dashboard'>
       <div style={{ position: "relative", top: "-22px", right: "25px" }}>
-        <h1 className='breadcrumb dash'>YOUR NETWORK </h1>
+        <h1 className='breadcrumb dash'>{t('your_network')}</h1>
       </div>
       <div className='panel'>
         <Map
@@ -46,6 +47,8 @@ const DashBoard = (props) => {
           visible={visible}
           warehouseArr={warehouseArr}
           warehouseLocation={warehouseLocation}
+          t={t}
+          lang={lang}
         />
         <div className=''>
           <Tabs

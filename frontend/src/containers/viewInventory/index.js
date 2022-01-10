@@ -5,8 +5,10 @@ import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { getInventoryByWareHouse } from "../../actions/inventoryActions";
+import { useTranslation } from 'react-i18next';
 
 const ViewInventoryContainer = (props) => {
+const { t, i18n } = useTranslation();
   const [inventories, setInventories] = useState([]);
   const dispatch = useDispatch();
   const warehouseId = props.match.params?.warehouseId;
@@ -23,11 +25,11 @@ const ViewInventoryContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <ViewInventory inventories={inventories} {...props} />
+          <ViewInventory inventories={inventories} {...props} t={t} />
         </div>
       </div>
     </div>

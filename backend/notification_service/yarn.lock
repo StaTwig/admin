@@ -156,6 +156,11 @@ cors@^2.8.5:
     object-assign "^4"
     vary "^1"
 
+cuid@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/cuid/-/cuid-2.1.8.tgz#cbb88f954171e0d5747606c0139fb65c5101eac0"
+  integrity sha512-xiEMER6E7TlTPnDxrM4eRiC6TRgjNX9xzEZ5U/Se2YJKr7Mq4pJn/2XEHjl3STcSh96GmkHPcBXLES8M29wyyg==
+
 dayjs@^1.8.29:
   version "1.10.6"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.6.tgz#288b2aa82f2d8418a6c9d4df5898c0737ad02a63"

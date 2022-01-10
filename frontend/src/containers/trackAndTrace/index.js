@@ -4,8 +4,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { getShipments, resetShipments } from "../../actions/shipmentActions";
+import { useTranslation } from 'react-i18next';
 
 const TrackandTraceContainer = (props) => {
+const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
   const shipments = useSelector((state) => {
@@ -18,11 +20,11 @@ const TrackandTraceContainer = (props) => {
   }, [dispatch]);
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <TrackandTrace shipments={shipments} {...props} />
+          <TrackandTrace shipments={shipments} {...props} t={t}/>
         </div>
       </div>
     </div>

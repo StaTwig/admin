@@ -24,6 +24,8 @@ const Track = (props) => {
     shippmentChainOfCustodyData,
     searchData,
     resetData,
+    lang,
+    t
   } = props;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +80,7 @@ const Track = (props) => {
   return (
     <div className='track'>
       <div className='row justify-content-between'>
-        <h1 className='breadcrumb'>Track & Trace</h1>
+        <h1 className='breadcrumb'>{t('trackntrace')}</h1>
       </div>
       {!props.viewIotTemperatureSplineline ? (
         <div className='row'>
@@ -86,7 +88,7 @@ const Track = (props) => {
             <div className='col'>
               <div className='row mb-4'>
                 <div className='col' style={{ minHeight: 400 }}>
-                  <Map data={shippmentChainOfCustodyData} />
+                  <Map data={shippmentChainOfCustodyData} t={t} lang={lang} />
                 </div>
               </div>
               {/* <div 
@@ -136,7 +138,7 @@ const Track = (props) => {
                       placeholder='Enter Order ID or Serial No. or Shipment No. or Transit No.'
                       onChange={onSearchChange}
                       //className="form-control border border-primary search-field"
-                      className='form-control search-field border-8'
+                      className='form-control border-blue search-field border-8'
                     />
                     <img
                       src={searchingIcon}
@@ -166,12 +168,12 @@ const Track = (props) => {
                         className='mr-2 mb-1'
                         alt='Back'
                       />
-                      <span className='fontSize20'>Back to Search</span>
+                        <span className='fontSize20'>{t('back_to_search')}</span>
                     </button>
                   )}
                 </div>
                 <div className=' panel commonpanle  bg-light'>
-                  <h6 className=' text-primary mb-4'>CHAIN OF CUSTODY</h6>
+                  <h6 className=' text-primary mb-4'>{t('chain_of_custody')}</h6>
                   <div className='row orderTxt'>
                     <div className='col-1'>
                       <div className='picture recived-bg'>
@@ -182,8 +184,8 @@ const Track = (props) => {
                       <div className=''>
                         <div className='text-muted '>
                           {!!Object.keys(poChainOfCustodyData).length
-                            ? "Order ID"
-                            : "Shipment ID"}
+                            ? t('order_id')
+                            : t('shipment_id')}
                         </div>
                         <div className='font-weight-bold '>
                           {shippmentChainOfCustodyData?.length > 0
@@ -236,6 +238,7 @@ const Track = (props) => {
                                 : 1
                             }
                             container={2 + i}
+                            t={t}
                           />
                         ));
                     })}

@@ -1,13 +1,18 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q";
 
 const Map = (props) => {
+  const { lang } = props;
   const mapContainerRef = useRef(null);
   const [lng, setLng] = useState(5);
   const [lat, setLat] = useState(34);
@@ -232,7 +237,8 @@ const Map = (props) => {
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
     });
-
+    const language = new MapboxLanguage({defaultLanguage: lang});
+    map.addControl(language);
     // Clean up on unmount
     return () => map.remove();
   }, [props]); // eslint-disable-line react-hooks/exhaustive-deps

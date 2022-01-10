@@ -12,6 +12,7 @@ const EditRow = (props) => {
     handleProductChange,
     products,
     handleCategoryChange,
+    t
   } = props;
 
   const numbersOnly = (e) => {
@@ -56,8 +57,8 @@ const EditRow = (props) => {
                 <Select
                   className="no-border"
                   placeholder={
-                    <div className="select-placeholder-text">
-                      Select Product Category
+                    <div className='select-placeholder-text'>
+                      {t('select_product_category')}
                     </div>
                   }
                   value={
@@ -90,7 +91,7 @@ const EditRow = (props) => {
                   placeholder={
                     <div className="select-placeholder-text">
                       {" "}
-                      Product Name{" "}
+                      {t('product_name')}{" "}
                     </div>
                   }
                   value={
@@ -122,7 +123,7 @@ const EditRow = (props) => {
                       color: "#a8a8a8",
                     }}
                   >
-                    Product ID
+                    {t('product_id')}
                   </div>
                 )}
               </div>
@@ -133,7 +134,7 @@ const EditRow = (props) => {
           {prod.manufacturer ? (
             prod.manufacturer
           ) : (
-            <div className="select-placeholder-text">Manufacturer</div>
+            <div className='select-placeholder-text'>{t('manufacturer')}</div>
           )}
         </div>
         <div className="divider1"></div>
@@ -141,8 +142,8 @@ const EditRow = (props) => {
           <div className="">
             <input
               style={{ position: "relative", left: "-20px" }}
-              className="form-control text-center"
-              placeholder="Enter Quantity"
+              className='form-control text-center'
+              placeholder={t('enter_quantity')}
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : ""}
               onChange={(e) => {
@@ -163,7 +164,7 @@ const EditRow = (props) => {
                 : prod.unitofMeasure.name}
             </div>
           ) : (
-            <div className="select-placeholder-text">Unit</div>
+            <div className='select-placeholder-text'>{t('unit')}</div>
           )}
         </div>
       </div>

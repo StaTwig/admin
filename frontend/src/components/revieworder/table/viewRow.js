@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.scss";
 const ViewRow = (props) => {
-  const { prod } = props;
+  const { prod, t } = props;
   return (
     <div className='row text-center text-dark col ml-5'>
       <div className='col tcell p-2 '>
@@ -72,7 +72,7 @@ const ViewRow = (props) => {
                 : prod.unitofMeasure.name}
             </span>
           ) : (
-            <span className='placeholder_id'>Unit</span>
+              <span className='placeholder_id'>{t('unit')}</span>
           )}
           <span>{")"}</span>
         </div>

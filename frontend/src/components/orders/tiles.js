@@ -7,6 +7,7 @@ import { getOrderAnalytics } from "../../actions/analyticsAction";
 import "./style.scss";
 
 const Tiles = (props) => {
+  const { t } = props;
   const [orderAnalytics, setOrderAnalytics] = useState({
     outboundPO: 0,
     inboundPO: 0,
@@ -29,7 +30,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title recived-text font-weight-bold'>
-              Total Orders Sent
+              {t('total_orders_sent')}
             </div>
             <div className='recived-text count'>
               {orderAnalytics?.outboundPO}
@@ -44,7 +45,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title sent-text font-weight-bold'>
-              Total Orders Received
+              {t('total_orders_received')}
             </div>
             <div className='sent-text count'>{orderAnalytics?.inboundPO}</div>
           </div>
@@ -60,7 +61,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title inbound-text font-weight-bold'>
-              Total Orders Pending
+              {t('total_orders_pending')}
             </div>
             <div className='inbound-text count'>
               {orderAnalytics?.pendingOrders}
@@ -78,7 +79,7 @@ const Tiles = (props) => {
           </div>
           <div className='d-flex flex-column'>
             <div className='title outbound-text font-weight-bold'>
-              Total Orders Rejected
+              {t('total_orders_rejected')}
             </div>
             <div className='outbound-text count'>
               {orderAnalytics?.rejectedOrders}

@@ -1,5 +1,4 @@
 const EmployeeModel = require("../models/EmployeeModel");
-const WarehouseModel = require("../models/WarehouseModel");
 const { sendNotification } = require("./sender");
 const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
 const { asyncForEach } = require("./utility");
@@ -45,7 +44,6 @@ exports.inventoryAdd = async (event) => {
       transactionId: txnId,
     };
     await sendNotification(dataSender);
-    // template = `${actor.firstName} ${actor.lastName} has added "Inventory - ${txnId}" to the inventory`;
   }
 };
 exports.inventoryUpdate = async (event) => {
@@ -68,40 +66,37 @@ exports.inventoryUpdate = async (event) => {
 };
 exports.inventoryNearExpiry = async (event) => {
   let txnId = event?.transactionId;
-  let template = `"Inventory - ${txnId}" will expire soon`;
-  if (event?.actorId) {
-    const actor = await EmployeeModel.findOne({ id: event.actorId });
-    let dataSender = {
-      user: event.actorId,
-      email: actor.emailId,
-      mobile: actor.phoneNumber,
+  let template = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) will expire soon`;
+  const employees = await getEligibleUsers(event.actorWarehouseId);
+  await asyncForEach(employees, async (user) => {
+    const dataReceiver = {
+      user: user.id,
+      email: user.emailId,
+      mobile: user.phoneNumber,
       subject: `Inventory Alert`,
       content: template,
       type: "ALERT",
       eventType: "INVENTORY",
       transactionId: txnId,
     };
-    await sendNotification(dataSender);
-  }
+    await sendNotification(dataReceiver);
+  });
 };
 exports.inventoryExpired = async (event) => {
-  let txnId = event.transactionId;
-  let template = `"Inventory - ${txnId}" has expired`;
-  const warehouseId = await WarehouseModel.find({ warehouseInventory: txnId });
-  for (warehouse of warehouseId) {
-    const employees = await getEligibleUsers(warehouse.id);
-    asyncForEach(employees, async (employee) => {
-      let dataReceiver = {
-        user: user.id,
-        email: user.emailId,
-        mobile: user.phoneNumber,
-        subject: `Inventory Alert`,
-        content: template,
-        type: "ALERT",
-        eventType: "INVENTORY",
-        transactionId: txnId,
-      };
-      await sendNotification(dataReceiver);
-    });
-  }
+  const txnId = event.transactionId;
+  const template = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) has expired`;
+  const employees = await getEligibleUsers(event.actorWarehouseId);
+  await asyncForEach(employees, async (user) => {
+    const dataReceiver = {
+      user: user.id,
+      email: user.emailId,
+      mobile: user.phoneNumber,
+      subject: `Inventory Alert`,
+      content: template,
+      type: "ALERT",
+      eventType: "INVENTORY",
+      transactionId: txnId,
+    };
+    await sendNotification(dataReceiver);
+  });
 };

@@ -2,6 +2,7 @@ import React from "react";
 import "./style.scss";
 
 const Tabs = (props) => {
+  const { t } = props;
   return (
     <div className='tabs'>
       <ul className='nav nav-pills'>
@@ -19,7 +20,7 @@ const Tabs = (props) => {
                 props.visible === "one" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              Inbound
+              {t('inbound')}
             </div>
           </li>
         )}
@@ -39,7 +40,7 @@ const Tabs = (props) => {
               }
               id='tab-content'
             >
-              Outbound
+              {t('outbound')}
             </div>
           </li>
         )}

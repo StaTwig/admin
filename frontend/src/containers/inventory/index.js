@@ -8,9 +8,11 @@ import {
   resetInventories,
   getTransactionFilterList,
 } from "../../actions/inventoryActions";
+import { useTranslation } from 'react-i18next';
 
 const InventoryContainer = (props) => {
   const dispatch = useDispatch();
+const { t, i18n } = useTranslation();
 
   const [skip, setSkip] = useState(0);
   const [inventoryFilterData, setInventoryFilterData] = useState([]);
@@ -51,15 +53,16 @@ const InventoryContainer = (props) => {
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
           <Inventory
             skip={skip}
             inventoriesCount={inventoriesCount}
             inventoryDetails={inventories}
             inventoryFilterData={inventoryFilterData}
+            t={t}
             {...props}
           />
         </div>

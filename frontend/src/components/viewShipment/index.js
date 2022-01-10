@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { getAddress } from "../../utils/commonHelper";
 import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
+import { t } from "i18next";
 const Tracing = (props) => {
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
@@ -33,12 +34,12 @@ const Tracing = (props) => {
   return (
     <div className='tracing'>
       <div className='row justify-content-between'>
-        <h1 className='breadcrumb mt-3'>VIEW SHIPMENT</h1>
+        <h1 className='breadcrumb mt-3'>{t('view_shipment')}</h1>
         <div className='row'>
           <Link to={`/shipments`}>
             <button className='btn btn-outline-primary mr-4 mt-3'>
               <img src={back} height='17' className='mr-2 mb-1' alt='' />
-              Back to shipments
+              {t('back_to_shipments')}
             </button>
           </Link>
           {isAuthenticated("updateShipment") && (
@@ -57,9 +58,9 @@ const Tracing = (props) => {
                   src={UpdateStatus}
                   height='17'
                   className='mr-2 mb-1'
-                  alt='Update Status'
+                  alt={t('update_status')}
                 />
-                <b>Update Status</b>
+                <b>{t('update_status')}</b>
               </button>
             </Link>
           )}
@@ -81,9 +82,9 @@ const Tracing = (props) => {
                   height='14'
                   className='mr-2'
                   disabled={status === "RECEIVED"}
-                  alt='Return Shipment'
+                  alt={t('receive_shipment')}
                 />
-                <b>Receive Shipment</b>
+                <b>{t('receive_shipment')}</b>
               </button>
             </Link>
           )}
@@ -91,24 +92,26 @@ const Tracing = (props) => {
       </div>
       <div className='row'>
         <div className='col-sm-4'>
-          <h6 className='heading mb-3'>SHIPMENT SUMMARY</h6>
-          <ShipmentSummary shipments={tracking} />
-          <h6 className='heading mt-4 mb-3'>SHIPMENT DETAILS</h6>
+          <h6 className='heading mb-3'>{t('shipment_summary')}</h6>
+          <ShipmentSummary shipments={tracking} t={t} />
+          <h6 className='heading mt-4 mb-3'>{t('shipment_details')}</h6>
           <ShipmentDetails
             shipments={tracking}
             setMenuShip={setMenuShip}
             menuShip={menuShip}
             highLight={highLight}
             setHighLight={setHighLight}
+            t={t}
           />
 
-          <h6 className='heading mt-4 mb-3'>PRODUCT LIST</h6>
+          <h6 className='heading mt-4 mb-3'>{t('product_list')}</h6>
           <ProductList
             shipments={tracking}
             productHighLight={productHighLight}
             setProductHighLight={setProductHighLight}
             menuProduct={menuProduct}
             setMenuProduct={setMenuProduct}
+            t={t}
           />
         </div>
         <div className='col-sm-8'>
@@ -117,8 +120,9 @@ const Tracing = (props) => {
               className='col' // commonpanle
               style={{ height: "350px" }}
             >
-              <p className='heading'>Geographical Tracking</p>
-              <Map data={shippmentChainOfCustodyData} />{" "}
+              <p className='heading'>{t('geographical_tracking')}</p>
+              <Map data={shippmentChainOfCustodyData}
+                t={t} />{" "}
             </div>
             {/* <div className="panel commonpanle col">
               {props.iotEnabledStatus ?
@@ -167,7 +171,7 @@ const Tracing = (props) => {
               )
             }
           >
-            SHOW MORE
+            {t('show_more')}
           </button>
           {openShipping && (
             <Modal
@@ -178,7 +182,7 @@ const Tracing = (props) => {
               <ViewShippingModal shipments={tracking} />
             </Modal>
           )}
-          <h6 className='heading mb-3'>CHAIN OF CUSTODY</h6>
+          <h6 className='heading mb-3'>{t('chain_of_custody')}</h6>
           {shippmentChainOfCustodyData.length === 0 ? (
             <div>N/A</div>
           ) : (
@@ -192,7 +196,7 @@ const Tracing = (props) => {
                 />
               </div>
               <div className='d-flex flex-column'>
-                <div className='chain text-secondary'>Shipment Number</div>
+                  <div className='chain text-secondary'> {t('shipment_number')}</div>
                 <div className='chain'>
                   <strong>{shippmentChainOfCustodyData[0].id}</strong>
                 </div>
@@ -237,6 +241,7 @@ const Tracing = (props) => {
             setMenuShip={setMenuShip}
             setMenuProduct={setMenuProduct}
             setProductHighLight={setProductHighLight}
+            t={t}
           />
         </div>
       </div>

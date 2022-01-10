@@ -5,7 +5,7 @@ const axios = require("axios");
 const client = require("twilio")(accountSid, authToken);
 const Notification = require("../models/NotificationsModel");
 const Organisation = require("../models/OrganisationModel");
-var uuid = require("uuid");
+const cuid = require("cuid");
 
 async function eventToData(event, type) {
   switch (event.eventTypeDesc) {
@@ -75,7 +75,7 @@ async function pushNotification(event, userId, type, transactionId) {
   try {
     const content = await eventToData(event, "mobile");
     var notification = new Notification({
-      id: uuid.v4(),
+      id: cuid(),
       title: "VaccineLedger alert",
       message: content,
       user: userId,
@@ -88,7 +88,7 @@ async function pushNotification(event, userId, type, transactionId) {
     notification.transactionId = transactionId;
     notification.save(async function (err, doc) {
       if (err) return console.error(err);
-      console.log("Document inserted succussfully!", doc);
+      console.log("Document inserted successfully!", doc);
     });
   } catch (err) {
     console.log(err);
@@ -133,7 +133,7 @@ async function alertEmail(event, email) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("**********Mailed Succesfully**********");
+          console.log("********** Mailed Successfully **********");
           return true;
         }
       });

@@ -2,19 +2,21 @@ import React from "react";
 import CreateShipment from "../../components/createshipment";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
+import { useTranslation } from 'react-i18next';
 
-const createShipmentContainer = (props) => {
+const CreateShipmentContainer = (props) => {
+const { t, i18n } = useTranslation();
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} />
+      <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} />
+        <Sidebar {...props} t={t}/>
         <div className='content'>
-          <CreateShipment {...props} />
+          <CreateShipment {...props} t={t} />
         </div>
       </div>
     </div>
   );
 };
 
-export default createShipmentContainer;
+export default CreateShipmentContainer;

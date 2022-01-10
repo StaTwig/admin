@@ -13,6 +13,7 @@ import { isAuthenticated } from "../../utils/commonHelper";
 import "./style.scss";
 
 const Overview = (props) => {
+  const { t, i18n } = props;
   const [visible, setvisible] = useState("one");
   const [shpmnts, setShpmnts] = useState([]);
   const [overviewAnalytics, setOverViewAnalytics] = useState({});
@@ -42,7 +43,7 @@ const Overview = (props) => {
 
   return (
     <div className='overview'>
-      <h2 className='breadcrumb'>OVERVIEW</h2>
+      <h2 className='breadcrumb'>{t('overview')}</h2>
       <div className='full-width-ribben'>
         <div className='row no-gutters'>
           <div className='col'>
@@ -51,7 +52,7 @@ const Overview = (props) => {
                 <img src={totalshipments} alt='truck' />
               </div>
               <div className='d-flex flex-column'>
-                <div className='title'>Total Outbound Shipments</div>
+                <div className='title'>{t('total_outbound_shipments')}</div>
                 <div className='count1'>
                   {overviewAnalytics.outboundShipments}
                   <small className='dayStatus ml-1'></small>
@@ -70,7 +71,7 @@ const Overview = (props) => {
               </div>
 
               <div className='d-flex flex-column'>
-                <div className='title'>Total Inbound Shipments</div>
+                <div className='title'>{t('total_inbound_shipments')}</div>
                 <div className='count3'>
                   {overviewAnalytics.inboundShipments}
                   <small className='dayStatus ml-1'></small>
@@ -84,7 +85,7 @@ const Overview = (props) => {
                 <img src={TotalInventoryAdded} alt='truck' width='65%' />
               </div>
               <div className='d-flex flex-column'>
-                <div className='title'>Total Product Category</div>
+                <div className='title'>{t('total_product_category')}</div>
                 <div className='count2'>
                   {overviewAnalytics.totalProductCategory}
                   <small className='dayStatus ml-1'></small>
@@ -102,7 +103,7 @@ const Overview = (props) => {
                 />
               </div>
               <div className='d-flex flex-column'>
-                <div className='title'>Average Order Processing Time</div>
+                <div className='title'>{t('avg_order_processing_time')}</div>
                 <div className='count4'>
                   {overviewAnalytics.averageOrderProcessingTime}
                   <small className='dayStatus ml-1'></small>
@@ -116,7 +117,7 @@ const Overview = (props) => {
                 <img src={shipmentsdelayed} alt='truck' />
               </div>
               <div className='d-flex flex-column'>
-                <div className='title'>Pending Orders</div>
+                <div className='title'>{t('pending_orders')}</div>
                 <div className='count5'>
                   {overviewAnalytics.pendingOrders}{" "}
                   <small className='dayStatus'></small>
@@ -133,13 +134,13 @@ const Overview = (props) => {
             <div className='card-header'>
               <div className='d-flex align-items-center justify-content-between'>
                 <h5 className='card-title font-weight-bold mt-2'>
-                  Inventory Summary
+                  {t('inventory_summary')}
                 </h5>
                 {isAuthenticated("addInventory") && (
                   <Link to='/newinventory'>
                     <button className='btn-primary btn-sm btn mt-3'>
                       {" "}
-                      <b>Add Inventory</b>
+                      <b>{t('add_inventory')}</b>
                     </button>
                   </Link>
                 )}
@@ -155,7 +156,7 @@ const Overview = (props) => {
                 {isAuthenticated("viewInventory") && (
                   <Link to='/inventory'>
                     <button className=' card-link btn btn-outline-primary'>
-                      View More
+                     {t('view_more')}
                     </button>
                   </Link>
                 )}
@@ -168,26 +169,26 @@ const Overview = (props) => {
             <div className='card-header'>
               <div className='d-flex align-items-center justify-content-between'>
                 <h5 className='card-title font-weight-bold mt-2'>
-                  Shipment Summary
+                  {t('shipment_summary')}
                 </h5>
                 {isAuthenticated("createShipment") && (
                   <Link to='/newshipment'>
                     <button className='btn-primary btn-sm btn mt-3'>
-                      <b> Create Shipment </b>
+                      <b> {t('create_shipment')} </b>
                     </button>
                   </Link>
                 )}
               </div>
             </div>
             <div className='card-body' style={{ padding: 0 }}>
-              <SummaryTable {...props} setvisible={setData} visible={visible} />
+              <SummaryTable {...props} t={t} setvisible={setData} visible={visible} />
             </div>
             <div className='card-footer mb-2'>
               <div className='d-flex align-items-center justify-content-center'>
                 {isAuthenticated("viewShipment") && (
                   <Link to='/shipments'>
                     <button className=' card-link btn btn-outline-primary'>
-                      View More
+                      {t('view_more')}
                     </button>
                   </Link>
                 )}

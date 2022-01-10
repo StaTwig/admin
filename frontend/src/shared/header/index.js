@@ -62,6 +62,7 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
+  const { t } = props;
   // console.log(ABC)
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -355,6 +356,7 @@ const Header = (props) => {
     }
   };
   const imgs = config().fetchProfileImage;
+  const search_placeholder = t('search') + ' ' + t('po_id') + '/' + t('shipment_id') + ' /' + t('transit_no');
 
   return (
     <div className="navBar">

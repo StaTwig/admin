@@ -13,6 +13,7 @@ import {
 } from "../../actions/shipmentActions";
 import { useDispatch, useSelector } from "react-redux";
 import { element, func } from "prop-types";
+import { t } from "i18next";
 
 const EnterId = (props) => {
   const { id } = props.match.params;
@@ -103,7 +104,7 @@ const EnterId = (props) => {
   return (
     <div className="updateStatus">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">UPDATE SHIPMENT</h1>
+        <h1 className="breadcrumb">{t('update_shipment')}</h1>
       </div>
       <Formik
         enableReinitialize={true}
@@ -164,7 +165,7 @@ const EnterId = (props) => {
                         errors.shipmentId && touched.shipmentId && ``
                       }`}
                     >
-                      <label className="text-secondary">Shipment ID</label>
+                        <label className="text-secondary">{t('shipment_id')}</label>
                       <div className="mb-2" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps}
@@ -190,6 +191,7 @@ const EnterId = (props) => {
                               name="shipmentId"
                               margin="normal"
                               variant="outlined"
+                              placeholder="Enter Shipment ID"
                             />
                           )}
                         />
@@ -197,8 +199,8 @@ const EnterId = (props) => {
                           <span
                             className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
-                          >
-                            This shipment has been already delivered.
+                            >
+                            {t('update_msg')}
                           </span>
                         )}
                       </div>
@@ -231,7 +233,7 @@ const EnterId = (props) => {
                     className="or"
                     style={{ position: "absolute", left: "4px", top: "25px" }}
                   >
-                    <b>OR</b>
+                    <b>{t('or')}</b>
                   </h6>
                 </div>
 
@@ -241,7 +243,7 @@ const EnterId = (props) => {
                     style={{ height: "60%", width: "110%" }}
                   >
                     <div className="form-group">
-                      <label className="text-secondary">Transit No.</label>
+                        <label className="text-secondary">{t('transit_no')}</label>
                       <div className="" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps1}
@@ -265,6 +267,7 @@ const EnterId = (props) => {
                               name="billNo"
                               margin="normal"
                               variant="outlined"
+                              placeholder="Enter Transit No"
                             />
                           )}
                         />
@@ -273,7 +276,7 @@ const EnterId = (props) => {
                             className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
                           >
-                            This shipment has been already delivered.
+                            {t('update_msg')}
                           </span>
                         )}
                       </div>
@@ -301,7 +304,7 @@ const EnterId = (props) => {
                       className="btn btn-outline-primary mr-4 "
                       onClick={() => props.history.push(`/shipments`)}
                     >
-                      Cancel
+                      {t('cancel')}
                     </button>
                     <button
                       disabled={shipdisabled}
@@ -325,7 +328,7 @@ const EnterId = (props) => {
                         height="17"
                         className="mr-2 mb-1"
                       />
-                      <span>Update Shipment</span>
+                        <span>{t('update_shipment')}</span>
                     </button>
                   </div>
                 </div>
