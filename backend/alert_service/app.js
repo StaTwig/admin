@@ -7,7 +7,7 @@ const cron = require("node-cron");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-const alerts = require("./helpers/alertGenerator");
+const alerts = require("./helpers/alertCronJobs");
 const events = require("./models/EventModal");
 const { alertListener } = require("./helpers/listener");
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -34,7 +34,6 @@ const eventEmitter = events.watch();
 eventEmitter.on("change", (change) => {
   if (change.operationType === "insert") {
     const event = change.fullDocument;
-    // alerts.generateAlert(event);
     alertListener(event);
   } else if (change.operationType === "delete") {
     console.log(
