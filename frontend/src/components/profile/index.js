@@ -345,7 +345,7 @@ class Profile extends React.Component {
                         type="text"
                         id="referenceShipmentId"
                         name="firstname"
-                        placeholder={t('enter')+' '+t('first_name')}
+                        placeholder={t('enter') + ' ' + t('first_name')}
                         value={firstName}
                         onChange={(e) =>
                           this.setState({ firstName: e.target.value })
@@ -361,7 +361,7 @@ class Profile extends React.Component {
                         id="referenceShipmentId"
                         name="lastname"
                         value={lastName}
-                        placeholder={t('enter')+' '+t('last_name')}
+                        placeholder={t('enter') + ' ' + t('last_name')}
                         onChange={(e) =>
                           this.setState({
                             lastName: e.target.value,
@@ -396,7 +396,7 @@ class Profile extends React.Component {
                         className='form-group'
                         country={"in"}
                         placeholder={t('enter_phone_number')}
-                        style={{ position: "absolute", marginLeft: "64%" }}
+                        // style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
                           this.setState({ phoneNumber: phone })
@@ -468,34 +468,34 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] === "ACTIVE" && (
-                                    <Link
-                                      to={{
-                                        pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
-                                        state: {
-                                          editMode: this.state.editMode,
-                                        },
-                                      }}
-                                    >
-                                      <button
-                                        className="btn-edit fontSize20 pl-2 pr-10"
-                                        style={{
-                                          height: "35px",
-                                          width: "100px",
+                                      <Link
+                                        to={{
+                                          pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
+                                          state: {
+                                            editMode: this.state.editMode,
+                                          },
                                         }}
                                       >
-                                        <img
-                                          src={Pen}
-                                          width="15"
-                                          height="15"
-                                          className="mr-2"
-                                          alt="Edit"
-                                        />
-                                        <span className="font-weight-bold edit-text">
-                                          {t('edit')}
-                                        </span>
-                                      </button>
-                                    </Link>
-                                  )}
+                                        <button
+                                          className="btn-edit fontSize20 pl-2 pr-10"
+                                          style={{
+                                            height: "35px",
+                                            width: "100px",
+                                          }}
+                                        >
+                                          <img
+                                            src={Pen}
+                                            width="15"
+                                            height="15"
+                                            className="mr-2"
+                                            alt="Edit"
+                                          />
+                                          <span className="font-weight-bold edit-text">
+                                            {t('edit')}
+                                          </span>
+                                        </button>
+                                      </Link>
+                                    )}
                                   {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -505,10 +505,10 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] !== "ACTIVE" && (
-                                    <span className="font-weight-bold badge badge-danger">
-                                      {t('approval_pending')}
-                                    </span>
-                                  )}
+                                      <span className="font-weight-bold badge badge-danger">
+                                        {t('approval_pending')}
+                                      </span>
+                                    )}
                                 </div>
                               </div>
                               <div className="card-body">
@@ -630,8 +630,8 @@ class Profile extends React.Component {
                       <div className="row date-joined">
                         {this.state.signup_date ? (
                           <span>{t('joined_on')} {moment(this.state.signup_date).format("Do MMMM YYYY") === "Invalid date"
-                          ? this.state.signup_date
-                          : moment(this.state.signup_date).format("Do MMMM YYYY")}</span>
+                            ? this.state.signup_date
+                            : moment(this.state.signup_date).format("Do MMMM YYYY")}</span>
                         ) : (
                           <span>N/A</span>
                         )}
@@ -701,7 +701,7 @@ class Profile extends React.Component {
                                     >
                                       {
                                         this.state.warehouseLocations[id][
-                                          "title"
+                                        "title"
                                         ]
                                       }
                                       <div
@@ -712,7 +712,7 @@ class Profile extends React.Component {
                                       >
                                         {
                                           this.state.warehouseLocations[id][
-                                            "id"
+                                          "id"
                                           ]
                                         }
                                       </div>
@@ -720,45 +720,45 @@ class Profile extends React.Component {
                                     {this.state.warehouseLocations[id][
                                       "status"
                                     ] !== "ACTIVE" && (
-                                      <div className="font-weight-bold badge badge-danger ml-3">
-                                        {t('approval_pending')}
-                                      </div>
-                                    )}
+                                        <div className="font-weight-bold badge badge-danger ml-3">
+                                          {t('approval_pending')}
+                                        </div>
+                                      )}
                                   </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.city && (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.city
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.city
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.state && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.state
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.state
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.country && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.country
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.country
+                                          }
+                                        </span>
+                                      )}
                                   </div>
 
                                   <div className="full-address">
