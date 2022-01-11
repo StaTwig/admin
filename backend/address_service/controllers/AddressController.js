@@ -69,6 +69,7 @@ function getConditionForLocationApprovals(type, id) {
 exports.getLocationApprovals = [
   auth,
   async (req, res) => {
+    // console.log('Request', req);
     try {
       const orgType = req.user.organisationType;
       await Warehouse.aggregate([
@@ -94,7 +95,7 @@ exports.getLocationApprovals = [
             as: "employee",
           },
         },
-        { $unwind: "$employee" },
+        { $unwind: "$employee" }
       ])
         .then((warehouses) => {
           return apiResponse.successResponseWithData(
@@ -104,11 +105,11 @@ exports.getLocationApprovals = [
           );
         })
         .catch((err) => {
-          console.log(err);
+          console.log('error1',err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
-      console.log(err);
+      console.log('Error2', err);
 
       return apiResponse.ErrorResponse(res, err);
     }
