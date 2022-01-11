@@ -27,7 +27,7 @@ const BatchExpiry = (props) => {
         setEnable(false);
         result = await getExpiredProductsByBatch();
       }
-      if(Array.isArray(result))
+      if (Array.isArray(result))
         setData(result);
       dispatch(turnOff());
     }
@@ -88,13 +88,13 @@ const BatchExpiry = (props) => {
               <div style={{ width: "14%" }} className="txt txtBlue">
                 {exp.products.name}
               </div>
-              <div style={{ width: "16%" }} className="txt1 ">
+              <div style={{ width: "16%" }} className="fieldVals ">
                 {exp.products.type}
               </div>
-              <div style={{ width: "15%" }} className="txt1 ">
+              <div style={{ width: "15%" }} className="fieldVals ">
                 {exp.products.manufacturer}
               </div>
-              <div style={{ width: "12%" }} className="txt1 ">
+              <div style={{ width: "12%", fontWeight: 1000 }} className="fieldVals ">
                 {exp?.quantity ? exp.quantity : 0}
                 {" ("}
                 {exp.products.unitofMeasure
@@ -102,15 +102,15 @@ const BatchExpiry = (props) => {
                   : "N/A"}
                 {")"}
               </div>
-              <div style={{ width: "14%" }} className="txt1 ">
+              <div style={{ width: "14%" }} className="fieldVals ">
                 {exp.batchNumbers[0]}
               </div>
-              <div style={{ width: "12%" }} className="txt1 ">
+              <div style={{ width: "12%" }} className="fieldVals ">
                 {exp.attributeSet.mfgDate
                   ? formatDate(exp.attributeSet.mfgDate, "mmyyyy")
                   : ""}
               </div>
-              <div style={{ width: "8%" }} className="txt1 ">
+              <div style={{ width: "8%" }} className="fieldVals ">
                 {exp.attributeSet.expDate
                   ? formatDate(exp.attributeSet.expDate, "mmyyyy")
                   : ""}
