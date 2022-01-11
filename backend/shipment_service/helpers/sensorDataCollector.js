@@ -2,11 +2,13 @@ const SensorModel = require("../models/SensorModel");
 const ShipmentModel = require("../models/ShipmentModel");
 
 exports.getCurrentShipment = async (vehicleId) => {
-  const shipment = await ShipmentModel.find({
+  const shipment = await ShipmentModel.findOne({
     vehicleId: vehicleId,
     status: "CREATED",
-  });
-  return shipment.pop();
+  })
+    .sort({ _id: -1 })
+    .limit(1);
+  return shipment;
 };
 
 exports.saveSensorData = async (sensorData) => {
