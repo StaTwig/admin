@@ -10,6 +10,7 @@ const {
   orderReject,
   orderDefault,
   orderCreated,
+  orderUpdate,
 } = require("./order");
 const {
   inventoryAdd,
@@ -23,18 +24,23 @@ async function shipmentListener(event) {
   try {
     switch (event.eventTypePrimary) {
       case "CREATE":
+        console.log("Shipment Create == > ", event);
         await shipmentCreate(event);
         break;
       case "UPDATE":
+        console.log("Shipment Update == > ", event);
         await shipmentUpdate(event);
         break;
       case "RECEIVE":
+        console.log("Shipment Receive == > ", event);
         await shipmentReceive(event);
         break;
       case "DELAYED":
+        console.log("Shipment Delayed == > ", event);
         await shipmentDelayed(event);
         break;
       default:
+        console.log("Shipment Default", event);
         console.log("Shipment Default");
         await shipmentUpdate(event);
     }
@@ -47,16 +53,24 @@ async function orderListener(event) {
   try {
     switch (event.eventTypePrimary) {
       case "PENDING":
+        console.log("Order Pending == > ", event);
         await orderPending(event);
         break;
       case "CREATE":
+        console.log("Order Create == > ", event);
         await orderCreated(event);
         break;
       case "RECEIVE":
+        console.log("Order Receive == > ", event);
         await orderAccept(event);
         break;
       case "REJECT":
+        console.log("Order Reject == > ", event);
         await orderReject(event);
+        break;
+      case "UPDATE":
+        console.log("Order Update == > ", event);
+        await orderUpdate(event);
         break;
       default:
         console.log("Order Default");
@@ -71,15 +85,19 @@ async function inventoryListener(event) {
   try {
     switch (event.eventTypePrimary) {
       case "ADD":
+        console.log("Inventory Add == > ", event);
         await inventoryAdd(event);
         break;
       case "UPDATE":
+        console.log("Inventory Update == > ", event);
         await inventoryUpdate(event);
         break;
       case "EXPIRED":
+        console.log("Inventory Expired == > ", event);
         await inventoryExpired(event);
         break;
       case "NEAR_EXPIRY":
+        console.log("Inventory Near Expiry == > ", event);
         await inventoryNearExpiry(event);
         break;
       default:
@@ -92,7 +110,7 @@ async function inventoryListener(event) {
 
 async function alertListener(event) {
   try {
-    console.log(event.eventTypeDesc);
+    console.log("EVENT TYPE == > ", event.eventTypeDesc);
     if (
       event.eventTypeDesc == "SHIPMENT" ||
       event.eventTypeDesc == "SHIPMENT_TRACKING"
@@ -161,4 +179,5 @@ async function subscribedAlerts(event) {
 
 module.exports = {
   alertListener,
+  inventoryListener,
 };
