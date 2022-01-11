@@ -295,7 +295,3 @@ exports.orderDefault = async (event) => {
     await sendNotification(dataReceiver);
   }
 };
-
-exports.orderUpdate = async (event) => {
-  const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
-};
