@@ -444,6 +444,7 @@ const FormPage = (props) => {
                                 setChecker(true);
                                 if (e.length > 0) {
                                   setPhoneNumberError(false);
+                                  setMailError(false)
                                 } else {
                                   setsignupDisable(true);
                                 }
@@ -517,10 +518,14 @@ const FormPage = (props) => {
                                     setLastNameError(true);
                                   }
                                   if (
-                                    mobileNumber.length <= 0 ||
-                                    email.length <= 0
+                                    (email.length > 0 ||
+                                      mobileNumber.length > 0)
+                                    && emailErrorMsg === '' &&
+                                    phoneErrorMsg === '' &&
+                                    (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
                                   ) {
                                     setPhoneNumberError(true);
+                                    setMailError(true)
                                   }
 
                                   setFieldValue("type", item);
@@ -635,10 +640,11 @@ const FormPage = (props) => {
                                     setLastNameError(true);
                                   }
                                   if (
-                                    mobileNumber.length <= 0 ||
-                                    email.length <= 0
+                                    (mobileNumber.length <= 0 ||
+                                      email.length <= 0) && emailErrorMsg === '' && phoneErrorMsg === '' && (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
                                   ) {
                                     setPhoneNumberError(true);
+                                    setMailError(true)
                                   }
                                   setFieldValue("org", item);
                                   props.onOrganisationChange(item);
@@ -647,18 +653,22 @@ const FormPage = (props) => {
                                     props.onOrgChange(false);
                                   }
                                   if (item.name === t('other')) {
-                                    // props.onOrgChange(true);
+                                    props.onOrgChange(true);
 
                                     if (
                                       firstName.length > 0 &&
                                       lastName.length > 0 &&
                                       orgType.length > 0 &&
                                       (email.length > 0 ||
-                                        mobileNumber.length > 0) && emailErrorMsg !== '' && phoneErrorMsg !== ''
+                                        mobileNumber.length > 0)
+                                      && emailErrorMsg === '' &&
+                                      phoneErrorMsg === '' &&
+                                      (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
                                     ) {
                                       props.onOrgChange(true);
                                     } else {
                                       setPhoneNumberError(true);
+                                      setMailError(true)
                                       props.onOrgChange(false);
                                     }
                                   }
