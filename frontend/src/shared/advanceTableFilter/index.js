@@ -272,7 +272,7 @@ const AdvanceTableFilter = (props) => {
     }
   };
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event?.currentTarget);
   };
 
   const handleClose = () => {
@@ -294,11 +294,11 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoDeliveryLocationClick = (event) => {
-    setPoDeliveryLocationAnchorEl(event.currentTarget);
+    setPoDeliveryLocationAnchorEl(event?.currentTarget);
   };
 
   const handlePoDeliveryLocationClose = (event) => {
-    if(!event.currentTarget.contains(event.relatedTarget))
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setPoDeliveryLocationAnchorEl(null);
   };
 
@@ -542,7 +542,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleToShipmentClick = (event) => {
-    setToShipmentAnchorEl(event.currentTarget);
+    setToShipmentAnchorEl(event?.currentTarget);
   };
 
   const handleToShipmentClose = (event) => {
@@ -556,7 +556,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoProductNameClick = (event) => {
-    setPoProductNameAnchorEl(event.currentTarget);
+    setPoProductNameAnchorEl(event?.currentTarget);
   };
 
   const handlePoProductNameClose = (event) => {
@@ -570,7 +570,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryStatusClick = (event) => {
-    setInventoryStatusAnchorEl(event.currentTarget);
+    setInventoryStatusAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryStatusClose = () => {
@@ -792,7 +792,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleFromShipmentClick = (event) => {
-    setFromShipmentAnchorEl(event.currentTarget);
+    setFromShipmentAnchorEl(event?.currentTarget);
   };
 
   const handleFromShipmentClose = (event) => {
@@ -806,7 +806,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoOrderIdClick = (event) => {
-    setPoOrderIdAnchorEl(event.currentTarget);
+    setPoOrderIdAnchorEl(event?.currentTarget);
   };
 
   const handlePoOrderIdClose = (event) => {
@@ -969,7 +969,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryProductCategoryClick = (event) => {
-    setInventoryProductCategoryAnchorEl(event.currentTarget);
+    setInventoryProductCategoryAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryProductCategoryClose = () => {
@@ -1110,7 +1110,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleShipmentIdClick = (event) => {
-    setShipmentIdAnchorEl(event.currentTarget);
+    setShipmentIdAnchorEl(event?.currentTarget);
   };
 
   const handleShipmentIdClose = (event) => {
@@ -1124,7 +1124,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoToClick = (event) => {
-    setPoToAnchorEl(event.currentTarget);
+    setPoToAnchorEl(event?.currentTarget);
   };
 
   const handlePoToClose = () => {
@@ -1137,7 +1137,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoFromClick = (event) => {
-    setPoFromAnchorEl(event.currentTarget);
+    setPoFromAnchorEl(event?.currentTarget);
   };
 
   const handlePoFromClose = (event) => {
@@ -1151,7 +1151,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryProductNameClick = (event) => {
-    setInventoryProductNameAnchorEl(event.currentTarget);
+    setInventoryProductNameAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryProductNameClose = () => {
