@@ -374,6 +374,7 @@ const FormPage = (props) => {
                                 setChecker(true);
                                 if (e.target.value.length > 0) {
                                   setEmailErrorMsg("")
+                                  setemailerror(false)
                                   setPhoneNumberError(false);
                                   setMailError(false);
                                 } else {
