@@ -4,6 +4,8 @@ import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+import translationEN from '../public/locales/en/translation.json';
+import translationES from '../public/locales/es/translation.json';
 // import translationEN from '../public/locales/en/translation.js';
 // import translationES from '../public/locales/es/translation.js';
 // don't want to use this?
@@ -32,10 +34,25 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
+    resources: {
+      en: {
+        translation: translationEN
+      },
+      es: {
+        translation: translationES
+      }
+    },
     fallbackLng: 'en',
     debug: true,
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
+    },
+    react: {
+        useSuspense: false,
+        wait: true
+    },
+    interpolation: {
+        escapeValue: false
     }
   });
 

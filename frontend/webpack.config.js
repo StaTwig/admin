@@ -42,6 +42,11 @@ module.exports = {
 
         use: "file-loader",
       },
+      {
+        test: /\.json$/,
+        type: 'javascript/auto',
+        loader: 'json-loader'
+      }
     ],
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
