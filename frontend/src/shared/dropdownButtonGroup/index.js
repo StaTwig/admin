@@ -24,12 +24,12 @@ const DropdownButtonGroup = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
-  console.log(name)
+  console.log(name);
   return (
-    <div className='custom-dropdown' ref={ref}>
+    <div className="custom-dropdown" ref={ref}>
       {isText ? (
         <input
-          className='btn-custom-dropdown form-control'
+          className="btn-custom-dropdown form-control"
           onBlur={() =>
             setTimeout(() => {
               if (value) changeFn(value, "y");
@@ -41,7 +41,7 @@ const DropdownButtonGroup = (props) => {
           }
           onChange={(e) => changeFn(e.target.value)}
           value={value}
-          type='text'
+          type="text"
           onFocus={() => groups.length && setMenu(true)}
           placeholder={placeholder}
           onClick={() => groups.length && setMenu(true)}
@@ -53,17 +53,20 @@ const DropdownButtonGroup = (props) => {
             name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
           }
           // className={`btn-custom-dropdown ${menu && 'active'}`}
-          role='button'
-          type='button'
+          role="button"
+          type="button"
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <div className={`${name?.length > 15 && "textNeg"}`}>
-            {useParse ? parse(name) : name.split("|")[0] }
-          </div>
-          <br></br>
-          <div className={`location-add ${name?.length > 15 && "textNeg-title"}`}>
-            {useParse ? parse(name) : name.split("|")[1]}
+          <div className="loc-text">
+            <div className={`${name?.length > 20 && "textNeg"}`}>
+              {useParse ? parse(name) : name.split("|")[0]}
+            </div>
+            <div
+              className={`location-add ${name?.length > 20 && "textNeg-title"}`}
+            >
+              {useParse ? parse(name) : name.split("|")[1]}
+            </div>
           </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
@@ -90,17 +93,20 @@ const DropdownButtonGroup = (props) => {
                   >
                     {item?.warehouseInventory ? (
                       <div>
-                        <span style={{fontWeight: "bolder", color:"#707070"}}>
+                        <span
+                          style={{ fontWeight: "bolder", color: "#707070" }}
+                        >
                           {item.title}
                         </span>
                         <br></br>
-                        <span style={{color:"#707070", fontSize:"12px"}}>
-                          {item?.warehouseAddress?.firstLine +
-                            " " +
-                            item?.warehouseAddress?.city 
-                          //  + " " +
-                          //   item.postalAddress
-                            }
+                        <span style={{ color: "#707070", fontSize: "12px" }}>
+                          {
+                            item?.warehouseAddress?.firstLine +
+                              " " +
+                              item?.warehouseAddress?.city
+                            //  + " " +
+                            //   item.postalAddress
+                          }
                         </span>
                       </div>
                     ) : (

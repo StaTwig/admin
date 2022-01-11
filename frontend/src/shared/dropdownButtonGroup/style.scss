@@ -1,7 +1,6 @@
 @import "../../assets/styles/global.scss";
 
 .custom-dropdown {
-  width: 11vw;
   position: relative;
   right: 0rem;
   flex-basis: 100%;
@@ -14,13 +13,12 @@
   .btn-custom-dropdown {
     border: none;
     display: flex;
-    justify-content: left !important;
     width: 100%;
     color: #3b2222;
-    flex-basis: 100%;
+    gap: 1.5rem;
     outline: none;
     align-items: center;
-    font-size: 15px;
+    font-size: 12px;
 
     position: absolute;
     background: transparent;
@@ -28,7 +26,7 @@
       color: $primaryBlue;
     }
     .textNeg {
-      margin-top: -1.15rem;
+      margin-top: 0rem !important;
     }
   }
   // .textNeg-title{
@@ -42,6 +40,7 @@
     min-width: 0rem;
     font-size: 12px;
     font-weight: 400;
+    text-align: left;
   }
   .btn-custom-dropdown img {
     position: absolute;
@@ -51,21 +50,20 @@
     border: none;
     display: flex;
     justify-content: space-between;
-    color: black;
-    flex-basis: 100%;
+    color: #0b65c1;
+    gap: 1.5rem;
     outline: none;
     align-items: center;
-    font-size: 16px;
+    font-size: 12px;
     background: transparent;
     &.active {
       color: $primaryBlue;
     }
     .textNeg {
-      margin-top: -1.15rem;
+      font-weight: 700;
     }
   }
   .dropdown-menu {
-    height: 180px;
     overflow: auto;
     box-shadow: 0px 3px 10px $grey;
     border-radius: 8px;
@@ -92,10 +90,12 @@
     will-change: transform;
   }
   .customwh {
-    position: absolute;
-    left: 122px;
     height: 9px;
     width: 14px;
+    display: block;
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
   }
 }
 .lastmile-drop-img {

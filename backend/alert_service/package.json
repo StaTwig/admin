@@ -9,7 +9,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cors": "^2.8.5",
-    "cuid": "^2.1.8",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "helmet": "^5.0.1",
@@ -18,8 +17,7 @@
     "mongoose": "^6.1.5",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.0",
-    "redis": "3.1.2",
-    "twilio": "^3.72.0"
+    "redis": "3.1.2"
   },
   "devDependencies": {
     "eslint": "^8.6.0"
