@@ -26,6 +26,7 @@ import {
 import { config } from "../../config";
 import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const Orders = (props) => {
   const { t } = props;
