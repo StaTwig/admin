@@ -95,16 +95,25 @@ const SideBar = ({ match, location, user, t }) => {
               className={
                 url === "/shipments" ||
                   url === "/newshipment" ||
-                  url === "/transactionHistory"
-                    ? shipIcon
-                    : shipIcon
-                }
-                alt='Shippment'
-              />
-              <span className='ml-2'>{t('shipments')}</span>
-            </Link>
-          </li>
-        )}
+                  url === "/transactionHistory" ? "active"
+                  : ""
+              }
+            >
+              <Link to='/shipments' className='d-inline-block'>
+                <img
+                  src={
+                    url === "/shipments" ||
+                      url === "/newshipment" ||
+                      url === "/transactionHistory"
+                      ? shipIcon
+                      : shipIcon
+                  }
+                  alt='Shippment'
+                />
+                <span className='ml-2'>Shipments</span>
+              </Link>
+            </li>
+          )}
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>

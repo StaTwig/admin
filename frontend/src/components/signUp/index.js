@@ -439,7 +439,6 @@ const FormPage = (props) => {
                                 // defaultCountry: "IN",
                                 // enableSearch: true,
                               }}
-                              maxLength="10"
                               value={props.phone}
                               onChange={(e) => {
                                 setChecker(true);
@@ -648,14 +647,14 @@ const FormPage = (props) => {
                                     props.onOrgChange(false);
                                   }
                                   if (item.name === t('other')) {
-                                    props.onOrgChange(true);
+                                    // props.onOrgChange(true);
 
                                     if (
                                       firstName.length > 0 &&
                                       lastName.length > 0 &&
                                       orgType.length > 0 &&
                                       (email.length > 0 ||
-                                        mobileNumber.length > 0)
+                                        mobileNumber.length > 0) && emailErrorMsg !== '' && phoneErrorMsg !== ''
                                     ) {
                                       props.onOrgChange(true);
                                     } else {
