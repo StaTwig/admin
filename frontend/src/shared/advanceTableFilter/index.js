@@ -87,7 +87,7 @@ const AdvanceTableFilter = (props) => {
             id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -545,7 +545,8 @@ const AdvanceTableFilter = (props) => {
     setToShipmentAnchorEl(event.currentTarget);
   };
 
-  const handleToShipmentClose = () => {
+  const handleToShipmentClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setToShipmentAnchorEl(null);
   };
 
@@ -558,7 +559,8 @@ const AdvanceTableFilter = (props) => {
     setPoProductNameAnchorEl(event.currentTarget);
   };
 
-  const handlePoProductNameClose = () => {
+  const handlePoProductNameClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setPoProductNameAnchorEl(null);
   };
 
@@ -598,9 +600,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(toShipmentAnchorEl)}
             onClose={handleToShipmentClose}
-            // 
+            onBlur={handleToShipmentClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleToShipmentClose}>
+            <div className="d-flex flex-column align-items-center" >
               {toShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -656,9 +658,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poProductNameAnchorEl)}
             onClose={handlePoProductNameClose}
-            // 
+            onBlur={handlePoProductNameClose} 
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoProductNameClose}>
+            <div className="d-flex flex-column align-items-center" >
               {poProductNameAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -793,7 +795,8 @@ const AdvanceTableFilter = (props) => {
     setFromShipmentAnchorEl(event.currentTarget);
   };
 
-  const handleFromShipmentClose = () => {
+  const handleFromShipmentClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setFromShipmentAnchorEl(null);
   };
 
@@ -806,13 +809,14 @@ const AdvanceTableFilter = (props) => {
     setPoOrderIdAnchorEl(event.currentTarget);
   };
 
-  const handlePoOrderIdClose = () => {
+  const handlePoOrderIdClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setPoOrderIdAnchorEl(null);
   };
 
   const setPoOrderIdFilterOnSelect = (selectedVal) => {
     props.setOrderIdNameFilterOnSelect(selectedVal);
-    handlePoOrderIdClose();
+    handlePoOrderIdClose(null);
   };
 
   // const handleInventoryManufacturerClose = () => {
@@ -837,10 +841,10 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(fromShipmentAnchorEl)}
             onClose={handleFromShipmentClose}
-            // onBlur={handleFromShipmentClose}
+            onBlur={handleFromShipmentClose}
             style={{ marginLeft: "4rem" }}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleFromShipmentClose}>
+            <div className="d-flex flex-column align-items-center">
               {fromShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -895,9 +899,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poOrderIdAnchorEl)}
             onClose={handlePoOrderIdClose}
-            // 
+            onBlur={handlePoOrderIdClose} 
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoOrderIdClose}>
+            <div className="d-flex flex-column align-items-center">
               {poOrderIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -1109,7 +1113,8 @@ const AdvanceTableFilter = (props) => {
     setShipmentIdAnchorEl(event.currentTarget);
   };
 
-  const handleShipmentIdClose = () => {
+  const handleShipmentIdClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setShipmentIdAnchorEl(null);
   };
 
@@ -1135,7 +1140,8 @@ const AdvanceTableFilter = (props) => {
     setPoFromAnchorEl(event.currentTarget);
   };
 
-  const handlePoFromClose = () => {
+  const handlePoFromClose = (event) => {
+    if(!event?.currentTarget.contains(event?.relatedTarget))
     setPoFromAnchorEl(null);
   };
 
@@ -1174,10 +1180,10 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(shipmentIdAnchorEl)}
             onClose={handleShipmentIdClose}
-            // 
+            onBlur={handleShipmentIdClose}
             style={{ width: "150rem" }}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleShipmentIdClose}>
+            <div className="d-flex flex-column align-items-center" >
               {shipmentIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -1293,9 +1299,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poFromAnchorEl)}
             onClose={handlePoFromClose}
-            // 
+            onBlur={handlePoFromClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoFromClose}>
+            <div className="d-flex flex-column align-items-center" >
               <StyledMenuItem>
                 <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
