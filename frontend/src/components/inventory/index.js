@@ -18,11 +18,17 @@ import Cards from "./cards/cards";
 const Inventory = (props) => {
   const { t } = props;
   const headers = {
-    coloumn1: t('product_name'),
-    coloumn2: t('product_category'),
-    coloumn3: t('date'),
-    coloumn4: t('quantity'),
-    coloumn5: t('status'),
+    coloumn1: "Product Name",
+    coloumn2: "Product Category",
+    coloumn3: "Date",
+    coloumn4: "Quantity",
+    coloumn5: "Status",
+
+    displayColoumn1: t("product_name"),
+    displayColoumn2: t("product_category"),
+    displayColoumn3: t("date"),
+    displayColoumn4: t("quantity"),
+    displayColoumn5: t("status"),
 
     img1: <img src={Product} width="16" height="16" alt="Product" />,
     img2: <img src={Quantity} width="24" height="16" alt="Quantity" />,
@@ -33,9 +39,9 @@ const Inventory = (props) => {
 
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
-    coloumn1: t('product_name'),
-    coloumn2: t('product_category'),
-    coloumn3: t('quantity'),
+    coloumn1: t("product_name"),
+    coloumn2: t("product_category"),
+    coloumn3: t("quantity"),
   };
   const MAX_LENGTH = 20;
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState("");
@@ -260,14 +266,14 @@ const Inventory = (props) => {
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
-        <h2 className="breadcrumb">{t('inventory')}</h2>
+        <h2 className="breadcrumb">{t("inventory")}</h2>
         <div className="d-flex">
           {isAuthenticated("addInventory") && (
             <Link to="/newinventory">
               <button className="btn btn-yellow mt-2">
                 <img src={Add} width="13" height="13" className="mr-2" alt="" />
                 <span>
-                  <b>{t('add_inventory')}</b>
+                  <b>{t("add_inventory")}</b>
                 </span>
               </button>
             </Link>
@@ -304,7 +310,7 @@ const Inventory = (props) => {
           setInventoryProductCategoryFilterOnSelect={
             setInventoryProductCategoryFilterOnSelect
           }
-          fb='80%'
+          fb="80%"
           t={t}
           filterPage="inventory"
         />
@@ -325,11 +331,11 @@ const Inventory = (props) => {
               <div className="list-container">
                 <div className="d-flex justify-content-between align-items-center ml-3">
                   <h4>
-                    <b>{t('product_list')}</b>
+                    <b>{t("product_list")}</b>
                   </h4>
-                  <Link to='/productcategory'>
-                    <button className='btn btn-link mr-1'>
-                      <b>{t('view_all')}</b>
+                  <Link to="/productcategory">
+                    <button className="btn btn-link mr-1">
+                      <b>{t("view_all")}</b>
                     </button>
                   </Link>
                 </div>
@@ -356,8 +362,8 @@ const Inventory = (props) => {
                           </div>
 
                           {/* <p className="product">{product.productName}</p> */}
-                          <h3 className='qty'>
-                            {t('quantity')} : {product.quantity}
+                          <h3 className="qty">
+                            {t("quantity")} : {product.quantity}
                             <span>{"  ("}</span>
                             {product.unitofMeasure &&
                             product.unitofMeasure.name ? (
