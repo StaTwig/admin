@@ -81,7 +81,7 @@ exports.getLocationApprovals = [
         },
         {
           $lookup: {
-            from: "Employees",
+            from: "employees",
             let: {
               wid: "$id",
             },
@@ -92,10 +92,10 @@ exports.getLocationApprovals = [
                 },
               },
             ],
-            as: "Employee",
+            as: "employee",
           },
         },
-        { $unwind: "$Employee" }
+        { $unwind: "$employee" }
       ])
         .then((warehouses) => {
           return apiResponse.successResponseWithData(
