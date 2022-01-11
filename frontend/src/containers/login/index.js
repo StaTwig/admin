@@ -8,14 +8,23 @@ import Login from "../../components/login";
 import { sendOtp, setCurrentUser } from "../../actions/userActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import setAuthToken from "../../utils/setAuthToken";
+import { useTranslation } from 'react-i18next';
 
 const LoginContainer = (props) => {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
   const user = useSelector((state) => {
     return state.user;
   });
+
+  const lang = i18n.language;
+
+  const changeLanguage = (e) => {
+    const lng = e.target.value;
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     if (user) {
@@ -48,11 +57,11 @@ const LoginContainer = (props) => {
     } else if (result.status === 401) {
       const err = result.data.message;
       setErrorMessage(err);
-    } else if (result.status === 400){
+    } else if (result.status === 400) {
       const err = result.data.data[0].msg;
       setErrorMessage(err);
     }
-    
+
     else {
       const err = result.data.data[0];
       setErrorMessage(err.message);

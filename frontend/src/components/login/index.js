@@ -5,10 +5,18 @@ import User from "../../assets/icons/mail.png";
 import logo from "../../assets/aicons/AdminLogo.png";
 import { Formik } from "formik";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { useTranslation } from 'react-i18next';
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp } = props;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
+  const changeLanguage = (e) => {
+    console.log('event', e.target.value);
+    const lng = e.target.value;
+    i18n.changeLanguage(lng);
+  };
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -71,9 +79,8 @@ const FormLoginPage = (props) => {
                           <input
                             id="email"
                             type="email"
-                            className={`pl-0 form-control ${
-                              errors.email ? "border-danger" : ""
-                            }`}
+                            className={`pl-0 form-control ${errors.email ? "border-danger" : ""
+                              }`}
                             // value={email}
                             autoFocus
                             // onChange={onEmailChange}
@@ -102,7 +109,7 @@ const FormLoginPage = (props) => {
                           </div>
                         )}
                         <div className="text-center mt-4">
-                          <button 
+                          <button
                             type="submit"
                             className="btn btn-primary"
                             onClick={onSendOtp} >
@@ -120,7 +127,18 @@ const FormLoginPage = (props) => {
               </div>
             </div>
           </div>
+          <div>
+            <p className='copywrite'>© {new Date().getFullYear()} {t('statwig')}</p>
+            <p className='poweredby'>
+              {t('powered_by_blockchain')} &nbsp;
+              <select className="language" value={lang} onChange={changeLanguage}>
+                <option value="en">{t('english')}</option>
+                <option value="es">{t('spanish')}</option>
+              </select>
+            </p>
+          </div>
         </div>
+
       </div>
     </div>
   );
