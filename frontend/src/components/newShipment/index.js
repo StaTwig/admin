@@ -370,6 +370,7 @@ const NewShipment = (props) => {
           let flag = false;
 
           for (j = 0; j < productsList.length; j++) {
+            console.log(productsList[j].productName)
             if (productsList[j].productName === prdctName) {
               flag = true;
               break;
@@ -1423,6 +1424,7 @@ const NewShipment = (props) => {
               </label>
               {OrderDetails?.products?.length > 0 ? (
                 <EditTable
+                  t={t}
                   check='1'
                   warehouseID={senderOrgId}
                   product={OrderDetails?.products}
@@ -1660,6 +1662,7 @@ const NewShipment = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
+            t={t}
             onHide={closeModal} //FailurePopUp
             {...modalProps}
           />
@@ -1674,6 +1677,7 @@ const NewShipment = (props) => {
           <ShipmentFailPopUp
             onHide={closeModalFail} //FailurePopUp
             {...modalProps}
+            t={t}
             shipmentError={shipmentError}
           />
         </Modal>

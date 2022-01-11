@@ -50,12 +50,12 @@ const VerifyInventory = (props) => {
     const result = await addProductsToInventory({
       products: postData,
     });
-    console.log(result.status)
+    console.log(result)
     setOpenCreatedInventory(true);
     if (result.success) {
       setSuccessMessage(result.message);
     } else {
-      setErrorMessage(result.data?.message);
+      setErrorMessage(result.message);
     }
     dispatch(turnOff());
     dispatch(resetReviewInventories());
