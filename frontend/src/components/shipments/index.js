@@ -25,6 +25,7 @@ import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
 import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const ShipmentAnalytic = (props) => {
   const { t } = props;
@@ -137,17 +138,22 @@ const ShipmentAnalytic = (props) => {
   };
 
   const headers = {
-    coloumn1: t('shipment_id'),
-    coloumn2: t("shipment_date"),
-    coloumn3: t("from"),
-    coloumn4: t("to"),
-    coloumn6: t("status"),
+    coloumn1: "Shipment ID",
+    displayColoumn1: t("shipment_id"),
+    coloumn2: "Shipment Date",
+    displayColoumn2: t("shipment_date"),
+    coloumn3: "From",
+    displayColoumn3: t("from"),
+    coloumn4: "To",
+    displayColoumn4: t("to"),
+    coloumn6: "Status",
+    displayColoumn6: t("status"),
 
-    img1: <img src={mon} width='16' height='16' alt='Monday' />,
-    img2: <img src={calender} width='16' height='16' alt='Calender' />,
-    img3: <img src={Received} width='16' height='16' alt='Received' />,
-    img4: <img src={Sent} width='16' height='16' alt='Sent' />,
-    img6: <img src={Status} width='16' height='16' alt='Status' />,
+    img1: <img src={mon} width="16" height="16" alt="Monday" />,
+    img2: <img src={calender} width="16" height="16" alt="Calender" />,
+    img3: <img src={Received} width="16" height="16" alt="Received" />,
+    img4: <img src={Sent} width="16" height="16" alt="Sent" />,
+    img6: <img src={Status} width="16" height="16" alt="Status" />,
   };
 
   const setData = (v, a = false) => {
@@ -313,9 +319,9 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: t('excel'), checked: false },
-      { key: "pdf", value: t('pdf'), checked: false },
-      { key: "email", value: t('mail'), checked: false },
+      { key: "excel", value: t("excel"), checked: false },
+      { key: "pdf", value: t("pdf"), checked: false },
+      { key: "email", value: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -338,12 +344,23 @@ const ShipmentAnalytic = (props) => {
 
     var nameOfFile;
 
-    if(visible=='one'){
-      nameOfFile = 'shipmentinbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+    if (visible == "one") {
+      nameOfFile =
+        "shipmentinbound" +
+        today.getFullYear().toString() +
+        "/" +
+        (today.getMonth() + 1).toString() +
+        "/" +
+        today.getDate().toString();
       // console.log(name, name);
-    }
-    else if(visible=='two'){
-      nameOfFile = 'shipmentoutbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+    } else if (visible == "two") {
+      nameOfFile =
+        "shipmentoutbound" +
+        today.getFullYear() +
+        "/" +
+        (today.getMonth() + 1) +
+        "/" +
+        today.getDate();
     }
     getExportFile(url, value).then((response) => {
       console.log(response);
@@ -367,10 +384,10 @@ const ShipmentAnalytic = (props) => {
   };
 
   return (
-    <div className='shipment'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t('shipments')}</h1>
-        <div className='d-flex'>
+    <div className="shipment">
+      <div className="d-flex justify-content-between">
+        <h1 className="breadcrumb">{t("shipments")}</h1>
+        <div className="d-flex">
           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
           <button
@@ -381,20 +398,20 @@ const ShipmentAnalytic = (props) => {
             <span>Create Purchase Order</span>
           </button> */}
           {isAuthenticated("updateShipment") && (
-            <Link to='/enterid'>
+            <Link to="/enterid">
               <button
-                className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'
+                className="btn btn-orange fontSize20 font-bold mr-3 chain mt-2"
                 disabled={status === "RECEIVED"}
               >
                 <img
                   src={update}
-                  width='20'
-                  height='17'
-                  className='mr-2 mb-1'
-                  alt='UpdateShipment'
+                  width="20"
+                  height="17"
+                  className="mr-2 mb-1"
+                  alt="UpdateShipment"
                 />
                 <span>
-                  <b>{t('update_shipment')}</b>
+                  <b>{t("update_shipment")}</b>
                 </span>
               </button>
             </Link>
@@ -407,16 +424,16 @@ const ShipmentAnalytic = (props) => {
                   : `/newshipment`
               }
             >
-              <button className='btn btn-yellow fontSize20 font-bold mt-2'>
+              <button className="btn btn-yellow fontSize20 font-bold mt-2">
                 <img
                   src={Add}
-                  width='20'
-                  height='17'
-                  className='mr-2 mb-1'
-                  alt='CreateShipment'
+                  width="20"
+                  height="17"
+                  className="mr-2 mb-1"
+                  alt="CreateShipment"
                 />
                 <span>
-                  <b>{t('create_shipment')}</b>
+                  <b>{t("create_shipment")}</b>
                 </span>
               </button>
             </Link>
@@ -425,10 +442,11 @@ const ShipmentAnalytic = (props) => {
       </div>
       {isAuthenticated("shipmentAnalytics") &&
         props.user.emailId !== "gmr@statledger.io" && (
-          <Tiles {...props} setData={setData} />
+          // <Tiles {...props} setData={setData} />
+          <Cards {...props} setData={setData} />
         )}
       {props.user.emailId !== "gmr@statledger.io" && (
-        <div className='mt-4'>
+        <div className="mt-4">
           <Tabs
             {...props}
             isAuthenticated={isAuthenticated}
@@ -460,7 +478,7 @@ const ShipmentAnalytic = (props) => {
           isReportDisabled={!isAuthenticated("shipmentExportReport")}
         />
       </div> */}
-      <div className='ribben-space'>
+      <div className="ribben-space">
         <Table
           {...props}
           skip={skip}
@@ -479,7 +497,7 @@ const ShipmentAnalytic = (props) => {
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
           setStatusFilterOnSelect={setStatusFilterOnSelect}
           setDateFilterOnSelect={setDateFilterOnSelect}
-          fb='80%'
+          fb="80%"
           showExportFilter={showExportFilter}
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
