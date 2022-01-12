@@ -299,6 +299,7 @@ const Inventory = (props) => {
           isReportDisabled={true}
           data={headers}
           inventoryFilterData={props.inventoryFilterData}
+          productCategories={props.productCategories}
           setInventoryProductNameFilterOnSelect={
             setInventoryProductNameFilterOnSelect
           }

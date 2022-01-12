@@ -8,6 +8,7 @@ import {
   resetInventories,
   getTransactionFilterList,
 } from "../../actions/inventoryActions";
+import { getProducts } from "../../actions/poActions"
 import { useTranslation } from 'react-i18next';
 
 const InventoryContainer = (props) => {
@@ -16,6 +17,7 @@ const { t, i18n } = useTranslation();
 
   const [skip, setSkip] = useState(0);
   const [inventoryFilterData, setInventoryFilterData] = useState([]);
+  const [categories, setCategories] = useState([]);
   // const [loadMore, setLoadMore] = useState(true);
 
   const inventories = useSelector((state) => {
@@ -30,12 +32,25 @@ const { t, i18n } = useTranslation();
     async function fetchData() {
       const inventoryFilterDataRes = await getTransactionFilterList();
       setInventoryFilterData(inventoryFilterDataRes);
+      const result1 = await getProducts();
+      const categoryArray = result1.map((product) => product.type);
+      setCategories(
+        categoryArray
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map((item) => {
+            return {
+              value: item,
+              label: item,
+            };
+          })
+      );
     }
     fetchData();
     dispatch(resetInventories());
     dispatch(getInventories(0, 10, "", "", "", "")); //(skip, limit, dateFilter, productName, productCategory, status)
   }, [dispatch]);
 
+  
   // const onLoadMore = async () => {
   //   const newSkip = skip + 5;
   //   setSkip(newSkip);
@@ -62,6 +77,7 @@ const { t, i18n } = useTranslation();
             inventoriesCount={inventoriesCount}
             inventoryDetails={inventories}
             inventoryFilterData={inventoryFilterData}
+            productCategories={categories}
             t={t}
             {...props}
           />
