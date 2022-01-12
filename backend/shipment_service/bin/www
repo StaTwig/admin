@@ -7,7 +7,7 @@ const { app, Server } = require("../app");
 const { MqttConnection } = require("../helpers/mqtt");
 const {
   lastTenSensorData,
-  getMinMax,
+  getMetaData,
 } = require("../helpers/sensorDataCollector");
 
 /**
@@ -52,11 +52,10 @@ io.on("connection", (socket) => {
       console.log("join ======== > ", shipmentId);
       await socket.join(shipmentId);
       const sensorsData = await lastTenSensorData(shipmentId);
-      const minMax = await getMinMax(shipmentId);
-      io.to(shipmentId).emit("graphMeta", minMax);
-      for (const data of sensorsData) {
-        io.to(shipmentId).emit("sensorData", data);
-      }
+      const { avg, min, max } = await getMetaData(shipmentId);
+      io.to(shipmentId).emit("graphMeta", { min, max });
+      io.to(shipmentId).emit("avgTemperature", { temperature: avg });
+      io.to(shipmentId).emit("sensorData", sensorsData);
     });
     socket.on("disconnect", () => {
       console.log("disconnected");

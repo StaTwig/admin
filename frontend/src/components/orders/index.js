@@ -5,7 +5,6 @@ import Table from "./table";
 import Tabs from "./tabs";
 import Tiles from "./tiles";
 import OrderIcon from "../../assets/icons/order.svg";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import calender from "../../assets/icons/calendar.svg";
@@ -148,6 +147,14 @@ const Orders = (props) => {
     coloumn4: t("product"),
     coloumn5: t("delivery_location"),
     coloumn6: t("status"),
+
+    displayColoumn1:
+      visible === "one" ? t("order_sent_to") : t("order_created_by"),
+    displayColoumn2: t("order_date"),
+    displayColoumn3: t("order_id"),
+    displayColoumn4: t("product"),
+    displayColoumn5: t("delivery_location"),
+    displayColoumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='' />,
     img2: <img src={calender} width='16' height='16' alt='' />,

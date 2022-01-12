@@ -50,16 +50,34 @@ const ViewGMRShipment = (props) => {
       socket.on("graphMeta", (metaData) => {
         setMinMax(metaData);
       });
+      socket.on("avgTemperature", (avg) => {
+        const timestamp = fromUnixTime(avg?.timestamp) || new Date();
+        setCurrentTemperature(avg.temperature);
+        setLastUpdateTime(timestamp.toLocaleString("en-IN"));
+      });
       socket.on("sensorData", (data) => {
-        const time = fromUnixTime(data.timestamp);
-        setCurrentTemperature(data.temperature);
-        setLastUpdateTime(time.toLocaleString("en-IN"));
+        console.log("SENSOR DATA", data);
         const array = sensorData;
-        array.push([time, data.temperature]);
-        if (array.length > 50) array.shift();
+        for (const sensor of data) {
+          const time = fromUnixTime(sensor.timestamp);
+          const found = array.find((o, i) => {
+            if (o.name === sensor.name) {
+              array[i] = {
+                name: o.name,
+                data: [...o?.data, [time, sensor.temperature]],
+              };
+              return true; // stop searching
+            }
+          });
+          if (!found) {
+            array.push({ name: sensor.name, data: [time, sensor.temperature] });
+          }
+        }
+        // if (array.length > 50) array.shift();
         setSensorData(array);
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.match.params.id]);
 
   return (
@@ -69,7 +87,7 @@ const ViewGMRShipment = (props) => {
         <div className='row'>
           <Link to={`/shipments`}>
             <button className='btn btn-outline-primary mr-4 mt-3'>
-              <img src={back} height='17' className='mr-2 mb-1' alt='' />
+              <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
               Back to shipments
             </button>
           </Link>

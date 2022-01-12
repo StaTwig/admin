@@ -319,11 +319,10 @@ exports.createShipment = [
         data.shippingDate = shippingDate;
       }
       data.shippingDate = new Date(data.shippingDate);
-      data.products.forEach(async (element) => {
-        var product = await ProductModel.findOne({ id: element.productID });
+      await asyncForEach(data.products, async (element) => {
+        const product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;
         element.unitofMeasure = product.unitofMeasure;
-        console.log(product);
       });
       const shipmentCounter = await CounterModel.findOneAndUpdate(
         {
@@ -417,12 +416,6 @@ exports.createShipment = [
             } else {
               shipment_product_qty = p.productQuantity;
             }
-
-            console.log(
-              po_product_quantity,
-              shipment_product_qty,
-              alreadyShipped
-            );
             if (
               parseInt(shipment_product_qty, 10) <
               parseInt(po_product_quantity, 10)
@@ -578,7 +571,7 @@ exports.createShipment = [
               }
             );
           } else if (products[count].serialNumber != null) {
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(
@@ -1825,8 +1818,8 @@ exports.fetchGMRShipments = [
   auth,
   async (req, res) => {
     try {
-      const skip = req.query || 0;
-      const limit = req.query || 30;
+      const skip = req.query.skip || 0;
+      const limit = req.query.skip || 30;
       const count = await ShipmentModel.count({ isCustom: true });
       const shipments = await ShipmentModel.find({ isCustom: true })
         .skip(parseInt(skip))

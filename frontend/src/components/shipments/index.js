@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "../../shared/tabs";
-import Tiles from "./tiles";
 import Add from "../../assets/icons/createshipment.png";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
@@ -24,6 +22,7 @@ import update from "../../assets/icons/Update_Status.png";
 import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const ShipmentAnalytic = (props) => {
   const { t } = props;
@@ -136,11 +135,16 @@ const ShipmentAnalytic = (props) => {
   };
 
   const headers = {
-    coloumn1: t("shipment_id"),
-    coloumn2: t("shipment_date"),
-    coloumn3: t("from"),
-    coloumn4: t("to"),
-    coloumn6: t("status"),
+    coloumn1: "Shipment ID",
+    displayColoumn1: t("shipment_id"),
+    coloumn2: "Shipment Date",
+    displayColoumn2: t("shipment_date"),
+    coloumn3: "From",
+    displayColoumn3: t("from"),
+    coloumn4: "To",
+    displayColoumn4: t("to"),
+    coloumn6: "Status",
+    displayColoumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='Monday' />,
     img2: <img src={calender} width='16' height='16' alt='Calender' />,
@@ -337,7 +341,7 @@ const ShipmentAnalytic = (props) => {
 
     var nameOfFile;
 
-    if (visible == "one") {
+    if (visible === "one") {
       nameOfFile =
         "shipmentinbound" +
         today.getFullYear().toString() +
@@ -346,7 +350,7 @@ const ShipmentAnalytic = (props) => {
         "/" +
         today.getDate().toString();
       // console.log(name, name);
-    } else if (visible == "two") {
+    } else if (visible === "two") {
       nameOfFile =
         "shipmentoutbound" +
         today.getFullYear() +
@@ -435,7 +439,8 @@ const ShipmentAnalytic = (props) => {
       </div>
       {isAuthenticated("shipmentAnalytics") &&
         props.user.emailId !== "gmr@statledger.io" && (
-          <Tiles {...props} setData={setData} />
+          // <Tiles {...props} setData={setData} />
+          <Cards {...props} setData={setData} />
         )}
       {props.user.emailId !== "gmr@statledger.io" && (
         <div className='mt-4'>
