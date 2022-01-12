@@ -27,6 +27,7 @@ import {
   getShippingOrderIds,
   fetchAllairwayBillNumber,
 } from "../../actions/shippingOrderAction";
+import { getImage } from "../../actions/notificationActions";
 import { getOrderIds } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import setAuthToken from "../../utils/setAuthToken";

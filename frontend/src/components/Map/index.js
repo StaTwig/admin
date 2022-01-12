@@ -5,10 +5,6 @@ import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-mapboxgl.workerClass =
-  require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
-
 mapboxgl.accessToken =
   "pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q";
 
