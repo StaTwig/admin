@@ -41,8 +41,6 @@ const UpdateStatus = (props) => {
     setPhoto(evt.target.files[0]);
   };
 
-  console.log(comment);
-
   React.useEffect(() => {
     async function fetchData() {
       const result = await dispatch(getViewShipmentGmr(props.match.params.id));
@@ -82,7 +80,7 @@ const UpdateStatus = (props) => {
     const data = {
       id: shipmentId,
       shipmentUpdates: {
-        updateComment: comments,
+        updateComment: comment,
         updatedBy: profile.firstName,
         orgid: profile.organisation,
         orglocation: profile.location,
@@ -284,7 +282,7 @@ const UpdateStatus = (props) => {
                           onClick={() => {
                             setCount("r1");
                             setCommentEnabled(false);
-                            setComment("Damaged in transit");
+                            setComment(t('damaged_in_transit'));
                           }}
                           className={`txt-outline ${
                             count === "r1" && "comment-active"
@@ -296,7 +294,7 @@ const UpdateStatus = (props) => {
                           onClick={() => {
                             setCount("r2");
                             setCommentEnabled(false);
-                            setComment("Miscount");
+                            setComment(t('miscount'));
                           }}
                           className={`txt-outline ${
                             count === "r2" && "comment-active"
@@ -308,7 +306,7 @@ const UpdateStatus = (props) => {
                           onClick={() => {
                             setCount("r3");
                             setCommentEnabled(false);
-                            setComment("Shipment Stolen");
+                            setComment(t('shipment_stolen'));
                           }}
                           className={`txt-outline ${
                             count === "r3" && "comment-active"
@@ -320,7 +318,7 @@ const UpdateStatus = (props) => {
                           onClick={() => {
                             setCount("r4");
                             setCommentEnabled(false);
-                            setComment("Wrong Shipment");
+                            setComment(t('wrong_shipment'));
                           }}
                           className={`txt-outline ${
                             count === "r4" && "comment-active"
