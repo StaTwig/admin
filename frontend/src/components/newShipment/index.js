@@ -591,6 +591,9 @@ const NewShipment = (props) => {
                               if (
                                 result.poDetails[0].products[i]
                                   .productQuantityShipped
+                                  ||
+                                  result.poDetails[0].products[i]
+                                  .productQuantityDelivered
                               ) {
                                 result.poDetails[0].products[
                                   i
@@ -602,6 +605,10 @@ const NewShipment = (props) => {
                                   parseInt(
                                     result.poDetails[0].products[i]
                                       .productQuantityShipped
+                                  ) - 
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantityDelivered
                                   );
                               }
                               result.poDetails[0].products[i].orderedQuantity =
@@ -773,13 +780,16 @@ const NewShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-                                if (result.products[i].productQuantityShipped) {
+                                if (result.products[i].productQuantityShipped || result.products[i].productQuantityDelivered) {
                                   result.products[i].productQuantity =
                                     parseInt(
                                       result.products[i].productQuantity
                                     ) -
                                     parseInt(
-                                      result.products[i].productQuantityShipped
+                                     result.products[i].productQuantityShipped
+                                    ) -
+                                    parseInt(
+                                      result.products[i].productQuantityDelivered
                                     );
                                 }
                                 result.products[i].orderedQuantity =
