@@ -66,7 +66,9 @@ exports.orderCreated = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const senderOrgName = await getOrgName(event?.secondaryOrgId);
   const templateReceiver = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateReceiverSpanish = `Recibió un nuevo "Pedido- ${txnId}" desde ${senderOrgName} - ${event?.secondaryOrgId}`;
   const templateOthers = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateOthersSpanish = `"Pedido - ${txnId}" ha sido creado por ${senderOrgName} - ${event?.secondaryOrgId}`;
   const eligibleUsers = await getEligibleUsers(
     event.actorOrgId,
     "ORGANISATION"
@@ -77,7 +79,7 @@ exports.orderCreated = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: templateReceiver,
+      content: user.preferredLanguage == "EN" ? templateReceiver : templateReceiverSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -92,7 +94,7 @@ exports.orderCreated = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: templateOthers,
+        content: user.preferredLanguage == "EN" ? templateOthers : templateOthersSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -105,6 +107,7 @@ exports.orderCreated = async (event) => {
 exports.orderAccept = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const templateSender = `Your "Order - ${txnId}" has been Accepted by ${event.actorOrgName} - ${event.actorOrgId}`;
+  const templateSenderSpanish = `Su "Pedido - ${txnId}" ha sido aceptado por ${event.actorOrgName} - ${event.actorOrgId}`;
   const creatorUser = await getCreator(txnId);
   if (creatorUser) {
     const dataSender = {
@@ -112,7 +115,7 @@ exports.orderAccept = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: templateSender,
+      content: user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -129,7 +132,7 @@ exports.orderAccept = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: templateSender,
+      content: user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -141,6 +144,7 @@ exports.orderAccept = async (event) => {
 exports.orderReject = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const templateSender = `Your "Order - ${txnId}" has been Rejected by ${event?.actorOrgName} - ${event?.actorOrgId}`;
+  const templateSenderSpanish = `Your "Order - ${txnId}" has been Rejected by ${event?.actorOrgName} - ${event?.actorOrgId}`;
   const creatorUser = await getCreator(txnId);
   if (creatorUser) {
     const dataSender = {
@@ -148,7 +152,7 @@ exports.orderReject = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: templateSender,
+      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -165,7 +169,7 @@ exports.orderReject = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: templateSender,
+      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -179,14 +183,16 @@ exports.orderPending = async (event) => {
     const txnId = event?.transactionId;
     const customerOrgName = await getOrgName(event?.secondaryOrgId);
     const templateCustomer = `Your "Order - ${txnId}" is still under Review`;
+    const templateCustomerSpanish = `Su "Pedido - ${txnId}" todavía está bajo revisión`;
     const templateSupplier = `"Order - ${txnId}" from Organization - ${customerOrgName} / ${event?.secondaryOrgId} is Pending`;
+    const templateSupplierSpanish = `"Pedido: ${txnId}" de la organización: ${customerOrgName} / ${event?.secondaryOrgId} está pendiente`;
     const creatorUser = await getCreator(txnId);
     const dataSender = {
       user: creatorUser.id,
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
-      subject: `Order Alert`,
-      content: templateCustomer,
+      subject: `Order Alert`,      
+      content: user.preferredLanguage == "EN" ?  templateCustomer : templateCustomerSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -206,7 +212,7 @@ exports.orderPending = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: templateSupplier,
+        content: user.preferredLanguage == "EN" ? templateSupplier : templateSupplierSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -219,7 +225,7 @@ exports.orderPending = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: templateCustomer,
+        content: user.preferredLanguage == "EN" ?  templateCustomer : templateCustomerSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -239,7 +245,9 @@ exports.orderDefault = async (event) => {
   const secondaryOrgName =
     event?.secondaryOrgName || (await getOrgName(event?.secondaryOrgId));
   const templateActor = `"New updates on "Order - ${txnId}" of ${event.actorOrgId} ${actorOrgName}`;
+  const templateActorSpanish = `"Nuevas actualizaciones en "Pedido - ${txnId}" de ${event.actorOrgId} ${actorOrgName}`;
   const templateSecondary = `"New updates on "Order - ${txnId}" of ${event.secondaryOrgId} ${secondaryOrgName}`;
+  const templateSecondarySpanish = `"Nuevas actualizaciones en "Pedido - ${txnId}" de ${event.secondaryOrgId} ${secondaryOrgName}`;
   const creatorUser = await getCreator(txnId);
   if (creatorUser) {
     const dataSender = {
@@ -247,7 +255,7 @@ exports.orderDefault = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: templateActor,
+      content: user.preferredLanguage == "EN" ? templateActor : templateActorSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -269,7 +277,7 @@ exports.orderDefault = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: templateSecondary,
+        content: user.preferredLanguage == "EN" ? templateSecondary : templateSecondarySpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -287,7 +295,7 @@ exports.orderDefault = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: templateActor,
+      content: user.preferredLanguage == "EN" ?  templateActor : templateActorSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
