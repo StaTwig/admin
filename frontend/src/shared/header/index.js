@@ -190,7 +190,7 @@ const Header = (props) => {
   console.log(props.match.params.id, search)
   const onSeach = () => {
     if (search.substring(0, 2) === "SH") {
-      
+
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
         if (shippingIds.indexOf(search) !== -1) {
@@ -425,8 +425,8 @@ const Header = (props) => {
                   placeholder="Search PO ID/ Shipment ID/ Transit Number"
                   onFocus={(e) => (e.target.placeholder = "")}
                   onBlur={(e) =>
-                    (e.target.placeholder =
-                      "Search PO ID/ Shipment ID/ Transit Number")
+                  (e.target.placeholder =
+                    "Search PO ID/ Shipment ID/ Transit Number")
                   }
                   inputValue={search}
                   onInputChange={(event, newInputValue) => {
@@ -486,7 +486,7 @@ const Header = (props) => {
                       }}
                     >
                       <div className="user-notification-head">
-                        User Notifications
+                        {t('user_notification')}
                       </div>
                       {notifications?.length >= 0 && (
                         <span
@@ -500,7 +500,7 @@ const Header = (props) => {
                             fontSize: "14px",
                           }}
                         >
-                          {newNotifs} new
+                          {newNotifs} {t('new')}
                         </span>
                       )}
 
@@ -526,7 +526,7 @@ const Header = (props) => {
                                   : "nav-link tab-text"
                               }
                             >
-                              Alerts
+                              {t('alerts')}
                             </div>
                           </li>
                           <li
@@ -551,7 +551,7 @@ const Header = (props) => {
                                   : "nav-link tab-text"
                               }
                             >
-                              Transactions
+                              {t('transactions')}
                             </div>
                           </li>
                         </ul>
@@ -757,7 +757,7 @@ const Header = (props) => {
                 sx={{ ml: 2 }}
               >
                 <Avatar
-                  sx={{ width: 42, height: 42, outline: "5px solid #ddd", outlineOffset:"1px" }}
+                  sx={{ width: 42, height: 42, outline: "5px solid #ddd", outlineOffset: "1px" }}
                   src={`${image}`}
                 ></Avatar>
               </IconButton>
@@ -796,21 +796,21 @@ const Header = (props) => {
                   style={{ fontSize: "13px" }}
                   onClick={() => props.history.push("/profile")}
                 >
-                  My profile
+                  {t('my_profile')}
                 </MenuItem>
                 <Divider />
                 <MenuItem
                   style={{ fontSize: "13px" }}
                   onClick={() => props.history.push("/settings")}
                 >
-                  Settings
+                  {t('settings')}
                 </MenuItem>
                 <Divider />
                 <MenuItem
                   style={{ fontSize: "13px" }}
                   onClick={() => dispatch(logoutUser())}
                 >
-                  Logout
+                  {t('logout')}
                 </MenuItem>
               </Menu>
             </li>

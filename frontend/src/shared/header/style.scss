@@ -469,7 +469,7 @@
 .user-notification-head {
   position: relative;
   top: 1px;
-  left: -40px;
+  // left: -40px;
   display: inline;
   color: #fff;
   font-size: 18px;
@@ -651,7 +651,6 @@
     }
   }
 }
-
 
 @media screen and (max-width: 992px) {
   .search-form {
