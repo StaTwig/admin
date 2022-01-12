@@ -516,7 +516,7 @@ const ReceiveShipment = (props) => {
 
       <div className="row">
         <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3 ml-3"> {t('product_deetails')}</h6>
+          <h6 className="heading mt-3 mb-3 ml-3"> {t('product_details')}</h6>
         </div>
       </div>
       <div className="row">

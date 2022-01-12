@@ -571,73 +571,6 @@ const NewShipment = (props) => {
                         {t('order_id')}
                       </label>
                       <div className='line'>
-                        {/* <DropdownButton
-                        name={OrderId}
-                        name2="Select Order ID"
-                        onSelect={async (v) => {
-                          setOrderIdSelected(true);
-                          setFieldValue("OrderId", v);
-                          // handleSOChange(v);
-                          setOrderId(v);
-                          dispatch(turnOn());
-                          const result = await dispatch(getOrder(v));
-                          console.log("Result");
-                          console.log(result);
-                          setReceiverOrgLoc(
-                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
-                          );
-                          setReceiverOrgId(
-                            result.poDetails[0].customer.organisation.id
-                          );
-                          setOrderDetails(result.poDetails[0]);
-
-                          dispatch(turnOff());
-                          setDisabled(true);
-                          let warehouse = senderWarehouses.filter((w) => {
-                            let supplierWarehouse =
-                              result.poDetails[0].supplier.organisation
-                                .warehouses;
-                            for (let i = 0; i < supplierWarehouse.length; i++) {
-                              return w.id == supplierWarehouse[i];
-                            }
-                          });
-                          setFieldValue("fromOrg", senderOrganisation[0]);
-                          setFieldValue(
-                            "fromOrgLoc",
-                            result.poDetails[0].supplier.organisation.id
-                          );
-                          setFieldValue(
-                            "toOrg",
-                            result.poDetails[0].customer.organisation.id
-                          );
-                          setFieldValue(
-                            "toOrgLoc",
-                            result.poDetails[0].customer.shippingAddress
-                              .shippingAddressId
-                          );
-                          // setSenderOrgLoc(warehouse[0].postalAddress);
-                          let products_temp = result.poDetails[0].products;
-                          for (let i = 0; i < products_temp.length; i++) {
-                            products_temp[i].manufacturer =
-                              result.poDetails[0].productDetails[i].manufacturer;
-                            products_temp[i].productName =
-                              result.poDetails[0].productDetails[i].name;
-                            products_temp[i].productQuantity =
-                              result.poDetails[0].products[i].quantity;
-                            products_temp[i].productCategory =
-                              result.poDetails[0].products[i].type;
-                            products_temp[i].productID =
-                              result.poDetails[0].products[i].productId;
-                          }
-                          
-                         if (result.poDetails[0].productDetails.length > 0) {
-                           setProducts([]);
-                            setAddProducts([]);
-                            setFieldValue("products",products_temp);
-                          } else setFieldValue("products", []);
-                        }}
-                        groups={OrderIds}
-                      /> */}
                         <Select
                           styles={customStyles}
                           placeholder={t('enter')+' '+t('order_id')}
@@ -658,6 +591,9 @@ const NewShipment = (props) => {
                               if (
                                 result.poDetails[0].products[i]
                                   .productQuantityShipped
+                                  ||
+                                  result.poDetails[0].products[i]
+                                  .productQuantityDelivered
                               ) {
                                 result.poDetails[0].products[
                                   i
@@ -668,7 +604,11 @@ const NewShipment = (props) => {
                                   ) -
                                   parseInt(
                                     result.poDetails[0].products[i]
-                                      .productQuantityShipped
+                                      .productQuantityShipped || 0
+                                  ) - 
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantityDelivered || 0
                                   );
                               }
                               result.poDetails[0].products[i].orderedQuantity =
@@ -734,8 +674,9 @@ const NewShipment = (props) => {
                               "rtype",
                               result.poDetails[0].customer.organisation.type
                             );
-                            console.log(result.poDetails[0].products);
-                            let products_temp = result.poDetails[0].products;
+                            
+                            let products_temp = result.poDetails[0].products.filter(item => item.productQuantity > 0);
+                            if(result.poDetails[0].products && result.poDetails[0].products.length)
                             for (let i = 0; i < products_temp.length; i++) {
                               if (
                                 result.poDetails[0].products[i]
@@ -745,7 +686,7 @@ const NewShipment = (props) => {
                                 i--;
                               }
                               products_temp[i].manufacturer =
-                                result.poDetails[0].products[i].manufacturer;
+                                result.poDetails[0]?.products[i]?.manufacturer;
                               products_temp[i].productName =
                                 result.poDetails[0].products[i].name;
                               products_temp[i].productQuantity =
@@ -839,13 +780,16 @@ const NewShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-                                if (result.products[i].productQuantityShipped) {
+                                if (result.products[i].productQuantityShipped || result.products[i].productQuantityDelivered) {
                                   result.products[i].productQuantity =
                                     parseInt(
                                       result.products[i].productQuantity
                                     ) -
                                     parseInt(
-                                      result.products[i].productQuantityShipped
+                                     result.products[i].productQuantityShipped || 0
+                                    ) -
+                                    parseInt(
+                                      result.products[i].productQuantityDelivered || 0
                                     );
                                 }
                                 result.products[i].orderedQuantity =
