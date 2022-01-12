@@ -12,6 +12,7 @@ import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import ExcelPopUp from "./ExcelPopup";
+import Cards from "./cards/cards";
 import Modal from "../../shared/modal";
 import Status from "../../assets/icons/Status.svg";
 import {

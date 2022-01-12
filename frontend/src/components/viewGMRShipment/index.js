@@ -156,7 +156,7 @@ const ViewGMRShipment = (props) => {
                     alt='Current Temperature'
                   />
                   <div className='d-flex flex-column'>
-                    <div className='info'>Current temperature</div>
+                    <div className='info'>Average temperature</div>
                     <div className='temp'>
                       {currentTemperature ? currentTemperature : 0}
                       {""}
