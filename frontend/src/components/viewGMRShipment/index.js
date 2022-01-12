@@ -22,8 +22,8 @@ import { fromUnixTime } from "date-fns";
 const ViewGMRShipment = (props) => {
   const [sensorData, setSensorData] = useState([]);
   const [minMax, setMinMax] = useState({});
-  const [currentTemperature, setCurrentTemperature] = useState("");
-  const [lastUpdateTime, setLastUpdateTime] = useState("");
+  const [currentTemperature, setCurrentTemperature] = useState();
+  const [lastUpdateTime, setLastUpdateTime] = useState();
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
@@ -40,7 +40,6 @@ const ViewGMRShipment = (props) => {
   };
 
   useEffect(() => {
-    console.log("SOCKETURL", config().temperatureSocketUrl);
     const socket = io(config().temperatureSocketUrl, {
       path: "/shipmentmanagement/api/socket",
       transports: ["websocket"],
@@ -51,30 +50,37 @@ const ViewGMRShipment = (props) => {
         setMinMax(metaData);
       });
       socket.on("avgTemperature", (avg) => {
-        const timestamp = fromUnixTime(avg?.timestamp) || new Date();
+        if (avg.timestamp) {
+          setLastUpdateTime(avg.timestamp.toLocaleString("en-IN"));
+        }
         setCurrentTemperature(avg.temperature);
-        setLastUpdateTime(timestamp.toLocaleString("en-IN"));
       });
       socket.on("sensorData", (data) => {
-        console.log("SENSOR DATA", data);
         const array = sensorData;
         for (const sensor of data) {
-          const time = fromUnixTime(sensor.timestamp);
-          const found = array.find((o, i) => {
-            if (o.name === sensor.name) {
-              array[i] = {
-                name: o.name,
-                data: [...o?.data, [time, sensor.temperature]],
-              };
-              return true; // stop searching
+          for (const element of sensor.data) {
+            const time = fromUnixTime(element.timestamp).toLocaleTimeString(
+              "en-IN"
+            );
+            const found = array.find((o, i) => {
+              if (o.name === sensor.name) {
+                if (o.data.length > 300) o.data.shift();
+                array[i] = {
+                  name: o.name,
+                  data: [...o?.data, [time, element.temperature]],
+                };
+                return true; // stop searching
+              }
+            });
+            if (!found) {
+              array.push({
+                name: sensor.name,
+                data: [[time, element.temperature]],
+              });
             }
-          });
-          if (!found) {
-            array.push({ name: sensor.name, data: [time, sensor.temperature] });
           }
+          setSensorData(array);
         }
-        // if (array.length > 50) array.shift();
-        setSensorData(array);
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

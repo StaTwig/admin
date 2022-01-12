@@ -95,7 +95,6 @@ const Orders = (props) => {
 
       const productsLocationsOrganisationsRes =
         await getProductIdDeliveryLocationsOrganisations();
-      // console.log('products location', productsLocationsOrganisationsRes);
       setPoDeliveryLocationsList(
         productsLocationsOrganisationsRes.deliveryLocations
       );
@@ -133,7 +132,6 @@ const Orders = (props) => {
         recordSkip,
         limit
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -305,7 +303,6 @@ const Orders = (props) => {
   };
 
   const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    console.log(statusFilterSelected);
     setStatusFilter(statusFilterSelected);
     setSkip(0);
     if (visible === "one") {
@@ -319,7 +316,6 @@ const Orders = (props) => {
         0,
         limit
       ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
-      console.log(outboundRes.data.outboundPOs);
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
@@ -333,7 +329,6 @@ const Orders = (props) => {
         0,
         limit
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -402,8 +397,6 @@ const Orders = (props) => {
       }?type=${value.toLowerCase()}`;
     }
 
-    // console.log('visible', visible);
-
     var today = new Date();
 
     var nameOfFile;
@@ -416,7 +409,6 @@ const Orders = (props) => {
         (today.getMonth() + 1).toString() +
         "/" +
         today.getDate().toString();
-      // console.log(name, name);
     } else if (visible === "two") {
       nameOfFile =
         "ordersinbound" +
@@ -440,7 +432,6 @@ const Orders = (props) => {
             value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
-        console.log("Link", link);
         document.body.appendChild(link);
         link.click();
         link.remove();

@@ -14,6 +14,8 @@ const Chart = (props) => {
       xtitle='Time'
       min={props.metaData.min}
       max={props.metaData.max}
+      precision={2}
+      // round={2}
     />
   );
 };

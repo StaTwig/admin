@@ -21,13 +21,6 @@ const AddLocation = (props) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
-  // console.log(addressTitle,"title");
-  // console.log(pincode,"Pin");
-  // console.log(region,"region  ");
-  // console.log(country,"Country");
-  // console.log(city,"city");
-  // console.log(state,"state");
-  // console.log(addressLine,"Line");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
 
   //Newly Added
@@ -85,24 +78,12 @@ const AddLocation = (props) => {
       supervisors: [],
       employeess: [],
     };
-    console.log(data, "Data");
     const result = await addWarehouse(data);
-    console.log("Result");
-    console.log(result);
     if (result.data.status !== 0) {
-      console.log("Added Location");
-      console.log(result);
       setAddedLocationModal(true);
-      // props.history.push('/profile');
-    } else {
-      console.log("Error in add location");
-      console.log(result);
     }
   };
 
-  // const requestadminforapproval = () => {
-  //  props.history.push('/profile');
-  // };
   function search(name, myArray) {
     for (var i = 0; i < myArray.length; i++) {
       if (myArray[i].name === name) {
@@ -130,7 +111,6 @@ const AddLocation = (props) => {
               }}
               validate={(values) => {
                 const errors = {};
-                console.log(values, "Values");
                 if (!values.region) {
                   errors.region = "Required";
                 }
@@ -155,8 +135,6 @@ const AddLocation = (props) => {
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                console.log("Values");
-                console.log(values);
                 setSubmitting(false);
                 updateStatus(values);
               }}
@@ -284,7 +262,7 @@ const AddLocation = (props) => {
                         <div className='' style={{ flexBasis: "47%" }}>
                           <Autocomplete
                             labelId='demo-simple-select-label'
-                            id='demo-simple-select'
+                            id='demo-simple-select controllable-states-demo'
                             placeholder={
                               <div className='select-placeholder-text'>
                                 Select State
@@ -297,7 +275,6 @@ const AddLocation = (props) => {
                               setState(newValue);
                               setCity("");
                             }}
-                            id='controllable-states-demo'
                             options={allState.map((option) => option.name)}
                             renderInput={(params) => (
                               <TextField {...params} label='Select State' />
@@ -322,7 +299,7 @@ const AddLocation = (props) => {
                         <div className='' style={{ flexBasis: "47%" }}>
                           <Autocomplete
                             labelId='demo-simple-select-label'
-                            id='demo-simple-select'
+                            id='demo-simple-select controllable-states-demo'
                             placeholder={
                               <div className='select-placeholder-text'>
                                 Select State
@@ -332,7 +309,6 @@ const AddLocation = (props) => {
                             onChange={(event, newValue) => {
                               setCity(newValue);
                             }}
-                            id='controllable-states-demo'
                             options={allCity.map((Option) => Option.name)}
                             renderInput={(params) => (
                               <TextField {...params} label='Select City' />

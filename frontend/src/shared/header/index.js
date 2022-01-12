@@ -1,31 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.scss";
-import searchingIcon from "../../assets/icons/search.png";
 import bellIcon from "../../assets/icons/notification_blue.png";
 import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from "react-infinite-scroll-component";
-import DrawerMenu from "./drawerMenu";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/spinner/index.js";
 import "./Header.css";
-import {
-  Avatar,
-  Badge,
-  Divider,
-  IconButton,
-  Menu,
-  InputBase,
-  MenuItem,
-} from "@mui/material";
-import {
-  ExpandMore,
-  LocationOnOutlined,
-  MenuOutlined,
-  NotificationsOutlined,
-  Search,
-} from "@mui/icons-material";
+import { Avatar, Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import { MenuOutlined, Search } from "@mui/icons-material";
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -34,10 +18,6 @@ import {
   postUserLocation,
 } from "../../actions/userActions";
 import logo from "../../assets/brands/VACCINELEDGER.png";
-import {
-  deleteNotification,
-  getImage,
-} from "../../actions/notificationActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { config } from "../../config";
@@ -56,20 +36,17 @@ import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import userIcon from "../../assets/icons/brand.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
-import SettingIcon from "../../assets/icons/utilitieswhite.png";
 import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
 import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
   const { t } = props;
-  // console.log(ABC)
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [AlertModalData, setAlertModalData] = useState({});
   const [menu, setMenu] = useState(false);
   const [location, setLocation] = useState({});
-  const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState("");
   const [searchString, setSearchString] = useState("");
   const [searchType, setSearchType] = useState("");
@@ -113,7 +90,6 @@ const Header = (props) => {
   const ref1 = useRef(null);
   useOnclickOutside(
     (ref) => {
-      // console.log(ref.target.className)
       if (
         ref.target.className !== "ignore-react-onclickoutside" &&
         ref.target.className !== "badge badge-light"
@@ -166,8 +142,7 @@ const Header = (props) => {
     }
   }
   async function readNotification(id) {
-    let res = axios.get(`${config().readNotification}${id}`);
-    console.log(res);
+    await axios.get(`${config().readNotification}${id}`);
   }
   async function getAllShipmentIDs() {
     dispatch(turnOn());
@@ -187,10 +162,8 @@ const Header = (props) => {
     dispatch(turnOff());
     return result;
   }
-  console.log(props.match.params.id, search)
   const onSeach = () => {
     if (search.substring(0, 2) === "SH") {
-
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
         if (shippingIds.indexOf(search) !== -1) {
@@ -260,7 +233,6 @@ const Header = (props) => {
     return state.user;
   });
 
-
   if (profile.photoId != null) {
     getImage(profile.photoId).then((r) => {
       const reader = new window.FileReader();
@@ -293,7 +265,6 @@ const Header = (props) => {
       );
 
       setNotifications(response.data.data?.data?.reverse());
-      console.log(response.data?.data);
       if (response.data?.data?.totalNew)
         setNewNotifs(response.data?.data?.totalNew);
       if (response.data?.data?.totalUnRead)
@@ -356,27 +327,34 @@ const Header = (props) => {
     }
   };
   const imgs = config().fetchProfileImage;
-  const search_placeholder = t('search') + ' ' + t('po_id') + '/' + t('shipment_id') + ' /' + t('transit_no');
+  const search_placeholder =
+    t("search") +
+    " " +
+    t("po_id") +
+    "/" +
+    t("shipment_id") +
+    " /" +
+    t("transit_no");
 
   return (
-    <div className="navBar">
+    <div className='navBar'>
       {/* Container */}
 
-      <div className="navContainer">
+      <div className='navContainer'>
         {/* Navbar */}
 
-        <nav className="navContent">
+        <nav className='navContent'>
           {/* branding */}
 
-          <div className="logo">
-            <img src={logo} alt="logo" />
+          <div className='logo'>
+            <img src={logo} alt='logo' />
           </div>
 
           {/* Nav Items */}
-          <MenuOutlined className="hambergerMenu" />
+          <MenuOutlined className='hambergerMenu' />
 
-          <ul className="navList">
-            <li className="navItems">
+          <ul className='navList'>
+            <li className='navItems'>
               {/* <Autocomplete 
                   style={{width:"400px"}}
                   freeSolo
@@ -412,9 +390,9 @@ const Header = (props) => {
                     />
                   )}
                 /> */}
-              <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
+              <div className='search-form' tabIndex='-1' onKeyDown={onkeydown}>
                 <Autocomplete
-                  id="free-solo-demo"
+                  id='free-solo-demo'
                   freeSolo
                   //value={search}
                   forcePopupIcon={true}
@@ -422,11 +400,11 @@ const Header = (props) => {
                   options={options}
                   getOptionLabel={(option) => option._id}
                   filterOptions={filterOptions}
-                  placeholder="Search PO ID/ Shipment ID/ Transit Number"
+                  placeholder='Search PO ID/ Shipment ID/ Transit Number'
                   onFocus={(e) => (e.target.placeholder = "")}
                   onBlur={(e) =>
-                  (e.target.placeholder =
-                    "Search PO ID/ Shipment ID/ Transit Number")
+                    (e.target.placeholder =
+                      "Search PO ID/ Shipment ID/ Transit Number")
                   }
                   inputValue={search}
                   onInputChange={(event, newInputValue) => {
@@ -435,14 +413,14 @@ const Header = (props) => {
                   }}
                   onChange={(event, newValue) => {
                     onSearchChange(newValue);
-                    onSeach()
+                    onSeach();
                   }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Search PO ID/ Shipment ID"
-                      margin="normal"
-                      variant="outlined"
+                      label='Search PO ID/ Shipment ID'
+                      margin='normal'
+                      variant='outlined'
                     />
                   )}
                 />
@@ -450,43 +428,43 @@ const Header = (props) => {
             </li>
             {/* Notification Icons */}
 
-            <li className="navItems notifyList">
-              <div className="notifications cursorP">
+            <li className='navItems notifyList'>
+              <div className='notifications cursorP'>
                 <img
-                  width="20px"
-                  height="20px"
-                  id="notification"
-                  className="ignore-react-onclickoutside"
+                  width='20px'
+                  height='20px'
+                  id='notification'
+                  className='ignore-react-onclickoutside'
                   src={bellIcon}
                   onClick={() => setShowNotifications(!showNotifications)}
-                  alt="notification"
+                  alt='notification'
                 />
                 <div
-                  id="notification"
-                  className="bellicon-wrap"
+                  id='notification'
+                  className='bellicon-wrap'
                   onClick={() => setShowNotifications(!showNotifications)}
                 >
                   {notifications?.length && (
-                    <span className="badge badge-light">{newNotifs}</span>
+                    <span className='badge badge-light'>{newNotifs}</span>
                   )}
                 </div>
-                {showNotifications && <div className="triangle-up"></div>}
+                {showNotifications && <div className='triangle-up'></div>}
                 {showNotifications && (
                   <div
                     ref={ref1}
                     outsideClickIgnoreClass={"ignore-react-onclickoutside"}
-                    className="slider-menu"
-                    id="scrollableDiv"
+                    className='slider-menu'
+                    id='scrollableDiv'
                   >
                     <div
-                      className="nheader"
+                      className='nheader'
                       style={{
                         backgroundImage:
                           "linear-gradient(to right, #0092e8, #0a6bc6)",
                       }}
                     >
-                      <div className="user-notification-head">
-                        {t('user_notification')}
+                      <div className='user-notification-head'>
+                        {t("user_notification")}
                       </div>
                       {notifications?.length >= 0 && (
                         <span
@@ -500,12 +478,12 @@ const Header = (props) => {
                             fontSize: "14px",
                           }}
                         >
-                          {newNotifs} {t('new')}
+                          {newNotifs} {t("new")}
                         </span>
                       )}
 
-                      <div className="noti-tab">
-                        <ul className="nav nav-pills">
+                      <div className='noti-tab'>
+                        <ul className='nav nav-pills'>
                           <li
                             className={
                               visible === "one" ? "nav-item-active" : "nav-item"
@@ -526,7 +504,7 @@ const Header = (props) => {
                                   : "nav-link tab-text"
                               }
                             >
-                              {t('alerts')}
+                              {t("alerts")}
                             </div>
                           </li>
                           <li
@@ -551,13 +529,13 @@ const Header = (props) => {
                                   : "nav-link tab-text"
                               }
                             >
-                              {t('transactions')}
+                              {t("transactions")}
                             </div>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div className="slider-item">
+                    <div className='slider-item'>
                       <InfiniteScroll
                         dataLength={notifications?.length || 0}
                         next={() => changeNotifications(alertType, 10)}
@@ -572,7 +550,7 @@ const Header = (props) => {
                           </h4>
                         }
                         scrollThreshold={1}
-                        scrollableTarget="scrollableDiv"
+                        scrollableTarget='scrollableDiv'
                       >
                         {notifications?.length >= 0 ? (
                           notifications?.map((notifications) =>
@@ -591,19 +569,19 @@ const Header = (props) => {
                                   }
                                 >
                                   <div
-                                    className="col-sm-10"
+                                    className='col-sm-10'
                                     style={{ display: "flex" }}
                                   >
                                     <img
-                                      className="notification-icons"
+                                      className='notification-icons'
                                       src={notifIcon(notifications)}
-                                      alt="Icon"
+                                      alt='Icon'
                                     />
-                                    <div className="notification-events">
+                                    <div className='notification-events'>
                                       {notifications.message}
                                     </div>
                                   </div>
-                                  <div className="text-secondary notif-time">
+                                  <div className='text-secondary notif-time'>
                                     {formatDistanceToNow(
                                       new Date(
                                         parseInt(
@@ -616,8 +594,8 @@ const Header = (props) => {
                                     )}
                                   </div>
                                   <img
-                                    className="toggle-icon"
-                                    alt="Drop Down Icon"
+                                    className='toggle-icon'
+                                    alt='Drop Down Icon'
                                     src={dropdownIcon}
                                   ></img>
                                 </Link>
@@ -632,19 +610,19 @@ const Header = (props) => {
                                   }}
                                 >
                                   <div
-                                    className="col-sm-10"
+                                    className='col-sm-10'
                                     style={{ display: "flex" }}
                                   >
                                     <img
-                                      className="notification-icons"
+                                      className='notification-icons'
                                       src={notifIcon(notifications)}
-                                      alt="Icon"
+                                      alt='Icon'
                                     />
-                                    <div className="notification-events">
+                                    <div className='notification-events'>
                                       {notifications.message}
                                     </div>
                                   </div>
-                                  <div className="text-secondary notif-time">
+                                  <div className='text-secondary notif-time'>
                                     {formatDistanceToNow(
                                       new Date(
                                         parseInt(
@@ -657,8 +635,8 @@ const Header = (props) => {
                                     )}
                                   </div>
                                   <img
-                                    className="toggle-icon"
-                                    alt="Drop Down Icon"
+                                    className='toggle-icon'
+                                    alt='Drop Down Icon'
                                     src={dropdownIcon}
                                   ></img>
                                 </div>
@@ -669,19 +647,19 @@ const Header = (props) => {
                                 style={{ cursor: "not-allowed" }}
                               >
                                 <div
-                                  className="col-sm-10"
+                                  className='col-sm-10'
                                   style={{ display: "flex" }}
                                 >
                                   <img
-                                    className="notification-icons"
+                                    className='notification-icons'
                                     src={notifIcon(notifications)}
-                                    alt="Icon"
+                                    alt='Icon'
                                   />
-                                  <div className="notification-events">
+                                  <div className='notification-events'>
                                     {notifications.message}
                                   </div>
                                 </div>
-                                <div className="text-secondary notif-time">
+                                <div className='text-secondary notif-time'>
                                   {formatDistanceToNow(
                                     new Date(
                                       parseInt(
@@ -697,11 +675,11 @@ const Header = (props) => {
                             )
                           )
                         ) : (
-                          <div className="slider-item">
-                            <div className="row">
-                              <div className="col text-center mt-3 mr-5">
+                          <div className='slider-item'>
+                            <div className='row'>
+                              <div className='col text-center mt-3 mr-5'>
                                 <div>
-                                  <span className="no-notification">
+                                  <span className='no-notification'>
                                     No notifications
                                   </span>
                                 </div>
@@ -717,17 +695,17 @@ const Header = (props) => {
             </li>
 
             <Divider
-              orientation="vertical"
-              variant="middle"
+              orientation='vertical'
+              variant='middle'
               flexItem
-              className="divider"
+              className='divider'
             />
 
             {/* Location */}
 
-            <li className="navItems location">
-              <img className="locationimg" src={Location} alt="Location" />
-              <div className="navCard navlocation">
+            <li className='navItems location'>
+              <img className='locationimg' src={Location} alt='Location' />
+              <div className='navCard navlocation'>
                 <DropdownButton
                   name={(
                     location?.title +
@@ -749,15 +727,20 @@ const Header = (props) => {
 
             {/* Location */}
 
-            <li className="navItems">
+            <li className='navItems'>
               <IconButton
                 // style={{ margin: 0 }}
                 onClick={handleClick}
-                size="small"
+                size='small'
                 sx={{ ml: 2 }}
               >
                 <Avatar
-                  sx={{ width: 42, height: 42, outline: "5px solid #ddd", outlineOffset: "1px" }}
+                  sx={{
+                    width: 42,
+                    height: 42,
+                    outline: "5px solid #ddd",
+                    outlineOffset: "1px",
+                  }}
                   src={`${image}`}
                 ></Avatar>
               </IconButton>
@@ -784,9 +767,9 @@ const Header = (props) => {
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
                 <MenuItem>
-                  <div className="profileName">
-                    <h1 className="nav-heading">{profile?.firstName}</h1>
-                    <p className="nav-subheading">
+                  <div className='profileName'>
+                    <h1 className='nav-heading'>{profile?.firstName}</h1>
+                    <p className='nav-subheading'>
                       {profile?.organisation?.split("/")[0]}
                     </p>
                   </div>
@@ -796,21 +779,21 @@ const Header = (props) => {
                   style={{ fontSize: "13px" }}
                   onClick={() => props.history.push("/profile")}
                 >
-                  {t('my_profile')}
+                  {t("my_profile")}
                 </MenuItem>
                 <Divider />
                 <MenuItem
                   style={{ fontSize: "13px" }}
                   onClick={() => props.history.push("/settings")}
                 >
-                  {t('settings')}
+                  {t("settings")}
                 </MenuItem>
                 <Divider />
                 <MenuItem
                   style={{ fontSize: "13px" }}
                   onClick={() => dispatch(logoutUser())}
                 >
-                  {t('logout')}
+                  {t("logout")}
                 </MenuItem>
               </Menu>
             </li>

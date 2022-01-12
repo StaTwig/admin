@@ -6,26 +6,27 @@ import {
   getManufacturers,
   addNewProduct,
   addMultipleProducts,
-  getProducts
+  getProducts,
 } from "../../actions/poActions";
 
 // import DropdownButton from "../../shared/dropdownButtonGroup";
 import Modal from "../../shared/modal";
 import ProductPopUp from "./productPopUp";
 import "./style.scss";
-import DropdownButton from "./ProductsDropDown"
+import DropdownButton from "./ProductsDropDown";
 import add_icon from "../../assets/icons/add_blue.png";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 
 const AddProduct = (props) => {
   const { t } = props;
-  const [manufacturer, setManufacturer] = useState(t('select') +' '+t('manufacturer'));
-  const [category, setCategory] = useState(t('select_category'));
+  const [manufacturer, setManufacturer] = useState(
+    t("select") + " " + t("manufacturer")
+  );
+  const [category, setCategory] = useState(t("select_category"));
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productName, setProductName] = useState("");
-  const [subCategory, setSubCategory] = useState("");
   const [UOM, setUOM] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
@@ -47,7 +48,7 @@ const AddProduct = (props) => {
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
           .map((item) => {
-            return item
+            return item;
           })
       );
     }
@@ -60,14 +61,20 @@ const AddProduct = (props) => {
   const [descErr, setDescErr] = useState(false);
 
   const validation = () => {
-    if (productName === "" || manufacturer === t('select') + ' ' + t('manufacturer') || category === t('select_category') || UOM === "" || description === "") {
+    if (
+      productName === "" ||
+      manufacturer === t("select") + " " + t("manufacturer") ||
+      category === t("select_category") ||
+      UOM === "" ||
+      description === ""
+    ) {
       if (productName === "") {
         setPdNameErr(true);
       }
-      if (manufacturer === t('select') + ' ' + t('manufacturer')) {
+      if (manufacturer === t("select") + " " + t("manufacturer")) {
         setManufacturerErr(true);
       }
-      if (category === t('select_category')) {
+      if (category === t("select_category")) {
         setCategoryErr(true);
       }
       if (UOM === "") {
@@ -76,8 +83,7 @@ const AddProduct = (props) => {
       if (description === "") {
         setDescErr(true);
       }
-    }
-    else {
+    } else {
       return true;
     }
   };
@@ -88,21 +94,23 @@ const AddProduct = (props) => {
       let formData = new FormData();
 
       formData.append("manufacturer", manufacturer);
-      // let unitofMeasure = 
+      // let unitofMeasure =
       formData.append("name", productName);
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
       formData.append("type", category);
-      formData.append("unitofMeasure", JSON.stringify({
-        id: UOM,
-        name: UOM
-      }));
+      formData.append(
+        "unitofMeasure",
+        JSON.stringify({
+          id: UOM,
+          name: UOM,
+        })
+      );
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
       if (result.status === 1) {
         setOpenCreatedInventory(true);
-        console.log("success add product");
       }
     }
   };
@@ -111,7 +119,6 @@ const AddProduct = (props) => {
     formData.append("excel", excel);
     const result = await addMultipleProducts(formData);
     if (result.status === 200) {
-      console.log("success add product");
     }
   };
   const setFile = (evt) => {
@@ -124,12 +131,19 @@ const AddProduct = (props) => {
 
   return (
     <div className='addproduct'>
-      <div className='d-flex' style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-        <h1 className='breadcrumb'>{t('add_new_product')}</h1>
+      <div
+        className='d-flex'
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <h1 className='breadcrumb'>{t("add_new_product")}</h1>
         {/* <div className="d-flex flex-column align-items-center"> */}
         <button
           className='btn-primary btn fontSize20 font-bold mt-1 ml-2'
-        // onClick={() => setMenu(!menu)}
+          // onClick={() => setMenu(!menu)}
         >
           <div className='d-flex align-items-center'>
             <img
@@ -140,7 +154,7 @@ const AddProduct = (props) => {
               alt=''
             />
             <span>
-              <b>{t('import')}</b>
+              <b>{t("import")}</b>
             </span>
             <img
               src={dropdownIcon}
@@ -162,8 +176,8 @@ const AddProduct = (props) => {
                 <img
                   src={photoUrl || uploadBlue}
                   name='photo'
-                  width={photoUrl ? '120' : '150'}
-                  height={photoUrl ? '120' : '150'}
+                  width={photoUrl ? "120" : "150"}
+                  height={photoUrl ? "120" : "150"}
                   className='mt-3'
                   alt=''
                 />
@@ -178,10 +192,32 @@ const AddProduct = (props) => {
                     />{" "}
                   </label> */}
               </div>
-              <div style={{ display: "flex", width: "10vw", flexDirection: "row", justifyContent: 'flex-end' }}>
-                <label className=' card-link btn btn-outline-primary' style={{ display: "flex", flexDirection: "row", alignItems: "center", fontSize: "1vw", height: "2rem" }}>
-                  <img src={add_icon} width='10' height='10' className='mr-2' alt='' />
-                   {t('add_image')}
+              <div
+                style={{
+                  display: "flex",
+                  width: "10vw",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <label
+                  className=' card-link btn btn-outline-primary'
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    fontSize: "1vw",
+                    height: "2rem",
+                  }}
+                >
+                  <img
+                    src={add_icon}
+                    width='10'
+                    height='10'
+                    className='mr-2'
+                    alt=''
+                  />
+                  {t("add_image")}
                   <input
                     type='file'
                     className='select'
@@ -191,32 +227,41 @@ const AddProduct = (props) => {
               </div>
             </div>
 
-
-            <div className='col mr-5' style={{ position: "relative", right: "8rem" }}>
+            <div
+              className='col mr-5'
+              style={{ position: "relative", right: "8rem" }}
+            >
               <div className='flex-row'>
                 <div className='form-group'>
-                  <label htmlFor='shipmentId'> {t('product_name')}</label>
+                  <label htmlFor='shipmentId'> {t("product_name")}</label>
                   <input
                     type='text'
-                    className={`form-control ${pdNameErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${
+                      pdNameErr ? "border-danger" : ""
+                    }`}
                     name='product'
-                    placeholder={t('enter')+' '+t('product_name')}
-                    onChange={(e) => { setPdNameErr(false); setProductName(e.target.value) }}
+                    placeholder={t("enter") + " " + t("product_name")}
+                    onChange={(e) => {
+                      setPdNameErr(false);
+                      setProductName(e.target.value);
+                    }}
                     value={productName}
                   />
                 </div>
               </div>
               <div className='flex-row'>
                 <div className='form-group'>
-                  <label htmlFor='shipmentId'>{t('manufacturer')}</label>
-                  <div className={`form-control ${manufacturerErr ? "border-danger" : ""
-                    }`}>
+                  <label htmlFor='shipmentId'>{t("manufacturer")}</label>
+                  <div
+                    className={`form-control ${
+                      manufacturerErr ? "border-danger" : ""
+                    }`}
+                  >
                     <DropdownButton
                       name={manufacturer}
                       onSelect={(item) => {
                         setManufacturerErr(false);
-                        setManufacturer(item)
+                        setManufacturer(item);
                       }}
                       groups={manufacturers}
                       required
@@ -226,7 +271,7 @@ const AddProduct = (props) => {
               </div>
               <div className='flex-row'>
                 <div className='form-group'>
-                  <label htmlFor='shipmentId'>{t('product_category')}</label>
+                  <label htmlFor='shipmentId'>{t("product_category")}</label>
                   {/* <input
                     type='text'
                     className='form-control'
@@ -235,13 +280,16 @@ const AddProduct = (props) => {
                     onChange={(e) => setCategory(e.target.value)}
                     value={category}
                   /> */}
-                  <div className={`form-control ${categoryErr ? "border-danger" : ""
-                    }`}>
+                  <div
+                    className={`form-control ${
+                      categoryErr ? "border-danger" : ""
+                    }`}
+                  >
                     <DropdownButton
                       name={category}
                       onSelect={(item) => {
                         setCategoryErr(false);
-                        setCategory(item)
+                        setCategory(item);
                       }}
                       groups={categories}
                     />
@@ -250,16 +298,15 @@ const AddProduct = (props) => {
               </div>
               <div className='flex-row'>
                 <div className='form-group'>
-                  <label htmlFor='shipmentId'>{t('unit_of_measure')}</label>
+                  <label htmlFor='shipmentId'>{t("unit_of_measure")}</label>
                   <input
                     type='text'
-                    className={`form-control ${UOMErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${UOMErr ? "border-danger" : ""}`}
                     name='UOM'
-                    placeholder={t('enter')+' '+t('unit_of_measure')}
+                    placeholder={t("enter") + " " + t("unit_of_measure")}
                     onChange={(e) => {
                       setUOMErr(false);
-                      setUOM(e.target.value)
+                      setUOM(e.target.value);
                     }}
                     value={UOM}
                   />
@@ -267,16 +314,15 @@ const AddProduct = (props) => {
               </div>
               <div className='flex-row'>
                 <div className='form-group'>
-                  <label htmlFor='shipmentId'>{t('short_description')}</label>
+                  <label htmlFor='shipmentId'>{t("short_description")}</label>
                   <input
                     type='text'
-                    className={`form-control ${descErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${descErr ? "border-danger" : ""}`}
                     name='description'
-                    placeholder={t('enter')+' '+t('short_description')}
+                    placeholder={t("enter") + " " + t("short_description")}
                     onChange={(e) => {
                       setDescErr(false);
-                      setDescription(e.target.value)
+                      setDescription(e.target.value);
                     }}
                     value={description}
                   />
@@ -286,19 +332,17 @@ const AddProduct = (props) => {
             <div>
               <button
                 className='fontSize20 font-bold mr-4 addNewBtn'
-                onClick={() => props.history.push('/addNewCategory')}
-              // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
+                onClick={() => props.history.push("/addNewCategory")}
+                // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
               >
                 <img src={Add} width='10' height='10' className='mr-2' alt='' />
-                <span style={{ fontSize: "1vw" }}>{t('add_new_category')}</span>
+                <span style={{ fontSize: "1vw" }}>{t("add_new_category")}</span>
               </button>
             </div>
           </div>
-
-
         </div>
       </div>
-      <div className="mt-5">
+      <div className='mt-5'>
         <div className='d-flex flex-row justify-content-between'>
           <div />
           <div>
@@ -308,7 +352,7 @@ const AddProduct = (props) => {
               onClick={() => props.history.push("/productcategory")}
               style={{ fontSize: "1vw", height: "2rem" }}
             >
-              {t('cancel')}
+              {t("cancel")}
             </button>
             <button
               className='addNewBtn fontSize20 font-bold mr-4 product'
@@ -316,7 +360,7 @@ const AddProduct = (props) => {
               style={{ position: "unset" }}
             >
               <img src={Add} width='10' height='10' className='mr-2' alt='' />
-              <span style={{ fontSize: "1vw" }}>{t('add_new_product')}</span>
+              <span style={{ fontSize: "1vw" }}>{t("add_new_product")}</span>
             </button>
           </div>{" "}
           {openCreatedInventory && (

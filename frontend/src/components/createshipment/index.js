@@ -88,9 +88,7 @@ const CreateShipment = (props) => {
       const result111 = await getProductList();
 
       setProductsList(result111.message);
-      console.log(result111);
       const { search } = props.location;
-      console.log(search);
       const result = await getOpenOrderIds();
 
       const ids = result.map((item) => {
@@ -101,7 +99,6 @@ const CreateShipment = (props) => {
       });
       setOrderIds(ids);
       const orgs = await getAllOrganisations();
-      console.log(user.organisation);
       const orgSplit = user.organisation?.split("/");
       if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
 
@@ -309,7 +306,6 @@ const CreateShipment = (props) => {
         }
       }
       if (check === 1) {
-        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       } else if (check === 2) {
@@ -745,8 +741,6 @@ const CreateShipment = (props) => {
                 products={products}
                 category={category}
                 handleQuantityChange={(v, i) => {
-                  console.log(v, "v");
-
                   let newArr = [...addProducts];
                   newArr[i].productQuantity = v;
                   setFieldValue(
@@ -830,7 +824,6 @@ const CreateShipment = (props) => {
                 handleProductChange={(i, v) => {
                   let newArr = [...addProducts];
                   newArr[i]["name"] = v;
-                  console.log(newArr);
                   setFieldValue(
                     "products",
                     newArr.map((row) => ({
@@ -849,7 +842,6 @@ const CreateShipment = (props) => {
                 }}
                 handleLabelIdChange={handleLabelIdChange}
                 handleCategoryChange={(i, v) => {
-                  console.log("in product type", v);
                   let newArr = [...addProducts];
                   newArr[i]["type"] = v;
                   setFieldValue(
