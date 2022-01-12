@@ -24,12 +24,11 @@ const DropdownButtonGroup = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
-  console.log(name);
   return (
-    <div className="custom-dropdown" ref={ref}>
+    <div className='custom-dropdown' ref={ref}>
       {isText ? (
         <input
-          className="btn-custom-dropdown form-control"
+          className='btn-custom-dropdown form-control'
           onBlur={() =>
             setTimeout(() => {
               if (value) changeFn(value, "y");
@@ -41,7 +40,7 @@ const DropdownButtonGroup = (props) => {
           }
           onChange={(e) => changeFn(e.target.value)}
           value={value}
-          type="text"
+          type='text'
           onFocus={() => groups.length && setMenu(true)}
           placeholder={placeholder}
           onClick={() => groups.length && setMenu(true)}
@@ -53,12 +52,12 @@ const DropdownButtonGroup = (props) => {
             name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
           }
           // className={`btn-custom-dropdown ${menu && 'active'}`}
-          role="button"
-          type="button"
+          role='button'
+          type='button'
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <div className="loc-text">
+          <div className='loc-text'>
             <div className={`${name?.length > 20 && "textNeg"}`}>
               {useParse ? parse(name) : name.split("|")[0]}
             </div>
@@ -71,7 +70,9 @@ const DropdownButtonGroup = (props) => {
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className={`${props.labelType === "lastmile" ? "lastmile-drop-img" : "customwh"}`}
+            className={`${
+              props.labelType === "lastmile" ? "lastmile-drop-img" : "customwh"
+            }`}
           />
         </button>
       )}
@@ -85,7 +86,7 @@ const DropdownButtonGroup = (props) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className="dropdown-item p-1"
+                    className='dropdown-item p-1'
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);

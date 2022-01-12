@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "../../shared/tabs";
-import Tiles from "./tiles";
 import Add from "../../assets/icons/createshipment.png";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
@@ -23,7 +21,6 @@ import Sent from "../../assets/icons/Sent.png";
 import update from "../../assets/icons/Update_Status.png";
 import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 import Cards from "./cards/cards";
 
@@ -149,11 +146,11 @@ const ShipmentAnalytic = (props) => {
     coloumn6: "Status",
     displayColoumn6: t("status"),
 
-    img1: <img src={mon} width="16" height="16" alt="Monday" />,
-    img2: <img src={calender} width="16" height="16" alt="Calender" />,
-    img3: <img src={Received} width="16" height="16" alt="Received" />,
-    img4: <img src={Sent} width="16" height="16" alt="Sent" />,
-    img6: <img src={Status} width="16" height="16" alt="Status" />,
+    img1: <img src={mon} width='16' height='16' alt='Monday' />,
+    img2: <img src={calender} width='16' height='16' alt='Calender' />,
+    img3: <img src={Received} width='16' height='16' alt='Received' />,
+    img4: <img src={Sent} width='16' height='16' alt='Sent' />,
+    img6: <img src={Status} width='16' height='16' alt='Status' />,
   };
 
   const setData = (v, a = false) => {
@@ -344,7 +341,7 @@ const ShipmentAnalytic = (props) => {
 
     var nameOfFile;
 
-    if (visible == "one") {
+    if (visible === "one") {
       nameOfFile =
         "shipmentinbound" +
         today.getFullYear().toString() +
@@ -353,7 +350,7 @@ const ShipmentAnalytic = (props) => {
         "/" +
         today.getDate().toString();
       // console.log(name, name);
-    } else if (visible == "two") {
+    } else if (visible === "two") {
       nameOfFile =
         "shipmentoutbound" +
         today.getFullYear() +
@@ -384,10 +381,10 @@ const ShipmentAnalytic = (props) => {
   };
 
   return (
-    <div className="shipment">
-      <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">{t("shipments")}</h1>
-        <div className="d-flex">
+    <div className='shipment'>
+      <div className='d-flex justify-content-between'>
+        <h1 className='breadcrumb'>{t("shipments")}</h1>
+        <div className='d-flex'>
           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
           <button
@@ -398,17 +395,17 @@ const ShipmentAnalytic = (props) => {
             <span>Create Purchase Order</span>
           </button> */}
           {isAuthenticated("updateShipment") && (
-            <Link to="/enterid">
+            <Link to='/enterid'>
               <button
-                className="btn btn-orange fontSize20 font-bold mr-3 chain mt-2"
+                className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'
                 disabled={status === "RECEIVED"}
               >
                 <img
                   src={update}
-                  width="20"
-                  height="17"
-                  className="mr-2 mb-1"
-                  alt="UpdateShipment"
+                  width='20'
+                  height='17'
+                  className='mr-2 mb-1'
+                  alt='UpdateShipment'
                 />
                 <span>
                   <b>{t("update_shipment")}</b>
@@ -424,13 +421,13 @@ const ShipmentAnalytic = (props) => {
                   : `/newshipment`
               }
             >
-              <button className="btn btn-yellow fontSize20 font-bold mt-2">
+              <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
-                  width="20"
-                  height="17"
-                  className="mr-2 mb-1"
-                  alt="CreateShipment"
+                  width='20'
+                  height='17'
+                  className='mr-2 mb-1'
+                  alt='CreateShipment'
                 />
                 <span>
                   <b>{t("create_shipment")}</b>
@@ -446,7 +443,7 @@ const ShipmentAnalytic = (props) => {
           <Cards {...props} setData={setData} />
         )}
       {props.user.emailId !== "gmr@statledger.io" && (
-        <div className="mt-4">
+        <div className='mt-4'>
           <Tabs
             {...props}
             isAuthenticated={isAuthenticated}
@@ -478,7 +475,7 @@ const ShipmentAnalytic = (props) => {
           isReportDisabled={!isAuthenticated("shipmentExportReport")}
         />
       </div> */}
-      <div className="ribben-space">
+      <div className='ribben-space'>
         <Table
           {...props}
           skip={skip}
@@ -497,7 +494,7 @@ const ShipmentAnalytic = (props) => {
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
           setStatusFilterOnSelect={setStatusFilterOnSelect}
           setDateFilterOnSelect={setDateFilterOnSelect}
-          fb="80%"
+          fb='80%'
           showExportFilter={showExportFilter}
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}

@@ -54,7 +54,7 @@ const NewShipment = (props) => {
   );
   const [toOrgLocLabel, settoOrgLocLabel] = useState("");
   const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-    t('select_delivery_location')
+    t("select_delivery_location")
   );
   const user = useSelector((state) => state.user);
   const [OrderDetails, setOrderDetails] = useState({});
@@ -101,12 +101,7 @@ const NewShipment = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result111 = await getProductList();
-
       setProductsList(result111.message);
-      console.log(result111);
-      const { search } = props.location;
-      console.log(search);
-      // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
 
       const ids = result.map((item) => {
@@ -118,7 +113,6 @@ const NewShipment = (props) => {
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-      console.log(user.organisation);
       const orgSplit = user.organisation?.split("/");
       if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
 
@@ -356,7 +350,6 @@ const NewShipment = (props) => {
         }
       }
       if (check === 1) {
-        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       } else if (check === 2) {
@@ -370,7 +363,6 @@ const NewShipment = (props) => {
           let flag = false;
 
           for (j = 0; j < productsList.length; j++) {
-            console.log(productsList[j].productName)
             if (productsList[j].productName === prdctName) {
               flag = true;
               break;
@@ -397,7 +389,7 @@ const NewShipment = (props) => {
               message: "Created Successfully!",
               id: result?.id,
               type: "Success",
-              t:t
+              t: t,
             });
           } else {
             setShipmentError(result.data.message);
@@ -460,8 +452,6 @@ const NewShipment = (props) => {
       );
       setProducts(
         buffer.map((item) => {
-          // console.log(item.products.name)
-
           return {
             value: item.products.name,
             label: item.products.name,
@@ -493,7 +483,7 @@ const NewShipment = (props) => {
 
   return (
     <div className='NewShipment'>
-      <h1 className='breadcrumb'>{t('create_shipment')}</h1>
+      <h1 className='breadcrumb'>{t("create_shipment")}</h1>
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -568,12 +558,12 @@ const NewShipment = (props) => {
                   <div className='col-md-6 col-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orderID'>
-                        {t('order_id')}
+                        {t("order_id")}
                       </label>
                       <div className='line'>
                         <Select
                           styles={customStyles}
-                          placeholder={t('enter')+' '+t('order_id')}
+                          placeholder={t("enter") + " " + t("order_id")}
                           onChange={async (v) => {
                             setfetchdisabled(true);
                             setProducts((p) => []);
@@ -590,9 +580,8 @@ const NewShipment = (props) => {
                             ) {
                               if (
                                 result.poDetails[0].products[i]
-                                  .productQuantityShipped
-                                  ||
-                                  result.poDetails[0].products[i]
+                                  .productQuantityShipped ||
+                                result.poDetails[0].products[i]
                                   .productQuantityDelivered
                               ) {
                                 result.poDetails[0].products[
@@ -605,7 +594,7 @@ const NewShipment = (props) => {
                                   parseInt(
                                     result.poDetails[0].products[i]
                                       .productQuantityShipped || 0
-                                  ) - 
+                                  ) -
                                   parseInt(
                                     result.poDetails[0].products[i]
                                       .productQuantityDelivered || 0
@@ -674,39 +663,47 @@ const NewShipment = (props) => {
                               "rtype",
                               result.poDetails[0].customer.organisation.type
                             );
-                            
-                            let products_temp = result.poDetails[0].products.filter(item => item.productQuantity > 0);
-                            if(result.poDetails[0].products && result.poDetails[0].products.length)
-                            for (let i = 0; i < products_temp.length; i++) {
-                              if (
-                                result.poDetails[0].products[i]
-                                  .productQuantity === 0
-                              ) {
-                                products_temp.splice(i, 1);
-                                i--;
-                              }
-                              products_temp[i].manufacturer =
-                                result.poDetails[0]?.products[i]?.manufacturer;
-                              products_temp[i].productName =
-                                result.poDetails[0].products[i].name;
-                              products_temp[i].productQuantity =
-                                result.poDetails[0].products[i].productQuantity;
-                              products_temp[i].productCategory =
-                                result.poDetails[0].products[i].type;
-                              products_temp[i].productID =
-                                result.poDetails[0].products[i].productId;
-                              products_temp[i].batchNumber = "";
-                              products_temp[i].productQuantityDelivered =
-                                result.poDetails[0].products[
-                                  i
-                                ].productQuantityDelivered;
-                              products_temp[i].productQuantityShipped =
-                                result.poDetails[0].products[
-                                  i
-                                ].productQuantityShipped;
-                            }
-                            console.log(products_temp);
 
+                            let products_temp =
+                              result.poDetails[0].products.filter(
+                                (item) => item.productQuantity > 0
+                              );
+                            if (
+                              result.poDetails[0].products &&
+                              result.poDetails[0].products.length
+                            )
+                              for (let i = 0; i < products_temp.length; i++) {
+                                if (
+                                  result.poDetails[0].products[i]
+                                    .productQuantity === 0
+                                ) {
+                                  products_temp.splice(i, 1);
+                                  i--;
+                                }
+                                products_temp[i].manufacturer =
+                                  result.poDetails[0]?.products[
+                                    i
+                                  ]?.manufacturer;
+                                products_temp[i].productName =
+                                  result.poDetails[0].products[i].name;
+                                products_temp[i].productQuantity =
+                                  result.poDetails[0].products[
+                                    i
+                                  ].productQuantity;
+                                products_temp[i].productCategory =
+                                  result.poDetails[0].products[i].type;
+                                products_temp[i].productID =
+                                  result.poDetails[0].products[i].productId;
+                                products_temp[i].batchNumber = "";
+                                products_temp[i].productQuantityDelivered =
+                                  result.poDetails[0].products[
+                                    i
+                                  ].productQuantityDelivered;
+                                products_temp[i].productQuantityShipped =
+                                  result.poDetails[0].products[
+                                    i
+                                  ].productQuantityShipped;
+                              }
                             if (result.poDetails[0].products.length > 0) {
                               setProducts((p) => []);
                               setAddProducts((p) => []);
@@ -725,7 +722,7 @@ const NewShipment = (props) => {
                       htmlFor='shipmentID'
                       style={{ position: "relative", top: "0.5rem" }}
                     >
-                      {t('reference_shipment_id')}
+                      {t("reference_shipment_id")}
                     </label>
                     <input
                       className='refship' //input
@@ -734,12 +731,13 @@ const NewShipment = (props) => {
                       name='shipmentID'
                       value={values.shipmentID}
                       onBlur={handleBlur}
-                      placeholder={t('enter')+' '+t('reference_shipment_id')}
+                      placeholder={
+                        t("enter") + " " + t("reference_shipment_id")
+                      }
                       onInputChange={(event, newInputValue) => {
                         onSearchChange(newInputValue);
                       }}
                       onChange={(event, newValue) => {
-                        console.log("evnt", event, newValue);
                         handleChange(event);
                         onSearchChange(event.target.value);
                       }}
@@ -780,16 +778,21 @@ const NewShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-                                if (result.products[i].productQuantityShipped || result.products[i].productQuantityDelivered) {
+                                if (
+                                  result.products[i].productQuantityShipped ||
+                                  result.products[i].productQuantityDelivered
+                                ) {
                                   result.products[i].productQuantity =
                                     parseInt(
                                       result.products[i].productQuantity
                                     ) -
                                     parseInt(
-                                     result.products[i].productQuantityShipped || 0
+                                      result.products[i]
+                                        .productQuantityShipped || 0
                                     ) -
                                     parseInt(
-                                      result.products[i].productQuantityDelivered || 0
+                                      result.products[i]
+                                        .productQuantityDelivered || 0
                                     );
                                 }
                                 result.products[i].orderedQuantity =
@@ -808,7 +811,6 @@ const NewShipment = (props) => {
                                 setOpenShipmentFail(true);
                               } else {
                                 setOrderDetails(result);
-                                let wa = result.receiver.warehouse;
                                 setFieldValue("toOrgLoc", "");
                                 settoOrgLocLabel("");
                                 // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
@@ -830,7 +832,6 @@ const NewShipment = (props) => {
                                   products_temp[i].id =
                                     result.products[i].productID;
                                 }
-                                console.log(products_temp);
                                 if (result.products.length > 0) {
                                   setProducts((p) => []);
                                   setAddProducts((p) => []);
@@ -856,7 +857,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t('fetch') === "fetch" ? "fetch" : "obtener"}
+                        {t("fetch") === "fetch" ? "fetch" : "obtener"}
                       </span>
                     </span>
                   ) : (
@@ -872,7 +873,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t('fetch') === "fetch" ? "fetch" : "obtener"}
+                        {t("fetch") === "fetch" ? "fetch" : "obtener"}
                       </span>
                     </span>
                   )}
@@ -883,7 +884,7 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  {t('from')}
+                  {t("from")}
                 </label>
                 {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
@@ -912,7 +913,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                        {t('organisation_name')}*
+                        {t("organisation_name")}*
                       </label>
                       <div className='line'>
                         {/* <DropdownButton
@@ -942,7 +943,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orgLocation'>
-                        {t('organisation_location')}*
+                        {t("organisation_location")}*
                       </label>
                       <div
                         className={`line ${
@@ -978,24 +979,23 @@ const NewShipment = (props) => {
                           groups={senderWarehouses}
                         /> */}
                         <Select
-                            styles={customStyles}
-                            isDisabled={false}
-                            placeholder={t('select') + ' ' + t('organisation_location')}
+                          styles={customStyles}
+                          isDisabled={false}
+                          placeholder={
+                            t("select") + " " + t("organisation_location")
+                          }
                           onChange={async (v) => {
                             let res = await onWarehouseChange(
                               v.warehouseInventory
                             );
-                            // console.log(res);
                             if (!res) {
                               return;
                             }
                             setFromOrgLabel(v.label);
-                            // console.log(values.fromOrgLoc);
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
-                            // console.log(v.value)
                             setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
@@ -1008,7 +1008,7 @@ const NewShipment = (props) => {
                           }}
                           value={
                             values.fromOrgLoc === ""
-                              ? t('select') + ' ' + t('organisation_location')
+                              ? t("select") + " " + t("organisation_location")
                               : {
                                   value: values.fromOrgLoc,
                                   label: FromOrgLabel,
@@ -1037,13 +1037,13 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  {t('to')}
+                  {t("to")}
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationType'>
-                        {t('organisation_type')}*
+                        {t("organisation_type")}*
                       </label>
                       <div
                         className={`line ${
@@ -1054,7 +1054,9 @@ const NewShipment = (props) => {
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={
-                            disabled ? values.rtype : t('select') + ' ' + t('organisation_type')
+                            disabled
+                              ? values.rtype
+                              : t("select") + " " + t("organisation_type")
                           }
                           onChange={(v) => {
                             setFieldValue("rtype", v?.value);
@@ -1077,7 +1079,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                          {t('organisation_name')}*
+                        {t("organisation_name")}*
                       </label>
                       <div
                         className={`line ${
@@ -1103,12 +1105,12 @@ const NewShipment = (props) => {
                           placeholder={
                             disabled
                               ? values.toOrg.split("/")[1]
-                              : t('select') + ' ' + t('organisation_name')
+                              : t("select") + " " + t("organisation_name")
                           }
                           //placeholder={"Select Organisation Name"}
                           value={
                             values.toOrg === ""
-                              ? t('select') + ' ' + t('organisation_name')
+                              ? t("select") + " " + t("organisation_name")
                               : { value: values.toOrg, label: receiverOrgId }
                           }
                           onChange={(v) => {
@@ -1134,7 +1136,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        {t('delivery_location')}*
+                        {t("delivery_location")}*
                       </label>
                       <div
                         className={`line ${
@@ -1165,12 +1167,12 @@ const NewShipment = (props) => {
                           placeholder={
                             disabled
                               ? values.toOrgLoc.split("/")[1]
-                              : t('select_delivery_location')
+                              : t("select_delivery_location")
                           }
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgLoc === ""
-                              ? t('select_delivery_location')
+                              ? t("select_delivery_location")
                               : { value: values.toOrgLoc, label: toOrgLocLabel }
                           }
                           onChange={(v) => {
@@ -1201,12 +1203,12 @@ const NewShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  {t('delivery_details')}:
+                  {t("delivery_details")}:
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12 mt-2'>
                     <label className='name' htmlFor='organizationName'>
-                      {t('transit_no')}*
+                      {t("transit_no")}*
                     </label>
                     <input
                       className={`input refship ${
@@ -1219,7 +1221,7 @@ const NewShipment = (props) => {
                       name='airWayBillNo'
                       value={values.airWayBillNo}
                       onBlur={handleBlur}
-                      placeholder={t('enter')+' '+t('transit_no')}
+                      placeholder={t("enter") + " " + t("transit_no")}
                       onChange={handleChange}
                     />
                     {/* {errors.airWayBillNo && touched.airWayBillNo && (
@@ -1232,7 +1234,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12 mt-3'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        {t('shipment_date')}*
+                        {t("shipment_date")}*
                       </label>
                       <div
                         className={`input refship ${
@@ -1253,7 +1255,9 @@ const NewShipment = (props) => {
                             e.keyCode !== 8 && e.preventDefault()
                           }
                           minDate={new Date()}
-                          placeholderText={t('enter')+' '+t('shipment_date')}
+                          placeholderText={
+                            t("enter") + " " + t("shipment_date")
+                          }
                           //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
                           onChange={(date) => {
                             setFieldValue("shipmentDate", date);
@@ -1282,7 +1286,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <label className='name' htmlFor='organizationName'>
-                      {t('label_code')}*
+                      {t("label_code")}*
                     </label>
                     <input
                       className={`input refship ${
@@ -1295,7 +1299,7 @@ const NewShipment = (props) => {
                       name='labelCode'
                       value={values.labelCode}
                       onBlur={handleBlur}
-                      placeholder={t('enter')+' '+t('label_code')}
+                      placeholder={t("enter") + " " + t("label_code")}
                       onChange={handleChange}
                     />
                     {/* {errors.labelCode && touched.labelCode && (
@@ -1308,7 +1312,7 @@ const NewShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='shipmentId '>
-                        {t('estimated_delivery_date')}
+                        {t("estimated_delivery_date")}
                       </label>
                       <div
                         className={`input refship ${
@@ -1321,7 +1325,7 @@ const NewShipment = (props) => {
                         <DatePicker
                           ref={ref2}
                           className='date'
-                          placeholderText={t('enter_delivery_date')}
+                          placeholderText={t("enter_delivery_date")}
                           onChange={(date) => {
                             setFieldValue("estimateDeliveryDate", date);
                             // setEstimateDeliveryDate(date);
@@ -1364,7 +1368,7 @@ const NewShipment = (props) => {
 
             <div className='row mb-3'>
               <label htmlFor='productDetails' className='headsup'>
-                {t('product_details')}
+                {t("product_details")}
               </label>
               {OrderDetails?.products?.length > 0 ? (
                 <EditTable
@@ -1422,7 +1426,7 @@ const NewShipment = (props) => {
                       }}
                       className='mt-5 '
                     >
-                      *{t('no_products_available')}
+                      *{t("no_products_available")}
                     </h4>
                   </div>
                 )
@@ -1504,7 +1508,6 @@ const NewShipment = (props) => {
                     handleProductChange={(index, item) => {
                       addProducts.splice(index, 1, item);
                       let newArr = [...addProducts];
-                      console.log(newArr);
                       setFieldValue(
                         "products",
                         newArr.map((row) => ({
@@ -1548,7 +1551,7 @@ const NewShipment = (props) => {
                         setAddProducts((prod) => [...prod, newArr]);
                       }}
                     >
-                      +<span> {t('add_another_product')}</span>
+                      +<span> {t("add_another_product")}</span>
                     </button>
                   </div>
                 </>
@@ -1579,7 +1582,7 @@ const NewShipment = (props) => {
                   className='btn btn-outline-primary font-bold mr-2'
                   onClick={() => props.history.push("/shipments")}
                 >
-                  {t('cancel')}
+                  {t("cancel")}
                 </button>
 
                 <button
@@ -1593,7 +1596,7 @@ const NewShipment = (props) => {
                     className='mr-2 mb-1'
                     alt=''
                   />
-                    <span>{t('create_shipment')}</span>
+                  <span>{t("create_shipment")}</span>
                 </button>
               </div>
             </div>

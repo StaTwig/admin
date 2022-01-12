@@ -40,7 +40,6 @@ const Settings = (props) => {
   const [mobileAlert, setMobileAlert] = useState(false);
   const [disabledQuesMark, setDisabledQuesMark] = useState(true);
 
-
   const setIndicatorValuesForTooltipPanel = (type) => {
     if (type === "orders_alerts") {
       setShowToolTipForOrderAlerts(!showToolTipForOrderAlerts);
@@ -184,22 +183,14 @@ const Settings = (props) => {
     }
   };
 
-  const createNewAlert = () => {
-    createUpdateNewAlert(alertsObj)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const createNewAlert = async () => {
+    await createUpdateNewAlert(alertsObj);
   };
 
   const closeModal = () => {
     setShowModal(false);
     props.history.push("/overview");
   };
-
-  console.log("createNewAlertString: ", alertsObj);
 
   const isEmailMobileModeEnabled = () => {
     if (alertsObj.alertEmail || alertsObj.alertMobile) {
@@ -296,10 +287,15 @@ const Settings = (props) => {
                     checked={alertsObj.alertEmail}
                     onClick={() => {
                       updateAlertsObj("email");
-                      setEmailClicked(!emailClicked)
+                      setEmailClicked(!emailClicked);
                     }}
                   />
-                  <label className='subscription-alert-label' style={{color: emailClicked ? 'black' : 'grey'}}>{"Email"}</label>
+                  <label
+                    className='subscription-alert-label'
+                    style={{ color: emailClicked ? "black" : "grey" }}
+                  >
+                    {"Email"}
+                  </label>
                 </div>
                 <div className='subscription-alert-section'>
                   <input
@@ -316,21 +312,30 @@ const Settings = (props) => {
                   <label
                     className='subscription-alert-label'
                     style={{
-                      // color: isMobileNumberNotAvailable() 
+                      // color: isMobileNumberNotAvailable()
                       //   ? "#B4B4B4"
                       //   : "#000000",
-                        color: smsClicked ? 'black' : 'grey'
+                      color: smsClicked ? "black" : "grey",
                     }}
                   >
                     {"Mobile SMS"} &nbsp;
-                  {disabledQuesMark && 
-                    <span onClick= {() => {setMobileAlert(true); setDisabledQuesMark(false)}} 
-                          className="ques-mark cursorP">{'(?)'} 
-                    </span>}                                 
+                    {disabledQuesMark && (
+                      <span
+                        onClick={() => {
+                          setMobileAlert(true);
+                          setDisabledQuesMark(false);
+                        }}
+                        className='ques-mark cursorP'
+                      >
+                        {"(?)"}
+                      </span>
+                    )}
                   </label>
-                  {mobileAlert && 
-                    <p className="register-mobile-alert">( Please register Mobile Number to get alerts )</p>
-                  }
+                  {mobileAlert && (
+                    <p className='register-mobile-alert'>
+                      ( Please register Mobile Number to get alerts )
+                    </p>
+                  )}
                   <label
                     className='subscription-alert-label'
                     style={{ color: "#D80000" }}

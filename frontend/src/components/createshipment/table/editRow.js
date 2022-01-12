@@ -21,7 +21,6 @@ const EditRow = (props) => {
     handleManufacturerChange,
     index,
     enableDelete,
-    category,
     handleCategoryChange,
     handleProductChange,
     handleBatchChange,
@@ -45,7 +44,6 @@ const EditRow = (props) => {
     img5: <img src={date} width='15' height='15' alt='' />,
     img6: <img src={Quantity} width='20' height='15' alt='' />,
   };
-  // console.log(prod,"Edit rowt",index);
   const [editButtonStatus, setEditButtonStatus] = useState(false);
   const [changebtn, setbtn] = useState(false);
   const [addnew] = useState(!props.category);
@@ -57,7 +55,6 @@ const EditRow = (props) => {
   const [batches, setBatches] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState({});
   const [selectedIndex, setSelectedIndex] = useState();
-  const [BatchSelected, setBatchSelected] = useState([]);
   const closeModal = () => setShowModal(false);
 
   const onEditClick = (e) => {
@@ -68,7 +65,6 @@ const EditRow = (props) => {
     let buffer = [...batches];
     buffer[index][type] = value;
     setBatches(buffer);
-    console.log(buffer);
   };
 
   const onSaveClick = (e) => {
@@ -106,7 +102,6 @@ const EditRow = (props) => {
   const updateQuantity = () => {
     setQuantityChecker(0);
   };
-  // console.log("product Quantity is "+ prod.productQuantity);
   if (
     check === "0" &&
     quantityChecker === 1 &&
@@ -118,34 +113,29 @@ const EditRow = (props) => {
     for (var i = 0; i < productsList.length; i++) {
       if (prod.name === productsList[i].productName) {
         qty = String(productsList[i].quantity);
-        console.log(typeof qty);
         break;
       }
     }
     if (i < productsList.length) {
       prod.productQuantity = qty;
       handleQuantityChange(prod.productQuantity, index);
-      console.log("productQuantity is " + prod.productQuantity);
       updateQuantity();
     }
   }
 
   async function changeBatch(batch, index) {
-    console.log(selectedBatch.quant, selectedBatch.bnp, index);
     handleBatchChange(batch.bnp, index);
     handleQuantityChange(batch.quant, index);
     // closeModal()
   }
   async function fetchBatches(prod, index) {
-    // console.log(warehouseID)
     setSelectedIndex(index);
-    // console.log("index, ", selectedIndex )
     setModelProduct(prod);
     let res = await axios.get(
-      `${config().fetchBatchesOfInventory}?productId=${prod.id
+      `${config().fetchBatchesOfInventory}?productId=${
+        prod.id
       }&wareId=${warehouseID}`
     );
-    // console.log(res.data);
     let buffer = res.data.data;
     buffer.forEach((element) => {
       element.selected = false;
@@ -170,14 +160,12 @@ const EditRow = (props) => {
     }
   };
   const handleChange = (value) => {
-    console.log(value);
     setSelectedBatch(value);
   };
   const setQuantity = (value) => {
     let buffer = selectedBatch;
     buffer.quant = value;
     setSelectedBatch(buffer);
-    console.log(selectedBatch);
   };
   const editQuantity = (value, index) => {
     let buffer = [...batches];

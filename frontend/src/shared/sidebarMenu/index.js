@@ -20,14 +20,14 @@ const SideBar = ({ match, location, user, t }) => {
   }, [user]);
 
   return (
-    <div className="sidebar">
+    <div className='sidebar'>
       <ul>
         {isAuthenticated("overview") && enable && (
           <li className={url === "/overview" ? "active" : "inactive"}>
-            <Link to="/overview" className="nav-look-link">
+            <Link to='/overview' className='nav-look-link'>
               <img
                 src={url === "/overview" ? HomeIcon : HomeIcon}
-                alt="Overview"
+                alt='Overview'
               />
               <span>{t("overview")}</span>
             </Link>
@@ -41,16 +41,16 @@ const SideBar = ({ match, location, user, t }) => {
                 url === "/orders" || url === "/neworder" ? "active" : ""
               }
             >
-              <Link to="/orders" className="d-inline-block">
+              <Link to='/orders' className='d-inline-block'>
                 <img
                   src={
                     url === "/orders" || url === "/neworder"
                       ? OrderSelectedIcon
                       : OrderSelectedIcon
                   }
-                  alt="Orders"
+                  alt='Orders'
                 />
-                <span className="ml-2">{t("orders")}</span>
+                <span className='ml-2'>{t("orders")}</span>
               </Link>
             </li>
           )}
@@ -58,94 +58,94 @@ const SideBar = ({ match, location, user, t }) => {
           <li
             className={
               url === "/inventory" ||
-                url === "/newinventory" ||
-                url === "/productcategory" ||
-                url === "/batchexpired" ||
-                url === "/batchnearexpiry/product" ||
-                url === "/productoutofstock" ||
-                url === "/addproduct" ||
-                url === "/productlist/all"
+              url === "/newinventory" ||
+              url === "/productcategory" ||
+              url === "/batchexpired" ||
+              url === "/batchnearexpiry/product" ||
+              url === "/productoutofstock" ||
+              url === "/addproduct" ||
+              url === "/productlist/all"
                 ? "active"
                 : ""
             }
           >
-            <Link to="/inventory" className="d-inline-block">
+            <Link to='/inventory' className='d-inline-block'>
               <img
                 src={
                   url === "/inventory" ||
-                    url === "/newinventory" ||
-                    url === "/productcategory" ||
-                    url === "/batchexpired" ||
-                    url === "/batchnearexpiry/product" ||
-                    url === "/productoutofstock" ||
-                    url === "/addproduct" ||
-                    url === "/productlist/all"
+                  url === "/newinventory" ||
+                  url === "/productcategory" ||
+                  url === "/batchexpired" ||
+                  url === "/batchnearexpiry/product" ||
+                  url === "/productoutofstock" ||
+                  url === "/addproduct" ||
+                  url === "/productlist/all"
                     ? InventoryIcon
                     : InventoryIcon
                 }
-                alt="Inventory"
+                alt='Inventory'
               />
-              <span className="ml-2">{t("inventory")}</span>
+              <span className='ml-2'>{t("inventory")}</span>
             </Link>
           </li>
         )}
         {(isAuthenticated("inboundShipments") ||
           isAuthenticated("outboundShipments")) && (
-            <li
-              className={
-                url === "/shipments" ||
+          <li
+            className={
+              url === "/shipments" ||
+              url === "/newshipment" ||
+              url === "/transactionHistory"
+                ? "active"
+                : ""
+            }
+          >
+            <Link to='/shipments' className='d-inline-block'>
+              <img
+                src={
+                  url === "/shipments" ||
                   url === "/newshipment" ||
                   url === "/transactionHistory"
-                  ? "active"
-                  : ""
-              }
-            >
-              <Link to="/shipments" className="d-inline-block">
-                <img
-                  src={
-                    url === "/shipments" ||
-                      url === "/newshipment" ||
-                      url === "/transactionHistory"
-                      ? shipIcon
-                      : shipIcon
-                  }
-                  alt="Shippment"
-                />
-                <span className="ml-2">{t("shipments")}</span>
-              </Link>
-            </li>
-          )}
+                    ? shipIcon
+                    : shipIcon
+                }
+                alt='Shippment'
+              />
+              <span className='ml-2'>{t("shipments")}</span>
+            </Link>
+          </li>
+        )}
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
-            <Link to="/dashboard" className="d-inline-block">
+            <Link to='/dashboard' className='d-inline-block'>
               <img
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt="Shippment"
+                alt='Shippment'
               />
-              <span className="ml-2">{t("network")}</span>
+              <span className='ml-2'>{t("network")}</span>
             </Link>
           </li>
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link to="/track" className="d-inline-block">
+            <Link to='/track' className='d-inline-block'>
               <img
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt="Track & Trace"
+                alt='Track & Trace'
               />
-              <span className="ml-2">{t("trackntrace")}</span>
+              <span className='ml-2'>{t("trackntrace")}</span>
             </Link>
           </li>
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>
-            <Link to="/lastMile" className="d-inline-block">
+            <Link to='/lastMile' className='d-inline-block'>
               <img
                 src={url === "/lastMile" ? lastMileIcon : lastMileIcon}
-                alt="lastMile"
+                alt='lastMile'
               />
 
-              <span className="ml-2">{t("lastmile")}</span>
+              <span className='ml-2'>{t("lastmile")}</span>
             </Link>
           </li>
         )}

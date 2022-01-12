@@ -319,11 +319,10 @@ exports.createShipment = [
         data.shippingDate = shippingDate;
       }
       data.shippingDate = new Date(data.shippingDate);
-      data.products.forEach(async (element) => {
-        var product = await ProductModel.findOne({ id: element.productID });
+      await asyncForEach(data.products, async (element) => {
+        const product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;
         element.unitofMeasure = product.unitofMeasure;
-        console.log(product);
       });
       const shipmentCounter = await CounterModel.findOneAndUpdate(
         {
@@ -403,40 +402,37 @@ exports.createShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            if(product.id === p.productID){
+            if (product.id === p.productID) {
               // console.log(p)
-            const po_product_quantity =
-              product.productQuantity || product.quantity;
-            const alreadyShipped = parseInt(product.productQuantityShipped || 0) + parseInt(product.productQuantityDelivered || 0)  || null;
-            let shipment_product_qty;
-            if (alreadyShipped) {
-              // console.log(
-              //   "values are" + parseInt(p.productQuantity),
-              //   parseInt(alreadyShipped)
-              // );
-              shipment_product_qty =
-                parseInt(p.productQuantity) + parseInt(alreadyShipped);
-            } else {
-              shipment_product_qty = p.productQuantity;
+              const po_product_quantity =
+                product.productQuantity || product.quantity;
+              const alreadyShipped =
+                parseInt(product.productQuantityShipped || 0) +
+                  parseInt(product.productQuantityDelivered || 0) || null;
+              let shipment_product_qty;
+              if (alreadyShipped) {
+                // console.log(
+                //   "values are" + parseInt(p.productQuantity),
+                //   parseInt(alreadyShipped)
+                // );
+                shipment_product_qty =
+                  parseInt(p.productQuantity) + parseInt(alreadyShipped);
+              } else {
+                shipment_product_qty = p.productQuantity;
+              }
+              if (
+                parseInt(shipment_product_qty, 10) <
+                parseInt(po_product_quantity, 10)
+              ) {
+                quantityMismatch = true;
+                console.log("quantityMismatch is ", quantityMismatch);
+                return false;
+              } else if (
+                parseInt(shipment_product_qty) === parseInt(po_product_quantity)
+              ) {
+                quantityMismatch = false;
+              }
             }
-
-            console.log(
-              po_product_quantity,
-              shipment_product_qty,
-              alreadyShipped
-            );
-            console.log(po_product_quantity, shipment_product_qty)
-            if (
-              parseInt(shipment_product_qty, 10) <
-              parseInt(po_product_quantity, 10)
-            ) {
-              quantityMismatch = true;
-              console.log("quantityMismatch is ", quantityMismatch);
-              return false;
-            }else if(parseInt(shipment_product_qty) === parseInt(po_product_quantity)){
-              quantityMismatch = false;
-            }
-          }
           });
         });
 
@@ -584,7 +580,7 @@ exports.createShipment = [
               }
             );
           } else if (products[count].serialNumber != null) {
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(
@@ -1007,25 +1003,30 @@ exports.receiveShipment = [
           let quantityMismatch = false;
           po.products.every((product) => {
             data.products.every((p) => {
-              if(product.id === p.productID){
+              if (product.id === p.productID) {
                 // console.log(product, p)
                 const po_product_quantity =
-                product.productQuantity || product.quantity;
-              let shipment_product_qty = 0;
-              if (product.productQuantityDelivered)
-                shipment_product_qty = parseInt(product.productQuantityDelivered) + parseInt(p.productQuantity);
-              else shipment_product_qty = p.productQuantity;
+                  product.productQuantity || product.quantity;
+                let shipment_product_qty = 0;
+                if (product.productQuantityDelivered)
+                  shipment_product_qty =
+                    parseInt(product.productQuantityDelivered) +
+                    parseInt(p.productQuantity);
+                else shipment_product_qty = p.productQuantity;
                 // console.log(shipment_product_qty, po_product_quantity)
-              if (
-                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-              ) {
-                console.log('mismatch')
-                quantityMismatch = true;
-                return false;
-              }else if(parseInt(shipment_product_qty) === parseInt(po_product_quantity)){
-                console.log("full now");
-                quantityMismatch = false;
-              }
+                if (
+                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                ) {
+                  console.log("mismatch");
+                  quantityMismatch = true;
+                  return false;
+                } else if (
+                  parseInt(shipment_product_qty) ===
+                  parseInt(po_product_quantity)
+                ) {
+                  console.log("full now");
+                  quantityMismatch = false;
+                }
               }
             });
           });
@@ -1836,8 +1837,8 @@ exports.fetchGMRShipments = [
   auth,
   async (req, res) => {
     try {
-      const skip = req.query || 0;
-      const limit = req.query || 30;
+      const skip = req.query.skip || 0;
+      const limit = req.query.skip || 30;
       const count = await ShipmentModel.count({ isCustom: true });
       const shipments = await ShipmentModel.find({ isCustom: true })
         .skip(parseInt(skip))

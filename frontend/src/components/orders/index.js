@@ -23,7 +23,6 @@ import {
 } from "../../actions/poActions";
 import { config } from "../../config";
 import { isAuthenticated } from "../../utils/commonHelper";
-import Cards from "./cards/cards";
 
 const Orders = (props) => {
   const { t } = props;
@@ -95,7 +94,6 @@ const Orders = (props) => {
 
       const productsLocationsOrganisationsRes =
         await getProductIdDeliveryLocationsOrganisations();
-      // console.log('products location', productsLocationsOrganisationsRes);
       setPoDeliveryLocationsList(
         productsLocationsOrganisationsRes.deliveryLocations
       );
@@ -133,7 +131,6 @@ const Orders = (props) => {
         recordSkip,
         limit
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -141,12 +138,12 @@ const Orders = (props) => {
   };
 
   const headers = {
-    coloumn1: visible === "one" ? "Order Sent To" : "Order CreatedBy",
-    coloumn2: "Order Date",
-    coloumn3: "Order ID",
-    coloumn4: "Product",
-    coloumn5: "Delivery Location",
-    coloumn6: "Status",
+    coloumn1: visible === "one" ? t("order_sent_to") : t("order_created_by"),
+    coloumn2: t("order_date"),
+    coloumn3: t("order_id"),
+    coloumn4: t("product"),
+    coloumn5: t("delivery_location"),
+    coloumn6: t("status"),
 
     displayColoumn1:
       visible === "one" ? t("order_sent_to") : t("order_created_by"),
@@ -156,12 +153,12 @@ const Orders = (props) => {
     displayColoumn5: t("delivery_location"),
     displayColoumn6: t("status"),
 
-    img1: <img src={mon} width="16" height="16" alt="" />,
-    img2: <img src={calender} width="16" height="16" alt="" />,
-    img3: <img src={Order} width="18" height="16" alt="" />,
-    img4: <img src={Package} width="16" height="16" alt="" />,
-    img5: <img src={Totalshipments} width="18" height="18" alt="" />,
-    img6: <img src={Status} width="16" height="16" alt="" />,
+    img1: <img src={mon} width='16' height='16' alt='' />,
+    img2: <img src={calender} width='16' height='16' alt='' />,
+    img3: <img src={Order} width='18' height='16' alt='' />,
+    img4: <img src={Package} width='16' height='16' alt='' />,
+    img5: <img src={Totalshipments} width='18' height='18' alt='' />,
+    img6: <img src={Status} width='16' height='16' alt='' />,
   };
 
   const closeExcelModal = () => {
@@ -305,7 +302,6 @@ const Orders = (props) => {
   };
 
   const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    console.log(statusFilterSelected);
     setStatusFilter(statusFilterSelected);
     setSkip(0);
     if (visible === "one") {
@@ -319,7 +315,6 @@ const Orders = (props) => {
         0,
         limit
       ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
-      console.log(outboundRes.data.outboundPOs);
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
@@ -333,7 +328,6 @@ const Orders = (props) => {
         0,
         limit
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -402,13 +396,11 @@ const Orders = (props) => {
       }?type=${value.toLowerCase()}`;
     }
 
-    // console.log('visible', visible);
-
     var today = new Date();
 
     var nameOfFile;
 
-    if (visible == "one") {
+    if (visible === "one") {
       nameOfFile =
         "ordersoutbound" +
         today.getFullYear().toString() +
@@ -416,8 +408,7 @@ const Orders = (props) => {
         (today.getMonth() + 1).toString() +
         "/" +
         today.getDate().toString();
-      // console.log(name, name);
-    } else if (visible == "two") {
+    } else if (visible === "two") {
       nameOfFile =
         "ordersinbound" +
         today.getFullYear() +
@@ -440,7 +431,6 @@ const Orders = (props) => {
             value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
-        console.log("Link", link);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -449,19 +439,19 @@ const Orders = (props) => {
   };
 
   return (
-    <div className="orders">
-      <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">{t("your_orders")}</h1>
-        <div className="d-flex">
+    <div className='orders'>
+      <div className='d-flex justify-content-between'>
+        <h1 className='breadcrumb'>{t("your_orders")}</h1>
+        <div className='d-flex'>
           {isAuthenticated("createOrder") && (
-            <Link to="/neworder">
-              <button className="btn btn-orange fontSize20 font-bold mt-1">
+            <Link to='/neworder'>
+              <button className='btn btn-orange fontSize20 font-bold mt-1'>
                 <img
                   src={OrderIcon}
-                  width="20"
-                  height="17"
-                  className="mr-2 mb-1"
-                  alt=""
+                  width='20'
+                  height='17'
+                  className='mr-2 mb-1'
+                  alt=''
                 />
                 <span style={{ color: "white" }}>
                   <b>{t("create_new_order")}</b>
@@ -473,47 +463,47 @@ const Orders = (props) => {
           {/* <div className="d-flex flex-column align-items-center"> */}
           {isAuthenticated("importOrder") && (
             <button
-              className="btn-primary btn fontSize20 font-bold mt-1 ml-2"
+              className='btn-primary btn fontSize20 font-bold mt-1 ml-2'
               onClick={() => setMenu(!menu)}
             >
-              <div className="d-flex align-items-center">
+              <div className='d-flex align-items-center'>
                 <img
                   src={ExportIcon}
-                  width="16"
-                  height="16"
-                  className="mr-2"
-                  alt=""
+                  width='16'
+                  height='16'
+                  className='mr-2'
+                  alt=''
                 />
                 <span>
                   <b>{t("import")}</b>
                 </span>
                 <img
                   src={dropdownIcon}
-                  width="14"
-                  height="14"
-                  className="ml-2"
-                  alt=""
+                  width='14'
+                  height='14'
+                  className='ml-2'
+                  alt=''
                 />
               </div>
             </button>
           )}
           {menu ? (
-            <div className="menu">
+            <div className='menu'>
               <button
-                className=" btn btn-outline-info mb-2 "
+                className=' btn btn-outline-info mb-2 '
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
                 {t("excel")}
               </button>
-              <button className=" btn btn-outline-info"> {t("other")}</button>
+              <button className=' btn btn-outline-info'> {t("other")}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
               title={t("import")}
               close={() => closeExcelModal()}
-              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+              size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <ExcelPopUp
                 {...props}
@@ -531,7 +521,7 @@ const Orders = (props) => {
         // <Tiles {...props} setData={setData} t={t} />
         <Cards {...props} setData={setData} t={t} />
       )}
-      <div className="mt-4">
+      <div className='mt-4'>
         <Tabs
           {...props}
           setvisible={setvisible}
@@ -540,7 +530,7 @@ const Orders = (props) => {
           t={t}
         />
       </div>
-      <div className="ribben-space">
+      <div className='ribben-space'>
         <Table
           {...props}
           skip={skip}
@@ -548,7 +538,6 @@ const Orders = (props) => {
           visible={visible}
           count={count}
           onPageChange={onPageChange}
-          visible={visible}
           data={headers}
           poOrderIdList={poOrderIdList}
           poDeliveryLocationsList={poDeliveryLocationsList}
@@ -560,7 +549,7 @@ const Orders = (props) => {
           setProductNameFilterOnSelect={setProductNameFilterOnSelect}
           setLocationFilterOnSelect={setLocationFilterOnSelect}
           setDateFilterOnSelect={setDateFilterOnSelect}
-          fb="76%"
+          fb='76%'
           showExportFilter={showExportFilter}
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}

@@ -1,16 +1,16 @@
-import axios from 'axios';
-import { config } from '../config';
+import axios from "axios";
+import { config } from "../config";
 import {
   SET_REVIEW_PO,
   RESET_REVIEW_PO,
   SET_EDIT_PO,
   RESET_EDIT_PO,
   // SET_POS,
-  RESET_POS
-} from '../constants/poconstants';
+  RESET_POS,
+} from "../constants/poconstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
-export const createPO = async data => {
+export const createPO = async (data) => {
   try {
     const result = await axios.post(config().createPurchaseOrderUrl, data);
     return result;
@@ -19,7 +19,7 @@ export const createPO = async data => {
   }
 };
 
-export const getPO = async po => {
+export const getPO = async (po) => {
   try {
     const result = await axios.get(config().fetchAllPurchaseOrderUrl + po);
     return result.data.data;
@@ -28,7 +28,7 @@ export const getPO = async po => {
   }
 };
 
-export const changePOStatus = async data => {
+export const changePOStatus = async (data) => {
   try {
     const result = await axios.post(config().changePOStatus, data);
     return result;
@@ -39,9 +39,9 @@ export const changePOStatus = async data => {
 
 export const resetPOs = () => {
   return {
-    type: RESET_POS
-  }
-}
+    type: RESET_POS,
+  };
+};
 
 export const getProducts = async () => {
   try {
@@ -52,9 +52,8 @@ export const getProducts = async () => {
   }
 };
 
-export const createOrder = async data => {
+export const createOrder = async (data) => {
   try {
-    console.log(config().createOrderUrl);
     const result = await axios.post(config().createOrderUrl, data);
     return result;
   } catch (e) {
@@ -62,11 +61,11 @@ export const createOrder = async data => {
   }
 };
 
-export const addPOsFromExcel = async data => {
+export const addPOsFromExcel = async (data) => {
   try {
     const url = config().addPOsFromExcel;
     const result = await axios.post(url, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return result;
   } catch (e) {
@@ -85,8 +84,13 @@ export const getProductsByCategory = async (id) => {
 
 export const searchProduct = async (id, warehouseId) => {
   try {
-    const result = await axios.get(config().searchProduct + '&productType=' + id + '&warehouseId=' + warehouseId);
-    console.log(result.data.data)
+    const result = await axios.get(
+      config().searchProduct +
+        "&productType=" +
+        id +
+        "&warehouseId=" +
+        warehouseId
+    );
     return result.data.data;
   } catch (e) {
     return [];
@@ -102,22 +106,22 @@ export const getManufacturers = async () => {
   }
 };
 
-export const addNewProduct = async data => {
+export const addNewProduct = async (data) => {
   try {
     // const url = config().addNewProduct;
     const result = await axios.post(config().addNewProduct, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return result.data;
   } catch (e) {
     return e.response;
   }
 };
-export const addMultipleProducts = async data => {
+export const addMultipleProducts = async (data) => {
   try {
     const url = config().addMultipleProducts;
     const result = await axios.post(url, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return result.data;
   } catch (e) {
@@ -126,11 +130,11 @@ export const addMultipleProducts = async data => {
 };
 
 export const getPOs = (skip = 0, limit = 5) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        `${config().fetchPurchaseOrderUrl}?skip=${skip}&limit=${limit}`,
+        `${config().fetchPurchaseOrderUrl}?skip=${skip}&limit=${limit}`
       );
 
       // dispatch(setReviewPos(result.data));
@@ -143,10 +147,22 @@ export const getPOs = (skip = 0, limit = 5) => {
   };
 };
 
-export const getSentPOs = async (to, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+export const getSentPOs = async (
+  to,
+  orderId,
+  productName,
+  deliveryLocation,
+  dateFilter,
+  status,
+  skip,
+  limit
+) => {
+  //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
-      `${config().fetchOutboundPurchaseOrderUrl}?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
+      `${
+        config().fetchOutboundPurchaseOrderUrl
+      }?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {
@@ -154,11 +170,22 @@ export const getSentPOs = async (to, orderId, productName, deliveryLocation, dat
   }
 };
 
-
-export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, dateFilter, status, skip, limit) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+export const getReceivedPOs = async (
+  from,
+  orderId,
+  productName,
+  deliveryLocation,
+  dateFilter,
+  status,
+  skip,
+  limit
+) => {
+  //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
-      `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`,
+      `${
+        config().fetchInboundPurchaseOrderUrl
+      }?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {
@@ -168,19 +195,21 @@ export const getReceivedPOs = async (from, orderId, productName, deliveryLocatio
 
 export const getProductIdDeliveryLocationsOrganisations = async () => {
   try {
-    const result = await axios.get(config().fetchProductIdsCustomerLocationsOrganisationsUrl);
+    const result = await axios.get(
+      config().fetchProductIdsCustomerLocationsOrganisationsUrl
+    );
     return result.data.data;
   } catch (e) {
     return [];
   }
-}
+};
 
 export const getOrder = (id) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        `${config().fetchPurchaseOrderUrl}?poId=${id}&skip=0&limit=1`,
+        `${config().fetchPurchaseOrderUrl}?poId=${id}&skip=0&limit=1`
       );
       dispatch(turnOff());
       return result.data.data;
@@ -215,35 +244,35 @@ export const getOpenOrderIds = async () => {
 //   };
 // };
 
-export const setReviewPos = data => {
+export const setReviewPos = (data) => {
   return {
     type: SET_REVIEW_PO,
     payload: data,
   };
 };
 
-export const resetReviewPos = data => {
+export const resetReviewPos = (data) => {
   return {
     type: RESET_REVIEW_PO,
     payload: data,
   };
 };
 
-export const setEditPos = data => {
+export const setEditPos = (data) => {
   return {
     type: SET_EDIT_PO,
     payload: data,
   };
 };
 
-export const resetEditPos = data => {
+export const resetEditPos = (data) => {
   return {
     type: RESET_EDIT_PO,
     payload: data,
   };
 };
 
-export const getOrganizationsByTypes = async id => {
+export const getOrganizationsByTypes = async (id) => {
   try {
     const result = await axios.get(config().getOrganizationsTypewithauth + id);
     return result.data;
@@ -255,7 +284,7 @@ export const getOrganizationsByTypes = async id => {
 export const getExportFile = async (url, value) => {
   try {
     const result = await axios.get(url, {
-      responseType: 'blob'
+      responseType: "blob",
     });
     return result.data;
   } catch (e) {

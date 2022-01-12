@@ -108,36 +108,6 @@ const PurchaseForm = (props) => {
   };
 
   const onProceed = async () => {
-    /*if (checkValidationErrors(poFields)) {
-      return;
-    }
-
-    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
-
-    const data = {
-      data: {
-        ExternalPoId,
-        OrgId,
-        vendorName,
-        vendorId,
-        toDeliveryLocation,
-        deliveryId,
-        products: [{ materialId, product, manufacturer, quantity }],
-        date: todayDate,
-      },
-    };
-
-    //Store in reducer
-    dispatch(setReviewPos(data));
-    console.log('new po data', data);
-    //Redirect to review page.
-    props.setEditMode(true);
-    console.log('new po data', data);*/
-
-    //Temporarily sending post reqeuest
-
-    //Todo this needs to be done after review
-
     const isoDate = new Date().toISOString();
     const supplierOrg = organisations.find((org) => org.id === orgId);
     const customerOrg = organisations.find((org) => org.id === customerOrgId);
@@ -166,8 +136,6 @@ const PurchaseForm = (props) => {
       },
       products: selectedProducts,
     };
-
-    console.log("data", data);
     const result = await createPO(data);
     if (result.status === 200) {
       await onCashfreeClick();
