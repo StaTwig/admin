@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  defaults
-} from 'chart.js';
-import {
-  Chart, Doughnut
-} from 'react-chartjs-2';
-import { MDBContainer } from "mdbreact";
+import { Doughnut } from "react-chartjs-2";
 import { getProductList } from "../actions/productActions";
 import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
 
@@ -16,8 +8,8 @@ const ChartsPage = (props) => {
   const [validdata, setValiddata] = useState(false);
 
   const truncate = (str, n) => {
-		return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-	};
+    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +19,9 @@ const ChartsPage = (props) => {
       const productNames = result?.map((product) => product.productName);
       const quantity = result?.map((product) => product.quantity);
 
-      const productNameShorted = productNames?.map((product) => truncate(product, 15));
+      const productNameShorted = productNames?.map((product) =>
+        truncate(product, 15)
+      );
 
       if (productNames.length > 0) {
         setDoughnut({
@@ -156,7 +150,7 @@ const ChartsPage = (props) => {
               ],
             },
           ],
-        })
+        });
 
         setValiddata(true);
       }
@@ -166,7 +160,7 @@ const ChartsPage = (props) => {
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
 
   const option = {
-    cutout:"75%",
+    cutout: "75%",
     maintainAspectRatio: false,
     responsive: true,
     layout: {
@@ -192,18 +186,16 @@ const ChartsPage = (props) => {
   return (
     <div>
       {validdata ? (
-        // <MDBContainer>
         <Doughnut
           height={250}
-          id="doughnut-chart"
+          id='doughnut-chart'
           data={doughnut}
           options={option}
         />
       ) : (
-        // </MDBContainer>
-        <div className="summaryTable justify-content-center ">
-          <div className="d-flex flex-column ">
-            <img src={EmptyInventory} height="200" width="200" alt="" />
+        <div className='summaryTable justify-content-center '>
+          <div className='d-flex flex-column '>
+            <img src={EmptyInventory} height='200' width='200' alt='' />
           </div>
         </div>
       )}

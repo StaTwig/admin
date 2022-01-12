@@ -23,7 +23,6 @@ import Sent from "../../assets/icons/Sent.png";
 import update from "../../assets/icons/Update_Status.png";
 import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const ShipmentAnalytic = (props) => {
@@ -137,7 +136,7 @@ const ShipmentAnalytic = (props) => {
   };
 
   const headers = {
-    coloumn1: t('shipment_id'),
+    coloumn1: t("shipment_id"),
     coloumn2: t("shipment_date"),
     coloumn3: t("from"),
     coloumn4: t("to"),
@@ -313,9 +312,9 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: t('excel'), checked: false },
-      { key: "pdf", value: t('pdf'), checked: false },
-      { key: "email", value: t('mail'), checked: false },
+      { key: "excel", value: t("excel"), checked: false },
+      { key: "pdf", value: t("pdf"), checked: false },
+      { key: "email", value: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -338,12 +337,23 @@ const ShipmentAnalytic = (props) => {
 
     var nameOfFile;
 
-    if(visible=='one'){
-      nameOfFile = 'shipmentinbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+    if (visible == "one") {
+      nameOfFile =
+        "shipmentinbound" +
+        today.getFullYear().toString() +
+        "/" +
+        (today.getMonth() + 1).toString() +
+        "/" +
+        today.getDate().toString();
       // console.log(name, name);
-    }
-    else if(visible=='two'){
-      nameOfFile = 'shipmentoutbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+    } else if (visible == "two") {
+      nameOfFile =
+        "shipmentoutbound" +
+        today.getFullYear() +
+        "/" +
+        (today.getMonth() + 1) +
+        "/" +
+        today.getDate();
     }
     getExportFile(url, value).then((response) => {
       console.log(response);
@@ -369,7 +379,7 @@ const ShipmentAnalytic = (props) => {
   return (
     <div className='shipment'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t('shipments')}</h1>
+        <h1 className='breadcrumb'>{t("shipments")}</h1>
         <div className='d-flex'>
           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
@@ -394,7 +404,7 @@ const ShipmentAnalytic = (props) => {
                   alt='UpdateShipment'
                 />
                 <span>
-                  <b>{t('update_shipment')}</b>
+                  <b>{t("update_shipment")}</b>
                 </span>
               </button>
             </Link>
@@ -416,7 +426,7 @@ const ShipmentAnalytic = (props) => {
                   alt='CreateShipment'
                 />
                 <span>
-                  <b>{t('create_shipment')}</b>
+                  <b>{t("create_shipment")}</b>
                 </span>
               </button>
             </Link>

@@ -20,7 +20,7 @@ const Tabs = (props) => {
                 props.visible === "one" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              {t('orders_sent')}
+              {t("orders_sent")}
             </div>
           </li>
         )}
@@ -39,7 +39,7 @@ const Tabs = (props) => {
                 props.visible === "two" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              {t('orders_received')}
+              {t("orders_received")}
             </div>
           </li>
         )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
@@ -24,7 +24,6 @@ import {
   getExportFile,
 } from "../../actions/poActions";
 import { config } from "../../config";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Orders = (props) => {
@@ -143,12 +142,12 @@ const Orders = (props) => {
   };
 
   const headers = {
-    coloumn1: visible === "one" ? t('order_sent_to') : t('order_created_by'),
-    coloumn2: t('order_date'),
-    coloumn3: t('order_id'),
-    coloumn4: t('product'),
-    coloumn5: t('delivery_location'),
-    coloumn6: t('status'),
+    coloumn1: visible === "one" ? t("order_sent_to") : t("order_created_by"),
+    coloumn2: t("order_date"),
+    coloumn3: t("order_id"),
+    coloumn4: t("product"),
+    coloumn5: t("delivery_location"),
+    coloumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='' />,
     img2: <img src={calender} width='16' height='16' alt='' />,
@@ -375,9 +374,9 @@ const Orders = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: t('excel'), checked: false },
-      { key: "pdf", value: t('pdf'), checked: false },
-      { key: "email", value: t('mail'), checked: false },
+      { key: "excel", value: t("excel"), checked: false },
+      { key: "pdf", value: t("pdf"), checked: false },
+      { key: "email", value: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -402,12 +401,23 @@ const Orders = (props) => {
 
     var nameOfFile;
 
-    if(visible=='one'){
-      nameOfFile = 'ordersoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
+    if (visible === "one") {
+      nameOfFile =
+        "ordersoutbound" +
+        today.getFullYear().toString() +
+        "/" +
+        (today.getMonth() + 1).toString() +
+        "/" +
+        today.getDate().toString();
       // console.log(name, name);
-    }
-    else if(visible=='two'){
-      nameOfFile = 'ordersinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+    } else if (visible === "two") {
+      nameOfFile =
+        "ordersinbound" +
+        today.getFullYear() +
+        "/" +
+        (today.getMonth() + 1) +
+        "/" +
+        today.getDate();
     }
 
     getExportFile(url).then((response) => {
@@ -423,7 +433,7 @@ const Orders = (props) => {
             value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
-        console.log('Link', link);
+        console.log("Link", link);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -434,7 +444,7 @@ const Orders = (props) => {
   return (
     <div className='orders'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t('your_orders')}</h1>
+        <h1 className='breadcrumb'>{t("your_orders")}</h1>
         <div className='d-flex'>
           {isAuthenticated("createOrder") && (
             <Link to='/neworder'>
@@ -447,7 +457,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span style={{ color: "white" }}>
-                  <b>{t('create_new_order')}</b>
+                  <b>{t("create_new_order")}</b>
                 </span>
               </button>
             </Link>
@@ -468,7 +478,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span>
-                  <b>{t('import')}</b>
+                  <b>{t("import")}</b>
                 </span>
                 <img
                   src={dropdownIcon}
@@ -487,14 +497,14 @@ const Orders = (props) => {
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
-                {t('excel')}
+                {t("excel")}
               </button>
-              <button className=' btn btn-outline-info'> {t('other')}</button>
+              <button className=' btn btn-outline-info'> {t("other")}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
-              title={t('import')}
+              title={t("import")}
               close={() => closeExcelModal()}
               size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
@@ -530,7 +540,6 @@ const Orders = (props) => {
           visible={visible}
           count={count}
           onPageChange={onPageChange}
-          visible={visible}
           data={headers}
           poOrderIdList={poOrderIdList}
           poDeliveryLocationsList={poDeliveryLocationsList}
