@@ -6,6 +6,7 @@ import { turnOn, turnOff } from "../../actions/spinnerActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import Checked from "../../assets/icons/checked.svg";
 import createHistory from "history/createBrowserHistory";
+import { t } from "i18next";
 
 const ExcelPopUp = (props) => {
   const [excel, setExcel] = useState("");
@@ -43,8 +44,8 @@ const ExcelPopUp = (props) => {
           height="50"
           className="mt-2"
         />
-        <div>"Drag and drop" your Excel file here</div>
-        <div>or</div>
+        <div>{t(`Drag and drop your Excel file here`)}</div>
+        <div>{t('or')}</div>
         <input
           type="file"
           className="mb-3 excelSpace"
@@ -53,7 +54,7 @@ const ExcelPopUp = (props) => {
       </div>
       {visible && (
         <span className="  text-success d-flex flex-row-reverse pr-5 pb-2">
-          Addresses Imported
+          {t('Addresses Imported')}
         </span>
       )}
       <div className="row justify-content-between">
@@ -63,10 +64,10 @@ const ExcelPopUp = (props) => {
             className="btn-outline-primary btn mr-3"
             onClick={props.onHide}
           >
-            CANCEL
+            {t('CANCEL')}
           </button>
           <button className="btn-primary btn mr-4" onClick={uploadExcel}>
-            IMPORT
+            {t('IMPORT')}
           </button>
         </div>
       </div>

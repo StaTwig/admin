@@ -86,7 +86,7 @@ const UserRoles = ({
       <div className="user-role-header">
         <div className="input-section">
           <div className="role-section">
-            <span className="text">{"Role Title"}</span>
+            <span className="text">{t("Role Title")}</span>
             <CustomDropdown
                 data={defaultRoles}
                 selected={selectedLevel}
@@ -139,7 +139,7 @@ const UserRoles = ({
                   className={`list-group-item list-group-item-action feature-panel ${item.key === selectedFeature ? 'selectedFeature' : ''}`}
                   onClick={() => handleOnClickOfAFeature(item.key)}
                 >
-                  {item.value}
+                  {t(item.value)}
                   <img src={Arrow} alt="icon" width="7px" height="12px" />
                 </a>
               );
