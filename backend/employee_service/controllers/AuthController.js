@@ -948,7 +948,7 @@ exports.addWarehouse = [
         { new: true }
       );
       const inventoryId =
-        invCounter.counters[0].format + invCounter.counters[0].value;
+        invCounter.counters[7].format + invCounter.counters[7].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -963,7 +963,7 @@ exports.addWarehouse = [
         bottleCapacity,
         sqft,
       } = req.body;
-      const warehouseCounter = await CounterModel.findOne(
+      const warehouseCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "warehouseId" },
         {
           $inc: {
@@ -975,8 +975,8 @@ exports.addWarehouse = [
         }
       );
       const warehouseId =
-        warehouseCounter.counters[0].format +
-        warehouseCounter.counters[0].value;
+        warehouseCounter.counters[3].format +
+        warehouseCounter.counters[3].value;
 
       const loc = await getLatLongByCity(
         warehouseAddress.city + "," + warehouseAddress.country

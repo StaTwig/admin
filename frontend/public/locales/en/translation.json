@@ -172,6 +172,8 @@
     "error_product_details": "Fill all the required Product Details",
     "add_another_product": "Add Another Product",
     "order_from": "Order From",
+    "order_to": "Order To",
+    "region": "Region",
     "organisation_type": "Organisation Type",
     "select_organisation_type": "Select Organisation Type",
     "organisation_name": "Organisation Name",
