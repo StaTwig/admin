@@ -10,14 +10,15 @@ import "./style.scss";
 import SearchBar from "../searchBar";
 import DropDownFilter from "../dropDownFilter";
 import { t } from "i18next";
+import NoRecordsFound from "../NoRecordsFound";
 
 const Organisations = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
 
-  const {  modifyOrg, setShowModals, addOrg, organisationList, 
-    countryData, orgTypeData, regionData, statusData, 
+  const { modifyOrg, setShowModals, addOrg, organisationList,
+    countryData, orgTypeData, regionData, statusData,
     filterOrganisationListBasedOnTopPanelSearchInput,
     onChangeOfSearchForFilterInput,
     onSelectionOfDropdownValue,
@@ -31,7 +32,7 @@ const Organisations = (props) => {
     setShowDropDownForRegion,
     setShowDropDownForCountry,
     setShowDropDownForType
-   } = props;
+  } = props;
 
 
 
@@ -85,7 +86,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '68px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -123,7 +124,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '50px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -154,7 +155,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '50px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -162,7 +163,7 @@ const Organisations = (props) => {
               />
               {showDropDownForRegion &&
                 <DropDownFilter
-                  setShowDropDownForRegion = {setShowDropDownForRegion}
+                  setShowDropDownForRegion={setShowDropDownForRegion}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={regionData}
                   type={'region'}
@@ -186,7 +187,7 @@ const Organisations = (props) => {
                   height: '10px',
                   marginTop: '0px',
                   marginLeft: '68px',
-                  cursor:"pointer"
+                  cursor: "pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -196,7 +197,7 @@ const Organisations = (props) => {
               />
               {showDropDownForStatus &&
                 <DropDownFilter
-                  setShowDropDownForStatus = {setShowDropDownForStatus}
+                  setShowDropDownForStatus={setShowDropDownForStatus}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={statusData}
                   type={'status'}
@@ -207,30 +208,15 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col ml-2  headerText headerTitles'>
-              <span className="headerText" 
+              <span className="headerText"
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
                 }}
                 style={{cursor:"pointer"}}>{t('created_on')}
               </span>
-              <img
-                class='headerText'
-                style={{
-                  width: '7px',
-                  height: '10px',
-                  marginTop: '0px',
-                  marginLeft: '38px',
-                  cursor:"pointer"
-                }}
-                src={sortIcon}
-                alt='roleSortIcon'
-                onClick={() => {
-                  setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
-                }}
-              />
               {showDropDownForCreatedOn &&
                 <DropDownFilter
-                  setShowDropDownForCreatedOn = {setShowDropDownForCreatedOn}
+                  setShowDropDownForCreatedOn={setShowDropDownForCreatedOn}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={[]}
                   type={'createdOn'}
@@ -240,7 +226,7 @@ const Organisations = (props) => {
             {/* <div className='box col headerText'>
               <span className="headerText" style={{ marginRight: '72px' }}>{''}</span>
             </div> */}
-            </div>
+          </div>
         </div>
       </div>
       <div className="details-card">
@@ -254,7 +240,10 @@ const Organisations = (props) => {
             types={orgTypeData}
             onClickOfDropDownItem={onSelectionOfDropdownValue}
           />
-        }) : <div>{'loading....'}</div>}
+        }) :
+          <div className="col recordsMsg justify-content">
+            <NoRecordsFound dClass="w-50" />
+          </div>}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import Modal from "../../shared/modal";
 import SuccessPopUp from "../../shared/PopUp/successPopUp";
 
 const OrganisationContainer = (props) => {
-  if (props.user.type != "CENTRAL_AUTHORITY") {
+  if ((props.user.type || props.user.organisationType) != "CENTRAL_AUTHORITY") {
     props.history.push(`/overview`);
   }
   const [showModals, setShowModals] = useState(false);
@@ -256,7 +256,7 @@ const OrganisationContainer = (props) => {
 export default OrganisationContainer;
 
 function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
-  if(data[index].checked) {
+  if (data[index].checked) {
     setQueryValue(value);
     setQueryType(type);
   } else {
