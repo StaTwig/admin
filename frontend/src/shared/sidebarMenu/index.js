@@ -13,6 +13,7 @@ import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOr
 import Configration from "../../assets/aicons/configration.png";
 
 import "./style.scss";
+import { t } from "i18next";
 
 const SideBar = ({ match, location, user }) => {
   const { url } = match;
@@ -25,7 +26,7 @@ const SideBar = ({ match, location, user }) => {
               src={url === "/overview" ? HomeSelectedIcon : HomeSelectedIcon}
               alt="Overview"
             />
-            <span className="ml-2">Overview</span>
+            <span className="ml-2">{t('overview')}</span>
           </Link>
         </li>
         {user.type == "CENTRAL_AUTHORITY" && (
@@ -40,7 +41,7 @@ const SideBar = ({ match, location, user }) => {
                 alt="Organisation"
               />
               <span className="ml-2">
-                Manage Organisation
+                {t('manage_organisations')}
               </span>
             </Link>
           </li>
@@ -60,7 +61,7 @@ const SideBar = ({ match, location, user }) => {
               alt="Manage address"
             />
             <span className="ml-2">
-              Manage Address
+              {t('manage_address')}
             </span>
           </Link>
         </li>
@@ -75,7 +76,7 @@ const SideBar = ({ match, location, user }) => {
               alt="Manage users"
             />
             <span className="ml-2">
-              Manage Users
+              {t('manage_users')}
             </span>
           </Link>
         </li>
@@ -89,7 +90,7 @@ const SideBar = ({ match, location, user }) => {
               alt="configuration"
             />
             <span className="ml-2">
-            Configuration
+            {t('configuration')}
             </span>
           </Link>
         </li>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/aicons/AdminLogo.png";
 import "../login/style.scss";
 import { Formik } from "formik";
+import { useTranslation } from 'react-i18next';
 
 const FormVerifyPage = (props) => {
   const { otp, onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
@@ -11,6 +12,8 @@ const FormVerifyPage = (props) => {
   const thirdInputRef = useRef(null);
   const fourthInputRef = useRef(null);
   const formRef = useRef();
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setOtpArray(otp.split(""));
@@ -55,14 +58,14 @@ const FormVerifyPage = (props) => {
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
-              <h1>Welcome</h1>
+              <h1>{t('welcome')}</h1>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
             <div className="card">
               <div className="card-body">
                 <div className="login-form">
-                  <div className="card-title mb-5">Enter OTP</div>
+                  <div className="card-title mb-5">{t('enter_otp')}</div>
                   <Formik
                     innerRef={formRef}
                     initialValues={{ otp0: "", otp1: "", otp2: "", otp3: "" }}
@@ -140,19 +143,19 @@ const FormVerifyPage = (props) => {
                               touched.otp2 ||
                               touched.otp3) && (
                               <span className="error-msg text-danger">
-                                Required
+                                {t('required')}
                               </span>
                             )}
                           &nbsp;
                         </div>
                         <div className="font-weight-bold text-center mb-2">
-                          Didn't receive the OTP?
+                          {t("didnt_receive_the_otp")}
                         </div>
                         <div
                           className="text-center mb-5 text-primary resend"
                           onClick={onResendOtp}
                         >
-                          RESEND CODE
+                          {t('resend_code')}
                         </div>
 
                         {errorMessage && (
@@ -162,7 +165,7 @@ const FormVerifyPage = (props) => {
                         )}
                         <div className="text-center">
                           <button type="submit" className="btn btn-primary">
-                            LOGIN
+                            {t('login')}
                           </button>
                         </div>
                       </form>

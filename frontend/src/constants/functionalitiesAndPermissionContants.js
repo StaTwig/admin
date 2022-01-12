@@ -1,7 +1,9 @@
+import { t } from "i18next";
+
 export const OVERVIEW_CONSTANTS = [
     {
         key: 'overview',
-        value: 'Overview',
+        value: 'overview',
         hasPermission: false
     }
 ]
@@ -9,32 +11,32 @@ export const OVERVIEW_CONSTANTS = [
 export const SEARCH_CONSTANTS = [
     {
         key: 'searchByOrderId',
-        value: 'Search by Order ID',
+        value: 'search_by_order_id',
         hasPermission: false
     },
     {
         key: 'searchByProductCategory',
-        value: 'Search by Product Category',
+        value: 'search_by_product_category',
         hasPermission: false
     },
     {
         key: 'searchByProductId',
-        value: 'Search by Product ID',
+        value: 'search_by_product_id',
         hasPermission: false
     },
     {
         key: 'searchByProductName',
-        value: 'Search by Product name',
+        value: 'search_by_product_name',
         hasPermission: false
     },
     {
         key: 'searchByShipmentId',
-        value: 'Search by Shipment ID',
+        value: 'search_by_shipment_id',
         hasPermission: false
     },
     {
         key: 'searchByTransitNo',
-        value: 'Search by Transit number',
+        value: 'search_by_transit_number',
         hasPermission: false
     }
 ]
@@ -42,47 +44,47 @@ export const SEARCH_CONSTANTS = [
 export const INVENTORY_CONSTANTS = [
     {
         key: 'addInventory',
-        value: 'Add Inventory',
+        value: 'add_inventory',
         hasPermission: false
     },
     {
         key: 'importInventory',
-        value: 'Import Inventory',
+        value: 'import_inventory',
         hasPermission: false
     },
     {
         key: 'inventoryAnalytics',
-        value: 'Inventory Analytics',
+        value: 'inventory_analytics',
         hasPermission: false
     },
     {
         key: 'viewProductList',
-        value: 'View Product List',
+        value: 'view_product_list',
         hasPermission: false
     },
     {
         key: 'addNewProduct',
-        value: 'Add New Product',
+        value: 'add_new_product',
         hasPermission: false
     },
     {
         key: 'inventoryFilters',
-        value: 'Filters',
+        value: 'inventory_filters',
         hasPermission: false
     },
     {
         key: 'inventoryExportReport',
-        value: 'Export report in excel and PDF',
+        value: 'export_report_in_excel_and_pdf',
         hasPermission: false
     },
     {
         key: 'viewInventory',
-        value: 'View Inventory',
+        value: 'view_inventory',
         hasPermission: false
     }, 
     {
         key: 'viewProductInfo',
-        value: 'View Inventory Info',
+        value: 'view_inventory_info',
         hasPermission: false
     },
 ]
@@ -90,52 +92,52 @@ export const INVENTORY_CONSTANTS = [
 export const ORDERS_CONSTANTS = [
     {
         key: 'createOrder',
-        value: 'Create Order',
+        value: 'create_order',
         hasPermission: false
     },
     {
         key: 'importOrder',
-        value: 'Import Orders',
+        value: 'import_orders',
         hasPermission: false
     },
     {
         key: 'orderAnalytics',
-        value: 'Order Analytics',
+        value: 'order_analytics',
         hasPermission: false
     },
     {
         key: 'receiveOrder',
-        value: 'Receive Order',
+        value: 'receive_order',
         hasPermission: false
     },
     {
         key: 'acceptRejectOrder',
-        value: 'Accept/Reject Order',
+        value: 'accept_reject_order',
         hasPermission: false
     },
     {
         key: 'viewInboundOrders',
-        value: 'View Inbound Orders',
+        value: 'view_inbound_orders',
         hasPermission: false
     },
     {
         key: 'viewOutboundOrders',
-        value: 'View Outbound Orders',
+        value: 'view_outbound_orders',
         hasPermission: false
     },
     {
         key: 'orderFilters',
-        value: 'Filters',
+        value: 'filters',
         hasPermission: false
     },
     {
         key: 'orderExportReport',
-        value: 'Export report in excel and PDF',
+        value: 'export_report_in_excel_and_pdf',
         hasPermission: false
     },
     {
         key: 'viewPO',
-        value: 'View PO',
+        value: 'view_PO',
         hasPermission: false
     },
 ]
@@ -143,52 +145,52 @@ export const ORDERS_CONSTANTS = [
 export const SHIPMENT_CONSTANTS = [
     {
         key: 'createShipment',
-        value: 'Create Shipment',
+        value: 'create_shipment',
         hasPermission: false
     },
     {
         key: 'shipmentAnalytics',
-        value: 'Shipment Analytics',
+        value: 'shipment_analytics',
         hasPermission: false
     },
     {
         key: 'updateShipment',
-        value: 'Update Shipment',
+        value: 'update_shipment',
         hasPermission: false
     },
     {
         key: 'receiveShipment',
-        value: 'Receive Shipment',
+        value: 'receive_shipment',
         hasPermission: false
     },
     {
         key: 'receiveShipmentScan',
-        value: 'Receive Shipment with Scan',
+        value: 'receive_shipment_with_scan',
         hasPermission: false
     },
     {
         key: 'inboundShipments',
-        value: 'Inbound Shipments',
+        value: 'inbound_shipments',
         hasPermission: false
     },
     {
         key: 'outboundShipments',
-        value: 'Outbound Shipments',
+        value: 'outbound_shipments',
         hasPermission: false
     },
     {
         key: 'viewShipment',
-        value: 'View Shipment',
+        value: 'view_shipment',
         hasPermission: false
     },
     {
         key: 'shipmentFilters',
-        value: 'Filters',
+        value: 'filters',
         hasPermission: false
     },
     {
         key: 'shipmentExportReport',
-        value: 'Export report in excel and PDF',
+        value: 'export_report_in_excel_and_pdf',
         hasPermission: false
     }
 ]
@@ -196,7 +198,7 @@ export const SHIPMENT_CONSTANTS = [
 export const NETWORK_CONSTANTS = [
     {
         key: 'network',
-        value: 'Network',
+        value: 'network',
         hasPermission: false
     }
 ]
@@ -204,7 +206,7 @@ export const NETWORK_CONSTANTS = [
 export const TRACK_AND_TRACE_CONSTANTS = [
     {
         key: 'trackAndTrace',
-        value: 'Track & Trace Access',
+        value: 'trackntrace',
         hasPermission: false
     },
 ]

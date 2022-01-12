@@ -29,8 +29,8 @@ const FormLoginPage = (props) => {
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
               {/* <img className="logo" src={logo} /> */}
-              <h1>Welcome Back,</h1>
-              <p>Login to continue</p>
+              <h1>{t('welcome_back')},</h1>
+              <p>{t('login_to_continue')}</p>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
@@ -73,7 +73,7 @@ const FormLoginPage = (props) => {
                           <label htmlFor="email">
                             <img alt="" src={User} className="icon imgs mb-1" />
                             <span className="ml-1 text-muted">
-                              Email ID/Mobile Number
+                              {t('email_id')}
                             </span>
                           </label>
                           <input
@@ -113,7 +113,7 @@ const FormLoginPage = (props) => {
                             type="submit"
                             className="btn btn-primary"
                             onClick={onSendOtp} >
-                            SEND OTP
+                            {t('send_otp')}
                           </button>
                         </div>
                       </form>

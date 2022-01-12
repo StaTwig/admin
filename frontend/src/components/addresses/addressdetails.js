@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import Maps from "./maps";
 import { Link } from "react-router-dom";
+import { t } from "i18next";
 
 const AddressDetails = (props) => {
   const { address } = props;
@@ -41,7 +42,7 @@ const AddressDetails = (props) => {
           >
             <button className="bg-white btn-outline-primary d-width">
               <i className="fa fa-pencil"></i>
-              <span className="ml-2">Edit</span>
+              <span className="ml-2">{t('edit')}</span>
             </button>
           </Link>
         </div>

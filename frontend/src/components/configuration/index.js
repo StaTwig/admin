@@ -17,6 +17,7 @@ import { getAllRoles, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, ge
 import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
 import UserRoles from "../userRoles/userRoles";
+import { t } from "i18next";
 
 const Configurationpart = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -280,7 +281,7 @@ const Configurationpart = (props) => {
   return (
     <div>
       <div className="spacingbutton">
-        <h1 className="breadcrumb">CONFIGURATION</h1>
+        <h1 className="breadcrumb">{t('configuration')}</h1>
         <div>
           <Tabs {...props} tabIndex={tabIndex} setTabIndex={setTabIndex} />
         </div>
@@ -431,7 +432,7 @@ const Configurationpart = (props) => {
                 >
                   <div className="">
                     <li className="p-2 ">
-                      Overview
+                      {t('overview')}
                       <img
                         src={Arrow}
                         alt="icon"
@@ -441,7 +442,7 @@ const Configurationpart = (props) => {
                       />
                     </li>
                     <li className="p-2">
-                      Shipment
+                      {t('shipment')}
                       <img
                         src={Arrow}
                         alt="icon"
@@ -451,7 +452,7 @@ const Configurationpart = (props) => {
                       />
                     </li>
                     <li className="p-2">
-                      Inventory
+                      {t('inventory')}
                       <img
                         src={Arrow}
                         alt="icon"

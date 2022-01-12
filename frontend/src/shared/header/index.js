@@ -11,6 +11,7 @@ import bellIcon from "../../assets/icons/bell.png"
 import dropdownIcon from "../../assets/icons/DropdownIcon.png";
 import { getUserInfo, logoutUser } from "../../actions/userActions";
 import useOnclickOutside from "react-cool-onclickoutside";
+import { t } from "i18next";
 
 const Header = (props) => {
   const [menu, setMenu] = useState(false);
@@ -147,7 +148,7 @@ const Header = (props) => {
                   className="slider-item border-top-0"
                   onClick={() => dispatch(logoutUser())}
                 >
-                  Logout
+                  {t('logout')}
                 </div>
               </React.Fragment>
             }
