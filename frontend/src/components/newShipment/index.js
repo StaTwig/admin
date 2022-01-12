@@ -604,11 +604,11 @@ const NewShipment = (props) => {
                                   ) -
                                   parseInt(
                                     result.poDetails[0].products[i]
-                                      .productQuantityShipped
+                                      .productQuantityShipped || 0
                                   ) - 
                                   parseInt(
                                     result.poDetails[0].products[i]
-                                      .productQuantityDelivered
+                                      .productQuantityDelivered || 0
                                   );
                               }
                               result.poDetails[0].products[i].orderedQuantity =
@@ -786,10 +786,10 @@ const NewShipment = (props) => {
                                       result.products[i].productQuantity
                                     ) -
                                     parseInt(
-                                     result.products[i].productQuantityShipped
+                                     result.products[i].productQuantityShipped || 0
                                     ) -
                                     parseInt(
-                                      result.products[i].productQuantityDelivered
+                                      result.products[i].productQuantityDelivered || 0
                                     );
                                 }
                                 result.products[i].orderedQuantity =

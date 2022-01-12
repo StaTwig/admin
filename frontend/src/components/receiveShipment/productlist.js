@@ -13,7 +13,7 @@ const ProductList = (props) => {
   const closeModalFail = () => {
     setError(false);
   };
-  //console.log("props in receive shipment",props);
+  console.log(props.shipments.products);
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -22,71 +22,6 @@ const ProductList = (props) => {
         <div
           className= "col-sm-4 "
         >
-          {
-            //<div className="d-flex flex-row " >
-            //         <ul className="mr-2 w-75 elemens">
-            //             <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>
-            //             <li className="mb-2 text-secondary">Product Name</li>
-            //             <li className="mb-2 text-secondary">Manufacturer</li>
-            //             <li className="mb-3 text-secondary">Quantity Sent</li>
-            //             <li className="mb-3 text-secondary">Quantity Received</li>
-            //             <li className="mb-2 text-secondary">Label ID</li>
-            //         </ul>
-            //         <ul className="elemens w-75">
-            //         <li className="mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
-            //             {isVisible ?
-            //             <button
-            //                 className="btn btn-outline-primary"
-            //                 onClick={() =>
-            //                     {
-            //                         deliveredProductList.push(deliveredProduct);
-            //                         props.setDelivered(deliveredProductList);
-            //                         props.setIndex(index);
-            //                         if(deliveredProduct)
-            //                             setIsVisible(false);
-            //                     }}
-            //                 style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
-            //                 >
-            //                 Save
-            //             </button>
-            //             : <span> &nbsp;</span>}
-            //             </li>
-            //             <li className="mb-2 text-secondary">{product.productName}</li>
-            //             <li className="mb-2 text-secondary">{product.manufacturer}</li>
-            //             <li className="mb-2 text-secondary">{product.productQuantity}</li>
-            //             <li className="text-secondary" style={{paddingTop:'0.2vh'}}>
-            //                 {
-            //                     product['productQuantityDelivered'] ?
-            //                         product['productQuantityDelivered'] :
-            //                         <input
-            //                             style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }}
-            //                             className="form-control"
-            //                             value={deliveredProduct}
-            //                             placeholder="Enter the Quantity"
-            //                             // maxLength={product.productQuantity.length}
-            //                             onChange={e => {
-            //                                 setDeliveredProduct(e.target.value);
-            //                                 if (e.target.value <= product.productQuantity) {
-            //                                     setError(false);
-            //                                     props.onQuantityChange(index, e.target.value);
-            //                                 }
-            //                                 else{
-            //                                     e.target.value="";
-            //                                     setDeliveredProduct();
-            //                                     props.onQuantityChange(index, e.target.value);
-            //                                     setError(true);
-            //                                 }
-            //                             }
-            //                             }
-            //                         />
-            //                 }
-            //             </li>
-            //             <li className="mb-2 text-secondary">{props.shipments.label.labelId}</li>
-            //     </ul>
-            //         <div>
-            // </div>
-            //   </div>
-          }
           <div className={
             props.productHighLight
               ? "col panel commonpanle highlight mb-5 "
@@ -153,7 +88,7 @@ const ProductList = (props) => {
                 {t('quantity') + ' ' + t('received')}
               </div>
               <div className='col-sm text-secondary styler'>
-                {product["productQuantityDelivered"] ? (
+                {!product["productQuantity"] ? (
                   product["productQuantityDelivered"]
                 ) : (
                   <input
