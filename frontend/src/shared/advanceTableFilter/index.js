@@ -1038,11 +1038,11 @@ const AdvanceTableFilter = (props) => {
                     <StyledMenuItem>
                       <Autocomplete
                         id="ProductCategory"
-                        options={props.inventoryFilterData}
-                        getOptionLabel={(options) => options.name}
+                        options={props.productCategories}
+                        getOptionLabel={(options) => options.value}
                         onChange={(event, newValue) => {
                           setInventoryProductCategoryFilterOnSelect(
-                            newValue.id
+                            newValue.value
                           );
                         }}
                         style={{ width: "14rem" }}
