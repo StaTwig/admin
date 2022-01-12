@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React from "react";
 import "./style.scss";
 
@@ -11,7 +12,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(0)}
         >
           <span className={tabIndex == 0 ? "nav-link textColor" : "nav-link"}>
-            {'User Role'}
+            {t('user_role')}
           </span>
         </li>
         <li
@@ -19,7 +20,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(1)}
         >
           <span className={tabIndex == 1 ? "nav-link textColor" : "nav-link"}>
-            Workflow
+            {t('workflow')}
           </span>
         </li>
         <li
@@ -27,7 +28,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(2)}
         >
           <span className={tabIndex == 2 ? "nav-link textColor " : "nav-link "}>
-            Integration
+            {t('integration')}
           </span>
         </li>
         <li
@@ -35,7 +36,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(3)}
         >
           <span className={tabIndex == 3 ? "nav-link textColor " : "nav-link"}>
-            Analytics
+            {t('analytics')}
           </span>
         </li>
         <li
@@ -43,7 +44,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(4)}
         >
           <span className={tabIndex == 4 ? "nav-link textColor" : "nav-link"}>
-            Rules
+            {t('rules')}
           </span>
         </li>
         <li
@@ -51,7 +52,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(5)}
         >
           <span className={tabIndex == 5 ? "nav-link textColor" : "nav-link "}>
-            Payment
+            {t('payment')}
           </span>
         </li>
         <li
@@ -59,7 +60,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(6)}
         >
           <span className={tabIndex == 6 ? "nav-link textColor " : "nav-link "}>
-            Type
+            {t('type')}
           </span>
         </li>
       </ul>

@@ -5,10 +5,18 @@ import User from "../../assets/icons/mail.png";
 import logo from "../../assets/aicons/AdminLogo.png";
 import { Formik } from "formik";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { useTranslation } from 'react-i18next';
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp } = props;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
+  const changeLanguage = (e) => {
+    console.log('event', e.target.value);
+    const lng = e.target.value;
+    i18n.changeLanguage(lng);
+  };
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -21,8 +29,8 @@ const FormLoginPage = (props) => {
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
               {/* <img className="logo" src={logo} /> */}
-              <h1>Welcome Back,</h1>
-              <p>Login to continue</p>
+              <h1>{t('welcome_back')},</h1>
+              <p>{t('login_to_continue')}</p>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
@@ -65,15 +73,14 @@ const FormLoginPage = (props) => {
                           <label htmlFor="email">
                             <img alt="" src={User} className="icon imgs mb-1" />
                             <span className="ml-1 text-muted">
-                              Email ID/Mobile Number
+                              {t('email_id')}
                             </span>
                           </label>
                           <input
                             id="email"
                             type="email"
-                            className={`pl-0 form-control ${
-                              errors.email ? "border-danger" : ""
-                            }`}
+                            className={`pl-0 form-control ${errors.email ? "border-danger" : ""
+                              }`}
                             // value={email}
                             autoFocus
                             // onChange={onEmailChange}
@@ -102,11 +109,11 @@ const FormLoginPage = (props) => {
                           </div>
                         )}
                         <div className="text-center mt-4">
-                          <button 
+                          <button
                             type="submit"
                             className="btn btn-primary"
                             onClick={onSendOtp} >
-                            SEND OTP
+                            {t('send_otp')}
                           </button>
                         </div>
                       </form>
@@ -120,7 +127,18 @@ const FormLoginPage = (props) => {
               </div>
             </div>
           </div>
+          <div>
+            <p className='copywrite'>© {new Date().getFullYear()} {t('statwig')}</p>
+            <p className='poweredby'>
+              {t('powered_by_blockchain')} &nbsp;
+              <select className="language" value={lang} onChange={changeLanguage}>
+                <option value="en">{t('english')}</option>
+                <option value="es">{t('spanish')}</option>
+              </select>
+            </p>
+          </div>
         </div>
+
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import FilterIcon from '../../assets/icons/adjust-filter.svg';
 import DownArrowIcon from '../../assets/icons/down-arrow.svg';
 import SearchBar from "../searchBar";
 import useOnclickOutside from "react-cool-onclickoutside";
+import { t } from "i18next";
 
 const Users = (props) => {
   const [showModal, setShowModal] = useState(false);
@@ -72,18 +73,18 @@ const Users = (props) => {
         </Modal>
       )}
       <div className="d-flex pl-2 justify-content-between">
-        <h1 className="breadcrumb dash">MANAGE USERS</h1>
+        <h1 className="breadcrumb dash">{t('manage_users')}</h1>
         <div className='d-flex'>
           <SearchBar onChangeOfSearchInput={filterOrganisationListBasedOnTopPanelSearchInput}
             type={'searchBarTopPanel'} />
-          <div className="pr-4">
+          <div className="pr-2">
             <button
               type="button"
               className="btn btn-warning "
               onClick={() => setShowModal(true)}
             >
-              <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
-              <span className="txt">Add New User</span>
+              <i className="fa fa-plus txt" aria-hidden="true"></i>
+              <span className="txt">{t('add_new_users')}</span>
             </button>
           </div>
         </div>
@@ -96,7 +97,7 @@ const Users = (props) => {
                style={{position:"relative",
                 left:"15px",
                 justifyContent:"unset"}}
-               >Name</span>
+               >{t('name')}</span>
 
             <div class="vl text-center"></div>
             <div className='col box headerText' style={{paddingLeft:"10px",justifyContent:"unset"}}>
@@ -104,7 +105,7 @@ const Users = (props) => {
                   onClick={() => {
                     setShowDropDownForRole(!showDropDownForRole);
                   }}
-                  style={{cursor:"pointer"}}>{'Role'}
+                  style={{cursor:"pointer"}}>{t('role')}
               </span>
               <img
               class='headerText'
@@ -133,19 +134,19 @@ const Users = (props) => {
             </div>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Location</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('location')}</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Wallet address</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('wallet_address')}</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>Email/Mobile</span>
+            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('email_mobile')}</span>
 
             <div class="vl text-center"></div>
             <div className='col box headerText pl-2' style={{justifyContent:"unset"}}>
               <span className="headerText" onClick={() => {
                 setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
-              }} style={{cursor:"pointer"}}>{'Account Status'}</span>
+              }} style={{cursor:"pointer"}}>{t('account_status')}</span>
               <img
               class='headerText'
               style={{
@@ -176,7 +177,7 @@ const Users = (props) => {
                 onClick={() => setShowFilterDropDown(!showFilterDropDown)}
               >
                 <img className="mr-3" src={FilterIcon} alt={'filter-icon'} />
-                <span className="btnText">{'Filter'}</span>
+                <span className="btnText">{t('filter')}</span>
                 <img className="ml-3" src={DownArrowIcon} alt={'drp-arrow'} />
                 {
                   showFilterDropDown && calenderFilterJsonData &&

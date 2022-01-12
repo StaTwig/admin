@@ -4,6 +4,7 @@ import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import { getAddress } from "../../utils/commonHelper";
 import { config } from "../../config";
+import { t } from "i18next";
 
 const LocationRequests = (props) => {
   const {
@@ -38,7 +39,7 @@ const LocationRequests = (props) => {
           </div>
           <div className="pb-2 d-flex">
             <span className="txtColor">
-              {row?.employee.phoneNumber ? "Mobile: " : "Email: "}
+              {row?.employee.phoneNumber ? `${t('mobile_no')} :` : `${t('email_id')}: ` }
             </span>
             <span className="txtWrapR">
               &nbsp;
@@ -48,14 +49,14 @@ const LocationRequests = (props) => {
             </span>
           </div>
           <div className="pb-2">
-            <span className="txtColor">Location: </span>
+            <span className="txtColor">{t('location')}: </span>
             <span>{getAddress(row?.warehouseAddress)} </span>
           </div>
         </div>
       </div>
       <div className="pl-1">
         <div className="d-grid txtColor">
-          <span>Date: {formatDate(row?.updatedAt)}</span>
+          <span>{t('date')}: {formatDate(row?.updatedAt)}</span>
         </div>
         <div className="d-flex flex-row mt-5 pt-5">
           <button
@@ -71,7 +72,7 @@ const LocationRequests = (props) => {
               });
             }}
           >
-            Approve
+            {t('approve')}
           </button>
           <button
             type="button"
@@ -86,7 +87,7 @@ const LocationRequests = (props) => {
               });
             }}
           >
-            Reject
+            {t('reject')}
           </button>
         </div>
       </div>

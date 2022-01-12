@@ -7,6 +7,7 @@ import Spinner from "../spinner";
 import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
 import SuccessPopUp from "../../shared/PopUp/successPopUp";
+import { t } from "i18next";
 
 const UserRoles = ({
   defaultRoles,
@@ -85,7 +86,7 @@ const UserRoles = ({
       <div className="user-role-header">
         <div className="input-section">
           <div className="role-section">
-            <span className="text">{"Role Title"}</span>
+            <span className="text">{t("Role Title")}</span>
             <CustomDropdown
                 data={defaultRoles}
                 selected={selectedLevel}
@@ -111,7 +112,7 @@ const UserRoles = ({
             onClick={() => {onSaveOfUpdatePermission(); setDisable(true);setShowSuccessModel(true) }}
             disabled={isDisabled}
           >
-            {"Save"}
+            {t('save')}
           </button>
           <button
             className="add-user-btn"
@@ -124,7 +125,7 @@ const UserRoles = ({
             }}
           >
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
-            <span className="txt">{"Add New User Role"}</span>
+            <span className="txt">{t('add_new_user_role')}</span>
           </button>
         </div>
       </div>
@@ -138,7 +139,7 @@ const UserRoles = ({
                   className={`list-group-item list-group-item-action feature-panel ${item.key === selectedFeature ? 'selectedFeature' : ''}`}
                   onClick={() => handleOnClickOfAFeature(item.key)}
                 >
-                  {item.value}
+                  {t(item.value)}
                   <img src={Arrow} alt="icon" width="7px" height="12px" />
                 </a>
               );
@@ -148,10 +149,10 @@ const UserRoles = ({
         <div className="feature-functionality-permissions">
           <div className="feature-functionality-permissions-headers">
             <span className="functionality-permission-text">
-              {"Functionality"}
+              {t('functionality')}
             </span>
             <span className="functionality-permission-text">
-              {"Permission"}
+              {t('permission')}
             </span>
           </div>
           {functionalitiesPermissionPanelData.length > 0
@@ -159,7 +160,7 @@ const UserRoles = ({
                 return (
                   <div key={index} className="permission-selection-panal">
                     <div className="selection-panel">
-                      <span>{item.value}</span>
+                      <span>{t(item.value)}</span>
                     </div>
                     <div className="selection-panel">
                       <input

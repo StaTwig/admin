@@ -6,6 +6,7 @@ import NoRecordsFound from "../NoRecordsFound";
 import ExcelPopUp from "./excelpopup";
 import ExportIcon from "../../assets/icons/Export.svg";
 import Modal from "../../shared/modal";
+import { t } from "i18next";
 
 const Address = (props) => {
   const { addresses } = props;
@@ -17,7 +18,7 @@ const Address = (props) => {
   return (
     <div className="address">
       <div className="d-flex pl-2 justify-content-between">
-        <h1 className="breadcrumb dash">MANAGE ADDRESS</h1>
+        <h1 className="breadcrumb dash">{t('manage_address')}</h1>
         <div>
           <button
             className="btn-primary btn"
@@ -25,7 +26,7 @@ const Address = (props) => {
           >
             <div className="d-flex  align-items-center ">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span style={{fontWeight:"600",fontSize:"small",alignSelf:"center",overflow:"hidden"}}>Import addresses</span>
+              <span style={{fontWeight:"600",fontSize:"small",alignSelf:"center",overflow:"hidden"}}>{t('import_address')}</span>
             </div>
           </button>
           {openExcel && (
@@ -43,7 +44,7 @@ const Address = (props) => {
           <button type="button" className="btn btn-warning ml-3">
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
             <Link to="/newaddress" className="forgot-link text-decoration-none">
-              <span className="txt ">Add New Address</span>
+              <span className="txt ">{t('add_new_address')}</span>
             </Link>
           </button>
         </div>

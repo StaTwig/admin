@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
+import { t } from "i18next";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
@@ -139,7 +140,7 @@ const NUModal = (props) => {
                   className={`form-control ${
                     errors.email ? "border-danger" : ""
                   }`}
-                  placeholder="Enter email"
+                  placeholder={t('enter_email')}
                   readOnly={data?.ref != undefined ? true : false}
                   onChange={(e) => {
                     verifyEmailIds(e);
@@ -153,7 +154,7 @@ const NUModal = (props) => {
               </div>
                 {userAlreadyExits && (
                   <div  style={{position:"absolute",top:"4.8rem",left:"2rem",zIndex:"5",color:"rgb(244, 33, 46)"}}>
-                     <span>{"Email has already been taken."}</span>
+                     <span>{t('email_has_already_been_taken')}</span>
                   </div>
                 )}
               <button 
@@ -162,7 +163,7 @@ const NUModal = (props) => {
                 className="redirect-button" 
                 onClick={() => redirectToConfigurationPage()}>
                 <i className="plus-icon fa fa-plus pr-2" aria-hidden="true"></i>
-                <span className="txt-btn">{"Add New User Role"}</span>
+                <span className="txt-btn" style={{fontSize:'12px'}}>{t('add_new_user_role')}</span>
               </button>
             </div>
             <div className="p-1" ref={scrolling} style={{height:"auto", overflow:"scroll",minHeight:"5rem",overflowX:"hidden", maxHeight:"20rem"}}>
@@ -233,11 +234,11 @@ const NUModal = (props) => {
               {changeComponent === "role" ? 
                 (
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); scrolling.current.scrollTop = 0  }} disabled = {unDisableNxtBtn()}>
-                    {buttonText}
+                    {t(buttonText)}
                   </button>
                 ) : (
                   <button type="button" onClick={() =>{formikRef.current.submitForm()}} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
-                    {buttonText}
+                    {t(buttonText)}
                   </button>
                 )}
                 {changeComponent === "address" && 
@@ -246,7 +247,7 @@ const NUModal = (props) => {
                     onClick={(e) => {setChangeComponent('role');setButtonText('NEXT'); scrolling.current.scrollTop = 0}}
                     className="btn btn-outline-dark"
                   >
-                    Back
+                    {t('back')}
                   </button>
                 }
             </div>

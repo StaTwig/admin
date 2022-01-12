@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
+import { t } from "i18next";
 
 const NewRequests = (props) => {
   const {
@@ -58,7 +59,7 @@ const NewRequests = (props) => {
       </div>
       <div className="pl-1">
         <div className="d-grid txtColor">
-          <span>Date: {formatDate(requestRow?.createdAt)}</span>
+          <span>{t('date')}: {formatDate(requestRow?.createdAt)}</span>
         </div>
         <div className="d-flex flex-row mt-4">
           <button
@@ -76,7 +77,7 @@ const NewRequests = (props) => {
             }}
             style = {{width:"10vw"}}
           >
-            Accept request
+            {t('accept_request')}
           </button>
           <button
             type="button"
@@ -89,7 +90,7 @@ const NewRequests = (props) => {
             }}
             style = {{width:"10vw"}}
           >
-            Reject request
+            {t('reject_request')}
           </button>
         </div>
       </div>

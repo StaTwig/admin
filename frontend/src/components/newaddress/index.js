@@ -15,7 +15,8 @@ import {
 import Modal from "../../shared/modal";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { useSelector, useDispatch } from "react-redux";
-import './indexStyle.scss'
+import './indexStyle.scss';
+import { t } from "i18next";
 
 const NewAddress = (props) => {
   // const editAddress = JSON.parse(props.match.params.address);
@@ -156,7 +157,7 @@ const NewAddress = (props) => {
         </Modal>
       )}
       {
-        Object.keys(addr).length == 0 ? <h1 className="breadcrumb dash pl-2">ADD NEW ADDRESS</h1>:
+        Object.keys(addr).length == 0 ? <h1 className="breadcrumb dash pl-2">{t('ADD NEW ADDRESS')}</h1>:
         <h1 className="breadcrumb dash pl-2">EDIT ADDRESS</h1>
       }
       <div className="d-flex row ">
@@ -247,7 +248,7 @@ const NewAddress = (props) => {
                               width:"425px"
                           }}
                           id="standard-basic"
-                          label="Address Title" 
+                          label={t('Address Title')} 
                           className="form-control2 mb-3"
                           name="title"
                           value={values.title}
@@ -276,7 +277,7 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }}{...params} className="mb-3" /*error={errors.region}  touched={touched.region} */ label="Select Region"  />}
+                        }}{...params} className="mb-3" /*error={errors.region}  touched={touched.region} */ label={t("Select Region")}  />}
                         />
                         {/* {errors.region && touched.region && (
                           <span className="error-msg text-danger-ANL">
@@ -298,7 +299,7 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }} {...params} className="mb-3"  label="Select Country"  />}
+                        }} {...params} className="mb-3"  label={t("Select Country")}  />}
                         />
                         {/* {errors.country && touched.country && (
                           <span className="error-msg text-danger-ANL">
@@ -320,7 +321,7 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => < TextField style={{
                             width:"425px"
-                        }}{...params} className="mb-3"  label="Select State"  />}
+                        }}{...params} className="mb-3"  label={t("Select State")}  />}
                         />
                         {/* {errors.state && touched.state && (
                           <span className="error-msg text-danger-ANL">
@@ -339,7 +340,7 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }} {...params} className="mb-3" label="Select City"  />}
+                        }} {...params} className="mb-3" label={t("Select City")}  />}
                         />
                         {/* {errors.town && touched.town && (
                           <span className="error-msg text-danger-ANL">
@@ -351,7 +352,7 @@ const NewAddress = (props) => {
                         width:"425px"
                     }}
                     id="standard-basic"
-                    label="Address Line" 
+                    label={t("Address Line")} 
                     className="form-control2 mb-3"
                     name="area"
                     value={values.area}
@@ -370,7 +371,7 @@ const NewAddress = (props) => {
                       width:"425px"
                   }}
                   id="standard-basic"
-                  label="Pin Code" 
+                  label={t("Pincode")} 
                   type="number"
                   className="form-control2 mb-3"
                   name="pincode"
@@ -467,7 +468,7 @@ const NewAddress = (props) => {
                             className="fa fa-plus txt pr-2"
                             aria-hidden="true"
                           ></i>
-                          <span className="txt">Add New Address</span>
+                          <span className="txt">{t('Add New Address')}</span>
                         </button>
                       </div> :
                         ``
@@ -484,12 +485,12 @@ const NewAddress = (props) => {
                   type="button"
                   className="btn btn-primary btn-sm"
                 >
-                  <span className="txt">Use my current location</span>
+                  <span className="txt">{t('Use my current location')}</span>
                 </button>
               </div>
               <div className="pl-1 w-75 pt-1 txtAdress">
                 <p className="txtColor font-13">
-                  This will auto populate/ auto fill every information that is shown mandatory
+                  {t('This will auto populate/ auto fill every information that is shown mandatory')}
                 </p>
               </div>
             </div>

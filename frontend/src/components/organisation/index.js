@@ -9,6 +9,7 @@ import "./style.scss";
 
 import SearchBar from "../searchBar";
 import DropDownFilter from "../dropDownFilter";
+import { t } from "i18next";
 import NoRecordsFound from "../NoRecordsFound";
 
 const Organisations = (props) => {
@@ -61,22 +62,22 @@ const Organisations = (props) => {
         </Modal>
       )}
       <div className="d-flex pl-2 justify-content-between">
-        <h1 className="breadcrumb dash">MANAGE ORGANISATIONS</h1>
+        <h1 className="breadcrumb dash">{t('manage_organisations')}</h1>
         <SearchBar onChangeOfSearchInput={filterOrganisationListBasedOnTopPanelSearchInput} type={'searchBarTopPanel'} />
       </div>
       <div className='full-width'>
         <div className='filter'>
           <div className='row'>
-            <div className='box col-1 ml-5 mr-5 headerText headerTitles' style={{ position: "relative", left: "1.1rem" }}>Name</div>
+            <div className='box col-1 ml-5 mr-5 headerText headerTitles' style={{position:"relative",left:"1.1rem"}}>{t('name')}</div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText headerTitles' style={{ marginLeft: "12px" }}>
-              <span className="headerText"
-                onClick={() => {
-                  setShowDropDownForType(!showDropDownForType);
-                }}
-
-                style={{ cursor: "pointer" }}>{'Type'}
+            <div className='box col-2 headerText headerTitles' style={{marginLeft:"12px"}}>
+              <span className="headerText" 
+                  onClick={() => {
+                    setShowDropDownForType(!showDropDownForType);
+                  }}
+                  
+                 style={{cursor:"pointer"}}>{t('type')}
               </span>
               <img
                 class='headerText'
@@ -105,17 +106,17 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col-2 headerText headerTitles' style={{ marginLeft: "15px" }}>Postal address</div>
+            <div className='box col-2 headerText headerTitles' style={{marginLeft:"15px"}}>{t('postal_address')}</div>
             <div class="vl text-center"></div>
 
 
-            <div className='box ml-2 mr-2 headerText headerTitles' style={{ flex: "0 0 10.333333%", maxWidth: "10.333333%" }}>
-              <span className="headerText"
-                onClick={() => {
-                  setShowDropDownForCountry(!showDropDownForCountry);
-                }}
-                style={{ cursor: "pointer" }}>{'Country'}
-              </span>
+            <div className='box ml-2 mr-2 headerText headerTitles' style={{flex:"0 0 10.333333%", maxWidth:"10.333333%"}}>
+              <span className="headerText"  
+                  onClick={() => {
+                    setShowDropDownForCountry(!showDropDownForCountry);
+                  }}
+                  style={{cursor:"pointer"}}>{t('country')}
+                </span>
               <img
                 class='headerText'
                 style={{
@@ -143,9 +144,9 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
             <div className='box col-1 headerText ml-2 mr-2 headerTitles'>
-              <span className="headerText"
-                onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
-                style={{ cursor: "pointer" }}>{'Region'}
+              <span className="headerText" 
+                    onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
+                    style={{cursor:"pointer"}}>{t('region')}
               </span>
               <img
                 class='headerText'
@@ -173,11 +174,11 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col ml-2 mr-2 headerText headerTitles'>
-              <span className="headerText"
-                onClick={() => {
-                  setShowDropDownForStatus(!showDropDownForStatus);
-                }}
-                style={{ cursor: "pointer" }}>{'Status'}
+              <span className="headerText" 
+                  onClick={() => {
+                    setShowDropDownForStatus(!showDropDownForStatus);
+                  }}
+                  style={{cursor:"pointer"}}>{t('status')}
               </span>
               <img
                 class='headerText'
@@ -211,7 +212,7 @@ const Organisations = (props) => {
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
                 }}
-                style={{ cursor: "pointer" }}>{'Created on'}
+                style={{cursor:"pointer"}}>{t('created_on')}
               </span>
               {showDropDownForCreatedOn &&
                 <DropDownFilter

@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import Popover from "react-popover";
 import dummyImage from '../../assets/icons/block-icon.png'
+import { t } from "i18next";
 
 const UserDetails = (props) => {
   const [visible, setVisible] = useState(false);
@@ -162,7 +163,7 @@ const UserDetails = (props) => {
                     </span>
               </label>
 
-           {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> ACTIVE </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
+           {(status) ? (status === 'ACTIVE' ? <div className="status text-success" style={{position:"relative",left:"1rem"}}> {t('active')} </div> : <div className="status text-danger" style={{position:"relative",left:"1rem"}}>{t('rejected')}</div>) : <div className="status text-warning">DEACTIVATED</div>}
           
           </span>
           <div

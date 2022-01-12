@@ -7,6 +7,7 @@ import RecentRequests from "./recentrequests";
 import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
 import NoRecordsFound from "../NoRecordsFound";
+import { t } from "i18next";
 
 const DashBoard = (props) => {
   const [data, setData] = useState([]);
@@ -59,7 +60,7 @@ locationApprovals.sort(function (a, b) {
         </Modal>
       )}
       <div className="d-flex  pl-3  justify-content-between">
-        <h1 className="breadcrumb dash">ADMIN DASHBOARD </h1>
+        <h1 className="breadcrumb dash">{t('admin_dashboard')} </h1>
         <div className="d-flex">
           <button
             type="button"
@@ -72,13 +73,13 @@ locationApprovals.sort(function (a, b) {
             className="btn btn-warning "
           >
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
-            <span className="txt">Add New User</span>
+            <span className="txt">{t('add')} {t('new')} {t('user')}</span>
           </button>
         </div>
       </div>
       <div className="d-flex flex-row ">
         <div className="panel w-50 mr-3 mt-3">
-          <h5 className="sub-header" style={{fontWeight:"bold"}}>Request Pending</h5>
+          <h5 className="sub-header" style={{fontWeight:"bold"}}>{t('request_pending')}</h5>
           {requestsPending.map((row, index) => (
             <NewRequests
               requestRow={row}
@@ -117,7 +118,7 @@ locationApprovals.sort(function (a, b) {
             {recentRequestsSent.length == 0 && <NoRecordsFound />}
           </div> */}
           <div className="">
-            <h5 className="sub-header" style={{fontWeight:"bold"}}>Location approvals</h5>
+            <h5 className="sub-header" style={{fontWeight:"bold"}}>{t('location_approvals')}</h5>
             {locationApprovals.map((row, index) => (
               <LocationRequests
                 row={row}

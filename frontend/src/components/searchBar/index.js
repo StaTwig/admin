@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.scss';
 import SearchIcon from '../../assets/icons/searching@2x.png';
+import { t } from 'i18next';
 
 const SearchBar = (props) => {
 
@@ -30,7 +31,7 @@ const SearchBar = (props) => {
                         'search-input-standard' : 'search-input-for-dropDown'}
                     type="text"
                     id="header-search"
-                    placeholder="Search"
+                    placeholder={t('search')}
                     value={query}
                     onChange={handleOnChange}
                 />
