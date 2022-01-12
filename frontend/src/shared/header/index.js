@@ -329,13 +329,7 @@ const Header = (props) => {
   };
   const imgs = config().fetchProfileImage;
   const search_placeholder =
-    t("search") +
-    " " +
-    t("po_id") +
-    "/" +
-    t("shipment_id") +
-    " /" +
-    t("transit_no");
+    t("search") + " " + t("po_id") + "/" + t("shipment_id");
 
   return (
     <div className='navBar'>
@@ -346,10 +340,11 @@ const Header = (props) => {
 
         <nav className='navContent'>
           {/* branding */}
-
-          <div className='logo'>
-            <img src={logo} alt='logo' />
-          </div>
+          <Link to='/overview'>
+            <div className='logo'>
+              <img src={logo} alt='logo' />
+            </div>
+          </Link>
 
           {/* Nav Items */}
           <MenuOutlined className='hambergerMenu' />
@@ -401,11 +396,10 @@ const Header = (props) => {
                   options={options}
                   getOptionLabel={(option) => option._id}
                   filterOptions={filterOptions}
-                  placeholder='Search PO ID/ Shipment ID/ Transit Number'
+                  placeholder={search_placeholder}
                   onFocus={(e) => (e.target.placeholder = "")}
                   onBlur={(e) =>
-                    (e.target.placeholder =
-                      "Search PO ID/ Shipment ID/ Transit Number")
+                    (e.target.placeholder = { search_placeholder })
                   }
                   inputValue={search}
                   onInputChange={(event, newInputValue) => {
@@ -419,7 +413,7 @@ const Header = (props) => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label='Search PO ID/ Shipment ID'
+                      label={search_placeholder}
                       margin='normal'
                       variant='outlined'
                     />
@@ -601,27 +595,47 @@ const Header = (props) => {
                                   ></img>
                                 </Link>
                               ) : (
-                                <div
-                                  className={
-                                    notifications.isRead ? "read" : "unRead"
-                                  }
-                                  onClick={() => {
-                                    setAlertModalData(notifications);
-                                    setOpenModal(true);
-                                  }}
-                                >
+                                <Link>
                                   <div
-                                    className='col-sm-10'
-                                    style={{ display: "flex" }}
+                                    className={
+                                      notifications.isRead ? "read" : "unRead"
+                                    }
+                                    onClick={() => {
+                                      setAlertModalData(notifications);
+                                      setOpenModal(true);
+                                    }}
                                   >
-                                    <img
-                                      className='notification-icons'
-                                      src={notifIcon(notifications)}
-                                      alt='Icon'
-                                    />
-                                    <div className='notification-events'>
-                                      {notifications.message}
+                                    <div
+                                      className='col-sm-10'
+                                      style={{ display: "flex" }}
+                                    >
+                                      <img
+                                        className='notification-icons'
+                                        src={notifIcon(notifications)}
+                                        alt='Icon'
+                                      />
+                                      <div className='notification-events'>
+                                        {notifications.message}
+                                      </div>
                                     </div>
+                                    <div className='text-secondary notif-time'>
+                                      {formatDistanceToNow(
+                                        new Date(
+                                          parseInt(
+                                            notifications._id
+                                              .toString()
+                                              .substr(0, 8),
+                                            16
+                                          ) * 1000
+                                        )
+                                      )}{" "}
+                                      {t("ago")}
+                                    </div>
+                                    <img
+                                      className='toggle-icon'
+                                      alt='Drop Down Icon'
+                                      src={dropdownIcon}
+                                    ></img>
                                   </div>
                                   <div className='text-secondary notif-time'>
                                     {formatDistanceToNow(
@@ -633,14 +647,15 @@ const Header = (props) => {
                                           16
                                         ) * 1000
                                       )
-                                    )}
+                                    )}{" "}
+                                    {t("ago")}
                                   </div>
                                   <img
                                     className='toggle-icon'
                                     alt='Drop Down Icon'
                                     src={dropdownIcon}
                                   ></img>
-                                </div>
+                                </Link>
                               )
                             ) : (
                               <div
@@ -681,7 +696,7 @@ const Header = (props) => {
                               <div className='col text-center mt-3 mr-5'>
                                 <div>
                                   <span className='no-notification'>
-                                    No notifications
+                                    {t("no_notifications")}
                                   </span>
                                 </div>
                               </div>

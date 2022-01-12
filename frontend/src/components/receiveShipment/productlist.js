@@ -19,71 +19,6 @@ const ProductList = (props) => {
     <>
       {props.shipments.products.map((product, index) => (
         <div className='col-sm-4 '>
-          {
-            //<div className="d-flex flex-row " >
-            //         <ul className="mr-2 w-75 elemens">
-            //             <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>
-            //             <li className="mb-2 text-secondary">Product Name</li>
-            //             <li className="mb-2 text-secondary">Manufacturer</li>
-            //             <li className="mb-3 text-secondary">Quantity Sent</li>
-            //             <li className="mb-3 text-secondary">Quantity Received</li>
-            //             <li className="mb-2 text-secondary">Label ID</li>
-            //         </ul>
-            //         <ul className="elemens w-75">
-            //         <li className="mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
-            //             {isVisible ?
-            //             <button
-            //                 className="btn btn-outline-primary"
-            //                 onClick={() =>
-            //                     {
-            //                         deliveredProductList.push(deliveredProduct);
-            //                         props.setDelivered(deliveredProductList);
-            //                         props.setIndex(index);
-            //                         if(deliveredProduct)
-            //                             setIsVisible(false);
-            //                     }}
-            //                 style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
-            //                 >
-            //                 Save
-            //             </button>
-            //             : <span> &nbsp;</span>}
-            //             </li>
-            //             <li className="mb-2 text-secondary">{product.productName}</li>
-            //             <li className="mb-2 text-secondary">{product.manufacturer}</li>
-            //             <li className="mb-2 text-secondary">{product.productQuantity}</li>
-            //             <li className="text-secondary" style={{paddingTop:'0.2vh'}}>
-            //                 {
-            //                     product['productQuantityDelivered'] ?
-            //                         product['productQuantityDelivered'] :
-            //                         <input
-            //                             style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }}
-            //                             className="form-control"
-            //                             value={deliveredProduct}
-            //                             placeholder="Enter the Quantity"
-            //                             // maxLength={product.productQuantity.length}
-            //                             onChange={e => {
-            //                                 setDeliveredProduct(e.target.value);
-            //                                 if (e.target.value <= product.productQuantity) {
-            //                                     setError(false);
-            //                                     props.onQuantityChange(index, e.target.value);
-            //                                 }
-            //                                 else{
-            //                                     e.target.value="";
-            //                                     setDeliveredProduct();
-            //                                     props.onQuantityChange(index, e.target.value);
-            //                                     setError(true);
-            //                                 }
-            //                             }
-            //                             }
-            //                         />
-            //                 }
-            //             </li>
-            //             <li className="mb-2 text-secondary">{props.shipments.label.labelId}</li>
-            //     </ul>
-            //         <div>
-            // </div>
-            //   </div>
-          }
           <div
             className={
               props.productHighLight
@@ -128,31 +63,39 @@ const ProductList = (props) => {
                 <div className='col-sm mb-1 text-secondary styler'>
                   {t("manufacturer")}
                 </div>
-                <div className='col-sm mb-1 text-secondary styler'>
-                  {product.manufacturer}
+                <div className='row'>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {t("product_name")}
+                  </div>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {product.productName}
+                  </div>
                 </div>
-              </div>
-              <div className='row'>
-                <div className='col-sm mb-1 text-secondary styler'>
-                  {t("quantity") + " " + t("sent")}
+                <div className='row'>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {t("manufacturer")}
+                  </div>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {product.manufacturer}
+                  </div>
                 </div>
-                <div className='col-sm mb-3 text-secondary styler'>
-                  {product.productQuantity}
-                  <span>{"  ("}</span>
-                  {product.unitofMeasure && product.unitofMeasure.name ? (
-                    <span>{product.unitofMeasure.name}</span>
-                  ) : (
-                    ""
-                  )}
-                  <span>{")"}</span>
-                </div>
-              </div>
-              <div className='row'>
-                <div className='col-sm mb-0 text-secondary styler'>
-                  {t("quantity") + " " + t("received")}
+                <div className='row'>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {t("quantity") + " " + t("sent")}
+                  </div>
+                  <div className='col-sm mb-3 text-secondary styler'>
+                    {product.productQuantity}
+                    <span>{"  ("}</span>
+                    {product.unitofMeasure && product.unitofMeasure.name ? (
+                      <span>{product.unitofMeasure.name}</span>
+                    ) : (
+                      ""
+                    )}
+                    <span>{")"}</span>
+                  </div>
                 </div>
                 <div className='col-sm text-secondary styler'>
-                  {product["productQuantityDelivered"] ? (
+                  {!product["productQuantity"] ? (
                     product["productQuantityDelivered"]
                   ) : (
                     <input
@@ -175,32 +118,27 @@ const ProductList = (props) => {
                     />
                   )}
                 </div>
-              </div>
-              <div className='row'>
-                <div className='col-sm mb-1 text-secondary styler'>
-                  {t("batch_no")}
+                <div className='row'>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {t("batch_no")}
+                  </div>
+                  <div className='col-sm mb-1 text-secondary styler'>
+                    {props.shipments.products[0].batchNumber}
+                  </div>
                 </div>
-                <div className='col-sm mb-1 text-secondary styler'>
-                  {props.shipments.products[0].batchNumber}
-                </div>
-              </div>
-              <div className='row'>
-                <div className='col-sm mb-3 text-secondary styler'>
-                  {t("label_code")}
-                </div>
-                <div className='col-sm mb-3 text-secondary styler'>
-                  {props.shipments.label.labelId}
+                <div className='row'>
+                  <div className='col-sm mb-3 text-secondary styler'>
+                    {t("label_code")}
+                  </div>
+                  <div className='col-sm mb-3 text-secondary styler'>
+                    {props.shipments.label.labelId}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       ))}
-      {/* <div className="arrow float-right" onClick={() => {
-                    props.setMenuProduct(!props.menuProduct)
-                    props.setProductHighLight(false);
-                }}><img src={props.menuProduct?Down:traceDrop} alt="actions" height="7" width="12"
-                    /></div> */}
       {error && (
         <Modal
           close={() => closeModalFail()}

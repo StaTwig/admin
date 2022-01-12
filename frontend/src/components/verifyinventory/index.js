@@ -23,7 +23,7 @@ const VerifyInventory = (props) => {
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
   });
-  console.log("reviewInventories",reviewInventories);
+  // console.log("reviewInventories",reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +34,7 @@ const VerifyInventory = (props) => {
     dispatch(turnOn());
 
     const postData = reviewInventories.map((inventory) => {
-      console.log('Inventory details', inventory);
+      // console.log('Inventory details', inventory);
       return {
         productId: inventory.productId,
         batchNumber: inventory.batchNumber,
@@ -50,7 +50,6 @@ const VerifyInventory = (props) => {
     const result = await addProductsToInventory({
       products: postData,
     });
-    console.log(result)
     setOpenCreatedInventory(true);
     if (result.success) {
       setSuccessMessage(result.message);
@@ -119,7 +118,7 @@ const VerifyInventory = (props) => {
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
-              console.log('Individual Details', reviewInventory);
+              // console.log('Individual Details', reviewInventory);
               return (
               <div className='row p-1 mt-4'>
                 <span className='col-3'>{reviewInventory.productName}</span>

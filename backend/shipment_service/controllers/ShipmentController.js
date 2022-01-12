@@ -16,9 +16,9 @@ const AtomModel = require("../models/AtomModel");
 const Event = require("../models/EventModal");
 const Record = require("../models/RecordModel");
 const moment = require("moment");
-const CENTRAL_AUTHORITY_ID = null;
-const CENTRAL_AUTHORITY_NAME = null;
-const CENTRAL_AUTHORITY_ADDRESS = null;
+const CENTRAL_AUTHORITY_ID = "null";
+const CENTRAL_AUTHORITY_NAME = "null";
+const CENTRAL_AUTHORITY_ADDRESS = "null";
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const logEvent = require("../../../utils/event_logger");
@@ -402,27 +402,36 @@ exports.createShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            const po_product_quantity =
-              product.productQuantity || product.quantity;
-            const alreadyShipped = product.productQuantityShipped || null;
-            let shipment_product_qty;
-            if (alreadyShipped) {
-              console.log(
-                "values are" + parseInt(p.productQuantity),
-                parseInt(alreadyShipped)
-              );
-              shipment_product_qty =
-                parseInt(p.productQuantity) + parseInt(alreadyShipped);
-            } else {
-              shipment_product_qty = p.productQuantity;
-            }
-            if (
-              parseInt(shipment_product_qty, 10) <
-              parseInt(po_product_quantity, 10)
-            ) {
-              quantityMismatch = true;
-              console.log("quantityMismatch is ", quantityMismatch);
-              return false;
+            if (product.id === p.productID) {
+              // console.log(p)
+              const po_product_quantity =
+                product.productQuantity || product.quantity;
+              const alreadyShipped =
+                parseInt(product.productQuantityShipped || 0) +
+                  parseInt(product.productQuantityDelivered || 0) || null;
+              let shipment_product_qty;
+              if (alreadyShipped) {
+                // console.log(
+                //   "values are" + parseInt(p.productQuantity),
+                //   parseInt(alreadyShipped)
+                // );
+                shipment_product_qty =
+                  parseInt(p.productQuantity) + parseInt(alreadyShipped);
+              } else {
+                shipment_product_qty = p.productQuantity;
+              }
+              if (
+                parseInt(shipment_product_qty, 10) <
+                parseInt(po_product_quantity, 10)
+              ) {
+                quantityMismatch = true;
+                console.log("quantityMismatch is ", quantityMismatch);
+                return false;
+              } else if (
+                parseInt(shipment_product_qty) === parseInt(po_product_quantity)
+              ) {
+                quantityMismatch = false;
+              }
             }
           });
         });
@@ -621,9 +630,9 @@ exports.createShipment = [
           actorWarehouseId: req.user.warehouseId || null,
           stackholders: {
             ca: {
-              id: CENTRAL_AUTHORITY_ID || null,
-              name: CENTRAL_AUTHORITY_NAME || null,
-              address: CENTRAL_AUTHORITY_NAME || null,
+              id: CENTRAL_AUTHORITY_ID || "null",
+              name: CENTRAL_AUTHORITY_NAME || "null",
+              address: CENTRAL_AUTHORITY_NAME || "null",
             },
             actororg: {
               id: orgId,
@@ -994,20 +1003,30 @@ exports.receiveShipment = [
           let quantityMismatch = false;
           po.products.every((product) => {
             data.products.every((p) => {
-              const po_product_quantity =
-                product.productQuantity || product.quantity;
-              let shipment_product_qty = 0;
-              if (product.productQuantityDelivered)
-                shipment_product_qty =
-                  parseInt(product.productQuantityDelivered, 10) +
-                  parseInt(p.productQuantity, 10);
-              else shipment_product_qty = p.productQuantity;
-
-              if (
-                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-              ) {
-                quantityMismatch = true;
-                return false;
+              if (product.id === p.productID) {
+                // console.log(product, p)
+                const po_product_quantity =
+                  product.productQuantity || product.quantity;
+                let shipment_product_qty = 0;
+                if (product.productQuantityDelivered)
+                  shipment_product_qty =
+                    parseInt(product.productQuantityDelivered) +
+                    parseInt(p.productQuantity);
+                else shipment_product_qty = p.productQuantity;
+                // console.log(shipment_product_qty, po_product_quantity)
+                if (
+                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                ) {
+                  console.log("mismatch");
+                  quantityMismatch = true;
+                  return false;
+                } else if (
+                  parseInt(shipment_product_qty) ===
+                  parseInt(po_product_quantity)
+                ) {
+                  console.log("full now");
+                  quantityMismatch = false;
+                }
               }
             });
           });
@@ -1196,9 +1215,9 @@ exports.receiveShipment = [
             actorWarehouseId: req.user.warehouseId || null,
             stackholders: {
               ca: {
-                id: CENTRAL_AUTHORITY_ID || null,
-                name: CENTRAL_AUTHORITY_NAME || null,
-                address: CENTRAL_AUTHORITY_ADDRESS || null,
+                id: CENTRAL_AUTHORITY_ID || "null",
+                name: CENTRAL_AUTHORITY_NAME || "null",
+                address: CENTRAL_AUTHORITY_ADDRESS || "null",
               },
               actororg: {
                 id: orgId || null,

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "./tabs";
-import Tiles from "./tiles";
 import OrderIcon from "../../assets/icons/order.svg";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
@@ -519,7 +518,8 @@ const Orders = (props) => {
         </div>
       </div>
       {isAuthenticated("orderAnalytics") && (
-        <Tiles {...props} setData={setData} t={t} />
+        // <Tiles {...props} setData={setData} t={t} />
+        <Cards {...props} setData={setData} t={t} />
       )}
       <div className='mt-4'>
         <Tabs

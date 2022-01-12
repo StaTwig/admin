@@ -3,7 +3,6 @@ import EditRow from "./editRow";
 import "./style.scss";
 
 const EditTable = (props) => {
-  const { t } = props;
   const [visible, setVisible] = useState(false);
   return (
     <div className=''>
