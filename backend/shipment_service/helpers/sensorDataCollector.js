@@ -62,6 +62,9 @@ exports.lastTenSensorData = async (shipmentId) => {
       $limit: 100,
     },
     {
+      $sort: { _id: 1 },
+    },
+    {
       $group: {
         _id: "$sensorId",
         data: { $push: "$$ROOT" },
@@ -75,26 +78,28 @@ exports.lastTenSensorData = async (shipmentId) => {
       },
     },
   ]);
-
-  console.log("lastTenSensorData", lastTenSensorData);
   return lastTenSensorData;
 };
 
 exports.getMetaData = async (shipmentId) => {
-  const sensorsData = await SensorModel.find({ shipmentId: shipmentId }).limit(
-    50
-  );
+  const sensorsData = await SensorModel.find({ shipmentId: shipmentId })
+    .sort({
+      _id: -1,
+    })
+    .limit(100);
   const avg =
-    sensorsData.reduce((acc, cur) => {
-      return acc + cur.temperature;
-    }, 0) / sensorsData.length || 0;
+    (
+      sensorsData.reduce((acc, cur) => {
+        return acc + cur.temperature;
+      }, 0) / sensorsData.length
+    ).toFixed(2) || 0;
   let min = Math.min(
     ...sensorsData.map((sensor) => sensor.temperature)
   ).toFixed(2);
   let max = Math.max(
     ...sensorsData.map((sensor) => sensor.temperature)
   ).toFixed(2);
-  max = parseInt(max) + parseInt(max - min);
-  min = parseInt(min) - parseInt(max - min);
+  max = parseFloat(max + (max - min)).toFixed(2);
+  min = parseFloat(min - (max - min)).toFixed(2);
   return { min, max, avg };
 };
