@@ -155,7 +155,6 @@ exports.register = [
       if (!emailId.match(phoneRegex))
         return Promise.reject("Mobile number is not valid");
       phone = "+" + value;
-      console.log(phone);
       user = await EmployeeModel.findOne({ phoneNumber: phone });
       if (user) {
         return Promise.reject("Mobile already in use");
@@ -198,7 +197,7 @@ exports.register = [
           { new: true }
         );
         const employeeId =
-          empCounter.counters[0].format + empCounter.counters[0].value;
+          empCounter.counters[4].format + empCounter.counters[4].value;
         const employeeStatus = "NOTAPPROVED";
         let addr = "";
         //create organisation if doesn't exists

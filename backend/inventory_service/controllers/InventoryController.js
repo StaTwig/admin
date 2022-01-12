@@ -2774,14 +2774,14 @@ exports.autoCompleteSuggestions = [
             value: { $regex: searchString ? searchString : "", $options: "i" },
           },
         },
-        { $limit: 5 },
         {
           $group: {
             _id: "$value",
-            type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
+            // type: { $first: "$record_type" },
+            // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
+        { $limit: 5 },
       ]).sort({ createdAt: -1 });
 
       const suggestions2 = await RecordModel.aggregate([
