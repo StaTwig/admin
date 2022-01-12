@@ -356,7 +356,7 @@ const Header = (props) => {
     }
   };
   const imgs = config().fetchProfileImage;
-  const search_placeholder = t('search') + ' ' + t('po_id') + '/' + t('shipment_id') + ' /' + t('transit_no');
+  const search_placeholder = t('search') + ' ' + t('po_id') + '/' + t('shipment_id');
 
   return (
     <div className="navBar">
@@ -367,10 +367,11 @@ const Header = (props) => {
 
         <nav className="navContent">
           {/* branding */}
-
+          <Link to="/overview">
           <div className="logo">
             <img src={logo} alt="logo" />
           </div>
+          </Link>
 
           {/* Nav Items */}
           <MenuOutlined className="hambergerMenu" />
@@ -422,11 +423,11 @@ const Header = (props) => {
                   options={options}
                   getOptionLabel={(option) => option._id}
                   filterOptions={filterOptions}
-                  placeholder="Search PO ID/ Shipment ID/ Transit Number"
+                  placeholder={search_placeholder}
                   onFocus={(e) => (e.target.placeholder = "")}
                   onBlur={(e) =>
                   (e.target.placeholder =
-                    "Search PO ID/ Shipment ID/ Transit Number")
+                    {search_placeholder})
                   }
                   inputValue={search}
                   onInputChange={(event, newInputValue) => {
@@ -440,7 +441,7 @@ const Header = (props) => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Search PO ID/ Shipment ID"
+                      label={search_placeholder}
                       margin="normal"
                       variant="outlined"
                     />
@@ -558,130 +559,52 @@ const Header = (props) => {
                       </div>
                     </div>
                     <div className="slider-item">
-                      <InfiniteScroll
-                        dataLength={notifications?.length || 0}
-                        next={() => changeNotifications(alertType, 10)}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column-reverse",
-                        }} //To put endMessage and loader to the top.
-                        hasMore={hasMore}
-                        loader={
-                          <h4>
-                            <Spinner />
-                          </h4>
-                        }
-                        scrollThreshold={1}
-                        scrollableTarget="scrollableDiv"
-                      >
-                        {notifications?.length >= 0 ? (
-                          notifications?.map((notifications) =>
-                            notifications.transactionId ? (
-                              notifications.eventType !== "REQUEST" ? (
-                                <Link
-                                  key={notifications.id}
-                                  to={notifRouting(notifications)}
-                                  // style={{ textDecoration: "none" }}
-                                  className={
-                                    notifications.isRead ? "read" : "unRead"
-                                  }
-                                  style={{ textDecoration: "none" }}
-                                  onClick={() =>
-                                    readNotification(notifications.id)
-                                  }
-                                >
-                                  <div
-                                    className="col-sm-10"
-                                    style={{ display: "flex" }}
-                                  >
-                                    <img
-                                      className="notification-icons"
-                                      src={notifIcon(notifications)}
-                                      alt="Icon"
-                                    />
-                                    <div className="notification-events">
-                                      {notifications.message}
-                                    </div>
-                                  </div>
-                                  <div className="text-secondary notif-time">
-                                    {formatDistanceToNow(
-                                      new Date(
-                                        parseInt(
-                                          notifications._id
-                                            .toString()
-                                            .substr(0, 8),
-                                          16
-                                        ) * 1000
-                                      )
-                                    )}
-                                  </div>
-                                  <img
-                                    className="toggle-icon"
-                                    alt="Drop Down Icon"
-                                    src={dropdownIcon}
-                                  ></img>
-                                </Link>
-                              ) : (
-                                <div
-                                  className={
-                                    notifications.isRead ? "read" : "unRead"
-                                  }
-                                  onClick={() => {
-                                    setAlertModalData(notifications);
-                                    setOpenModal(true);
-                                  }}
-                                >
-                                  <div
-                                    className="col-sm-10"
-                                    style={{ display: "flex" }}
-                                  >
-                                    <img
-                                      className="notification-icons"
-                                      src={notifIcon(notifications)}
-                                      alt="Icon"
-                                    />
-                                    <div className="notification-events">
-                                      {notifications.message}
-                                    </div>
-                                  </div>
-                                  <div className="text-secondary notif-time">
-                                    {formatDistanceToNow(
-                                      new Date(
-                                        parseInt(
-                                          notifications._id
-                                            .toString()
-                                            .substr(0, 8),
-                                          16
-                                        ) * 1000
-                                      )
-                                    )}
-                                  </div>
-                                  <img
-                                    className="toggle-icon"
-                                    alt="Drop Down Icon"
-                                    src={dropdownIcon}
-                                  ></img>
-                                </div>
-                              )
-                            ) : (
-                              <div
+                    <InfiniteScroll
+                      dataLength={notifications?.length || 0}
+                      next={() => changeNotifications(alertType, 10)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                      }} //To put endMessage and loader to the top.
+                      hasMore={hasMore}
+                      loader={
+                        <h4>
+                          <Spinner />
+                        </h4>
+                      }
+                      scrollThreshold={1}
+                      scrollableTarget='scrollableDiv'
+                    >
+                      {notifications?.length >= 0 ? (
+                        notifications?.map((notifications) =>
+                          notifications.transactionId ? (
+                            notifications.eventType !== "REQUEST" ? (
+                              <Link
                                 key={notifications.id}
-                                style={{ cursor: "not-allowed" }}
+                                to={notifRouting(notifications)}
+                                // style={{ textDecoration: "none" }}
+                                className={
+                                  notifications.isRead ? "read" : "unRead"
+                                }
+                                style={{ textDecoration: "none" }}
+                                onClick={() =>
+                                  readNotification(notifications.id)
+                                }
                               >
                                 <div
-                                  className="col-sm-10"
+                                  className='col-sm-10'
                                   style={{ display: "flex" }}
                                 >
                                   <img
-                                    className="notification-icons"
+                                    className='notification-icons'
                                     src={notifIcon(notifications)}
-                                    alt="Icon"
+                                    alt='Icon'
                                   />
-                                  <div className="notification-events">
+                                  <div className='notification-events'>
                                     {notifications.message}
                                   </div>
                                 </div>
-                                <div className="text-secondary notif-time">
+                                <div className='text-secondary notif-time'>
                                   {formatDistanceToNow(
                                     new Date(
                                       parseInt(
@@ -693,23 +616,120 @@ const Header = (props) => {
                                     )
                                   )}
                                 </div>
-                              </div>
-                            )
-                          )
-                        ) : (
-                          <div className="slider-item">
-                            <div className="row">
-                              <div className="col text-center mt-3 mr-5">
-                                <div>
-                                  <span className="no-notification">
-                                    No notifications
-                                  </span>
+                                <img
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
+                                  src={dropdownIcon}
+                                ></img>
+                              </Link>
+                            ) : (
+                              <Link>
+                                <div
+                                  className={
+                                    notifications.isRead ? "read" : "unRead"
+                                  }
+                                  onClick={() => {
+                                    setAlertModalData(notifications);
+                                    setOpenModal(true);
+                                  }}
+                                >
+                                  <div
+                                    className='col-sm-10'
+                                    style={{ display: "flex" }}
+                                  >
+                                    <img
+                                      className='notification-icons'
+                                      src={notifIcon(notifications)}
+                                      alt='Icon'
+                                    />
+                                    <div className='notification-events'>
+                                      {notifications.message}
+                                    </div>
+                                  </div>
+                                  <div className='text-secondary notif-time'>
+                                    {formatDistanceToNow(
+                                      new Date(
+                                        parseInt(
+                                          notifications._id
+                                            .toString()
+                                            .substr(0, 8),
+                                          16
+                                        ) * 1000
+                                      )
+                                    )}{" "}
+                                    {t('ago')}
+                                  </div>
+                                  <img
+                                    className='toggle-icon'
+                                    alt='Drop Down Icon'
+                                    src={dropdownIcon}
+                                  ></img>
                                 </div>
+                                <div className='text-secondary notif-time'>
+                                  {formatDistanceToNow(
+                                    new Date(
+                                      parseInt(
+                                        notifications._id
+                                          .toString()
+                                          .substr(0, 8),
+                                        16
+                                      ) * 1000
+                                    )
+                                  )}{" "}
+                                  {t('ago')}
+                                </div>
+                                <img
+                                  className='toggle-icon'
+                                  alt='Drop Down Icon'
+                                  src={dropdownIcon}
+                                ></img>
+                              </Link>
+                            )
+                          ) : (
+                            <div
+                              key={notifications.id}
+                              style={{ cursor: "not-allowed" }}
+                            >
+                              <div
+                                className='col-sm-10'
+                                style={{ display: "flex" }}
+                              >
+                                <img
+                                  className='notification-icons'
+                                  src={notifIcon(notifications)}
+                                  alt='Icon'
+                                />
+                                <div className='notification-events'>
+                                  {notifications.message}
+                                </div>
+                              </div>
+                              <div className='text-secondary notif-time'>
+                                {formatDistanceToNow(
+                                  new Date(
+                                    parseInt(
+                                      notifications._id.toString().substr(0, 8),
+                                      16
+                                    ) * 1000
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )
+                        )
+                      ) : (
+                        <div className='slider-item'>
+                          <div className='row'>
+                            <div className='col text-center mt-3 mr-5'>
+                              <div>
+                                <span className='no-notification'>
+                                  {t('no_notifications')}
+                                </span>
                               </div>
                             </div>
                           </div>
-                        )}
-                      </InfiniteScroll>
+                        </div>
+                      )}
+                    </InfiniteScroll>
                     </div>
                   </div>
                 )}

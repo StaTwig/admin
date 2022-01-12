@@ -344,7 +344,7 @@ const EditRow = (props) => {
           <button
             type="button"
             className="btn btn-outline-primary mr-2 ml-2"
-            style={{ height: "30px", width: "60px" }}
+            style={{ height: "30px", width: "70px" }}
             onClick={() => {
               setShowModal(true);
               fetchBatches(prod, index);
@@ -353,7 +353,7 @@ const EditRow = (props) => {
             <div
               style={{ position: "relative", fontSize: "12px", left: "-6px" }}
             >
-              {t('fetch')}
+              {t('fetch') === "fetch" ? "fetch" : "obtener"}
             </div>
           </button>
           <div className="">
@@ -361,7 +361,7 @@ const EditRow = (props) => {
               <div>
                 <Modal
                   close={closeModal}
-                  title={t('fetch')+' '+t('serial_numbers')}
+                  title={(t('fetch') === "fetch" ? "fetch" : "obtener")+' '+t('serial_numbers')}
                   size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                 >
                   <div className="">

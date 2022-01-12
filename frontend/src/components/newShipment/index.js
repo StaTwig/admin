@@ -912,12 +912,12 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t('fetch')}
+                        {t('fetch') === "fetch" ? "fetch" : "obtener"}
                       </span>
                     </span>
                   ) : (
                     <span
-                      style={{ height: "25px", width: "50px" }}
+                      style={{ height: "25px", width: "60px" }}
                       className='btn fetchDisable'
                     >
                       <span
@@ -928,7 +928,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t('fetch')}
+                        {t('fetch') === "fetch" ? "fetch" : "obtener"}
                       </span>
                     </span>
                   )}
