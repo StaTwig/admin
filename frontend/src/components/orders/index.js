@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "./tabs";
-import Tiles from "./tiles";
 import OrderIcon from "../../assets/icons/order.svg";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import calender from "../../assets/icons/calendar.svg";
@@ -24,7 +22,6 @@ import {
   getExportFile,
 } from "../../actions/poActions";
 import { config } from "../../config";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
 import Cards from "./cards/cards";
 
@@ -531,7 +528,8 @@ const Orders = (props) => {
         </div>
       </div>
       {isAuthenticated("orderAnalytics") && (
-        <Tiles {...props} setData={setData} t={t} />
+        // <Tiles {...props} setData={setData} t={t} />
+        <Cards {...props} setData={setData} t={t} />
       )}
       <div className="mt-4">
         <Tabs
