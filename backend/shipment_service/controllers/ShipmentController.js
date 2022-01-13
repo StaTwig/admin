@@ -137,23 +137,23 @@ async function poUpdate(id, quantity, poId, shipmentStatus, actor) {
       },
       stackholders: {
         ca: {
-          id: null,
-          name: null,
-          address: null,
+          id: "null",
+          name: "null",
+          address: "null",
         },
         actororg: {
           id: actor.organisationId,
-          name: null,
-          address: null,
+          name: "null",
+          address: "null",
         },
         secondorg: {
-          id: null,
-          name: null,
-          address: null,
+          id: "null",
+          name: "null",
+          address: "null",
         },
       },
       payload: {
-        data: event.payloadData || null,
+        data: event.payloadData || "null",
       },
     };
     await logEvent(event_data);
@@ -408,7 +408,7 @@ exports.createShipment = [
                 product.productQuantity || product.quantity;
               const alreadyShipped =
                 parseInt(product.productQuantityShipped || 0) +
-                  parseInt(product.productQuantityDelivered || 0) || null;
+                  parseInt(product.productQuantityDelivered || 0) || "null";
               let shipment_product_qty;
               if (alreadyShipped) {
                 // console.log(
@@ -627,7 +627,7 @@ exports.createShipment = [
             actorid: user_id,
             actoruserid: email,
           },
-          actorWarehouseId: req.user.warehouseId || null,
+          actorWarehouseId: req.user.warehouseId || "null",
           stackholders: {
             ca: {
               id: CENTRAL_AUTHORITY_ID || "null",
@@ -635,14 +635,14 @@ exports.createShipment = [
               address: CENTRAL_AUTHORITY_NAME || "null",
             },
             actororg: {
-              id: orgId,
-              name: orgName,
-              address: address,
+              id: orgId || "null",
+              name: orgName || "null",
+              address: address || "null",
             },
             secondorg: {
-              id: null,
-              name: null,
-              address: null,
+              id: "null",
+              name: "null",
+              address: "null",
             },
           },
           payload: {
@@ -650,13 +650,13 @@ exports.createShipment = [
           },
         };
         if (orgId === supplierID) {
-          event_data.stackholders.secondorg.id = receiverId || null;
-          event_data.stackholders.secondorg.name = receiverName || null;
-          event_data.stackholders.secondorg.address = receiverAddress || null;
+          event_data.stackholders.secondorg.id = receiverId || "null";
+          event_data.stackholders.secondorg.name = receiverName || "null";
+          event_data.stackholders.secondorg.address = receiverAddress || "null";
         } else {
-          event_data.stackholders.secondorg.id = supplierID || null;
-          event_data.stackholders.secondorg.name = supplierName || null;
-          event_data.stackholders.secondorg.address = supplierAddress || null;
+          event_data.stackholders.secondorg.id = supplierID || "null";
+          event_data.stackholders.secondorg.name = supplierName || "null";
+          event_data.stackholders.secondorg.address = supplierAddress || "null";
         }
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
@@ -691,66 +691,66 @@ exports.createShipment = [
           Misc: "",
         };
 
-        const token =
-          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+        // const token = 
+        //   req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        await axios.post(
-          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
-          bc_data,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        if (data.taggedShipments) {
-          const prevTaggedShipments = await ShipmentModel.findOne(
-            {
-              id: data.taggedShipments,
-            },
-            {
-              _id: 0,
-              taggedShipments: 1,
-              products: 1,
-            }
-          );
-          let quantityMismatch = false;
-          prevTaggedShipments.products.every((product) => {
-            products.every((p) => {
-              const shipment_product_quantity =
-                product.productQuantity - product.productQuantityTaggedSent;
-              const tagged_product_qty = p.productQuantity || p.quantity;
-              if (
-                parseInt(tagged_product_qty) <=
-                parseInt(shipment_product_quantity)
-              ) {
-                quantityMismatch = true;
-                return false;
-              }
-            });
-          });
+        // await axios.post(
+        //   `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+        //   bc_data,
+        //   {
+        //     headers: {
+        //       Authorization: token,
+        //     },
+        //   }
+        // );
+        // if (data.taggedShipments) {
+        //   const prevTaggedShipments = await ShipmentModel.findOne(
+        //     {
+        //       id: data.taggedShipments,
+        //     },
+        //     {
+        //       _id: 0,
+        //       taggedShipments: 1,
+        //       products: 1,
+        //     }
+        //   );
+        //   let quantityMismatch = false;
+        //   prevTaggedShipments.products.every((product) => {
+        //     products.every((p) => {
+        //       const shipment_product_quantity =
+        //         product.productQuantity - product.productQuantityTaggedSent;
+        //       const tagged_product_qty = p.productQuantity || p.quantity;
+        //       if (
+        //         parseInt(tagged_product_qty) <=
+        //         parseInt(shipment_product_quantity)
+        //       ) {
+        //         quantityMismatch = true;
+        //         return false;
+        //       }
+        //     });
+        //   });
 
-          if (!quantityMismatch)
-            throw new Error("Tagged product quantity not available");
-          await ShipmentModel.findOneAndUpdate(
-            {
-              id: shipmentId,
-            },
-            {
-              $push: {
-                taggedShipments: prevTaggedShipments.taggedShipments,
-              },
-            }
-          );
+        //   if (!quantityMismatch)
+        //     throw new Error("Tagged product quantity not available");
+        //   await ShipmentModel.findOneAndUpdate(
+        //     {
+        //       id: shipmentId,
+        //     },
+        //     {
+        //       $push: {
+        //         taggedShipments: prevTaggedShipments.taggedShipments,
+        //       },
+        //     }
+        //   );
 
-          for (let count = 0; count < products.length; count++) {
-            taggedShipmentUpdate(
-              products[count].productId,
-              products[count].productQuantity,
-              data.taggedShipments
-            );
-          }
-        }
+        //   for (let count = 0; count < products.length; count++) {
+        //     taggedShipmentUpdate(
+        //       products[count].productId,
+        //       products[count].productQuantity,
+        //       data.taggedShipments
+        //     );
+        //   }
+        // }
         await logEvent(event_data);
         return apiResponse.successResponseWithData(
           res,
@@ -1209,10 +1209,10 @@ exports.receiveShipment = [
             },
             transactionId: data.id,
             actor: {
-              actorid: user_id || null,
-              actoruserid: email || null,
+              actorid: user_id || "null",
+              actoruserid: email || "null",
             },
-            actorWarehouseId: req.user.warehouseId || null,
+            actorWarehouseId: req.user.warehouseId || "null",
             stackholders: {
               ca: {
                 id: CENTRAL_AUTHORITY_ID || "null",
@@ -1220,14 +1220,14 @@ exports.receiveShipment = [
                 address: CENTRAL_AUTHORITY_ADDRESS || "null",
               },
               actororg: {
-                id: orgId || null,
-                name: orgName || null,
-                address: address || null,
+                id: orgId || "null",
+                name: orgName || "null",
+                address: address || "null",
               },
               secondorg: {
-                id: null,
-                name: null,
-                address: null,
+                id: "null",
+                name: "null",
+                address: "null",
               },
             },
             payload: {
@@ -1235,13 +1235,13 @@ exports.receiveShipment = [
             },
           };
           if (orgId === supplierID) {
-            event_data.stackholders.secondorg.id = receiverId || null;
-            event_data.stackholders.secondorg.name = receiverName || null;
-            event_data.stackholders.secondorg.address = receiverAddress || null;
+            event_data.stackholders.secondorg.id = receiverId || "null";
+            event_data.stackholders.secondorg.name = receiverName || "null";
+            event_data.stackholders.secondorg.address = receiverAddress || "null";
           } else {
-            event_data.stackholders.secondorg.id = supplierID || null;
-            event_data.stackholders.secondorg.name = supplierName || null;
-            event_data.stackholders.secondorg.address = supplierAddress || null;
+            event_data.stackholders.secondorg.id = supplierID || "null";
+            event_data.stackholders.secondorg.name = supplierName || "null";
+            event_data.stackholders.secondorg.address = supplierAddress || "null";
           }
           await logEvent(event_data);
 
@@ -2014,24 +2014,24 @@ exports.updateTrackingStatus = [
           description: "SHIPMENT_TRACKING",
         },
         actor: {
-          actorid: req.user.id || null,
-          actoruserid: req.user.emailId || null,
+          actorid: req.user.id || "null",
+          actoruserid: req.user.emailId || "null",
         },
         stackholders: {
           ca: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
           actororg: {
             id: req.user.organisationId,
-            name: null,
-            address: null,
+            name: "null",
+            address: "null",
           },
           secondorg: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
         },
         payload: {
