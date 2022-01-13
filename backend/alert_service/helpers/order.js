@@ -65,8 +65,8 @@ async function getCreator(txnId) {
 exports.orderCreated = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const senderOrgName = await getOrgName(event?.secondaryOrgId);
-  const templateReceiver = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
-  const templateOthers = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateOthers = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateReceiver = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
   const eligibleUsers = await getEligibleUsers(
     event.actorOrgId,
     "ORGANISATION"
@@ -84,8 +84,8 @@ exports.orderCreated = async (event) => {
     };
     await sendNotification(dataSender);
   }
-  if (event.caId && event.caId !== "null") {
-    const caUsers = await getEligibleUsers(event.caId, "ORGANISATION");
+  if (event.secondaryOrgId && event.secondaryOrgId !== "null") {
+    const caUsers = await getEligibleUsers(event.secondaryOrgId, "ORGANISATION");
     for (const user of caUsers) {
       const dataOthers = {
         user: user.id,
