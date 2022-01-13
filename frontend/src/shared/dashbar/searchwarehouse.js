@@ -44,7 +44,7 @@ const SearchWareHouse = (props) => {
 
   const onRegionChange = async (item) => {
     const warehousesResult = await getWareHousesByRegion(item);
-    if (warehousesResult.status === 1) {
+    if (warehousesResult.success === true) {
       setWareHouses(warehousesResult.data);
       props.setWarehouseArr(warehousesResult.data);
       const warehouseList = warehousesResult.data.map((w) => w.id);
@@ -65,7 +65,7 @@ const SearchWareHouse = (props) => {
 
   const onWarehouses = async (item) => {
     const warehousesResult = await getWareHousesByCountry(item);
-    if (warehousesResult.status === 1) {
+    if (warehousesResult.success === true) {
       setWareHouses(warehousesResult.data);
       props.setWarehouseArr(warehousesResult.data);
       const warehouseList = warehousesResult.data.map((w) => w.id);

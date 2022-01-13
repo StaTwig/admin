@@ -1456,7 +1456,7 @@ const AdvanceTableFilter = (props) => {
                         options={props.inventoryFilterData}
                         getOptionLabel={(options) => options?.name}
                         onChange={(event, newValue) => {
-                          setInventoryProductNameFilterOnSelect(newValue.id);
+                          setInventoryProductNameFilterOnSelect(newValue.name);
                         }}
                         style={{ width: "14rem" }}
                         renderInput={(params) => (
