@@ -5,7 +5,7 @@ import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import editIcon from "../../assets/icons/editIcon.png";
 import greenn_tick from "../../assets/icons/greenn_tick.png";
-
+import { t } from "i18next";
 export function getColor(status) {
   if (status === 'ACTIVE') {
     return "status text-success";
@@ -175,7 +175,7 @@ const Details = (props) => {
                     <span className="slider round" onClick={(e) => { changeBtnStatus(status) }}></span>
                  </label>
 
-           {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
+           {(status) ? (<div className={getColor(status)}>{t(status)}</div>) :  <div className="status text-warning">{t('DEACTIVATED')}</div>}
           </span>
           
           <span 

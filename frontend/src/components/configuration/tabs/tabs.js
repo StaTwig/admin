@@ -52,7 +52,7 @@ const Tabs = (props) => {
           onClick={() => setTabIndex(5)}
         >
           <span className={tabIndex == 5 ? "nav-link textColor" : "nav-link "}>
-            {t('payment')}
+            {t('Payment')}
           </span>
         </li>
         <li

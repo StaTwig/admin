@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.scss';
-
+import { t } from "i18next";
 const EditRow = (props) => {
   const {
     prod,
@@ -35,7 +35,7 @@ const EditRow = (props) => {
         <div className="pr-3">
           <button className="bg-white btn-outline-primary d-width">
             <i className="fa fa-pencil"></i>
-            <span className="ml-1">Edit</span>
+            <span className="ml-1">{t('edit')}</span>
           </button>
         </div>
       </div>
