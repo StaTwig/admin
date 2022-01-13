@@ -317,7 +317,7 @@ const Configurationpart = (props) => {
                       setShowOrg(true);
                     }}
                   >
-                    <a href="#">Organisation</a>
+                    <a href="#">{t('Organisation')}</a>
                     <img
                       src={Arrow}
                       alt="icon"
@@ -332,7 +332,7 @@ const Configurationpart = (props) => {
                       setShowOrg(false);
                     }}
                   >
-                    <a href="#"> Warehouse</a>
+                    <a href="#">{t('Warehouse')}</a>
                     <img
                       src={Arrow}
                       alt="icon"
@@ -348,7 +348,7 @@ const Configurationpart = (props) => {
               <div className="col">
                 <div className="row">
                   <p className="mb-4">
-                    <b>Organisation Type</b>
+                    <b>{t('Organisation Type')}</b>
                   </p>
                   <div style={{ position: "relative", left: "70%" }}>
                     <button
@@ -361,7 +361,7 @@ const Configurationpart = (props) => {
                       }}
                     >
                       <img src={Add} width="13" height="13" className="mr-2" />
-                      <span>Add New Type</span>
+                      <span>{t('Add New Type')}</span>
                     </button>
                   </div>
                 </div>
@@ -385,7 +385,7 @@ const Configurationpart = (props) => {
                 <div className="col">
                   <div className="row">
                     <p className="mb-4">
-                      <b>Warehouse Type</b>
+                      <b>{t('Warehouse Type')}</b>
                     </p>
 
                     <div style={{ position: "relative", left: "70%" }}>
@@ -399,7 +399,7 @@ const Configurationpart = (props) => {
                         }}
                       >
                         <img src={Add} width="13" height="13" className="mr-2" />
-                        <span>Add New Type</span>
+                        <span>{t('Add New Type')}</span>
                       </button>
                     </div>
                   </div>
@@ -470,18 +470,18 @@ const Configurationpart = (props) => {
                 <thead className="borderless">
                   <tr className="borderless text-center">
                     <th scope="col"></th>
-                    <th scope="col">Sent</th>
-                    <th scope="col">Received</th>
-                    <th scope="col">InTransit</th>
-                    <th scope="col">Expiring</th>
-                    <th scope="col">Expired</th>
-                    <th scope="col">Delay</th>
-                    <th scope="col">Added</th>
+                    <th scope="col">{t('Sent')}</th>
+                    <th scope="col">{t('Received')}</th>
+                    <th scope="col">{t('InTransit')}</th>
+                    <th scope="col">{t('Expiring')}</th>
+                    <th scope="col">{t('Expired')}</th>
+                    <th scope="col">{t('Delay')}</th>
+                    <th scope="col">{t('Added')}</th>
                   </tr>
                 </thead>
                 <tbody className="borderless">
                   <tr>
-                    <th scope="row">Total Products</th>
+                    <th scope="row">{t('Total Products')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -505,7 +505,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expiring this week</th>
+                    <th scope="row">{t('Total Products Expiring this week')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -529,7 +529,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expiring this month</th>
+                    <th scope="row">{t('Total Products Expiring this month')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -553,7 +553,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expiring this year</th>
+                    <th scope="row">{t('Total Products Expiring this year')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -577,7 +577,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expired this week</th>
+                    <th scope="row">{t('Total Products Expired this week')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -601,7 +601,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expired this month</th>
+                    <th scope="row">{t('Total Products Expired this month')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -625,7 +625,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Products Expired this year</th>
+                    <th scope="row">{t('Total Products Expired this year')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -649,7 +649,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Shipments</th>
+                    <th scope="row">{t('Total Shipments')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>
@@ -673,7 +673,7 @@ const Configurationpart = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">Total Product in inventory</th>
+                    <th scope="row">{t('Total Product in inventory')}</th>
                     <td>
                       <input type="checkbox" />
                     </td>

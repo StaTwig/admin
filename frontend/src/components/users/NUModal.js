@@ -126,8 +126,7 @@ const NUModal = (props) => {
               className="pl-4 pt-2 txtColor"
               style={{ marginTop: -25, fontSize: 14 }}
             >
-              Enter the email address of the users you'd like to add or invite
-              and choose the role they should have.
+              {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
             </p>
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow" 
               style={{ justifyContent: 'space-between'}}>
@@ -173,7 +172,7 @@ const NUModal = (props) => {
                     <Role
                       key={index}
                       title={permission.role}
-                      description={permission.role + " Description"}
+                      description={permission.role + " "+ t("Description")}
                       selectedValue={selectedValue}
                       setSelectedValue={setRole}
                       i={index}

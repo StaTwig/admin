@@ -195,7 +195,7 @@ const UserDetails = (props) => {
               onClick={() => {setDisplay(!display); setViewButton(viewButton ? false : true)}}
               style={{position:"relative",left:"1rem"}}
             >
-              {display ? "Back" : "View"}
+              {display ? t("Back") : t("View")}
             </button>
 
             <Popover className="bg-light rounded shadow" {...popoverProps}>

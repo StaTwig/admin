@@ -54,7 +54,7 @@ const Users = (props) => {
       {showModal && (
         <Modal
           close={closeModal}
-          title="ADD NEW USER"
+          title={t('ADD NEW USER')}
           size="modal-lg" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >

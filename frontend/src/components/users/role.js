@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import Permission from "./permission";
 import { Link } from "react-router-dom";
+import { t } from "i18next";
 
 const Role = (props) => {
   const {
@@ -47,7 +48,7 @@ const Role = (props) => {
           </label>
         </div>
         <div className="w-50">
-          <span className="txtColor">{description}</span>
+          <span className="txtColor">{t('Description')}</span>
         </div>
         <div className="d-flex flex-row-reverse">
           <Link
@@ -55,7 +56,7 @@ const Role = (props) => {
             >
               <button className="bg-white btn-outline-primary d-width">
                 <i className="fa fa-pencil"></i>
-                <span className="ml-2">Edit</span>
+                <span className="ml-2">{t('edit')}</span>
               </button>
             </Link>
             </div>

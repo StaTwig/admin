@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./style.scss";
 import { updateOrgTypesUrl } from "../../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../../actions/organisationActions";
+import { t } from "i18next";
 
 const EditRow = (props) => {
   const [editButtonStatus, setEditButtonStatus] = useState(false);
@@ -64,7 +65,7 @@ const EditRow = (props) => {
           <div className="">
             <input
               className="form-control"
-              placeholder="Type"
+              placeholder={t('Type')}
               defaultValue={prod.name}
               disabled={disabled}
               onChange={(e) => handleNameChange(e.target.value, index)}
@@ -100,7 +101,7 @@ const EditRow = (props) => {
                 onClick={onEditClick}
               >
                 <i className="fa fa-pencil"></i>
-                <span className="ml-1">EDIT</span>
+                <span className="ml-1">{t('edit')}</span>
               </button>
             )}
           </div>
