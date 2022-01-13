@@ -65,8 +65,8 @@ async function getCreator(txnId) {
 exports.orderCreated = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const senderOrgName = await getOrgName(event?.secondaryOrgId);
-  const templateOthers = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
-  const templateReceiver = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateReceiver = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const templateOthers = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
   const eligibleUsers = await getEligibleUsers(
     event.actorOrgId,
     "ORGANISATION"
@@ -105,20 +105,20 @@ exports.orderCreated = async (event) => {
 exports.orderAccept = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const templateSender = `Your "Order - ${txnId}" has been Accepted by ${event.actorOrgName} - ${event.actorOrgId}`;
-  const creatorUser = await getCreator(txnId);
-  if (creatorUser) {
-    const dataSender = {
-      user: creatorUser.id,
-      email: creatorUser.emailId,
-      mobile: creatorUser.phoneNumber,
-      subject: `Order Alert`,
-      content: templateSender,
-      type: "ALERT",
-      eventType: "ORDER",
-      transactionId: txnId,
-    };
-    await sendNotification(dataSender);
-  }
+  // const creatorUser = await getCreator(txnId);
+  // if (creatorUser) {
+  //   const dataSender = {
+  //     user: creatorUser.id,
+  //     email: creatorUser.emailId,
+  //     mobile: creatorUser.phoneNumber,
+  //     subject: `Order Alert`,
+  //     content: templateSender,
+  //     type: "ALERT",
+  //     eventType: "ORDER",
+  //     transactionId: txnId,
+  //   };
+  //   await sendNotification(dataSender);
+  // }
   const eligibleUsers = await getEligibleUsers(
     event.secondaryOrgId,
     "ORGANISATION"
@@ -141,20 +141,20 @@ exports.orderAccept = async (event) => {
 exports.orderReject = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
   const templateSender = `Your "Order - ${txnId}" has been Rejected by ${event?.actorOrgName} - ${event?.actorOrgId}`;
-  const creatorUser = await getCreator(txnId);
-  if (creatorUser) {
-    const dataSender = {
-      user: creatorUser.id,
-      email: creatorUser.emailId,
-      mobile: creatorUser.phoneNumber,
-      subject: `Order Alert`,
-      content: templateSender,
-      type: "ALERT",
-      eventType: "ORDER",
-      transactionId: txnId,
-    };
-    await sendNotification(dataSender);
-  }
+  // const creatorUser = await getCreator(txnId);
+  // if (creatorUser) {
+  //   const dataSender = {
+  //     user: creatorUser.id,
+  //     email: creatorUser.emailId,
+  //     mobile: creatorUser.phoneNumber,
+  //     subject: `Order Alert`,
+  //     content: templateSender,
+  //     type: "ALERT",
+  //     eventType: "ORDER",
+  //     transactionId: txnId,
+  //   };
+  //   await sendNotification(dataSender);
+  // }
   const eligibleUsers = await getEligibleUsers(
     event.secondaryOrgId,
     "ORGANISATION"
