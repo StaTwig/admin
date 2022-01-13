@@ -857,7 +857,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t("fetch") === "fetch" ? "fetch" : "obtener"}
+                        {t("fetch") === "Fetch" ? "Fetch" : "obtener"}
                       </span>
                     </span>
                   ) : (
@@ -873,7 +873,7 @@ const NewShipment = (props) => {
                           left: "-11px",
                         }}
                       >
-                        {t("fetch") === "fetch" ? "fetch" : "obtener"}
+                        {t("fetch") === "Fetch" ? "Fetch" : "Obtener"}
                       </span>
                     </span>
                   )}
