@@ -369,8 +369,12 @@ const Orders = (props) => {
 
   const sendData = () => {
     let rtnArr = visible === "one" ? outboundRecords : inboundRecords;
-    if (alerts)
-      rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
+    const status = visible === "one" ? "REJECTED" :  "CREATED";
+    if (alerts) {
+      rtnArr = rtnArr.filter((row) => row.poStatus === status);
+      setStatusFilterOnSelect(status);
+    }
+    
     return rtnArr ? rtnArr : [];
   };
 
@@ -389,12 +393,12 @@ const Orders = (props) => {
     if (visible === "one") {
       url = `${
         config().getExportFileForOutboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}`;
     }
     if (visible === "two") {
       url = `${
         config().getExportFileForInboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}`;
     }
 
     var today = new Date();

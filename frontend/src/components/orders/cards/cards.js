@@ -8,6 +8,7 @@ import "../style.scss";
 import "./cards.scss";
 
 function Cards(props) {
+  const { t } = props;
   const [orderAnalytics, setOrderAnalytics] = useState({
     outboundPO: 0,
     inboundPO: 0,
@@ -29,7 +30,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text font-weight-bold">Total Orders Sent</p>
+          <p className="recived-text font-weight-bold"> {t("total_orders_sent")}</p>
           <h1 className="count recived-text">{orderAnalytics?.outboundPO}</h1>
         </div>
       </div>
@@ -40,7 +41,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="sent-text font-weight-bold">Total Orders Received</p>
+          <p className="recived-text font-weight-bold">{t("total_orders_received")}</p>
           <h1 className="count sent-text">{orderAnalytics?.inboundPO}</h1>
         </div>
       </div>
@@ -51,7 +52,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="inbound-text font-weight-bold">Total Orders Pending</p>
+          <p className="inbound-text font-weight-bold">{t("total_orders_pending")}</p>
           <h1 className="count inbound-text">
             {orderAnalytics?.pendingOrders}
           </h1>
@@ -65,7 +66,7 @@ function Cards(props) {
 
         <div className="tile-content">
           <p className="outbound-text font-weight-bold">
-            Total Orders Rejected
+            {t("total_orders_rejected")}
           </p>
           <h1 className="count outbound-text">
             {orderAnalytics?.rejectedOrders}
