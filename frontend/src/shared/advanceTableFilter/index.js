@@ -1249,6 +1249,7 @@ const AdvanceTableFilter = (props) => {
                     options={props.shipmentIdList}
                     getOptionLabel={(options) => options.id}
                     onChange={(event, newValue) => {
+                      console.log(newValue)
                       setShipmentIdFilterOnSelect(newValue.id);
                     }}
                     style={{ width: "14rem" }}
