@@ -40,7 +40,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text font-weight-bold">Total Orders Received</p>
+          <p className="sent-text font-weight-bold">Total Orders Received</p>
           <h1 className="count sent-text">{orderAnalytics?.inboundPO}</h1>
         </div>
       </div>
