@@ -234,7 +234,7 @@ exports.register = [
               { new: true }
             );
             organisationId =
-              orgCounter.counters[0].format + orgCounter.counters[0].value;
+              orgCounter.counters[2].format + orgCounter.counters[2].value;
             const warehouseCounter = await CounterModel.findOneAndUpdate(
               { "counters.name": "warehouseId" },
               {
@@ -245,8 +245,8 @@ exports.register = [
               { new: true }
             );
             warehouseId =
-              warehouseCounter.counters[0].format +
-              warehouseCounter.counters[0].value;
+              warehouseCounter.counters[3].format +
+              warehouseCounter.counters[3].value;
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
@@ -279,7 +279,7 @@ exports.register = [
               }
             );
             const inventoryId =
-              invCounter.counters[0].format + invCounter.counters[0].value;
+              invCounter.counters[7].format + invCounter.counters[7].value;
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
             const loc = await getLatLongByCity(
