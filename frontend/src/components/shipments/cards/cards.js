@@ -38,7 +38,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text font-weight-bold">Outbound Shipment</p>
+          <p className="sent-text font-weight-bold">Outbound Shipment</p>
           <h1 className="count sent-text">
             {shipmentAnalytics.outboundShipments}
           </h1>

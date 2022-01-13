@@ -175,7 +175,7 @@ const Table = (props) => {
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
                                     ? t("to_location")
-                                    : t("from_location")}
+                                    : t("from_locations")}
                                 </div>
                               </TableCell>
                               <div className=''>
