@@ -47,14 +47,16 @@ exports.shipmentCreate = async (event) => {
   const txnId = event?.payloadData?.data?.id || event?.transactionId;
   const createdOrgName = await getOrgName(event?.actorOrgId);
   const templateSender = `"Shipment - ${txnId}" to ${event?.secondaryOrgName}has been Created`;
+  const templateSenderSpanish = `Se ha creado "Envío - ${txnId}" a ${event?.secondaryOrgName}`;
   const templateReceiver = `"Shipment - ${txnId}" from Organization - ${createdOrgName} has been Created`;
+  const templateReceiverSpanish = `"Envío - ${txnId}" de la organización - ${createdOrgName} ha sido creado`;
   const getSenderDetails = await getUserDetails(event?.actorId);
   const dataSender = {
     user: event?.actorId,
     email: getSenderDetails.emailId,
     mobile: getSenderDetails.phoneNumber,
     subject: `Shipment Alert`,
-    content: templateSender,
+    content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
     type: "ALERT",
     eventType: "SHIPMENT",
     transactionId: txnId,
@@ -85,7 +87,7 @@ exports.shipmentCreate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: templateReceiver,
+      content: user.preferredLanguage == "EN" ?  templateReceiver : templateReceiverSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -103,7 +105,9 @@ exports.shipmentUpdate = async (event) => {
   );
   const templateActor = `"Shipment - ${txnId}" has been Updated`;
   const templateSupplier = `"Shipment - ${txnId}" to Organization - ${receiverOrgName} has been Updated`;
+  const templateSupplierSpanish = `"Envío - ${txnId}" a la Organización - ${receiverOrgName} ha sido actualizado`;
   const templateReceiver = `"Shipment - ${txnId}" from Organization - ${actorOrgName} has been Updated`;
+  const templateReceiverSpanish = `"Envío - ${txnId}" de la Organización - ${actorOrgName} ha sido actualizado`;
   const getSenderDetails = await getUserDetails(event?.actorId);
   let dataSender = {
     user: event?.actorId,
@@ -128,7 +132,7 @@ exports.shipmentUpdate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: templateSupplier,
+      content: user.preferredLanguage == "EN" ?  templateSupplier : templateSupplierSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -144,7 +148,7 @@ exports.shipmentUpdate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: templateReceiver,
+      content: user.preferredLanguage == "EN" ?  templateReceiver : templateReceiverSpanish ,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -156,6 +160,7 @@ exports.shipmentUpdate = async (event) => {
 exports.shipmentReceive = async (event) => {
   let txnId = event?.payloadData?.data?.id || event?.transactionId;
   let templateSender = `"Shipment - ${txnId}" has been Delivered`;
+  let templateSenderSpanish = `"Envío - ${txnId}" ha sido entregado`;
   let getReceiverDetails = await getEligibleUsers(
     event?.payloadData?.data?.supplier?.locationId
   );
@@ -165,7 +170,7 @@ exports.shipmentReceive = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: templateSender,
+      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,

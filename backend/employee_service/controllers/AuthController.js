@@ -744,6 +744,7 @@ exports.updateProfile = [
         phoneNumber = "",
         warehouseId,
         organisation,
+        preferredLanguage
       } = req.body;
 
       const organisationId = organisation.split("/")[1];
@@ -752,6 +753,7 @@ exports.updateProfile = [
       employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
+      employee.preferredLanguage = preferredLanguage;
       await employee.save();
 
       const returnData = { isRefresh: false };
