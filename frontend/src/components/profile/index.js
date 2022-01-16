@@ -11,7 +11,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { getImage } from "../../actions/notificationActions";
 import SuccessPopUp from "./successPopup";
-
+import Select from "react-select";
 import { getUserInfoUpdated, updateProfile } from "../../actions/userActions";
 import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
@@ -53,6 +53,7 @@ class Profile extends React.Component {
       title: "",
       warehouseLocByOrg: [],
       image: "",
+      preferredLanguage: "EN",
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -83,6 +84,7 @@ class Profile extends React.Component {
         warehouseAddress_state,
         signup_date,
         title,
+        preferredLanguage,
       } = response.data.data;
       this.setState({
         profile_picture,
@@ -105,6 +107,7 @@ class Profile extends React.Component {
         warehouseAddress_state,
         signup_date,
         title,
+        preferredLanguage,
       });
     }
 
@@ -225,6 +228,7 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      preferredLanguage,
     } = this.state;
     phoneNumber = phoneNumber ? phoneNumber.replaceAll("+", "") : "";
     const data = {
@@ -241,6 +245,7 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      preferredLanguage,
     };
 
     const result = await updateProfile(data);
@@ -378,7 +383,18 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-
+                    <div className='form-group'>
+                      <label htmlFor='shipmentId'>{"language"}</label>
+                      <Select
+                        className='form-group'
+                        placeholder={"Select language"}
+                        style={{ display: 'contents', fontSize: "14px" }}
+                        options={[{value: 'EN', label: 'English'}, {value: 'ES', label: 'Español'}].map((v) => v)}
+                        onChange={ (language) =>
+                          this.setState({ preferredLanguage: language.value })
+                        }
+                      />
+                    </div>
                     <div className='col'>
                       <div className='row'>
                         <div className='row location'>
