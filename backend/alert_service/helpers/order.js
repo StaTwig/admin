@@ -86,8 +86,8 @@ exports.orderCreated = async (event) => {
     };
     await sendNotification(dataSender);
   }
-  if (event.caId && event.caId !== "null") {
-    const caUsers = await getEligibleUsers(event.caId, "ORGANISATION");
+  if (event.secondaryOrgId && event.secondaryOrgId !== "null") {
+    const caUsers = await getEligibleUsers(event.secondaryOrgId, "ORGANISATION");
     for (const user of caUsers) {
       const dataOthers = {
         user: user.id,

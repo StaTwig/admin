@@ -26,7 +26,7 @@ const ProductList = (props) => {
                 : "col panel commonpanle mb-5"
             }
           >
-            <div className='container ml-2'>
+           <div className='container ml-2'>
               <div className='row'>
                 <div className='col mt-2 productheading'>
                   {product.productName}
@@ -59,18 +59,6 @@ const ProductList = (props) => {
                   {product.productName}
                 </div>
               </div>
-              <div className='row'>
-                <div className='col-sm mb-1 text-secondary styler'>
-                  {t("manufacturer")}
-                </div>
-                <div className='row'>
-                  <div className='col-sm mb-1 text-secondary styler'>
-                    {t("product_name")}
-                  </div>
-                  <div className='col-sm mb-1 text-secondary styler'>
-                    {product.productName}
-                  </div>
-                </div>
                 <div className='row'>
                   <div className='col-sm mb-1 text-secondary styler'>
                     {t("manufacturer")}
@@ -94,6 +82,10 @@ const ProductList = (props) => {
                     <span>{")"}</span>
                   </div>
                 </div>
+                <div className='row'>
+              <div className='col-sm mb-0 text-secondary styler'>
+                {t("quantity") + " " + t("received")}
+              </div>
                 <div className='col-sm text-secondary styler'>
                   {!product["productQuantity"] ? (
                     product["productQuantityDelivered"]
@@ -118,6 +110,7 @@ const ProductList = (props) => {
                     />
                   )}
                 </div>
+                </div>
                 <div className='row'>
                   <div className='col-sm mb-1 text-secondary styler'>
                     {t("batch_no")}
@@ -135,7 +128,6 @@ const ProductList = (props) => {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       ))}

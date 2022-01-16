@@ -992,7 +992,7 @@ exports.addInventoriesFromExcel = [
               data[index].productId = product.id;
               data[index].type = product.type;
             } else {
-              console.log(product);
+              // console.log(product);
             }
           }
 
@@ -1049,7 +1049,7 @@ exports.addInventoriesFromExcel = [
           event_data.stackholders.ca.address =
             CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data.products = [...data];
-          logEvent(event_data);
+          // logEvent(event_data);
           return apiResponse.successResponseWithData(res, "Success", data);
         } else {
           return apiResponse.ErrorResponse(

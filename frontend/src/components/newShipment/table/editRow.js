@@ -327,7 +327,7 @@ const EditRow = (props) => {
             <div
               style={{ position: "relative", fontSize: "12px", left: "-6px" }}
             >
-              {t("fetch") === "fetch" ? "fetch" : "obtener"}
+              {t("fetch") === "Fetch" ? "Fetch" : "obtener"}
             </div>
           </button>
           <div className=''>
@@ -336,7 +336,7 @@ const EditRow = (props) => {
                 <Modal
                   close={closeModal}
                   title={
-                    (t("fetch") === "fetch" ? "fetch" : "obtener") +
+                    (t("fetch") === "Fetch" ? "Fetch" : "obtener") +
                     " " +
                     t("serial_numbers")
                   }

@@ -38,27 +38,23 @@
   margin-top: -10px;
 }
 .truck-text {
-  color: #2ba3ae;
+  color: #2ba3ae !important;
 }
 
 .sent-text {
-  color: #fa7923;
-}
-
-.recived-text {
-  color: #434e58;
+  color: #fa7923 !important;
 }
 
 .outbound-text {
-  color: #2ba3ae;
+  color: #2ba3ae !important;
 }
 
 .inbound-text {
-  color: #0159ea;
+  color: #0159ea !important;
 }
 
 .transit-text {
-  color: $deepBlue;
+  color: $deepBlue !important;
 }
 .tile-content p {
   font-size: 16px;
