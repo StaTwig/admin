@@ -42,7 +42,7 @@ const VerifyInventory = (props) => {
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber,
-        unitOfMeasure:inventory.unitofMeasure.name
+        unitOfMeasure:inventory?.unitofMeasure?.name
       };
     });
 
@@ -133,7 +133,7 @@ const VerifyInventory = (props) => {
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
-                  {reviewInventory.unitofMeasure.name}
+                  {reviewInventory?.unitofMeasure?.name}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>

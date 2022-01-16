@@ -64,9 +64,9 @@ async function getCreator(txnId) {
 
 exports.orderCreated = async (event) => {
   const txnId = event?.payloadData?.data?.order_id || event?.transactionId;
-  const senderOrgName = await getOrgName(event?.secondaryOrgId);
-  const templateReceiver = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.secondaryOrgId}`;
-  const templateOthers = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.secondaryOrgId}`;
+  const senderOrgName = await getOrgName(event?.actorOrgId);
+  const templateReceiver = `Received a new "Order - ${txnId}" from ${senderOrgName} - ${event?.actorOrgId}`;
+  const templateOthers = `"Order - ${txnId}" has been created by ${senderOrgName} - ${event?.actorOrgId}`;
   const eligibleUsers = await getEligibleUsers(
     event.actorOrgId,
     "ORGANISATION"
@@ -84,8 +84,8 @@ exports.orderCreated = async (event) => {
     };
     await sendNotification(dataSender);
   }
-  if (event.caId && event.caId !== "null") {
-    const caUsers = await getEligibleUsers(event.caId, "ORGANISATION");
+  if (event.secondaryOrgId && event.secondaryOrgId !== "null") {
+    const caUsers = await getEligibleUsers(event.secondaryOrgId, "ORGANISATION");
     for (const user of caUsers) {
       const dataOthers = {
         user: user.id,
@@ -119,23 +119,23 @@ exports.orderAccept = async (event) => {
     };
     await sendNotification(dataSender);
   }
-  const eligibleUsers = await getEligibleUsers(
-    event.secondaryOrgId,
-    "ORGANISATION"
-  );
-  for (const user of eligibleUsers) {
-    const dataSender = {
-      user: user.id,
-      email: user.emailId,
-      mobile: user.phoneNumber,
-      subject: `Order Alert`,
-      content: templateSender,
-      type: "ALERT",
-      eventType: "ORDER",
-      transactionId: txnId,
-    };
-    await sendNotification(dataSender);
-  }
+  // const eligibleUsers = await getEligibleUsers(
+  //   event.secondaryOrgId,
+  //   "ORGANISATION"
+  // );
+  // for (const user of eligibleUsers) {
+  //   const dataSender = {
+  //     user: user.id,
+  //     email: user.emailId,
+  //     mobile: user.phoneNumber,
+  //     subject: `Order Alert`,
+  //     content: templateSender,
+  //     type: "ALERT",
+  //     eventType: "ORDER",
+  //     transactionId: txnId,
+  //   };
+  //   await sendNotification(dataSender);
+  // }
 };
 
 exports.orderReject = async (event) => {
@@ -155,23 +155,23 @@ exports.orderReject = async (event) => {
     };
     await sendNotification(dataSender);
   }
-  const eligibleUsers = await getEligibleUsers(
-    event.secondaryOrgId,
-    "ORGANISATION"
-  );
-  await asyncForEach(eligibleUsers, async (user) => {
-    const dataSender = {
-      user: user.id,
-      email: user.emailId,
-      mobile: user.phoneNumber,
-      subject: `Order Alert`,
-      content: templateSender,
-      type: "ALERT",
-      eventType: "ORDER",
-      transactionId: txnId,
-    };
-    await sendNotification(dataSender);
-  });
+  // const eligibleUsers = await getEligibleUsers(
+  //   event.secondaryOrgId,
+  //   "ORGANISATION"
+  // );
+  // await asyncForEach(eligibleUsers, async (user) => {
+  //   const dataSender = {
+  //     user: user.id,
+  //     email: user.emailId,
+  //     mobile: user.phoneNumber,
+  //     subject: `Order Alert`,
+  //     content: templateSender,
+  //     type: "ALERT",
+  //     eventType: "ORDER",
+  //     transactionId: txnId,
+  //   };
+  //   await sendNotification(dataSender);
+  // });
 };
 
 exports.orderPending = async (event) => {
