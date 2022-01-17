@@ -24,7 +24,6 @@ const { t, i18n } = useTranslation();
   useEffect(() => {
     async function fetchData() {
       const result = await dispatch(getViewShipmentGmr(props.match.params.id));
-      console.log(result, "result");
       if (result) {
         setTrackData(result);
         setShippmentChainOfCustodyData([result]);
