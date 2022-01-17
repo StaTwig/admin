@@ -118,7 +118,7 @@ const VerifyInventory = (props) => {
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
-              // console.log('Individual Details', reviewInventory);
+              console.log('Individual Details', reviewInventory);
               return (
               <div className='row p-1 mt-4'>
                 <span className='col-3'>{reviewInventory.productName}</span>
@@ -133,7 +133,7 @@ const VerifyInventory = (props) => {
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
-                  {reviewInventory?.unitofMeasure?.name}
+                  {reviewInventory['unitOfMeasure.name']}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>
