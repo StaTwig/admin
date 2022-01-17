@@ -209,7 +209,7 @@ const Track = (props) => {
                       cIndex = index < cIndex ? index : cIndex;
 
                       return row?.shipmentUpdates
-                        // ?.filter((s) => s.status === "RECEIVED")
+                        ?.filter((s) => s.status === "RECEIVED")
                         .map((r, i) => (
                           <SoChainOfCustody
                             len={

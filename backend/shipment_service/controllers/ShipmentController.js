@@ -2960,9 +2960,6 @@ exports.trackJourney = [
                 {
                   airWayBillNo: trackingId,
                 },
-                {
-                  taggedShipments: trackingId,
-                },
               ],
             },
             {
