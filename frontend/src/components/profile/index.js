@@ -389,7 +389,7 @@ class Profile extends React.Component {
                         <div className='addloc1'>
                           {editMode && (
                             <button
-                              className='buttonA btn btn-orange font-bold mt-1'
+                              className='buttonA btn btn-S btn-orange font-bold mt-1'
                               onClick={() => {
                                 this.setState({ openModal: true });
                               }}

@@ -60,7 +60,7 @@ const PopUpLocation = (props) => {
 
       <div className="wrapper1">
         <Link to={"/Addlocation"}>
-          <button className="btn btn-orange fontSize18" type="button">
+          <button className="btn btn-orange fontSize18 center-display" type="button">
             <img
               src={Location1}
               width="20"
@@ -68,7 +68,7 @@ const PopUpLocation = (props) => {
               className="mr-2 mb-1"
               alt="Location"
             />
-            <span className="buttonS">
+            <span className="buttonS btn-space">
               <b>{t('add_new_location')}</b>
             </span>
           </button>
