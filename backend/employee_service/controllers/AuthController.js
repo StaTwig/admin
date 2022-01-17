@@ -534,10 +534,10 @@ exports.verifyOtp = [
             const userData = {
               address,
             };
-            await axios.post(
+           /* await axios.post(
               `${blockchain_service_url}/grantPermission`,
               userData
-            );
+            );*/
             await EmployeeModel.updateOne(query, {
               otp: null,
               walletAddress: address,
