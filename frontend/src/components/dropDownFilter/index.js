@@ -8,55 +8,56 @@ const DropDownFilter = (props) => {
 
     let ref = useOnclickOutside(() => {
         switch (props.type) {
-            case 'orgType' :
+            case 'orgType':
                 setShowDropDownForType(false);
                 break;
-            case 'country' :
+            case 'country':
                 setShowDropDownForCountry(false);
                 break;
-            case 'region' :
+            case 'region':
                 setShowDropDownForRegion(false);
                 break;
-            case 'status' :
+            case 'status':
                 setShowDropDownForStatus(false);
                 break;
-            case 'createdOn' :
+            case 'createdOn':
                 setShowDropDownForCreatedOn(false);
                 break;
-            case 'role' :
+            case 'role':
                 setShowDropDownForRole(false);
                 break;
-            case 'accountStatus' :
+            case 'accountStatus':
                 setShowDropDownForAccountStatus(false);
-                
+
             default:
                 console.log("default values")
         }
 
     })
-    
+
 
     const { setShowDropDownForType,
-            setShowDropDownForCountry,
-            setShowDropDownForRegion,
-            setShowDropDownForStatus,
-            setShowDropDownForCreatedOn,
-            setShowDropDownForAccountStatus,
-            setShowDropDownForRole
-             } = props
-     return (
-        <div ref={ref}  className={`card rounded bg-white border-white role-card-container`} style={{left:"unset",height:"auto",minHeight:"5rem",maxHeight:"15rem"}}>
+        setShowDropDownForCountry,
+        setShowDropDownForRegion,
+        setShowDropDownForStatus,
+        setShowDropDownForCreatedOn,
+        setShowDropDownForAccountStatus,
+        setShowDropDownForRole
+    } = props
+    return (
+        <div ref={ref} className={`card rounded bg-white border-white role-card-container`} style={{ left: "unset", height: "auto", minHeight: "5rem", maxHeight: "15rem" }}>
             <SearchBar
                 onChangeOfSearchInput={props.onChangeOfSearchInput}
                 type={props.type}
             />
-            <ul style={{overflowX:"hidden"}}>
+            <ul style={{ overflowX: "hidden" }}>
                 {props?.data?.map((item, index) => {
                     return (
-                        <li 
+                        <li
                             className={item.checked ? "selected" : 'nonSelected'}
-                            key={item.key} 
+                            key={item.key}
                             onClick={() => props.onClickOfDropDownItem(index, props.type, item.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && props.onClickOfDropDownItem(index, props.type, item.value)}
                         >
                             {item.value}
                         </li>
