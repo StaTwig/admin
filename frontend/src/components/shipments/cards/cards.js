@@ -25,8 +25,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text font-weight-bold">Inbound Shipment</p>
-          <h1 className="count recived-text">
+          <p className="recived-text-cards font-weight-bold">Inbound Shipment</p>
+          <h1 className="count recived-text-cards">
             {shipmentAnalytics.inboundShipments}
           </h1>
         </div>

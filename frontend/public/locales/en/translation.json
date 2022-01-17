@@ -286,5 +286,6 @@
     "mobile_no":"Mobile No",
     "date_time": "Date & Time",
     "version": "Version",
-    "made_with_care": "Made with Care"
+    "made_with_care": "Made with Care",
+    "from_locations":"From Location"
 }
