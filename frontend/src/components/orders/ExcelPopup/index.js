@@ -61,15 +61,19 @@ const ExcelPopUp = (props) => {
           name='photo'
           width='50'
           height='50'
-          className='mt-2'
+          className='mt-3'
           alt=''
         />
         <div>
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='mb-3 excelSpace mt-4'>
-          <label htmlFor='fileE' className='mb-3 excelSpace'>
+        <div className='row'
+                  >
+          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center'  style={{
+                    display:"block",
+                    margin:"0 auto"  
+                  }}>
             {t("select_a_file")}
           </label>
 
