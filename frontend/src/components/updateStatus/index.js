@@ -371,7 +371,7 @@ const UpdateStatus = (props) => {
                         )} */}
                       </div>
                     </div>
-                    {props.user.emailId === 'gmr@statledger.io' &&
+                    {props.user.emailId === 'gmr@statledger.io' ?
                       <div>
                         <h6 className='poheads potext m-4'>
                           Shipment Cargo Status
@@ -477,6 +477,119 @@ const UpdateStatus = (props) => {
                           </div>
                         </div>
                       </div>
+                        : 
+                         <>
+                        <h6 className="poheads potext m-4">{t('comment')}</h6>
+                        <div className="panel commonpanle mb-5">
+                          {/* <div className='form-group mb-0'>
+                        <input
+                          type='text'
+                          className='form-control mb-2'
+                          name='comments'
+                          //style={{ flexBasis: "100%" }}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder='Enter comments here...'
+                          value={values.comments}
+                        />
+                      </div> */}
+
+                          <div className=" pt-2 pb-2 d-flex row">
+                            <span
+                              onClick={() => {
+                                setCount("r1");
+                                setCommentEnabled(false);
+                                setComment(t('damaged_in_transit'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r1" && "comment-active"
+                                }`}
+                            >
+                              {t('damaged_in_transit')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r2");
+                                setCommentEnabled(false);
+                                setComment(t('miscount'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r2" && "comment-active"
+                                }`}
+                            >
+                              {t('miscount')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r3");
+                                setCommentEnabled(false);
+                                setComment(t('shipment_stolen'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r3" && "comment-active"
+                                }`}
+                            >
+                              {t('shipment_stolen')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r4");
+                                setCommentEnabled(false);
+                                setComment(t('wrong_shipment'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r4" && "comment-active"
+                                }`}
+                            >
+                              {t('wrong_shipment')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r5");
+                                setCommentEnabled(true);
+                                setComment("");
+                              }}
+                              className={`txt-outline ${
+                                count === "r5" && "comment-active"
+                                }`}
+                            >
+                              {t('other')}
+                            </span>
+                          </div>
+                          <div
+                            className="form-group"
+                            style={{ width: "150%", height: "60px" }}
+                          >
+                            {commentEnabled && (
+                              <input
+                                disabled={!commentEnabled}
+                                style={{
+                                  fontSize: "14px",
+                                  resize: "none",
+                                  //borderBottom: "none",
+                                  marginTop: "40px",
+                                  //marginBottom:"10px"
+                                }}
+                                type="text"
+                                className="form-control"
+                                name="Comment"
+                                onChange={(e) => setComment(e.target.value)}
+                                size="40"
+                                cols="120"
+                                rows="7"
+                                placeholder={t('enter') + ' ' + t('comment')}
+                                value={comment}
+                              />
+                            )}
+                          </div>
+
+                          {errors.comments && touched.comments && (
+                            <span className="error-msg text-danger">
+                              {errors.comments}
+                            </span>
+                          )}
+                        </div>
+                        </>
                     }
                   </div>
                   <div className="col ">
@@ -580,10 +693,11 @@ const UpdateStatus = (props) => {
                         </div>
                       )}
                     </div>
-                    
-                      <h6 className="poheads potext m-4">{t('comment')}</h6>
-                    <div className="panel commonpanle mb-5">
-                      {/* <div className='form-group mb-0'>
+                      {props.user.emailId === 'gmr@statledger.io' &&
+                        <>
+                        <h6 className="poheads potext m-4">{t('comment')}</h6>
+                        <div className="panel commonpanle mb-5">
+                          {/* <div className='form-group mb-0'>
                         <input
                           type='text'
                           className='form-control mb-2'
@@ -596,102 +710,103 @@ const UpdateStatus = (props) => {
                         />
                       </div> */}
 
-                      <div className=" pt-2 pb-2 d-flex row">
-                        <span
-                          onClick={() => {
-                            setCount("r1");
-                            setCommentEnabled(false);
-                            setComment(t('damaged_in_transit'));
-                          }}
-                          className={`txt-outline ${
-                            count === "r1" && "comment-active"
-                          }`}
-                        >
-                          {t('damaged_in_transit')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r2");
-                            setCommentEnabled(false);
-                            setComment(t('miscount'));
-                          }}
-                          className={`txt-outline ${
-                            count === "r2" && "comment-active"
-                          }`}
-                        >
-                               {t('miscount')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r3");
-                            setCommentEnabled(false);
-                            setComment(t('shipment_stolen'));
-                          }}
-                          className={`txt-outline ${
-                            count === "r3" && "comment-active"
-                          }`}
-                        >
-                               {t('shipment_stolen')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r4");
-                            setCommentEnabled(false);
-                            setComment(t('wrong_shipment'));
-                          }}
-                          className={`txt-outline ${
-                            count === "r4" && "comment-active"
-                          }`}
-                        >
-                          {t('wrong_shipment')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r5");
-                            setCommentEnabled(true);
-                            setComment("");
-                          }}
-                          className={`txt-outline ${
-                            count === "r5" && "comment-active"
-                          }`}
-                        >
-                            {t('other')}
-                        </span>
-                      </div>
-                      <div
-                        className="form-group"
-                        style={{ width: "150%", height: "60px" }}
-                      >
-                        {commentEnabled && (
-                          <input
-                            disabled={!commentEnabled}
-                            style={{
-                              fontSize: "14px",
-                              resize: "none",
-                              //borderBottom: "none",
-                              marginTop: "40px",
-                              //marginBottom:"10px"
-                            }}
-                            type="text"
-                            className="form-control"
-                            name="Comment"
-                            onChange={(e) => setComment(e.target.value)}
-                            size="40"
-                            cols="120"
-                            rows="7"
-                            placeholder={t('enter')+' '+t('comment')}
-                            value={comment}
-                          />
-                        )}
-                      </div>
+                          <div className=" pt-2 pb-2 d-flex row">
+                            <span
+                              onClick={() => {
+                                setCount("r1");
+                                setCommentEnabled(false);
+                                setComment(t('damaged_in_transit'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r1" && "comment-active"
+                                }`}
+                            >
+                              {t('damaged_in_transit')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r2");
+                                setCommentEnabled(false);
+                                setComment(t('miscount'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r2" && "comment-active"
+                                }`}
+                            >
+                              {t('miscount')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r3");
+                                setCommentEnabled(false);
+                                setComment(t('shipment_stolen'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r3" && "comment-active"
+                                }`}
+                            >
+                              {t('shipment_stolen')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r4");
+                                setCommentEnabled(false);
+                                setComment(t('wrong_shipment'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r4" && "comment-active"
+                                }`}
+                            >
+                              {t('wrong_shipment')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r5");
+                                setCommentEnabled(true);
+                                setComment("");
+                              }}
+                              className={`txt-outline ${
+                                count === "r5" && "comment-active"
+                                }`}
+                            >
+                              {t('other')}
+                            </span>
+                          </div>
+                          <div
+                            className="form-group"
+                            style={{ width: "150%", height: "60px" }}
+                          >
+                            {commentEnabled && (
+                              <input
+                                disabled={!commentEnabled}
+                                style={{
+                                  fontSize: "14px",
+                                  resize: "none",
+                                  //borderBottom: "none",
+                                  marginTop: "40px",
+                                  //marginBottom:"10px"
+                                }}
+                                type="text"
+                                className="form-control"
+                                name="Comment"
+                                onChange={(e) => setComment(e.target.value)}
+                                size="40"
+                                cols="120"
+                                rows="7"
+                                placeholder={t('enter') + ' ' + t('comment')}
+                                value={comment}
+                              />
+                            )}
+                          </div>
 
-                      {errors.comments && touched.comments && (
-                        <span className="error-msg text-danger">
-                          {errors.comments}
-                        </span>
-                      )}
+                          {errors.comments && touched.comments && (
+                            <span className="error-msg text-danger">
+                              {errors.comments}
+                            </span>
+                          )}
                         </div>
-                      
+                        </>
+                      }
                   </div>
                 </div>
 
