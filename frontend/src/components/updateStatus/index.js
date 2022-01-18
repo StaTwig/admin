@@ -371,7 +371,7 @@ const UpdateStatus = (props) => {
                         )} */}
                       </div>
                     </div>
-
+                    {props.user.emailId === 'gmr@statledger.io' &&
                       <div>
                         <h6 className='poheads potext m-4'>
                           Shipment Cargo Status
@@ -477,6 +477,7 @@ const UpdateStatus = (props) => {
                           </div>
                         </div>
                       </div>
+                    }
                   </div>
                   <div className="col ">
                     <div className="row">
