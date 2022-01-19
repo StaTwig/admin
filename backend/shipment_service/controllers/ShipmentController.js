@@ -408,7 +408,7 @@ exports.createShipment = [
                 product.productQuantity || product.quantity;
               const alreadyShipped =
                 parseInt(product.productQuantityShipped || 0) +
-                  parseInt(product.productQuantityDelivered || 0) || "null";
+                  parseInt(product.productQuantityDelivered || 0) || null;
               let shipment_product_qty;
               if (alreadyShipped) {
                 // console.log(
