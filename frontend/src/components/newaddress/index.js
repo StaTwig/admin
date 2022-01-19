@@ -204,25 +204,25 @@ const NewAddress = (props) => {
                 validate={(values) => {
                   const errors = {};
                   if (!values.title) {
-                    errors.title = "Required";
+                    errors.title = t('Required');
                   }
                   if (!values.pincode) {
-                    errors.pincode = "Required";
+                    errors.pincode = t('Required');
                   }
                   if (!values.region) {
-                    errors.region = "Required";
+                    errors.region = t('Required');
                   }
                   if (!values.area) {
-                    errors.area = "Required";
+                    errors.area = t('Required');
                   }
                   if (!values.town) {
-                    errors.town = "Required";
+                    errors.town = t('Required');
                   }
                   if (!values.state) {
-                    errors.state = "Required";
+                    errors.state = t('Required');
                   }
                   if (!values.country) {
-                    errors.country = "Required";
+                    errors.country = t('Required');
                   }
                   return errors;
                 }}

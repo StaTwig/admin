@@ -91,17 +91,17 @@ const NUModal = (props) => {
           // console.log(values);
 
           if (!values.email) {
-            errors.email = "Required";
+            errors.email = t('Required');
           } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
           ) {
             errors.email = "Invalid email address";
           }
           if (!values.role) {
-            errors.role = "Required";
+            errors.role = t('Required');
           }
           if (!values.warehouse) {
-            errors.warehouse = "Required";
+            errors.warehouse = t('Required');
           }
           return errors;
         }}
