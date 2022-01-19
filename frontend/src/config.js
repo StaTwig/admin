@@ -190,7 +190,7 @@ export function config() {
       getShippingOrdersUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
-      createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
+      createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/createShipment`,
       fetchGMRShipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchGMRShipments`,
       newShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/newShipment`,
       viewShipmentGmrUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/viewShipmentGmr?shipmentId=`,

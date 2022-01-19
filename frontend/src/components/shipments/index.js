@@ -143,7 +143,7 @@ const ShipmentAnalytic = (props) => {
     displayColoumn3: t("from"),
     coloumn4: "To",
     displayColoumn4: t("to"),
-    coloumn6: "Status",
+    coloumn6: "ShipStatus",
     displayColoumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='Monday' />,

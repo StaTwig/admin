@@ -10,11 +10,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FilterDropDown from "../../components/filterDropDown";
+import DateFilter from "./DateFilter.jsx";
 
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #D3D4D5",
-    width: "10%",
     borderRadius: "15px",
   },
 })((props) => (
@@ -68,6 +68,19 @@ const AdvanceTableFilter = (props) => {
     React.useState(null);
   const [inventoryfiFilterOnSelect, setInventoryfiFilterOnSelect] =
     React.useState(null);
+
+
+    const [dateFilter, setdateFilter] = React.useState(null);
+
+  const [value, setValue] = React.useState([null, null]);
+
+  const dateclick = (event) => {
+    setdateFilter(event.currentTarget);
+  };
+
+  const dateclose = () => {
+    setdateFilter(null);
+  };
 
   const renderColumn6 = (columnData) => {
     if (columnData === "Status") {
@@ -394,7 +407,7 @@ const AdvanceTableFilter = (props) => {
           </StyledMenu>
         </div>
       );
-    } else if (columnData === "Status") {
+    } else if (columnData === "ShipStatus") {
       return (
         <th
           className="cursorP table-border-right"
@@ -507,7 +520,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Location"}
+                        label={"Search Location"}
                         variant="outlined"
                       />
                     )}
@@ -624,7 +637,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Org. Name"}
+                        label={"Search Org. Name"}
                         variant="outlined"
                       />
                     )}
@@ -688,7 +701,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Product Name"}
+                        label={"Search Product"}
                         variant="outlined"
                       />
                     )}
@@ -878,7 +891,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Supplier Name"}
+                        label={"Search Supplier Name"}
                         variant="outlined"
                       />
                     )}
@@ -937,7 +950,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Order"}
+                        label={"Search Order"}
                         variant="outlined"
                       />
                     )}
@@ -962,15 +975,27 @@ const AdvanceTableFilter = (props) => {
       );
     } else if (columnData === "Date") {
       return (
-        <div className="box col">
+        <div className="box col" onClick={dateclick}>
           <div className="filter-item">
             <div className="icon mr-2">{props.data.img3}</div>
             <div className="filterTitle">{props.data.displayColoumn3}</div>
             <div className="filterAction">
-              {/* <img src={updownarrow} width="9" height="9" /> */}
+              <img src={updownarrow} width="9" height="9" />
             </div>
           </div>
+          <StyledMenu
+        style={{ margin: "10px" }}
+        id="customized-menu"
+        anchorEl={dateFilter}
+        keepMounted
+        open={Boolean(dateFilter)}
+        onClose={dateclose}
+        onBlur={dateclose}
+      >
+          <DateFilter t={props.t} />
+      </StyledMenu>
         </div>
+
       );
     } else {
       return (
@@ -1047,7 +1072,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Enter Category"}
+                            label={"Search Category"}
                             variant="outlined"
                           />
                         )}
@@ -1115,7 +1140,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Enter Category"}
+                            label={"Search Category"}
                             variant="outlined"
                           />
                         )}
@@ -1147,7 +1172,62 @@ const AdvanceTableFilter = (props) => {
           )}
         </>
       );
-    } else {
+    } 
+    else if (columnData === "Shipment Date") {
+      return (
+        <th
+          className="cursorP table-border-right"
+          onClick={dateclick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img2}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn2}
+            </div>
+            <img src={updownarrow} height="10" width="15" alt="" />
+          </div>
+          <StyledMenu
+              style={{ margin: "10px" }}
+              id="customized-menu"
+              anchorEl={dateFilter}
+              keepMounted
+              open={Boolean(dateFilter)}
+              onClose={dateclose}
+              onBlur={dateclose}
+            >
+                <DateFilter t={props.t} />
+            </StyledMenu>
+        </th>
+      );
+    }
+    else if (columnData === "Order Date") {
+      return (
+        <th
+          className="cursorP table-border-right"
+          onClick={dateclick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img2}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn2}
+            </div>
+            <img src={updownarrow} height="10" width="15" alt="" />
+          </div>
+          <StyledMenu
+              style={{ margin: "10px" }}
+              id="customized-menu"
+              anchorEl={dateFilter}
+              keepMounted
+              open={Boolean(dateFilter)}
+              onClose={dateclose}
+              onBlur={dateclose}
+            >
+                <DateFilter t={props.t} />
+            </StyledMenu>
+        </th>
+      );
+    }
+    else {
       return (
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
@@ -1254,7 +1334,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Shipment Id"}
+                        label={"Search Shipment"}
                         variant="outlined"
                       />
                     )}
@@ -1334,7 +1414,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Customer"}
+                        label={"Search Customer"}
                         variant="outlined"
                       />
                     )}
@@ -1400,7 +1480,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Enter Supplier Name"}
+                        label={"Search Supplier"}
                         variant="outlined"
                       />
                     )}
@@ -1460,7 +1540,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Enter Product Name"}
+                            label={"Search Product"}
                             variant="outlined"
                           />
                         )}
@@ -1525,7 +1605,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Enter Product Name"}
+                            label={"Search Product"}
                             variant="outlined"
                           />
                         )}
