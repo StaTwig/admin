@@ -43,7 +43,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 const AdvanceTableFilter = (props) => {
-  const { t } = props;
+  const { t, onSelectionDateFilter } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [statusAnchorEl, setStatusAnchorEl] = React.useState(null);
   const [toShipmentAnchorEl, setToShipmentAnchorEl] = React.useState(null);
@@ -75,6 +75,7 @@ const AdvanceTableFilter = (props) => {
   const [value, setValue] = React.useState([null, null]);
 
   const dateclick = (event) => {
+    if(props?.shouldEnable === true)
     setdateFilter(event.currentTarget);
   };
 
@@ -229,7 +230,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn6}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             className="filter-dropdown"
@@ -992,7 +993,7 @@ const AdvanceTableFilter = (props) => {
         onClose={dateclose}
         onBlur={dateclose}
       >
-          <DateFilter t={props.t} />
+          <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
       </StyledMenu>
         </div>
 
@@ -1184,7 +1185,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn2}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
               style={{ margin: "10px" }}
@@ -1195,7 +1196,7 @@ const AdvanceTableFilter = (props) => {
               onClose={dateclose}
               onBlur={dateclose}
             >
-                <DateFilter t={props.t} />
+                <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
             </StyledMenu>
         </th>
       );
@@ -1222,7 +1223,7 @@ const AdvanceTableFilter = (props) => {
               onClose={dateclose}
               onBlur={dateclose}
             >
-                <DateFilter t={props.t} />
+                <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
             </StyledMenu>
         </th>
       );

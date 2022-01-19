@@ -51,6 +51,8 @@ const Orders = (props) => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
+  const [fromFilterDate, setFromFilterDate] = useState("");
+  const [toFilterDate, setToFilterDate] = useState("");
   if (
     !isAuthenticated("viewInboundOrders") &&
     !isAuthenticated("viewOutboundOrders")
@@ -66,7 +68,7 @@ const Orders = (props) => {
         setOrderIdFilter("");
         setStatusFilter("");
         setLocationFilter("");
-        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit, fromFilterDate, toFilterDate); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
       } else {
@@ -85,7 +87,9 @@ const Orders = (props) => {
           "",
           "",
           0,
-          limit
+          limit,
+          fromFilterDate,
+          toFilterDate
         ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count);
@@ -117,7 +121,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         recordSkip,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -130,7 +136,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         recordSkip,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -186,7 +194,9 @@ const Orders = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -199,7 +209,9 @@ const Orders = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -218,7 +230,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit;
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -231,7 +245,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -250,7 +266,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -263,7 +281,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -282,7 +302,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -295,7 +317,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -314,7 +338,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilterSelected,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -327,7 +353,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilterSelected,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -347,7 +375,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -360,7 +390,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
@@ -387,18 +419,60 @@ const Orders = (props) => {
     ]);
   }, []);
 
+  const onSelectionDateFilter = async (value) => {
+    const fromDate = value[0] == '' ? '' : new Date(new Date(value[0]).toDateString());
+    setFromFilterDate(fromDate);
+    if (value.length > 1) {
+      const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
+      if(toDate)
+        toDate.setDate(toDate.getDate() + 1);
+      setToFilterDate(toDate);
+       if (visible === "one") {
+        const outboundRes = await getSentPOs(
+          toFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); //to, orderId, productName, deliveryLocation, date, skip, limit
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count);
+      } else {
+        const inboundRes = await getReceivedPOs(
+          fromFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); //from, orderId, productName, deliveryLocation, date, skip, limit
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count);
+      }
+    }
+  }
+
   const onSelectionOfDropdownValue = (index, type, value) => {
     setShowExportFilter(false);
     let url = "";
     if (visible === "one") {
       url = `${
         config().getExportFileForOutboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}`;
+      }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
     if (visible === "two") {
       url = `${
         config().getExportFileForInboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}`;
+      }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
 
     var today = new Date();
@@ -559,6 +633,7 @@ const Orders = (props) => {
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          onSelectionDateFilter={onSelectionDateFilter}
           isReportDisabled={!isAuthenticated("orderExportReport")}
           t={t}
         />

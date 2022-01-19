@@ -3411,6 +3411,8 @@ exports.exportInboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -3460,6 +3462,12 @@ exports.exportInboundShipments = [
 
       if (shipmentId) {
         whereQuery["id"] = shipmentId;
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
@@ -3581,6 +3589,8 @@ exports.exportOutboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -3630,6 +3640,12 @@ exports.exportOutboundShipments = [
 
       if (shipmentId) {
         whereQuery["id"] = shipmentId;
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
