@@ -188,14 +188,14 @@ const ViewGMRShipment = (props) => {
               <Chart lastTemperatureData={sensorData} metaData={minMax} />
             </div>
           </div>
-          <button
+          {/* <button
             className='btn btn-outline-* fontSize200 enlargeTemperature float-right'
             onClick={() =>
               window.open("http://iot.vaccineledger.com", "_blank")
             }
           >
             SHOW MORE
-          </button>
+          </button> */}
           {openShipping && (
             <Modal
               title='Shipping Order Details'

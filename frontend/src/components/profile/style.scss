@@ -28,6 +28,12 @@
   .btn {
     border-radius: 15px;
   }
+  .btn-S {
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }
 
   .form-group-2{
     display: flex;
@@ -367,4 +373,12 @@
 }
 .btn-edit:hover {
   border: 1.4px solid #006dac;
+}
+.btn-space{
+  white-space: nowrap !important;
+}
+.center-display{
+  display: block;
+  margin: 0 auto !important;
+  text-decoration: none !important;
 }

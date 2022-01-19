@@ -139,12 +139,12 @@ const Orders = (props) => {
   };
 
   const headers = {
-    coloumn1: visible === "one" ? t("order_sent_to") : t("order_created_by"),
-    coloumn2: t("order_date"),
-    coloumn3: t("order_id"),
-    coloumn4: t("product"),
-    coloumn5: t("delivery_location"),
-    coloumn6: t("status"),
+    coloumn1: visible === "one" ? "Order Sent To" : "Order CreatedBy",
+    coloumn2: "Order Date",
+    coloumn3: "Order ID",
+    coloumn4: "Product",
+    coloumn5: "Delivery Location",
+    coloumn6: "Status",
 
     displayColoumn1:
       visible === "one" ? t("order_sent_to") : t("order_created_by"),
