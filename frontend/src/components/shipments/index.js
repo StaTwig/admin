@@ -484,6 +484,7 @@ const ShipmentAnalytic = (props) => {
           onPageChange={onPageChange}
           data={headers}
           shipmentIdList={shipmentIdList}
+          shouldEnable={props.user.emailId === "gmr@statledger.io" ? false : true}
           supplierReceiverList={
             props.user.emailId === "gmr@statledger.io"
               ? []

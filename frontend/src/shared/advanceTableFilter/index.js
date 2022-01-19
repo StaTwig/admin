@@ -81,7 +81,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn6}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} width="10" height="10" alt="Arrow" />}
           </div>
           <StyledMenu
             className="ml-5 mt-3"
@@ -321,13 +321,7 @@ const AdvanceTableFilter = (props) => {
           >
             <div className="icon mr-2">{props.data.img5}</div>
             <div className="filterTitle">{props.data.displayColoumn5}</div>
-            <img
-              src={updownarrow}
-              width="10"
-              height="10"
-              className="ml-3"
-              alt="Arrow"
-            />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} width="10" height="10" className="ml-3" alt="Arrow" />}
           </div>
           <StyledMenu
             className="mt-3"
@@ -411,7 +405,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn5}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             className="filter-dropdown"
@@ -479,7 +473,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn5}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -552,6 +546,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleToShipmentClick = (event) => {
+    if(props?.shouldEnable === true)
     setToShipmentAnchorEl(event?.currentTarget);
   };
 
@@ -580,6 +575,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryStatusClick = (event) => {
+    if(props?.shouldEnable === true)
     setInventoryStatusAnchorEl(event?.currentTarget);
   };
 
@@ -604,7 +600,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn4}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="icon" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -813,6 +809,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleFromShipmentClick = (event) => {
+    if(props?.shouldEnable === true)
     setFromShipmentAnchorEl(event?.currentTarget);
   };
 
@@ -856,7 +853,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn3}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="icon" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -1166,6 +1163,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleShipmentIdClick = (event) => {
+    if(props?.shouldEnable === true)
     setShipmentIdAnchorEl(event?.currentTarget);
   };
 
@@ -1230,7 +1228,7 @@ const AdvanceTableFilter = (props) => {
             <div className="mx-2 table-text-filter">
               {props.data.displayColoumn1}
             </div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="icon" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -1743,25 +1741,27 @@ const AdvanceTableFilter = (props) => {
             {props.filterss === "no" ? null : (
               <th>
                 <div className="d-flex px-3">
+                  {props?.shouldEnable === true &&
                   <button className="btn-filter-info" onClick={handleClick}>
                     <div className="d-flex align-items-center">
-                      <img
-                        src={FilterIcon}
-                        width="14"
-                        height="14"
-                        className="mr-2"
-                        alt="FilterIcon"
-                      />
-                      <span className="text">{t("filter")}</span>
-                      <img
-                        src={dropdownIcon}
-                        width="10"
-                        height="10"
-                        className="ml-2"
-                        alt="Drop Down Icon"
-                      />
+                          <img
+                            src={FilterIcon}
+                            width="14"
+                            height="14"
+                            className="mr-2"
+                            alt="FilterIcon"
+                          />
+                          <span className="text">{t("filter")}</span>
+                          <img
+                            src={dropdownIcon}
+                            width="10"
+                            height="10"
+                            className="ml-2"
+                            alt="Drop Down Icon"
+                          />
                     </div>
                   </button>
+                  }
                   <StyledMenu
                     id="customized-menu"
                     anchorEl={anchorEl}
@@ -1837,7 +1837,7 @@ const AdvanceTableFilter = (props) => {
                       </StyledMenuItem>
                     </div>
                   </StyledMenu>
-                  {!props?.isReportDisabled && (
+                  {!props?.isReportDisabled && props?.shouldEnable === true && (
                     <button
                       className="btn-filter-blue ml-2"
                       onClick={() =>
