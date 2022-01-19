@@ -507,7 +507,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Location"}
+                        label={"Enter Location"}
                         variant="outlined"
                       />
                     )}
@@ -624,7 +624,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Org. Name"}
+                        label={"Enter Org. Name"}
                         variant="outlined"
                       />
                     )}
@@ -688,7 +688,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Product"}
+                        label={"Enter Product Name"}
                         variant="outlined"
                       />
                     )}
@@ -878,7 +878,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Supplier Name"}
+                        label={"Enter Supplier Name"}
                         variant="outlined"
                       />
                     )}
@@ -937,7 +937,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Order"}
+                        label={"Enter Order"}
                         variant="outlined"
                       />
                     )}
@@ -1047,7 +1047,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Category"}
+                            label={"Enter Category"}
                             variant="outlined"
                           />
                         )}
@@ -1115,7 +1115,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Category"}
+                            label={"Enter Category"}
                             variant="outlined"
                           />
                         )}
@@ -1254,7 +1254,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Shipment"}
+                        label={"Enter Shipment Id"}
                         variant="outlined"
                       />
                     )}
@@ -1334,7 +1334,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Customer"}
+                        label={"Enter Customer"}
                         variant="outlined"
                       />
                     )}
@@ -1400,7 +1400,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Supplier"}
+                        label={"Enter Supplier Name"}
                         variant="outlined"
                       />
                     )}
@@ -1460,7 +1460,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Product"}
+                            label={"Enter Product Name"}
                             variant="outlined"
                           />
                         )}
@@ -1525,7 +1525,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Product"}
+                            label={"Enter Product Name"}
                             variant="outlined"
                           />
                         )}

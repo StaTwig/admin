@@ -778,23 +778,7 @@ const NewShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-                                if (
-                                  result.products[i].productQuantityShipped ||
-                                  result.products[i].productQuantityDelivered
-                                ) {
-                                  result.products[i].productQuantity =
-                                    parseInt(
-                                      result.products[i].productQuantity
-                                    ) -
-                                    parseInt(
-                                      result.products[i]
-                                        .productQuantityShipped || 0
-                                    ) -
-                                    parseInt(
-                                      result.products[i]
-                                        .productQuantityDelivered || 0
-                                    );
-                                }
+                               
                                 result.products[i].orderedQuantity =
                                   result.products[i].productQuantity;
                               }
@@ -821,9 +805,7 @@ const NewShipment = (props) => {
                                   products_temp[i].name =
                                     result.products[i].productName;
                                   products_temp[i].productQuantity =
-                                    result.products[i].productQuantity -
-                                    result.products[i]
-                                      .productQuantityTaggedSent;
+                                    result.products[i].productQuantity 
                                   products_temp[i].type =
                                     result.products[i].productCategory;
                                   delete products_temp[i]

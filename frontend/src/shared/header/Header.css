@@ -13,6 +13,15 @@
 .navContainer {
   padding: 0 1.25rem;
 }
+.read{
+  text-decoration: "none";
+  background-color : #f1eeee;
+}
+.unread{
+ text-decoration: "none";
+ background-color: #fff;
+}
+
 .navContent {
   width: 100%;
   height: 85px;

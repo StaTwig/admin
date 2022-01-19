@@ -18,6 +18,9 @@ import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
 import { io } from "socket.io-client";
 import { fromUnixTime } from "date-fns";
+import FullscreenOutlined from '@mui/icons-material/FullscreenOutlined';
+import ArrowBack from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowForward from '@mui/icons-material/ArrowForwardIosRounded';
 
 const ViewGMRShipment = (props) => {
   const [sensorData, setSensorData] = useState([]);
@@ -147,7 +150,7 @@ const ViewGMRShipment = (props) => {
           <p className='heading'>TEMPERATURE</p>
           <div className='row mb-4 mt-0'>
             <div className='col panel commonpanle' style={{ height: "360px" }}>
-              <div className='d-flex justify-content-between mb-4'>
+              <div className='d-flex justify-content-between mb-4 p-relative'>
                 <div className='row ml-4 mb-2'>
                   <img
                     style={{ width: "2rem", height: "3.5rem" }}
@@ -164,6 +167,7 @@ const ViewGMRShipment = (props) => {
                     </div>
                   </div>
                 </div>
+                <div style={{gap:"2rem"}} className="d-flex">
                 <div className='d-flex'>
                   <img
                     style={{ width: "3.5rem", height: "3.5rem" }}
@@ -183,6 +187,17 @@ const ViewGMRShipment = (props) => {
                     </div>
                   </div>
                 </div>
+                <div className="icon-container">
+                <FullscreenOutlined className="icon-gmr" />
+                </div>
+                </div>
+                <div className="icon-container-alt left-arrow">
+                <ArrowBack className="icon-gmr"/>
+                </div>
+                <div className="icon-container-alt right-arrow">
+                <ArrowForward className="icon-gmr"/>
+                </div>
+
               </div>
               {/* <Map data={shippmentChainOfCustodyData} />{" "} */}
               <Chart lastTemperatureData={sensorData} metaData={minMax} />

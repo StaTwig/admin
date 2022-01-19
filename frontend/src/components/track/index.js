@@ -27,7 +27,7 @@ const Track = (props) => {
     lang,
     t
   } = props;
-
+  console.log(shippmentChainOfCustodyData)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   // const onSeach = useCallback(async (v = value) => {
   //   if (v) {
@@ -213,9 +213,7 @@ const Track = (props) => {
                         .map((r, i) => (
                           <SoChainOfCustody
                             len={
-                              row.shipmentUpdates.filter(
-                                (s) => s.status === "RECEIVED"
-                              ).length
+                              row.length
                             }
                             i={i}
                             v={visible}

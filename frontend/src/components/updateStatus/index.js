@@ -17,6 +17,8 @@ import { FormControlLabel, Switch } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { useDispatch } from "react-redux";
 import moment from "moment";
+import Loader from "../../shared/loader/Loader";
+import Fulloader from "../../shared/loader/Fulloader";
 
 const UpdateStatus = (props) => {
   const { t, shipmentData } = props;
@@ -376,11 +378,12 @@ const UpdateStatus = (props) => {
                         <h6 className='poheads potext m-4'>
                           Shipment Cargo Status
                         </h6>
-                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loader && "fade-color"}`}>
                           <div className="cargoLabels">
                             <label className='mb-1 text-secondary'>Acceptance Date</label>
                           </div>
-                          <div>
+                          {loader && (<Loader />)}
+                          {!loader && (<div>
                             <input
                               type='text'
                               className='form-control mb-2'
@@ -389,7 +392,7 @@ const UpdateStatus = (props) => {
                               value={acceptanceDate}
                               style={{ border: "0px", color: "#6c757d!important" }}
                             />
-                          </div>
+                          </div>) }
                           <div className="appearDate">
                             <FormControlLabel
                               control={

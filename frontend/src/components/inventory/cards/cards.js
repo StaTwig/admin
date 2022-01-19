@@ -47,10 +47,10 @@ function Cards(props) {
               </div>
 
               <div className="tile-content">
-                <p className="recived-text font-weight-bold">
+                <p className="recived-text-cards font-weight-bold">
                 {t('product_out_of_stock')}
                 </p>
-                <h1 className="count recived-text">
+                <h1 className="count recived-text-cards">
                   {props.currentInventoriesCount}
                   {props.inventoryAnalytics?.stockOut}
                 </h1>
