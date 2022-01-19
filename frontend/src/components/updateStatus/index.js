@@ -29,7 +29,8 @@ const UpdateStatus = (props) => {
   // console.log('Profile');
   // console.log(profile);
   const { id } = props.match.params;
-  const { billNo, quantity, weight } = useState("")
+  const billNo = shipmentData?.airWayBillNo;
+  const { quantity, weight } = useState("")
   const [firstName, setFirstName] = useState("");
   const [organisationName, setOrganisationName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -43,6 +44,8 @@ const UpdateStatus = (props) => {
   const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
   const [loader, setLoader] = useState(false);
+  const [loaderC, setLoaderC] = useState(false);
+  const [loaderL, setLoaderL] = useState(false);
   const [commentEnabled, setCommentEnabled] = useState(false);
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
@@ -68,8 +71,15 @@ const UpdateStatus = (props) => {
 
 
   const onToggle = async (value) => {
+    console.log(value);
     document.getElementById(value.target.id).checked = value.currentTarget.checked;
-    setLoader(true);
+    
+    if(value.target.id === 'toggle1')
+      setLoader(true);
+    else if(value.target.id === 'toggle2')
+      setLoaderC(true);
+    else if(value.target.id === 'toggle3')
+      setLoaderL(true);
     const data = {
       id: id,
       shipmentUpdates: {
@@ -91,6 +101,8 @@ const UpdateStatus = (props) => {
         else if(value.target.id === 'toggle3')
           setLastStatusDate(moment(new Date()).format('D/M/YYYY'));
         setLoader(false);
+        setLoaderC(false);
+        setLoaderL(false);
       }, 2000);
     } else {
       setOpenShipmentFail(true);
@@ -398,6 +410,7 @@ const UpdateStatus = (props) => {
                               control={
                                 <CustomSwitch
                                   readOnly={acceptanceDate != ''}
+                                  disabled={acceptanceDate != ''}
                                   checked={acceptanceDate != ''}
                                   onChange={onToggle}
                                   name="checkedB"
@@ -418,12 +431,14 @@ const UpdateStatus = (props) => {
                             name="alerttrue"
                           />
                         </div>
-                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderC && "fade-color"}`}>
                           <div className="cargoLabels">
                             <label className='mb-1 text-secondary'>
                               Customs clearance Date
                             </label>
                           </div>
+                          {loaderC && (<Loader />)}
+                          {!loaderC && (
                           <div>
                             <input
                               type='text'
@@ -433,12 +448,13 @@ const UpdateStatus = (props) => {
                               value={customsDate}
                               style={{ border: "0px", color: "#6c757d!important" }}
                             />
-                          </div>
+                          </div>)}
                           <div>
                             <FormControlLabel
                               control={
                                 <CustomSwitch
                                   readOnly={customsDate != ''}
+                                  disabled={customsDate != ''}
                                   checked={customsDate != ''}
                                   onChange={onToggle}
                                   name="checkedB"
@@ -448,12 +464,14 @@ const UpdateStatus = (props) => {
                             />
                           </div>
                         </div>
-                        <div className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between'>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderL && "fade-color"}`}>
                           <div className="cargoLabels">
                             <label className='mb-1 text-secondary'>
                               Last Status
                             </label>
                           </div>
+                          {loaderL && (<Loader />)}
+                          {!loaderL && (
                           <div>
                             <input
                               type='text'
@@ -464,12 +482,13 @@ const UpdateStatus = (props) => {
                               value={lastStatusDate}
                               style={{ border: "0px", color: "#6c757d!important" }}
                             />
-                          </div>
+                          </div>)}
                           <div>
                             <FormControlLabel
                               control={
                                 <CustomSwitch
                                   readOnly={lastStatusDate != ''}
+                                  disabled={lastStatusDate != ''}
                                   checked={lastStatusDate != ''}
                                   onChange={onToggle}
                                   name="checkedB"

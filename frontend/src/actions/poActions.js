@@ -155,14 +155,16 @@ export const getSentPOs = async (
   dateFilter,
   status,
   skip,
-  limit
+  limit,
+  fromDate,
+  toDate
 ) => {
   //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
       `${
         config().fetchOutboundPurchaseOrderUrl
-      }?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`
+      }?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&fromDate=${fromDate}&toDate=${toDate}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {
@@ -178,14 +180,16 @@ export const getReceivedPOs = async (
   dateFilter,
   status,
   skip,
-  limit
+  limit,
+  fromDate,
+  toDate
 ) => {
   //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
   try {
     const result = await axios.get(
       `${
         config().fetchInboundPurchaseOrderUrl
-      }?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&skip=${skip}&limit=${limit}`
+      }?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&poStatus=${status}&fromDate=${fromDate}&toDate=${toDate}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {

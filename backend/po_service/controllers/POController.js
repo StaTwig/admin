@@ -1568,6 +1568,8 @@ exports.exportInboundPurchaseOrders = [
         : undefined;
       let orderId = req.query.orderId ? req.query.orderId : undefined;
       let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -1620,6 +1622,12 @@ exports.exportInboundPurchaseOrders = [
 
       if (fromDateFilter) {
         whereQuery["createdAt"] = { $gte: fromDateFilter };
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`creationDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (organisationId) {
@@ -1753,6 +1761,8 @@ exports.exportOutboundPurchaseOrders = [
         : undefined;
       let orderId = req.query.orderId ? req.query.orderId : undefined;
       let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -1805,6 +1815,12 @@ exports.exportOutboundPurchaseOrders = [
 
       if (fromDateFilter) {
         whereQuery["createdAt"] = { $gte: fromDateFilter };
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`creationDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (organisationId) {
