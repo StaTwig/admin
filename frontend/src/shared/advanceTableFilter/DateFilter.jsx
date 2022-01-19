@@ -46,7 +46,7 @@ export default function DateFilter({ t }) {
       <Calendar
       value={fweek}
           range={DateType === 2 ? true : false }
-          onChange={(e) =>setFweek(e.target.value)}
+          onChange={(e) =>console.log(e)}
         />
         </>
     )

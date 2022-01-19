@@ -10,11 +10,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FilterDropDown from "../../components/filterDropDown";
-import DateRangePicker from "@mui/lab/DateRangePicker";
-import StaticDateRangePicker from '@mui/lab/StaticDateRangePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import Box from '@mui/material/Box';
 import DateFilter from "./DateFilter.jsx";
 
 const StyledMenu = withStyles({
