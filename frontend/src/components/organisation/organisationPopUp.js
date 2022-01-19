@@ -13,6 +13,7 @@ const OrganisationPopUp = (props) => {
   const [message, setMessage] = useState(
     "Location service is disabled. Enter address manually!!!"
   );
+  const required = t('Required');
   const [address, setAddress] = useState({});
   const [pos, setPos] = useState({});
   const closeModal = () => setShowModal(false);
@@ -81,22 +82,22 @@ const OrganisationPopUp = (props) => {
               validate={(values) => {
                 const errors = {};
                 if (!values.type) {
-                  errors.type = "Required";
+                  errors.type = t('Required');
                 }
                 if (!values.pincode) {
-                  errors.pincode = "Required";
+                  errors.pincode = t('Required');
                 }
                 if (!values.line1) {
-                  errors.line1 = "Required";
+                  errors.line1 = t('Required');
                 }
                 if (!values.city) {
-                  errors.city = "Required";
+                  errors.city = t('Required');
                 }
                 if (!values.state) {
-                  errors.state = "Required";
+                  errors.state = t('Required');
                 }
                 if (!values.country) {
-                  errors.country = "Required";
+                  errors.country = t('Required');
                 }
                 return errors;
               }}

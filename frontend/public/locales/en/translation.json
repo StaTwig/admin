@@ -64,7 +64,7 @@
     "add": "Add",
     "details": "details",
     "select": "Select",
-    "region": "region",
+    "region": "Region",
     "country": "Country",
     "state": "State",
     "city": "City",
@@ -325,5 +325,12 @@
     "accept_reject_order":"Accept/Reject Order",
     "view_inbound_orders":"View Inbound Orders",
     "view_outbound_orders":"View Outbound Orders",
-    "receive_shipment_with_scan":"Receive Shipment with Scan"
+    "receive_shipment_with_scan":"Receive Shipment with Scan",
+    "accept_request":"Accept Request",
+    "reject_request":"Reject Request",
+    "role":"Role",
+    "integration":"Integration",
+    "analytics":"Analytics",
+    "rules":"Rules",
+    "send_otp":"Send OTP"
 }

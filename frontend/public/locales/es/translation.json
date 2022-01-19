@@ -38,6 +38,7 @@
     "enter_otp": "Ingrese OTP",
     "enter": "ingresar",
     "required": "Requerido",
+    "Required":"Requerido",
     "otp_doesnt_match": "OTP no coincide",
     "didnt_receive_the_otp": "No recibió el OTP",
     "resend_code": "REENVIAR CODIGO",

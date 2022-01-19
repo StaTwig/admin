@@ -24,7 +24,7 @@ const EditRow = (props) => {
           <div className="">
             <input
               className="form-control"
-              placeholder="Type"
+              placeholder={t("Type")}
               value={
                 prod.productQuantity ? prod.productQuantity : prod.quantity
               }
