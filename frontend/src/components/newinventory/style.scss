@@ -105,6 +105,31 @@
     color: #000000;
   }
 }
+.import-disable-button {
+  &:disabled {
+      cursor: not-allowed;
+  }
+}
+.UploadedFileInfo {
+  height: 190px;
+  width: 370px;
+  border: 1px solid #707070;
+  border-radius: 8px;
+  margin: 0 auto 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  .UploadedFileInfo-remove-button {
+      position: absolute;
+      background-color: white;
+      outline: none;
+      border: 1px solid red;
+      width: 95%;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: red;
+      bottom: 5%;
+  }
+}
 
 .btn-custom-dropdown {
   justify-content: space-around !important;
