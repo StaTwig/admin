@@ -10,7 +10,7 @@ import FailPopup from "../../../shared/PopUp/failedPopUp";
 
 const ExcelPopUp = (props) => {
   const { t } = props;
-  const [excel, setExcel] = useState("");
+  const [excel, setExcel] = useState(null);
   const dispatch = useDispatch();
   const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
   const [openFailedPopup, setopenFailedPop] = useState(false);
@@ -55,7 +55,7 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      <div className='d-flex flex-column upload mb-5 ml-5'>
+      {excel === null ? <div className='d-flex flex-column upload mb-5 ml-5'>
         <img
           src={uploadBlue}
           name='photo'
@@ -69,11 +69,11 @@ const ExcelPopUp = (props) => {
         </div>
         <div>{t("or")}</div>
         <div className='row'
-                  >
-          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center'  style={{
-                    display:"block",
-                    margin:"0 auto"  
-                  }}>
+        >
+          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
+            display: "block",
+            margin: "0 auto"
+          }}>
             {t("select_a_file")}
           </label>
 
@@ -85,7 +85,8 @@ const ExcelPopUp = (props) => {
             onChange={setExcelFile}
           />
         </div>
-      </div>
+      </div> :
+        <UploadedFileInfo file={excel} setExcel={setExcel} />}
       <div className='row justify-content-between'>
         <div />
         <div className='row'>
@@ -95,7 +96,7 @@ const ExcelPopUp = (props) => {
           >
             {t("cancel")}
           </button>
-          <button className='btn-primary btn mr-4' onClick={uploadExcel}>
+          <button className='btn-primary btn mr-4 import-disable-button' disabled={excel === null ? true : false} onClick={uploadExcel}>
             {t("import")}
           </button>
           {openSuccesfulOrder && (
@@ -121,3 +122,26 @@ const ExcelPopUp = (props) => {
 };
 
 export default ExcelPopUp;
+
+
+function UploadedFileInfo({ file, setExcel }) {
+
+  const formatFileSize = (bytes, precision = 2) => {
+    if (bytes === 0) { return '0 Bytes' }
+
+    const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(precision)) + ' ' + sizes[i];
+  };
+
+  return (
+    <div className="UploadedFileInfo">
+      <h4>Information about current file</h4>
+      <div><strong>Name:</strong> {file?.name} </div>
+      <div><strong>Size:</strong> {formatFileSize(file?.size)} </div>
+      <div><strong>Type:</strong> {file?.type}</div>
+      <button className="UploadedFileInfo-remove-button" onClick={() => setExcel(null)} >Remove File</button>
+    </div>
+  )
+
+} 

@@ -1,23 +1,48 @@
 @import "../../../assets/styles/global.scss";
 
 .excelpopup {
-  .upload {
-    height: 200px;
-    width: 350px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px dashed #707070;
-    border-radius: 8px;
-  }
-  .excelSpace {
-    float: left;
-    margin-left: 2.1rem;
-    width: 280px;
-  }
+    .upload {
+        height: 200px;
+        width: 350px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px dashed #707070;
+        border-radius: 8px;
+    }
+    .excelSpace {
+        float: left;
+        margin-left: 2.1rem;
+        width: 280px;
+    }
 }
-.d-center{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+.import-disable-button {
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+.d-center {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.UploadedFileInfo {
+    height: 190px;
+    width: 370px;
+    border: 1px solid #707070;
+    border-radius: 8px;
+    margin: 0 auto 0.5rem;
+    padding: 0.5rem;
+    position: relative;
+    .UploadedFileInfo-remove-button {
+        position: absolute;
+        background-color: white;
+        outline: none;
+        border: 1px solid red;
+        width: 95%;
+        padding: 0.5rem;
+        cursor: pointer;
+        color: red;
+        bottom: 5%;
+    }
 }
