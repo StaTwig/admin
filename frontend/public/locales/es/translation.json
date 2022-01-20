@@ -284,5 +284,6 @@
     "date_time": "Fecha y hora",
     "version": "versión",
     "made_with_care": "Hecho con cuidado",
-    "from_locations":"Desde la ubicación"
+    "from_locations":"Desde la ubicación",
+    "Partially Fulfilled":"Parcialmente cumplida"
 }
