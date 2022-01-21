@@ -1,14 +1,10 @@
 const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-
+const helmet = require("helmet");
 const mongoose = require("mongoose");
 
 require("dotenv").config();
-const swaggerUi = require("swagger-ui-express");
-const openApiDocumentation = require("./openApiDocumentation");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
@@ -40,11 +36,9 @@ if (process.env.NODE_ENV !== "test") {
 }
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
-app.use(cookieParser());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 //To allow cross-origin requests
 app.use(cors());
-
+app.use(helmet());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/lastmilemanagement/api/", apiRouter);

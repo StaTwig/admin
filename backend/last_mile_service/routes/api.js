@@ -1,6 +1,6 @@
-var express = require("express");
-var lastMileQueryRouter = require("./lastmile");
-var app = express();
+const express = require("express");
+const lastMileQueryRouter = require("./lastmile");
+const app = express();
 
 app.use("/", lastMileQueryRouter);
 
