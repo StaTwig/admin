@@ -350,8 +350,8 @@ exports.register = [
             description: "USER",
           },
           actor: {
-            actorid: null,
-            actoruserid: null,
+            actorid: employeeId,
+            actoruserid: employeeId,
           },
           stackholders: {
             ca: {
@@ -531,10 +531,10 @@ exports.verifyOtp = [
               `${blockchain_service_url}/createUserAddress`
             );
             address = response.data.items;
-            const userData = {
-              address,
-            };
-           /* await axios.post(
+            // const userData = {
+            //   address,
+            // };
+            /* await axios.post(
               `${blockchain_service_url}/grantPermission`,
               userData
             );*/
@@ -744,7 +744,7 @@ exports.updateProfile = [
         phoneNumber = "",
         warehouseId,
         organisation,
-        preferredLanguage
+        preferredLanguage,
       } = req.body;
 
       const organisationId = organisation.split("/")[1];
