@@ -80,6 +80,7 @@ exports.createNewAlert = [
         });
         alert.active = alertSubscription;
         await alert.save();
+        return apiResponse.successResponse(res, "Alert created");
       } else return apiResponse.ErrorResponse(res, "NO USER FOUND");
     } catch (err) {
       console.log(err);
@@ -194,6 +195,20 @@ exports.deleteAlert = [
         }
       );
       return apiResponse.successResponse(res, "Alerts Deleted Successfully");
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.getAllAlerts = [
+  auth,
+  async function (req, res) {
+    try {
+      const data = await Alerts.find(
+        { username: req.user.id }
+      );
+      return apiResponse.successResponseWithData(res, "Alerts fetched Successfully", data);
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }

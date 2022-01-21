@@ -190,6 +190,7 @@ exports.updateRequest = [
 ];
 
 exports.createRequest = [
+  auth,
   async (req, res) => {
     try {
       let { labelId, type } = req.body;

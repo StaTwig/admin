@@ -10,11 +10,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FilterDropDown from "../../components/filterDropDown";
+import DateFilter from "./DateFilter.jsx";
 
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #D3D4D5",
-    width: "10%",
     borderRadius: "15px",
   },
 })((props) => (
@@ -43,7 +43,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 const AdvanceTableFilter = (props) => {
-  const { t } = props;
+  const { t, onSelectionDateFilter } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [statusAnchorEl, setStatusAnchorEl] = React.useState(null);
   const [toShipmentAnchorEl, setToShipmentAnchorEl] = React.useState(null);
@@ -69,6 +69,20 @@ const AdvanceTableFilter = (props) => {
   const [inventoryfiFilterOnSelect, setInventoryfiFilterOnSelect] =
     React.useState(null);
 
+
+    const [dateFilter, setdateFilter] = React.useState(null);
+
+  const [value, setValue] = React.useState([null, null]);
+
+  const dateclick = (event) => {
+    if(props?.shouldEnable === true)
+    setdateFilter(event.currentTarget);
+  };
+
+  const dateclose = () => {
+    setdateFilter(null);
+  };
+
   const renderColumn6 = (columnData) => {
     if (columnData === "Status") {
       return (
@@ -78,8 +92,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img6}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn6}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn6}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} width="10" height="10" alt="Arrow" />}
           </div>
           <StyledMenu
             className="ml-5 mt-3"
@@ -87,7 +103,7 @@ const AdvanceTableFilter = (props) => {
             id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -104,7 +120,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("ACCEPTED")}
                 >
-                  {t('accepted')}
+                  {t("accepted")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -119,7 +135,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
-                  {props.visible === "one" ? t('sent') : t('received')}
+                  {props.visible === "one" ? t("sent") : t("received")}
                 </button>
               </StyledMenuItem>
 
@@ -127,9 +143,10 @@ const AdvanceTableFilter = (props) => {
                 <button
                   style={{
                     padding: "10px",
-                    height: "40px",
+                    height: "60px",
                     width: "200px",
                     borderRadius: "10px",
+                    whiteSpace: 'initial'
                   }}
                   className="btn btn-outline-warning btn-sm font-weight-bold"
                   color="primary"
@@ -137,9 +154,28 @@ const AdvanceTableFilter = (props) => {
                     setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")
                   }
                 >
-                  {t('transitpartiallyfilled')}
+                  {t("transitpartiallyfilled")}
                 </button>
               </StyledMenuItem>
+
+              {/* <StyledMenuItem>
+                <button
+                  style={{
+                    padding: "10px",
+                    height: "60px",
+                    width: "200px",
+                    borderRadius: "10px",
+                    whiteSpace: 'initial'
+                  }}
+                  className="btn btn-outline-warning btn-sm font-weight-bold"
+                  color="primary"
+                  onClick={() =>
+                    setStatusFilterOnSelect("PARTIALLYFULFILLED")
+                  }
+                >
+                  {t("partiallyfilled")}
+                </button>
+              </StyledMenuItem> */}
 
               <StyledMenuItem>
                 <button
@@ -155,7 +191,7 @@ const AdvanceTableFilter = (props) => {
                     setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")
                   }
                 >
-                  {t('transitfullyfilled')}
+                  {t("transitfullyfilled")}
                 </button>
               </StyledMenuItem>
 
@@ -169,9 +205,27 @@ const AdvanceTableFilter = (props) => {
                   }}
                   className="btn btn-outline-info btn-sm font-weight-bold"
                   color="primary"
+                  onClick={() => setStatusFilterOnSelect("PARTIALLYFULFILLED")}
+                >
+                  {t("Partially Fulfilled")}
+                </button>
+              </StyledMenuItem>
+
+
+
+              <StyledMenuItem>
+                <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "180px",
+                    borderRadius: "10px",
+                  }}
+                  className="btn btn-outline-info btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setStatusFilterOnSelect("FULLYFULFILLED")}
                 >
-                  {t('fullyfilled')}
+                  {t("fullyfilled")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -186,7 +240,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("REJECTED")}
                 >
-                  {t('rejected')}
+                  {t("rejected")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -195,7 +249,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
-                  {t('clear')}
+                  {t("clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -210,8 +264,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img6}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn6}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn6}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             className="filter-dropdown"
@@ -237,7 +293,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
-                  {t('shipped')}
+                  {t("shipped")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -253,7 +309,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
                 >
-                  {t('delivered')}
+                  {t("delivered")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -262,7 +318,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
-                  {t('clear')}
+                  {t("clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -272,7 +328,7 @@ const AdvanceTableFilter = (props) => {
     }
   };
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event?.currentTarget);
   };
 
   const handleClose = () => {
@@ -294,12 +350,12 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoDeliveryLocationClick = (event) => {
-    setPoDeliveryLocationAnchorEl(event.currentTarget);
+    setPoDeliveryLocationAnchorEl(event?.currentTarget);
   };
 
   const handlePoDeliveryLocationClose = (event) => {
-    if(!event.currentTarget.contains(event.relatedTarget))
-    setPoDeliveryLocationAnchorEl(null);
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setPoDeliveryLocationAnchorEl(null);
   };
 
   const setPoDeliveryLocationFilterOnSelect = (selectedVal) => {
@@ -309,31 +365,25 @@ const AdvanceTableFilter = (props) => {
   const renderColumn5 = (columnData) => {
     if (columnData === "Status") {
       return (
-        <div className='box col-2'>
+        <div className="box col-2">
           <div
-            className='filter-item mr-5'
+            className="filter-item mr-5"
             onClick={handleInventoryStatusClick}
           >
-            <div className='icon mr-2'>{props.data.img5}</div>
-            <div className='filterTitle'>{props.data.coloumn5}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              alt='Arrow'
-            />
+            <div className="icon mr-2">{props.data.img5}</div>
+            <div className="filterTitle">{props.data.displayColoumn5}</div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} width="10" height="10" className="ml-3" alt="Arrow" />}
           </div>
           <StyledMenu
-            className='mt-3'
-            id='customized-menu'
+            className="mt-3"
+            id="customized-menu"
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
-            // onBlur={handleInventoryStatusClose}
+          // onBlur={handleInventoryStatusClose}
           >
-            <div className='d-flex flex-column align-items-center'>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
                 <button
                   style={{
@@ -342,12 +392,12 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-primary btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-primary btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("ADD")}
                 >
-                  {t('added')}
+                  {t("added")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -358,12 +408,12 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-warning btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-warning btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("CREATE")}
                 >
-                  {t('sent')}
+                  {t("sent")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -374,28 +424,28 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-success btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
+                  className="btn btn-outline-success btn-sm font-weight-bold"
+                  variant="outlined"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}
                 >
-                  {t('received')}
+                  {t("received")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
-                  className='btn btn-link btn-sm font-weight-bold'
-                  color='primary'
+                  className="btn btn-link btn-sm font-weight-bold"
+                  color="primary"
                   onClick={() => setInventoryStatusFilterOnSelect("")}
                 >
-                  {t('clear')}
+                  {t("clear")}
                 </button>
               </StyledMenuItem>
             </div>
           </StyledMenu>
         </div>
       );
-    } else if (columnData === "Status") {
+    } else if (columnData === "ShipStatus") {
       return (
         <th
           className="cursorP table-border-right"
@@ -403,8 +453,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img5}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn5}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             className="filter-dropdown"
@@ -429,7 +481,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("CREATED")}
                 >
-                  {t('shipped')}
+                  {t("shipped")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -445,7 +497,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("RECEIVED")}
                 >
-                  {t('delivered')}
+                  {t("delivered")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>
@@ -454,7 +506,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setStatusFilterOnSelect("")}
                 >
-                  {t('clear')}
+                  {t("clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -466,12 +518,13 @@ const AdvanceTableFilter = (props) => {
         <th
           className="cursorP table-border-right"
           onClick={handlePoDeliveryLocationClick}
-          
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img5}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn5}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -482,8 +535,8 @@ const AdvanceTableFilter = (props) => {
             onClose={handlePoDeliveryLocationClose}
             onBlur={handlePoDeliveryLocationClose}
           >
-            <div className="d-flex flex-column align-items-center" id="deldiv" >
-              <StyledMenuItem style={{ width: "100%" }} >
+            <div className="d-flex flex-column align-items-center" id="deldiv">
+              <StyledMenuItem style={{ width: "100%" }}>
                 {poDeliveryLocationAnchorEl ? (
                   <Autocomplete
                     id="toShipment"
@@ -491,11 +544,11 @@ const AdvanceTableFilter = (props) => {
                     getOptionLabel={(options) =>
                       options.title
                         ? options?.title +
-                          " (" +
-                          options?.warehouseAddress?.city +
-                          " ," +
-                          options?.warehouseAddress?.country +
-                          ")"
+                        " (" +
+                        options?.warehouseAddress?.city +
+                        " ," +
+                        options?.warehouseAddress?.country +
+                        ")"
                         : " (" + options.id + " )"
                     }
                     onChange={(event, newValue) => {
@@ -511,7 +564,7 @@ const AdvanceTableFilter = (props) => {
                     )}
                   />
                 ) : (
-                  <div>{t('empty_list')}</div>
+                  <div>{t("empty_list")}</div>
                 )}
               </StyledMenuItem>
               <StyledMenuItem>
@@ -521,7 +574,7 @@ const AdvanceTableFilter = (props) => {
                   color="primary"
                   onClick={() => setPoDeliveryLocationFilterOnSelect("")}
                 >
-                  {t('clear')}
+                  {t("clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -533,7 +586,9 @@ const AdvanceTableFilter = (props) => {
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img5}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn5}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn5}
+            </div>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -542,11 +597,13 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleToShipmentClick = (event) => {
-    setToShipmentAnchorEl(event.currentTarget);
+    if(props?.shouldEnable === true)
+    setToShipmentAnchorEl(event?.currentTarget);
   };
 
-  const handleToShipmentClose = () => {
-    setToShipmentAnchorEl(null);
+  const handleToShipmentClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setToShipmentAnchorEl(null);
   };
 
   const setToShipmentFilterOnSelect = (selectedVal) => {
@@ -555,11 +612,12 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoProductNameClick = (event) => {
-    setPoProductNameAnchorEl(event.currentTarget);
+    setPoProductNameAnchorEl(event?.currentTarget);
   };
 
-  const handlePoProductNameClose = () => {
-    setPoProductNameAnchorEl(null);
+  const handlePoProductNameClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setPoProductNameAnchorEl(null);
   };
 
   const setPoProductNameFilterOnSelect = (selectedVal) => {
@@ -568,7 +626,8 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryStatusClick = (event) => {
-    setInventoryStatusAnchorEl(event.currentTarget);
+    if(props?.shouldEnable === true)
+    setInventoryStatusAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryStatusClose = () => {
@@ -589,8 +648,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img4}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
-            <img src={updownarrow} height="10" width="15" alt="icon" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn4}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -598,9 +659,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(toShipmentAnchorEl)}
             onClose={handleToShipmentClose}
-            // 
+            onBlur={handleToShipmentClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleToShipmentClose}>
+            <div className="d-flex flex-column align-items-center">
               {toShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -646,7 +707,9 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img4}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn4}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="icon" />
           </div>
           <StyledMenu
@@ -656,9 +719,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poProductNameAnchorEl)}
             onClose={handlePoProductNameClose}
-            // 
+            onBlur={handlePoProductNameClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoProductNameClose}>
+            <div className="d-flex flex-column align-items-center">
               {poProductNameAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -708,7 +771,9 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img4}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn4}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
@@ -717,9 +782,12 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
-            // 
+          //
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleInventoryStatusClose}>
+            <div
+              className="d-flex flex-column align-items-center"
+              onBlur={handleInventoryStatusClose}
+            >
               <StyledMenuItem>
                 <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
@@ -766,11 +834,11 @@ const AdvanceTableFilter = (props) => {
         //     <img src={updownarrow} height="10" width="15" alt="" />
         //   </div>
         // </th>
-        <div className='box col'>
-          <div className='filter-item'>
-            <div className='icon mr-2'>{props.data.img4}</div>
-            <div className='filterTitle'>{props.data.coloumn4}</div>
-            <div className='filterAction'>
+        <div className="box col">
+          <div className="filter-item">
+            <div className="icon mr-2">{props.data.img4}</div>
+            <div className="filterTitle">{props.data.displayColoumn4}</div>
+            <div className="filterAction">
               {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
           </div>
@@ -781,7 +849,9 @@ const AdvanceTableFilter = (props) => {
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img4}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn4}
+            </div>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -790,11 +860,13 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleFromShipmentClick = (event) => {
-    setFromShipmentAnchorEl(event.currentTarget);
+    if(props?.shouldEnable === true)
+    setFromShipmentAnchorEl(event?.currentTarget);
   };
 
-  const handleFromShipmentClose = () => {
-    setFromShipmentAnchorEl(null);
+  const handleFromShipmentClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setFromShipmentAnchorEl(null);
   };
 
   const setFromShipmentFilterOnSelect = (selectedVal) => {
@@ -803,16 +875,17 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoOrderIdClick = (event) => {
-    setPoOrderIdAnchorEl(event.currentTarget);
+    setPoOrderIdAnchorEl(event?.currentTarget);
   };
 
-  const handlePoOrderIdClose = () => {
-    setPoOrderIdAnchorEl(null);
+  const handlePoOrderIdClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setPoOrderIdAnchorEl(null);
   };
 
   const setPoOrderIdFilterOnSelect = (selectedVal) => {
     props.setOrderIdNameFilterOnSelect(selectedVal);
-    handlePoOrderIdClose();
+    handlePoOrderIdClose(null);
   };
 
   // const handleInventoryManufacturerClose = () => {
@@ -828,8 +901,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img3}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn3}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="icon" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -837,10 +912,10 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(fromShipmentAnchorEl)}
             onClose={handleFromShipmentClose}
-            // onBlur={handleFromShipmentClose}
+            onBlur={handleFromShipmentClose}
             style={{ marginLeft: "4rem" }}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleFromShipmentClose}>
+            <div className="d-flex flex-column align-items-center">
               {fromShipmentAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -886,7 +961,9 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img3}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn3}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
@@ -895,9 +972,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poOrderIdAnchorEl)}
             onClose={handlePoOrderIdClose}
-            // 
+            onBlur={handlePoOrderIdClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoOrderIdClose}>
+            <div className="d-flex flex-column align-items-center">
               {poOrderIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -936,22 +1013,36 @@ const AdvanceTableFilter = (props) => {
       );
     } else if (columnData === "Date") {
       return (
-        <div className='box col'>
-          <div className='filter-item'>
-            <div className='icon mr-2'>{props.data.img3}</div>
-            <div className='filterTitle'>{props.data.coloumn3}</div>
-            <div className='filterAction'>
-              {/* <img src={updownarrow} width="9" height="9" /> */}
+        <div className="box col" onClick={dateclick}>
+          <div className="filter-item">
+            <div className="icon mr-2">{props.data.img3}</div>
+            <div className="filterTitle">{props.data.displayColoumn3}</div>
+            <div className="filterAction">
+              <img src={updownarrow} width="9" height="9" />
             </div>
           </div>
+          <StyledMenu
+        style={{ margin: "10px" }}
+        id="customized-menu"
+        anchorEl={dateFilter}
+        keepMounted
+        open={Boolean(dateFilter)}
+        onClose={dateclose}
+        onBlur={dateclose}
+      >
+          <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
+      </StyledMenu>
         </div>
+
       );
     } else {
       return (
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img3}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn3}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn3}
+            </div>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -965,7 +1056,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryProductCategoryClick = (event) => {
-    setInventoryProductCategoryAnchorEl(event.currentTarget);
+    setInventoryProductCategoryAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryProductCategoryClose = () => {
@@ -975,129 +1066,213 @@ const AdvanceTableFilter = (props) => {
     if (columnData === "Product Category") {
       return (
         <>
-        {props.filterPage === "inventory" ? (<div className='box col-3'>
-          <div
-            className='filter-item'
-            onClick={handleInventoryProductCategoryClick}
-          >
-            <div className='icon mr-2'>{props.data.img2}</div>
-            <div className='filterTitle'>{props.data.coloumn2}</div>
-            <img
-              src={updownarrow}
-              width='10'
-              height='10'
-              className='ml-3'
-              style={{ position: "relative", left: "20px" }}
-              alt='arrow'
-            />
-          </div>
-          <StyledMenu
-            id='customized-menu'
-            anchorEl={inventoryProductCategoryAnchorEl}
-            keepMounted
-            open={Boolean(inventoryProductCategoryAnchorEl)}
-            onClose={handleInventoryProductCategoryClose}
-            // 
-          >
-            <div className='d-flex flex-column align-items-center' onBlur={handleInventoryProductCategoryClose}>
-              {inventoryProductCategoryAnchorEl ? (
-                <StyledMenuItem>
-                  <Autocomplete
-                    id='ProductCategory'
-                    options={props.inventoryFilterData}
-                    getOptionLabel={(options) => options.name}
-                    onChange={(event, newValue) => {
-                      setInventoryProductCategoryFilterOnSelect(newValue.id);
-                    }}
-                    style={{ width: "14rem" }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={"Search Category"}
-                        variant='outlined'
-                      />
-                    )}
-                  />
-                </StyledMenuItem>
-              ) : (
-                <div>Empty List</div>
-              )}
-              <StyledMenuItem>
-                <button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className='btn btn-link btn-sm font-weight-bold'
-                  variant='outlined'
-                  color='primary'
-                  onClick={() => setInventoryProductCategoryFilterOnSelect("")}
+          {props.filterPage === "inventory" ? (
+            <div className="box col-3">
+              <div
+                className="filter-item"
+                onClick={handleInventoryProductCategoryClick}
+              >
+                <div className="icon mr-2">{props.data.img2}</div>
+                <div className="filterTitle">{props.data.displayColoumn2}</div>
+                <img
+                  src={updownarrow}
+                  width="10"
+                  height="10"
+                  className="ml-3"
+                  style={{ position: "relative", left: "20px" }}
+                  alt="arrow"
+                />
+              </div>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={inventoryProductCategoryAnchorEl}
+                keepMounted
+                open={Boolean(inventoryProductCategoryAnchorEl)}
+                onClose={handleInventoryProductCategoryClose}
+              //
+              >
+                <div
+                  className="d-flex flex-column align-items-center"
+                  onBlur={handleInventoryProductCategoryClose}
                 >
-                  Clear
-                </button>
-              </StyledMenuItem>
+                  {inventoryProductCategoryAnchorEl ? (
+                    <StyledMenuItem>
+                      <Autocomplete
+                        id="ProductCategory"
+                        options={props.productCategories}
+                        getOptionLabel={(options) => options.value}
+                        onChange={(event, newValue) => {
+                          setInventoryProductCategoryFilterOnSelect(
+                            newValue.value
+                          );
+                        }}
+                        style={{ width: "14rem" }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={"Search Category"}
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </StyledMenuItem>
+                  ) : (
+                    <div>Empty List</div>
+                  )}
+                  <StyledMenuItem>
+                    <button
+                      style={{
+                        padding: "10px",
+                        height: "40px",
+                        width: "130px",
+                      }}
+                      className="btn btn-link btn-sm font-weight-bold"
+                      variant="outlined"
+                      color="primary"
+                      onClick={() =>
+                        setInventoryProductCategoryFilterOnSelect("")
+                      }
+                    >
+                      Clear
+                    </button>
+                  </StyledMenuItem>
+                </div>
+              </StyledMenu>
             </div>
-          </StyledMenu>
-        </div>) : (<th
-          className="cursorP table-border-right col-3"
-          onClick={handleInventoryProductCategoryClick}
+          ) : (
+            <th
+              className="cursorP table-border-right col-3"
+              onClick={handleInventoryProductCategoryClick}
+            >
+              <div className="cursorP d-flex align-items-center">
+                <div className="icon">{props.data.img2}</div>
+                <div className="mx-2 table-text-filter">
+                  {props.data.coloumn2}
+                </div>
+                <img src={updownarrow} height="10" width="15" alt="" />
+              </div>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={inventoryProductCategoryAnchorEl}
+                keepMounted
+                open={Boolean(inventoryProductCategoryAnchorEl)}
+                onClose={handleInventoryProductCategoryClose}
+              //
+              >
+                <div
+                  className="d-flex flex-column align-items-center"
+                  onBlur={handleInventoryProductCategoryClose}
+                >
+                  {inventoryProductCategoryAnchorEl ? (
+                    <StyledMenuItem>
+                      <Autocomplete
+                        id="ProductCategory"
+                        options={props.inventoryFilterData}
+                        getOptionLabel={(options) => options.name}
+                        onChange={(event, newValue) => {
+                          setInventoryProductCategoryFilterOnSelect(
+                            newValue.id
+                          );
+                        }}
+                        style={{ width: "14rem" }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={"Search Category"}
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </StyledMenuItem>
+                  ) : (
+                    <div>Empty List</div>
+                  )}
+                  <StyledMenuItem>
+                    <button
+                      style={{
+                        padding: "10px",
+                        height: "40px",
+                        width: "130px",
+                      }}
+                      className="btn btn-link btn-sm font-weight-bold"
+                      variant="outlined"
+                      color="primary"
+                      onClick={() =>
+                        setInventoryProductCategoryFilterOnSelect("")
+                      }
+                    >
+                      Clear
+                    </button>
+                  </StyledMenuItem>
+                </div>
+              </StyledMenu>
+            </th>
+          )}
+        </>
+      );
+    } 
+    else if (columnData === "Shipment Date") {
+      return (
+        <th
+          className="cursorP table-border-right"
+          onClick={dateclick}
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img2}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn2}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn2}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="" />}
+          </div>
+          <StyledMenu
+              style={{ margin: "10px" }}
+              id="customized-menu"
+              anchorEl={dateFilter}
+              keepMounted
+              open={Boolean(dateFilter)}
+              onClose={dateclose}
+              onBlur={dateclose}
+            >
+                <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
+            </StyledMenu>
+        </th>
+      );
+    }
+    else if (columnData === "Order Date") {
+      return (
+        <th
+          className="cursorP table-border-right"
+          onClick={dateclick}
+        >
+          <div className="cursorP d-flex align-items-center">
+            <div className="icon">{props.data.img2}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn2}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
-            id="customized-menu"
-            anchorEl={inventoryProductCategoryAnchorEl}
-            keepMounted
-            open={Boolean(inventoryProductCategoryAnchorEl)}
-            onClose={handleInventoryProductCategoryClose}
-            // 
-          >
-            <div className="d-flex flex-column align-items-center" onBlur={handleInventoryProductCategoryClose}>
-              {inventoryProductCategoryAnchorEl ? (
-                <StyledMenuItem>
-                  <Autocomplete
-                    id="ProductCategory"
-                    options={props.inventoryFilterData}
-                    getOptionLabel={(options) => options.name}
-                    onChange={(event, newValue) => {
-                      setInventoryProductCategoryFilterOnSelect(newValue.id);
-                    }}
-                    style={{ width: "14rem" }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={"Search Category"}
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </StyledMenuItem>
-              ) : (
-                <div>Empty List</div>
-              )}
-              <StyledMenuItem>
-                <button
-                  style={{ padding: "10px", height: "40px", width: "130px" }}
-                  className="btn btn-link btn-sm font-weight-bold"
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => setInventoryProductCategoryFilterOnSelect("")}
-                >
-                  Clear
-                </button>
-              </StyledMenuItem>
-            </div>
-          </StyledMenu>
-        </th>)}
-        </>
-        
+              style={{ margin: "10px" }}
+              id="customized-menu"
+              anchorEl={dateFilter}
+              keepMounted
+              open={Boolean(dateFilter)}
+              onClose={dateclose}
+              onBlur={dateclose}
+            >
+                <DateFilter t={props.t} onSelectionDateFilter={onSelectionDateFilter} />
+            </StyledMenu>
+        </th>
       );
-    } else {
+    }
+    else {
       return (
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img2}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn2}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn2}
+            </div>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -1106,11 +1281,13 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleShipmentIdClick = (event) => {
-    setShipmentIdAnchorEl(event.currentTarget);
+    if(props?.shouldEnable === true)
+    setShipmentIdAnchorEl(event?.currentTarget);
   };
 
-  const handleShipmentIdClose = () => {
-    setShipmentIdAnchorEl(null);
+  const handleShipmentIdClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setShipmentIdAnchorEl(null);
   };
 
   const setShipmentIdFilterOnSelect = (selectedVal) => {
@@ -1119,7 +1296,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoToClick = (event) => {
-    setPoToAnchorEl(event.currentTarget);
+    setPoToAnchorEl(event?.currentTarget);
   };
 
   const handlePoToClose = () => {
@@ -1132,11 +1309,12 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handlePoFromClick = (event) => {
-    setPoFromAnchorEl(event.currentTarget);
+    setPoFromAnchorEl(event?.currentTarget);
   };
 
-  const handlePoFromClose = () => {
-    setPoFromAnchorEl(null);
+  const handlePoFromClose = (event) => {
+    if (!event?.currentTarget.contains(event?.relatedTarget))
+      setPoFromAnchorEl(null);
   };
 
   const setInventoryProductNameFilterOnSelect = (selectedVal) => {
@@ -1145,7 +1323,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryProductNameClick = (event) => {
-    setInventoryProductNameAnchorEl(event.currentTarget);
+    setInventoryProductNameAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryProductNameClose = () => {
@@ -1165,8 +1343,10 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img1}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
-            <img src={updownarrow} height="10" width="15" alt="" />
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn1}
+            </div>
+            {props?.shouldEnable === false ? null : <img src={updownarrow} height="10" width="15" alt="icon" />}
           </div>
           <StyledMenu
             id="customized-menu"
@@ -1174,10 +1354,10 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(shipmentIdAnchorEl)}
             onClose={handleShipmentIdClose}
-            // 
+            onBlur={handleShipmentIdClose}
             style={{ width: "150rem" }}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handleShipmentIdClose}>
+            <div className="d-flex flex-column align-items-center">
               {shipmentIdAnchorEl ? (
                 <StyledMenuItem>
                   <Autocomplete
@@ -1185,6 +1365,7 @@ const AdvanceTableFilter = (props) => {
                     options={props.shipmentIdList}
                     getOptionLabel={(options) => options.id}
                     onChange={(event, newValue) => {
+                      console.log(newValue)
                       setShipmentIdFilterOnSelect(newValue.id);
                     }}
                     style={{ width: "14rem" }}
@@ -1220,7 +1401,9 @@ const AdvanceTableFilter = (props) => {
         <th className="cursorP table-border-right" onClick={handlePoToClick}>
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img1}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn1}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
@@ -1229,9 +1412,12 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poToAnchorEl)}
             onClose={handlePoToClose}
-            // 
+          //
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoToClose}>
+            <div
+              className="d-flex flex-column align-items-center"
+              onBlur={handlePoToClose}
+            >
               <StyledMenuItem>
                 <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
@@ -1284,7 +1470,9 @@ const AdvanceTableFilter = (props) => {
         <th className="cursorP table-border-right" onClick={handlePoFromClick}>
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img1}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn1}
+            </div>
             <img src={updownarrow} height="10" width="15" alt="" />
           </div>
           <StyledMenu
@@ -1293,9 +1481,9 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poFromAnchorEl)}
             onClose={handlePoFromClose}
-            // 
+            onBlur={handlePoFromClose}
           >
-            <div className="d-flex flex-column align-items-center" onBlur={handlePoFromClose}>
+            <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
                 <button
                   style={{ padding: "10px", height: "40px", width: "130px" }}
@@ -1354,7 +1542,7 @@ const AdvanceTableFilter = (props) => {
                 style={{ position: "relative", left: "-70px" }}
               >
                 <div className="icon mr-2">{props.data.img1}</div>
-                <div className="filterTitle">{props.data.coloumn1}</div>
+                <div className="filterTitle">{props.data.displayColoumn1}</div>
                 <img
                   src={updownarrow}
                   width="10"
@@ -1370,10 +1558,13 @@ const AdvanceTableFilter = (props) => {
                 keepMounted
                 open={Boolean(inventoryProductNameAnchorEl)}
                 onClose={handleInventoryProductNameClose}
-                // 
+                //
                 style={{ marginLeft: "3rem", width: "175rem" }}
               >
-                <div className="d-flex flex-column align-items-center" onBlur={handleInventoryProductNameClose}>
+                <div
+                  className="d-flex flex-column align-items-center"
+                  onBlur={handleInventoryProductNameClose}
+                >
                   {inventoryProductNameAnchorEl ? (
                     <StyledMenuItem>
                       <Autocomplete
@@ -1381,7 +1572,7 @@ const AdvanceTableFilter = (props) => {
                         options={props.inventoryFilterData}
                         getOptionLabel={(options) => options?.name}
                         onChange={(event, newValue) => {
-                          setInventoryProductNameFilterOnSelect(newValue.id);
+                          setInventoryProductNameFilterOnSelect(newValue.name);
                         }}
                         style={{ width: "14rem" }}
                         renderInput={(params) => (
@@ -1432,10 +1623,13 @@ const AdvanceTableFilter = (props) => {
                 keepMounted
                 open={Boolean(inventoryProductNameAnchorEl)}
                 onClose={handleInventoryProductNameClose}
-                // 
+                //
                 style={{ marginLeft: "3rem", width: "175rem" }}
               >
-                <div className="d-flex flex-column align-items-center" onBlur={handleInventoryProductNameClose}>
+                <div
+                  className="d-flex flex-column align-items-center"
+                  onBlur={handleInventoryProductNameClose}
+                >
                   {inventoryProductNameAnchorEl ? (
                     <StyledMenuItem>
                       <Autocomplete
@@ -1484,7 +1678,9 @@ const AdvanceTableFilter = (props) => {
         <th className="cursorP table-border-right">
           <div className="cursorP d-flex align-items-center">
             <div className="icon">{props.data.img1}</div>
-            <div className="mx-2 table-text-filter">{props.data.coloumn1}</div>
+            <div className="mx-2 table-text-filter">
+              {props.data.displayColoumn1}
+            </div>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -1522,7 +1718,7 @@ const AdvanceTableFilter = (props) => {
                       className="mr-2"
                       alt="FilterIcon"
                     />
-                    <span className="text">{t('filter')}</span>
+                    <span className="text">{t("filter")}</span>
                     <img
                       src={dropdownIcon}
                       width="10"
@@ -1538,9 +1734,12 @@ const AdvanceTableFilter = (props) => {
                   keepMounted
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
-                  // 
+                //
                 >
-                  <div className="d-flex flex-column align-items-center" onBlur={handleClose}>
+                  <div
+                    className="d-flex flex-column align-items-center"
+                    onBlur={handleClose}
+                  >
                     <StyledMenuItem>
                       <button
                         type="button"
@@ -1552,7 +1751,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("today")}
                       >
-                        <b>{t('today')}</b>
+                        <b>{t("today")}</b>
                       </button>
                     </StyledMenuItem>
                     <StyledMenuItem>
@@ -1562,7 +1761,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("week")}
                       >
-                        <b>{t('this_week')}</b>
+                        <b>{t("this_week")}</b>
                       </button>
                     </StyledMenuItem>
                     <StyledMenuItem>
@@ -1572,7 +1771,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("month")}
                       >
-                        <b>{t('this_month')}</b>
+                        <b>{t("this_month")}</b>
                       </button>
                     </StyledMenuItem>
                     <StyledMenuItem>
@@ -1582,7 +1781,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("threeMonth")}
                       >
-                        <b>{t('last_three_months')}</b>
+                        <b>{t("last_three_months")}</b>
                       </button>
                     </StyledMenuItem>
                     <StyledMenuItem>
@@ -1592,7 +1791,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("sixMonth")}
                       >
-                        <b>{t('last_six_months')}</b>
+                        <b>{t("last_six_months")}</b>
                       </button>
                     </StyledMenuItem>
                     <StyledMenuItem>
@@ -1602,7 +1801,7 @@ const AdvanceTableFilter = (props) => {
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => setDateFilterOnSelect("year")}
                       >
-                        <b>{t('this_year')}</b>
+                        <b>{t("this_year")}</b>
                       </button>
                     </StyledMenuItem>
                   </div>
@@ -1622,7 +1821,7 @@ const AdvanceTableFilter = (props) => {
                         className="mr-2"
                         alt="Export Icon"
                       />
-                      <span>{t('export')}</span>
+                      <span>{t("export")}</span>
                       <img
                         src={dropdownIcon}
                         width="10"
@@ -1660,25 +1859,27 @@ const AdvanceTableFilter = (props) => {
             {props.filterss === "no" ? null : (
               <th>
                 <div className="d-flex px-3">
+                  {props?.shouldEnable === true &&
                   <button className="btn-filter-info" onClick={handleClick}>
                     <div className="d-flex align-items-center">
-                      <img
-                        src={FilterIcon}
-                        width="14"
-                        height="14"
-                        className="mr-2"
-                        alt="FilterIcon"
-                      />
-                        <span className="text">{t('filter')}</span>
-                      <img
-                        src={dropdownIcon}
-                        width="10"
-                        height="10"
-                        className="ml-2"
-                        alt="Drop Down Icon"
-                      />
+                          <img
+                            src={FilterIcon}
+                            width="14"
+                            height="14"
+                            className="mr-2"
+                            alt="FilterIcon"
+                          />
+                          <span className="text">{t("filter")}</span>
+                          <img
+                            src={dropdownIcon}
+                            width="10"
+                            height="10"
+                            className="ml-2"
+                            alt="Drop Down Icon"
+                          />
                     </div>
                   </button>
+                  }
                   <StyledMenu
                     id="customized-menu"
                     anchorEl={anchorEl}
@@ -1699,7 +1900,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("today")}
                         >
-                            <b>{t('today')}</b>
+                          <b>{t("today")}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1709,7 +1910,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("week")}
                         >
-                            <b>{t('this_week')}</b>
+                          <b>{t("this_week")}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1719,7 +1920,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("month")}
                         >
-                            <b>{t('this_month')}</b>
+                          <b>{t("this_month")}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1729,7 +1930,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("threeMonth")}
                         >
-                            <b>{t('last_three_months')}</b>
+                          <b>{t("last_three_months")}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1739,7 +1940,7 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("sixMonth")}
                         >
-                            <b>{t('last_six_months')}</b>
+                          <b>{t("last_six_months")}</b>
                         </button>
                       </StyledMenuItem>
                       <StyledMenuItem>
@@ -1749,12 +1950,12 @@ const AdvanceTableFilter = (props) => {
                           className="btn btn-outline-primary btn-sm"
                           onClick={() => setDateFilterOnSelect("year")}
                         >
-                            <b>{t('this_year')}</b>
+                          <b>{t("this_year")}</b>
                         </button>
                       </StyledMenuItem>
                     </div>
                   </StyledMenu>
-                  {!props?.isReportDisabled && (
+                  {!props?.isReportDisabled && props?.shouldEnable === true && (
                     <button
                       className="btn-filter-blue ml-2"
                       onClick={() =>
@@ -1769,7 +1970,7 @@ const AdvanceTableFilter = (props) => {
                           className="mr-2"
                           alt="Export Icon"
                         />
-                          <span>{t('export')}</span>
+                        <span>{t("export")}</span>
                         <img
                           src={dropdownIcon}
                           width="10"

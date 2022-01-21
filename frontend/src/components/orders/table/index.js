@@ -30,6 +30,7 @@ function Table(props) {
       <AdvanceTableFilter
           visible={props.visible}
           data={props.data}
+          shouldEnable={true}
           poOrderIdList={props.poOrderIdList}
           poDeliveryLocationsList={props.poDeliveryLocationsList}
           poProductsList={props.poProductsList}
@@ -45,6 +46,7 @@ function Table(props) {
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
+          onSelectionDateFilter={props.onSelectionDateFilter}
           isReportDisabled={props.isReportDisabled}
           t={t}
           filterPage="orders"

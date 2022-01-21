@@ -3,7 +3,7 @@ import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
 import { config } from "../../config";
-import { getAddress } from "../../utils/commonHelper";
+// import { getAddress } from "../../utils/commonHelper";
 
 const ChainOfCustody = (props) => {
   const configObject = config();
@@ -32,9 +32,7 @@ const ChainOfCustody = (props) => {
     <div>
       {props.shipments[0].shipmentUpdates?.map((custody, index) =>
         index === 0 ? (
-          <div className='row  mb-3'>
-            <div></div>
-            <div className='big-dot bg-info ml-4'></div>
+          <div className='row  mb-3' key={index}>
             <div className='col'>
               <div className='color mb-3'>
                 {custody.status === "CREATED" ? "SHIPPED" : "Shipped"}
@@ -51,7 +49,7 @@ const ChainOfCustody = (props) => {
                     <h6 className='poheads potext mt-3 mb-3'>From</h6>
                     <div className=' d-flex flex-row p-1'>
                       <span className='w-100  text-secondary'>
-                        Organisation Name{" "}
+                        Organization Name{" "}
                       </span>
                       <span className='w-100 pl-2'>
                         {shipmentData.supplier.id}
@@ -59,12 +57,10 @@ const ChainOfCustody = (props) => {
                     </div>
                     <div className=' d-flex flex-row p-1'>
                       <span className='w-100 text-secondary'>
-                        Organisation Location{" "}
+                        Organization Location{" "}
                       </span>
                       <span className='w-100 pl-2 '>
-                        {
-                          shipmentData.supplier.locationId
-                        }
+                        {shipmentData.supplier.locationId}
                       </span>
                     </div>
                     {/* <h6 className="poheads potext mt-3 mb-3">To</h6>
@@ -143,7 +139,7 @@ const ChainOfCustody = (props) => {
             </div>
           </div>
         ) : (
-          <div>
+          <div key={index}>
             {" "}
             {custody.status === "RECEIVED" ? (
               <div className='row  mb-3'>

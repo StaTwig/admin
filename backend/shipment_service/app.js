@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const swaggerUi = require("swagger-ui-express");
 const openApiDocumentation = require("./openApiDocumentation");
-const { MqttConnection } = require("./helpers/mqtt");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
@@ -27,9 +26,6 @@ mongoose
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("Shipment Service is running ... \n");
-      (async () => {
-        await MqttConnection();
-      })();
     }
   })
   .catch((err) => {

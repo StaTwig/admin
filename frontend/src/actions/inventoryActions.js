@@ -126,7 +126,6 @@ export const GetStatesFromWarehouses = async (id) => {
 export const GetCitiesFromWarehouses = async (id) => {
   try {
     const result = await axios.get(`${config().getCitiesByState}?state=${id}`);
-    console.log(result);
     return result.data;
   } catch (e) {
     return [];
@@ -138,7 +137,6 @@ export const GetWarehousesWithCity = async (id) => {
     const result = await axios.get(
       `${config().getWarehousesByCity}?city=${id}`
     );
-    console.log(result);
     return result.data;
   } catch (e) {
     return [];
@@ -265,7 +263,7 @@ export const addInventory = async (data) => {
 export const addProductsToInventory = async (data) => {
   try {
     const result = await axios.post(config().addProductsToInventory, data);
-    return result;
+    return result.data;
   } catch (e) {
     return e.response;
   }
@@ -309,9 +307,7 @@ export const getInventoryByBatchNumber = (id) => {
     return async (dispatch) => {
       const url = config().getInventoryByBatchNumber + id;
       const result = await axios.get(url);
-      console.log(result);
-      // dispatch(setInventories(result.data));
-      return result.sata;
+      return result.data;
     };
     // eslint-disable-next-line no-unreachable
   } catch (e) {

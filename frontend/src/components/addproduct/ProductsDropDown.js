@@ -24,7 +24,6 @@ const ProductsDropDown = (props) => {
     setMenu(false);
   });
   const useParse = name && name.includes("<");
-  console.log(name)
   return (
     <div className='custom-dropdown1' ref={ref}>
       {isText ? (
@@ -59,16 +58,18 @@ const ProductsDropDown = (props) => {
           onClick={() => setMenu(!menu)}
         >
           <div className={`${name?.length > 15 && "textNeg"}`}>
-            {useParse ? parse(name) : name.split("|")[0] }
+            {useParse ? parse(name) : name.split("|")[0]}
           </div>
           <br></br>
-          <div className={`location-add ${name?.length > 15 && "textNeg-title"}`}>
+          <div
+            className={`location-add ${name?.length > 15 && "textNeg-title"}`}
+          >
             {useParse ? parse(name) : name.split("|")[1]}
           </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
             alt='downarrow'
-            className= "customdropDown"
+            className='customdropDown'
             // style={{position:"relative",left:"3.5rem"}}
           />
         </button>
@@ -83,7 +84,7 @@ const ProductsDropDown = (props) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className="dropdown-item p-1"
+                    className='dropdown-item p-1'
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);
@@ -91,17 +92,20 @@ const ProductsDropDown = (props) => {
                   >
                     {item?.warehouseInventory ? (
                       <div>
-                        <span style={{fontWeight: "bolder", color:"#707070"}}>
+                        <span
+                          style={{ fontWeight: "bolder", color: "#707070" }}
+                        >
                           {item.title}
                         </span>
                         <br></br>
-                        <span style={{color:"#707070", fontSize:"12px"}}>
-                          {item?.warehouseAddress?.firstLine +
-                            " " +
-                            item?.warehouseAddress?.city 
-                          //  + " " +
-                          //   item.postalAddress
-                            }
+                        <span style={{ color: "#707070", fontSize: "12px" }}>
+                          {
+                            item?.warehouseAddress?.firstLine +
+                              " " +
+                              item?.warehouseAddress?.city
+                            //  + " " +
+                            //   item.postalAddress
+                          }
                         </span>
                       </div>
                     ) : (

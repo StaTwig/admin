@@ -23,7 +23,7 @@ const VerifyInventory = (props) => {
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
   });
-  console.log("reviewInventories",reviewInventories);
+  // console.log("reviewInventories",reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +34,7 @@ const VerifyInventory = (props) => {
     dispatch(turnOn());
 
     const postData = reviewInventories.map((inventory) => {
-      console.log('Inventory details', inventory);
+      // console.log('Inventory details', inventory);
       return {
         productId: inventory.productId,
         batchNumber: inventory.batchNumber,
@@ -42,7 +42,7 @@ const VerifyInventory = (props) => {
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber,
-        unitOfMeasure:inventory.unitofMeasure.name
+        unitOfMeasure:inventory?.unitofMeasure?.name
       };
     });
 
@@ -50,12 +50,11 @@ const VerifyInventory = (props) => {
     const result = await addProductsToInventory({
       products: postData,
     });
-    console.log(result.status)
     setOpenCreatedInventory(true);
     if (result.success) {
       setSuccessMessage(result.message);
     } else {
-      setErrorMessage(result.data?.message);
+      setErrorMessage(result.message);
     }
     dispatch(turnOff());
     dispatch(resetReviewInventories());
@@ -120,6 +119,7 @@ const VerifyInventory = (props) => {
             </div>
             {reviewInventories.map((reviewInventory) => {
               console.log('Individual Details', reviewInventory);
+              console.log("Bool", typeof reviewInventory.unitofMeasure === 'object')
               return (
               <div className='row p-1 mt-4'>
                 <span className='col-3'>{reviewInventory.productName}</span>
@@ -134,7 +134,7 @@ const VerifyInventory = (props) => {
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
-                  {reviewInventory.unitofMeasure.name}
+                  {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
                   <span>{")"}</span>
                 </span>
                 <span className='col-1'>

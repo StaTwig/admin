@@ -5,7 +5,7 @@ const ProductList = (props) => {
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
-    <div>
+    <>
       {props.shipments?.products?.map((product, index) => (
         <div
           className={
@@ -13,6 +13,7 @@ const ProductList = (props) => {
               ? "col panel commonpanle highlight mb-3"
               : "col panel commonpanle mb-3"
           }
+          key={index}
         >
           <div className='d-flex flex-row '>
             <ul className='w-75 elemens'>
@@ -27,9 +28,7 @@ const ProductList = (props) => {
               <li className='mb-1'>{product.productName}</li>
               <li className='mb-1'>{product.manufacturer}</li>
               <li className='mb-1'>{product?.batchNumber}</li>
-              <li className='mb-1'>
-                {product.productQuantity}
-              </li>
+              <li className='mb-1'>{product.productQuantity}</li>
               <li className='mb-1'>
                 {product["productQuantityDelivered"]
                   ? product["productQuantityDelivered"]
@@ -46,7 +45,7 @@ const ProductList = (props) => {
                     props.setProductHighLight(false);
                 }}><img src={props.menuProduct?Down:traceDrop} alt="actions" height="7" width="12"
                     /></div> */}
-    </div>
+    </>
   );
 };
 

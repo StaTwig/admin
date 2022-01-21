@@ -33,12 +33,12 @@ const SideBar = (props) => {
       <ul>
         {isAuthenticated("overview") && enable && (
           <li className={url === "/overview" ? "active" : "inactive"}>
-            <Link to='/overview' className='d-inline-block'>
+            <Link to='/overview' className='nav-look-link'>
               <img
                 src={url === "/overview" ? HomeIcon : HomeIcon}
                 alt='Overview'
               />
-              <span className='ml-2'>{t('overview')}</span>
+              <span>{t("overview")}</span>
             </Link>
           </li>
         )}
@@ -59,7 +59,7 @@ const SideBar = (props) => {
                   }
                   alt='Orders'
                 />
-                <span className='ml-2'>{t('orders')}</span>
+                <span className='ml-2'>{t("orders")}</span>
               </Link>
             </li>
           )}
@@ -94,7 +94,7 @@ const SideBar = (props) => {
                 }
                 alt='Inventory'
               />
-              <span className='ml-2'>{t('inventory')}</span>
+              <span className='ml-2'>{t("inventory")}</span>
             </Link>
           </li>
         )}
@@ -124,6 +124,7 @@ const SideBar = (props) => {
               </Link>
             </li>
           )}
+
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>
@@ -131,7 +132,7 @@ const SideBar = (props) => {
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
                 alt='Shippment'
               />
-              <span className='ml-2'>{t('network')}</span>
+              <span className='ml-2'>{t("network")}</span>
             </Link>
           </li>
         )}
@@ -142,7 +143,7 @@ const SideBar = (props) => {
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
                 alt='Track & Trace'
               />
-              <span className='ml-2'>{t('trackntrace')}</span>
+              <span className='ml-2'>{t("trackntrace")}</span>
             </Link>
           </li>
         )}
@@ -154,7 +155,7 @@ const SideBar = (props) => {
                 alt='lastMile'
               />
 
-              <span className='ml-2'>{t('lastmile')}</span>
+              <span className='ml-2'>{t("lastmile")}</span>
             </Link>
           </li>
         )}

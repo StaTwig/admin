@@ -4,10 +4,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { trackProduct } from "../../actions/shipmentActions";
 import { chainOfCustody } from "../../actions/shipmentActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const TracingContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [trackData, setTrackData] = useState({});
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
@@ -17,8 +17,6 @@ const { t, i18n } = useTranslation();
     async function fetchData() {
       const result = await trackProduct(props.match.params.id);
       if (result.status === 200) {
-        console.log("Tracking data");
-        console.log(result.data);
         setTrackData(result.data);
       } else {
         setTrackData({});
@@ -35,9 +33,6 @@ const { t, i18n } = useTranslation();
         setShippmentChainOfCustodyData(
           result.data.data["shipmentChainOfCustody"]
         );
-        console.log("from variable");
-        console.log(poChainOfCustodyData);
-        console.log(shippmentChainOfCustodyData);
       } else {
         setPoChainOfCustodyData([]);
         setShippmentChainOfCustodyData([]);
@@ -52,9 +47,9 @@ const { t, i18n } = useTranslation();
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} t={t}/>
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} t={t}/>
+        <Sidebar {...props} t={t} />
         <div className='content'>
           <Tracing
             trackData={trackData}

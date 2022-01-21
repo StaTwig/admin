@@ -13,10 +13,15 @@ import {
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
+import { FormControlLabel, Switch } from "@material-ui/core";
+import withStyles from "@material-ui/core/styles/withStyles";
 import { useDispatch } from "react-redux";
+import moment from "moment";
+import Loader from "../../shared/loader/Loader";
+import Fulloader from "../../shared/loader/Fulloader";
 
 const UpdateStatus = (props) => {
-  const { t } = props;
+  const { t, shipmentData } = props;
   const dispatch = useDispatch();
   const profile = useSelector((state) => {
     return state.user;
@@ -24,6 +29,8 @@ const UpdateStatus = (props) => {
   // console.log('Profile');
   // console.log(profile);
   const { id } = props.match.params;
+  const billNo = shipmentData?.airWayBillNo;
+  const { quantity, weight } = useState("")
   const [firstName, setFirstName] = useState("");
   const [organisationName, setOrganisationName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -32,17 +39,89 @@ const UpdateStatus = (props) => {
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // const [isActive, setActive] = useState(false)
   const [shipment, setShipment] = useState({});
   const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [loaderC, setLoaderC] = useState(false);
+  const [loaderL, setLoaderL] = useState(false);
   const [commentEnabled, setCommentEnabled] = useState(false);
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
 
-  console.log(comment);
+  const [acceptanceDate, setAcceptanceDate] = useState("");
+  const [customsDate, setCustomsDate] = useState("");
+  const [lastStatusDate, setLastStatusDate] = useState("");
+  React.useEffect(() => {
+    const acceptanceArr = shipmentData.shipmentUpdates?.filter(u => u.updateComment === 'Acceptance Date');
+    let accDate = acceptanceArr?.length > 0 ? acceptanceArr[0].updatedOn.split(" ")[0] : "";
+    setAcceptanceDate(accDate);
 
+    const customsArr = shipmentData.shipmentUpdates?.filter(u => u.updateComment === 'Customs clearance Date');
+    let cusDate = customsArr?.length > 0 ? customsArr[0].updatedOn.split(" ")[0] : "";
+    setCustomsDate(cusDate);
+
+    const lastStatusArr = shipmentData.shipmentUpdates?.filter(u => u.updateComment === 'Last Status');
+    let lsDate = lastStatusArr?.length > 0 ? lastStatusArr[0].updatedOn.split(" ")[0] : "";
+    setLastStatusDate(lsDate);
+  },[shipmentData])
+
+
+  const onToggle = async (value) => {
+    console.log(value);
+    document.getElementById(value.target.id).checked = value.currentTarget.checked;
+    
+    if(value.target.id === 'toggle1')
+      setLoader(true);
+    else if(value.target.id === 'toggle2')
+      setLoaderC(true);
+    else if(value.target.id === 'toggle3')
+      setLoaderL(true);
+    const data = {
+      id: id,
+      shipmentUpdates: {
+        updateComment:value.target.id === 'toggle1' ? "Acceptance Date" : value.target.id === 'toggle2' ? "Customs clearance Date" : "Last Status",
+        updatedBy: profile.firstName,
+        orgid: profile.organisation,
+        orglocation: profile.location,
+        updatedAt: "InTransit",
+        isAlertTrue: true,
+      },
+    };
+    const result = await updateTrackingStatus(data);
+    if (result.status === 200) {
+      setTimeout(() => {
+        if(value.target.id === 'toggle1')
+          setAcceptanceDate(moment(new Date()).format('D/M/YYYY'));
+        else if(value.target.id === 'toggle2')
+          setCustomsDate(moment(new Date()).format('D/M/YYYY'));
+        else if(value.target.id === 'toggle3')
+          setLastStatusDate(moment(new Date()).format('D/M/YYYY'));
+        setLoader(false);
+        setLoaderC(false);
+        setLoaderL(false);
+      }, 2000);
+    } else {
+      setOpenShipmentFail(true);
+      setErrorMessage("Failed to Update");
+    }
+  }
+
+  const CustomSwitch = withStyles({
+    switchBase: {
+      '&$checked': {
+        color: "#0b65c1",
+      },
+      '&$checked + $track': {
+        backgroundColor: "#0b65c1",
+      },
+    },
+    checked: {},
+    track: {},
+  })(Switch);
   React.useEffect(() => {
     async function fetchData() {
       const result = await dispatch(getViewShipmentGmr(props.match.params.id));
@@ -82,7 +161,7 @@ const UpdateStatus = (props) => {
     const data = {
       id: shipmentId,
       shipmentUpdates: {
-        updateComment: comments,
+        updateComment: comment,
         updatedBy: profile.firstName,
         orgid: profile.organisation,
         orglocation: profile.location,
@@ -131,6 +210,9 @@ const UpdateStatus = (props) => {
         enableReinitialize={true}
         initialValues={{
           shipmentId: id,
+          airWayBillNo: billNo,
+          quantity: quantity,
+          weight: weight,
           firstName: profile.firstName,
           organisationName: profile.organisation,
           organisationLocation: profile.location,
@@ -189,6 +271,46 @@ const UpdateStatus = (props) => {
                           value={values.shipmentId}
                         />
                       </div>
+                      {props.user.emailId === 'gmr@statledger.io' ? (
+                        <div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Airway Bill No
+                            </label>
+                            <input
+                              type='text'
+                              className='form-control'
+                              name='airWayBillNo'
+                              onBlur={handleBlur}
+                              value={values.airWayBillNo}
+                            />
+                          </div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Quantity
+                            </label>
+                            <input
+                              type='text'
+                              className='form-control'
+                              name='quantity'
+                              onBlur={handleBlur}
+                              value={values.quantity}
+                            />
+                          </div>
+                          <div className='form-group'>
+                            <label className='mt-3 text-secondary'>
+                              Weight
+                            </label>
+                            <input
+                              type='text'
+                              className='form-control'
+                              name='weight'
+                              onBlur={handleBlur}
+                              value={values.weight}
+                            />
+                          </div>
+                        </div>
+                      ) : ('')}
                       {/* {errors.shipmentId && touched.shipmentId && (
                         <span className="error-msg text-danger row justify-content-end col-8">
                           {errors.shipmentId}
@@ -263,10 +385,125 @@ const UpdateStatus = (props) => {
                         )} */}
                       </div>
                     </div>
-
-                      <h6 className="poheads potext m-4">{t('comment')}</h6>
-                    <div className="panel commonpanle mb-5">
-                      {/* <div className='form-group mb-0'>
+                    {props.user.emailId === 'gmr@statledger.io' ?
+                      <div>
+                        <h6 className='poheads potext m-4'>
+                          Shipment Cargo Status
+                        </h6>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loader && "fade-color"}`}>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>Acceptance Date</label>
+                          </div>
+                          {loader && (<Loader />)}
+                          {!loader && (<div>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='acceptanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={acceptanceDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>) }
+                          <div className="appearDate">
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  readOnly={acceptanceDate != ''}
+                                  disabled={acceptanceDate != ''}
+                                  checked={acceptanceDate != ''}
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle1"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="col col-1 pl-2 custom-control custom-radio">
+                          <input
+                            type="radio"
+                            className="custom-control-input"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value="False"
+                            id="noradio"
+                            name="alerttrue"
+                          />
+                        </div>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderC && "fade-color"}`}>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Customs clearance Date
+                            </label>
+                          </div>
+                          {loaderC && (<Loader />)}
+                          {!loaderC && (
+                          <div>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='customsClearanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={customsDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>)}
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  readOnly={customsDate != ''}
+                                  disabled={customsDate != ''}
+                                  checked={customsDate != ''}
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle2"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderL && "fade-color"}`}>
+                          <div className="cargoLabels">
+                            <label className='mb-1 text-secondary'>
+                              Last Status
+                            </label>
+                          </div>
+                          {loaderL && (<Loader />)}
+                          {!loaderL && (
+                          <div>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='lastStatus'
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              value={lastStatusDate}
+                              style={{ border: "0px", color: "#6c757d!important" }}
+                            />
+                          </div>)}
+                          <div>
+                            <FormControlLabel
+                              control={
+                                <CustomSwitch
+                                  readOnly={lastStatusDate != ''}
+                                  disabled={lastStatusDate != ''}
+                                  checked={lastStatusDate != ''}
+                                  onChange={onToggle}
+                                  name="checkedB"
+                                  id="toggle3"
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                        : 
+                         <>
+                        <h6 className="poheads potext m-4">{t('comment')}</h6>
+                        <div className="panel commonpanle mb-5">
+                          {/* <div className='form-group mb-0'>
                         <input
                           type='text'
                           className='form-control mb-2'
@@ -279,143 +516,103 @@ const UpdateStatus = (props) => {
                         />
                       </div> */}
 
-                      <div className=" pt-2 pb-2 d-flex row">
-                        <span
-                          onClick={() => {
-                            setCount("r1");
-                            setCommentEnabled(false);
-                            setComment("Damaged in transit");
-                          }}
-                          className={`txt-outline ${
-                            count === "r1" && "comment-active"
-                          }`}
-                        >
-                          {t('damaged_in_transit')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r2");
-                            setCommentEnabled(false);
-                            setComment("Miscount");
-                          }}
-                          className={`txt-outline ${
-                            count === "r2" && "comment-active"
-                          }`}
-                        >
-                               {t('miscount')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r3");
-                            setCommentEnabled(false);
-                            setComment("Shipment Stolen");
-                          }}
-                          className={`txt-outline ${
-                            count === "r3" && "comment-active"
-                          }`}
-                        >
-                               {t('shipment_stolen')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r4");
-                            setCommentEnabled(false);
-                            setComment("Wrong Shipment");
-                          }}
-                          className={`txt-outline ${
-                            count === "r4" && "comment-active"
-                          }`}
-                        >
-                          {t('wrong_shipment')}
-                        </span>
-                        <span
-                          onClick={() => {
-                            setCount("r5");
-                            setCommentEnabled(true);
-                            setComment("");
-                          }}
-                          className={`txt-outline ${
-                            count === "r5" && "comment-active"
-                          }`}
-                        >
-                            {t('other')}
-                        </span>
-                      </div>
-                      <div
-                        className="form-group"
-                        style={{ width: "150%", height: "60px" }}
-                      >
-                        {commentEnabled && (
-                          <input
-                            disabled={!commentEnabled}
-                            style={{
-                              fontSize: "14px",
-                              resize: "none",
-                              //borderBottom: "none",
-                              marginTop: "40px",
-                              //marginBottom:"10px"
-                            }}
-                            type="text"
-                            className="form-control"
-                            name="Comment"
-                            onChange={(e) => setComment(e.target.value)}
-                            size="40"
-                            cols="120"
-                            rows="7"
-                            placeholder={t('enter')+' '+t('comment')}
-                            value={comment}
-                          />
-                        )}
-                      </div>
-
-                      {errors.comments && touched.comments && (
-                        <span className="error-msg text-danger">
-                          {errors.comments}
-                        </span>
-                      )}
-
-                      {/* <div className="row mt-3 justify-content-end">
-                        <span className="col row col-6 justify-content-end text-secondary">
-                          Should send an alert?
-                        </span>
-                        <div className="col col-2 ml-2 custom-control custom-radio">
-                          <input
-                            type="radio"
-                            className="custom-control-input"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value="True"
-                            id="yesradio"
-                            name="alerttrue"
-                          />
-                          <label
-                            className="custom-control-label"
-                            for="yesradio"
+                          <div className=" pt-2 pb-2 d-flex row">
+                            <span
+                              onClick={() => {
+                                setCount("r1");
+                                setCommentEnabled(false);
+                                setComment(t('damaged_in_transit'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r1" && "comment-active"
+                                }`}
+                            >
+                              {t('damaged_in_transit')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r2");
+                                setCommentEnabled(false);
+                                setComment(t('miscount'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r2" && "comment-active"
+                                }`}
+                            >
+                              {t('miscount')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r3");
+                                setCommentEnabled(false);
+                                setComment(t('shipment_stolen'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r3" && "comment-active"
+                                }`}
+                            >
+                              {t('shipment_stolen')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r4");
+                                setCommentEnabled(false);
+                                setComment(t('wrong_shipment'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r4" && "comment-active"
+                                }`}
+                            >
+                              {t('wrong_shipment')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r5");
+                                setCommentEnabled(true);
+                                setComment("");
+                              }}
+                              className={`txt-outline ${
+                                count === "r5" && "comment-active"
+                                }`}
+                            >
+                              {t('other')}
+                            </span>
+                          </div>
+                          <div
+                            className="form-group"
+                            style={{ width: "150%", height: "60px" }}
                           >
-                            Yes
-                          </label>
+                            {commentEnabled && (
+                              <input
+                                disabled={!commentEnabled}
+                                style={{
+                                  fontSize: "14px",
+                                  resize: "none",
+                                  //borderBottom: "none",
+                                  marginTop: "40px",
+                                  //marginBottom:"10px"
+                                }}
+                                type="text"
+                                className="form-control"
+                                name="Comment"
+                                onChange={(e) => setComment(e.target.value)}
+                                size="40"
+                                cols="120"
+                                rows="7"
+                                placeholder={t('enter') + ' ' + t('comment')}
+                                value={comment}
+                              />
+                            )}
+                          </div>
+
+                          {errors.comments && touched.comments && (
+                            <span className="error-msg text-danger">
+                              {errors.comments}
+                            </span>
+                          )}
                         </div>
-                        <div className="col col-1 pl-2 custom-control custom-radio">
-                          <input
-                            type="radio"
-                            className="custom-control-input"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value="False"
-                            id="noradio"
-                            name="alerttrue"
-                          />
-                          <label className="custom-control-label" for="noradio">
-                            No
-                          </label>
-                        </div>
-                      </div>
-                      {errors.alerttrue && touched.alerttrue && (
-                        <span className="error-msg text-danger row justify-content-end col-12">
-                          {errors.alerttrue}
-                        </span>
-                      )} */}
-                    </div>
+                        </>
+                    }
                   </div>
                   <div className="col ">
                     <div className="row">
@@ -518,6 +715,120 @@ const UpdateStatus = (props) => {
                         </div>
                       )}
                     </div>
+                      {props.user.emailId === 'gmr@statledger.io' &&
+                        <>
+                        <h6 className="poheads potext m-4">{t('comment')}</h6>
+                        <div className="panel commonpanle mb-5">
+                          {/* <div className='form-group mb-0'>
+                        <input
+                          type='text'
+                          className='form-control mb-2'
+                          name='comments'
+                          //style={{ flexBasis: "100%" }}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder='Enter comments here...'
+                          value={values.comments}
+                        />
+                      </div> */}
+
+                          <div className=" pt-2 pb-2 d-flex row">
+                            <span
+                              onClick={() => {
+                                setCount("r1");
+                                setCommentEnabled(false);
+                                setComment(t('damaged_in_transit'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r1" && "comment-active"
+                                }`}
+                            >
+                              {t('damaged_in_transit')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r2");
+                                setCommentEnabled(false);
+                                setComment(t('miscount'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r2" && "comment-active"
+                                }`}
+                            >
+                              {t('miscount')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r3");
+                                setCommentEnabled(false);
+                                setComment(t('shipment_stolen'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r3" && "comment-active"
+                                }`}
+                            >
+                              {t('shipment_stolen')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r4");
+                                setCommentEnabled(false);
+                                setComment(t('wrong_shipment'));
+                              }}
+                              className={`txt-outline ${
+                                count === "r4" && "comment-active"
+                                }`}
+                            >
+                              {t('wrong_shipment')}
+                            </span>
+                            <span
+                              onClick={() => {
+                                setCount("r5");
+                                setCommentEnabled(true);
+                                setComment("");
+                              }}
+                              className={`txt-outline ${
+                                count === "r5" && "comment-active"
+                                }`}
+                            >
+                              {t('other')}
+                            </span>
+                          </div>
+                          <div
+                            className="form-group"
+                            style={{ width: "150%", height: "60px" }}
+                          >
+                            {commentEnabled && (
+                              <input
+                                disabled={!commentEnabled}
+                                style={{
+                                  fontSize: "14px",
+                                  resize: "none",
+                                  //borderBottom: "none",
+                                  marginTop: "40px",
+                                  //marginBottom:"10px"
+                                }}
+                                type="text"
+                                className="form-control"
+                                name="Comment"
+                                onChange={(e) => setComment(e.target.value)}
+                                size="40"
+                                cols="120"
+                                rows="7"
+                                placeholder={t('enter') + ' ' + t('comment')}
+                                value={comment}
+                              />
+                            )}
+                          </div>
+
+                          {errors.comments && touched.comments && (
+                            <span className="error-msg text-danger">
+                              {errors.comments}
+                            </span>
+                          )}
+                        </div>
+                        </>
+                      }
                   </div>
                 </div>
 

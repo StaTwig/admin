@@ -11,7 +11,7 @@ import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
   const dispatch = useDispatch();
-  const { shpmnts, t } = props;
+  const { shpmnts, t, shouldEnable } = props;
   const shipments = shpmnts();
   shipments.sort(function (a, b) {
     if (a.id > b.id) {
@@ -29,6 +29,7 @@ function Table(props) {
         <AdvanceTableFilter
           data={props.data}
           shipmentIdList={props.shipmentIdList}
+          shouldEnable={shouldEnable}
           supplierReceiverList={
             props.user.emailId === "gmr@statledger.io"
               ? []
@@ -44,6 +45,7 @@ function Table(props) {
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
+          onSelectionDateFilter={props.onSelectionDateFilter}
           isReportDisabled={props.isReportDisabled}
           t={t}
         />

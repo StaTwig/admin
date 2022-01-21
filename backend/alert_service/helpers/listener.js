@@ -92,7 +92,6 @@ async function inventoryListener(event) {
 
 async function alertListener(event) {
   try {
-    console.log(event.eventTypeDesc);
     if (
       event.eventTypeDesc == "SHIPMENT" ||
       event.eventTypeDesc == "SHIPMENT_TRACKING"
@@ -161,4 +160,5 @@ async function subscribedAlerts(event) {
 
 module.exports = {
   alertListener,
+  inventoryListener,
 };

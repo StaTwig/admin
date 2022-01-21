@@ -155,7 +155,6 @@ exports.register = [
       if (!emailId.match(phoneRegex))
         return Promise.reject("Mobile number is not valid");
       phone = "+" + value;
-      console.log(phone);
       user = await EmployeeModel.findOne({ phoneNumber: phone });
       if (user) {
         return Promise.reject("Mobile already in use");
@@ -198,7 +197,7 @@ exports.register = [
           { new: true }
         );
         const employeeId =
-          empCounter.counters[0].format + empCounter.counters[0].value;
+          empCounter.counters[4].format + empCounter.counters[4].value;
         const employeeStatus = "NOTAPPROVED";
         let addr = "";
         //create organisation if doesn't exists
@@ -235,7 +234,7 @@ exports.register = [
               { new: true }
             );
             organisationId =
-              orgCounter.counters[0].format + orgCounter.counters[0].value;
+              orgCounter.counters[2].format + orgCounter.counters[2].value;
             const warehouseCounter = await CounterModel.findOneAndUpdate(
               { "counters.name": "warehouseId" },
               {
@@ -246,8 +245,8 @@ exports.register = [
               { new: true }
             );
             warehouseId =
-              warehouseCounter.counters[0].format +
-              warehouseCounter.counters[0].value;
+              warehouseCounter.counters[3].format +
+              warehouseCounter.counters[3].value;
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
@@ -280,7 +279,7 @@ exports.register = [
               }
             );
             const inventoryId =
-              invCounter.counters[0].format + invCounter.counters[0].value;
+              invCounter.counters[7].format + invCounter.counters[7].value;
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
             const loc = await getLatLongByCity(
@@ -535,10 +534,10 @@ exports.verifyOtp = [
             const userData = {
               address,
             };
-            await axios.post(
+           /* await axios.post(
               `${blockchain_service_url}/grantPermission`,
               userData
-            );
+            );*/
             await EmployeeModel.updateOne(query, {
               otp: null,
               walletAddress: address,
@@ -745,6 +744,7 @@ exports.updateProfile = [
         phoneNumber = "",
         warehouseId,
         organisation,
+        preferredLanguage
       } = req.body;
 
       const organisationId = organisation.split("/")[1];
@@ -753,6 +753,7 @@ exports.updateProfile = [
       employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
+      employee.preferredLanguage = preferredLanguage;
       await employee.save();
 
       const returnData = { isRefresh: false };
@@ -948,7 +949,7 @@ exports.addWarehouse = [
         { new: true }
       );
       const inventoryId =
-        invCounter.counters[0].format + invCounter.counters[0].value;
+        invCounter.counters[7].format + invCounter.counters[7].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -963,7 +964,7 @@ exports.addWarehouse = [
         bottleCapacity,
         sqft,
       } = req.body;
-      const warehouseCounter = await CounterModel.findOne(
+      const warehouseCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "warehouseId" },
         {
           $inc: {
@@ -975,8 +976,8 @@ exports.addWarehouse = [
         }
       );
       const warehouseId =
-        warehouseCounter.counters[0].format +
-        warehouseCounter.counters[0].value;
+        warehouseCounter.counters[3].format +
+        warehouseCounter.counters[3].value;
 
       const loc = await getLatLongByCity(
         warehouseAddress.city + "," + warehouseAddress.country

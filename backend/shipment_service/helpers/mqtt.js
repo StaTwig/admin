@@ -4,6 +4,7 @@ const {
   updateSensorData,
   getCurrentShipment,
 } = require("./sensorDataCollector");
+const { asyncForEach } = require("./utility");
 const options = {
   host: "statwig.vacustech.in",
   port: 8883,
@@ -25,18 +26,32 @@ exports.MqttConnection = (io) => {
     client.on("message", async (topic, messageArray) => {
       try {
         messageArray = JSON.parse(messageArray.toString());
-        for (const message of messageArray) {
-          let sensorData;
-          if (topic == "/test/vacus/sensor") {
+        if (topic == "/test/vacus/sensor") {
+          const sensorArray = new Array();
+          let shipmentId = null;
+          let avg = 0;
+          for (const message of messageArray) {
             const result = await getCurrentShipment(message.vehicleID);
-            message.shipmentId = result.id || null;
-            sensorData = await saveSensorData(message);
-            if (sensorData.shipmentId) {
-              io.to(sensorData.shipmentId).emit("sensorData", sensorData);
-            }
-          } else {
-            sensorData = await updateSensorData(message);
+            message.shipmentId = shipmentId = result.id || null;
+            const sensorData = await saveSensorData(message);
+            sensorArray.push({
+              name: sensorData.sensorId,
+              data: [sensorData],
+            });
+            avg += sensorData.temperature;
           }
+          const avgTemperature = {
+            temperature: avg / messageArray.length,
+            timestamp: new Date(),
+          };
+          if (shipmentId) {
+            io.to(shipmentId).emit("sensorData", sensorArray);
+            io.to(shipmentId).emit("avgTemperature", avgTemperature);
+          }
+        } else {
+          await asyncForEach(messageArray, async (message) => {
+            await updateSensorData(message);
+          });
         }
       } catch (error) {
         console.log("SOCKET-IO MQTT ERROR", error);

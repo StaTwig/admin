@@ -34,7 +34,6 @@ const ExcelPopUp = (props) => {
     }
 
     if (result && result.status === 200 && notNullValues !== 0) {
-      console.log("success add PO");
       setopenSuccesfulOrder(true);
       setModalProps({
         message: "Created Successfully!",
@@ -62,22 +61,29 @@ const ExcelPopUp = (props) => {
           name='photo'
           width='50'
           height='50'
-          className='mt-2'
+          className='mt-3'
           alt=''
         />
-        <div>"{t('drag_drop')}" {t('your_excel_file_here')}</div>
-        <div>{t('or')}</div>
-        <div className='mb-3 excelSpace mt-4'>
-          <label htmlFor="fileE" 
-            className='mb-3 excelSpace' >{t('select_a_file')}</label>
-        
+        <div>
+          "{t("drag_drop")}" {t("your_excel_file_here")}
+        </div>
+        <div>{t("or")}</div>
+        <div className='row'
+                  >
+          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center'  style={{
+                    display:"block",
+                    margin:"0 auto"  
+                  }}>
+            {t("select_a_file")}
+          </label>
+
           <input
             type='file'
-            id="fileE"
-            style={{visibility: 'hidden'}}
+            id='fileE'
+            style={{ visibility: "hidden" }}
             className='mb-3 excelSpace'
             onChange={setExcelFile}
-            />
+          />
         </div>
       </div>
       <div className='row justify-content-between'>
@@ -87,10 +93,10 @@ const ExcelPopUp = (props) => {
             className='btn-outline-primary btn mr-3'
             onClick={props.onHide}
           >
-            {t('cancel')}
+            {t("cancel")}
           </button>
           <button className='btn-primary btn mr-4' onClick={uploadExcel}>
-            {t('import')}
+            {t("import")}
           </button>
           {openSuccesfulOrder && (
             <Modal

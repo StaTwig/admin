@@ -10,7 +10,17 @@
     padding-right: 10px;
     padding-left: 10px;
   }
-
+  .custom-control {
+    min-height: 0;
+  }
+  .cargoLabels {
+    align-self: center;
+    min-width: 200px;
+  }
+  div[disabled] {
+    pointer-events: none;
+    opacity: 0.7;
+  }
   .breadcrumb {
     position: relative;
     left: -25px;
@@ -120,9 +130,16 @@
     top: -10px;
     font-size: 15px;
   }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
 }
 
 .comment-active {
   background: $primaryBlue;
   color: #fff;
+}
+.fade-color{
+  background: rgba(0, 0, 0, 0.10) !important;
 }

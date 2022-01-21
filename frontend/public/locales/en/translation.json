@@ -64,7 +64,6 @@
     "add": "Add",
     "details": "details",
     "select": "Select",
-    "region": "region",
     "country": "Country",
     "state": "State",
     "city": "City",
@@ -111,6 +110,7 @@
     "orders": "Orders",
     "inventory": "Inventory",
     "shipments": "Shipments",
+    "your": "Your",
     "shipment": "Shipment",
     "network": "Network",
     "trackntrace": "Track & Trace",
@@ -172,6 +172,8 @@
     "error_product_details": "Fill all the required Product Details",
     "add_another_product": "Add Another Product",
     "order_from": "Order From",
+    "order_to": "Order To",
+    "region": "Region",
     "organisation_type": "Organisation Type",
     "select_organisation_type": "Select Organisation Type",
     "organisation_name": "Organisation Name",
@@ -216,8 +218,8 @@
     "show_less": "Show Less",
     "from_organisation": "From Organisation",
     "to_organisation": "To Organisation",
-    "from_location": "Desde la ubicación",
-    "to_location": "A la ubicación",
+    "from_location": "From Location",
+    "to_location": "To location",
     "batch": "Batch",
     "batch_no": "Batch No",
     "view_shipment": "View Shipment",
@@ -284,5 +286,6 @@
     "mobile_no":"Mobile No",
     "date_time": "Date & Time",
     "version": "Version",
-    "made_with_care": "Made with Care"
+    "made_with_care": "Made with Care",
+    "from_locations":"From Location"
 }

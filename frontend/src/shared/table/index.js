@@ -16,15 +16,9 @@ import Divider from "@material-ui/core/Divider";
 
 const Table = (props) => {
   const { inventoryDetails, inventoryCount, t } = props;
-  // const [display, setDisplay] = useState(false);
-
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };
-  // function getDate(n) {
-  //   return n.substring(0, 10);
-  // }
-  // console.log("inventoryDetailsTable",inventoryDetails)
   inventoryDetails.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
@@ -108,13 +102,17 @@ const Table = (props) => {
                     inventory.eventTypePrimary === "RECEIVE" ? (
                       <div className='status secondary-bg bg-success'>
                         {" "}
-                        {t('received')}
+                        {t("received")}
                       </div>
                     ) : (
-                      <div className='status secondary-bg bg-warning'>{t('sent')}</div>
+                      <div className='status secondary-bg bg-warning'>
+                        {t("sent")}
+                      </div>
                     )
                   ) : (
-                    <div className='status secondary-bg bg-primary'>{t('added')}</div>
+                    <div className='status secondary-bg bg-primary'>
+                      {t("added")}
+                    </div>
                   )}
                 </div>
                 <div
@@ -148,7 +146,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>{t('shipment_id')}</div>
+                                <div className='d-head'>{t("shipment_id")}</div>
                               </TableCell>
                               <div>
                                 <TableCell align='left'>
@@ -160,8 +158,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? t('to_organisation')
-                                    : t('from_organisation')}
+                                    ? t("to_organisation")
+                                    : t("from_organisation")}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -176,8 +174,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? t('to_location')
-                                    : t('from_location')}
+                                    ? t("to_location")
+                                    : t("from_locations")}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -193,7 +191,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>{t('mfg_date')}</div>
+                                <div className='d-head'>{t("mfg_date")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -206,7 +204,7 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>{t('exp_date')}</div>
+                                <div className='d-head'>{t("exp_date")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -219,7 +217,7 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>{t('batch')}</div>
+                                <div className='d-head'>{t("batch")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -252,7 +250,7 @@ const Table = (props) => {
                                 );
                               }}
                             >
-                              {t('view_shipment')}
+                              {t("view_shipment")}
                             </button>
                           ) : (
                             ""
@@ -304,7 +302,7 @@ const Table = (props) => {
               className='mx-5 my-1 rounded text-dark'
               style={{ fontWeight: "400", fontSize: "14px" }}
             >
-              {t('total_records')} {inventoryCount}{" "}
+              {t("total_records")} {inventoryCount}{" "}
             </span>
           </div>
         )}

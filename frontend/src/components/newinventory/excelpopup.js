@@ -20,7 +20,6 @@ const ExcelPopUp = (props) => {
   const uploadExcel = async () => {
     let formData = new FormData();
     formData.append("excel", excel);
-    console.log(formData);
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
     if (result.status === 200) {
@@ -40,15 +39,18 @@ const ExcelPopUp = (props) => {
           className='mt-2'
           alt='Upload'
         />
-        <div>"{t('drag_drop')}" {t('your_excel_file_here')}</div>
-        <div>{t('or')}</div>
+        <div>
+          "{t("drag_drop")}" {t("your_excel_file_here")}
+        </div>
+        <div>{t("or")}</div>
         <div className='mb-3 excelSpace mt-4 ml-0'>
-          <label htmlFor="fileE"
-            className='mb-3 excelSpace ml-0 text-center' >{t('select_a_file')}</label>
+          <label htmlFor='fileE' className='mb-3 excelSpace ml-0 text-center'>
+            {t("select_a_file")}
+          </label>
           <input
             type='file'
-            id="fileE"
-            style={{ visibility: 'hidden' }}
+            id='fileE'
+            style={{ visibility: "hidden" }}
             className='mb-3 excelSpace'
             onChange={setExcelFile}
           />
@@ -61,10 +63,10 @@ const ExcelPopUp = (props) => {
             className='btn-outline-primary btn mr-3'
             onClick={props.onHide}
           >
-            {t('cancel')}
+            {t("cancel")}
           </button>
           <button className='btn-primary btn mr-4' onClick={uploadExcel}>
-            {t('import')}
+            {t("import")}
           </button>
         </div>
       </div>

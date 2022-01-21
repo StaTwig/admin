@@ -18,12 +18,15 @@ import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
 import { io } from "socket.io-client";
 import { fromUnixTime } from "date-fns";
+import FullscreenOutlined from '@mui/icons-material/FullscreenOutlined';
+import ArrowBack from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowForward from '@mui/icons-material/ArrowForwardIosRounded';
 
 const ViewGMRShipment = (props) => {
   const [sensorData, setSensorData] = useState([]);
   const [minMax, setMinMax] = useState({});
-  const [currentTemperature, setCurrentTemperature] = useState("");
-  const [lastUpdateTime, setLastUpdateTime] = useState("");
+  const [currentTemperature, setCurrentTemperature] = useState();
+  const [lastUpdateTime, setLastUpdateTime] = useState();
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
@@ -40,7 +43,6 @@ const ViewGMRShipment = (props) => {
   };
 
   useEffect(() => {
-    console.log("SOCKETURL", config().temperatureSocketUrl);
     const socket = io(config().temperatureSocketUrl, {
       path: "/shipmentmanagement/api/socket",
       transports: ["websocket"],
@@ -50,16 +52,41 @@ const ViewGMRShipment = (props) => {
       socket.on("graphMeta", (metaData) => {
         setMinMax(metaData);
       });
+      socket.on("avgTemperature", (avg) => {
+        if (avg.timestamp) {
+          setLastUpdateTime(avg.timestamp.toLocaleString("en-IN"));
+        }
+        setCurrentTemperature(avg.temperature);
+      });
       socket.on("sensorData", (data) => {
-        const time = fromUnixTime(data.timestamp);
-        setCurrentTemperature(data.temperature);
-        setLastUpdateTime(time.toLocaleString("en-IN"));
         const array = sensorData;
-        array.push([time, data.temperature]);
-        if (array.length > 50) array.shift();
-        setSensorData(array);
+        for (const sensor of data) {
+          for (const element of sensor.data) {
+            const time = fromUnixTime(element.timestamp).toLocaleTimeString(
+              "en-IN"
+            );
+            const found = array.find((o, i) => {
+              if (o.name === sensor.name) {
+                if (o.data.length > 300) o.data.shift();
+                array[i] = {
+                  name: o.name,
+                  data: [...o?.data, [time, element.temperature]],
+                };
+                return true; // stop searching
+              }
+            });
+            if (!found) {
+              array.push({
+                name: sensor.name,
+                data: [[time, element.temperature]],
+              });
+            }
+          }
+          setSensorData(array);
+        }
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.match.params.id]);
 
   return (
@@ -69,7 +96,7 @@ const ViewGMRShipment = (props) => {
         <div className='row'>
           <Link to={`/shipments`}>
             <button className='btn btn-outline-primary mr-4 mt-3'>
-              <img src={back} height='17' className='mr-2 mb-1' alt='' />
+              <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
               Back to shipments
             </button>
           </Link>
@@ -123,7 +150,7 @@ const ViewGMRShipment = (props) => {
           <p className='heading'>TEMPERATURE</p>
           <div className='row mb-4 mt-0'>
             <div className='col panel commonpanle' style={{ height: "360px" }}>
-              <div className='d-flex justify-content-between mb-4'>
+              <div className='d-flex justify-content-between mb-4 p-relative'>
                 <div className='row ml-4 mb-2'>
                   <img
                     style={{ width: "2rem", height: "3.5rem" }}
@@ -132,7 +159,7 @@ const ViewGMRShipment = (props) => {
                     alt='Current Temperature'
                   />
                   <div className='d-flex flex-column'>
-                    <div className='info'>Current temperature</div>
+                    <div className='info'>Average temperature</div>
                     <div className='temp'>
                       {currentTemperature ? currentTemperature : 0}
                       {""}
@@ -140,6 +167,7 @@ const ViewGMRShipment = (props) => {
                     </div>
                   </div>
                 </div>
+                <div style={{gap:"2rem"}} className="d-flex">
                 <div className='d-flex'>
                   <img
                     style={{ width: "3.5rem", height: "3.5rem" }}
@@ -159,19 +187,30 @@ const ViewGMRShipment = (props) => {
                     </div>
                   </div>
                 </div>
+                <div className="icon-container">
+                <FullscreenOutlined className="icon-gmr" />
+                </div>
+                </div>
+                <div className="icon-container-alt left-arrow">
+                <ArrowBack className="icon-gmr"/>
+                </div>
+                <div className="icon-container-alt right-arrow">
+                <ArrowForward className="icon-gmr"/>
+                </div>
+
               </div>
               {/* <Map data={shippmentChainOfCustodyData} />{" "} */}
               <Chart lastTemperatureData={sensorData} metaData={minMax} />
             </div>
           </div>
-          <button
+          {/* <button
             className='btn btn-outline-* fontSize200 enlargeTemperature float-right'
             onClick={() =>
               window.open("http://iot.vaccineledger.com", "_blank")
             }
           >
             SHOW MORE
-          </button>
+          </button> */}
           {openShipping && (
             <Modal
               title='Shipping Order Details'

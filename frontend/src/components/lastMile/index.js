@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./style.scss";
 import DropdownButton from "../../shared/dropdownButtonGroup";
@@ -47,18 +47,18 @@ const LastMile = (props) => {
   const [warehouseTitle, setwarehouseTitle] = useState("");
   // const [skip, setSkip] = useState(0);
   const headers = {
-    coloumn1: t('beneficiary_details'),
-    coloumn2: t('id_proof'),
-    coloumn3: t('mobile_no'),
-    coloumn4: t('product'),
-    coloumn5: t('date_time'),
+    coloumn1: t("beneficiary_details"),
+    coloumn2: t("id_proof"),
+    coloumn3: t("mobile_no"),
+    coloumn4: t("product"),
+    coloumn5: t("date_time"),
 
-    img1: <img src={patient} width="15" height="20" className="pb-1" alt="" />,
-    img2: <img src={idprrof} width="20" height="20" className="pb-1" alt="" />,
-    img3: <img src={mobile} width="16" height="25" className="pb-1" alt="" />,
-    img4: <img src={Product} width="20" height="22" className="pb-1" alt="" />,
+    img1: <img src={patient} width='15' height='20' className='pb-1' alt='' />,
+    img2: <img src={idprrof} width='20' height='20' className='pb-1' alt='' />,
+    img3: <img src={mobile} width='16' height='25' className='pb-1' alt='' />,
+    img4: <img src={Product} width='20' height='22' className='pb-1' alt='' />,
     img5: (
-      <img src={Date_time} width="19" height="22" className="pb-1" alt="" />
+      <img src={Date_time} width='19' height='22' className='pb-1' alt='' />
     ),
   };
 
@@ -87,22 +87,8 @@ const LastMile = (props) => {
         obj.eol_info.contact_address.zipcode
     );
   }
-  useEffect(() => {
-    async function fetchData() {
-      // setLastMile(props)
-      // const eol_ProductID = await GetEOLInfoByProductId("pro123456");
-      // const regions = await getRegions();
-      // console.log(regions.data[0].country)
-      // setCountries(regions.data[0].country)
-      // const statess = await dispatch(getAllStates());
-      // console.log(statess)
-      //console.log(eol_ProductID);
-    }
-    fetchData();
-  }, []);
 
   const onPageChange = async (pageNum) => {
-    console.log("onPageChange =========>", pageNum);
     const recordSkip = (pageNum - 1) * limit;
     // setSkip(recordSkip);
     dispatch(
@@ -112,7 +98,6 @@ const LastMile = (props) => {
 
   const onFilter = async (type, item) => {
     if (type === "region") {
-      console.log(region);
       const countries = await GetCountriesFromWarehouses(item);
       let arr = [];
       setstate("");
@@ -127,7 +112,6 @@ const LastMile = (props) => {
       // dispatch(getEOLInfo(0, 10, product, country, state, district, location, region));
     }
     if (type === "country") {
-      console.log(region);
       const states = await GetStatesFromWarehouses(item);
       let arr = [];
       const country = item;
@@ -155,7 +139,6 @@ const LastMile = (props) => {
       setlocation("");
       setproduct("");
       setdistrict("");
-      // console.log(country, state, district, location, product,region);
       dispatch(
         getEOLInfo(0, 10, country, state, district, location, product, region)
       );
@@ -170,14 +153,12 @@ const LastMile = (props) => {
       setLocations(arr);
       setlocation("");
       setproduct("");
-      // console.log(country, state, district, location, product,region);
       dispatch(
         getEOLInfo(0, 10, country, state, district, location, product, region)
       );
     }
     if (type === "location") {
       const products = await getProductsByWarehouse(item);
-      console.log(products);
       let arr = [];
       const location = item;
       products.data.forEach((element) => {
@@ -185,8 +166,6 @@ const LastMile = (props) => {
       });
       setProducts(arr);
       setproduct("");
-
-      // console.log(country, state, district, location, product,region);
       dispatch(
         getEOLInfo(0, 10, country, state, district, location, product, region)
       );
@@ -203,23 +182,23 @@ const LastMile = (props) => {
     <div>
       <div>
         <div
-          className="lastmile"
+          className='lastmile'
           style={{ position: "relative", left: "-22px", top: "-20px" }}
         >
-          <h1 className='breadcrumb'> {t('last_mile')} </h1>
+          <h1 className='breadcrumb'> {t("last_mile")} </h1>
           {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
 </button> */}
-          <div className="row">
-            <div className="col tab" style={{ width: "76%" }}>
-              <div className="">
-                <TableFilter data={headers} fb="85%" />
+          <div className='row'>
+            <div className='col tab' style={{ width: "76%" }}>
+              <div className=''>
+                <TableFilter data={headers} fb='85%' />
               </div>
             </div>
           </div>
-          <div className="ribben-space" style={{ width: "76%" }}>
+          <div className='ribben-space' style={{ width: "76%" }}>
             <Table
               {...props}
               cardFill={cardFill}
@@ -236,121 +215,139 @@ const LastMile = (props) => {
             <div className='d-flex flex-column mb-2 region pt-4'>
               <div className='form-group row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('region')}
+                  {t("region")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={region === "" ? t('select')+' '+t('region') : region}
+                    name={
+                      region === "" ? t("select") + " " + t("region") : region
+                    }
                     groups={regions}
                     onSelect={(item) => {
                       setRegion(item);
                       onFilter("region", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
               <div className='form-group row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('country')}
+                  {t("country")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={country === "" ? t('select')+' '+t('country') : country}
+                    name={
+                      country === ""
+                        ? t("select") + " " + t("country")
+                        : country
+                    }
                     groups={countries}
                     onSelect={(item) => {
                       setCountry(item);
                       onFilter("country", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
               <div className='form-group row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('state')}
+                  {t("state")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={state === "" ? t('select')+' '+t('state') : state}
+                    name={state === "" ? t("select") + " " + t("state") : state}
                     groups={states}
                     onSelect={(item) => {
                       setstate(item);
                       onFilter("state", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
               <div className='form-group row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('district')}
+                  {t("district")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={district === "" ? t('select')+' '+t('district') : district}
+                    name={
+                      district === ""
+                        ? t("select") + " " + t("district")
+                        : district
+                    }
                     groups={cities}
                     onSelect={(item) => {
                       setdistrict(item);
                       onFilter("city", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
               <div className='form-group row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('location')}
+                  {t("location")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={location === "" ? t('select')+' '+t('location') : location}
+                    name={
+                      location === ""
+                        ? t("select") + " " + t("location")
+                        : location
+                    }
                     groups={locations}
                     onSelect={(item) => {
                       setlocation(item);
                       onFilter("location", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
               <div className='form-group mb-4 row mr-1'>
                 <label htmlFor='shipmentId' className='mt-2 col-4 text-left'>
-                  {t('product')}
+                  {t("product")}
                 </label>
                 <div
-                  className="form-control col"
+                  className='form-control col'
                   style={{ borderBottom: "2px solid #d6d6d6" }}
                 >
                   <DropdownButton
-                    name={product === "" ? t('select')+' '+t('product') : product}
+                    name={
+                      product === ""
+                        ? t("select") + " " + t("product")
+                        : product
+                    }
                     groups={products}
                     onSelect={(item) => {
                       setproduct(item);
                       onFilter("product", item);
                     }}
-                    labelType="lastmile"
+                    labelType='lastmile'
                   />
                 </div>
               </div>
             </div>
-            <div className="mainsearchwarehouse">
-              <div className=" panel  mb-3 searchpanel">
+            <div className='mainsearchwarehouse'>
+              <div className=' panel  mb-3 searchpanel'>
                 <div>{warehouseTitle}</div>
                 {/* <div>
                         <u>
@@ -360,18 +357,18 @@ const LastMile = (props) => {
                             </small>
                         </u>
                     </div> */}
-                <div className="d-flex text-white mt-2 flex-row ">
-                  <ul className="mr-3 text-light">
+                <div className='d-flex text-white mt-2 flex-row '>
+                  <ul className='mr-3 text-light'>
                     {/* <li className="mb-1">Country ID</li> */}
-                    <li className='mb-3'>{t('country')}</li>
-                    <li className='mb-3'>{t('location')}</li>
-                    <li className='mb-3'>{t('location_name')}</li>
+                    <li className='mb-3'>{t("country")}</li>
+                    <li className='mb-3'>{t("location")}</li>
+                    <li className='mb-3'>{t("location_name")}</li>
                   </ul>
-                  <ul className="text-light">
+                  <ul className='text-light'>
                     {/* <li className="mb-1">{countryId}</li> */}
-                    <li className="mb-3">{locationCountry}</li>
-                    <li className="mb-3">{locationState}</li>
-                    <li className="mb-3">{locationName}</li>
+                    <li className='mb-3'>{locationCountry}</li>
+                    <li className='mb-3'>{locationState}</li>
+                    <li className='mb-3'>{locationName}</li>
                   </ul>
                 </div>
               </div>
@@ -379,10 +376,10 @@ const LastMile = (props) => {
                 <div className='row'>
                   <img src={pingrey} height='20' width='15' alt=''></img>
                   <div className='ml-2' style={{ fontSize: "13px" }}>
-                    {t('address')}
+                    {t("address")}
                   </div>
                 </div>
-                <div className="ml-2">{Address}</div>
+                <div className='ml-2'>{Address}</div>
               </div>
             </div>
           </div>

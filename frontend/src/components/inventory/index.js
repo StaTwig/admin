@@ -5,10 +5,6 @@ import Table from "../../shared/table";
 import TableFilter from "../../shared/advanceTableFilter";
 import { getInventoryAnalytics } from "../../actions/analyticsAction";
 import { getProductList } from "../../actions/productActions";
-import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
-import currentinventory from "../../assets/icons/CurrentInventory.svg";
-import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
-import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from "../../assets/icons/add.svg";
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
@@ -17,15 +13,22 @@ import Product from "../../assets/icons/Producttype.png";
 import { useDispatch } from "react-redux";
 import { getInventories } from "../../actions/inventoryActions";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const Inventory = (props) => {
   const { t } = props;
   const headers = {
-    coloumn1: t('product_name'),
-    coloumn2: t('product_category'),
-    coloumn3: t('date'),
-    coloumn4: t('quantity'),
-    coloumn5: t('status'),
+    coloumn1: "Product Name",
+    coloumn2: "Product Category",
+    coloumn3: "Date",
+    coloumn4: "Quantity",
+    coloumn5: "Status",
+
+    displayColoumn1: t("product_name"),
+    displayColoumn2: t("product_category"),
+    displayColoumn3: t("date"),
+    displayColoumn4: t("quantity"),
+    displayColoumn5: t("status"),
 
     img1: <img src={Product} width='16' height='16' alt='Product' />,
     img2: <img src={Quantity} width='24' height='16' alt='Quantity' />,
@@ -36,9 +39,9 @@ const Inventory = (props) => {
 
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
-    coloumn1: t('product_name'),
-    coloumn2: t('product_category'),
-    coloumn3: t('quantity'),
+    coloumn1: t("product_name"),
+    coloumn2: t("product_category"),
+    coloumn3: t("quantity"),
   };
   const MAX_LENGTH = 20;
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState("");
@@ -180,10 +183,6 @@ const Inventory = (props) => {
   };
 
   const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
-    // console.log(
-    //   "setInventoryStatusFilterOnSelect =========>",
-    //   statusFilterSelected
-    // );
     setStatusFilter(statusFilterSelected);
     // setSkip(0);
     dispatch(
@@ -201,10 +200,6 @@ const Inventory = (props) => {
   const setInventoryProductNameFilterOnSelect = async (
     productNameFilterSelected
   ) => {
-    // console.log(
-    //   "setInventoryProductNameFilterOnSelect =========>",
-    //   productNameFilterSelected
-    // );
     setProductNameFilter(productNameFilterSelected);
     // setSkip(0);
     dispatch(
@@ -222,10 +217,6 @@ const Inventory = (props) => {
   const setInventoryManufacturerFilterOnSelect = async (
     manufacturerFilterSelected
   ) => {
-    // console.log(
-    //   "setInventoryManufacturerFilterOnSelect =========>",
-    //   manufacturerFilterSelected
-    // );
     // setManufacturerFilter(manufacturerFilterSelected);
     // setSkip(0);
     dispatch(
@@ -243,10 +234,6 @@ const Inventory = (props) => {
   const setInventoryProductCategoryFilterOnSelect = async (
     categoryFilterSelected
   ) => {
-    // console.log(
-    //   "setInventoryProductCategoryFilterOnSelect =========>",
-    //   categoryFilterSelected
-    // );
     setProductCategoryFilter(categoryFilterSelected);
     // setSkip(0);
     dispatch(
@@ -263,14 +250,14 @@ const Inventory = (props) => {
   return (
     <div className='inventory'>
       <div className='d-flex justify-content-between'>
-        <h2 className='breadcrumb'>{t('inventory')} </h2>
+        <h2 className='breadcrumb'>{t("inventory")}</h2>
         <div className='d-flex'>
           {isAuthenticated("addInventory") && (
             <Link to='/newinventory'>
               <button className='btn btn-yellow mt-2'>
                 <img src={Add} width='13' height='13' className='mr-2' alt='' />
                 <span>
-                  <b>{t('add_inventory')}</b>
+                  <b>{t("add_inventory")}</b>
                 </span>
               </button>
             </Link>
@@ -278,193 +265,16 @@ const Inventory = (props) => {
         </div>
       </div>
       {isAuthenticated("inventoryAnalytics") && (
-        <div className='row mb-4'>
-          <div className='col'>
-            <Link to='/productcategory'>
-              <div className='panel'>
-                <div className='picture truck-bg'>
-                  <img src={TotalInventoryAdded} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title truck-text font-weight-bold'>
-                    {t('total_product_category')}
-                  </div>
-
-                  <div className='count truck-text'>
-                    {inventoriesCount}{" "}
-                    {inventoryAnalytics?.totalProductCategory}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className='col'>
-            <Link to='/productoutofstock'>
-              <div className='panel'>
-                <div className='picture sent-bg'>
-                  <img src={currentinventory} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title sent-text font-weight-bold'>
-                    {t('product_out_of_stock')}
-                  </div>
-                  <div className='sent-text count'>
-                    {currentInventoriesCount}
-                    {inventoryAnalytics?.stockOut}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div className='col'>
-            <Link to='/batchnearexpiry/product'>
-              <div className='panel'>
-                <div className='picture recived-bg'>
-                  <img src={Expiration} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title recived-text font-weight-bold'>
-                    {t('batch_near_expiration')}
-                  </div>
-                  {/* <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInThreeMonths
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                      )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringThisMonth
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringThisWeek
-                    )
-                  }
-                >
-              </div>
-              </div> */}
-                  <div className='recived-text count'>
-                    {inventoryNearExpiration}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className='col'>
-            <Link to='/batchexpired'>
-              <div className='panel'>
-                <div className='picture transit-bg'>
-                  <img src={TotalVaccineExpired} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title transit-text font-weight-bold'>
-                    {t('batch_expired')}
-                  </div>
-                  {/* <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastMonth
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastWeek
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredToday
-                    )
-                  }
-                >
-                </div>
-              </div> */}
-                  <div className='transit-text count'>{inventoryExpired}</div>
-                </div>
-              </div>
-            </Link>
-          </div>
+        <div className='mb-4'>
+          <Cards
+            inventoriesCount={inventoriesCount}
+            inventoryAnalytics={inventoryAnalytics}
+            currentInventoriesCount={currentInventoriesCount}
+            inventoryNearExpiration={inventoryNearExpiration}
+            inventoryExpired={inventoryExpired}
+            setData={props.setData}
+            t={t}
+          />
         </div>
       )}
       <div className='full-width-ribben'>
@@ -473,6 +283,7 @@ const Inventory = (props) => {
           isReportDisabled={true}
           data={headers}
           inventoryFilterData={props.inventoryFilterData}
+          productCategories={props.productCategories}
           setInventoryProductNameFilterOnSelect={
             setInventoryProductNameFilterOnSelect
           }
@@ -486,7 +297,7 @@ const Inventory = (props) => {
           }
           fb='80%'
           t={t}
-          filterPage="inventory"
+          filterPage='inventory'
         />
       </div>
       <div className='ribben-space'>
@@ -505,11 +316,11 @@ const Inventory = (props) => {
               <div className='list-container'>
                 <div className='d-flex justify-content-between align-items-center ml-3'>
                   <h4>
-                    <b>{t('product_list')}</b>
+                    <b>{t("product_list")}</b>
                   </h4>
                   <Link to='/productcategory'>
                     <button className='btn btn-link mr-1'>
-                      <b>{t('view_all')}</b>
+                      <b>{t("view_all")}</b>
                     </button>
                   </Link>
                 </div>
@@ -537,7 +348,7 @@ const Inventory = (props) => {
 
                           {/* <p className="product">{product.productName}</p> */}
                           <h3 className='qty'>
-                            {t('quantity')} : {product.quantity}
+                            {t("quantity")} : {product.quantity}
                             <span>{"  ("}</span>
                             {product.unitofMeasure &&
                             product.unitofMeasure.name ? (

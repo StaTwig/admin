@@ -14,10 +14,11 @@ const CounterModel = require("../models/CounterModel");
 const ProductModel = require("../models/ProductModel");
 const AtomModel = require("../models/AtomModel");
 const Event = require("../models/EventModal");
+const Record = require("../models/RecordModel");
 const moment = require("moment");
-const CENTRAL_AUTHORITY_ID = null;
-const CENTRAL_AUTHORITY_NAME = null;
-const CENTRAL_AUTHORITY_ADDRESS = null;
+const CENTRAL_AUTHORITY_ID = "null";
+const CENTRAL_AUTHORITY_NAME = "null";
+const CENTRAL_AUTHORITY_ADDRESS = "null";
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const logEvent = require("../../../utils/event_logger");
@@ -26,11 +27,12 @@ const axios = require("axios");
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
-const uniqid = require("uniqid");
+const cuid = require("cuid");
 const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 const { resolve } = require("path");
-var PdfPrinter = require("pdfmake");
+const PdfPrinter = require("pdfmake");
+const { asyncForEach } = require("../helpers/utility");
 const fontDescriptors = {
   Roboto: {
     normal: resolve("./controllers/Roboto-Regular.ttf"),
@@ -40,16 +42,16 @@ const fontDescriptors = {
   },
 };
 const printer = new PdfPrinter(fontDescriptors);
-const inventoryUpdate = async (
+async function inventoryUpdate(
   id,
   quantity,
   suppId,
   recvId,
   poId,
   shipmentStatus
-) => {
+) {
   if (shipmentStatus == "CREATED") {
-    const suppUpdate = await InventoryModel.update(
+    await InventoryModel.updateOne(
       {
         id: suppId,
         "inventoryDetails.productId": id,
@@ -60,8 +62,7 @@ const inventoryUpdate = async (
         },
       }
     );
-
-    const suppUpdateTransit = await InventoryModel.update(
+    await InventoryModel.updateOne(
       {
         id: suppId,
         "inventoryDetails.productId": id,
@@ -73,12 +74,11 @@ const inventoryUpdate = async (
       }
     );
   }
-
   const checkProduct = await InventoryModel.find({
     $and: [{ id: recvId }, { "inventoryDetails.productId": id }],
   });
   if (shipmentStatus == "RECEIVED" && checkProduct != "") {
-    const recvUpdate = await InventoryModel.update(
+    await InventoryModel.updateOne(
       {
         id: recvId,
         "inventoryDetails.productId": id,
@@ -89,7 +89,7 @@ const inventoryUpdate = async (
         },
       }
     );
-    const suppUpdateRecvTransit = await InventoryModel.update(
+    await InventoryModel.updateOne(
       {
         id: suppId,
         "inventoryDetails.productId": id,
@@ -101,11 +101,11 @@ const inventoryUpdate = async (
       }
     );
   } else if (shipmentStatus == "RECEIVED" && checkProduct == "") {
-    const s = await InventoryModel.update(
+    await InventoryModel.updateOne(
       { id: recvId },
       { $addToSet: { inventoryDetails: { productId: id, quantity: quantity } } }
     );
-    const suppUpdateRecvTransit = await InventoryModel.update(
+    await InventoryModel.updateOne(
       {
         id: suppId,
         "inventoryDetails.productId": id,
@@ -117,17 +117,15 @@ const inventoryUpdate = async (
       }
     );
   }
-};
+}
 
-const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
+async function poUpdate(id, quantity, poId, shipmentStatus, actor) {
   try {
-    let event = await Event.findOne({ "payloadData.data.order_id": poId });
-    var evid = Math.random().toString(36).slice(2);
-    var datee = new Date();
-    datee = datee.toISOString();
-    let event_data = {
-      eventID: null,
-      eventTime: null,
+    const event = await Event.findOne({ "payloadData.data.order_id": poId });
+    const event_data = {
+      eventID: cuid(),
+      eventTime: new Date().toISOString(),
+      transactionId: poId,
       actorWarehouseId: actor.warehouseId,
       eventType: {
         primary: "UPDATE",
@@ -155,35 +153,25 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
         },
       },
       payload: {
-        data: {
-          data: null,
-        },
+        data: event.payloadData || "null",
       },
     };
-    event_data.eventID = "ev0000" + evid;
-    event_data.eventTime = datee;
-    event_data.eventType.primary = "UPDATE";
-    event_data.transactionId = poId;
-    event_data.eventType.description = "ORDER";
-    if (event) event_data.payload.data = event.payloadData;
-
     await logEvent(event_data);
-
     if (shipmentStatus == "CREATED") {
-      const poUpdateShipped = await RecordModel.update(
+      await RecordModel.updateOne(
         {
           id: poId,
           "products.productId": id,
         },
         {
           $inc: {
-            "products.$.productQuantityShipped": parseInt(quantity),
+            "products.$.productQuantityShipped": parseInt(quantity, 10),
           },
         }
       );
     }
     if (shipmentStatus == "RECEIVED") {
-      const poUpdate = await RecordModel.update(
+      await RecordModel.updateOne(
         {
           id: poId,
           "products.productId": id,
@@ -194,7 +182,7 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
           },
         }
       );
-      const poUpdateRecvDelivered = await RecordModel.update(
+      await RecordModel.updateOne(
         {
           id: poId,
           "products.productId": id,
@@ -206,21 +194,15 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
         }
       );
     }
-
-    return response;
+    return true;
   } catch (error) {
     console.log(error);
+    return false;
   }
-};
+}
 
-const shipmentUpdate = async (
-  id,
-  quantity,
-  shipmentId,
-  shipmentStatus,
-  next
-) => {
-  const shipmentUpdateDelivered = await ShipmentModel.updateOne(
+const shipmentUpdate = async (id, quantity, shipmentId) => {
+  await ShipmentModel.updateOne(
     {
       id: shipmentId,
       "products.productID": id,
@@ -231,22 +213,14 @@ const shipmentUpdate = async (
       },
     }
   );
-
-  //next("Success")
 };
 
-const userShipments = async (mode, warehouseId, skip, limit, callback) => {
-  // var matchCondition = {};
-  //var criteria = mode + ".locationId";
-  //matchCondition[criteria] = warehouseId
-
-  var matchCondition = {};
-
-  if (mode != "id") var criteria = mode + ".locationId";
-  else var criteria = mode;
-
+async function userShipments(mode, warehouseId, skip, limit) {
+  const matchCondition = {};
+  let criteria;
+  if (mode != "id") criteria = mode + ".locationId";
+  else criteria = mode;
   matchCondition[criteria] = warehouseId;
-
   const shipments = await ShipmentModel.aggregate([
     {
       $match: matchCondition,
@@ -310,11 +284,11 @@ const userShipments = async (mode, warehouseId, skip, limit, callback) => {
     .skip(parseInt(skip))
 
     .limit(parseInt(limit));
-  callback(undefined, shipments);
-};
+  return shipments;
+}
 
-const taggedShipmentUpdate = async (id, quantity, shipmentId, next) => {
-  const shipmentUpdate = await ShipmentModel.update(
+async function taggedShipmentUpdate(id, quantity, shipmentId) {
+  await ShipmentModel.updateOne(
     {
       id: shipmentId,
       "products.productID": id,
@@ -325,7 +299,7 @@ const taggedShipmentUpdate = async (id, quantity, shipmentId, next) => {
       },
     }
   );
-};
+}
 
 exports.createShipment = [
   auth,
@@ -345,11 +319,10 @@ exports.createShipment = [
         data.shippingDate = shippingDate;
       }
       data.shippingDate = new Date(data.shippingDate);
-      data.products.forEach(async (element) => {
-        var product = await ProductModel.findOne({ id: element.productID });
+      await asyncForEach(data.products, async (element) => {
+        const product = await ProductModel.findOne({ id: element.productID });
         element.type = product.type;
         element.unitofMeasure = product.unitofMeasure;
-        console.log(product);
       });
       const shipmentCounter = await CounterModel.findOneAndUpdate(
         {
@@ -409,8 +382,6 @@ exports.createShipment = [
       const receiverId = req.body.receiver.id;
       const receiverName = receiverOrgData.name;
       const receiverAddress = receiverOrgData.postalAddress;
-      const soID = data.shippingOrderId;
-      const poID = data.poId;
       var flag = "Y";
       //if (data.shippingOrderId === null || data.poId === null) {
       if (data.poId === null) {
@@ -431,32 +402,36 @@ exports.createShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            const po_product_quantity =
-              product.productQuantity || product.quantity;
-            const alreadyShipped = product.productQuantityShipped || null;
-            let shipment_product_qty;
-            if (alreadyShipped) {
-              console.log(
-                "values are" + parseInt(p.productQuantity),
-                parseInt(alreadyShipped)
-              );
-              shipment_product_qty =
-                parseInt(p.productQuantity) + parseInt(alreadyShipped);
-            } else {
-              shipment_product_qty = p.productQuantity;
-            }
-
-            console.log(
-              po_product_quantity,
-              shipment_product_qty,
-              alreadyShipped
-            );
-            if (
-              parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-            ) {
-              quantityMismatch = true;
-              console.log("quantityMismatch is ", quantityMismatch);
-              return false;
+            if (product.id === p.productID) {
+              // console.log(p)
+              const po_product_quantity =
+                product.productQuantity || product.quantity;
+              const alreadyShipped =
+                parseInt(product.productQuantityShipped || 0) +
+                  parseInt(product.productQuantityDelivered || 0) || null;
+              let shipment_product_qty;
+              if (alreadyShipped) {
+                // console.log(
+                //   "values are" + parseInt(p.productQuantity),
+                //   parseInt(alreadyShipped)
+                // );
+                shipment_product_qty =
+                  parseInt(p.productQuantity) + parseInt(alreadyShipped);
+              } else {
+                shipment_product_qty = p.productQuantity;
+              }
+              if (
+                parseInt(shipment_product_qty, 10) <
+                parseInt(po_product_quantity, 10)
+              ) {
+                quantityMismatch = true;
+                console.log("quantityMismatch is ", quantityMismatch);
+                return false;
+              } else if (
+                parseInt(shipment_product_qty) === parseInt(po_product_quantity)
+              ) {
+                quantityMismatch = false;
+              }
             }
           });
         });
@@ -484,7 +459,7 @@ exports.createShipment = [
                 }
               );
             } catch (err) {
-              console.log("failed to set orderprocesstime");
+              console.log("failed to set ORDER PROCESSING TIME");
               console.log(err);
             }
           }
@@ -530,7 +505,7 @@ exports.createShipment = [
           }
         );
         if (poidupdate == null) {
-          return apiResponse.ErrorResponse(res, "Product  not Updated");
+          return apiResponse.ErrorResponse(res, "Product not Updated");
         }
       }
       if (flag != "N") {
@@ -573,7 +548,7 @@ exports.createShipment = [
           );
         }
         var products = data.products;
-        for (count = 0; count < products.length; count++) {
+        for (let count = 0; count < products.length; count++) {
           data.products[count]["productId"] = data.products[count].productID;
           await inventoryUpdate(
             products[count].productID,
@@ -593,7 +568,7 @@ exports.createShipment = [
             );
           //Case - create shipment with Batch Number
           if (products[count].batchNumber != null) {
-            const update = await AtomModel.updateOne(
+            await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
                 inventoryIds: suppInventoryId,
@@ -605,7 +580,7 @@ exports.createShipment = [
               }
             );
           } else if (products[count].serialNumber != null) {
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(
@@ -617,7 +592,7 @@ exports.createShipment = [
 
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-                const updateAtoms = await AtomModel.updateMany(
+                const updateAtoms = await AtomModel.findOneAndUpdate(
                   {
                     id: `${serialNumberText}${i}`,
                     inventoryIds: suppInventoryId,
@@ -628,7 +603,7 @@ exports.createShipment = [
                     },
                   }
                 );
-                atomsArray.push(atom);
+                atomsArray.push(updateAtoms);
               }
             }
           }
@@ -640,58 +615,40 @@ exports.createShipment = [
           products: products,
         };
         data.shipmentUpdates = updates;
-        var datee = new Date();
-        datee = datee.toISOString();
-        var evid = Math.random().toString(36).slice(2);
-        let event_data = {
-          eventID: null,
-          eventTime: null,
+        const event_data = {
+          eventID: cuid(),
+          eventTime: new Date().toISOString(),
           eventType: {
             primary: "CREATE",
-            description: "SHIPMENT_CREATION",
+            description: "SHIPMENT",
           },
+          transactionId: data.id,
           actor: {
-            actorid: null,
-            actoruserid: null,
+            actorid: user_id,
+            actoruserid: email,
           },
+          actorWarehouseId: req.user.warehouseId || "null",
           stackholders: {
             ca: {
-              id: null,
-              name: null,
-              address: null,
+              id: CENTRAL_AUTHORITY_ID || "null",
+              name: CENTRAL_AUTHORITY_NAME || "null",
+              address: CENTRAL_AUTHORITY_NAME || "null",
             },
             actororg: {
-              id: null,
-              name: null,
-              address: null,
+              id: orgId || "null",
+              name: orgName || "null",
+              address: address || "null",
             },
             secondorg: {
-              id: null,
-              name: null,
-              address: null,
+              id: "null",
+              name: "null",
+              address: "null",
             },
           },
           payload: {
-            data: {
-              abc: 123,
-            },
+            data: data,
           },
         };
-        event_data.eventID = "ev0000" + evid;
-        event_data.eventTime = datee;
-        event_data.eventType.primary = "CREATE";
-        event_data.eventType.description = "SHIPMENT";
-        event_data.transactionId = data.id;
-        event_data.actor.actorid = user_id || "null";
-        event_data.actor.actoruserid = email || "null";
-        event_data.actorWarehouseId = req.user.warehouseId || "null";
-        event_data.stackholders.actororg.id = orgId || "null";
-        event_data.stackholders.actororg.name = orgName || "null";
-        event_data.stackholders.actororg.address = address || "null";
-        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-        event_data.stackholders.ca.address =
-          CENTRAL_AUTHORITY_ADDRESS || "null";
         if (orgId === supplierID) {
           event_data.stackholders.secondorg.id = receiverId || "null";
           event_data.stackholders.secondorg.name = receiverName || "null";
@@ -701,8 +658,6 @@ exports.createShipment = [
           event_data.stackholders.secondorg.name = supplierName || "null";
           event_data.stackholders.secondorg.address = supplierAddress || "null";
         }
-        event_data.payload.data = data;
-        console.log(event_data);
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
         if (result == null) {
@@ -736,66 +691,66 @@ exports.createShipment = [
           Misc: "",
         };
 
-        const token =
-          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+        // const token = 
+        //   req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        await axios.post(
-          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
-          bc_data,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        if (data.taggedShipments) {
-          const prevTaggedShipments = await ShipmentModel.findOne(
-            {
-              id: data.taggedShipments,
-            },
-            {
-              _id: 0,
-              taggedShipments: 1,
-              products: 1,
-            }
-          );
-          let quantityMismatch = false;
-          prevTaggedShipments.products.every((product) => {
-            products.every((p) => {
-              const shipment_product_quantity =
-                product.productQuantity - product.productQuantityTaggedSent;
-              const tagged_product_qty = p.productQuantity || p.quantity;
-              if (
-                parseInt(tagged_product_qty) <=
-                parseInt(shipment_product_quantity)
-              ) {
-                quantityMismatch = true;
-                return false;
-              }
-            });
-          });
+        // await axios.post(
+        //   `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+        //   bc_data,
+        //   {
+        //     headers: {
+        //       Authorization: token,
+        //     },
+        //   }
+        // );
+        // if (data.taggedShipments) {
+        //   const prevTaggedShipments = await ShipmentModel.findOne(
+        //     {
+        //       id: data.taggedShipments,
+        //     },
+        //     {
+        //       _id: 0,
+        //       taggedShipments: 1,
+        //       products: 1,
+        //     }
+        //   );
+        //   let quantityMismatch = false;
+        //   prevTaggedShipments.products.every((product) => {
+        //     products.every((p) => {
+        //       const shipment_product_quantity =
+        //         product.productQuantity - product.productQuantityTaggedSent;
+        //       const tagged_product_qty = p.productQuantity || p.quantity;
+        //       if (
+        //         parseInt(tagged_product_qty) <=
+        //         parseInt(shipment_product_quantity)
+        //       ) {
+        //         quantityMismatch = true;
+        //         return false;
+        //       }
+        //     });
+        //   });
 
-          if (!quantityMismatch)
-            throw new Error("Tagged product quantity not available");
-          await ShipmentModel.findOneAndUpdate(
-            {
-              id: shipmentId,
-            },
-            {
-              $push: {
-                taggedShipments: prevTaggedShipments.taggedShipments,
-              },
-            }
-          );
+        //   if (!quantityMismatch)
+        //     throw new Error("Tagged product quantity not available");
+        //   await ShipmentModel.findOneAndUpdate(
+        //     {
+        //       id: shipmentId,
+        //     },
+        //     {
+        //       $push: {
+        //         taggedShipments: prevTaggedShipments.taggedShipments,
+        //       },
+        //     }
+        //   );
 
-          for (count = 0; count < products.length; count++) {
-            taggedShipmentUpdate(
-              products[count].productId,
-              products[count].productQuantity,
-              data.taggedShipments
-            );
-          }
-        }
+        //   for (let count = 0; count < products.length; count++) {
+        //     taggedShipmentUpdate(
+        //       products[count].productId,
+        //       products[count].productQuantity,
+        //       data.taggedShipments
+        //     );
+        //   }
+        // }
         await logEvent(event_data);
         return apiResponse.successResponseWithData(
           res,
@@ -916,7 +871,6 @@ exports.receiveShipment = [
     try {
       let locationMatch = false;
       let permission = false;
-      let change = false;
       const { role, warehouseId, organisationId, id } = req.user;
       const receiver = await ShipmentModel.findOne({
         id: req.body.id,
@@ -944,7 +898,6 @@ exports.receiveShipment = [
         });
         if (request != null && request.status == "ACCEPTED") {
           locationMatch = true;
-          change = true;
         }
       }
       if (permission == false) {
@@ -971,8 +924,6 @@ exports.receiveShipment = [
         const orgName = empData.name;
         const orgData = await OrganisationModel.findOne({ id: orgId });
         const address = orgData.postalAddress;
-        const confId = orgData.configuration_id;
-        const confData = await ConfigurationModel.findOne({ id: confId });
         const supplierID = req.body.supplier.id;
         const receiverId = req.body.receiver.id;
         let supplierName = "";
@@ -1052,19 +1003,30 @@ exports.receiveShipment = [
           let quantityMismatch = false;
           po.products.every((product) => {
             data.products.every((p) => {
-              const po_product_quantity =
-                product.productQuantity || product.quantity;
-              if (product.productQuantityDelivered)
-                var shipment_product_qty =
-                  parseInt(product.productQuantityDelivered) +
-                  parseInt(p.productQuantity);
-              else var shipment_product_qty = p.productQuantity;
-
-              if (
-                parseInt(shipment_product_qty) < parseInt(po_product_quantity)
-              ) {
-                quantityMismatch = true;
-                return false;
+              if (product.id === p.productID) {
+                // console.log(product, p)
+                const po_product_quantity =
+                  product.productQuantity || product.quantity;
+                let shipment_product_qty = 0;
+                if (product.productQuantityDelivered)
+                  shipment_product_qty =
+                    parseInt(product.productQuantityDelivered) +
+                    parseInt(p.productQuantity);
+                else shipment_product_qty = p.productQuantity;
+                // console.log(shipment_product_qty, po_product_quantity)
+                if (
+                  parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                ) {
+                  console.log("mismatch");
+                  quantityMismatch = true;
+                  return false;
+                } else if (
+                  parseInt(shipment_product_qty) ===
+                  parseInt(po_product_quantity)
+                ) {
+                  console.log("full now");
+                  quantityMismatch = false;
+                }
               }
             });
           });
@@ -1081,17 +1043,10 @@ exports.receiveShipment = [
             id: data.supplier.locationId,
           });
           var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-          const suppInventoryDetails = await InventoryModel.findOne({
-            id: suppInventoryId,
-          });
-
           const recvWarehouseDetails = await WarehouseModel.findOne({
             id: data.receiver.locationId,
           });
           var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-          const recvInventoryDetails = await InventoryModel.findOne({
-            id: recvInventoryId,
-          });
           var products = data.products;
           var count = 0;
           var totalProducts = 0;
@@ -1150,7 +1105,7 @@ exports.receiveShipment = [
                 );
               } else {
                 const atom = new AtomModel({
-                  id: uniqid("batch-"),
+                  id: "batch-" + cuid(),
                   label: {
                     labelId: "QR_2D",
                     labelType: "3232", // ?? What is this ??
@@ -1234,11 +1189,9 @@ exports.receiveShipment = [
             Products: JSON.stringify(shipmentData.products),
             Misc: "",
           };
-          console.log("bc data", bc_data);
-          let token =
+          const token =
             req.headers["x-access-token"] || req.headers["authorization"];
-          console.log("token", token);
-          const bc_response = await axios.put(
+          await axios.put(
             `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
             bc_data,
             {
@@ -1247,75 +1200,49 @@ exports.receiveShipment = [
               },
             }
           );
-
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             eventType: {
               primary: "RECEIVE",
               description: "SHIPMENT",
             },
+            transactionId: data.id,
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id || "null",
+              actoruserid: email || "null",
             },
+            actorWarehouseId: req.user.warehouseId || "null",
             stackholders: {
               ca: {
-                id: null,
-                name: null,
-                address: null,
+                id: CENTRAL_AUTHORITY_ID || "null",
+                name: CENTRAL_AUTHORITY_NAME || "null",
+                address: CENTRAL_AUTHORITY_ADDRESS || "null",
               },
               actororg: {
-                id: null,
-                name: null,
-                address: null,
+                id: orgId || "null",
+                name: orgName || "null",
+                address: address || "null",
               },
               secondorg: {
-                id: null,
-                name: null,
-                address: null,
+                id: "null",
+                name: "null",
+                address: "null",
               },
             },
             payload: {
-              data: {
-                abc: 123,
-              },
+              data: data,
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "RECEIVE";
-          event_data.eventType.description = "SHIPMENT";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.actororg.id = orgId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.transactionId = data.id;
-
           if (orgId === supplierID) {
             event_data.stackholders.secondorg.id = receiverId || "null";
             event_data.stackholders.secondorg.name = receiverName || "null";
-            event_data.stackholders.secondorg.address =
-              receiverAddress || "null";
+            event_data.stackholders.secondorg.address = receiverAddress || "null";
           } else {
             event_data.stackholders.secondorg.id = supplierID || "null";
             event_data.stackholders.secondorg.name = supplierName || "null";
-            event_data.stackholders.secondorg.address =
-              supplierAddress || "null";
+            event_data.stackholders.secondorg.address = supplierAddress || "null";
           }
-
-          event_data.payload.data = data;
-          console.log(event_data);
-
           await logEvent(event_data);
 
           return apiResponse.successResponseWithData(
@@ -1656,24 +1583,17 @@ exports.fetchShipments = [
     try {
       const { skip, limit } = req.query;
       const { warehouseId } = req.user;
-      var inboundShipments, outboundShipments;
-      const supplier = await userShipments(
+      const outboundShipments = await userShipments(
         "supplier",
         warehouseId,
         skip,
-        limit,
-        (error, data) => {
-          outboundShipments = data;
-        }
+        limit
       );
-      const receiver = await userShipments(
+      const inboundShipments = await userShipments(
         "receiver",
         warehouseId,
         skip,
-        limit,
-        (error, data) => {
-          inboundShipments = data;
-        }
+        limit
       );
 
       const shipments = await ShipmentModel.aggregate([
@@ -1772,7 +1692,7 @@ exports.viewShipment = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          await ShipmentModel.aggregate([
+          const shipment = await ShipmentModel.aggregate([
             {
               $match: {
                 $or: [
@@ -1837,28 +1757,19 @@ exports.viewShipment = [
                 path: "$receiver.org",
               },
             },
-          ])
-            .then(async (shipment) => {
-              var Shipment = shipment.length ? shipment[0] : [];
-              // var result = []
-              let prom = await Promise.all(
-                Shipment.products.map(async (element) => {
-                  var product = await ProductModel.findOne({
-                    id: element.productID,
-                  });
-                  element.unitofMeasure = product.unitofMeasure;
-                })
-              );
-              console.log(Shipment.products);
-              return apiResponse.successResponseWithData(
-                res,
-                "Shipment",
-                Shipment
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err.message);
+          ]);
+          const Shipment = shipment.length ? shipment[0] : [];
+          await asyncForEach(Shipment.products, async (element) => {
+            const product = await ProductModel.findOne({
+              id: element.productID,
             });
+            element.unitofMeasure = product.unitofMeasure;
+          });
+          return apiResponse.successResponseWithData(
+            res,
+            "View Shipment",
+            Shipment
+          );
         } else {
           return apiResponse.forbiddenResponse(
             res,
@@ -1867,6 +1778,7 @@ exports.viewShipment = [
         }
       });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1888,7 +1800,7 @@ exports.viewShipmentGmr = [
           });
           return apiResponse.successResponseWithData(
             res,
-            "Shipment Details",
+            "View Shipment Details",
             shipment
           );
         } else {
@@ -1915,6 +1827,7 @@ exports.fetchAllShipments = [
         shipments
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1924,7 +1837,8 @@ exports.fetchGMRShipments = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      const skip = req.query.skip || 0;
+      const limit = req.query.skip || 30;
       const count = await ShipmentModel.count({ isCustom: true });
       const shipments = await ShipmentModel.find({ isCustom: true })
         .skip(parseInt(skip))
@@ -1935,6 +1849,7 @@ exports.fetchGMRShipments = [
         count: count,
       });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1944,21 +1859,16 @@ exports.fetch_po_Shipments = [
   auth,
   async (req, res) => {
     try {
-      const poId = req.query.poId;
-      await ShipmentModel.findOne({
-        poId: poId,
-      })
-        .then((shipment) => {
-          return apiResponse.successResponseWithData(
-            res,
-            "Shipment by PO ID",
-            shipment
-          );
-        })
-        .catch((err) => {
-          return apiResponse.ErrorResponse(res, err.message);
-        });
+      const shipment = await ShipmentModel.findOne({
+        poId: req.query.poId,
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Shipment by PO ID",
+        shipment
+      );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -2050,7 +1960,7 @@ exports.uploadImage = [
       );
       return apiResponse.successResponseWithData(
         res,
-        "Image uploaded successfullly",
+        "Image uploaded successfully",
         update
       );
     } catch (e) {
@@ -2064,22 +1974,15 @@ exports.fetchImage = [
   async (req, res) => {
     try {
       const Id = req.query.id;
-      var imageArray = [];
-      const update = await ShipmentModel.find({ id: Id }, { imageDetails: 1 })
-        .then((result) => {
-          imageArray = result[0].imageDetails;
-        })
-        .catch((e) => {
-          return apiResponse.ErrorResponse(res, e.message);
-        });
-
-      var resArray = [];
-
-      for (i = 0; i < imageArray.length; i++) {
+      let imageArray = [];
+      const result = await ShipmentModel.find({ id: Id }, { imageDetails: 1 });
+      imageArray = result[0].imageDetails;
+      const resArray = [];
+      for (let i = 0; i < imageArray.length; i++) {
         const s = "/images/" + imageArray[i];
         resArray.push(s);
       }
-      return apiResponse.successResponseWithData(res, "Images ", resArray);
+      return apiResponse.successResponseWithData(res, "Images", resArray);
     } catch (e) {
       return apiResponse.ErrorResponse(res, e.message);
     }
@@ -2091,19 +1994,19 @@ exports.updateTrackingStatus = [
   async (req, res) => {
     try {
       const data = req.body;
-      const currentDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      data.shipmentUpdates.updatedOn = currentDateTime;
+      data.shipmentUpdates.updatedOn = date.format(
+        new Date(),
+        "DD/MM/YYYY HH:mm"
+      );
       data.shipmentUpdates.updatedBy = req.user.id;
       data.shipmentUpdates.status = "UPDATED";
-      await ShipmentModel.updateOne(
+      const shipment = await ShipmentModel.findOneAndUpdate(
         { id: req.body.id },
         { $push: { shipmentUpdates: data.shipmentUpdates } }
       );
-      const currentDate = new Date().toISOString();
-      const evid = Math.random().toString(36).slice(2);
       const event_data = {
-        eventID: "ev0000" + evid,
-        eventTime: currentDate,
+        eventID: cuid(),
+        eventTime: new Date().toISOString(),
         actorWarehouseId: req.user.warehouseId,
         transactionId: req.body.id,
         eventType: {
@@ -2132,12 +2035,13 @@ exports.updateTrackingStatus = [
           },
         },
         payload: {
-          data: req.body,
+          data: shipment,
         },
       };
       await logEvent(event_data);
       return apiResponse.successResponse(res, "Status Updated");
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -2198,19 +2102,12 @@ exports.chainOfCustody = [
 
               const shipmentIds = poDetails[0].shipments;
               var shipments = [];
-              var shipmentDetails = [];
-
-              for (i = 0; i < shipmentIds.length; i++) {
-                const shipmentData = await userShipments(
+              for (let i = 0; i < shipmentIds.length; i++) {
+                const shipmentDetails = await userShipments(
                   "id",
                   shipmentIds[i],
                   0,
-                  100,
-                  (error, data) => {
-                    data.map((shipmentData) => {
-                      shipmentDetails = shipmentData;
-                    });
-                  }
+                  100
                 );
                 shipments.push(shipmentDetails);
               }
@@ -2429,19 +2326,12 @@ exports.fetchShipmentIds = [
 
               const shipmentIds = poDetails[0].shipments;
               var shipments = [];
-              var shipmentDetails = [];
-
-              for (i = 0; i < shipmentIds.length; i++) {
-                const shipmentData = await userShipments(
+              for (let i = 0; i < shipmentIds.length; i++) {
+                const shipmentDetails = await userShipments(
                   "id",
                   shipmentIds[i],
                   0,
-                  100,
-                  (error, data) => {
-                    data.map((shipmentData) => {
-                      shipmentDetails = shipmentData;
-                    });
-                  }
+                  100
                 );
                 shipments.push(shipmentDetails);
               }
@@ -2878,8 +2768,6 @@ exports.fetchOutboundShipments = [
       if (toReceiver) {
         whereQuery["receiver.id"] = toReceiver;
       }
-
-      console.log("Out bound whereQuery ======>", whereQuery);
       try {
         let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
@@ -2963,6 +2851,7 @@ exports.fetchAllWarehouseShipments = [
     try {
       const { skip, limit } = req.query;
       const { emailId, phoneNumber } = req.user;
+      let empDetails;
       if (emailId) empDetails = await EmployeeModel.findOne({ emailId });
       else {
         empDetails = await EmployeeModel.findOne({ phoneNumber });
@@ -3522,6 +3411,8 @@ exports.exportInboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -3571,6 +3462,12 @@ exports.exportInboundShipments = [
 
       if (shipmentId) {
         whereQuery["id"] = shipmentId;
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
@@ -3631,8 +3528,8 @@ exports.exportInboundShipments = [
             Promise.all(findInboundShipmentData).then(function (results) {
               let data = [];
               let rowData;
-              for (row of inboundShipmentsRes) {
-                for (product of row.products) {
+              for (const row of inboundShipmentsRes) {
+                for (const product of row.products) {
                   rowData = {
                     id: row.id,
                     poId: row.poId,
@@ -3692,6 +3589,8 @@ exports.exportOutboundShipments = [
       let fromSupplier = req.query.from ? req.query.from : undefined;
       let toReceiver = req.query.to ? req.query.to : undefined;
       let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -3741,6 +3640,12 @@ exports.exportOutboundShipments = [
 
       if (shipmentId) {
         whereQuery["id"] = shipmentId;
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (status) {
@@ -3798,8 +3703,8 @@ exports.exportOutboundShipments = [
             Promise.all(findOutboundShipmentData).then(function (results) {
               let data = [];
               let rowData;
-              for (row of outboundShipmentsRes) {
-                for (product of row.products) {
+              for (const row of outboundShipmentsRes) {
+                for (const product of row.products) {
                   rowData = {
                     id: row.id,
                     poId: row.poId,
@@ -4095,9 +4000,7 @@ exports.trackJourneyOnBlockchain = [
       var shipmentsArray = [];
       var inwardShipmentsArray = [];
       var outwardShipmentsArray = [];
-      var poDetails, trackedShipment;
       const trackingId = req.query.trackingId;
-      var poShipmentsArray = "";
       try {
         if (!trackingId.includes("PO")) {
           const inwardShipmentsQuery = {
@@ -4148,7 +4051,7 @@ exports.trackJourneyOnBlockchain = [
           );
           const len = shipmentResult.data.data;
 
-          for (count = 0; count < len.length; count++) {
+          for (let count = 0; count < len.length; count++) {
             const supplierDetails = JSON.parse(
               shipmentResult.data.data[count].Supplier
             );
@@ -4225,7 +4128,7 @@ exports.trackJourneyOnBlockchain = [
           );
           const len1 = shipmentResult.data.data;
 
-          for (count = 0; count < len.length; count++) {
+          for (let count = 0; count < len.length; count++) {
             const supplierDetails = JSON.parse(
               shipmentResultOutward.data.data[count].Supplier
             );
@@ -4543,132 +4446,92 @@ exports.fetchShipmentsForAbInBevOnBlockchain = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
-      var shipmentsArray = [];
-
+      const shipmentsArray = [];
       const filters = req.query;
-      try {
-        let warehouseIds = [];
+      let warehouseIds = [];
+      const shipmentQuery = {
+        selector: getShipmentFilterConditionOnBlockhain(filters, warehouseIds),
+        //selector:  matchConditionShipment(filters)
+      };
 
-        const shipmentQuery = {
-          selector: getShipmentFilterConditionOnBlockhain(
-            filters,
-            warehouseIds
-          ),
-          //selector:  matchConditionShipment(filters)
-        };
-        //Blockchain
-        /*const shipmentQuery = {
-   selector: {
-      ShippingDate: {
-        $gte: "2021-07-25T00:00:00Z",
-        $lt : "2021-07-31T00:00:00Z"
-      }
-   }
-}*/
-        /*        const shipmentQuery =
-{
-   selector: {
-Status: { "$in": ["RECEIVED"] }
-   }
-}*/
-        /* const shipmentQuery = {
-   "selector": {
-      "Supplier": {
-                "$regex": "ORG10017"
-      }
-   }
-}*/
+      const token =
+        req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        /*const shipmentQuery = {
-                  "selector": {
-                                                        "$or": [
-                                                            { "Supplier": {"$regex": "ORG10017"} },
-                                                            { "Receiver": {"$regex": "ORG10001"} }
-                                                        ]
-                                                }
-                                                }*/
+      const shipmentResult = await axios.post(
+        `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
+        shipmentQuery,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      const len = shipmentResult.data.data;
+      for (let count = 0; count < len.length; count++) {
+        const supplierDetails = JSON.parse(
+          shipmentResult.data.data[count].Supplier
+        );
+        const receiverDetails = JSON.parse(
+          shipmentResult.data.data[count].Receiver
+        );
 
-        let token =
-          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-
-        const shipmentResult = await axios.post(
-          `${hf_blockchain_url}/api/v1/transactionapi/shipment/querystring`,
-          shipmentQuery,
+        const supplierWarehouseDetails = await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`,
           {
             headers: {
               Authorization: token,
             },
           }
         );
-        const len = shipmentResult.data.data;
-        for (count = 0; count < len.length; count++) {
-          const supplierDetails = JSON.parse(
-            shipmentResult.data.data[count].Supplier
-          );
-          const receiverDetails = JSON.parse(
-            shipmentResult.data.data[count].Receiver
-          );
 
-          const supplierWarehouseDetails = await axios.get(
-            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${supplierDetails.locationId}`,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-
-          const supplierOrgDetails = await axios.get(
-            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-
-          const receiverWarehouseDetails = await axios.get(
-            `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-
-          const receiverOrgDetails = await axios.get(
-            `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-
-          const shipmentInwardData = {
-            Shipmentdata: shipmentResult.data.data[count],
-            supplierWarehouseDetails: supplierWarehouseDetails.data.data,
-            //supplierOrgDetails: supplierOrgDetails.data.data,
-            receiverWarehouseDetails: receiverWarehouseDetails.data.data,
-            //receiverOrgDetails: receiverOrgDetails.data.data,
-          };
-          //                console.log("123",shipmentInwardData)
-          shipmentsArray.push(shipmentInwardData);
-        }
-
-        //path: "$supplier.org.S1",
-        //{ $match: matchConditionShipment(filters) },
-
-        return apiResponse.successResponseWithMultipleData(
-          res,
-          "Shipments Table",
-          shipmentsArray
+        await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${supplierDetails.id}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
         );
-      } catch (err) {
-        return apiResponse.ErrorResponse(res, err.message);
+
+        const receiverWarehouseDetails = await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Warehouse/get/${receiverDetails.locationId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        await axios.get(
+          `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${receiverDetails.id}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        const shipmentInwardData = {
+          Shipmentdata: shipmentResult.data.data[count],
+          supplierWarehouseDetails: supplierWarehouseDetails.data.data,
+          //supplierOrgDetails: supplierOrgDetails.data.data,
+          receiverWarehouseDetails: receiverWarehouseDetails.data.data,
+          //receiverOrgDetails: receiverOrgDetails.data.data,
+        };
+        //                console.log("123",shipmentInwardData)
+        shipmentsArray.push(shipmentInwardData);
       }
+
+      //path: "$supplier.org.S1",
+      //{ $match: matchConditionShipment(filters) },
+
+      return apiResponse.successResponseWithMultipleData(
+        res,
+        "Shipments Table",
+        shipmentsArray
+      );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -4693,7 +4556,7 @@ exports.warehousesOrgsExportToBlockchain = [
 
         if (supplierWarehouseDetails.data.status == false) {
           const warehouseDetails = await WarehouseModel.findOne({
-            id: s,
+            id: supplierWarehouseDetails.data.data.id,
           });
 
           const bc_data = {
@@ -4725,7 +4588,9 @@ exports.warehousesOrgsExportToBlockchain = [
             Misc2: "",
           };
 
-          const bc_response = await axios.post(
+          const token =
+            req.headers["x-access-token"] || req.headers["authorization"];
+          await axios.post(
             `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
             bc_data,
             {
@@ -4741,10 +4606,10 @@ exports.warehousesOrgsExportToBlockchain = [
         status: "ACTIVE",
       });
 
-      for (i = 0; i < orgs.length; i++) {
-        let token =
+      for (let i = 0; i < orgs.length; i++) {
+        const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-        var s = orgs[i].id;
+        const s = orgs[i].id;
         const supplierOrgDetails = await axios.get(
           `${hf_blockchain_url}/api/v1/participantapi/Organizations/get/${s}`,
           {
@@ -4781,7 +4646,7 @@ exports.warehousesOrgsExportToBlockchain = [
             Authority: "",
           };
 
-          const bc_response = await axios.post(
+          await axios.post(
             `${hf_blockchain_url}/api/v1/participantapi/Organizations/create`,
             bc_data,
             {
