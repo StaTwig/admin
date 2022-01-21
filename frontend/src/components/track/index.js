@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "./temperatureChart";
 import Map from "./map";
 import CurrentTemperature from "../../assets/icons/thermometer.svg";
@@ -36,6 +36,12 @@ const Track = (props) => {
   //   } else setMsg("Required");
   //   setIsSubmitted(true);
   // });
+
+  useEffect(() => {
+    props.setTrackTraceData({setValue, value, resetData, setIsSubmitted})
+  }, [value])
+
+
 
   if (!isAuthenticated("trackAndTrace")) props.history.push(`/profile`);
 
