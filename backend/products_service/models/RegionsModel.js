@@ -30,4 +30,4 @@ const RegionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("new_regions", RegionSchema);
+module.exports = mongoose.model("regions", RegionSchema);

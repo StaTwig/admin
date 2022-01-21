@@ -31,4 +31,4 @@ const CountrySchema = new mongoose.Schema({
   emojiU: { type: String },
 });
 
-module.exports = mongoose.model("new_countries", CountrySchema);
+module.exports = mongoose.model("countries", CountrySchema);
