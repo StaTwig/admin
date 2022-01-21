@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "react-multi-date-picker": "^3.3.0"
+  }
+}
