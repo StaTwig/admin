@@ -158,6 +158,25 @@ const AdvanceTableFilter = (props) => {
                 </button>
               </StyledMenuItem>
 
+              {/* <StyledMenuItem>
+                <button
+                  style={{
+                    padding: "10px",
+                    height: "60px",
+                    width: "200px",
+                    borderRadius: "10px",
+                    whiteSpace: 'initial'
+                  }}
+                  className="btn btn-outline-warning btn-sm font-weight-bold"
+                  color="primary"
+                  onClick={() =>
+                    setStatusFilterOnSelect("PARTIALLYFULFILLED")
+                  }
+                >
+                  {t("partiallyfilled")}
+                </button>
+              </StyledMenuItem> */}
+
               <StyledMenuItem>
                 <button
                   style={{
@@ -175,6 +194,24 @@ const AdvanceTableFilter = (props) => {
                   {t("transitfullyfilled")}
                 </button>
               </StyledMenuItem>
+
+              <StyledMenuItem>
+                <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "180px",
+                    borderRadius: "10px",
+                  }}
+                  className="btn btn-outline-info btn-sm font-weight-bold"
+                  color="primary"
+                  onClick={() => setStatusFilterOnSelect("PARTIALLYFULFILLED")}
+                >
+                  {t("Partially Fulfilled")}
+                </button>
+              </StyledMenuItem>
+
+
 
               <StyledMenuItem>
                 <button
