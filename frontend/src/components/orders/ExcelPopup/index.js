@@ -55,7 +55,7 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      {excel === null ? <div className='d-flex flex-column upload mb-5 ml-5'>
+      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? {height: '200px'} : {height: '220px'}}>
         <img
           src={uploadBlue}
           name='photo'
@@ -68,7 +68,7 @@ const ExcelPopUp = (props) => {
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='row'
+        <div className='row' style={{position: 'relative'}}
         >
           <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
             display: "block",
@@ -84,9 +84,9 @@ const ExcelPopUp = (props) => {
             className='mb-3 excelSpace'
             onChange={setExcelFile}
           />
+        {excel !== null && <p className="file-name">{excel?.name}</p>}
         </div>
-      </div> :
-        <UploadedFileInfo file={excel} setExcel={setExcel} />}
+      </div>
       <div className='row justify-content-between'>
         <div />
         <div className='row'>
@@ -122,26 +122,3 @@ const ExcelPopUp = (props) => {
 };
 
 export default ExcelPopUp;
-
-
-function UploadedFileInfo({ file, setExcel }) {
-
-  const formatFileSize = (bytes, precision = 2) => {
-    if (bytes === 0) { return '0 Bytes' }
-
-    const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(precision)) + ' ' + sizes[i];
-  };
-
-  return (
-    <div className="UploadedFileInfo">
-      <h4>Information about current file</h4>
-      <div><strong>Name:</strong> {file?.name} </div>
-      <div><strong>Size:</strong> {formatFileSize(file?.size)} </div>
-      <div><strong>Type:</strong> {file?.type}</div>
-      <button className="UploadedFileInfo-remove-button" onClick={() => setExcel(null)} >Remove File</button>
-    </div>
-  )
-
-} 

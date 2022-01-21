@@ -26,23 +26,9 @@
     align-items: center !important;
     justify-content: center !important;
 }
-.UploadedFileInfo {
-    height: 190px;
-    width: 370px;
-    border: 1px solid #707070;
-    border-radius: 8px;
-    margin: 0 auto 0.5rem;
-    padding: 0.5rem;
-    position: relative;
-    .UploadedFileInfo-remove-button {
-        position: absolute;
-        background-color: white;
-        outline: none;
-        border: 1px solid red;
-        width: 95%;
-        padding: 0.5rem;
-        cursor: pointer;
-        color: red;
-        bottom: 5%;
-    }
+.file-name{
+    position: absolute;
+    bottom: 16%;
+    width: 100%;
+    text-align: center;
 }

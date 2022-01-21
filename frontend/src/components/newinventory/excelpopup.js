@@ -30,7 +30,7 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      {excel === null ? <div className='d-flex flex-column upload mb-5 ml-5'>
+      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? {height: '200px'} : {height: '220px'}}>
         <img
           src={uploadBlue}
           name='photo'
@@ -43,7 +43,7 @@ const ExcelPopUp = (props) => {
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='row'
+        <div className='row' style={{position: 'relative'}}
         >
           <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
             display: "block",
@@ -59,9 +59,9 @@ const ExcelPopUp = (props) => {
             className='mb-3 excelSpace'
             onChange={setExcelFile}
           />
+          {excel !== null && <p className="file-name">{excel?.name}</p>}
         </div>
-      </div> :
-        <UploadedFileInfo file={excel} setExcel={setExcel} />}
+      </div>
       <div className='row justify-content-between'>
         <div />
         <div className='row'>
