@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://test.admin.vaccineledger.com";
+export const TEST_SERVER_URL = "https://costarica.admin.vaccineledger.com";
 export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
 export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io:9001";
 export const ABINBEV_TEST_SERVER_URL =
@@ -9,7 +9,7 @@ export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
 export const LOCAL_SERVER_URL_EMPLOYEE = "//localhost:3003";
 export const LOCAL_SERVER_URL_RBAC = "//localhost:3004";
 export const LOCAL_SERVER_URL_CONFIG = "//localhost:3005";
-export const TEST_SERVER_URL_VL = 'https://test.vaccineledger.com';
+export const TEST_SERVER_URL_VL = 'https://costarica.vaccineledger.com';
 
 export function config() {
   const confs = {
