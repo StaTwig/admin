@@ -287,7 +287,6 @@
     "Partially Fulfilled":"Parcialmente cumplida",
     "select_category":"Seleccionar categoría",
     "enter_manufacturer":"Ingresar fabricante",
-
     "ADD_NEW_LOCATION": "AÑADIR NUEVA UBICACIÓN",
     "Required": "Requerido",
     "Address_Title": "Título Dirección",
@@ -307,5 +306,8 @@
     "Cancel": "Cancelar",
     "Success": "Éxito",
     "Request_Successfully_Sent_for_Approval": "Solicitud enviada con éxito para su aprobación",
-    "OK": "OK"
+    "OK": "OK",
+    "language":"idioma",
+    "select_the_language":"Seleccione el idioma",
+    "batch_details":"Detalles del Lote"
 }
