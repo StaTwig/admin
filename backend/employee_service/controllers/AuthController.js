@@ -521,6 +521,7 @@ exports.verifyOtp = [
           query = { emailId: req.body.emailId };
         }
         const user = await EmployeeModel.findOne(query);
+        console.log(user.preferredLanguage)
         if (user && user.otp == req.body.otp) {
           let address;
           if (
@@ -578,6 +579,7 @@ exports.verifyOtp = [
               phoneNumber: user.phoneNumber,
               org: user.msp,
               userName: user.emailId,
+              preferredLanguage: user.preferredLanguage,
             };
           } else {
             userData = {
@@ -591,6 +593,7 @@ exports.verifyOtp = [
               phoneNumber: user.phoneNumber,
               org: user.msp,
               userName: user.emailId,
+              preferredLanguage: user.preferredLanguage
             };
           }
           //Prepare JWT token for authentication
