@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://test.vaccineledger.com";
+export const TEST_SERVER_URL = "https://costarica.vaccineledger.com";
 export const TEST_SERVER_URL_FOR_ROAMBEE =
   "https://integrations.vaccineledger.com";
 export const PROD_SERVER_URL = "https://vaccineledger.com";
