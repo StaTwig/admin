@@ -3,6 +3,8 @@ import "./styles.scss";
 import Checked from "../../assets/icons/waiting.png";
 
 const SuccessPopUp = (props) => {
+  const { t } = props;
+
   return (
     <div className='popup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -11,18 +13,18 @@ const SuccessPopUp = (props) => {
           width='90'
           height='90'
           className='mb-3'
-          alt='Success'
+          alt={t('Success')}
         />
-        <div className='alert'>Success!</div>
+        <div className='alert'>{t('Success')}!</div>
         <div className='text-center'>
-          <b>Request Successfully Sent for Approval</b>
+          <b>{t('Request_Successfully_Sent_for_Approval')}</b>
         </div>
-        <div className='data'>{props.message}</div>
+        <div className='data'>{t(props.message)}</div>
         <button
           className='btn-primary btn w-25 mb-5 mt-4'
           onClick={props.onHide}
         >
-          OK
+          {t('OK')}
         </button>
       </div>
     </div>
