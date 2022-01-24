@@ -19,6 +19,11 @@ const Track = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(
     props.match.params.id ? true : false
   );
+
+  useEffect(() => {
+    props.setTrackTraceData({setValue, value, resetData, setIsSubmitted})
+  }, [value])
+
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
@@ -229,6 +234,7 @@ const Track = (props) => {
                             op={op}
                             setOp={setOp}
                             data={row}
+                            update={r}
                             update={r}
                             index={i + 3}
                             parentIndex={

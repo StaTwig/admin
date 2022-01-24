@@ -100,30 +100,31 @@ const SideBar = (props) => {
         )}
         {(isAuthenticated("inboundShipments") ||
           isAuthenticated("outboundShipments")) && (
-          <li
-            className={
-              url === "/shipments" ||
-              url === "/newshipment" ||
-              url === "/transactionHistory"
-                ? "active"
-                : ""
-            }
-          >
-            <Link to='/shipments' className='d-inline-block'>
-              <img
-                src={
-                  url === "/shipments" ||
+            <li
+              className={
+                url === "/shipments" ||
                   url === "/newshipment" ||
                   url === "/transactionHistory"
-                    ? shipIcon
-                    : shipIcon
-                }
-                alt='Shippment'
-              />
-              <span className='ml-2'>{t("shipments")}</span>
-            </Link>
-          </li>
-        )}
+                  ? "active"
+                  : ""
+              }
+            >
+              <Link to='/shipments' className='d-inline-block'>
+                <img
+                  src={
+                    url === "/shipments" ||
+                      url === "/newshipment" ||
+                      url === "/transactionHistory"
+                      ? shipIcon
+                      : shipIcon
+                  }
+                  alt='Shippment'
+                />
+                <span className='ml-2'>{t('shipments')}</span>
+              </Link>
+            </li>
+          )}
+
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>
