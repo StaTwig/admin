@@ -67,13 +67,13 @@ const SideBar = (props) => {
           <li
             className={
               url === "/inventory" ||
-              url === "/newinventory" ||
-              url === "/productcategory" ||
-              url === "/batchexpired" ||
-              url === "/batchnearexpiry/product" ||
-              url === "/productoutofstock" ||
-              url === "/addproduct" ||
-              url === "/productlist/all"
+                url === "/newinventory" ||
+                url === "/productcategory" ||
+                url === "/batchexpired" ||
+                url === "/batchnearexpiry/product" ||
+                url === "/productoutofstock" ||
+                url === "/addproduct" ||
+                url === "/productlist/all"
                 ? "active"
                 : ""
             }
@@ -82,13 +82,13 @@ const SideBar = (props) => {
               <img
                 src={
                   url === "/inventory" ||
-                  url === "/newinventory" ||
-                  url === "/productcategory" ||
-                  url === "/batchexpired" ||
-                  url === "/batchnearexpiry/product" ||
-                  url === "/productoutofstock" ||
-                  url === "/addproduct" ||
-                  url === "/productlist/all"
+                    url === "/newinventory" ||
+                    url === "/productcategory" ||
+                    url === "/batchexpired" ||
+                    url === "/batchnearexpiry/product" ||
+                    url === "/productoutofstock" ||
+                    url === "/addproduct" ||
+                    url === "/productlist/all"
                     ? InventoryIcon
                     : InventoryIcon
                 }
