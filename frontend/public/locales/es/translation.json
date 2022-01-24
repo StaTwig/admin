@@ -286,5 +286,8 @@
     "from_locations":"Desde la ubicación",
     "Partially Fulfilled":"Parcialmente cumplida",
     "select_category":"Seleccionar categoría",
-    "enter_manufacturer":"Ingresar fabricante"
+    "enter_manufacturer":"Ingresar fabricante",
+    "language":"idioma",
+    "select_the_language":"Seleccione el idioma",
+    "batch_details":"Detalles del Lote"
 }
