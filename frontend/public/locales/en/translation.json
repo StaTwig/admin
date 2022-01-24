@@ -219,7 +219,7 @@
     "from_organisation": "From Organisation",
     "to_organisation": "To Organisation",
     "from_location": "From Location",
-    "to_location": "To location",
+    "to_location": "To Location",
     "batch": "Batch",
     "batch_no": "Batch No",
     "view_shipment": "View Shipment",
@@ -261,7 +261,7 @@
     "shipment_number": "Shipment Number",
     "account_holder_details": "Account Holder Details",
     "user_name": "User Name",
-    "location": "location",
+    "location": "Location",
     "comment": "comment",
     "damaged_in_transit":"Damaged in transit",
     "miscount":"Miscount",
@@ -288,5 +288,8 @@
     "version": "Version",
     "made_with_care": "Made with Care",
     "from_locations":"From Location",
-    "enter_manufacturer":"Enter manufacturer"
+    "enter_manufacturer":"Enter manufacturer",
+    "language":"Language",
+    "select_the_language":"Select the Language",
+    "batch_details":"Batch Details"
 }
