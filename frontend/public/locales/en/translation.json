@@ -287,5 +287,6 @@
     "date_time": "Date & Time",
     "version": "Version",
     "made_with_care": "Made with Care",
-    "from_locations":"From Location"
+    "from_locations":"From Location",
+    "enter_manufacturer":"Enter manufacturer"
 }

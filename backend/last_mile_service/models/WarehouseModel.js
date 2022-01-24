@@ -1,49 +1,49 @@
-var mongoose = require('mongoose');
-var WarehouseSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    title: { type: String, default: 'WarehouseTitle' },
+    title: { type: String, default: "WarehouseTitle" },
     warehouseAddress: {
       type: Object,
       properties: {
         firstLine: {
           type: String,
-          default: 'Fourth Floor, T-Hub'
+          default: "Fourth Floor, T-Hub",
         },
         secondLine: {
           type: String,
-          default: 'IIIT Campus, Gachibowli'
+          default: "IIIT Campus, Gachibowli",
         },
         city: {
           type: String,
-          default: 'Hyderabad'
+          default: "Hyderabad",
         },
         state: {
           type: String,
-          default: 'Telangana'
+          default: "Telangana",
         },
         country: {
           type: String,
-          default: 'India'
+          default: "India",
         },
         region: {
           type: String,
-          default: 'Asia'
+          default: "Asia",
         },
         landmark: {
           type: String,
-          default: 'opposite to TCS'
+          default: "opposite to TCS",
         },
         zipCode: {
           type: Number,
-          default: 500032
-        }
+          default: 500032,
+        },
       },
     },
     organisationId: {
       type: String,
       required: true,
-      default: 'org123',
+      default: "org123",
     },
     postalAddress: {
       type: String,
@@ -54,16 +54,16 @@ var WarehouseSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        regionId: 'reg123',
-        regionName: 'Earth Prime',
+        regionId: "reg123",
+        regionName: "Earth Prime",
       },
     },
     country: {
       type: Object,
       required: true,
       default: {
-        countryId: '001',
-        countryName: 'India',
+        countryId: "001",
+        countryName: "India",
       },
     },
     location: {
@@ -71,23 +71,23 @@ var WarehouseSchema = new mongoose.Schema(
       default: {
         longitude: 12.12323453534,
         latitude: 13.123435345435,
-        geohash: '1231nejf923453',
+        geohash: "1231nejf923453",
       },
     },
     supervisors: {
       type: Array,
-      default: []
+      default: [],
     },
     employees: {
       type: Array,
-      default: []
+      default: [],
     },
     warehouseInventory: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model('Warehouse', WarehouseSchema);
+module.exports = mongoose.model("Warehouse", WarehouseSchema);

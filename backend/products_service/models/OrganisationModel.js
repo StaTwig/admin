@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var OrganisationSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const OrganisationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     name: { type: String },
@@ -10,15 +10,15 @@ var OrganisationSchema = new mongoose.Schema(
     region: {
       type: Object,
       default: {
-        id: 'reg123',
-        name: 'Earth Prime',
+        id: "reg123",
+        name: "Earth Prime",
       },
     },
     country: {
       type: Object,
       default: {
-        id: '001',
-        name: 'India',
+        id: "001",
+        name: "India",
       },
     },
     location: {
@@ -27,7 +27,7 @@ var OrganisationSchema = new mongoose.Schema(
       default: {
         longitude: 12.12323453534,
         latitude: 13.123435345435,
-        geohash: '1231nejf923453',
+        geohash: "1231nejf923453",
       },
     },
     primaryContactId: String,
@@ -36,17 +36,17 @@ var OrganisationSchema = new mongoose.Schema(
     status: String,
     warehouses: {
       type: Array,
-      default: ['ware123', 'ware234'],
+      default: ["ware123", "ware234"],
     },
     supervisors: {
       type: Array,
-      default: ['user_id 1', 'user_id 2'],
+      default: ["user_id 1", "user_id 2"],
     },
     warehouseEmployees: {
       type: String,
-      default: ['em12345', 'em12346', 'em12347'],
+      default: ["em12345", "em12346", "em12347"],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model('Organisation', OrganisationSchema);
+module.exports = mongoose.model("Organisation", OrganisationSchema);

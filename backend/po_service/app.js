@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 const logger = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
@@ -39,7 +39,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(helmet());
 
 //To allow cross-origin requests
 app.use(cors());

@@ -8,8 +8,8 @@ import icon from "../../assets/icons/block-icon.png";
 import icon1 from "../../assets/icons/temprature-icon.png";
 import icon2 from "../../assets/icons/location-icon.png";
 import icon3 from "../../assets/icons/chain-icon.png";
-import googleStore from "../../assets/brands/Google_store.png";
-import appleStore from "../../assets/brands/Apple_store.png";
+import googleStore from "../../assets/brands/Google_store.webp";
+import appleStore from "../../assets/brands/Apple_store.webp";
 import gitlab from "../../assets/icons/gitlab_logo.png";
 import { useTranslation } from 'react-i18next';
 

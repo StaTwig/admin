@@ -25,7 +25,7 @@ function Table(props) {
   };
   return (
     <div>
-      <table class="table">
+      <table className='table'>
         <AdvanceTableFilter
           data={props.data}
           shipmentIdList={props.shipmentIdList}
@@ -40,7 +40,7 @@ function Table(props) {
           setToShipmentFilterOnSelect={props.setToShipmentFilterOnSelect}
           setStatusFilterOnSelect={props.setStatusFilterOnSelect}
           setDateFilterOnSelect={props.setDateFilterOnSelect}
-          fb="80%"
+          fb='80%'
           showExportFilter={props.showExportFilter}
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
@@ -193,17 +193,17 @@ function Table(props) {
           )} */}
 
           {shipments.length === 0 && (
-            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
-              {t('no_records_found')}
+            <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
+              {t("no_records_found")}
             </div>
           )}
 
           {shipments.map((shipment, index) => {
             let statusStyle = "bg-primary";
-            let status = t('shipped');
+            let status = t("shipped");
             if (shipment.status === "RECEIVED") {
               statusStyle = "bg-success";
-              status = t('delivered');
+              status = t("delivered");
             }
             let supplierAddress =
               props.user.emailId === "gmr@statledger.io"
@@ -226,21 +226,21 @@ function Table(props) {
             return (
               <tr>
                 <td>
-                  <div class="user-info">
-                    <h5 class="table-h5-text shipmentId">{shipment.id}</h5>
+                  <div className='user-info'>
+                    <h5 className='table-h5-text shipmentId'>{shipment.id}</h5>
                     {shipment?.shipmentAlerts?.length > 0 && (
                       <span
                         style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
-                        className="rounded p-1"
+                        className='rounded p-1'
                       >
-                        <img style={{ height: 15 }} src={alert} alt="Alert" />
+                        <img style={{ height: 15 }} src={alert} alt='Alert' />
                       </span>
                     )}
                   </div>
                 </td>
                 <td>
-                  <div class="user-info">
-                    <h5 class="table-h5-text">
+                  <div className='user-info'>
+                    <h5 className='table-h5-text'>
                       {shipment?.shippingDate?.length === 10
                         ? shipment.shippingDate
                         : formatDate(shipment.shippingDate)}
@@ -248,15 +248,15 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div class="user-info__basic">
-                    <h5 class="mb-0 table-h5-text">
+                  <div className='user-info__basic'>
+                    <h5 className='mb-0 table-h5-text'>
                       {shipment.supplier.org
                         ? shipment.supplier.org.name
                         : props.user.emailId === "gmr@statledger.io"
                         ? shipment.supplier.id
                         : "-"}
                     </h5>
-                    <p class="text-muted mb-0 table-p-text">
+                    <p className='text-muted mb-0 table-p-text'>
                       {`${
                         supplierAddress.firstLine
                           ? supplierAddress.firstLine
@@ -276,15 +276,15 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div class="user-info__basic">
-                    <h5 class="mb-0 table-h5-text">
+                  <div className='user-info__basic'>
+                    <h5 className='mb-0 table-h5-text'>
                       {shipment.receiver.org
                         ? shipment.receiver.org.name
                         : props.user.emailId === "gmr@statledger.io"
                         ? shipment.receiver.id
                         : "-"}
                     </h5>
-                    <p class="text-muted mb-0 table-p-text">
+                    <p className='text-muted mb-0 table-p-text'>
                       {`${
                         receiverAddress.firstLine
                           ? receiverAddress.firstLine
@@ -305,8 +305,8 @@ function Table(props) {
                     </p>
                   </div>
                 </td>
-                <td >
-                  <div className="table-btns d-flex align-items-center justify-content-center">
+                <td>
+                  <div className='table-btns d-flex align-items-center justify-content-center'>
                     <div
                       className={`status  secondary-bgp p-1 mr-3 ${statusStyle}`}
                     >
@@ -314,10 +314,10 @@ function Table(props) {
                     </div>
                   </div>
                 </td>
-                <td >
-                  <div className="table-btns d-flex align-items-center justify-content-center">
+                <td>
+                  <div className='table-btns d-flex align-items-center justify-content-center'>
                     <button
-                      className="button btn-primary text-light btn-sm mr-3"
+                      className='button btn-primary text-light btn-sm mr-3'
                       onClick={() => {
                         const data = shipments[index];
                         dispatch(setTracingShipments(data));
@@ -327,9 +327,9 @@ function Table(props) {
                       <img
                         style={{ padding: 1, height: 15 }}
                         src={location}
-                        alt="Location"
+                        alt='Location'
                       />
-                      <span className="pl-1 text-white">{t('track')}</span>
+                      <span className='pl-1 text-white'>{t("track")}</span>
                     </button>
                     <Link
                       to={`/${
@@ -337,13 +337,13 @@ function Table(props) {
                           ? `viewgmrshipment`
                           : `viewshipment`
                       }/${shipment.id}`}
-                      className="button btn-view-link btn-sm px-4"
+                      className='button btn-view-link btn-sm px-4'
                       style={{
                         border: "1px solid #007bff",
                         borderRadius: "6px",
                       }}
                     >
-                      {t('view')}
+                      {t("view")}
                     </Link>
                   </div>
                 </td>
@@ -353,19 +353,19 @@ function Table(props) {
         </tbody>
       </table>
       {shipments?.length > 0 && (
-        <div className="d-flex flex-row-reverse">
+        <div className='d-flex flex-row-reverse'>
           <Pagination
             showFirstButton
             showLastButton
-            color="primary"
+            color='primary'
             count={Math.ceil(props.count / 10)}
             onChange={handlePageChange}
           />
           <span
-            className="mx-5 my-1 rounded text-dark"
+            className='mx-5 my-1 rounded text-dark'
             style={{ fontSize: "14px" }}
           >
-            {t('total_records')} {props.count}{" "}
+            {t("total_records")} {props.count}{" "}
           </span>
         </div>
       )}
