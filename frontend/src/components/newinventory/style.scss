@@ -105,6 +105,17 @@
     color: #000000;
   }
 }
+.import-disable-button {
+  &:disabled {
+      cursor: not-allowed;
+  }
+}
+.file-name{
+  position: absolute;
+  bottom: 16%;
+  width: 100%;
+  text-align: center;
+}
 
 .btn-custom-dropdown {
   justify-content: space-around !important;
