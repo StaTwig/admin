@@ -12,12 +12,21 @@ import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 import "./style.scss";
-const SideBar = ({ match, location, user, t }) => {
+const SideBar = (props) => {
+  const { match, location, user, t, trackTraceData } = props;
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
     if (user?.emailId === "gmr@statledger.io") setEnable(false);
   }, [user]);
+
+  const resetTrackTracePage = () => {
+    if (trackTraceData && trackTraceData?.value !== "") {
+      trackTraceData?.setValue("");
+      trackTraceData?.resetData();
+      trackTraceData?.setIsSubmitted(false);
+    }
+  };
 
   return (
     <div className='sidebar'>
@@ -115,6 +124,7 @@ const SideBar = ({ match, location, user, t }) => {
             </Link>
           </li>
         )}
+
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>
@@ -128,10 +138,14 @@ const SideBar = ({ match, location, user, t }) => {
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link to='/track' className='d-inline-block'>
+            <Link
+              to='/track'
+              className='d-inline-block'
+              onClick={resetTrackTracePage}
+            >
               <img
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track & Trace'
+                alt='Track &amp; Trace'
               />
               <span className='ml-2'>{t("trackntrace")}</span>
             </Link>

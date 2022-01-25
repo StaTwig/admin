@@ -384,11 +384,11 @@ class Profile extends React.Component {
                       />
                     </div>
                     <div className='form-group'>
-                      <label htmlFor='shipmentId'>{"language"}</label>
+                      <label htmlFor=''>{t("language")}</label>
                       <Select
-                        className='form-group'
-                        placeholder={"Select language"}
-                        style={{ display: 'contents', fontSize: "14px" }}
+                        className='my-form-width'
+                        placeholder={t("select_the_language")}
+                        style={{ fontSize: "14px" }}
                         options={[{value: 'EN', label: 'English'}, {value: 'ES', label: 'Español'}].map((v) => v)}
                         onChange={ (language) =>
                           this.setState({ preferredLanguage: language.value })

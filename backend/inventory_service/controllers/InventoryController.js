@@ -14,6 +14,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
+const { responses } = require("../helpers/responses")
 const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
@@ -444,7 +445,7 @@ exports.updateInventories = [
       }
 
       await InventoryModel.bulkWrite(bulkArr);
-      apiResponse.successResponse(res, "Updated Success");
+      apiResponse.successResponse(res, responses(req.user.preferredLanguage).updated_success);
     } catch (e) {
       console.log(e);
       apiResponse.ErrorResponse(res, e.message);
@@ -537,47 +538,7 @@ exports.insertInventories = [
         }
       }
       recursiveFun();
-      //   event_data = {
-      //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-      //     "eventTime": new Date().toISOString(),
-      //     "eventType": {
-      //         "primary": "CREATE",
-      //         "description": "SHIPMENT ALERTS"
-      //     },
-      //     "actor": {
-      //         "actorid": "userid1",
-      //         "actoruserid": "ashwini@statwig.com"
-      //     },
-      //     "stackholders": {
-      //         "ca": {
-      //             "id": "org001",
-      //             "name": "Statwig Pvt. Ltd.",
-      //             "address": "ca_address_object"
-      //         },
-      //         "actororg": {
-      //             "id": "org002",
-      //             "name": "Appollo Hospitals Jublihills",
-      //             "address": "actororg_address_object"
-      //         },
-      //         "secondorg": {
-      //             "id": "org003",
-      //             "name": "Med Plus Gachibowli",
-      //             "address": "secondorg_address_object"
-      //         }
-      //     },
-      //     "payload": {
-      //         "data": {
-      //             "abc": 123
-      //         }
-      //     }
-      // }
-      // async function compute(event_data) {
-      //     result = await logEvent(event_data)
-      //     return result
-      // }
-
-      // compute(event_data).then((response) => console.log(response))
-      apiResponse.successResponse(res, "Inserted Success");
+      apiResponse.successResponse(res, responses(req.user.preferredLanguage).success);
     } catch (e) {
       apiResponse.ErrorResponse(res, e.message);
     }
@@ -605,7 +566,7 @@ exports.addProductsToInventory = [
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error",
+          responses(req.user.preferredLanguage).validation_error,
           errors.array()
         );
       }
@@ -630,7 +591,7 @@ exports.addProductsToInventory = [
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
-              "Employee not assigned to any organization"
+              responses(req.user.preferredLanguage).not_assigned_to_org
             );
           }
           const inventory = await InventoryModel.findOne({
@@ -639,7 +600,7 @@ exports.addProductsToInventory = [
           if (!inventory)
             return apiResponse.ErrorResponse(
               res,
-              "Cannot find inventory to this employee warehouse"
+              responses(req.user.preferredLanguage).cant_find_warehouse_inv
             );
           let atoms = [];
           products.forEach((product) => {
@@ -664,7 +625,7 @@ exports.addProductsToInventory = [
           if (dupSerialFound)
             return apiResponse.ErrorResponse(
               res,
-              "Duplicate Serial Numbers found"
+              responses(req.user.preferredLanguage).duplicated_sno
             );
           var duplicateBatch = false;
           var duplicateBatchNo = "";
@@ -799,7 +760,7 @@ exports.addProductsToInventory = [
           if (duplicateBatch) {
             return apiResponse.ErrorResponse(
               res,
-              `A batch with batch number ${duplicateBatchNo} exists in the inventory`
+              responses(req.user.preferredLanguage).batchExists(duplicateBatchNo)
             );
           }
           var datee = new Date();
@@ -858,10 +819,10 @@ exports.addProductsToInventory = [
           await logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
-            "Added products to the inventories"
+            responses(req.user.preferredLanguage).added_inventory_products
           );
         } else {
-          res.json("Sorry! User does not have enough Permissions");
+          res.json(responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -1050,11 +1011,11 @@ exports.addInventoriesFromExcel = [
             CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data.products = [...data];
           // logEvent(event_data);
-          return apiResponse.successResponseWithData(res, "Success", data);
+          return apiResponse.successResponseWithData(res, responses(req.user.preferredLanguage).success, data);
         } else {
           return apiResponse.ErrorResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });

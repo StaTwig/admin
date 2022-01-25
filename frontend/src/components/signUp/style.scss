@@ -9,6 +9,9 @@
   display: flex;
   align-items: center;
   width: 100%;
+  .MuiInputBase-input {
+    margin-left: 0px !important;
+  }
   .mobile-header {
     display: none;
     border: none;

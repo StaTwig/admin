@@ -257,7 +257,7 @@ exports.register = [
               warehouses: [warehouseId],
               warehouseEmployees: [employeeId],
               region: {
-                regionName: region,
+                name: region,
               },
               country: {
                 countryId: "001",

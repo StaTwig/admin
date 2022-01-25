@@ -163,6 +163,9 @@ const Header = (props) => {
     dispatch(turnOff());
     return result;
   }
+
+  console.log(t("batch_details"))
+
   const onSeach = () => {
     if (search.substring(0, 2) === "SH") {
       getAllShipmentIDs().then((result) => {

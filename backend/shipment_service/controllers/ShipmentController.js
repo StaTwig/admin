@@ -15,6 +15,7 @@ const ProductModel = require("../models/ProductModel");
 const AtomModel = require("../models/AtomModel");
 const Event = require("../models/EventModal");
 const Record = require("../models/RecordModel");
+const Sensor = require("../models/SensorModel");
 const moment = require("moment");
 const CENTRAL_AUTHORITY_ID = "null";
 const CENTRAL_AUTHORITY_NAME = "null";
@@ -34,6 +35,7 @@ const { resolve } = require("path");
 const PdfPrinter = require("pdfmake");
 const { responses } = require("../helpers/responses")
 const { asyncForEach } = require("../helpers/utility");
+const { fromUnixTime } = require("date-fns");
 const fontDescriptors = {
   Roboto: {
     normal: resolve("./controllers/Roboto-Regular.ttf"),
@@ -404,7 +406,6 @@ exports.createShipment = [
         po.products.every((product) => {
           data.products.every((p) => {
             if (product.id === p.productID) {
-              // console.log(p)
               const po_product_quantity =
                 product.productQuantity || product.quantity;
               const alreadyShipped =
@@ -412,10 +413,6 @@ exports.createShipment = [
                   parseInt(product.productQuantityDelivered || 0) || null;
               let shipment_product_qty;
               if (alreadyShipped) {
-                // console.log(
-                //   "values are" + parseInt(p.productQuantity),
-                //   parseInt(alreadyShipped)
-                // );
                 shipment_product_qty =
                   parseInt(p.productQuantity) + parseInt(alreadyShipped);
               } else {
@@ -1238,11 +1235,13 @@ exports.receiveShipment = [
           if (orgId === supplierID) {
             event_data.stackholders.secondorg.id = receiverId || "null";
             event_data.stackholders.secondorg.name = receiverName || "null";
-            event_data.stackholders.secondorg.address = receiverAddress || "null";
+            event_data.stackholders.secondorg.address =
+              receiverAddress || "null";
           } else {
             event_data.stackholders.secondorg.id = supplierID || "null";
             event_data.stackholders.secondorg.name = supplierName || "null";
-            event_data.stackholders.secondorg.address = supplierAddress || "null";
+            event_data.stackholders.secondorg.address =
+              supplierAddress || "null";
           }
           await logEvent(event_data);
 
@@ -4660,6 +4659,116 @@ exports.warehousesOrgsExportToBlockchain = [
       }
       return apiResponse.successResponseWithData(res, "Export success", orgs);
     } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.sensorHistory = [
+  auth,
+  async (req, res) => {
+    try {
+      const shipmentId = req.query.shipmentId;
+      const page = req.query.page || 1;
+      const limit = 30;
+      const count = await Sensor.countDocuments({
+        shipmentId: shipmentId,
+      });
+      let nextPage = true;
+      if ((count - limit) * page - 1 < 0) {
+        nextPage = false;
+      }
+      const arrayLogs = await Sensor.aggregate([
+        {
+          $match: { shipmentId: shipmentId },
+        },
+        {
+          $sort: { _id: -1 },
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $sort: { _id: 1 },
+        },
+      ]);
+      const history = await Sensor.aggregate([
+        {
+          $match: { shipmentId: shipmentId },
+        },
+        {
+          $sort: { _id: -1 },
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $sort: { _id: 1 },
+        },
+        {
+          $group: {
+            _id: "$sensorId",
+            data: { $push: "$$ROOT" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            data: 1,
+            name: "$_id",
+          },
+        },
+      ]);
+
+      const historyArray = new Array();
+
+      for (const sensor of history) {
+        for (const data of sensor.data) {
+          const time = fromUnixTime(data.timestamp);
+          const found = historyArray.find((o, i) => {
+            if (o.name === data.sensorId) {
+              historyArray[i] = {
+                name: o.name,
+                data: [...o.data, [time, data.temperature]],
+              };
+              return true; // stop searching
+            }
+          });
+          if (!found) {
+            historyArray.push({
+              name: sensor.name,
+              data: [[time, data.temperature]],
+            });
+          }
+        }
+      }
+
+      const min =
+        (
+          Math.min(...arrayLogs.map((sensor) => sensor.temperature)) - 2
+        ).toFixed(2) || 0;
+      const max =
+        (
+          Math.max(...arrayLogs.map((sensor) => sensor.temperature)) + 2
+        ).toFixed(2) || 0;
+      return apiResponse.successResponseWithData(res, "Sensor History", {
+        page: page,
+        limit: limit,
+        nextPage: nextPage,
+        graph: historyArray,
+        metaData: {
+          min,
+          max,
+        },
+      });
+    } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

@@ -12,6 +12,11 @@ import Select from "react-select";
 
 import "./style.scss";
 
+
+const truncate = (str, n) => {
+  return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+};
+
 const EditRow = (props) => {
   const {
     manufacturer,
@@ -184,7 +189,7 @@ const EditRow = (props) => {
                   className='col-4 title recived-text'
                   style={{ position: "relative", top: "7px", left: "-41px" }}
                 >
-                  {productId}
+                  {truncate(productId, 6)}
                 </div>
               </div>
             </div>
