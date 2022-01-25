@@ -11,7 +11,7 @@ const options = {
   username: "vacus",
   password: "vacus123",
 };
-exports.MqttConnection = (io) => {
+exports.MqttConnection = () => {
   try {
     const client = mqtt.connect("mqtts://statwig.vacustech.in:8883", options);
     client.on("connect", () => {
@@ -27,26 +27,10 @@ exports.MqttConnection = (io) => {
       try {
         messageArray = JSON.parse(messageArray.toString());
         if (topic == "/test/vacus/sensor") {
-          const sensorArray = new Array();
-          let shipmentId = null;
-          let avg = 0;
           for (const message of messageArray) {
             const result = await getCurrentShipment(message.vehicleID);
-            message.shipmentId = shipmentId = result.id || null;
-            const sensorData = await saveSensorData(message);
-            sensorArray.push({
-              name: sensorData.sensorId,
-              data: [sensorData],
-            });
-            avg += sensorData.temperature;
-          }
-          const avgTemperature = {
-            temperature: avg / messageArray.length,
-            timestamp: new Date(),
-          };
-          if (shipmentId) {
-            io.to(shipmentId).emit("sensorData", sensorArray);
-            io.to(shipmentId).emit("avgTemperature", avgTemperature);
+            message.shipmentId = result.id || null;
+            await saveSensorData(message);
           }
         } else {
           await asyncForEach(messageArray, async (message) => {

@@ -4,11 +4,7 @@ import Chart from "./temperature";
 import ShipmentSummary from "./shipmentsummary";
 import ShipmentDetails from "./shipmentdetails";
 import ProductList from "./productlist";
-// import Map from "./map";
-import { config } from "../../config";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
-import CurrentTemperature from "../../assets/icons/CurrentTemperature.svg";
-import zoomInIcon from "../../assets/icons/chain-icon.png";
 import back from "../../assets/icons/back.png";
 import UpdateStatus from "../../assets/icons/Update_Status.png";
 import "./style.scss";
@@ -16,17 +12,7 @@ import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
 import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
-import { io } from "socket.io-client";
-import { fromUnixTime } from "date-fns";
-import FullscreenOutlined from '@mui/icons-material/FullscreenOutlined';
-import ArrowBack from '@mui/icons-material/ArrowBackIosNewRounded';
-import ArrowForward from '@mui/icons-material/ArrowForwardIosRounded';
-
 const ViewGMRShipment = (props) => {
-  const [sensorData, setSensorData] = useState([]);
-  const [minMax, setMinMax] = useState({});
-  const [currentTemperature, setCurrentTemperature] = useState();
-  const [lastUpdateTime, setLastUpdateTime] = useState();
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
@@ -37,57 +23,9 @@ const ViewGMRShipment = (props) => {
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
   const { id } = props.match.params;
   if (!isAuthenticated("viewShipment")) props.history.push(`/profile`);
-
   const closeModalShipping = () => {
     setOpenShipping(false);
   };
-
-  useEffect(() => {
-    const socket = io(config().temperatureSocketUrl, {
-      path: "/shipmentmanagement/api/socket",
-      transports: ["websocket"],
-    });
-    socket.on("connect", () => {
-      socket.emit("join", props.match.params.id);
-      socket.on("graphMeta", (metaData) => {
-        setMinMax(metaData);
-      });
-      socket.on("avgTemperature", (avg) => {
-        if (avg.timestamp) {
-          setLastUpdateTime(avg.timestamp.toLocaleString("en-IN"));
-        }
-        setCurrentTemperature(avg.temperature);
-      });
-      socket.on("sensorData", (data) => {
-        const array = sensorData;
-        for (const sensor of data) {
-          for (const element of sensor.data) {
-            const time = fromUnixTime(element.timestamp).toLocaleTimeString(
-              "en-IN"
-            );
-            const found = array.find((o, i) => {
-              if (o.name === sensor.name) {
-                if (o.data.length > 300) o.data.shift();
-                array[i] = {
-                  name: o.name,
-                  data: [...o?.data, [time, element.temperature]],
-                };
-                return true; // stop searching
-              }
-            });
-            if (!found) {
-              array.push({
-                name: sensor.name,
-                data: [[time, element.temperature]],
-              });
-            }
-          }
-          setSensorData(array);
-        }
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.match.params.id]);
 
   return (
     <div className='tracing'>
@@ -148,61 +86,7 @@ const ViewGMRShipment = (props) => {
         </div>
         <div className='col-sm-8'>
           <p className='heading'>TEMPERATURE</p>
-          <div className='row mb-4 mt-0'>
-            <div className='col panel commonpanle' style={{ height: "360px" }}>
-              <div className='d-flex justify-content-between mb-4 p-relative'>
-                <div className='row ml-4 mb-2'>
-                  <img
-                    style={{ width: "2rem", height: "3.5rem" }}
-                    className='temperature-icon mr-2'
-                    src={CurrentTemperature}
-                    alt='Current Temperature'
-                  />
-                  <div className='d-flex flex-column'>
-                    <div className='info'>Average temperature</div>
-                    <div className='temp'>
-                      {currentTemperature ? currentTemperature : 0}
-                      {""}
-                      °C
-                    </div>
-                  </div>
-                </div>
-                <div style={{gap:"2rem"}} className="d-flex">
-                <div className='d-flex'>
-                  <img
-                    style={{ width: "3.5rem", height: "3.5rem" }}
-                    className='temperature-icon mr-2'
-                    src={zoomInIcon}
-                    alt='Zoom in'
-                  />
-                  <div className='current-info'>
-                    <div className='info'>Last Updated on</div>
-                    <div
-                      className='info'
-                      style={{ fontSize: "13px", marginTop: "1rem" }}
-                    >
-                      {lastUpdateTime
-                        ? lastUpdateTime
-                        : new Date().toLocaleString("en-IN")}
-                    </div>
-                  </div>
-                </div>
-                <div className="icon-container">
-                <FullscreenOutlined className="icon-gmr" />
-                </div>
-                </div>
-                <div className="icon-container-alt left-arrow">
-                <ArrowBack className="icon-gmr"/>
-                </div>
-                <div className="icon-container-alt right-arrow">
-                <ArrowForward className="icon-gmr"/>
-                </div>
-
-              </div>
-              {/* <Map data={shippmentChainOfCustodyData} />{" "} */}
-              <Chart lastTemperatureData={sensorData} metaData={minMax} />
-            </div>
-          </div>
+          <Chart shipmentId={id} />
           {/* <button
             className='btn btn-outline-* fontSize200 enlargeTemperature float-right'
             onClick={() =>
