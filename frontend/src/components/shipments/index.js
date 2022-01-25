@@ -511,7 +511,7 @@ const ShipmentAnalytic = (props) => {
       {isAuthenticated("shipmentAnalytics") &&
         props.user.emailId !== "gmr@statledger.io" && (
           // <Tiles {...props} setData={setData} />
-          <Cards {...props} setData={setData} />
+          <Cards {...props} setData={setData} t={t} />
         )}
       {props.user.emailId !== "gmr@statledger.io" && (
         <div className='mt-4'>
