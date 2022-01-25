@@ -158,7 +158,7 @@ const Track = (props) => {
                       alt='searching'
                     />
                   </div>
-                  {isSubmitted && <span className='redTxt'>{msg}</span>}
+                  {isSubmitted && <span className='redTxt'>{t(msg)}</span>}
                 </div>
               </>
             ) : (
