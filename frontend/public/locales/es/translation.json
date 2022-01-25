@@ -325,5 +325,7 @@
     "Search_Supplier_Name": "Buscar nombre del proveedor",
     "Empty_List": "Lista vacía",
     "Search_Org._Name": "Organización de búsqueda Nombre",
-    "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Ingrese el ID de pedido o el número de serie para el número de envío o el número de tránsito."
+    "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Ingrese el ID de pedido o el número de serie para el número de envío o el número de tránsito.",
+    "Enter_Shipment_ID": "Ingrese la identificación del envío",
+    "Enter_Transit_No": "Ingrese el número de tránsito"
 }
