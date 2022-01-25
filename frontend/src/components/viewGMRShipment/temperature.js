@@ -18,9 +18,7 @@ const Chart = (props) => {
     setPage(parseInt(page) - 1);
   };
   async function fetchData(success, fail) {
-    console.log("fetchData Running");
     const result = await temperatureGraph(props.shipmentId, page);
-    console.log("TEMP RESULT", result);
     if (result.success) {
       success(result.data.graph);
       setPage(result.data.page);
