@@ -154,7 +154,7 @@ export function config() {
       createUpdateAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `ws://localhost:3002`,
+      temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -293,7 +293,7 @@ export function config() {
       createUpdateAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `wss://test.vaccineledger.com`,
+      temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -423,7 +423,7 @@ export function config() {
       createUpdateAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `wss://vaccineledger.com`,
+      temperatureGraph: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -563,7 +563,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
