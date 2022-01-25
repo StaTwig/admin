@@ -338,7 +338,7 @@ const EditRow = (props) => {
                   title={
                     (t("fetch") === "Fetch" ? "Fetch" : "obtener") +
                     " " +
-                    t("serial_numbers")
+                    t("batch_details")
                   }
                   size='modal-xl' //for other size's use `modal-lg, modal-md, modal-sm`
                 >

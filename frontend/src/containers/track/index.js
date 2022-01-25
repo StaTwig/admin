@@ -136,11 +136,13 @@ const { t, i18n } = useTranslation();
     setViewIotTemperatureSplineline(false);
   };
 
+  const [trackTraceData, setTrackTraceData] = useState({setValue: '', value: '', resetData: '', setIsSubmitted: ''});
+
   return (
     <div className='container-fluid p-0'>
       <Header {...props} t={t}/>
       <div className='d-flex'>
-        <Sidebar {...props} t={t}/>
+        <Sidebar {...props} t={t} trackTraceData={trackTraceData} />
         <div className='content'>
           <Track
             searchData={searchData}
@@ -159,6 +161,7 @@ const { t, i18n } = useTranslation();
             lastTenIotShipmentData={lastTenIotShipmentData}
             t={t}
             lang={i18n.resolvedLanguage}
+            setTrackTraceData={setTrackTraceData}
             {...props}
           />
         </div>
