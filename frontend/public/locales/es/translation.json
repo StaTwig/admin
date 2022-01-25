@@ -309,5 +309,11 @@
     "OK": "OK",
     "language":"idioma",
     "select_the_language":"Seleccione el idioma",
-    "batch_details":"Detalles del Lote"
+    "batch_details":"Detalles del Lote",
+    "Email/Mobile must be specified": "Email/Móvil Debe especificarse",
+    "Validation Error": "Error de validacion",
+    "OTP Sent Success": "Éxito de envío de OTP",
+    "Account is not Approved.Please contact admin": "La cuenta no está aprobada. Póngase en contacto con el administrador",
+    "User not registered": "Usuario no registrado",
+    "Some error occurred while login": "Se produjo un error al iniciar sesión"
 }

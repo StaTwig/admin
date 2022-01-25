@@ -311,5 +311,11 @@
     "OK": "OK",
     "language":"Language",
     "select_the_language":"Select the Language",
-    "batch_details":"Batch Details"
+    "batch_details":"Batch Details",
+    "Email/Mobile must be specified": "Email/Mobile must be specified",
+    "Validation Error": "Validation Error",
+    "OTP Sent Success": "OTP Sent Success",
+    "Account is not Approved.Please contact admin": "Account is not Approved.Please contact admin",
+    "User not registered": "User not registered",
+    "Some error occurred while login": "Some error occurred while login"
 }
