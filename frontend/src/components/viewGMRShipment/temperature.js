@@ -64,11 +64,11 @@ const Chart = (props) => {
             colors={["#FA7923", "#666"]}
             id='users-chart'
             height='240px'
-            ytitle='Temperature'
+            ytitle='Temperature  °C'
             xtitle='Time'
             min={min}
             max={max}
-            precision={2}
+            precision={4}
             data={fetchData}
             refresh={60}
           />
