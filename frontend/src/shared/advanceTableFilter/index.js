@@ -689,14 +689,14 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Org. Name"}
+                        label={t("Search_Org._Name")}
                         variant='outlined'
                       />
                     )}
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t("Empty List")}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -706,7 +706,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setToShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -945,14 +945,14 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Supplier Name"}
+                        label={t("Search_Supplier_Name")}
                         variant='outlined'
                       />
                     )}
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t('Empty_List')}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -962,7 +962,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setFromShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -1391,7 +1391,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Shipment"}
+                        label={t("Search_Shipment")}
                         variant='outlined'
                       />
                     )}
@@ -1408,7 +1408,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setShipmentIdFilterOnSelect("")}
                 >
-                  Clear
+                  {t('Clear')}
                 </button>
               </StyledMenuItem>
             </div>
