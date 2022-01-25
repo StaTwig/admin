@@ -329,5 +329,7 @@
     "Enter_Shipment_ID": "Ingrese la identificación del envío",
     "Enter_Transit_No": "Ingrese el número de tránsito",
     "No data found": "Datos no encontrados",
-    "Select_Location": "Seleccionar ubicación"
+    "Select_Location": "Seleccionar ubicación",
+    "Your_Shipment_Status_has_been": "Su estado de envío ha sido",
+    "Updated_Successfully": "Actualizado con éxito"
 }

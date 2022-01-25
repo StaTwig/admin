@@ -870,6 +870,7 @@ const UpdateStatus = (props) => {
         >
           <SuccessPopup
             onHide={closeModal} //FailurePopUp
+            t={t}
           />
         </Modal>
       )}

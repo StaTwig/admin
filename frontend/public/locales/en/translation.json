@@ -331,5 +331,7 @@
     "Enter_Shipment_ID": "Enter Shipment ID",
     "Enter_Transit_No": "Enter Transit No",
     "No data found": "No data found",
-    "Select_Location": "Select Location"
+    "Select_Location": "Select Location",
+    "Your_Shipment_Status_has_been": "Your Shipment Status has been",
+    "Updated_Successfully": "Updated Successfully"
 }
