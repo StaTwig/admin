@@ -13,11 +13,11 @@ import "./style.scss";
 import { TextField } from "@material-ui/core";
 const SearchWareHouse = (props) => {
   const { t } = props;
-  const [region, setRegion] = useState("Select Region");
+  const [region, setRegion] = useState(t("Select_Region"));
   const [regions, setRegions] = useState([]);
-  const [country, setCountry] = useState("Select Country");
+  const [country, setCountry] = useState(t("Select_Country"));
   const [countries, setCountries] = useState([]);
-  const [warehouseId, setWareHouseId] = useState("Select Location");
+  const [warehouseId, setWareHouseId] = useState(t("Select_Location"));
   const [warehouses, setWareHouses] = useState([]);
   const [warehouseIds, setWareHouseIds] = useState([]);
   useEffect(() => {

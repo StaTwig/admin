@@ -330,5 +330,6 @@
     "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No.",
     "Enter_Shipment_ID": "Enter Shipment ID",
     "Enter_Transit_No": "Enter Transit No",
-    "No data found": "No data found"
+    "No data found": "No data found",
+    "Select_Location": "Select Location"
 }
