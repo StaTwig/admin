@@ -2114,7 +2114,7 @@ exports.chainOfCustody = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2248,7 +2248,7 @@ exports.chainOfCustody = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2257,12 +2257,12 @@ exports.chainOfCustody = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(res, responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -2347,7 +2347,7 @@ exports.fetchShipmentIds = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           } else {
@@ -2472,7 +2472,7 @@ exports.fetchShipmentIds = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2481,12 +2481,12 @@ exports.fetchShipmentIds = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(res,responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -2971,8 +2971,8 @@ exports.trackJourney = [
 
           if (inwardShipments == null)
             throw new Error(
-              "ID does not exists..Please try searching with existing IDs"
-            );
+              responses(req.user.preferredLanguage).id_not_exists
+              );
 
           shipmentsArray = inwardShipments.taggedShipments;
           shipmentsArray.push(trackingId);
@@ -3193,8 +3193,8 @@ exports.trackJourney = [
 
           if (poDetails == null)
             throw new Error(
-              "Order ID does not exists..Please try searching with existing IDs"
-            );
+              responses(req.user.preferredLanguage).id_not_exists
+              );
 
           if (poDetails.shipments.length > 0) {
             outwardShipmentsArray = await ShipmentModel.aggregate([

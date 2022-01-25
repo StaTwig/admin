@@ -19,6 +19,8 @@ exports.responses = (language) => {
             shipment_received: "Shipment Received",
             shipment_cannot_receive: "Cannot receive a Shipment without SO and PO",
             status_updated: "Status Updated",
+            no_permission: "User does not have enough Permissions",
+            id_not_exists: "ID does not exists, please try tracking existing IDs"
         },
         ES: {
             email_not_found: "No se encuentra el correo electrónico",
@@ -38,7 +40,9 @@ exports.responses = (language) => {
             rec_quantity_error: "La cantidad recibida no puede ser mayor que la cantidad real",
             shipment_received: "Envío recibido",
             shipment_cannot_receive: "No puede recibir un envío sin tal y po",
-            status_updated: "Estado actualizado"
+            status_updated: "Estado actualizado",
+            no_permission: "El usuario no tiene suficientes permisos.",
+            id_not_exists: "La identificación no existe, intente rastrear los ID existentes"
         }
     };
     const conf = resps[language];
