@@ -146,7 +146,7 @@ const Track = (props) => {
                   <div className='search-form'>
                     <input
                       type='text'
-                      placeholder='Enter Order ID or Serial No. or Shipment No. or Transit No.'
+                      placeholder={t('Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.')}
                       onChange={onSearchChange}
                       //className="form-control border border-primary search-field"
                       className='form-control border-blue search-field border-8'
