@@ -1044,7 +1044,7 @@ exports.trackProduct = [
           });
           return apiResponse.successResponseWithData(
             res,
-            "Success Track Product",
+            responses(req.user.preferredLanguage).success,
             items_array
           );
         }
@@ -1085,13 +1085,13 @@ exports.getInventoryDetails = [
         );
         return apiResponse.successResponseWithData(
           res,
-          "Inventory Details",
+          responses(req.user.preferredLanguage).inventory_details,
           inventoryDetails
         );
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -1323,8 +1323,8 @@ exports.getGroupedInventoryDetails = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            `Sorry! User doesn't have permissions`
-          );
+            responses(req.user.preferredLanguage).no_permission
+            );
         }
       });
     } catch (err) {
@@ -1400,7 +1400,7 @@ exports.getBatchDetailsByBatchNumber = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1518,8 +1518,8 @@ exports.getInventory = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
-        );
+          responses(req.user.preferredLanguage).warehouse_not_found
+          );
       }
     } catch (err) {
       console.log(err);
@@ -2354,7 +2354,7 @@ exports.getBatchNearExpiration = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -2412,7 +2412,7 @@ exports.getBatchExpired = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -2636,7 +2636,7 @@ exports.deleteProductsFromInventory = [
       event_data.payload.data = payload;
 
       await logEvent(event_data);
-      return apiResponse.successResponse(res, "Operation success");
+      return apiResponse.successResponse(res, responses(req.user.preferredLanguage).success);
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2694,11 +2694,11 @@ exports.searchProduct = [
           } else {
             return apiResponse.ErrorResponse(
               res,
-              "Cannot find warehouse for this employee"
+              responses(req.user.preferredLanguage).warehouse_not_found
             );
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(res, responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
