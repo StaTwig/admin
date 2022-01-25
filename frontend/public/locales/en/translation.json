@@ -317,5 +317,15 @@
     "OTP Sent Success": "OTP Sent Success",
     "Account is not Approved.Please contact admin": "Account is not Approved.Please contact admin",
     "User not registered": "User not registered",
-    "Some error occurred while login": "Some error occurred while login"
+    "Some error occurred while login": "Some error occurred while login",
+    "Inbound_Shipment": "Inbound Shipment",
+    "Outbound_Shipment": "Outbound Shipment",
+    "Inbound_Alert": "Inbound Alert",
+    "Outbound_Alert": "Outbound Alert",
+    "Clear": "Clear",
+    "Search_Shipment": "Search Shipment",
+    "Search_Supplier_Name": "Search Supplier Name",
+    "Empty_List": "Empty List",
+    "Search_Org._Name": "Search Org. Name",
+    "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No."
 }

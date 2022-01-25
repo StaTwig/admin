@@ -315,5 +315,15 @@
     "OTP Sent Success": "Éxito de envío de OTP",
     "Account is not Approved.Please contact admin": "La cuenta no está aprobada. Póngase en contacto con el administrador",
     "User not registered": "Usuario no registrado",
-    "Some error occurred while login": "Se produjo un error al iniciar sesión"
+    "Some error occurred while login": "Se produjo un error al iniciar sesión",
+    "Inbound_Shipment": "Envío entrante",
+    "Outbound_Shipment": "Envío saliente",
+    "Inbound_Alert": "Alerta entrante",
+    "Outbound_Alert": "Alerta saliente",
+    "Clear": "Claro",
+    "Search_Shipment": "Buscar envío",
+    "Search_Supplier_Name": "Buscar nombre del proveedor",
+    "Empty_List": "Lista vacía",
+    "Search_Org._Name": "Organización de búsqueda Nombre",
+    "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Ingrese el ID de pedido o el número de serie para el número de envío o el número de tránsito."
 }
