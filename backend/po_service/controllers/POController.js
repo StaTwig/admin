@@ -1325,7 +1325,7 @@ exports.fetchInboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1510,7 +1510,7 @@ exports.fetchOutboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
