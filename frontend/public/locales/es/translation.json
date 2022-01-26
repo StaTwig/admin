@@ -334,5 +334,7 @@
     "Updated_Successfully": "Actualizado con éxito",
     "Your_Profile_has_been": "Tu perfil ha sido",
     "Saved_Successfully": "Guardado exitosamente",
-    "Enter_the_Quantity": "Ingrese la cantidad"
+    "Enter_the_Quantity": "Ingrese la cantidad",
+    "Failure": "Falla",
+    "Added_to_inventory": "Añadido al inventario"
 }

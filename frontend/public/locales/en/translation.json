@@ -336,6 +336,7 @@
     "Updated_Successfully": "Updated Successfully",
     "Your_Profile_has_been": "Your Profile has been",
     "Saved_Successfully": "Saved Successfully",
-    "Enter_the_Quantity": "Enter the Quantity"
-
+    "Enter_the_Quantity": "Enter the Quantity",
+    "Failure": "Failure",
+    "Added_to_inventory": "Added to inventory"
 }

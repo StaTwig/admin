@@ -3,8 +3,9 @@ import "./style.scss";
 import Checked from "../../assets/icons/checked.svg";
 import Cross from "../../assets/icons/crossRed.svg";
 
-const InventoryPopUp = ({ successMessage, errorMessage, onHide }) => {
+const InventoryPopUp = ({ successMessage, errorMessage, onHide, t }) => {
   const imagePath = successMessage ? Checked : Cross;
+  console.log("errorMessage ",errorMessage);
   return (
     <div className='inventorypopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -16,13 +17,13 @@ const InventoryPopUp = ({ successMessage, errorMessage, onHide }) => {
           alt='Alert'
         />
         <div className='alert'>
-          {successMessage && "Success!"}
-          {errorMessage && "Failure"}
+          {successMessage && `${t("success")}!`}
+          {errorMessage && t("Failure")}
         </div>
-        <div className='data'>{successMessage && "Successfully "}</div>
+        <div className='data'>{successMessage && t("successfully")}</div>
         <div className='data mb-4'>
-          {successMessage && "added to inventory!"}
-          {errorMessage && errorMessage}
+          {successMessage && `${t("Added_to_inventory")}!`}
+          {errorMessage && t(errorMessage)}
         </div>
         <button className='btn-primary btn' onClick={onHide}>
           OK
