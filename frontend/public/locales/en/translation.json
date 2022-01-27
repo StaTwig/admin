@@ -313,5 +313,6 @@
     "select_the_language":"Select the Language",
     "batch_details":"Batch Details",
     "search_location":"Search Location",
-    "cancelled":"CANCELLED"
+    "cancelled":"CANCELLED",
+    "cancel_order":"Cancel Order"
 }

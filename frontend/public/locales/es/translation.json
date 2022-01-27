@@ -311,5 +311,6 @@
     "select_the_language":"Seleccione el idioma",
     "batch_details":"Detalles del Lote",
     "search_location":"Encontrar ubicacion",
-    "cancelled": "Cancelado"
+    "cancelled": "Cancelado",
+    "cancel_order": "Cancelar orden"
 }
