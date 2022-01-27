@@ -62,7 +62,7 @@ const AddCategory = (props) => {
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
-      if (result.status === 1) {
+      if (result.success) {
         setOpenCreatedInventory(true);
       }
     }

@@ -23,6 +23,7 @@ const AddProduct = (props) => {
   const [manufacturer, setManufacturer] = useState(
     t("select") + " " + t("manufacturer")
   );
+  const [otherManufacturer, setOtherManufacturer] = useState("");
   const [category, setCategory] = useState(t("select_category"));
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -42,6 +43,7 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
+      setManufacturers(manufacturers => [...manufacturers, "Other"])
       const result = await getProducts();
       const categoryArray = result.map((product) => product.type);
       setCategories(
@@ -59,14 +61,15 @@ const AddProduct = (props) => {
   const [categoryErr, setCategoryErr] = useState(false);
   const [UOMErr, setUOMErr] = useState(false);
   const [descErr, setDescErr] = useState(false);
-
+  const [otherManufacturerErr, setOtherManufacturerErr] = useState(false);
   const validation = () => {
     if (
       productName === "" ||
       manufacturer === t("select") + " " + t("manufacturer") ||
       category === t("select_category") ||
       UOM === "" ||
-      description === ""
+      description === "" ||
+      (manufacturer=="Other"&&otherManufacturer=="")
     ) {
       if (productName === "") {
         setPdNameErr(true);
@@ -83,6 +86,9 @@ const AddProduct = (props) => {
       if (description === "") {
         setDescErr(true);
       }
+      if(manufacturer=="Other"&&otherManufacturer==""){
+        setOtherManufacturerErr(true);
+      }
     } else {
       return true;
     }
@@ -93,7 +99,12 @@ const AddProduct = (props) => {
     if (isValid) {
       let formData = new FormData();
 
-      formData.append("manufacturer", manufacturer);
+      if(manufacturer!="Other"){
+        formData.append("manufacturer", manufacturer);
+      }
+      else{
+        formData.append("manufacturer", otherManufacturer);
+      }
       // let unitofMeasure =
       formData.append("name", productName);
       formData.append("shortName", productName);
@@ -108,8 +119,10 @@ const AddProduct = (props) => {
       );
       formData.append("description", description);
       formData.append("photo", photo);
+      // console.log("formData", productName);
       const result = await addNewProduct(formData);
-      if (result.status === 1) {
+      console.log("Result", result);
+      if (result.success) {
         setOpenCreatedInventory(true);
       }
     }
@@ -269,6 +282,23 @@ const AddProduct = (props) => {
                   </div>
                 </div>
               </div>
+              {manufacturer=="Other" && 
+              <div className='flex-row'>
+              <div className='form-group'>
+                <label htmlFor='shipmentId'>{t("Other Manufacturer")}</label>
+                <input
+                  type='text'
+                  className={`form-control ${otherManufacturerErr ? "border-danger" : ""}`}
+                  name='otherManufacturer'
+                  placeholder={t("enter") + " " + t("manufacturer")}
+                  onChange={(e) => {
+                    setManufacturerErr(false);
+                    setOtherManufacturer(e.target.value);
+                    console.log("Manufacturer", otherManufacturer);
+                  }}
+                />
+              </div>
+            </div>}
               <div className='flex-row'>
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("product_category")}</label>
