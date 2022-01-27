@@ -76,7 +76,7 @@ const AddCategory = (props) => {
             </button> */}
         <div className='card'>
           <div className='card-body'>
-            <div className='d-flex'>
+            <div style={{gap:"5rem"}} className='d-flex'>
               <div className=''>
                 <div className='mb-4'>
                   <div className='d-flex flex-column upload'>

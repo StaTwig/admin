@@ -30,16 +30,19 @@
   .browse {
     display: flex;
     align-items: center;
+    white-space: nowrap;
+    margin-top: 1rem;
   }
   .upload {
     height: 9rem;
-    width: 9rem;
+    width: 12rem;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 1px dashed #707070;
     border-radius: 8px;
     margin-bottom: 25px;
+    padding: 1rem;
 
     .select {
       display: none;
@@ -116,7 +119,6 @@
 .addNewBtn {
   position: relative;
   top: 6.5rem;
-  // height: 2rem;
   right: 10rem;
   background-color: #fa7923;
   color: #ffffff;
@@ -124,7 +126,10 @@
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
-  padding: 5px 20px;
+  padding: 6px 20px;
+}
+.addNewBtn-padding{
+  padding: 11px 20px !important;
 }
 
 .addNewBtn:hover {
