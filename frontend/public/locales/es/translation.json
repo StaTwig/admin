@@ -336,5 +336,7 @@
     "Saved_Successfully": "Guardado exitosamente",
     "Enter_the_Quantity": "Ingrese la cantidad",
     "Failure": "Falla",
-    "Added_to_inventory": "Añadido al inventario"
+    "Added_to_inventory": "Añadido al inventario",
+    "A batch with batch number": "Un lote con número de lote",
+    "exists in the inventory": "existe en el inventario"
 }
