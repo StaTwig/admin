@@ -2,6 +2,11 @@ import React from "react";
 import Delete from "../../../assets/icons/Delete.png";
 import Select from "react-select";
 import "./style.scss";
+
+
+const truncate = (str, n) => {
+  return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+};
 const EditRow = (props) => {
   const {
     prod,
@@ -110,7 +115,7 @@ const EditRow = (props) => {
                 style={{ position: "relative", right: "30px" }}
               >
                 {prod.id ? (
-                  prod.id
+                  truncate(prod.id, 6)
                 ) : (
                   <div
                     className=''

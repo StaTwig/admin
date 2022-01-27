@@ -7,7 +7,7 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
@@ -138,18 +138,16 @@ const SideBar = (props) => {
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link
-              to='/track'
+          <Link to='/track'
               className='d-inline-block'
-              onClick={resetTrackTracePage}
-            >
-              <img
-                src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track &amp; Trace'
-              />
-              <span className='ml-2'>{t("trackntrace")}</span>
-            </Link>
-          </li>
+              onClick={resetTrackTracePage} className='nav-look-link'>
+            <img
+              src={url === "/track" ? trackSelectedIcon : trackIcon}
+              alt='Track &amp; Trace'
+            />
+             <span>{t("trackntrace")}</span>
+          </Link>
+        </li>
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>

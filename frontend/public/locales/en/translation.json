@@ -311,5 +311,6 @@
     "OK": "OK",
     "language":"Language",
     "select_the_language":"Select the Language",
-    "batch_details":"Batch Details"
+    "batch_details":"Batch Details",
+    "search_location":"Search Location"
 }

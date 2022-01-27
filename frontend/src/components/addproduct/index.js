@@ -195,9 +195,10 @@ const AddProduct = (props) => {
               <div
                 style={{
                   display: "flex",
-                  width: "10vw",
+                  width: "12rem",
                   flexDirection: "row",
-                  justifyContent: "flex-end",
+                  alignItems:"center",
+                  justifyContent: "center",
                 }}
               >
                 <label
@@ -206,8 +207,7 @@ const AddProduct = (props) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    fontSize: "1vw",
-                    height: "2rem",
+                    whiteSpace:"nowrap",
                   }}
                 >
                   <img
@@ -350,12 +350,12 @@ const AddProduct = (props) => {
             <button
               className='btn btn-outline-primary mr-4'
               onClick={() => props.history.push("/productcategory")}
-              style={{ fontSize: "1vw", height: "2rem" }}
+              style={{ fontSize: "1vw" }}
             >
               {t("cancel")}
             </button>
             <button
-              className='addNewBtn fontSize20 font-bold mr-4 product'
+              className='addNewBtn addNewBtn-padding fontSize20 font-bold mr-4 product'
               onClick={addProduct}
               style={{ position: "unset" }}
             >
