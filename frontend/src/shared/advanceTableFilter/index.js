@@ -34,11 +34,14 @@ const StyledMenu = withStyles({
 ));
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    "&:focus": {
-      /* backgroundColor: theme.palette.primary.main, */
-      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white,
-      },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+    '&:focus': {
+      backgroundColor: 'transparent',
+    },
+    '&:active': {
+      backgroundColor: 'transparent',
     },
   },
 }))(MenuItem);
@@ -548,7 +551,7 @@ const AdvanceTableFilter = (props) => {
             onBlur={handlePoDeliveryLocationClose}
           >
             <div className='d-flex flex-column align-items-center' id='deldiv'>
-              <StyledMenuItem style={{ width: "100%" }}>
+              <StyledMenuItem>
                 {poDeliveryLocationAnchorEl ? (
                   <Autocomplete
                     id='toShipment'
@@ -566,7 +569,7 @@ const AdvanceTableFilter = (props) => {
                     onChange={(event, newValue) => {
                       setPoDeliveryLocationFilterOnSelect(newValue.id);
                     }}
-                    style={{ width: "100%" }}
+                    style={{ width: "16rem" }}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -581,6 +584,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                style={{ padding: "10px", height: "40px", width: "130px" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'

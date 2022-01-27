@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import MobileHeader from "../../shared/header/mobileHeader";
@@ -10,6 +10,10 @@ import icon2 from "../../assets/icons/location-icon.png";
 import icon3 from "../../assets/icons/chain-icon.png";
 import googleStore from "../../assets/brands/Google_store.webp";
 import appleStore from "../../assets/brands/Apple_store.webp";
+import blockflow from "../../assets/brands/blockchain-flow-diagram.webp";
+import blockflowEs from "../../assets/brands/blockchain-flow-diagram-es.webp";
+import googleStoreEs from "../../assets/brands/Google_store_es.webp";
+import appleStoreEs from "../../assets/brands/Apple_store_es.webp";
 import gitlab from "../../assets/icons/gitlab_logo.png";
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +29,7 @@ const HomeContainer = (props) => {
     const lng = e.target.value;
     i18n.changeLanguage(lng);
   };
-
+  console.log(i18n);
   useEffect(() => {
     if (user) {
       props.history.push("/overview");
@@ -92,7 +96,7 @@ const HomeContainer = (props) => {
                 target='_blank'
               >
                 <img
-                  src={appleStore}
+                  src={lang === "en" ? appleStore : appleStoreEs }
                   width='165'
                   height='50'
                   alt='Apple App Store'
@@ -107,7 +111,7 @@ const HomeContainer = (props) => {
                 target='_blank'
               >
                 <img
-                  src={googleStore}
+                  src={lang === "en" ? googleStore : googleStoreEs }
                   width='165'
                   height='50'
                   alt='Google Play Store'
@@ -176,7 +180,7 @@ const HomeContainer = (props) => {
           <div className='row'>
             <div className='col align-text-center mx auto'>
               <h2 className='display-4'> {t('how_it_works')}</h2>
-              <div className='bg-work-flow'></div>
+              <div style={{background:`url(${lang === "en" ? blockflow : blockflowEs})`}} className='bg-work-flow'></div>
             </div>
           </div>
         </div>
@@ -218,7 +222,7 @@ const HomeContainer = (props) => {
                   target='_blank'
                 >
                   <img
-                    src={appleStore}
+                    src={lang === "en" ? appleStore : appleStoreEs }
                     width='165'
                     height='50'
                     alt=' Apple App Store'
@@ -233,7 +237,7 @@ const HomeContainer = (props) => {
                   target='_blank'
                 >
                   <img
-                    src={googleStore}
+                    src={lang === "en" ? googleStore : googleStoreEs }
                     width='165'
                     height='50'
                     alt='Google Play Store'
@@ -249,7 +253,7 @@ const HomeContainer = (props) => {
         <p className='copywrite'>© {new Date().getFullYear()} {t('statwig')}</p>
         <p className='poweredby'>
           {t('powered_by_blockchain')} &nbsp;
-          <select className="language" value={lang} onChange={changeLanguage}>
+          <select className="language cursorP" value={lang} onChange={changeLanguage}>
             <option value="en">{t('english')}</option>
             <option value="es">{t('spanish')}</option>
           </select>
