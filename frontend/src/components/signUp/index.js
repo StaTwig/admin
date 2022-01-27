@@ -663,8 +663,9 @@ const FormPage = (props) => {
                                       (email.length > 0 ||
                                         mobileNumber.length > 0)
                                       && emailErrorMsg === '' &&
-                                      phoneErrorMsg === '' &&
-                                      (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
+                                      phoneErrorMsg === '' 
+                                      // &&
+                                      // (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
                                     ) {
                                       props.onOrgChange(true);
                                     } else {

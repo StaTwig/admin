@@ -33,6 +33,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 const { resolve } = require("path");
 const PdfPrinter = require("pdfmake");
+const { responses } = require("../helpers/responses")
 const { asyncForEach } = require("../helpers/utility");
 const { fromUnixTime } = require("date-fns");
 const fontDescriptors = {
@@ -348,19 +349,19 @@ exports.createShipment = [
         emailId: req.user.emailId,
       });
       if (empData == null) {
-        return apiResponse.ErrorResponse(res, "Email is not found");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).email_not_found);
       }
       const orgId = empData.organisationId;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
       if (orgData == null) {
-        return apiResponse.ErrorResponse(res, "orgData is not found");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).orgdata_not_found);
       }
       const address = orgData.postalAddress;
       const confId = orgData.configuration_id;
       const confData = await ConfigurationModel.findOne({ id: confId });
       if (confData == null) {
-        return apiResponse.ErrorResponse(res, "Configuration is not found");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).config_not_found);
       }
       const process = confData.process;
       const supplierID = req.body.supplier.id;
@@ -369,14 +370,14 @@ exports.createShipment = [
       });
       if (supplierOrgData == null) {
         console.log("Supplier not defined");
-        return apiResponse.ErrorResponse(res, "Supplier  not defined");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).supplier_not_defined);
       }
 
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.receiver.id,
       });
       if (receiverOrgData == null) {
-        return apiResponse.ErrorResponse(res, "Receiver not defined");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).receiver_not_defined);
       }
 
       const supplierName = supplierOrgData.name;
@@ -399,7 +400,7 @@ exports.createShipment = [
           id: data.poId,
         });
         if (po == null) {
-          return apiResponse.ErrorResponse(res, "Order ID  not defined");
+          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).orderid_not_defined);
         }
         let quantityMismatch = false;
         po.products.every((product) => {
@@ -502,7 +503,7 @@ exports.createShipment = [
           }
         );
         if (poidupdate == null) {
-          return apiResponse.ErrorResponse(res, "Product not Updated");
+          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_not_updated);
         }
       }
       if (flag != "N") {
@@ -512,7 +513,7 @@ exports.createShipment = [
         if (suppWarehouseDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "suppWarehouseDetails not Found"
+            responses(req.user.preferredLanguage).supplier_not_found
           );
         }
         var suppInventoryId = suppWarehouseDetails.warehouseInventory;
@@ -522,7 +523,7 @@ exports.createShipment = [
         if (suppInventoryDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "suppInventoryDetails not Found"
+            "suppInventoryDetails" + responses(req.user.preferredLanguage).not_found
           );
         }
         const recvWarehouseDetails = await WarehouseModel.findOne({
@@ -531,7 +532,7 @@ exports.createShipment = [
         if (recvWarehouseDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "recvWarehouseDetails not Found"
+            "recvWarehouseDetails" + responses(req.user.preferredLanguage).not_found
           );
         }
         var recvInventoryId = recvWarehouseDetails.warehouseInventory;
@@ -541,7 +542,7 @@ exports.createShipment = [
         if (recvInventoryDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "recvInventoryDetails not Found"
+            "recvInventoryDetails" + responses(req.user.preferredLanguage).not_found
           );
         }
         var products = data.products;
@@ -658,7 +659,7 @@ exports.createShipment = [
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
         if (result == null) {
-          return apiResponse.ErrorResponse(res, "Shipment Not saved");
+          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_saved);
         }
 
         //Blockchain Integration
@@ -688,70 +689,70 @@ exports.createShipment = [
           Misc: "",
         };
 
-        // const token =
-        //   req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
+        const token = 
+          req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        // await axios.post(
-        //   `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
-        //   bc_data,
-        //   {
-        //     headers: {
-        //       Authorization: token,
-        //     },
-        //   }
-        // );
-        // if (data.taggedShipments) {
-        //   const prevTaggedShipments = await ShipmentModel.findOne(
-        //     {
-        //       id: data.taggedShipments,
-        //     },
-        //     {
-        //       _id: 0,
-        //       taggedShipments: 1,
-        //       products: 1,
-        //     }
-        //   );
-        //   let quantityMismatch = false;
-        //   prevTaggedShipments.products.every((product) => {
-        //     products.every((p) => {
-        //       const shipment_product_quantity =
-        //         product.productQuantity - product.productQuantityTaggedSent;
-        //       const tagged_product_qty = p.productQuantity || p.quantity;
-        //       if (
-        //         parseInt(tagged_product_qty) <=
-        //         parseInt(shipment_product_quantity)
-        //       ) {
-        //         quantityMismatch = true;
-        //         return false;
-        //       }
-        //     });
-        //   });
+        await axios.post(
+          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+          bc_data,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        if (data.taggedShipments) {
+          const prevTaggedShipments = await ShipmentModel.findOne(
+            {
+              id: data.taggedShipments,
+            },
+            {
+              _id: 0,
+              taggedShipments: 1,
+              products: 1,
+            }
+          );
+          let quantityMismatch = false;
+          prevTaggedShipments.products.every((product) => {
+            products.every((p) => {
+              const shipment_product_quantity =
+                product.productQuantity - product.productQuantityTaggedSent;
+              const tagged_product_qty = p.productQuantity || p.quantity;
+              if (
+                parseInt(tagged_product_qty) <=
+                parseInt(shipment_product_quantity)
+              ) {
+                quantityMismatch = true;
+                return false;
+              }
+            });
+          });
 
-        //   if (!quantityMismatch)
-        //     throw new Error("Tagged product quantity not available");
-        //   await ShipmentModel.findOneAndUpdate(
-        //     {
-        //       id: shipmentId,
-        //     },
-        //     {
-        //       $push: {
-        //         taggedShipments: prevTaggedShipments.taggedShipments,
-        //       },
-        //     }
-        //   );
+          if (!quantityMismatch)
+            throw new Error(responses(req.user.preferredLanguage).tagged_error);
+          await ShipmentModel.findOneAndUpdate(
+            {
+              id: shipmentId,
+            },
+            {
+              $push: {
+                taggedShipments: prevTaggedShipments.taggedShipments,
+              },
+            }
+          );
 
-        //   for (let count = 0; count < products.length; count++) {
-        //     taggedShipmentUpdate(
-        //       products[count].productId,
-        //       products[count].productQuantity,
-        //       data.taggedShipments
-        //     );
-        //   }
-        // }
+          for (let count = 0; count < products.length; count++) {
+            taggedShipmentUpdate(
+              products[count].productId,
+              products[count].productQuantity,
+              data.taggedShipments
+            );
+          }
+        }
         await logEvent(event_data);
         return apiResponse.successResponseWithData(
           res,
-          "Shipment Created Successfully",
+          responses(req.user.preferredLanguage).shipment_created,
           result
         );
       }
@@ -810,7 +811,7 @@ exports.newShipment = [
       const shipment = new ShipmentModel(data);
       const result = await shipment.save();
       if (result == null) {
-        return apiResponse.ErrorResponse(res, "Shipment Not saved");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_saved);
       }
 
       //Blockchain Integration
@@ -852,7 +853,7 @@ exports.newShipment = [
       );
       return apiResponse.successResponseWithData(
         res,
-        "Shipment Created Successfully",
+        responses(req.user.preferredLanguage).shipment_created,
         result
       );
     } catch (err) {
@@ -957,7 +958,7 @@ exports.receiveShipment = [
 
                 if (receivedQuantity > actuallyShippedQuantity)
                   throw new Error(
-                    "Received quantity cannot be greater than Actual quantity"
+                    responses(req.user.preferredLanguage).rec_quantity_error
                   );
 
                 var quantityDifference =
@@ -1246,13 +1247,13 @@ exports.receiveShipment = [
 
           return apiResponse.successResponseWithData(
             res,
-            "Shipment Received",
+            responses(req.user.preferredLanguage).shipment_received,
             updateData
           );
         } else {
           return apiResponse.successResponse(
             res,
-            "Cannot receive  a Shipment without SO and PO"
+            responses(req.user.preferredLanguage).shipment_cannot_receive,
           );
         }
       } else {
@@ -1887,11 +1888,11 @@ exports.updateStatus = [
         { new: true }
       );
       if (!update) {
-        return apiResponse.notFoundResponse(res, "Shipment not found");
+        return apiResponse.notFoundResponse(res, responses(req.user.preferredLanguage).shipment_not_found);
       }
       return apiResponse.successResponseWithData(
         res,
-        " Status Updated ",
+        responses(req.user.preferredLanguage).status_updated,
         update
       );
     } catch (err) {
@@ -2038,7 +2039,7 @@ exports.updateTrackingStatus = [
         },
       };
       await logEvent(event_data);
-      return apiResponse.successResponse(res, "Status Updated");
+      return apiResponse.successResponse(res, responses(req.user.preferredLanguage).status_updated);
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2113,7 +2114,7 @@ exports.chainOfCustody = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2247,7 +2248,7 @@ exports.chainOfCustody = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2256,12 +2257,12 @@ exports.chainOfCustody = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(res, responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -2346,7 +2347,7 @@ exports.fetchShipmentIds = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           } else {
@@ -2471,7 +2472,7 @@ exports.fetchShipmentIds = [
 
               return apiResponse.successResponseWithData(
                 res,
-                "Status Updated",
+                responses(req.user.preferredLanguage).status_updated,
                 {
                   poChainOfCustody: poDetails,
                   shipmentChainOfCustody: shipments,
@@ -2480,12 +2481,12 @@ exports.fetchShipmentIds = [
             } else {
               return apiResponse.validationErrorWithData(
                 res,
-                "ID does not exists, please try tracking existing IDs"
+                responses(req.user.preferredLanguage).id_not_exists
               );
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(res,responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -2970,8 +2971,8 @@ exports.trackJourney = [
 
           if (inwardShipments == null)
             throw new Error(
-              "ID does not exists..Please try searching with existing IDs"
-            );
+              responses(req.user.preferredLanguage).id_not_exists
+              );
 
           shipmentsArray = inwardShipments.taggedShipments;
           shipmentsArray.push(trackingId);
@@ -3192,8 +3193,8 @@ exports.trackJourney = [
 
           if (poDetails == null)
             throw new Error(
-              "Order ID does not exists..Please try searching with existing IDs"
-            );
+              responses(req.user.preferredLanguage).id_not_exists
+              );
 
           if (poDetails.shipments.length > 0) {
             outwardShipmentsArray = await ShipmentModel.aggregate([
@@ -3347,8 +3348,8 @@ exports.checkShipmentID = [
       const { shipmentId } = req.query;
       const checkShipment = await ShipmentModel.find({ id: shipmentId });
       if (checkShipment.length > 0)
-        return apiResponse.successResponse(res, "Shipment found");
-      else return apiResponse.ErrorResponse(res, "Shipment not found");
+        return apiResponse.successResponse(res, responses(req.user.preferredLanguage).shipment_found);
+      else return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_found);
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
