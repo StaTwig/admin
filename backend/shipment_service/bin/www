@@ -3,12 +3,8 @@
 "use strict";
 
 const http = require("http");
-const { app, Server } = require("../app");
+const app = require("../app");
 const { MqttConnection } = require("../helpers/mqtt");
-const {
-  lastTenSensorData,
-  getMetaData,
-} = require("../helpers/sensorDataCollector");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -40,33 +36,8 @@ app.set("port", port);
  */
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  path: "/shipmentmanagement/api/socket/",
-  transports: ["websocket", "polling"],
-});
-
-io.on("connection", (socket) => {
-  try {
-    console.log("connected ====== > ", socket.id);
-    socket.on("join", async (shipmentId) => {
-      console.log("join ======== > ", shipmentId);
-      await socket.join(shipmentId);
-      const sensorsData = await lastTenSensorData(shipmentId);
-      const { avg, min, max } = await getMetaData(shipmentId);
-      io.to(shipmentId).emit("graphMeta", { min, max });
-      io.to(shipmentId).emit("avgTemperature", { temperature: avg });
-      io.to(shipmentId).emit("sensorData", sensorsData);
-    });
-    socket.on("disconnect", () => {
-      console.log("disconnected");
-    });
-  } catch (error) {
-    console.log("SOCKET-IO ERROR", error);
-  }
-});
-
 (async () => {
-  await MqttConnection(io);
+  await MqttConnection();
 })();
 
 /**

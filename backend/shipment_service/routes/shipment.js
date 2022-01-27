@@ -81,4 +81,6 @@ router.get(
   ShipmentController.trackJourneyOnBlockchain
 );
 
+router.get("/sensorHistory", ShipmentController.sensorHistory);
+
 module.exports = router;

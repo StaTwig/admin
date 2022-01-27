@@ -403,3 +403,14 @@ export const chainOfCustodyTrack = async (id) => {
     return e.response;
   }
 };
+
+export const temperatureGraph = async (shipmentId, page) => {
+  try {
+    const url = config().temperatureGraph;
+    const result = await axios.get(url, { params: { shipmentId, page } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
+    return e.response;
+  }
+};

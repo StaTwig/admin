@@ -22,6 +22,8 @@ const printer = new PdfPrinter(fonts); //helper file to prepare responses.
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
+const OrganisationModel = require("../models/OrganisationModel");
+const { responses } = require("../helpers/responses");
 
 exports.getProducts = [
   auth,
@@ -38,7 +40,7 @@ exports.getProducts = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -64,7 +66,7 @@ exports.getProductsByCategory = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -94,7 +96,7 @@ exports.getProductInfo = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permission"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -163,7 +165,7 @@ exports.addMultipleProducts = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -210,6 +212,17 @@ exports.addProduct = [
           permissionRequired: ["addNewProduct"],
         };
         checkPermissions(permission_request, async (permissionResult) => {
+
+          const manufacturerCheck = OrganisationModel.exists({'name':manufacturer});
+
+          if(manufacturerCheck==false){
+            const otherManufacturer = new OrganisationModel({
+              name:manufacturer
+            })
+
+            await otherManufacturer.save();
+          }
+
           if (permissionResult.success) {
             const product_unique = uniqid("prod-");
             const product = new ProductModel({
@@ -241,8 +254,8 @@ exports.addProduct = [
           } else {
             return apiResponse.forbiddenResponse(
               res,
-              "Sorry! User does not have enough Permissions"
-            );
+              responses(req.user.preferredLanguage).no_permission
+              );
           }
         });
       }
@@ -274,7 +287,7 @@ exports.uploadImage = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });

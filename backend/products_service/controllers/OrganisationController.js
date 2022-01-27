@@ -2,6 +2,7 @@ const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
+const { responses } = require("../helpers/responses");
 
 exports.getOrganisations = [
   async (req, res) => {
@@ -38,7 +39,7 @@ exports.getWarehouses = [
       console.log(err);
       return apiResponse.ErrorResponse(
         res,
-        `Organization of id ${req.query.id} not found`
+        responses(req.user.preferredLanguage).orgid_not_found(req.query.id)
       );
     }
   },
@@ -60,7 +61,7 @@ exports.getAllWarehouses = [
       console.log(err);
       return apiResponse.ErrorResponse(
         res,
-        `Organization of id ${req.query.id} not found`
+        responses(req.user.preferredLanguage).orgid_not_found(req.query.id)
       );
     }
   },

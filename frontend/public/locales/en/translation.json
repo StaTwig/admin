@@ -103,7 +103,7 @@
     "alerts": "Alerts",
     "transactions": "Transactions",
     "ago": "ago",
-    "no_notifications": "No Notificaciones",
+    "no_notifications": "No Notifications",
     "my_profile": "My Profile",
     "settings": "Settings",
     "logout": "Logout",
@@ -311,5 +311,8 @@
     "OK": "OK",
     "language":"Language",
     "select_the_language":"Select the Language",
-    "batch_details":"Batch Details"
+    "batch_details":"Batch Details",
+    "search_location":"Search Location",
+    "cancelled":"CANCELLED",
+    "cancel_order":"Cancel Order"
 }

@@ -7,13 +7,13 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 import "./style.scss";
 const SideBar = (props) => {
-  const { match, location, user, t, trackTraceData} = props;
+  const { match, location, user, t, trackTraceData } = props;
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
@@ -21,12 +21,12 @@ const SideBar = (props) => {
   }, [user]);
 
   const resetTrackTracePage = () => {
-    if (trackTraceData && trackTraceData?.value !== '') {
+    if (trackTraceData && trackTraceData?.value !== "") {
       trackTraceData?.setValue("");
       trackTraceData?.resetData();
-      trackTraceData?.setIsSubmitted(false)
+      trackTraceData?.setIsSubmitted(false);
     }
-  }
+  };
 
   return (
     <div className='sidebar'>
@@ -67,13 +67,13 @@ const SideBar = (props) => {
           <li
             className={
               url === "/inventory" ||
-                url === "/newinventory" ||
-                url === "/productcategory" ||
-                url === "/batchexpired" ||
-                url === "/batchnearexpiry/product" ||
-                url === "/productoutofstock" ||
-                url === "/addproduct" ||
-                url === "/productlist/all"
+              url === "/newinventory" ||
+              url === "/productcategory" ||
+              url === "/batchexpired" ||
+              url === "/batchnearexpiry/product" ||
+              url === "/productoutofstock" ||
+              url === "/addproduct" ||
+              url === "/productlist/all"
                 ? "active"
                 : ""
             }
@@ -82,13 +82,13 @@ const SideBar = (props) => {
               <img
                 src={
                   url === "/inventory" ||
-                    url === "/newinventory" ||
-                    url === "/productcategory" ||
-                    url === "/batchexpired" ||
-                    url === "/batchnearexpiry/product" ||
-                    url === "/productoutofstock" ||
-                    url === "/addproduct" ||
-                    url === "/productlist/all"
+                  url === "/newinventory" ||
+                  url === "/productcategory" ||
+                  url === "/batchexpired" ||
+                  url === "/batchnearexpiry/product" ||
+                  url === "/productoutofstock" ||
+                  url === "/addproduct" ||
+                  url === "/productlist/all"
                     ? InventoryIcon
                     : InventoryIcon
                 }
@@ -100,30 +100,30 @@ const SideBar = (props) => {
         )}
         {(isAuthenticated("inboundShipments") ||
           isAuthenticated("outboundShipments")) && (
-            <li
-              className={
-                url === "/shipments" ||
+          <li
+            className={
+              url === "/shipments" ||
+              url === "/newshipment" ||
+              url === "/transactionHistory"
+                ? "active"
+                : ""
+            }
+          >
+            <Link to='/shipments' className='d-inline-block'>
+              <img
+                src={
+                  url === "/shipments" ||
                   url === "/newshipment" ||
                   url === "/transactionHistory"
-                  ? "active"
-                  : ""
-              }
-            >
-              <Link to='/shipments' className='d-inline-block'>
-                <img
-                  src={
-                    url === "/shipments" ||
-                      url === "/newshipment" ||
-                      url === "/transactionHistory"
-                      ? shipIcon
-                      : shipIcon
-                  }
-                  alt='Shippment'
-                />
-                <span className='ml-2'>{t('shipments')}</span>
-              </Link>
-            </li>
-          )}
+                    ? shipIcon
+                    : shipIcon
+                }
+                alt='Shippment'
+              />
+              <span className='ml-2'>{t("shipments")}</span>
+            </Link>
+          </li>
+        )}
 
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
@@ -138,14 +138,16 @@ const SideBar = (props) => {
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link to='/track' className='d-inline-block' onClick={resetTrackTracePage}>
-              <img
-                src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track &amp; Trace'
-              />
-              <span className='ml-2'>{t("trackntrace")}</span>
-            </Link>
-          </li>
+          <Link to='/track'
+              className='d-inline-block'
+              onClick={resetTrackTracePage} className='nav-look-link'>
+            <img
+              src={url === "/track" ? trackSelectedIcon : trackIcon}
+              alt='Track &amp; Trace'
+            />
+             <span>{t("trackntrace")}</span>
+          </Link>
+        </li>
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>

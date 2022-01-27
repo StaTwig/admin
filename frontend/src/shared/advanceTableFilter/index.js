@@ -34,17 +34,21 @@ const StyledMenu = withStyles({
 ));
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    "&:focus": {
-      /* backgroundColor: theme.palette.primary.main, */
-      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white,
-      },
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+    '&:focus': {
+      backgroundColor: 'transparent',
+    },
+    '&:active': {
+      backgroundColor: 'transparent',
     },
   },
 }))(MenuItem);
 const AdvanceTableFilter = (props) => {
   const { t, onSelectionDateFilter } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElEx, setAnchorElEx] = React.useState(null);
   const [statusAnchorEl, setStatusAnchorEl] = React.useState(null);
   const [toShipmentAnchorEl, setToShipmentAnchorEl] = React.useState(null);
   const [fromShipmentAnchorEl, setFromShipmentAnchorEl] = React.useState(null);
@@ -335,6 +339,14 @@ const AdvanceTableFilter = (props) => {
     setAnchorEl(null);
   };
 
+  const handleClick1 = (event) => {
+    setAnchorElEx(event?.currentTarget);
+  };
+
+  const handleClose1 = () => {
+    setAnchorElEx(null);
+  };
+
   const setDateFilterOnSelect = (selectedVal) => {
     props.setDateFilterOnSelect(selectedVal);
     handleClose();
@@ -548,7 +560,7 @@ const AdvanceTableFilter = (props) => {
             onBlur={handlePoDeliveryLocationClose}
           >
             <div className='d-flex flex-column align-items-center' id='deldiv'>
-              <StyledMenuItem style={{ width: "100%" }}>
+              <StyledMenuItem>
                 {poDeliveryLocationAnchorEl ? (
                   <Autocomplete
                     id='toShipment'
@@ -566,11 +578,11 @@ const AdvanceTableFilter = (props) => {
                     onChange={(event, newValue) => {
                       setPoDeliveryLocationFilterOnSelect(newValue.id);
                     }}
-                    style={{ width: "100%" }}
+                    style={{ width: "16rem" }}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Location"}
+                        label={t("search_location")}
                         variant='outlined'
                       />
                     )}
@@ -581,6 +593,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                style={{ padding: "10px", height: "40px", width: "130px" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
@@ -1914,7 +1927,7 @@ const AdvanceTableFilter = (props) => {
                           style={{
                             padding: "10px",
                             height: "40px",
-                            width: "130px",
+                            width: "150px",
                           }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("today")}
@@ -1925,7 +1938,7 @@ const AdvanceTableFilter = (props) => {
                       <StyledMenuItem>
                         <button
                           type='button'
-                          style={{ height: "40px", width: "130px" }}
+                          style={{ height: "40px", width: "150px" }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("week")}
                         >
@@ -1935,7 +1948,7 @@ const AdvanceTableFilter = (props) => {
                       <StyledMenuItem>
                         <button
                           type='button'
-                          style={{ height: "40px", width: "130px" }}
+                          style={{ height: "40px", width: "150px" }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("month")}
                         >
@@ -1945,7 +1958,7 @@ const AdvanceTableFilter = (props) => {
                       <StyledMenuItem>
                         <button
                           type='button'
-                          style={{ height: "40px", width: "130px" }}
+                          style={{ height: "40px", width: "150px" }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("threeMonth")}
                         >
@@ -1955,7 +1968,7 @@ const AdvanceTableFilter = (props) => {
                       <StyledMenuItem>
                         <button
                           type='button'
-                          style={{ height: "40px", width: "130px" }}
+                          style={{ height: "40px", width: "150px" }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("sixMonth")}
                         >
@@ -1965,7 +1978,7 @@ const AdvanceTableFilter = (props) => {
                       <StyledMenuItem>
                         <button
                           type='button'
-                          style={{ height: "40px", width: "130px" }}
+                          style={{ height: "40px", width: "150px" }}
                           className='btn btn-outline-primary btn-sm'
                           onClick={() => setDateFilterOnSelect("year")}
                         >
@@ -1977,9 +1990,10 @@ const AdvanceTableFilter = (props) => {
                   {!props?.isReportDisabled && props?.shouldEnable === true && (
                     <button
                       className='btn-filter-blue ml-2'
-                      onClick={() =>
-                        props.setShowExportFilter(!props.showExportFilter)
-                      }
+                      // onClick={() =>
+                      //   props.setShowExportFilter(!props.showExportFilter)
+                      // }
+                      onClick={handleClick1}
                     >
                       <div className='d-flex  align-items-center'>
                         <img
@@ -1997,15 +2011,19 @@ const AdvanceTableFilter = (props) => {
                           className='ml-2'
                           alt='DropDownIcon'
                         />
-                        {props.showExportFilter && props.exportFilterData && (
+                         { props.exportFilterData && (
                           <FilterDropDown
                             data={props.exportFilterData}
                             onChangeOfFilterDropDown={
                               props.onSelectionOfDropdownValue
                             }
                             type={"export"}
+                            MenuBtn = "ExportMenuBtn"
+                            anchorElEx={anchorElEx}
+                            handleClose1={handleClose1}
                           />
-                        )}
+                          
+                      )}
                       </div>
                     </button>
                   )}
