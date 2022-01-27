@@ -109,7 +109,7 @@ const ViewOrder = (props) => {
                   onClick={() => onPOStatusChange("CANCELLED")}
                   style={{ borderRadius: "5px" }}
                 >
-                  {t("cancel")+' '+t("order")}
+                  {t("cancel_order")}
                 </button>
               </Link>
             }
