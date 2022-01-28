@@ -138,18 +138,16 @@ const SideBar = (props) => {
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link
-              to='/track'
+          <Link to='/track'
               className='d-inline-block'
-              onClick={resetTrackTracePage}
-            >
-              <img
-                src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track &amp; Trace'
-              />
-              <span className='ml-2'>{t("trackntrace")}</span>
-            </Link>
-          </li>
+              onClick={resetTrackTracePage} className='nav-look-link'>
+            <img
+              src={url === "/track" ? trackSelectedIcon : trackIcon}
+              alt='Track &amp; Trace'
+            />
+             <span>{t("trackntrace")}</span>
+          </Link>
+        </li>
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>

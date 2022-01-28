@@ -309,5 +309,8 @@
     "OK": "OK",
     "language":"idioma",
     "select_the_language":"Seleccione el idioma",
-    "batch_details":"Detalles del Lote"
+    "batch_details":"Detalles del Lote",
+    "search_location":"Encontrar ubicacion",
+    "cancelled": "Cancelado",
+    "cancel_order": "Cancelar orden"
 }
