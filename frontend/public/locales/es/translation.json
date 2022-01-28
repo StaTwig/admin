@@ -338,5 +338,7 @@
     "Failure": "Falla",
     "Added_to_inventory": "Añadido al inventario",
     "A batch with batch number": "Un lote con número de lote",
-    "exists in the inventory": "existe en el inventario"
+    "exists in the inventory": "existe en el inventario",
+    "Looks_like_your_shipments_are_empty": "Parece que sus envíos están vacíos",
+    "Looks_like_your_inventory_are_empty": "Parece que tu inventario está vacío"
 }

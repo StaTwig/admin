@@ -340,5 +340,7 @@
     "Failure": "Failure",
     "Added_to_inventory": "Added to inventory",
     "A batch with batch number": "A batch with batch number",
-    "exists in the inventory": "exists in the inventory"
+    "exists in the inventory": "exists in the inventory",
+    "Looks_like_your_shipments_are_empty": "Looks like your shipments are empty",
+    "Looks_like_your_inventory_are_empty": "Looks like your inventory are empty"
 }

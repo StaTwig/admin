@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import EmptyShipments from "../../assets/icons/EmptyShipments-min.png";
+// import EmptyShipments from "../../assets/icons/EmptyShipments-min.png";
 import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
 import shippment from "../../assets/icons/shipment_id.png";
@@ -11,6 +11,7 @@ import received from "../../assets/icons/Received1.svg";
 import status from "../../assets/icons/Status.svg";
 
 import { formatDate } from "../../utils/dateHelper";
+import OverviewEmptyPage from "./OverviewEmptyPage";
 
 const SummaryTable = (props) => {
   const profile = useSelector((state) => {
@@ -20,16 +21,7 @@ const SummaryTable = (props) => {
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
-        <div className='summaryTable justify-content-center '>
-          <div className='d-flex flex-column '>
-            <img
-              src={EmptyShipments}
-              height='200'
-              width='200'
-              alt='Shipments'
-            />
-          </div>
-        </div>
+        <OverviewEmptyPage alt='shipments' t={t} />
       ) : (
         <div className='summaryTable mt-2'>
           <div className='rowData'>

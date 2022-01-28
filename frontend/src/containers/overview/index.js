@@ -8,7 +8,7 @@ import { getInventories } from "../../actions/inventoryActions";
 import { useTranslation } from 'react-i18next';
 
 const OverviewContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const shipments = useSelector((state) => {
     return state.shipments;
@@ -39,6 +39,7 @@ const { t, i18n } = useTranslation();
             shipmentsCount={shipmentsCount}
             inventoriesCount={inventoriesCount}
             t={t}
+            i18n={i18n}
             {...props}
           />
         </div>

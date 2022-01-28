@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { getProductList } from "../actions/productActions";
 import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
+import OverviewEmptyPage from "./overview/OverviewEmptyPage";
 
 const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
@@ -97,11 +98,12 @@ const ChartsPage = (props) => {
           options={option}
         />
       ) : (
-        <div className='summaryTable justify-content-center '>
-          <div className='d-flex flex-column '>
-            <img src={EmptyInventory} height='200' width='200' alt='' />
-          </div>
-        </div>
+        // <div className='summaryTable justify-content-center '>
+        //   <div className='d-flex flex-column '>
+        //     <img src={EmptyInventory} height='200' width='200' alt='' />
+        //   </div>
+        // </div>
+          <OverviewEmptyPage t={props.t} alt="inventory" />
       )}
     </div>
   );
