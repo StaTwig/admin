@@ -386,6 +386,7 @@ class Profile extends React.Component {
                     <div className='form-group'>
                       <label htmlFor=''>{t("language")}</label>
                       <Select
+                      noOptionsMessage={() => t("no_options")}
                         className='my-form-width'
                         placeholder={t("select_the_language")}
                         style={{ fontSize: "14px" }}

@@ -57,6 +57,7 @@ const EditRow = (props) => {
                 /> */}
 
                 <Select
+                noOptionsMessage={() => t("no_options")}
                   className='no-border'
                   placeholder={
                     <div className='select-placeholder-text'>
@@ -89,6 +90,7 @@ const EditRow = (props) => {
                   groups={products}
                 /> */}
                 <Select
+                noOptionsMessage={() => t("no_options")}
                   className='no-border mr-3 text-left'
                   placeholder={
                     <div className='select-placeholder-text'>

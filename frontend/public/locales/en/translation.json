@@ -267,7 +267,7 @@
     "miscount":"Miscount",
     "shipment_stolen":"Shipment Stolen",
     "wrong_shipment":"Wrong Shipment",
-    "upload_image": "Upload Image",
+    "uploaded_image": "Upload Image",
     "upload": "Upload",
     "files_here": "files here",
     "browse_files": "Browse Files",
@@ -314,5 +314,15 @@
     "batch_details":"Batch Details",
     "search_location":"Search Location",
     "cancelled":"CANCELLED",
-    "cancel_order":"Cancel Order"
+    "cancel_order":"Cancel Order",
+    "search_product":"Search Product",
+    "search_supplier_name":"Search Supplier Name",
+    "search_order":"Search Order",
+    "search_category":"Search Category",
+    "search_shipment":"Search Shipment",
+    "search_customer":"Search Customer",
+    "search_supplier":"Search Supplier",
+    "search_org_name":"Search Org. Name",
+    "organisation_name_info":"If yours is a new organization, please select “other”",
+    "no_options":"No Options"
 }

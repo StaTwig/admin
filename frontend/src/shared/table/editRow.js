@@ -141,6 +141,7 @@ const EditRow = (props) => {
                 groups={category}
               /> */}
               <Select
+              noOptionsMessage={() => t("no_options")}
                 className='no-border'
                 placeholder={
                   <div className='select-placeholder-text-prod-category'>
@@ -167,6 +168,7 @@ const EditRow = (props) => {
                   style={{ position: "relative", left: "-15px" }}
                 >
                   <Select
+                  noOptionsMessage={() => t("no_options")}
                     className='no-border'
                     placeholder={
                       <div className='select-placeholder-text-prod'>
