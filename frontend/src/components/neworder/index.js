@@ -973,6 +973,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
+          t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -984,6 +985,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
+          t={t}
             onHide={closeModalFail} //FailurePopUp
             shipmentError={shipmentError}
           />
@@ -996,6 +998,7 @@ const NewOrder = (props) => {
           size='modal-md'
         >
           <ShipmentFailPopUp
+          t={t}
             onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
             shipmentError={shipmentError}
           />
