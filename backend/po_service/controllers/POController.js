@@ -26,6 +26,7 @@ const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const apiResponse = require("../helpers/apiResponse");
+const { responses } = require("../helpers/responses")
 const auth = require("../middlewares/jwt");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
@@ -366,13 +367,13 @@ exports.changePOStatus = [
               }
               return apiResponse.successResponseWithData(
                 res,
-                "PO Status",
-                "Success"
+                responses(req.user.preferredLanguage).po_status,
+                responses(req.user.preferredLanguage).success
               );
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                "You are not authorised to change the status"
+                responses(req.user.preferredLanguage).not_authorized
               );
             }
           } catch (e) {
@@ -381,7 +382,7 @@ exports.changePOStatus = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -419,7 +420,7 @@ exports.createPurchaseOrder = [
       const result = await purchaseOrder.save();
       return apiResponse.successResponseWithData(
         res,
-        "Created PO Success",
+        responses(req.user.preferredLanguage).success,
         result.id
       );
     } catch (err) {
@@ -884,7 +885,7 @@ exports.addPOsFromExcel = [
       );
       return apiResponse.successResponseWithData(
         res,
-        "Upload Result",
+        responses(req.user.preferredLanguage).upload_result,
         poDataArray
       );
     } catch (err) {
@@ -892,7 +893,7 @@ exports.addPOsFromExcel = [
       if (err.code == "11000") {
         return apiResponse.successResponseWithData(
           res,
-          "Inserted excluding Duplicate Values",
+          responses(req.user.preferredLanguage).inserted_ex_duplicates,
           err
         );
       } else {
@@ -971,7 +972,7 @@ exports.createOrder = [
       });
       if (supplierOrgData == null) {
         console.log("Supplier not defined");
-        return apiResponse.ErrorResponse(res, "Supplier  not defined");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).supplier_not_defined);
       }
 
       const receiverOrgData = await OrganisationModel.findOne({
@@ -979,7 +980,7 @@ exports.createOrder = [
       });
       if (receiverOrgData == null) {
         console.log("customer not defined");
-        return apiResponse.ErrorResponse(res, "Receiver not defined");
+        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).receiver_not_defined);
       }
       var datee = new Date();
       datee = datee.toISOString();
@@ -1083,7 +1084,7 @@ exports.createOrder = [
         event_data.payload.data.order_id = poId;
         event_data.transactionId = poId;
         await logEvent(event_data);
-        return apiResponse.successResponseWithData(res, "Created order", {
+        return apiResponse.successResponseWithData(res, responses(req.user.preferredLanguage).created_order, {
           poId: poId,
         });
       } catch (error) {
@@ -1324,7 +1325,7 @@ exports.fetchInboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1509,7 +1510,7 @@ exports.fetchOutboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });

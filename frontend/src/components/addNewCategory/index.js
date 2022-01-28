@@ -62,7 +62,7 @@ const AddCategory = (props) => {
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
-      if (result.status === 1) {
+      if (result.success) {
         setOpenCreatedInventory(true);
       }
     }
@@ -76,7 +76,7 @@ const AddCategory = (props) => {
             </button> */}
         <div className='card'>
           <div className='card-body'>
-            <div className='d-flex'>
+            <div style={{gap:"5rem"}} className='d-flex'>
               <div className=''>
                 <div className='mb-4'>
                   <div className='d-flex flex-column upload'>

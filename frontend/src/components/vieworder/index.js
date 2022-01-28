@@ -47,6 +47,9 @@ const ViewOrder = (props) => {
   } else if (order.poStatus === "PARTIALLYFULFILLED") {
     statusStyle = "bg-warning";
     status = t("partiallyfilled");
+  } else if (order.poStatus === "CANCELLED") {
+    statusStyle = "bg-secondary";
+    status = t('cancelled');
   }
 
   const onPOStatusChange = async (status) => {
@@ -87,8 +90,9 @@ const ViewOrder = (props) => {
                     {t("reject_order")}
                   </button>
                 </Link>
+                
               </>
-            )}
+              )}
             <Link to={`/orders`}>
               <button className='btn btn-outline-primary mt-2'>
                 <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
@@ -98,6 +102,17 @@ const ViewOrder = (props) => {
           </div>
         ) : (
           <div className='d-flex'>
+            {status == t("sent") &&
+              <Link to={`/orders`}>
+                <button
+                  className='btn btn-orange fontSize20 font-bold mr-4 mt-2'
+                  onClick={() => onPOStatusChange("CANCELLED")}
+                  style={{ borderRadius: "5px" }}
+                >
+                  {t("cancel_order")}
+                </button>
+              </Link>
+            }
             <Link to={`/orders`}>
               <button className='btn btn-outline-primary mt-2'>
                 <img src={back} height='17' className='mr-2 mb-1' alt='Back' />

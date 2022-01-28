@@ -1,5 +1,4 @@
 const express = require("express");
-const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -60,4 +59,4 @@ app.use((err, req, res) => {
   }
 });
 
-module.exports = { app, Server };
+module.exports = app;
