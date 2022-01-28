@@ -16,12 +16,6 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilio_service_id = process.env.TWILIO_SERVICE_ID;
-const client = require("twilio")(accountSid, authToken, {
-  lazyLoading: true,
-});
 const cuid = require("cuid");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
