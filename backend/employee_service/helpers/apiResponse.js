@@ -32,14 +32,12 @@ exports.notFoundResponse = function (req, res, msg) {
 };
 
 exports.validationErrorWithData = function (req, res, msg, data) {
-  console.log(data);
-  for (const error in data) {
-    data[error.param] = req.t(error.msg);
-  }
+  let errorObject = {};
+  data.forEach((error) => (errorObject[error.param] = req.t(error.msg)));
   const resData = {
     success: false,
-    message: msg,
-    data: data,
+    message: req.t(msg),
+    data: errorObject,
   };
   return res.status(400).json(resData);
 };

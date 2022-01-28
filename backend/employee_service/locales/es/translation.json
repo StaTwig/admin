@@ -12,7 +12,6 @@
   "not_valid_name": "Please enter valid name",
   "account_already_exists": "Account with Email / Phone number already exists",
   "valid_email_success": "Email is valid",
-  "email_verification": "Email Verification",
   "user_registered_success": "User registered successfully",
   "otp_sent_success": "OTP sent successfully",
   "otp_not_match": "OTP does not match",
