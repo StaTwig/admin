@@ -54,7 +54,6 @@ router.get(
   AuthController.getOrganizationsTypewithauth
 );
 router.get("/emailverify", AuthController.emailverify);
-router.post("/registerTwillio", AuthController.createTwilioBinding);
 router.get("/images/:key", AuthController.Image);
 
 module.exports = router;

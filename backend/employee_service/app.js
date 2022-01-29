@@ -5,8 +5,6 @@ const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
-const swaggerUi = require("swagger-ui-express");
-const openApiDocumentation = require("./openApiDocumentation");
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
 mongoose
@@ -26,6 +24,25 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
+const i18next = require("i18next");
+const backend = require("i18next-fs-backend");
+const i18nextMiddleware = require("i18next-http-middleware");
+
+i18next
+  .use(backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    // detection: {
+    //   order: ["querystring", "cookie", "header"],
+    //   lookupQuerystring: "lang",
+    //   lookupCookie: "lang",
+    //   lookupHeader: "accept-language",
+    // },
+    fallbackLng: "en",
+    backend: {
+      loadPath: "./locales/{{lng}}/translation.json",
+    },
+  });
 
 const app = express();
 
@@ -33,9 +50,9 @@ const app = express();
 if (process.env.NODE_ENV !== "test") {
   app.use(logger("dev"));
 }
+app.use(i18nextMiddleware.handle(i18next));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests
 app.use(cors());
