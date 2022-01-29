@@ -4,6 +4,7 @@ import Checked from "../../../assets/icons/checked.svg";
 import Cross from "../../../assets/icons/cancel.svg";
 
 const AlertModal = (props) => {
+  const { t } = props;
   return (
     <div className='inventorypopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -25,14 +26,14 @@ const AlertModal = (props) => {
           />
         )}
         <div className='alert'>{props.type}</div>
-        <div className='data'>Your Shipping Order</div>
+        <div className='data'>{t('your')} {t('shipping_order')}</div>
         {props.type === "Success" ? (
-          <div className='data mb-3'>Created Successfully</div>
+          <div className='data mb-3'>{t('created')} {t('successfully')}</div>
         ) : (
-          <div className='data mb-3'>Was Cancelled</div>
+          <div className='data mb-3'>{t("was_cancelled")}</div>
         )}
         <button className='btn-primary btn' onClick={props.onHide}>
-          OK
+        {t('ok')}
         </button>
       </div>
     </div>

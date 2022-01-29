@@ -348,6 +348,7 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <InventoryPopUp
+          t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -359,6 +360,7 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailurePopUp
+          t={t}
             onHide={closeModalFail} //FailurePopUp
             inventoryError={inventoryError}
           />
@@ -370,6 +372,7 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
+          t={t}
             onHide={closeModalFail1} //FailurePopUp
             shipmentError={inventoryError}
           />

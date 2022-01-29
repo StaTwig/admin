@@ -859,7 +859,7 @@ class Profile extends React.Component {
                     close={() => this.closeModal()}
                     size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
                   >
-                    <SuccessPopUp onHide={this.closeModal} />
+                    <SuccessPopUp onHide={this.closeModal}  t={t} />
                   </Modal1>
                 )}
               </div>

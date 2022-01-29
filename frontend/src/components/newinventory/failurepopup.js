@@ -3,11 +3,12 @@ import "./style.scss";
 import Checked from "../../assets/icons/cancel.svg";
 
 const FailurePopUp = (props) => {
+  const {t} = props;
   return (
     <div className='inventorypopup'>
       <div className='d-flex  flex-column align-items-center'>
         <img src={Checked} width='60' height='60' className='mb-3' alt='' />
-        <div className='alert'> Fail!</div>
+        <div className='alert'>{t('fail')}!</div>
         <div className='font-weight-bolder error'>
           ' {props.inventoryError} '
         </div>
@@ -17,9 +18,9 @@ const FailurePopUp = (props) => {
             ? null
             : "cannot be Empty"}
         </div>
-        <div className='data mb-3'> Please try again</div>
+        <div className='data mb-3'>{t('please') + " " + t('try_again')}</div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          TRY AGAIN
+        {t('try_again')}
         </button>
       </div>
     </div>
