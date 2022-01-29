@@ -71,7 +71,7 @@ const Tabs = (props) => {
             {warehouseText !== "" && !isClicked && (
               <div
                 className='bg-white m-1 p-2 position-absolute rounded'
-                style={{ width: 250 }}
+                style={{ width: 250, height:"26rem", overflow:"auto" }}
               >
                 {filteredWareHouses?.map((warehouse, index) => (
                   <p

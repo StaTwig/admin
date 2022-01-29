@@ -541,7 +541,7 @@ const FormPage = (props) => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation') + " " + t('type')}
+                                    label={t('organisation_type')}
                                   />
                                 )}
                               />
@@ -686,7 +686,7 @@ const FormPage = (props) => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation') + " " + t('name')}
+                                    label={t('organisation_name')}
                                   />
                                 )}
                               />
@@ -738,6 +738,7 @@ const FormPage = (props) => {
                     className="text"
                   />  */}
                             </div>
+                            <span className="Organisation-type-msg">{t("organisation_name_info")}</span>
                             {/* <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
                   </div> */}

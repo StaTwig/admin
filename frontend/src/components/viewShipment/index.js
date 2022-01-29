@@ -162,7 +162,7 @@ const Tracing = (props) => {
               }
             </div>*/}
           </div>
-          <button
+          {/* <button
             className='btn btn-outline-* fontSize200 enlargeTemperature float-right'
             onClick={() =>
               window.open(
@@ -172,7 +172,7 @@ const Tracing = (props) => {
             }
           >
             {t('show_more')}
-          </button>
+          </button> */}
           {openShipping && (
             <Modal
               title='Shipping Order Details'
