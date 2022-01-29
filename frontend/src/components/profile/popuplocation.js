@@ -108,13 +108,11 @@ const PopUpLocation = (props) => {
                 // name2="Select Location"
                 onSelect={(v) => {
                   setAlertFlag(false);
-                  console.log("Location Selected");
-                  console.log(v);
                   setWareHouse({ ...v });
                   setSelectLocation(v.title);
-                  console.log(wareHouse);
                 }}
                 groups={props.wareHouses}
+                type="AddLocationType"
               />
             </div>
           </div>
