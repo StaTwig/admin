@@ -77,11 +77,11 @@ const VerifyInventory = (props) => {
           <h5 className='head ml-1'>{t('description_of_goods')}</h5>
           <div>
             <div className='row p1-1 mt-4'>
-              <span className='col-3'>
+              <span className='col-3' style={{ flex: "0 0 20%" }}>
                 <img src={Product} width='15' height='15' alt='Product' />
                 <span className='ml-1 text-muted'>{t('product_name')}</span>
               </span>
-              <span className='col-2'>
+              <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
                 <img
                   src={Manufacturer}
                   width='15'
@@ -92,26 +92,26 @@ const VerifyInventory = (props) => {
               </span>
               <span
                 className='col-1'
-                style={{ position: "relative", left: "-40px" }}
+                style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%" }}
               >
                 <img src={Quantity} width='24' height='15' alt='Quantity' />
                 <span className='ml-1 text-muted'>{t('quantity')}</span>
               </span>
-              <span className='col-1'>
+              <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
                 <span className='ml-1 text-muted'>{t('mfg_date')}</span>
               </span>
-              <span className='col-1'>
+              <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
                 <span className='ml-1 text-muted'>{t('exp_date')}</span>
               </span>
-              <span className='col-2'>
+              <span className='col-2' style={{flex: "0 0 15.666667%",maxWidth: "15.666667%"}}>
                 <img src={Batch} width='15' height='15' alt='Batch' />
                 <span className='ml-1 text-muted'>{t('batch_no')}</span>
               </span>
               <span
                 className='col-2'
-                style={{ position: "relative", left: "-60px" }}
+                style={{ position: "relative", left: "-60px",flex: "0 0 15.666667%",maxWidth: "15.666667%" }}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
                 <span className='ml-1 text-muted'>{t('serial_numbers')}</span>
