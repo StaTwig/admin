@@ -7,21 +7,22 @@
     "dev": "nodemon user_server.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.1029.0",
+    "aws-sdk": "^2.1065.0",
     "axios": "^0.24.0",
     "cors": "^2.8.5",
     "cuid": "^2.1.8",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
+    "i18next": "^21.6.10",
+    "i18next-fs-backend": "^1.1.4",
+    "i18next-http-middleware": "^3.1.5",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.13",
+    "mongoose": "^6.1.8",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
     "nodemailer": "^6.7.1",
-    "sharp": "^0.29.3",
-    "swagger-ui-express": "^4.1.6",
-    "twilio": "^3.71.1"
+    "sharp": "^0.29.3"
   },
   "devDependencies": {
     "eslint": "^8.6.0"

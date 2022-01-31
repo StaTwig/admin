@@ -96,7 +96,7 @@ const HomeContainer = (props) => {
                 target='_blank'
               >
                 <img
-                  src={lang === "en" ? appleStore : appleStoreEs }
+                  src={t('english') === "English" ? appleStore : t('english') === "Inglés" ? appleStoreEs : appleStore }
                   width='165'
                   height='50'
                   alt='Apple App Store'
@@ -111,7 +111,7 @@ const HomeContainer = (props) => {
                 target='_blank'
               >
                 <img
-                  src={lang === "en" ? googleStore : googleStoreEs }
+                  src={t('english') === "English" ? googleStore : t('english') === "Inglés" ? googleStoreEs : googleStore }
                   width='165'
                   height='50'
                   alt='Google Play Store'
@@ -180,7 +180,7 @@ const HomeContainer = (props) => {
           <div className='row'>
             <div className='col align-text-center mx auto'>
               <h2 className='display-4'> {t('how_it_works')}</h2>
-              <div style={{background:`url(${lang === "en" ? blockflow : blockflowEs})`}} className='bg-work-flow'></div>
+              <div style={{background:`url(${t('english') === "English" ? blockflow : t('english') === "Inglés" ? blockflowEs : blockflowEs})`}} className='bg-work-flow'></div>
             </div>
           </div>
         </div>
@@ -222,7 +222,7 @@ const HomeContainer = (props) => {
                   target='_blank'
                 >
                   <img
-                    src={lang === "en" ? appleStore : appleStoreEs }
+                    src={t('english') === "English" ? appleStore : t('english') === "Inglés" ? appleStoreEs : appleStore }
                     width='165'
                     height='50'
                     alt=' Apple App Store'
@@ -237,7 +237,7 @@ const HomeContainer = (props) => {
                   target='_blank'
                 >
                   <img
-                    src={lang === "en" ? googleStore : googleStoreEs }
+                    src={t('english') === "English" ? googleStore : t('english') === "Inglés" ? googleStoreEs : googleStore }
                     width='165'
                     height='50'
                     alt='Google Play Store'

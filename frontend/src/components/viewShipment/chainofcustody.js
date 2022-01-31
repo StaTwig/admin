@@ -310,7 +310,7 @@ const ChainOfCustody = (props) => {
                     {op === index ? (
                       <div className='row'>
                         <div className='column'>
-                          <h6 className='poheads potext mt-3 mb-3'>Comment*</h6>
+                        <h6 className='poheads potext mt-3 mb-3'>{t("comment")}*</h6>
                           {<div>{custody.updateComment}</div>}
                         </div>
                         <div className='column'>
