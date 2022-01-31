@@ -122,22 +122,22 @@ const VerifyInventory = (props) => {
               console.log("Bool", typeof reviewInventory.unitofMeasure === 'object')
               return (
               <div className='row p-1 mt-4'>
-                <span className='col-3'>{reviewInventory.productName}</span>
-                <span className='col-2'>
+                <span className='col-3'  style={{ flex: "0 0 20%" }}>{reviewInventory.productName}</span>
+                <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
                   {reviewInventory.manufacturer
                     ? reviewInventory.manufacturer
                     : reviewInventory.manufacturerName}
                 </span>
                 <span
                   className='col-1 text-right'
-                  style={{ position: "relative", left: "-50px" }}
+                  style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%" }}
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
                   {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
                   <span>{")"}</span>
                 </span>
-                <span className='col-1'>
+                <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
                   {reviewInventory.manufacturingDate
                     ? `0${
                         new Date(
@@ -150,7 +150,7 @@ const VerifyInventory = (props) => {
                       ).getFullYear()
                     : ""}
                 </span>
-                <span className='col-1'>
+                <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
                   {reviewInventory.expiryDate
                     ? `0${
                         new Date(
@@ -166,7 +166,7 @@ const VerifyInventory = (props) => {
                 <span className='col-2'>{reviewInventory.batchNumber}</span>
                 <span
                   className='col-2'
-                  style={{ position: "relative", left: "-55px" }}
+                  style={{ position: "relative", left: "-77px",flex: "0 0 13.666667%",maxWidth: "15.666667%" }}
                 >
                   {reviewInventory.serialNumber}
                 </span>
