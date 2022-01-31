@@ -336,5 +336,9 @@
     "search_supplier":"Search Supplier",
     "search_org_name":"Search Org. Name",
     "organisation_name_info":"If yours is a new organization, please select “other”",
-    "no_options":"No Options"
+    "no_options":"No Options",
+    "something_went_wrong":"SOMETHING WENT WRONG",
+    "sorry_msg":"We are very sorry for inconvenience.",
+    "sorry_reason":"It looks you are trying to access a page that either has been deleted or never been existed",
+    "back_to_home":"Back to Home"
 }

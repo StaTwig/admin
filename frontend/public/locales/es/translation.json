@@ -335,5 +335,9 @@
     "search_supplier":"Buscar proveedor",
     "search_org_name":"Organización de búsqueda Nombre",
     "organisation_name_info":"Si es una nueva organización, seleccione “otro”",
-    "no_options":"Sin Opciones"
+    "no_options":"Sin Opciones",
+    "something_went_wrong":"ALGO SALIÓ MAL",
+    "sorry_msg":"Lamentamos mucho las molestias.",
+    "sorry_reason":"Parece que está intentando acceder a una página que ha sido eliminada o que nunca existió",
+    "back_to_home":"De vuelta a casa"
 }
