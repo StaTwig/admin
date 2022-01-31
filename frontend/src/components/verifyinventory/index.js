@@ -92,7 +92,7 @@ const VerifyInventory = (props) => {
               </span>
               <span
                 className='col-1'
-                style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%" }}
+                style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%"}}
               >
                 <img src={Quantity} width='24' height='15' alt='Quantity' />
                 <span className='ml-1 text-muted'>{t('quantity')}</span>
@@ -129,8 +129,8 @@ const VerifyInventory = (props) => {
                     : reviewInventory.manufacturerName}
                 </span>
                 <span
-                  className='col-1 text-right'
-                  style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%" }}
+                  className='col-1'
+                  style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%",textAlign: "left!important" }}
                 >
                   {reviewInventory['quantity']}
                   <span>{"("}</span>
