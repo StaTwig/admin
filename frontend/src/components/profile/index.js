@@ -386,6 +386,7 @@ class Profile extends React.Component {
                     <div className='form-group'>
                       <label htmlFor=''>{t("language")}</label>
                       <Select
+                      noOptionsMessage={() => t("no_options")}
                         className='my-form-width'
                         placeholder={t("select_the_language")}
                         style={{ fontSize: "14px" }}
@@ -858,7 +859,7 @@ class Profile extends React.Component {
                     close={() => this.closeModal()}
                     size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
                   >
-                    <SuccessPopUp onHide={this.closeModal} />
+                    <SuccessPopUp onHide={this.closeModal}  t={t} />
                   </Modal1>
                 )}
               </div>

@@ -27,7 +27,7 @@ const ShipmentFailPopUp = (props) => {
             ? null
             : "cannot be Empty"}
         </div>
-        <div style = {{visibility : props.shipmentError === "ShipmentID cannot be Empty" || props.shipmentError === "Invalid ShipmentID Please Enter a Valid ShipmentID"  ? "hidden" : ''}} className='data mb-3'> Please Try Again </div>
+        <div style = {{visibility : props.shipmentError === "ShipmentID cannot be Empty" || props.shipmentError === "Invalid ShipmentID Please Enter a Valid ShipmentID"  ? "hidden" : ''}} className='data mb-3'> {t('please') + " " + t('try_again')}</div>
         <button className='btn-primary btn' onClick={props.onHide}>
           {t('try_again')}
         </button>

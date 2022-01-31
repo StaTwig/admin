@@ -3,6 +3,7 @@ import "./style.scss";
 import Cancel from "../../assets/icons/cancel.svg";
 
 const ShipmentFailPopUp = (props) => {
+  const { t } = props;
   return (
     <div className='shipmentpopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -13,7 +14,7 @@ const ShipmentFailPopUp = (props) => {
           className='mb-3'
           alt='Shipment Failed'
         />
-        <div className='alert font-weight-bolder'> Fail! </div>
+        <div className='alert font-weight-bolder'> {t('fail')}! </div>
         <div className='font-weight-bolder error text-center'>
           ' {props.shipmentError} '
         </div>
@@ -28,7 +29,7 @@ const ShipmentFailPopUp = (props) => {
         </div>
         <div style = {{visibility : props.shipmentError === "ShipmentID cannot be Empty" || props.shipmentError === "Invalid ShipmentID Please Enter a Valid ShipmentID"  ? "hidden" : ''}} className='data mb-3'> Please Try Again </div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          TRY AGAIN
+          {t('try_again')}
         </button>
       </div>
     </div>

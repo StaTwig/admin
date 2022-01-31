@@ -869,7 +869,8 @@ const UpdateStatus = (props) => {
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
-            onHide={closeModal} //FailurePopUp
+            onHide={closeModal}
+            t={t} //FailurePopUp
           />
         </Modal>
       )}
@@ -879,7 +880,8 @@ const UpdateStatus = (props) => {
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailPopup
-            onHide={closeModalFail} //FailurePopUp
+            onHide={closeModalFail}
+            t={t} //FailurePopUp
           />
         </Modal>
       )}
