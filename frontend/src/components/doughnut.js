@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { getProductList } from "../actions/productActions";
-import EmptyInventory from "../assets/icons/EmptyInventory-min.png";
+import EmptyInventory from "../assets/icons/Mt-Inventory.webp";
+import EmptyInventoryEs from "../assets/icons/Mt-Inventory-Es.webp";
 
 const ChartsPage = (props) => {
+  const { t } = props;
   const [doughnut, setDoughnut] = useState({});
   const [validdata, setValiddata] = useState(false);
 
@@ -99,7 +101,8 @@ const ChartsPage = (props) => {
       ) : (
         <div className='summaryTable justify-content-center '>
           <div className='d-flex flex-column '>
-            <img src={EmptyInventory} height='200' width='200' alt='' />
+            
+            <img src={t('english') === "English" ? EmptyInventory : t('english') === "Inglés" ? EmptyInventoryEs : EmptyInventory } height='200' width='200' alt='' />
           </div>
         </div>
       )}
