@@ -5,10 +5,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { getShipments } from "../../actions/shipmentActions";
 import { getInventories } from "../../actions/inventoryActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const OverviewContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const shipments = useSelector((state) => {
     return state.shipments;
