@@ -17,7 +17,7 @@ const ShipmentContainer = (props) => {
     (async () => {
       const results = await dispatch(getShipments());
       setShipments(results);
-      return () => dispatch(resetShipments());
+      return () => dispatch(resetShipments([]));
     })();
   }, []);
 

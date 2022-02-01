@@ -10,8 +10,8 @@ import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
 import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
-
 import "./style.scss";
+
 const SideBar = (props) => {
   const { match, user, t, trackTraceData } = props;
   const { url } = match;

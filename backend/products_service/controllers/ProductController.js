@@ -203,7 +203,7 @@ exports.addProduct = [
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
+          "Validation Error",
           errors.array()
         );
       } else {
@@ -211,18 +211,17 @@ exports.addProduct = [
           role: req.user.role,
           permissionRequired: ["addNewProduct"],
         };
+
         checkPermissions(permission_request, async (permissionResult) => {
-
-          const manufacturerCheck = OrganisationModel.exists({'name':manufacturer});
-
-          if(manufacturerCheck==false){
+          const manufacturerCheck = OrganisationModel.exists({
+            name: req.body.manufacturer,
+          });
+          if (manufacturerCheck == false) {
             const otherManufacturer = new OrganisationModel({
-              name:manufacturer
-            })
-
+              name: req.body.manufacturer,
+            });
             await otherManufacturer.save();
           }
-
           if (permissionResult.success) {
             const product_unique = uniqid("prod-");
             const product = new ProductModel({
@@ -234,7 +233,7 @@ exports.addProduct = [
               manufacturer: req.body.manufacturer,
               pricing: req.body.pricing,
               //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
-              unitofMeasure: JSON.parse(req.body.unitofMeasure),
+              unitofMeasure: req.body.unitofMeasure,
               characteristicSet: {
                 temperature_max: req.body.characteristicSet?.temperature_max,
                 temperature_min: req.body.characteristicSet?.temperature_min,
@@ -255,7 +254,7 @@ exports.addProduct = [
             return apiResponse.forbiddenResponse(
               res,
               responses(req.user.preferredLanguage).no_permission
-              );
+            );
           }
         });
       }

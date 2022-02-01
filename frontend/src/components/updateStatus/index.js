@@ -150,9 +150,7 @@ const UpdateStatus = (props) => {
 
   const uploadPhoto = async () => {
     const formData = new FormData();
-
     formData.append("photo", photo, photo.name);
-
     const result = await uploadImage(id, formData);
     if (result.status === 200) {
       setMessage("Image Uploaded");
