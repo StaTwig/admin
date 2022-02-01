@@ -14,7 +14,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
-const { responses } = require("../helpers/responses")
+const { responses } = require("../helpers/responses");
 const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
@@ -445,7 +445,10 @@ exports.updateInventories = [
       }
 
       await InventoryModel.bulkWrite(bulkArr);
-      apiResponse.successResponse(res, responses(req.user.preferredLanguage).updated_success);
+      apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).updated_success
+      );
     } catch (e) {
       console.log(e);
       apiResponse.ErrorResponse(res, e.message);
@@ -506,11 +509,6 @@ exports.insertInventories = [
           if (limit < inventories.length) {
             recursiveFun();
           } else {
-            logger.log(
-              "info",
-              `Insertion of inventories from mobile is completed. Time Taken to insert ${inventories.length} in seconds - `,
-              (new Date() - start) / 1000
-            );
             const newNotification = new NotificationModel({
               owner: address,
               message: `Your inventories are added successfully on ${new Date().toLocaleString()}`,
@@ -538,7 +536,10 @@ exports.insertInventories = [
         }
       }
       recursiveFun();
-      apiResponse.successResponse(res, responses(req.user.preferredLanguage).success);
+      apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).success
+      );
     } catch (e) {
       apiResponse.ErrorResponse(res, e.message);
     }
@@ -760,7 +761,9 @@ exports.addProductsToInventory = [
           if (duplicateBatch) {
             return apiResponse.ErrorResponse(
               res,
-              responses(req.user.preferredLanguage).batchExists(duplicateBatchNo)
+              responses(req.user.preferredLanguage).batchExists(
+                duplicateBatchNo
+              )
             );
           }
           var datee = new Date();
@@ -916,32 +919,13 @@ exports.addInventoriesFromExcel = [
                   const inventoryData = responses.map(
                     (response) => response.data
                   );
-                  // console.log(inventoryData);
-
-                  // InventoryModel.insertMany(inventoryData, (err, res) => {
-                  //   if (err) {
-                  //     logger.log("error", err.errmsg);
-                  //   } else
-                  //     logger.log(
-                  //       'info',
-                  //       'Number of documents inserted into mongo: ' +
-                  //       res.length,
-                  //     );
-                  // });
-
                   if (limit < data.length) {
                     recursiveFun();
-                  } else {
-                    // const newNotification = new NotificationModel({
-                    //   owner: address,
-                    //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
-                    // });
-                    // await newNotification.save();
                   }
                 })
               )
               .catch((errors) => {
-                logger.log(errors);
+                console.log(errors);
               });
           }
           recursiveFun();
@@ -1011,7 +995,11 @@ exports.addInventoriesFromExcel = [
             CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data.products = [...data];
           // logEvent(event_data);
-          return apiResponse.successResponseWithData(res, responses(req.user.preferredLanguage).success, data);
+          return apiResponse.successResponseWithData(
+            res,
+            responses(req.user.preferredLanguage).success,
+            data
+          );
         } else {
           return apiResponse.ErrorResponse(
             res,
@@ -1324,7 +1312,7 @@ exports.getGroupedInventoryDetails = [
           return apiResponse.forbiddenResponse(
             res,
             responses(req.user.preferredLanguage).no_permission
-            );
+          );
         }
       });
     } catch (err) {
@@ -1519,7 +1507,7 @@ exports.getInventory = [
         return apiResponse.ErrorResponse(
           res,
           responses(req.user.preferredLanguage).warehouse_not_found
-          );
+        );
       }
     } catch (err) {
       console.log(err);
@@ -2636,7 +2624,10 @@ exports.deleteProductsFromInventory = [
       event_data.payload.data = payload;
 
       await logEvent(event_data);
-      return apiResponse.successResponse(res, responses(req.user.preferredLanguage).success);
+      return apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).success
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2698,7 +2689,10 @@ exports.searchProduct = [
             );
           }
         } else {
-          return apiResponse.forbiddenResponse(res, responses(req.user.preferredLanguage).no_permission);
+          return apiResponse.forbiddenResponse(
+            res,
+            responses(req.user.preferredLanguage).no_permission
+          );
         }
       });
     } catch (err) {
