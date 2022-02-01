@@ -108,7 +108,6 @@ export const getManufacturers = async () => {
 
 export const addNewProduct = async (data) => {
   try {
-    // const url = config().addNewProduct;
     const result = await axios.post(config().addNewProduct, data, {
       headers: { "Content-Type": "multipart/form-data" },
     });

@@ -31,9 +31,7 @@ function Table(props) {
           shipmentIdList={props.shipmentIdList}
           shouldEnable={shouldEnable}
           supplierReceiverList={
-            props.user.emailId === "gmr@statledger.io"
-              ? []
-              : props.supplierReceiverList
+            props.user.isCustom ? [] : props.supplierReceiverList
           }
           setShipmentIdFilterOnSelect={props.setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={props.setFromShipmentFilterOnSelect}
@@ -205,19 +203,17 @@ function Table(props) {
               statusStyle = "bg-success";
               status = t("delivered");
             }
-            let supplierAddress =
-              props.user.emailId === "gmr@statledger.io"
-                ? shipment.supplier.locationId
-                : shipment.supplier.warehouse.warehouseAddress;
+            let supplierAddress = props.user.isCustom
+              ? shipment.supplier.locationId
+              : shipment.supplier.warehouse.warehouseAddress;
             let wLocation = shipment.supplier.warehouse?.location;
             if (wLocation?.length) {
               supplierAddress =
                 wLocation.firstLine + wLocation.secondLine + wLocation.city;
             }
-            let receiverAddress =
-              props.user.emailId === "gmr@statledger.io"
-                ? shipment.receiver.locationId
-                : shipment.receiver.warehouse.warehouseAddress;
+            let receiverAddress = props.user.isCustom
+              ? shipment.receiver.locationId
+              : shipment.receiver.warehouse.warehouseAddress;
             let wrLocation = shipment.receiver.warehouse?.location;
             if (wrLocation?.length) {
               supplierAddress =
@@ -252,7 +248,7 @@ function Table(props) {
                     <h5 className='mb-0 table-h5-text'>
                       {shipment.supplier.org
                         ? shipment.supplier.org.name
-                        : props.user.emailId === "gmr@statledger.io"
+                        : props.user.isCustom
                         ? shipment.supplier.id
                         : "-"}
                     </h5>
@@ -260,7 +256,7 @@ function Table(props) {
                       {`${
                         supplierAddress.firstLine
                           ? supplierAddress.firstLine
-                          : props.user.emailId === "gmr@statledger.io"
+                          : props.user.isCustom
                           ? shipment.supplier.locationId
                           : ""
                       } ${
@@ -280,7 +276,7 @@ function Table(props) {
                     <h5 className='mb-0 table-h5-text'>
                       {shipment.receiver.org
                         ? shipment.receiver.org.name
-                        : props.user.emailId === "gmr@statledger.io"
+                        : props.user.isCustom
                         ? shipment.receiver.id
                         : "-"}
                     </h5>
@@ -288,7 +284,7 @@ function Table(props) {
                       {`${
                         receiverAddress.firstLine
                           ? receiverAddress.firstLine
-                          : props.user.emailId === "gmr@statledger.io"
+                          : props.user.isCustom
                           ? shipment.receiver.locationId
                           : ""
                       }  ${

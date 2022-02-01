@@ -55,7 +55,7 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (props.user.emailId === "gmr@statledger.io") {
+      if (props.user.isCustom) {
         const inboundRes = await getGMRShipments(0, limit);
         setOutboundShipments(inboundRes.data.data);
         setCount(inboundRes.data.count);
@@ -106,7 +106,7 @@ const ShipmentAnalytic = (props) => {
     const recordSkip = (pageNum - 1) * limit;
 
     setSkip(recordSkip);
-    if (props.user.emailId === "gmr@statledger.io") {
+    if (props.user.isCustom) {
       const inboundRes = await getGMRShipments(recordSkip, limit);
       setInboundShipments(inboundRes.data.data);
       setCount(inboundRes.data.count);
@@ -341,7 +341,7 @@ const ShipmentAnalytic = (props) => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    if (props.user.emailId === "gmr@statledger.io") rtnArr = outboundShipments;
+    if (props.user.isCustom) rtnArr = outboundShipments;
     return rtnArr ? rtnArr : [];
   };
 
@@ -355,44 +355,45 @@ const ShipmentAnalytic = (props) => {
   }, []);
 
   const onSelectionDateFilter = async (value) => {
-    const fromDate = value[0] == '' ? '' : new Date(new Date(value[0]).toDateString());
+    const fromDate =
+      value[0] == "" ? "" : new Date(new Date(value[0]).toDateString());
     setFromFilterDate(fromDate);
     if (value.length > 1) {
-      const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
-      if(toDate)
-        toDate.setDate(toDate.getDate() + 1);
+      const toDate =
+        value[0] == "" ? "" : new Date(new Date(value[1]).toDateString());
+      if (toDate) toDate.setDate(toDate.getDate() + 1);
       setToFilterDate(toDate);
-       if (visible === "one") {
+      if (visible === "one") {
         const inboundRes = await getInboundShipments(
-            idFilter,
-            fromFilter,
-            toFilter,
-            dateFilter,
-            statusFilter,
-            0,
-            limit,
-            fromDate,
-            toDate
-          ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
-          setInboundShipments(inboundRes.data.inboundShipments);
-          setCount(inboundRes.data.count);
-        } else {
-          const outboundRes = await getOutboundShipments(
-            idFilter,
-            fromFilter,
-            toFilter,
-            dateFilter,
-            statusFilter,
-            0,
-            limit,
-            fromDate,
-            toDate
-          ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
-          setOutboundShipments(outboundRes.data.outboundShipments);
-          setCount(outboundRes.data.count);
-        }
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
+        setInboundShipments(inboundRes.data.inboundShipments);
+        setCount(inboundRes.data.count);
+      } else {
+        const outboundRes = await getOutboundShipments(
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
+        setOutboundShipments(outboundRes.data.outboundShipments);
+        setCount(outboundRes.data.count);
+      }
     }
-  }
+  };
 
   const onSelectionOfDropdownValue = (index, type, value) => {
     setShowExportFilter(false);
@@ -485,13 +486,7 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link
-              to={
-                props.user.emailId === "gmr@statledger.io"
-                  ? `/createshipment`
-                  : `/newshipment`
-              }
-            >
+            <Link to={props.user.isCustom ? `/createshipment` : `/newshipment`}>
               <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
@@ -508,12 +503,11 @@ const ShipmentAnalytic = (props) => {
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") &&
-        props.user.emailId !== "gmr@statledger.io" && (
-          // <Tiles {...props} setData={setData} />
-          <Cards {...props} setData={setData} />
-        )}
-      {props.user.emailId !== "gmr@statledger.io" && (
+      {isAuthenticated("shipmentAnalytics") && !props.user.isCustom && (
+        // <Tiles {...props} setData={setData} />
+        <Cards {...props} setData={setData} />
+      )}
+      {!props.user.isCustom && (
         <div className='mt-4'>
           <Tabs
             {...props}
@@ -529,7 +523,7 @@ const ShipmentAnalytic = (props) => {
           data={headers}
           shipmentIdList={shipmentIdList}
           supplierReceiverList={
-            props.user.emailId === "gmr@statledger.io"
+            props.user.isCustom
               ? []
               : supplierReceiverList
           }
@@ -555,12 +549,8 @@ const ShipmentAnalytic = (props) => {
           onPageChange={onPageChange}
           data={headers}
           shipmentIdList={shipmentIdList}
-          shouldEnable={props.user.emailId === "gmr@statledger.io" ? false : true}
-          supplierReceiverList={
-            props.user.emailId === "gmr@statledger.io"
-              ? []
-              : supplierReceiverList
-          }
+          shouldEnable={props.user.isCustom ? false : true}
+          supplierReceiverList={props.user.isCustom ? [] : supplierReceiverList}
           setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
