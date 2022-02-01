@@ -35,9 +35,7 @@ const VerifyContainer = (props) => {
         localStorage.setItem("bkp", result.data.data.permissions.permissions);
         dispatch(setCurrentUser(decoded));
         props.history.push(
-          emailId.toLowerCase() === "gmr@statledger.io"
-            ? `/shipments`
-            : `/overview`
+          result.data.data.isCustom ? `/shipments` : `/overview`
         );
       } else {
         const err = result.data.message;

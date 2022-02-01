@@ -18,7 +18,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 import Loader from "../../shared/loader/Loader";
-import Fulloader from "../../shared/loader/Fulloader";
 
 const UpdateStatus = (props) => {
   const { t, shipmentData } = props;
@@ -278,7 +277,7 @@ const UpdateStatus = (props) => {
                           value={values.shipmentId}
                         />
                       </div>
-                      {props.user.emailId === "gmr@statledger.io" ? (
+                      {props.user.isCustom ? (
                         <div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
@@ -398,7 +397,7 @@ const UpdateStatus = (props) => {
                         )} */}
                       </div>
                     </div>
-                    {props.user.emailId === "gmr@statledger.io" ? (
+                    {props.user.isCustom ? (
                       <div>
                         <h6 className='poheads potext m-4'>
                           Shipment Cargo Status
@@ -755,7 +754,7 @@ const UpdateStatus = (props) => {
                         </div>
                       )}
                     </div>
-                    {props.user.emailId === "gmr@statledger.io" && (
+                    {props.user.isCustom && (
                       <>
                         <h6 className='poheads potext m-4'>{t("comment")}</h6>
                         <div className='panel commonpanle mb-5'>

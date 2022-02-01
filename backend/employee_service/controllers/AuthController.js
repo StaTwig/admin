@@ -545,6 +545,7 @@ exports.verifyOtp = [
               org: user.msp,
               userName: user.emailId,
               preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           } else {
             userData = {
@@ -559,6 +560,7 @@ exports.verifyOtp = [
               org: user.msp,
               userName: user.emailId,
               preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           }
           //Prepare JWT token for authentication
@@ -568,8 +570,7 @@ exports.verifyOtp = [
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
-          const { role } = user;
-          userData.permissions = await RbacModel.findOne({ role });
+          userData.permissions = await RbacModel.findOne({ role: user.role });
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
           const bc_data = {

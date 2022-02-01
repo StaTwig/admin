@@ -745,7 +745,6 @@ exports.addProductsToInventory = [
                 batchNumbers: atomsArray[i].batchNumbers[0],
                 inventoryIds: warehouse.warehouseInventory,
               });
-              console.log(res);
               if (!res) {
                 continue;
               }

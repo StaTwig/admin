@@ -58,6 +58,10 @@ const EmployeeSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    isCustom: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

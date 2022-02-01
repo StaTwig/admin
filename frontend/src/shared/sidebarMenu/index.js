@@ -17,7 +17,7 @@ const SideBar = (props) => {
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
-    if (user?.emailId === "gmr@statledger.io") setEnable(false);
+    if (user.isCustom) setEnable(false);
   }, [user]);
 
   const resetTrackTracePage = () => {
