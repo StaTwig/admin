@@ -562,6 +562,7 @@ const NewOrder = (props) => {
                           }}
                           defaultInputValue={values.typeName}
                           options={orgTypes}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.type && touched.type && (
                             <span className="error-msg text-danger">{errors.type}</span>
@@ -621,6 +622,7 @@ const NewOrder = (props) => {
                           options={allOrganisations.filter(
                             (a) => a.type === values.typeName
                           )}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.fromOrg && touched.fromOrg && (
                           <span className="error-msg text-danger">{errors.fromOrg}</span>
@@ -644,7 +646,7 @@ const NewOrder = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low'>
                 <label htmlFor='client' className='headsup'>
-                  {t("deliver_to")}
+                {t("order_to")}
                 </label>
 
                 <div className='row'>
@@ -684,6 +686,7 @@ const NewOrder = (props) => {
                             onOrgTypeChange(v.label);
                           }}
                           options={orgTypes}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.rtype && touched.rtype && (
                             <span className="error-msg text-danger">{errors.rtype}</span>
@@ -738,6 +741,7 @@ const NewOrder = (props) => {
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesRegion}
+                          noOptionsMessage={() => t("no_options")}
                         />
                       </div>
                     </div>
@@ -787,6 +791,7 @@ const NewOrder = (props) => {
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesCountry}
+                          noOptionsMessage={() => t("no_options")}
                         />
                       </div>
                     </div>
@@ -845,6 +850,7 @@ const NewOrder = (props) => {
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={orgNames}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
@@ -923,6 +929,7 @@ const NewOrder = (props) => {
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehouses}
+                          noOptionsMessage={() => t("no_options")}
                         />
                       </div>
                     </div>
@@ -967,6 +974,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
+          t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -978,6 +986,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
+          t={t}
             onHide={closeModalFail} //FailurePopUp
             shipmentError={shipmentError}
           />
@@ -990,6 +999,7 @@ const NewOrder = (props) => {
           size='modal-md'
         >
           <ShipmentFailPopUp
+          t={t}
             onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
             shipmentError={shipmentError}
           />

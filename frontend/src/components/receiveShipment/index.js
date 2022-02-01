@@ -218,7 +218,7 @@ const ReceiveShipment = (props) => {
                 close={() => closeModalShipment()}
                 size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
               >
-                <FailedPopup onHide={closeModalShipment} ErrorMsg={ErrorMsg} />
+                <FailedPopup onHide={closeModalShipment} ErrorMsg={ErrorMsg} t={t} />
               </Modal>
             )}
             {openUpdatedStatus && (
@@ -517,7 +517,8 @@ const ReceiveShipment = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
-            onHide={closeModalShipment} //FailurePopUp
+            onHide={closeModalShipment}
+            t={t} //FailurePopUp
           />
         </Modal>
       )}

@@ -184,7 +184,7 @@ const AddCategory = (props) => {
             size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <ProductPopUp
-              onHide={closeModal} //FailurePopUp
+              onHide={closeModal} t={t} //FailurePopUp
             />
           </Modal>
         )}

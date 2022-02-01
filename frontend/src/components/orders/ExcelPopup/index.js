@@ -105,6 +105,7 @@ const ExcelPopUp = (props) => {
               size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <SuccessOrderPopUp
+              t={t}
                 onHide={closeModal} // onHide={closeModal} //FailurePopUp
                 {...modalProps}
               />
@@ -112,7 +113,7 @@ const ExcelPopUp = (props) => {
           )}
           {openFailedPopup && (
             <Modal close={() => closeModalFailedPopUp()} size='modal-sm'>
-              <FailPopup onHide={closeModalFailedPopUp} />
+              <FailPopup onHide={closeModalFailedPopUp} t={t} />
             </Modal>
           )}
         </div>

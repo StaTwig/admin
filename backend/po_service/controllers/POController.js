@@ -146,10 +146,11 @@ exports.fetchPurchaseOrders = [
               );
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
+                  console.log(element)
                   const product = await ProductModel.findOne({
                     id: element.id,
                   });
-                  element.unitofMeasure = product.unitofMeasure;
+                  element.unitofMeasure = product?.unitofMeasure;
                 })
               );
             } else {
@@ -885,7 +886,7 @@ exports.addPOsFromExcel = [
       );
       return apiResponse.successResponseWithData(
         res,
-        responses(req.user.preferredLanguage).upload_result,
+        responses(req.user.preferredLanguage || 'EN').upload_result,
         poDataArray
       );
     } catch (err) {

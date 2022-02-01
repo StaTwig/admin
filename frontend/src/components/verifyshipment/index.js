@@ -11,6 +11,7 @@ import "./style.scss";
 import { initialState } from "../../reducers/editShipmentReducer";
 
 const VerifyShipment = (props) => {
+  const { t } = props;
   //const [message, setMessage] = useState('');
   //const [errorMessage, setErrorMessage] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
@@ -161,7 +162,8 @@ const VerifyShipment = (props) => {
                   size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
                 >
                   <ShipmentPopUp
-                    onHide={closeModal} //FailurePopUp
+                    onHide={closeModal}
+                    t={t} //FailurePopUp
                   />
                 </Modal>
               )}

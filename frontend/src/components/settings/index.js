@@ -12,6 +12,7 @@ import "./style.scss";
 import { red } from "@material-ui/core/colors";
 
 const Settings = (props) => {
+  const {t} = props;
   const [visible, setvisible] = useState("one");
   const [emailClicked, setEmailClicked] = useState(false);
   const [smsClicked, setSmsClicked] = useState(false);
@@ -489,6 +490,7 @@ const Settings = (props) => {
                 >
                   <SuccessPopUp
                     onHide={closeModal} //FailurePopUp
+                    t={t}
                   />
                 </Modal>
               )}
