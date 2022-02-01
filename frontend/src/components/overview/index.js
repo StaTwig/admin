@@ -148,7 +148,7 @@ const Overview = (props) => {
             </div>
             <div className='card-body pl-1'>
               <div id='chartjs-render-monitor'>
-                <ChartsPage {...props} />
+                <ChartsPage {...props} t={t} />
               </div>
             </div>
             <div className='card-footer mb-2'>
