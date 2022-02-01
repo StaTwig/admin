@@ -175,6 +175,7 @@ exports.addMultipleProducts = [
     }
   },
 ];
+
 exports.addProduct = [
   auth,
   body("externalId")
