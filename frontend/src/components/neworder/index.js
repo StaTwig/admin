@@ -693,7 +693,7 @@ const NewOrder = (props) => {
                   </div>
                 </div>
 
-                <div className='row'>
+                {/* <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
                       <label className='' htmlFor='delLocation'>
@@ -739,9 +739,6 @@ const NewOrder = (props) => {
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesRegion}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
@@ -791,13 +788,10 @@ const NewOrder = (props) => {
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesCountry}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
