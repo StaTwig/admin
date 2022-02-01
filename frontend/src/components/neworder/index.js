@@ -102,6 +102,7 @@ const NewOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
+      onCountryChange('Costa Rica');
       const orgs = await getAllOrganisations();
       setAllOrganisations(
         orgs.data.map((item) => {
@@ -198,6 +199,7 @@ const NewOrder = (props) => {
         };
       });
       setReceiverWarehousesRegion(rr);
+      onCountryChange('Costa Rica');
     } catch (err) {
       setErrorMessage(err);
     }
