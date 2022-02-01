@@ -38,6 +38,7 @@ const AddLocation = (props) => {
     async function fetchAllRegions1() {
       let arr = await fetchAllRegions();
       setallregions(arr.data);
+      fetchAllState1(53);
     }
     fetchAllRegions1();
   }, []);
@@ -179,7 +180,7 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='region'>
@@ -239,7 +240,7 @@ const AddLocation = (props) => {
                               setState("");
                               setCity("");
                             }}
-                            options={allCountries.map((option) => option.name)}
+                            options={allCountries.map((option) => option.spanishName)}
                             renderInput={(params) => (
                               <TextField {...params} label={t('Select_Country')} />
                             )}
@@ -253,7 +254,7 @@ const AddLocation = (props) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>

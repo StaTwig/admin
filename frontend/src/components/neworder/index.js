@@ -102,6 +102,7 @@ const NewOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
+      onCountryChange('Costa Rica');
       const orgs = await getAllOrganisations();
       setAllOrganisations(
         orgs.data.map((item) => {
@@ -198,6 +199,7 @@ const NewOrder = (props) => {
         };
       });
       setReceiverWarehousesRegion(rr);
+      onCountryChange('Costa Rica');
     } catch (err) {
       setErrorMessage(err);
     }
@@ -696,7 +698,7 @@ const NewOrder = (props) => {
                   </div>
                 </div>
 
-                <div className='row'>
+                {/* <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
                       <label className='' htmlFor='delLocation'>
@@ -743,9 +745,6 @@ const NewOrder = (props) => {
                           options={receiverWarehousesRegion}
                           noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
@@ -796,13 +795,10 @@ const NewOrder = (props) => {
                           options={receiverWarehousesCountry}
                           noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
