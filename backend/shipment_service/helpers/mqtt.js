@@ -29,7 +29,7 @@ exports.MqttConnection = () => {
         if (topic == "/test/vacus/sensor") {
           for (const message of messageArray) {
             const result = await getCurrentShipment(message.vehicleID);
-            message.shipmentId = result.id || null;
+            message.shipmentId = result?.id || null;
             await saveSensorData(message);
           }
         } else {

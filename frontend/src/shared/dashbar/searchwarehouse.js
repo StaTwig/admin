@@ -127,7 +127,7 @@ const SearchWareHouse = (props) => {
                 onWarehouses(newValue);
                 setWareHouseId("");
               }}
-              options={countries.map((option) => option.spanishName)}
+              options={countries.map((option) => option.spanishName || option.name)}
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
