@@ -49,6 +49,8 @@ const Inventory = (props) => {
   const [inventoriesCount, setInventoriesCount] = useState("");
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState("");
   const [productsList, setProductsList] = useState([]);
+  const [fromFilterDate, setFromFilterDate] = useState();
+  const [toFilterDate, setToFilterDate] = useState();
   const dispatch = useDispatch();
   const colors = [
     "#D8E5FB",
@@ -166,6 +168,29 @@ const Inventory = (props) => {
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
+
+  const onSelectionDateFilter = async (value) => {
+    const fromDate = value[0] == '' ? '' : new Date(new Date(value[0]).toDateString());
+    setFromFilterDate(fromDate);
+    if (value.length > 1) {
+      const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
+      if(toDate)
+        toDate.setDate(toDate.getDate() + 1);
+      setToFilterDate(toDate);
+      dispatch(
+      getInventories(
+        0,
+        limit,
+        dateFilter,
+        productNameFilter,
+        productCategoryFilter,
+        statusFilter,
+        fromFilterDate.toLocaleDateString(),
+        toFilterDate.toLocaleDateString()
+      )
+    );
+    }
+  }
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     setDateFilter(dateFilterSelected);
@@ -287,6 +312,7 @@ const Inventory = (props) => {
           setInventoryProductNameFilterOnSelect={
             setInventoryProductNameFilterOnSelect
           }
+          onSelectionDateFilter={onSelectionDateFilter}
           setInventoryManufacturerFilterOnSelect={
             setInventoryManufacturerFilterOnSelect
           }

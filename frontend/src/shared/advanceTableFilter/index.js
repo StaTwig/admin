@@ -78,7 +78,9 @@ const AdvanceTableFilter = (props) => {
   const [value, setValue] = React.useState([null, null]);
 
   const dateclick = (event) => {
-    if (props?.shouldEnable === true) setdateFilter(event.currentTarget);
+    console.log(event.currentTarget);
+    // if (props?.shouldEnable === true) 
+    setdateFilter(event.currentTarget);
   };
 
   const dateclose = () => {
@@ -161,26 +163,6 @@ const AdvanceTableFilter = (props) => {
                   {t("transitpartiallyfilled")}
                 </button>
               </StyledMenuItem>
-
-              {/* <StyledMenuItem>
-                <button
-                  style={{
-                    padding: "10px",
-                    height: "60px",
-                    width: "200px",
-                    borderRadius: "10px",
-                    whiteSpace: 'initial'
-                  }}
-                  className="btn btn-outline-warning btn-sm font-weight-bold"
-                  color="primary"
-                  onClick={() =>
-                    setStatusFilterOnSelect("PARTIALLYFULFILLED")
-                  }
-                >
-                  {t("partiallyfilled")}
-                </button>
-              </StyledMenuItem> */}
-
               <StyledMenuItem>
                 <button
                   style={{
@@ -279,7 +261,7 @@ const AdvanceTableFilter = (props) => {
             id='customized-menu'
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -651,7 +633,7 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryStatusClick = (event) => {
-    if (props?.shouldEnable === true)
+    // if (props?.shouldEnable === true)
       setInventoryStatusAnchorEl(event?.currentTarget);
   };
 
@@ -920,6 +902,7 @@ const AdvanceTableFilter = (props) => {
   // };
 
   const renderColumn3 = (columnData) => {
+    console.log(columnData)
     if (columnData === "From") {
       return (
         <th
@@ -1042,12 +1025,12 @@ const AdvanceTableFilter = (props) => {
       );
     } else if (columnData === "Date") {
       return (
-        <div className='box col' onClick={dateclick}>
+        <div className='box col' onClick={(e) => dateclick(e)}>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img3}</div>
             <div className='filterTitle'>{props.data.displayColoumn3}</div>
             <div className='filterAction'>
-              <img src={updownarrow} width='9' height='9' />
+              <img src={updownarrow} alt="arrow" width='9' height='9' />
             </div>
           </div>
           <StyledMenu
