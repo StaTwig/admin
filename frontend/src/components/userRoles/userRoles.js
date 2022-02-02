@@ -114,7 +114,7 @@ const UserRoles = ({
           >
             {t('save')}
           </button>
-          <button
+          {/* <button
             className="add-user-btn"
             style={{outline:"none"}}
             onClick={() => {
@@ -126,7 +126,7 @@ const UserRoles = ({
           >
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
             <span className="txt">{t('add_new_user_role')}</span>
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="user-role-content">

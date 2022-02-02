@@ -207,7 +207,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-2  headerText headerTitles'>
+            <div className='box col mo-create headerText headerTitles'>
               <span className="headerText"
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
