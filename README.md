@@ -26,7 +26,6 @@ Branch out from `development` , Merge requests shall be to development, no direc
 |  tracktracemanagement  |    3005     |
 | notificationmanagement |    3006     |
 |  inventorymanagement   |    3007     |
-|  blockchainmanagement  |    3008     |
 |   productmanagement    |    3010     |
 |     rbacmanagement     |    3011     |
 |      pomanagement      |    3012     |
