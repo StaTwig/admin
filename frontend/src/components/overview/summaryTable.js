@@ -12,6 +12,7 @@ import EmptyShipment from "../../assets/icons/Mt-Shipment.webp";
 import EmptyShipmentEs from "../../assets/icons/Mt-Shipment-Es.webp";
 
 import { formatDate } from "../../utils/dateHelper";
+import OverviewEmptyPage from "./OverviewEmptyPage";
 
 const SummaryTable = (props) => {
   const profile = useSelector((state) => {

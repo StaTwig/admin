@@ -724,7 +724,7 @@ const AdvanceTableFilter = (props) => {
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t("Empty List")}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -734,7 +734,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setToShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -980,7 +980,7 @@ const AdvanceTableFilter = (props) => {
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t('Empty_List')}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -990,7 +990,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setFromShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -1436,7 +1436,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setShipmentIdFilterOnSelect("")}
                 >
-                  Clear
+                  {t('Clear')}
                 </button>
               </StyledMenuItem>
             </div>

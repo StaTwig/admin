@@ -503,11 +503,12 @@ const ShipmentAnalytic = (props) => {
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") && !props.user.isCustom && (
-        // <Tiles {...props} setData={setData} />
-        <Cards {...props} setData={setData} />
-      )}
-      {!props.user.isCustom && (
+      {isAuthenticated("shipmentAnalytics") &&
+        props.user.emailId !== "gmr@statledger.io" && (
+          // <Tiles {...props} setData={setData} />
+          <Cards {...props} setData={setData} t={t} />
+        )}
+      {props.user.emailId !== "gmr@statledger.io" && (
         <div className='mt-4'>
           <Tabs
             {...props}
