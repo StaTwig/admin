@@ -521,9 +521,9 @@ const NewShipment = (props) => {
           if (!values.airWayBillNo) {
             errors.airWayBillNo = "Required";
           }
-          if (!values.labelCode) {
-            errors.labelCode = "Required";
-          }
+          // if (!values.labelCode) {
+          //   errors.labelCode = "Required";
+          // }
           if (!values.shipmentDate) {
             errors.shipmentDate = "Required";
           }
@@ -1278,11 +1278,7 @@ const NewShipment = (props) => {
                       {t("label_code")}*
                     </label>
                     <input
-                      className={`input refship ${
-                        errors.labelCode && touched.labelCode
-                          ? "border-danger"
-                          : ""
-                      }`}
+                      className={`input refship`}
                       type='text'
                       id='referenceShipmentId'
                       name='labelCode'
