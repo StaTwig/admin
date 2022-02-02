@@ -8,4 +8,4 @@ RUN yarn install
 
 EXPOSE 3014
 
-CMD node analytics_service.js
+CMD yarn run start
