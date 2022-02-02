@@ -18,7 +18,7 @@ const SuccessPopUp = (props) => {
         <div className='data'>{t('Your_Profile_has_been')}</div>
         <div className='data mb-4'>{t('Saved_Successfully')}!</div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          OK
+        {t("ok")}
         </button>
       </div>
     </div>

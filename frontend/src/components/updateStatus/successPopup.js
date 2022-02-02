@@ -16,9 +16,9 @@ const SuccessPopup = (props) => {
         />
         <div className='alert'>{t("success")}!</div>
         <div className='data'>{t('Your_Shipment_Status_has_been')}</div>
-        <div className='data mb-4'>{t('Updated_Successfully')}!</div>
+        <div className='data mb-4'>{t('updated_successfully')}!</div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          OK
+        {t("ok")}
         </button>
       </div>
     </div>

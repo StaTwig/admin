@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import Login from "../../components/login";
 import { sendOtp } from "../../actions/userActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { useTranslation } from "react-i18next";
 
 const LoginContainer = (props) => {
+  const { i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,13 +26,16 @@ const LoginContainer = (props) => {
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
     const data = { emailId: email !== "" ? email : phone };
-    const result = await sendOtp(data);
-    if (result.status === 200) {
+    const result = await sendOtp(data, i18n.language);
+    if (result?.status === 200) {
       props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
-    } else if (result.status === 500) {
+    } else if (result?.status === 500) {
       const err = result.data.message;
       setErrorMessage(err);
-    } else if (result.status === 401) {
+    } else if (result?.status === 404) {
+      const err = result.data.message;
+      setErrorMessage(err);
+    } else if (result?.status === 401) {
       const err = result.data.message;
       setErrorMessage(err);
     } else {

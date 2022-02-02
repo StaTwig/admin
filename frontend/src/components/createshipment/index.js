@@ -26,6 +26,7 @@ import { config } from "../../config";
 import axios from "axios";
 
 const CreateShipment = (props) => {
+  const {t} = props;
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
@@ -931,6 +932,7 @@ const CreateShipment = (props) => {
           <ShipmentPopUp
             onHide={closeModal} //FailurePopUp
             {...modalProps}
+            t={t}
           />
         </Modal>
       )}
@@ -944,6 +946,7 @@ const CreateShipment = (props) => {
             onHide={closeModalFail} //FailurePopUp
             {...modalProps}
             shipmentError={shipmentError}
+            t={t}
           />
         </Modal>
       )}

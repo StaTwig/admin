@@ -197,6 +197,7 @@ const EditRow = (props) => {
                 /> */}
                 {enableDelete ? (
                   <Select
+                  noOptionsMessage={() => t("no_options")}
                     className='no-border'
                     placeholder={
                       <div className='select-placeholder-text'>
@@ -238,6 +239,7 @@ const EditRow = (props) => {
                 } */}
                 {enableDelete ? (
                   <Select
+                  noOptionsMessage={() => t("no_options")}
                     className='no-border'
                     placeholder={
                       <div className='select-placeholder-text'>

@@ -562,6 +562,7 @@ const NewShipment = (props) => {
                       </label>
                       <div className='line'>
                         <Select
+                        noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           placeholder={t("enter") + " " + t("order_id")}
                           onChange={async (v) => {
@@ -905,6 +906,7 @@ const NewShipment = (props) => {
                           groups={senderOrganisation}
                         /> */}
                         <Select
+                        noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={true}
                           onChange={(v) => {}}
@@ -961,6 +963,7 @@ const NewShipment = (props) => {
                           groups={senderWarehouses}
                         /> */}
                         <Select
+                        noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={false}
                           placeholder={
@@ -1033,6 +1036,7 @@ const NewShipment = (props) => {
                         }`}
                       >
                         <Select
+                        noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={
@@ -1082,6 +1086,7 @@ const NewShipment = (props) => {
                           groups={allOrganisations}
                         /> */}
                         <Select
+                        noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           //isDisabled={disabled}
                           placeholder={
@@ -1151,6 +1156,7 @@ const NewShipment = (props) => {
                               ? values.toOrgLoc.split("/")[1]
                               : t("select_delivery_location")
                           }
+
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgLoc === ""
@@ -1169,6 +1175,7 @@ const NewShipment = (props) => {
                                 (elem) => elem.label === ele.label
                               )
                           )}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">

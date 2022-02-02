@@ -247,6 +247,21 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "180px",
+                    borderRadius: "10px",
+                  }}
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
+                  color='primary'
+                  onClick={() => setStatusFilterOnSelect("CANCELLED")}
+                >
+                  {t("cancelled")}
+                </button>
+              </StyledMenuItem>
+              <StyledMenuItem>
+                <button
                   className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("")}
@@ -698,11 +713,11 @@ const AdvanceTableFilter = (props) => {
                     onChange={(event, newValue) => {
                       setToShipmentFilterOnSelect(newValue.id);
                     }}
-                    style={{ width: "14rem" }}
+                    style={{ width: "18rem" }}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t("Search_Org._Name")}
+                        label={t("search_org_name")}
                         variant='outlined'
                       />
                     )}
@@ -766,7 +781,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Product"}
+                        label={t("search_product")}
                         variant='outlined'
                       />
                     )}
@@ -958,7 +973,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t("Search_Supplier_Name")}
+                        label={t("search_supplier_name")}
                         variant='outlined'
                       />
                     )}
@@ -1017,7 +1032,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Order"}
+                        label={t("search_order")}
                         variant='outlined'
                       />
                     )}
@@ -1141,7 +1156,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Category"}
+                            label={t("search_category")}
                             variant='outlined'
                           />
                         )}
@@ -1209,7 +1224,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Category"}
+                            label={t("search_category")}
                             variant='outlined'
                           />
                         )}
@@ -1404,7 +1419,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t("Search_Shipment")}
+                        label={t("search_shipment")}
                         variant='outlined'
                       />
                     )}
@@ -1484,7 +1499,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Customer"}
+                        label={t("search_customer")}
                         variant='outlined'
                       />
                     )}
@@ -1550,7 +1565,7 @@ const AdvanceTableFilter = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={"Search Supplier"}
+                        label={t("search_supplier")}
                         variant='outlined'
                       />
                     )}
@@ -1610,7 +1625,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Product"}
+                            label={t("search_product")}
                             variant='outlined'
                           />
                         )}
@@ -1675,7 +1690,7 @@ const AdvanceTableFilter = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={"Search Product"}
+                            label={t("search_product")}
                             variant='outlined'
                           />
                         )}

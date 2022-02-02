@@ -7,17 +7,17 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
-
 import "./style.scss";
+
 const SideBar = (props) => {
-  const { match, location, user, t, trackTraceData } = props;
+  const { match, user, t, trackTraceData } = props;
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
-    if (user?.emailId === "gmr@statledger.io") setEnable(false);
+    if (user.isCustom) setEnable(false);
   }, [user]);
 
   const resetTrackTracePage = () => {
@@ -130,7 +130,7 @@ const SideBar = (props) => {
             <Link to='/dashboard' className='d-inline-block'>
               <img
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt='Shippment'
+                alt='Shipment'
               />
               <span className='ml-2'>{t("network")}</span>
             </Link>
@@ -138,16 +138,18 @@ const SideBar = (props) => {
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-          <Link to='/track'
-              className='d-inline-block'
-              onClick={resetTrackTracePage} className='nav-look-link'>
-            <img
-              src={url === "/track" ? trackSelectedIcon : trackIcon}
-              alt='Track &amp; Trace'
-            />
-             <span>{t("trackntrace")}</span>
-          </Link>
-        </li>
+            <Link
+              to='/track'
+              className='nav-look-link d-inline-block'
+              onClick={resetTrackTracePage}
+            >
+              <img
+                src={url === "/track" ? trackSelectedIcon : trackIcon}
+                alt='Track &amp; Trace'
+              />
+              <span>{t("trackntrace")}</span>
+            </Link>
+          </li>
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>

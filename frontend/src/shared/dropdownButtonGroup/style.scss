@@ -113,3 +113,9 @@
     left: 245px;
   }
 }
+.dropdown-menu{
+  right:0 !important;
+  left:unset !important;
+  top:0.6rem !important;
+  max-height: 30rem !important;
+}
