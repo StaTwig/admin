@@ -5,7 +5,7 @@ const ShipmentSchema = new mongoose.Schema(
     shippingOrderId: String,
     poId: String,
     label: {
-      labelId: { type: String, required: false, unique: false },
+      labelId: { type: String },
       labelType: { type: String, default: "QR_2DBAR" },
     },
     externalShipmentId: String,
