@@ -32,6 +32,9 @@ const LoginContainer = (props) => {
     } else if (result?.status === 500) {
       const err = result.data.message;
       setErrorMessage(err);
+    } else if (result?.status === 404) {
+      const err = result.data.message;
+      setErrorMessage(err);
     } else if (result?.status === 401) {
       const err = result.data.message;
       setErrorMessage(err);
