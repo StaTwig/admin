@@ -93,7 +93,7 @@ const ProductList = (props) => {
                     <input
                       className='form-control quantity-received'
                       value={deliveredProduct}
-                      placeholder='Enter the Quantity'
+                      placeholder={t('Enter_the_Quantity')}
                       // maxLength={product.productQuantity.length}
                       onChange={(e) => {
                         setDeliveredProduct(e.target.value);

@@ -263,7 +263,7 @@ export const addInventory = async (data) => {
 export const addProductsToInventory = async (data) => {
   try {
     const result = await axios.post(config().addProductsToInventory, data);
-    return result.data;
+    return result;
   } catch (e) {
     return e.response;
   }

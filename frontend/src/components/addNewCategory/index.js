@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style.scss";
-import { Formik } from "formik";
 import { addNewProduct } from "../../actions/poActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import { Link } from "react-router-dom";
@@ -48,7 +47,6 @@ const AddCategory = (props) => {
     const isValid = validation();
     if (isValid) {
       let formData = new FormData();
-
       formData.append("manufacturer", manufacturer);
       let unitofMeasure = {
         id: "N/A",
@@ -76,7 +74,7 @@ const AddCategory = (props) => {
             </button> */}
         <div className='card'>
           <div className='card-body'>
-            <div style={{gap:"5rem"}} className='d-flex'>
+            <div style={{ gap: "5rem" }} className='d-flex'>
               <div className=''>
                 <div className='mb-4'>
                   <div className='d-flex flex-column upload'>
@@ -184,7 +182,8 @@ const AddCategory = (props) => {
             size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <ProductPopUp
-              onHide={closeModal} t={t} //FailurePopUp
+              onHide={closeModal}
+              t={t} //FailurePopUp
             />
           </Modal>
         )}

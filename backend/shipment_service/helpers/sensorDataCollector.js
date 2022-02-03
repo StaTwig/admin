@@ -12,6 +12,9 @@ exports.getCurrentShipment = async (vehicleId) => {
 };
 
 exports.saveSensorData = async (sensorData) => {
+  if (sensorData?.temp >= 128) {
+    sensorData.temp = sensorData.temp - 140;
+  }
   const sensor = new SensorModel({
     sensorId: sensorData.id,
     vehicleId: sensorData.vehicleID,
