@@ -106,19 +106,19 @@ const EnterId = (props) => {
           const errors = {};
 
           if (!values.shipmentId) {
-            errors.shipmentId = "Required";
+            errors.shipmentId = t("Required");
           }
           if (!values.billno) {
-            errors.billno = "Required";
+            errors.billno = t("Required");
           }
           if (!values.updateStatusLocation) {
-            errors.updateStatusLocation = "Required";
+            errors.updateStatusLocation = t("Required");
           }
           if (!values.comments) {
-            errors.comments = "Required";
+            errors.comments = t("Required");
           }
           if (!values.alerttrue) {
-            errors.alerttrue = "Required";
+            errors.alerttrue = t("Required");
           }
           return errors;
         }}
@@ -183,7 +183,7 @@ const EnterId = (props) => {
                               name='shipmentId'
                               margin='normal'
                               variant='outlined'
-                              placeholder='Enter Shipment ID'
+                              placeholder={t('Enter_Shipment_ID')}
                             />
                           )}
                         />
@@ -260,7 +260,7 @@ const EnterId = (props) => {
                               name='billNo'
                               margin='normal'
                               variant='outlined'
-                              placeholder='Enter Transit No'
+                              placeholder={t('Enter_Transit_No')}
                             />
                           )}
                         />
