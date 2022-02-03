@@ -21,8 +21,6 @@ import logo from "../../assets/brands/VACCINELEDGER.png";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { config } from "../../config";
-import Modal from "../modal/index";
-import FailedPopUp from "../PopUp/failedPopUp";
 import {
   getShippingOrderIds,
   fetchAllairwayBillNumber,
@@ -163,7 +161,6 @@ const Header = (props) => {
     dispatch(turnOff());
     return result;
   }
-
 
   const onSeach = () => {
     if (search.substring(0, 2) === "SH") {

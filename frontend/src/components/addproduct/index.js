@@ -43,7 +43,7 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
-      setManufacturers(manufacturers => [...manufacturers, "Other"])
+      setManufacturers((manufacturers) => [...manufacturers, "Other"]);
       const result = await getProducts();
       const categoryArray = result.map((product) => product.type);
       setCategories(
@@ -69,7 +69,7 @@ const AddProduct = (props) => {
       category === t("select_category") ||
       UOM === "" ||
       description === "" ||
-      (manufacturer=="Other"&&otherManufacturer=="")
+      (manufacturer === "Other" && otherManufacturer === "")
     ) {
       if (productName === "") {
         setPdNameErr(true);
@@ -86,7 +86,7 @@ const AddProduct = (props) => {
       if (description === "") {
         setDescErr(true);
       }
-      if(manufacturer=="Other"&&otherManufacturer==""){
+      if (manufacturer === "Other" && otherManufacturer === "") {
         setOtherManufacturerErr(true);
       }
     } else {
@@ -99,10 +99,9 @@ const AddProduct = (props) => {
     if (isValid) {
       let formData = new FormData();
 
-      if(manufacturer!="Other"){
+      if (manufacturer !== "Other") {
         formData.append("manufacturer", manufacturer);
-      }
-      else{
+      } else {
         formData.append("manufacturer", otherManufacturer);
       }
       // let unitofMeasure =
@@ -119,9 +118,7 @@ const AddProduct = (props) => {
       );
       formData.append("description", description);
       formData.append("photo", photo);
-      // console.log("formData", productName);
       const result = await addNewProduct(formData);
-      console.log("Result", result);
       if (result.success) {
         setOpenCreatedInventory(true);
       }
@@ -210,7 +207,7 @@ const AddProduct = (props) => {
                   display: "flex",
                   width: "12rem",
                   flexDirection: "row",
-                  alignItems:"center",
+                  alignItems: "center",
                   justifyContent: "center",
                 }}
               >
@@ -220,7 +217,7 @@ const AddProduct = (props) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    whiteSpace:"nowrap",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   <img
@@ -282,23 +279,28 @@ const AddProduct = (props) => {
                   </div>
                 </div>
               </div>
-              {manufacturer=="Other" && 
-              <div className='flex-row'>
-              <div className='form-group'>
-                <label htmlFor='shipmentId'>{t("Other Manufacturer")}</label>
-                <input
-                  type='text'
-                  className={`form-control ${otherManufacturerErr ? "border-danger" : ""}`}
-                  name='otherManufacturer'
-                  placeholder={t("enter") + " " + t("manufacturer")}
-                  onChange={(e) => {
-                    setManufacturerErr(false);
-                    setOtherManufacturer(e.target.value);
-                    console.log("Manufacturer", otherManufacturer);
-                  }}
-                />
-              </div>
-            </div>}
+              {manufacturer == "Other" && (
+                <div className='flex-row'>
+                  <div className='form-group'>
+                    <label htmlFor='shipmentId'>
+                      {t("Other Manufacturer")}
+                    </label>
+                    <input
+                      type='text'
+                      className={`form-control ${
+                        otherManufacturerErr ? "border-danger" : ""
+                      }`}
+                      name='otherManufacturer'
+                      placeholder={t("enter") + " " + t("manufacturer")}
+                      onChange={(e) => {
+                        setManufacturerErr(false);
+                        setOtherManufacturer(e.target.value);
+                        console.log("Manufacturer", otherManufacturer);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               <div className='flex-row'>
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("product_category")}</label>
@@ -399,7 +401,8 @@ const AddProduct = (props) => {
               size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <ProductPopUp
-                onHide={closeModal} t={t} //FailurePopUp
+                onHide={closeModal}
+                t={t} //FailurePopUp
               />
             </Modal>
           )}

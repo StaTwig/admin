@@ -188,7 +188,7 @@ exports.register = [
           empCounter.counters[4].format + empCounter.counters[4].value;
         const employeeStatus = "NOTAPPROVED";
         let addr = "";
-        //create organisation if doesn't exists
+        //create organization if doesn't exists
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
           const organisation = await OrganisationModel.findOne({
@@ -248,7 +248,6 @@ exports.register = [
                 name: region,
               },
               country: {
-                countryId: "001",
                 countryName: country,
               },
               configuration_id: "CONF000",
