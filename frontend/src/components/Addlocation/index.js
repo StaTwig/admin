@@ -107,15 +107,10 @@ const AddLocation = (props) => {
                 addressLine,
                 city,
                 state,
-                country,
                 pincode,
-                region,
               }}
               validate={(values) => {
                 const errors = {};
-                if (!values.region) {
-                  errors.region = t("Required");
-                }
                 if (!values.addressTitle) {
                   errors.addressTitle = t("Required");
                 }
@@ -127,9 +122,6 @@ const AddLocation = (props) => {
                 }
                 if (!values.state) {
                   errors.state = t("Required");
-                }
-                if (!values.country) {
-                  errors.country = t("Required");
                 }
                 if (!values.pincode) {
                   errors.pincode = t("Required");
@@ -420,7 +412,6 @@ const AddLocation = (props) => {
                       className='btn btn-yellow float-right font-weight-bold'
                       disabled={
                         !(
-                          values.country &&
                           values.addressTitle &&
                           values.city &&
                           values.state &&
