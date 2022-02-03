@@ -45,7 +45,17 @@ function getFileStream(fileKey) {
     Key: fileKey,
     Bucket: bucketName,
   };
-
+  const readStream = s3.getObject(downloadParams).createReadStream();
+  let chunks = [];
+  let file;
+  readStream.on("data", (chunk) => {
+    chunks.push(chunk);
+  });
+  readStream.on("end", () => {
+    const result = Buffer.concat(chunks);
+    file = result;
+  });
+  console.log(file);
   return s3.getObject(downloadParams).createReadStream();
 }
 exports.getFileStream = getFileStream;
