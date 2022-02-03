@@ -8,18 +8,15 @@ import {
   resetInventories,
   getTransactionFilterList,
 } from "../../actions/inventoryActions";
-import { getProducts } from "../../actions/poActions"
-import { useTranslation } from 'react-i18next';
+import { getProducts } from "../../actions/poActions";
+import { useTranslation } from "react-i18next";
 
 const InventoryContainer = (props) => {
   const dispatch = useDispatch();
-const { t, i18n } = useTranslation();
-
+  const { t } = useTranslation();
   const [skip, setSkip] = useState(0);
   const [inventoryFilterData, setInventoryFilterData] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [loadMore, setLoadMore] = useState(true);
-
   const inventories = useSelector((state) => {
     return state.inventories;
   });
@@ -50,27 +47,11 @@ const { t, i18n } = useTranslation();
     dispatch(getInventories(0, 10, "", "", "", "")); //(skip, limit, dateFilter, productName, productCategory, status)
   }, [dispatch]);
 
-  
-  // const onLoadMore = async () => {
-  //   const newSkip = skip + 5;
-  //   setSkip(newSkip);
-  //   const results = await dispatch(getInventories(skip, limit));
-  //   if (results === 0) {
-  //     setLoadMore(false);
-  //   }
-  // };
-
-  // const onLoadMore = async (isInc) => {
-  //   const newSkip = isInc ? skip + 5 : skip - 5;
-  //   setSkip(newSkip);
-  //   dispatch(getInventories(newSkip, limit, ""));
-  // };
-
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} t={t}/>
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} t={t}/>
+        <Sidebar {...props} t={t} />
         <div className='content'>
           <Inventory
             skip={skip}

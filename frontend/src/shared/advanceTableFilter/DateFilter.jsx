@@ -56,7 +56,7 @@ export default function DateFilter({ t,onSelectionDateFilter }) {
                 color="primary"
                     onClick={() => { setFweek(new Array("", "")); onSelectionDateFilter(new Array("", ""));}}
                 >
-                    Clear
+                    {t('Clear')}
                 </button>
             </div>
         </>

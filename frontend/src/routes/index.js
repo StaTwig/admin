@@ -46,7 +46,7 @@ import ProductInventory from "../containers/productinventory";
 import BatchExpiry from "../containers/batchexpiry";
 import ViewInventory from "../containers/viewInventory";
 import AddNewCategory from "../containers/addNewCategory";
-import NoMatch from "../components/NoMatch";
+import ErrorPageContainer from "../containers/404error/ErrorPageContainer.jsx";
 import ViewProduct from "../containers/viewProduct";
 import ViewExpiry from "../containers/viewexpiry";
 import SettingsContainer from "../containers/settings";
@@ -127,7 +127,7 @@ const routes = (
     <Route path="/viewproduct" component={requireAuth(ViewProduct)} />
     <Route path="/addNewProduct" component={AddProductContainer} />
 
-    <Route component={NoMatch} />
+    <Route component={ErrorPageContainer} />
   </Switch>
 );
 

@@ -4,8 +4,6 @@ const EmployeeSchema = new mongoose.Schema(
     id: { type: String, required: false, unique: true },
     emailId: {
       type: String,
-      // required: true,
-      // unique: true
     },
     walletAddress: {
       type: String,
@@ -54,11 +52,15 @@ const EmployeeSchema = new mongoose.Schema(
     postalAddress: {
       type: String,
       required: false,
-      default: "gachibowli, hyderabad, india, earth",
+      default: "Gachibowli, Hyderabad, India",
     },
     userDocuments: {
       type: Array,
       default: [],
+    },
+    isCustom: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

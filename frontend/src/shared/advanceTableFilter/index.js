@@ -229,6 +229,21 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "180px",
+                    borderRadius: "10px",
+                  }}
+                  className='btn btn-outline-primary btn-sm font-weight-bold'
+                  color='primary'
+                  onClick={() => setStatusFilterOnSelect("CANCELLED")}
+                >
+                  {t("cancelled")}
+                </button>
+              </StyledMenuItem>
+              <StyledMenuItem>
+                <button
                   className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setStatusFilterOnSelect("")}
@@ -691,7 +706,7 @@ const AdvanceTableFilter = (props) => {
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t("Empty List")}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -701,7 +716,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setToShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -948,7 +963,7 @@ const AdvanceTableFilter = (props) => {
                   />
                 </StyledMenuItem>
               ) : (
-                <div>Empty List</div>
+                <div>{t('Empty_List')}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -958,7 +973,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setFromShipmentFilterOnSelect("")}
                 >
-                  Clear
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -1404,7 +1419,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setShipmentIdFilterOnSelect("")}
                 >
-                  Clear
+                  {t('Clear')}
                 </button>
               </StyledMenuItem>
             </div>
