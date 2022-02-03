@@ -865,6 +865,9 @@ exports.addInventoriesFromExcel = [
             workbook.Sheets[sheet_name_list[0]],
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
+
+          const resData = utility.excludeExpireProduct(data);
+
           const { address } = req.user;
           let start = new Date();
           let count = 0;
@@ -887,9 +890,8 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                  inventoriesFound.serialNumber
-                }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                  }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -997,7 +999,7 @@ exports.addInventoriesFromExcel = [
           return apiResponse.successResponseWithData(
             res,
             responses(req.user.preferredLanguage).success,
-            data
+            resData
           );
         } else {
           return apiResponse.ErrorResponse(
