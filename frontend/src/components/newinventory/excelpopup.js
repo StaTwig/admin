@@ -81,26 +81,3 @@ const ExcelPopUp = (props) => {
 };
 
 export default ExcelPopUp;
-
-
-function UploadedFileInfo({ file, setExcel }) {
-
-  const formatFileSize = (bytes, precision = 2) => {
-    if (bytes === 0) { return '0 Bytes' }
-
-    const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(precision)) + ' ' + sizes[i];
-  };
-
-  return (
-    <div className="UploadedFileInfo">
-      <h4>Information about current file</h4>
-      <div><strong>Name:</strong> {file?.name} </div>
-      <div><strong>Size:</strong> {formatFileSize(file?.size)} </div>
-      <div><strong>Type:</strong> {file?.type}</div>
-      <button className="UploadedFileInfo-remove-button" onClick={() => setExcel(null)} >Remove File</button>
-    </div>
-  )
-
-} 
