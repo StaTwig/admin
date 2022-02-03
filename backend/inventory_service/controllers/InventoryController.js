@@ -879,7 +879,7 @@ exports.addInventoriesFromExcel = [
             skip = chunkSize * count;
             count++;
             limit = chunkSize * count;
-            const chunkedData = data.slice(skip, limit);
+            const chunkedData = resData.slice(skip, limit);
             let chunkUrls = [];
             const serialNumbers = chunkedData.map((inventory) => {
               return { id: inventory.serialNumber.trim() };
@@ -920,7 +920,7 @@ exports.addInventoriesFromExcel = [
                   const inventoryData = responses.map(
                     (response) => response.data
                   );
-                  if (limit < data.length) {
+                  if (limit < resData.length) {
                     recursiveFun();
                   }
                 })
@@ -930,13 +930,13 @@ exports.addInventoriesFromExcel = [
               });
           }
           recursiveFun();
-          for (const [index, prod] of data.entries()) {
+          for (const [index, prod] of resData.entries()) {
             let product = await ProductModel.findOne({
               name: prod.productName,
             });
             if (product) {
-              data[index].productId = product.id;
-              data[index].type = product.type;
+              resData[index].productId = product.id;
+              resData[index].type = product.type;
             } else {
               // console.log(product);
             }
@@ -994,7 +994,7 @@ exports.addInventoriesFromExcel = [
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
           event_data.stackholders.ca.address =
             CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data.products = [...data];
+          event_data.payload.data.products = [...resData];
           // logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
