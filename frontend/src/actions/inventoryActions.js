@@ -27,10 +27,18 @@ export const getInventories = (
   return async (dispatch) => {
     try {
       dispatch(turnOn());
+      let dateF = '';
+      if(fromDate && toDate){
+        if(fromDate !== toDate){
+          dateF = 'fromDate=' + fromDate + '&toDate=' + toDate;
+        }else{
+          dateF = 'date=' + fromDate;
+        }
+      }
       const result = await axios.get(
         `${
           config().getTransactions
-        }?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}&${fromDate ? 'fromDate=' + fromDate : ''}&${toDate ? 'toDate=' + toDate : ''}`
+        }?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}&${dateF}`
       );
       dispatch(setInventories(result.data.data.inventoryRecords));
       dispatch(setInventoriesCount(result.data.data.count));

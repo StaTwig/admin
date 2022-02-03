@@ -174,8 +174,6 @@ const Inventory = (props) => {
     setFromFilterDate(fromDate);
     if (value.length > 1) {
       const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
-      if(toDate)
-        toDate.setDate(toDate.getDate() + 1);
       setToFilterDate(toDate);
       dispatch(
       getInventories(
@@ -185,8 +183,8 @@ const Inventory = (props) => {
         productNameFilter,
         productCategoryFilter,
         statusFilter,
-        fromFilterDate.toLocaleDateString(),
-        toFilterDate.toLocaleDateString()
+        fromDate ? fromDate?.toISOString() : null,
+        toDate ? toDate?.toISOString() : null
       )
     );
     }
