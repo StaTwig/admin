@@ -1,40 +1,37 @@
-var mongoose = require('mongoose');
-var RecordSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const RecordSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     externalId: {
       type: String,
-      required: true,
-      unique: true,
-      default: 'SAP12345-2342',
     },
     creationDate: {
       type: String,
       required: true,
-      default: '2020-12-31T18:30:00.000Z',
+      default: "2020-12-31T18:30:00.000Z",
     },
     createdBy: {
       type: String,
       required: true,
-      default: 'user_id',
+      default: "user_id",
     },
     supplier: {
       type: Object,
       required: true,
       default: {
-        supplierOrganization: 'organization_id',
-        supplierIncharge: 'user_id',
+        supplierOrganization: "organization_id",
+        supplierIncharge: "user_id",
       },
     },
     customer: {
       type: Object,
       required: true,
       default: {
-        organization: 'organization_id',
-        incharge: 'user_id',
+        organization: "organization_id",
+        incharge: "user_id",
         shippingAddress: {
-          shippingAddressId: 'warehouseId',
-          shipmentReceiverId: 'userId',
+          shippingAddressId: "warehouseId",
+          shipmentReceiverId: "userId",
         },
       },
     },
@@ -43,30 +40,30 @@ var RecordSchema = new mongoose.Schema(
       required: false,
       default: [
         {
-          productId: 'product_id 1',
+          productId: "product_id 1",
           quantity: 12345,
           quantityDelivered: 345,
         },
       ],
     },
-    poStatus: { type: String, required: false, default: 'CREATED' },
-    lastUpdatedBy: { type: String, required: false, default: 'USER_ID' },
+    poStatus: { type: String, required: false, default: "CREATED" },
+    lastUpdatedBy: { type: String, required: false, default: "USER_ID" },
     lastUpdatedOn: {
       type: String,
       required: false,
-      default: '2020-12-31T18:30:00.000Z',
+      default: "2020-12-31T18:30:00.000Z",
     },
     shippingOrders: {
       type: Array,
       required: false,
       default: [
         {
-          orderId: 'SO1234567890',
-          createdBy: 'user_id',
-          assignedTo: ['warehouse_id 1', 'warehouse_id 2'],
-          updatedOn: '2020-01-01T18:30:00.000Z',
-          updatedBy: 'user_id',
-          status: 'CREATED_INQUEUE_PROCESSED',
+          orderId: "SO1234567890",
+          createdBy: "user_id",
+          assignedTo: ["warehouse_id 1", "warehouse_id 2"],
+          updatedOn: "2020-01-01T18:30:00.000Z",
+          updatedBy: "user_id",
+          status: "CREATED_INQUEUE_PROCESSED",
         },
       ],
     },
@@ -75,28 +72,28 @@ var RecordSchema = new mongoose.Schema(
       required: false,
       default: [
         {
-          id: 'SH1234567890',
+          id: "SH1234567890",
           label: {
-            id: 'uuid1234567899',
-            type: 'QR_2DBAR',
+            id: "uuid1234567899",
+            type: "QR_2DBAR",
           },
-          externalShipmentId: 'HYDROS123456ORP',
+          externalShipmentId: "HYDROS123456ORP",
           supplier: {
-            id: 'user_id',
-            locationId: 'warehouse_id',
+            id: "user_id",
+            locationId: "warehouse_id",
           },
           receiver: {
-            id: 'user_id',
-            locationId: 'warehouse_id',
+            id: "user_id",
+            locationId: "warehouse_id",
           },
-          shippingDate: '2021-01-01T18:30:00.000Z',
-          expectedDeliveryDate: '2021-01-03T18:30:00.000Z',
-          actualDeliveryDate: '2021-01-04T18:30:00.000Z',
-          shipmentStatus: 'PROCESSING_CREATED_SHIPPED_RECEIVED_LOST_DAMAGED',
-          transactionIds: ['tx_id 1', 'tx_id 2', 'tx_id 3'],
+          shippingDate: "2021-01-01T18:30:00.000Z",
+          expectedDeliveryDate: "2021-01-03T18:30:00.000Z",
+          actualDeliveryDate: "2021-01-04T18:30:00.000Z",
+          shipmentStatus: "PROCESSING_CREATED_SHIPPED_RECEIVED_LOST_DAMAGED",
+          transactionIds: ["tx_id 1", "tx_id 2", "tx_id 3"],
           products: [
             {
-              id: 'product_id 1',
+              id: "product_id 1",
               quantity: 345,
             },
           ],
@@ -104,6 +101,6 @@ var RecordSchema = new mongoose.Schema(
       ],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model('Record', RecordSchema);
+module.exports = mongoose.model("Record", RecordSchema);

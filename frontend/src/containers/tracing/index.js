@@ -7,7 +7,7 @@ import { chainOfCustody } from "../../actions/shipmentActions";
 import { useTranslation } from "react-i18next";
 
 const TracingContainer = (props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [trackData, setTrackData] = useState({});
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =

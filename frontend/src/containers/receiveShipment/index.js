@@ -4,20 +4,17 @@ import ReceiveShipment from "../../components/receiveShipment";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { getViewShipment } from "../../actions/shipmentActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const ReceiveShipmentContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [trackData, setTrackData] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
       const result = await dispatch(getViewShipment(props.match.params.id));
-      console.log("Test");
-      console.log(result);
       if (result) {
-        console.log(result);
         setTrackData(result);
       } else {
         setTrackData({});
@@ -28,9 +25,9 @@ const { t, i18n } = useTranslation();
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} t={t}/>
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} t={t}/>
+        <Sidebar {...props} t={t} />
         <div className='content'>
           <ReceiveShipment trackData={trackData} t={t} {...props} />
         </div>

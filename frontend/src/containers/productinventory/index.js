@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { getProducts } from "../../actions/poActions";
 import { getInventory } from "../../actions/inventoryActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const ProductInventoryContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const inventories = useSelector((state) => {

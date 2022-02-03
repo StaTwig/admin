@@ -53,8 +53,8 @@ function Table(props) {
         />
         <tbody>
           {orders.length === 0 && (
-            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
-              {t('no_records_found')}
+            <div className="FullWidth rTableRow pt-2 pb-2 text-center justify-content-center ">
+              <span className="text-muted shadow-none">{t('no_records_found')}</span>
             </div>
           )}
           {orders.map((order, index) => {
@@ -80,6 +80,10 @@ function Table(props) {
           } else if (order.poStatus === "PARTIALLYFULFILLED") {
             statusStyle = "bg-warning";
             status = t('partiallyfilled');
+          }
+          else if (order.poStatus === "CANCELLED") {
+            statusStyle = "bg-primary";
+            status = t('cancelled');
           }
 
             const { customer, products, supplier, creatorOrganisation } = order;

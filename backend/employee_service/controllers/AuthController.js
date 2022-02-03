@@ -188,7 +188,7 @@ exports.register = [
           empCounter.counters[4].format + empCounter.counters[4].value;
         const employeeStatus = "NOTAPPROVED";
         let addr = "";
-        //create organisation if doesn't exists
+        //create organization if doesn't exists
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
           const organisation = await OrganisationModel.findOne({
@@ -248,7 +248,6 @@ exports.register = [
                 name: region,
               },
               country: {
-                countryId: "001",
                 countryName: country,
               },
               configuration_id: "CONF000",
@@ -545,6 +544,7 @@ exports.verifyOtp = [
               org: user.msp,
               userName: user.emailId,
               preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           } else {
             userData = {
@@ -559,6 +559,7 @@ exports.verifyOtp = [
               org: user.msp,
               userName: user.emailId,
               preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           }
           //Prepare JWT token for authentication
@@ -568,8 +569,7 @@ exports.verifyOtp = [
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
-          const { role } = user;
-          userData.permissions = await RbacModel.findOne({ role });
+          userData.permissions = await RbacModel.findOne({ role: user.role });
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
           const bc_data = {

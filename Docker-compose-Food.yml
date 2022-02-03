@@ -217,21 +217,6 @@ services:
       - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
-  shippingorder:
-    build: "./backend/shippingOrder_service"
-    image: "shippingorder_service1.0"
-    container_name: "shippingOrder_service1.0"
-    restart: always
-    env_file:
-      - ./env/ledger.env
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.shippingorder.entrypoints=websecure"
-      - "traefik.http.routers.shippingorder.rule=Host(`test.foodledger.statledger.io`) && PathPrefix(`/shippingordermanagement/`)"
-      - "traefik.http.routers.shippingorder.tls=true"
-      - "traefik.http.routers.shippingorder.tls.certresolver=lets-encrypt"
-
   track:
     build: "./backend/track_trace"
     image: "track_trace1.0"

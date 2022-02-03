@@ -12,17 +12,17 @@ services:
       - "./traefik.toml:/traefik.toml"
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels:
-      # Dashboard
-      - traefik.enable=true
-      - traefik.docker.network=proxy
-      - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`test.traefik.vaccineledger.com`)
-      - traefik.http.routers.traefik.service=api@internal"
-      - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.tls.certresolver=lets-encrypt
-      - traefik.http.routers.traefik.middlewares=authtraefik
-      - traefik.http.middlewares.authtraefik.basicauth.users=user:admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/
+    # labels:
+    #   # Dashboard
+    #   - traefik.enable=true
+    #   - traefik.docker.network=proxy
+    #   - traefik.http.routers.traefik.entrypoints=websecure
+    #   - traefik.http.routers.traefik.rule=Host(`test.traefik.vaccineledger.com`)
+    #   - traefik.http.routers.traefik.service=api@internal"
+    #   - traefik.http.routers.traefik.tls=true
+    #   - traefik.http.routers.traefik.tls.certresolver=lets-encrypt
+    #   - traefik.http.routers.traefik.middlewares=authtraefik
+    #   - traefik.http.middlewares.authtraefik.basicauth.users=user:admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/
 
   cache:
     image: "redis"
@@ -251,24 +251,6 @@ services:
       - "traefik.http.routers.shipment.rule=Host(`test.vaccineledger.com`) && PathPrefix(`/shipmentmanagement/`)"
       - "traefik.http.routers.shipment.tls=true"
       - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
-
-  shippingorder:
-    build: "./backend/shippingOrder_service"
-    image: "shippingorder_service1.0"
-    container_name: "shippingOrder_service1.0"
-    restart: always
-    env_file:
-      - ./env/ledger.env
-    depends_on:
-      - cache
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.shippingorder.entrypoints=websecure"
-      - "traefik.http.routers.shippingorder.rule=Host(`test.vaccineledger.com`) && PathPrefix(`/shippingordermanagement/`)"
-      - "traefik.http.routers.shippingorder.tls=true"
-      - "traefik.http.routers.shippingorder.tls.certresolver=lets-encrypt"
-
   track:
     build: "./backend/track_trace"
     image: "track_trace1.0"

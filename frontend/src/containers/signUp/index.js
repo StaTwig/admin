@@ -8,8 +8,9 @@ import { useDispatch } from "react-redux";
 import Modal from "../../shared/modal";
 import OrganisationPopUp from "../../components/signUp/organisationPopUp";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 const SignupContainer = (props) => {
+  const { i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -49,7 +50,7 @@ const SignupContainer = (props) => {
     }
 
     dispatch(turnOn());
-    const result = await registerUser(data);
+    const result = await registerUser(data, i18n.language);
     if (result.status === 200) {
       setShowModal(false);
       setAdminAwaiting(true);

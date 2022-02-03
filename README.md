@@ -18,23 +18,21 @@ Branch out from `development` , Merge requests shall be to development, no direc
 
 # Ports for different services:
 
-|        Services         | Docker Port |
-| :---------------------: | :---------: |
-|     usermanagement      |    3001     |
-|   shipmentmanagement    |    3002     |
-|     alertmanagement     |    3004     |
-|  tracktracemanagement   |    3005     |
-| notificationmanagement  |    3006     |
-|   inventorymanagement   |    3007     |
-|  blockchainmanagement   |    3008     |
-|    productmanagement    |    3010     |
-|     rbacmanagement      |    3011     |
-|      pomanagement       |    3012     |
-| shippingordermanagement |    3013     |
-|     eventmanagement     |    3014     |
-|   analyticsmanagement   |    3015     |
-|    AdvancedAnalytics    |    3016     |
-|   lastmilemanagement    |    3017     |
+|        Services        | Docker Port |
+| :--------------------: | :---------: |
+|     usermanagement     |    3001     |
+|   shipmentmanagement   |    3002     |
+|    alertmanagement     |    3004     |
+|  tracktracemanagement  |    3005     |
+| notificationmanagement |    3006     |
+|  inventorymanagement   |    3007     |
+|   productmanagement    |    3010     |
+|     rbacmanagement     |    3011     |
+|      pomanagement      |    3012     |
+|    eventmanagement     |    3013     |
+|  analyticsmanagement   |    3014     |
+|   AdvancedAnalytics    |    3015     |
+|   lastmilemanagement   |    3016     |
 
 # Flow
 
@@ -56,13 +54,9 @@ Dependencies can be installed by running `dependencyinstaller.sh`
 **Docker with Docker Compose**
 
 - [x] Every Service has a Dockerfile in its root folder, which reflects in building that Docker Image.
-
 - [x] Docker-compose.yml file present in root of Repository has all the docker service configuration , Traefik routing rules and Loadbalancing.
-
 - [x] There are multiple versions of Docker-compose-_-_.yml for partiucular deployments
-
 - [x] All static configuration of Traefik is present in "traefik.toml" file
-
 - [x] Dynamic Configuration is present in the file "traefik_dynamic.toml" . Security Configuration is also included
 
 * Important
@@ -72,17 +66,13 @@ Dependencies can be installed by running `dependencyinstaller.sh`
 - If acme.json doesn't exit:
 
 - [x] Create a file, by `touch acme.json`
-
 - [x] Permission to file , `sudo chmod 600 acme.json`
 
 ## Deployment Steps:
 
 1. Login to server
-
 2. Git clone for fresh deployment or git pull to pull latest changes
-
 3. Run Dependency installer script to download Docker Engine , Docker Compose and create Docker Network named : Proxy
-
 4. Create a folder `env`
 
 ```
@@ -100,8 +90,6 @@ docker-compose -f Docker-compose.yml build
 Builds all the docker containers as images and docker can caches the old ones
 
 All new built images are tagged with `latest` tag
-
-6.
 
 ```
 docker-compse -f Docker-compose.yml up -d
@@ -166,7 +154,6 @@ $ sudo service docker restart
 ## Notice :
 
 - Don't store any data that needs to be persistent in the services, as docker containers are volatile and data can be lost , for every docker image restart / New start
-
 - We are not binding an Volume to docker containers
 
 ## Working with Redis
