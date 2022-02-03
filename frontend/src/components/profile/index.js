@@ -370,11 +370,12 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className='form-group'>
+                    <div className='form-group2'>
                       <label htmlFor='shipmentId'>{t("phone")}</label>
                       <PhoneInput
-                        className='form-group'
-                        country={"in"}
+                        className='form-group mobile-number'
+                        country={"cr"}
+                        preferredCountries={["cr"]}
                         placeholder={t("enter_phone_number")}
                         // style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}

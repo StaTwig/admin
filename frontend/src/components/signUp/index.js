@@ -432,7 +432,8 @@ const FormPage = (props) => {
                             </div>
 
                             <PhoneInput
-                              country={"in"}
+                              country={"cr"}
+                              preferredCountries={["cr"]}
                               placeholder={t('enter_phone_number')}
                               inputProps={{
                                 name: "phone",
