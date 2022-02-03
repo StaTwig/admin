@@ -29,15 +29,15 @@ const AddCategory = (props) => {
   const [catNameErr, setCategoryNameErr] = useState(false);
   const [catDescErr, setDescErr] = useState(false);
   const validation = () => {
-    if (categoryName === "" || description === "") {
+    if (categoryName === "") {
       if (categoryName === "") {
         setCategoryNameErr(true);
         setBtnVisible(false);
       }
-      if (description === "") {
-        setDescErr(true);
-        setBtnVisible(false);
-      }
+      // if (description === "") {
+      //   setDescErr(true);
+      //   setBtnVisible(false);
+      // }
     } else {
       return true;
     }
@@ -126,7 +126,7 @@ const AddCategory = (props) => {
                 </div>
                 <div className='form-group'>
                   <label
-                    className='required-field'
+                    // className='required-field'
                     htmlFor='shipmentId'
                     style={{ textAlign: "right", paddingRight: "50px" }}
                   >

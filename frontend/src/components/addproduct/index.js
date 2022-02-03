@@ -17,14 +17,13 @@ import DropdownButton from "./ProductsDropDown";
 import add_icon from "../../assets/icons/add_blue.png";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const AddProduct = (props) => {
   const { t } = props;
-  const [manufacturer, setManufacturer] = useState(
-    t("select") + " " + t("manufacturer")
-  );
-  const [otherManufacturer, setOtherManufacturer] = useState("");
-  const [category, setCategory] = useState(t("select_category"));
+  const [manufacturer, setManufacturer] = useState();
+  const [category, setCategory] = useState();
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productName, setProductName] = useState("");
@@ -43,7 +42,7 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
-      setManufacturers(manufacturers => [...manufacturers, "Other"])
+      // setManufacturers(manufacturers => [...manufacturers, "Other"])
       const result = await getProducts();
       const categoryArray = result.map((product) => product.type);
       setCategories(
@@ -61,33 +60,25 @@ const AddProduct = (props) => {
   const [categoryErr, setCategoryErr] = useState(false);
   const [UOMErr, setUOMErr] = useState(false);
   const [descErr, setDescErr] = useState(false);
-  const [otherManufacturerErr, setOtherManufacturerErr] = useState(false);
   const validation = () => {
+    console.log("Manufacturer from valid:", manufacturer)
     if (
       productName === "" ||
-      manufacturer === t("select") + " " + t("manufacturer") ||
-      category === t("select_category") ||
-      UOM === "" ||
-      description === "" ||
-      (manufacturer=="Other"&&otherManufacturer=="")
+      manufacturer === undefined ||
+      category === undefined ||
+      UOM === ""
     ) {
       if (productName === "") {
         setPdNameErr(true);
       }
-      if (manufacturer === t("select") + " " + t("manufacturer")) {
+      if (manufacturer === undefined) {
         setManufacturerErr(true);
       }
-      if (category === t("select_category")) {
+      if (category === undefined) {
         setCategoryErr(true);
       }
       if (UOM === "") {
         setUOMErr(true);
-      }
-      if (description === "") {
-        setDescErr(true);
-      }
-      if(manufacturer=="Other"&&otherManufacturer==""){
-        setOtherManufacturerErr(true);
       }
     } else {
       return true;
@@ -98,13 +89,9 @@ const AddProduct = (props) => {
     const isValid = validation();
     if (isValid) {
       let formData = new FormData();
-
-      if(manufacturer!="Other"){
-        formData.append("manufacturer", manufacturer);
-      }
-      else{
-        formData.append("manufacturer", otherManufacturer);
-      }
+      // console.log("Manufacturer from API:", manufacturer);
+      console.log("Category:", category);
+      formData.append("manufacturer", manufacturer);
       // let unitofMeasure =
       formData.append("name", productName);
       formData.append("shortName", productName);
@@ -142,6 +129,16 @@ const AddProduct = (props) => {
   //   setExcel(evt.target.files[0]);
   // };
 
+  const defaultPropsManufacturer = {
+    options: manufacturers,
+    getOptionLabel: (option) => option,
+  };
+
+  const defaultPropsCategory = {
+    options: categories,
+    getOptionLabel: (option) => option,
+  };
+
   return (
     <div className='addproduct'>
       <div
@@ -156,7 +153,7 @@ const AddProduct = (props) => {
         {/* <div className="d-flex flex-column align-items-center"> */}
         <button
           className='btn-primary btn fontSize20 font-bold mt-1 ml-2'
-          // onClick={() => setMenu(!menu)}
+        // onClick={() => setMenu(!menu)}
         >
           <div className='d-flex align-items-center'>
             <img
@@ -210,7 +207,7 @@ const AddProduct = (props) => {
                   display: "flex",
                   width: "12rem",
                   flexDirection: "row",
-                  alignItems:"center",
+                  alignItems: "center",
                   justifyContent: "center",
                 }}
               >
@@ -220,7 +217,7 @@ const AddProduct = (props) => {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    whiteSpace:"nowrap",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   <img
@@ -249,9 +246,8 @@ const AddProduct = (props) => {
                   <label htmlFor='shipmentId'> {t("product_name")}</label>
                   <input
                     type='text'
-                    className={`form-control ${
-                      pdNameErr ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${pdNameErr ? "border-danger" : ""
+                      }`}
                     name='product'
                     placeholder={t("enter") + " " + t("product_name")}
                     onChange={(e) => {
@@ -266,63 +262,106 @@ const AddProduct = (props) => {
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("manufacturer")}</label>
                   <div
-                    className={`form-control ${
-                      manufacturerErr ? "border-danger" : ""
-                    }`}
+                    className={`w-100 ${manufacturerErr ? "border-danger" : ""
+                      }`}
                   >
-                    <DropdownButton
-                      name={manufacturer}
-                      onSelect={(item) => {
+                    <Autocomplete
+                      {...defaultPropsManufacturer}
+                      id='manufacturer'
+                      value={manufacturer ? manufacturer : ""}
+                      onChange={(event, newValue) => {
+                        setManufacturer(newValue);
                         setManufacturerErr(false);
-                        setManufacturer(item);
+                        // console.log("Manufacturer:", manufacturer);
+                        // console.log("Manufacturer:", manufacturer)
                       }}
-                      groups={manufacturers}
-                      required
+                      inputValue={manufacturer ? manufacturer : ""}
+                      onInputChange={(event, newInputValue) => {
+                        setManufacturer(newInputValue);
+                        setManufacturerErr(false);
+                        // console.log("Manufacturer:", manufacturer)
+                      }}
+                      // style={{width:'5vw'}}
+                      id='controllable-states-demo'
+                      autoComplete
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          className={`${manufacturerErr ? "border-danger" : ""
+                            }`}
+                          name='Manufacturer'
+                          // margin='normal'
+                          variant='outlined'
+                          placeholder={t('enter_manufacturer')}
+                        />
+                      )}
                     />
+                    {manufacturerErr && (
+                      <span
+                        className='error-msg text-danger mt-3 '
+                        style={{ top: "-10px", left: "0px" }}
+                      >
+                        {t('enter_manufacturer')}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-              {manufacturer=="Other" && 
-              <div className='flex-row'>
-              <div className='form-group'>
-                <label htmlFor='shipmentId'>{t("Other Manufacturer")}</label>
-                <input
-                  type='text'
-                  className={`form-control ${otherManufacturerErr ? "border-danger" : ""}`}
-                  name='otherManufacturer'
-                  placeholder={t("enter") + " " + t("manufacturer")}
-                  onChange={(e) => {
-                    setManufacturerErr(false);
-                    setOtherManufacturer(e.target.value);
-                    console.log("Manufacturer", otherManufacturer);
-                  }}
-                />
-              </div>
-            </div>}
               <div className='flex-row'>
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("product_category")}</label>
-                  {/* <input
-                    type='text'
-                    className='form-control'
-                    name='productcategory'
-                    placeholder='Enter Product-Category'
-                    onChange={(e) => setCategory(e.target.value)}
-                    value={category}
-                  /> */}
                   <div
-                    className={`form-control ${
-                      categoryErr ? "border-danger" : ""
-                    }`}
+                    className={`w-100 ${categoryErr ? "border-danger" : ""
+                      }`}
                   >
-                    <DropdownButton
+                    {/* <DropdownButton
                       name={category}
                       onSelect={(item) => {
                         setCategoryErr(false);
                         setCategory(item);
                       }}
                       groups={categories}
+                    /> */}
+
+                    <Autocomplete
+                      {...defaultPropsCategory}
+                      id='category'
+                      value={category ? category : ""}
+                      onChange={(event, newValue) => {
+                        setCategory(newValue);
+                        setCategoryErr(false);
+                        // console.log("Manufacturer:", manufacturer);
+                        // console.log("Manufacturer:", manufacturer)
+                      }}
+                      inputValue={category ? category : ""}
+                      onInputChange={(event, newInputValue) => {
+                        setCategory(newInputValue);
+                        setCategoryErr(false);
+                        // console.log("Manufacturer:", manufacturer)
+                      }}
+                      // style={{width:'5vw'}}
+                      id='controllable-states-demo'
+                      autoComplete
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          className={`${categoryErr ? "border-danger" : ""
+                            }`}
+                          name='Category'
+                          // margin='normal'
+                          variant='outlined'
+                          placeholder={t('product_category')}
+                        />
+                      )}
                     />
+                    {categoryErr && (
+                      <span
+                        className='error-msg text-danger mt-3 '
+                        style={{ top: "-10px", left: "0px" }}
+                      >
+                        {t('product_category')}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -363,7 +402,7 @@ const AddProduct = (props) => {
               <button
                 className='fontSize20 font-bold mr-4 addNewBtn'
                 onClick={() => props.history.push("/addNewCategory")}
-                // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
+              // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
               >
                 <img src={Add} width='10' height='10' className='mr-2' alt='' />
                 <span style={{ fontSize: "1vw" }}>{t("add_new_category")}</span>
