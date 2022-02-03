@@ -26,9 +26,16 @@ export const addWarehouse = async (data) => {
   }
 };
 
-export const verifyOtp = async (data) => {
+export const verifyOtp = async (data, language) => {
   try {
-    const result = await axios.post(config().verifyOtpUrl, data);
+    if (language === undefined) {
+      language = "en";
+    }
+    const result = await axios.post(config().verifyOtpUrl, data, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
     return result;
   } catch (e) {
     return e.response;
@@ -80,18 +87,32 @@ export const updateWarehouse = async (data, id) => {
   }
 };
 
-export const registerUser = async (data) => {
+export const registerUser = async (data, language) => {
   try {
-    const result = await axios.post(config().registerUrl, data);
+    if (language === undefined) {
+      language = "en";
+    }
+    const result = await axios.post(config().registerUrl, data, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
     return result;
   } catch (e) {
     return e.response;
   }
 };
 
-export const sendOtp = async (data) => {
+export const sendOtp = async (data, language) => {
   try {
-    const result = await axios.post(config().sendOtpUrl, data);
+    if (language === undefined) {
+      language = "en";
+    }
+    const result = await axios.post(config().sendOtpUrl, data, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
     return result;
   } catch (e) {
     return e.response;

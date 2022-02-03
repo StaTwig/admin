@@ -9,10 +9,10 @@ import moment from "moment";
 import { useIotShipmentData } from "../../hooks/useIotShipmentData";
 import { config } from "../../config";
 import queryString from "query-string";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const TrackContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
@@ -136,11 +136,16 @@ const { t, i18n } = useTranslation();
     setViewIotTemperatureSplineline(false);
   };
 
-  const [trackTraceData, setTrackTraceData] = useState({setValue: '', value: '', resetData: '', setIsSubmitted: ''});
+  const [trackTraceData, setTrackTraceData] = useState({
+    setValue: "",
+    value: "",
+    resetData: "",
+    setIsSubmitted: "",
+  });
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} t={t}/>
+      <Header {...props} t={t} />
       <div className='d-flex'>
         <Sidebar {...props} t={t} trackTraceData={trackTraceData} />
         <div className='content'>

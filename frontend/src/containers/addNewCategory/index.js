@@ -2,10 +2,10 @@ import React from "react";
 import AddNewCategory from "../../components/addNewCategory";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const AddNewCategoryContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <div className='container-fluid p-0'>
       <Header {...props} t={t} />

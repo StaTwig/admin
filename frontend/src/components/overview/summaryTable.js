@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import EmptyShipments from "../../assets/icons/EmptyShipments-min.png";
 import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
 import shippment from "../../assets/icons/shipment_id.png";
@@ -9,8 +8,11 @@ import shippmentdate from "../../assets/icons/ShippingDate.svg";
 import sent from "../../assets/icons/Sent.svg";
 import received from "../../assets/icons/Received1.svg";
 import status from "../../assets/icons/Status.svg";
+import EmptyShipment from "../../assets/icons/Mt-Shipment.webp";
+import EmptyShipmentEs from "../../assets/icons/Mt-Shipment-Es.webp";
 
 import { formatDate } from "../../utils/dateHelper";
+import OverviewEmptyPage from "./OverviewEmptyPage";
 
 const SummaryTable = (props) => {
   const profile = useSelector((state) => {
@@ -22,12 +24,7 @@ const SummaryTable = (props) => {
       {shipments.length === 0 ? (
         <div className='summaryTable justify-content-center '>
           <div className='d-flex flex-column '>
-            <img
-              src={EmptyShipments}
-              height='200'
-              width='200'
-              alt='Shipments'
-            />
+          <img src={t('english') === "English" ? EmptyShipment : t('english') === "Inglés" ? EmptyShipmentEs : EmptyShipment } height='200' width='200' alt='Shipment' />
           </div>
         </div>
       ) : (

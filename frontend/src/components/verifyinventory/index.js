@@ -42,19 +42,18 @@ const VerifyInventory = (props) => {
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber,
-        unitOfMeasure:inventory?.unitofMeasure?.name
+        unitOfMeasure: inventory?.unitofMeasure?.name,
       };
     });
 
-    // console.log('PostData', postData);
     const result = await addProductsToInventory({
       products: postData,
     });
     setOpenCreatedInventory(true);
-    if (result.success) {
-      setSuccessMessage(result.message);
+    if (result.data.success) {
+      setSuccessMessage(result.data.message);
     } else {
-      setErrorMessage(result.message);
+      setErrorMessage(result.data.message);
     }
     dispatch(turnOff());
     dispatch(resetReviewInventories());
@@ -67,119 +66,120 @@ const VerifyInventory = (props) => {
   return (
     <div className='verifyinventory'>
       <div className='d-flex flex-row justify-content-between'>
-        <h1 className='breadcrumb mt-2'>{t('review_inventory')}</h1>
+        <h1 className='breadcrumb mt-2'>{t("review_inventory")}</h1>
         {/* <button type="button" className="btn btn-outline-info">
           Export
         </button> */}
       </div>
       <div className='card'>
         <div className='card-body'>
-          <h5 className='head ml-1'>{t('description_of_goods')}</h5>
+          <h5 className='head ml-1'>{t("description_of_goods")}</h5>
           <div>
             <div className='row p1-1 mt-4'>
               <span className='col-3'>
                 <img src={Product} width='15' height='15' alt='Product' />
-                <span className='ml-1 text-muted'>{t('product_name')}</span>
+                <span className='ml-1 text-muted'>{t("product_name")}</span>
               </span>
               <span className='col-2'>
                 <img
                   src={Manufacturer}
                   width='15'
                   height='15'
-                  alt={t('manufacturer')}
+                  alt={t("manufacturer")}
                 />
-                <span className='ml-1 text-muted'>{t('manufacturer')}</span>
+                <span className='ml-1 text-muted'>{t("manufacturer")}</span>
               </span>
               <span
                 className='col-1'
                 style={{ position: "relative", left: "-40px" }}
               >
                 <img src={Quantity} width='24' height='15' alt='Quantity' />
-                <span className='ml-1 text-muted'>{t('quantity')}</span>
+                <span className='ml-1 text-muted'>{t("quantity")}</span>
               </span>
               <span className='col-1'>
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
-                <span className='ml-1 text-muted'>{t('mfg_date')}</span>
+                <span className='ml-1 text-muted'>{t("mfg_date")}</span>
               </span>
               <span className='col-1'>
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
-                <span className='ml-1 text-muted'>{t('exp_date')}</span>
+                <span className='ml-1 text-muted'>{t("exp_date")}</span>
               </span>
               <span className='col-2'>
                 <img src={Batch} width='15' height='15' alt='Batch' />
-                <span className='ml-1 text-muted'>{t('batch_no')}</span>
+                <span className='ml-1 text-muted'>{t("batch_no")}</span>
               </span>
               <span
                 className='col-2'
                 style={{ position: "relative", left: "-60px" }}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
-                <span className='ml-1 text-muted'>{t('serial_numbers')}</span>
+                <span className='ml-1 text-muted'>{t("serial_numbers")}</span>
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
-              console.log('Individual Details', reviewInventory);
-              console.log("Bool", typeof reviewInventory.unitofMeasure === 'object')
+              console.log("Individual Details", reviewInventory);
+              console.log(
+                "Bool",
+                typeof reviewInventory.unitofMeasure === "object"
+              );
               return (
-              <div className='row p-1 mt-4'>
-                <span className='col-3'>{reviewInventory.productName}</span>
-                <span className='col-2'>
-                  {reviewInventory.manufacturer
-                    ? reviewInventory.manufacturer
-                    : reviewInventory.manufacturerName}
-                </span>
-                <span
-                  className='col-1 text-right'
-                  style={{ position: "relative", left: "-50px" }}
-                >
-                  {reviewInventory['quantity']}
-                  <span>{"("}</span>
-                  {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
-                  <span>{")"}</span>
-                </span>
-                <span className='col-1'>
-                  {reviewInventory.manufacturingDate
-                    ? `0${
-                        new Date(
-                          Date.parse(reviewInventory.manufacturingDate)
-                        ).getMonth() + 1
-                      }`.slice(-2) +
+                <div className='row p-1 mt-4'>
+                  <span className='col-3'>{reviewInventory.productName}</span>
+                  <span className='col-2'>
+                    {reviewInventory.manufacturer
+                      ? reviewInventory.manufacturer
+                      : reviewInventory.manufacturerName}
+                  </span>
+                  <span
+                    className='col-1 text-right'
+                    style={{ position: "relative", left: "-50px" }}
+                  >
+                    {reviewInventory['quantity']}
+                    <span>{"("}</span>
+                    {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
+                    <span>{")"}</span>
+                  </span>
+                  <span className='col-1'>
+                    {reviewInventory.manufacturingDate
+                      ? `0${new Date(
+                        Date.parse(reviewInventory.manufacturingDate)
+                      ).getMonth() + 1
+                        }`.slice(-2) +
                       "/" +
                       new Date(
                         Date.parse(reviewInventory.manufacturingDate)
                       ).getFullYear()
-                    : ""}
-                </span>
-                <span className='col-1'>
-                  {reviewInventory.expiryDate
-                    ? `0${
-                        new Date(
-                          Date.parse(reviewInventory.expiryDate)
-                        ).getMonth() + 1
-                      }`.slice(-2) +
+                      : ""}
+                  </span>
+                  <span className='col-1'>
+                    {reviewInventory.expiryDate
+                      ? `0${new Date(
+                        Date.parse(reviewInventory.expiryDate)
+                      ).getMonth() + 1
+                        }`.slice(-2) +
                       "/" +
                       new Date(
                         Date.parse(reviewInventory.expiryDate)
                       ).getFullYear()
-                    : ""}
-                </span>
-                <span className='col-2'>{reviewInventory.batchNumber}</span>
-                <span
-                  className='col-2'
-                  style={{ position: "relative", left: "-55px" }}
-                >
-                  {reviewInventory.serialNumber}
-                </span>
-              </div>
-            );
-          })}
+                      : ""}
+                  </span>
+                  <span className='col-2'>{reviewInventory.batchNumber}</span>
+                  <span
+                    className='col-2'
+                    style={{ position: "relative", left: "-55px" }}
+                  >
+                    {reviewInventory.serialNumber}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <hr />
           <div className=''>
             <div className='d-flex flex-row-reverse'>
               <button className='btn-primary btn' onClick={onAssign}>
-                <b>{t('save')}</b>
+                <b>{t("save")}</b>
               </button>
               {reviewInventories.length > 0 &&
                 reviewInventories[0].manufacturer && (
@@ -192,10 +192,10 @@ const VerifyInventory = (props) => {
                       width='15'
                       height='15'
                       className='mr-3'
-                      alt={t('edit')}
+                      alt={t("edit")}
                     />
                     <span>
-                    <b>{t('edit')}</b>
+                      <b>{t('edit')}</b>
                     </span>
                   </button>
                 )}
@@ -208,6 +208,7 @@ const VerifyInventory = (props) => {
                     onHide={closeModal} //FailurePopUp
                     successMessage={successMessage}
                     errorMessage={errorMessage}
+                    t={t}
                   />
                 </Modal>
               )}

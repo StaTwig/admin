@@ -125,7 +125,7 @@ const FormLoginPage = (props) => {
                       {" "}
                       <Alert variant='filled' severity='error'>
                         <AlertTitle>{t('error')}</AlertTitle>
-                        {errorMessage}
+                        {t(errorMessage)}
                       </Alert>
                     </div>
                   )}
