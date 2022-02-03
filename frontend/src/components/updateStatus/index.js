@@ -230,10 +230,10 @@ const UpdateStatus = (props) => {
           const errors = {};
 
           if (!values.shipmentId) {
-            errors.shipmentId = "Required";
+            errors.shipmentId = t("Required");
           }
           if (!values.updateStatusLocation) {
-            errors.updateStatusLocation = "Required";
+            errors.updateStatusLocation = t("Required");
           }
           // if (!values.comments) {
           //   errors.comments = "Required";
@@ -386,9 +386,7 @@ const UpdateStatus = (props) => {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
-                          placeholder={` ${
-                            values.updateStatusLocation == "" ? "Required" : ""
-                          }`}
+                          placeholder={` ${values.updateStatusLocation==""? t('Required'):''}`}
                         />
                         {/* {errors.updateStatusLocation && touched.updateStatusLocation && (
                           <label className="error-msg text-danger mb-1">
@@ -908,8 +906,8 @@ const UpdateStatus = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
-            onHide={closeModal}
-            t={t} //FailurePopUp
+            onHide={closeModal} //FailurePopUp
+            t={t}
           />
         </Modal>
       )}

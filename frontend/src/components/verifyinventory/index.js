@@ -50,10 +50,10 @@ const VerifyInventory = (props) => {
       products: postData,
     });
     setOpenCreatedInventory(true);
-    if (result.success) {
-      setSuccessMessage(result.message);
+    if (result.data.success) {
+      setSuccessMessage(result.data.message);
     } else {
-      setErrorMessage(result.message);
+      setErrorMessage(result.data.message);
     }
     dispatch(turnOff());
     dispatch(resetReviewInventories());
@@ -134,38 +134,33 @@ const VerifyInventory = (props) => {
                     className='col-1 text-right'
                     style={{ position: "relative", left: "-50px" }}
                   >
-                    {reviewInventory["quantity"]}
+                    {reviewInventory['quantity']}
                     <span>{"("}</span>
-                    {typeof reviewInventory.unitofMeasure === "object" &&
-                    reviewInventory.unitofMeasure != null
-                      ? reviewInventory.unitofMeasure.name
-                      : reviewInventory["unitOfMeasure.name"]}
+                    {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
                     <span>{")"}</span>
                   </span>
                   <span className='col-1'>
                     {reviewInventory.manufacturingDate
-                      ? `0${
-                          new Date(
-                            Date.parse(reviewInventory.manufacturingDate)
-                          ).getMonth() + 1
+                      ? `0${new Date(
+                        Date.parse(reviewInventory.manufacturingDate)
+                      ).getMonth() + 1
                         }`.slice(-2) +
-                        "/" +
-                        new Date(
-                          Date.parse(reviewInventory.manufacturingDate)
-                        ).getFullYear()
+                      "/" +
+                      new Date(
+                        Date.parse(reviewInventory.manufacturingDate)
+                      ).getFullYear()
                       : ""}
                   </span>
                   <span className='col-1'>
                     {reviewInventory.expiryDate
-                      ? `0${
-                          new Date(
-                            Date.parse(reviewInventory.expiryDate)
-                          ).getMonth() + 1
+                      ? `0${new Date(
+                        Date.parse(reviewInventory.expiryDate)
+                      ).getMonth() + 1
                         }`.slice(-2) +
-                        "/" +
-                        new Date(
-                          Date.parse(reviewInventory.expiryDate)
-                        ).getFullYear()
+                      "/" +
+                      new Date(
+                        Date.parse(reviewInventory.expiryDate)
+                      ).getFullYear()
                       : ""}
                   </span>
                   <span className='col-2'>{reviewInventory.batchNumber}</span>
@@ -200,7 +195,7 @@ const VerifyInventory = (props) => {
                       alt={t("edit")}
                     />
                     <span>
-                      <b>{t("edit")}</b>
+                      <b>{t('edit')}</b>
                     </span>
                   </button>
                 )}
@@ -213,6 +208,7 @@ const VerifyInventory = (props) => {
                     onHide={closeModal} //FailurePopUp
                     successMessage={successMessage}
                     errorMessage={errorMessage}
+                    t={t}
                   />
                 </Modal>
               )}

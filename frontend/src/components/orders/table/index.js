@@ -81,6 +81,10 @@ function Table(props) {
             statusStyle = "bg-warning";
             status = t('partiallyfilled');
           }
+          else if (order.poStatus === "CANCELLED") {
+            statusStyle = "bg-primary";
+            status = t('cancelled');
+          }
 
             const { customer, products, supplier, creatorOrganisation } = order;
             return (

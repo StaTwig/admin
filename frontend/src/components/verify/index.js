@@ -113,7 +113,7 @@ const FormVerifyPage = (props) => {
                                 borderRadius: 0,
                               }}
                               className={`form-control text-center mr-5 ${
-                                errors.otp0 && touched.otp0
+                                errors[`otp${index}`] && touched[`otp${index}`] || (errors.otp0 && touched.otp0)
                                   ? "border-danger"
                                   : ""
                               }`}
