@@ -34,5 +34,8 @@
   "image_upload_success": "Imagen cargada con éxito",
   "image_upload_error": "Carga de imagen fallida. Marque el tipo de acción que desea realizar STOREID/KYCNEW/KYCUPLOAD",
   "image_not_found": "Imagen no encontrada. Número de identificación y tipo coincidentes no encontrados. STOREID/Aadhar/Pasaporte",
-  "image_success": "Imagen"
+  "image_success": "Imagen",
+  "no_token": "Token de autorización no encontrado",
+  "expired_token": "Ficha caducada. Por favor inicie sesión de nuevo",
+  "invalid_token": "Simbolo no valido. Por favor inicie sesión de nuevo"
 }
