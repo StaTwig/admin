@@ -18,7 +18,7 @@ import Serial from "../../assets/icons/serial.png";
 import "./style.scss";
 
 const VerifyInventory = (props) => {
-  const { t } = props;
+  const { t, i18n } = props;
   const dispatch = useDispatch();
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
@@ -61,6 +61,9 @@ const VerifyInventory = (props) => {
     props.history.push("/newinventory");
   };
 
+
+  const schemaClass =  'ml-1 text-muted text-review-column';
+
   return (
     <div className='verifyinventory'>
       <div className='d-flex flex-row justify-content-between'>
@@ -76,7 +79,7 @@ const VerifyInventory = (props) => {
             <div className='row p1-1 mt-4'>
               <span className='col-3' style={{ flex: "0 0 20%" }}>
                 <img src={Product} width='15' height='15' alt='Product' />
-                <span className='ml-1 text-muted'>{t("product_name")}</span>
+                <span className={schemaClass}>{t("product_name")}</span>
               </span>
               <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
                 <img
@@ -85,7 +88,7 @@ const VerifyInventory = (props) => {
                   height='15'
                   alt={t("manufacturer")}
                 />
-                <span className='ml-1 text-muted'>{t("manufacturer")}</span>
+                <span  className={schemaClass}>{t("manufacturer")}</span>
               </span>
               <span
                 className='col-1'
@@ -96,29 +99,29 @@ const VerifyInventory = (props) => {
                   maxWidth: "11.333333%",
                 }}
               >
-                <img src={Quantity} width='24' height='15' alt='Quantity' />
-                <span className='ml-1 text-muted'>{t("quantity")}</span>
+                <img src={Quantity} width='15' height='15' alt='Quantity' />
+                <span  className={schemaClass}>{t("quantity")}</span>
               </span>
               <span
                 className='col-1'
                 style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
               >
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
-                <span className='ml-1 text-muted'>{t("mfg_date")}</span>
+                <span  className={schemaClass}>{t("mfg_date")}</span>
               </span>
               <span
                 className='col-1'
                 style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
               >
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
-                <span className='ml-1 text-muted'>{t("exp_date")}</span>
+                <span  className={schemaClass}>{t("exp_date")}</span>
               </span>
               <span
                 className='col-2'
                 style={{ flex: "0 0 15.666667%", maxWidth: "15.666667%" }}
               >
                 <img src={Batch} width='15' height='15' alt='Batch' />
-                <span className='ml-1 text-muted'>{t("batch_no")}</span>
+                <span  className={schemaClass}>{t("batch_no")}</span>
               </span>
               <span
                 className='col-2'
@@ -130,7 +133,7 @@ const VerifyInventory = (props) => {
                 }}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
-                <span className='ml-1 text-muted'>{t("serial_numbers")}</span>
+                <span  className={schemaClass}>{t("serial_numbers")}</span>
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
@@ -194,7 +197,7 @@ const VerifyInventory = (props) => {
                         ).getFullYear()
                       : ""}
                   </span>
-                  <span className='col-2'>{reviewInventory.batchNumber}</span>
+                  <span className={i18n.language === 'en' ? 'col-2' : 'col-1'}>{reviewInventory.batchNumber}</span>
                   <span
                     className='col-2'
                     style={{

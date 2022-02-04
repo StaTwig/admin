@@ -866,6 +866,9 @@ exports.addInventoriesFromExcel = [
             workbook.Sheets[sheet_name_list[0]],
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
+
+          const resData = utility.excludeExpireProduct(data);
+
           const { address } = req.user;
           let start = new Date();
           let count = 0;
@@ -877,7 +880,7 @@ exports.addInventoriesFromExcel = [
             skip = chunkSize * count;
             count++;
             limit = chunkSize * count;
-            const chunkedData = data.slice(skip, limit);
+            const chunkedData = resData.slice(skip, limit);
             let chunkUrls = [];
             const serialNumbers = chunkedData.map((inventory) => {
               return { id: inventory.serialNumber.trim() };
@@ -888,9 +891,8 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                  inventoriesFound.serialNumber
-                }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                  }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -919,7 +921,7 @@ exports.addInventoriesFromExcel = [
                   const inventoryData = responses.map(
                     (response) => response.data
                   );
-                  if (limit < data.length) {
+                  if (limit < resData.length) {
                     recursiveFun();
                   }
                 })
@@ -929,13 +931,13 @@ exports.addInventoriesFromExcel = [
               });
           }
           recursiveFun();
-          for (const [index, prod] of data.entries()) {
+          for (const [index, prod] of resData.entries()) {
             let product = await ProductModel.findOne({
               name: prod.productName,
             });
             if (product) {
-              data[index].productId = product.id;
-              data[index].type = product.type;
+              resData[index].productId = product.id;
+              resData[index].type = product.type;
             } else {
               return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_doesnt_exist);
             }
@@ -993,12 +995,12 @@ exports.addInventoriesFromExcel = [
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
           event_data.stackholders.ca.address =
             CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data.products = [...data];
+          event_data.payload.data.products = [...resData];
           // logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
             responses(req.user.preferredLanguage).success,
-            data
+            resData
           );
         } else {
           return apiResponse.ErrorResponse(
