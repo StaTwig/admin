@@ -72,36 +72,41 @@ const SpmDashboard = (props) => {
     for (var i = 0; i < 20; i++) {
       numbers.push(i * 5);
       // numbers.push(i * 5 + "%");
-
     }
     setPercentages(numbers);
     // console.log(dates)
   }, []);
 
-const saveConfig = async () => {
-  let temp = config;
-  temp[`district`] = configDistrict;
-  temp[`state`] = state;
-  temp[`vendorType`] = selectedType;
-  let res = await setNewConfig(temp);
-  if(res.status === 200){
-    setOpenSetRating(false);
-    setOpenEditTargets(false);
-    setopenSelectSuplier(false);
-  }
-}
+  const saveConfig = async () => {
+    let temp = config;
+    temp[`district`] = configDistrict;
+    temp[`state`] = state;
+    temp[`vendorType`] = selectedType;
+    let res = await setNewConfig(temp);
+    if (res.status === 200) {
+      setOpenSetRating(false);
+      setOpenEditTargets(false);
+      setopenSelectSuplier(false);
+    }
+  };
   const dispatch = useDispatch();
   useEffect(() => {
-    (async () =>{
-      let configs = await dispatch(getNewConfig({district: configDistrict, vendorType: selectedType}));
+    (async () => {
+      let configs = await dispatch(
+        getNewConfig({ district: configDistrict, vendorType: selectedType })
+      );
       // console.log(configs.data[0]);
       // let tmp = config;
       // Object.assign(tmp, configs.data[0]);
-      if(configs.data.length)
-      setConfig(configs.data[0]);
+      if (configs.data.length) setConfig(configs.data[0]);
     })();
     (async () => {
-      const result = await dispatch(getSupplierPerformanceByOrgType({orgType: props.selectedType.toUpperCase(), location: props.location})); //
+      const result = await dispatch(
+        getSupplierPerformanceByOrgType({
+          orgType: props.selectedType.toUpperCase(),
+          location: props.location,
+        })
+      ); //
       let _spm = result.data;
       if (_spm.length) {
         sortSupplierPeformances(_spm);
@@ -114,18 +119,18 @@ const saveConfig = async () => {
   const typeSelected = (type) => {
     setSelectedType(type);
   };
-  console.log(props.selectedType)
-  function compare( a, b ) {
-    if ( a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`] ){
+  console.log(props.selectedType);
+  function compare(a, b) {
+    if (a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`]) {
       return 1;
     }
-    if ( a.rating[`${props.sortByValue}`] > b.rating[`${props.sortByValue}`] ){
+    if (a.rating[`${props.sortByValue}`] > b.rating[`${props.sortByValue}`]) {
       return -1;
     }
     return 0;
   }
-  function sortSupplierPeformances(arr){
-    arr.sort(compare)
+  function sortSupplierPeformances(arr) {
+    arr.sort(compare);
     // if(props.selectedType === 'All')
     setSupplierPerformances(arr);
     // else
@@ -145,13 +150,13 @@ const saveConfig = async () => {
   };
   return (
     <div>
-      {showSuccessPopup && <SuccessPopUp message={"config set succesfully"}/>}
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-        <h1 className="h2">Dashboard - SPM</h1>
+      {showSuccessPopup && <SuccessPopUp message={"config set succesfully"} />}
+      <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3'>
+        <h1 className='h2'>Dashboard - SPM</h1>
       </div>
-      <div className="viewTargets">
+      <div className='viewTargets'>
         <button
-          className="targetsBtn"
+          className='targetsBtn'
           onClick={() => {
             setopenSelectSuplier(true);
             setForNextBtn(true);
@@ -160,9 +165,9 @@ const saveConfig = async () => {
           Set Targets
         </button>
       </div>
-      <div className="tableDetals">
+      <div className='tableDetals'>
         <table
-          className="table text-align-left"
+          className='table text-align-left'
           style={{ background: "unset" }}
         >
           <thead
@@ -173,13 +178,13 @@ const saveConfig = async () => {
             }}
           >
             <tr>
-              <th scope="col">Rank</th>
-              <th scope="col">Supplier</th>
-              <th scope="col">Location</th>
-              <th scope="col" style={{ width: "17%" }}>
+              <th scope='col'>Rank</th>
+              <th scope='col'>Supplier</th>
+              <th scope='col'>Location</th>
+              <th scope='col' style={{ width: "17%" }}>
                 Overall Rating
               </th>
-              <th scope="col"></th>
+              <th scope='col'></th>
             </tr>
           </thead>
           <tbody style={{ background: "#ffffff" }}>
@@ -194,19 +199,19 @@ const saveConfig = async () => {
                   }`}
                   style={{ fontWeight: "bold", fontFamily: "open sans" }}
                 >
-                  <td scope="row" style={{ verticalAlign: "unset" }}>
+                  <td scope='row' style={{ verticalAlign: "unset" }}>
                     {index + 1}
                   </td>
                   <td>
                     <div
-                      className="tableProfileIconCard justify-content-start"
+                      className='tableProfileIconCard justify-content-start'
                       style={{ lineHeight: "1.5" }}
                     >
-                      <div className="profileIcon">
-                        <img src={profile} alt="" />
+                      <div className='profileIcon'>
+                        <img src={profile} alt='' />
                       </div>
-                      <div className="profileName">
-                        <span className="profileTitle">{perf.name}</span>
+                      <div className='profileName'>
+                        <span className='profileTitle'>{perf.name}</span>
                         <label
                           className={`
                             ${perf.type === "S1" ? "boldGreen" : ""}
@@ -217,8 +222,8 @@ const saveConfig = async () => {
                           {perf.type}
                         </label>
                         {selectedRatingIndex === index && (
-                          <div className="spmDetailsUserCard justify-content-start">
-                            <div className="profileName">
+                          <div className='spmDetailsUserCard justify-content-start'>
+                            <div className='profileName'>
                               <label>
                                 <b>Vendor ID:</b> {perf.id}
                               </label>
@@ -239,7 +244,7 @@ const saveConfig = async () => {
                   <td style={{ position: "relative", verticalAlign: "unset" }}>
                     {/* {selectedRatingIndex !== index ? ( */}
                     <div
-                      className="round round-lg"
+                      className='round round-lg'
                       onClick={() => {
                         `${
                           selectedRatingIndex !== index
@@ -258,11 +263,11 @@ const saveConfig = async () => {
                     </div>
                     {selectedRatingIndex === index && (
                       <div
-                        className="editTargetsContainer"
+                        className='editTargetsContainer'
                         style={{ position: "absolute" }}
                       >
                         <button
-                          className="editTarBtn"
+                          className='editTarBtn'
                           onClick={() => {
                             setOpenEditTargets(true);
                           }}
@@ -279,7 +284,7 @@ const saveConfig = async () => {
                 </tr>
                 {selectedRatingIndex === index ? (
                   <tr>
-                    <td colSpan="5" className="selectedSupplier">
+                    <td colSpan='5' className='selectedSupplier'>
                       <div
                         style={{
                           backgroundColor: "#ffffff",
@@ -287,7 +292,7 @@ const saveConfig = async () => {
                         }}
                       >
                         <table
-                          className="table text-align-left noTopRadius"
+                          className='table text-align-left noTopRadius'
                           style={{ background: "unset" }}
                         >
                           <thead>
@@ -298,10 +303,10 @@ const saveConfig = async () => {
                                 color: "#707070",
                               }}
                             >
-                              <th scope="col">Criteria</th>
-                              <th scope="col">Details</th>
-                              <th scope="col">Weightage</th>
-                              <th scope="col">Target</th>
+                              <th scope='col'>Criteria</th>
+                              <th scope='col'>Details</th>
+                              <th scope='col'>Weightage</th>
+                              <th scope='col'>Target</th>
                             </tr>
                           </thead>
                           <tbody
@@ -311,17 +316,15 @@ const saveConfig = async () => {
                             }}
                           >
                             <tr>
-                              <td scope="row" style={{ color: "#A20134" }}>
+                              <td scope='row' style={{ color: "#A20134" }}>
                                 Return Rate
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
-                              <td>
-                                {""}
-                              </td>
+                              <td>{""}</td>
                               <td>{config?.returnRate?.target}</td>
                             </tr>
                             <tr>
-                              <td scope="row" style={{ color: "#A20134" }}>
+                              <td scope='row' style={{ color: "#A20134" }}>
                                 Lead Time
                               </td>
                               <td>
@@ -344,15 +347,15 @@ const saveConfig = async () => {
                               <td>{config?.leadTime?.target}</td>
                             </tr>
                             <tr>
-                              <td scope="row" style={{ color: "#A20134" }}>
+                              <td scope='row' style={{ color: "#A20134" }}>
                                 Storage Capacity
                                 <br />
-                                <span className="subTitle">Sqft</span>
+                                <span className='subTitle'>Sqft</span>
                               </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
                                 <br />
-                                <span className="subTitle">
+                                <span className='subTitle'>
                                   {perf.storageCapacity.sqft}
                                 </span>
                               </td>
@@ -360,7 +363,7 @@ const saveConfig = async () => {
                               <td>{config?.storageCapacity?.target || 0}</td>
                             </tr>
                             <tr>
-                              <td scope="row" style={{ color: "#A20134" }}>
+                              <td scope='row' style={{ color: "#A20134" }}>
                                 Dirty Bottles
                               </td>
                               <td>{perf.dirtyBottles}%</td>
@@ -368,7 +371,7 @@ const saveConfig = async () => {
                               <td>{config?.dirtyBottle?.target}</td>
                             </tr>
                             <tr>
-                              <td scope="row" style={{ color: "#A20134" }}>
+                              <td scope='row' style={{ color: "#A20134" }}>
                                 Breakage
                               </td>
                               <td>{perf.breakage}%</td>
@@ -389,13 +392,13 @@ const saveConfig = async () => {
         </table>
       </div>
       {openEditTargets && (
-        <div className="editTargetsContainer1">
-          <div className="editTitle">
-            <span className="edittargetName">Edit Targets</span>
+        <div className='editTargetsContainer1'>
+          <div className='editTitle'>
+            <span className='edittargetName'>Edit Targets</span>
           </div>
           <div>
             <table
-              className="table text-align-left noTopRadius"
+              className='table text-align-left noTopRadius'
               style={{ background: "unset" }}
             >
               <thead>
@@ -406,19 +409,19 @@ const saveConfig = async () => {
                     color: "#707070",
                   }}
                 >
-                  <th scope="col">Criteria</th>
-                  <th scope="col">Set Target</th>
-                  <th scope="col">Weightage</th>
+                  <th scope='col'>Criteria</th>
+                  <th scope='col'>Set Target</th>
+                  <th scope='col'>Weightage</th>
                 </tr>
               </thead>
               <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Return Rate
                   </td>
                   <td>
                     <select
-                      className="filterSelect-1 mt-2"
+                      className='filterSelect-1 mt-2'
                       value={config.returnRate.target}
                       onChange={(e) => {
                         let temp = config;
@@ -438,14 +441,14 @@ const saveConfig = async () => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Lead Time
                   </td>
                   <td>
                     <select
-                      className="filterSelect-1 mt-2"
+                      className='filterSelect-1 mt-2'
                       value={config.leadTime.target}
-                      name="leadtime"
+                      name='leadtime'
                       onChange={(e) => {
                         let temp = config;
                         temp.leadTime.target = e.target.value;
@@ -464,12 +467,12 @@ const saveConfig = async () => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Breakage Bottle %
                   </td>
                   <td>
                     <select
-                      className="filterSelect-1 mt-2"
+                      className='filterSelect-1 mt-2'
                       value={config.breakageBottle.target}
                       style={{ boxShadow: "0px 4px 8px #54265e26" }}
                       onChange={function (e) {
@@ -479,10 +482,10 @@ const saveConfig = async () => {
                         setConfig(temp);
                         setTemp(e.target.value);
                         // debugger
-                        console.log(config)
+                        console.log(config);
                       }}
                     >
-                      <option value="">Select</option>
+                      <option value=''>Select</option>
                       {persentages.map((item, index) => (
                         <option key={index} value={item}>
                           {item}
@@ -493,12 +496,12 @@ const saveConfig = async () => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Dirty Bottle
                   </td>
                   <td>
                     <select
-                      className="filterSelect-1 mt-2"
+                      className='filterSelect-1 mt-2'
                       value={config.dirtyBottle.target}
                       onChange={(e) => {
                         let temp = config;
@@ -508,7 +511,7 @@ const saveConfig = async () => {
                         setTemp(e.target.value);
                       }}
                     >
-                      <option value="">Select</option>
+                      <option value=''>Select</option>
                       {persentages.map((item, index) => (
                         <option key={index} value={item}>
                           {item}
@@ -519,19 +522,19 @@ const saveConfig = async () => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#000000" }}>
+                  <td scope='row' style={{ color: "#000000" }}>
                     WAREHOUSE DETAILS
                   </td>
                   <td></td>
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Storage Capacity
                   </td>
                   <td>
                     <input
-                      className="filterSelect-1"
+                      className='filterSelect-1'
                       value={config.warehouseCapacity.target}
                       onChange={(e) => {
                         let temp = config;
@@ -543,12 +546,12 @@ const saveConfig = async () => {
                   </td>
                 </tr>
                 <tr>
-                  <td scope="row" style={{ color: "#A20134" }}>
+                  <td scope='row' style={{ color: "#A20134" }}>
                     Bottle Capacity
                   </td>
                   <td>
                     <input
-                      className="filterSelect-1"
+                      className='filterSelect-1'
                       value={config.bottleCapacity.target}
                       onChange={(e) => {
                         let temp = config;
@@ -562,9 +565,9 @@ const saveConfig = async () => {
               </tbody>
             </table>
           </div>
-          <div className="buttons">
+          <div className='buttons'>
             <button
-              className="backBtn"
+              className='backBtn'
               onClick={() => {
                 setOpenEditTargets(false);
               }}
@@ -572,7 +575,7 @@ const saveConfig = async () => {
               Close
             </button>
             <button
-              className="saveBtn"
+              className='saveBtn'
               onClick={() => {
                 setOpenSetRating(true);
               }}
@@ -582,9 +585,9 @@ const saveConfig = async () => {
       )}
       {openSelectSuplier && (
         <div>
-          <div className="setTargetsContainer">
-            <div className="editSelectSuplier">
-              <span className="edittargetName">Select Supplier</span>
+          <div className='setTargetsContainer'>
+            <div className='editSelectSuplier'>
+              <span className='edittargetName'>Select Supplier</span>
               <img
                 src={cancelIcon}
                 style={{ width: "2rem" }}
@@ -593,14 +596,14 @@ const saveConfig = async () => {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
-                <label className="filterSubHeading mt-3">Select State</label>
+                <label className='filterSubHeading mt-3'>Select State</label>
                 <select
-                  className="filterSelect-1 mt-2"
+                  className='filterSelect-1 mt-2'
                   value={state}
                   style={{ width: "100%" }}
                   onChange={onStateChange}
                 >
-                  <option value="">Select State</option>
+                  <option value=''>Select State</option>
                   {props.states?.map((state, index) => (
                     <option key={index} value={state}>
                       {state}
@@ -609,24 +612,22 @@ const saveConfig = async () => {
                 </select>
               </div>
               <div>
-                <label className="filterSubHeading mt-3">Select District</label>
+                <label className='filterSubHeading mt-3'>Select District</label>
                 <select
-                  className="filterSelect-1 mt-2"
+                  className='filterSelect-1 mt-2'
                   value={configDistrict}
                   style={{ width: "100%" }}
                   onChange={(e) => setConfigDistrict(e.target.value)}
                 >
                   <option>Select District</option>
                   {districts?.map((district, index) => (
-                    <option key={index}>
-                      {district}
-                    </option>
+                    <option key={index}>{district}</option>
                   ))}
                 </select>
               </div>
-              <div className="filterSection-1">
-                <label className="filterSubHeading-1 mt-3">vendor Type</label>
-                <div className="btn-group vonderType filterButton-1 mt-2 mb-4">
+              <div className='filterSection-1'>
+                <label className='filterSubHeading-1 mt-3'>vendor Type</label>
+                <div className='btn-group vonderType filterButton-1 mt-2 mb-4'>
                   {["All", "S1", "S2", "S3"].map((type, index) => (
                     <span
                       onClick={() => {
@@ -645,7 +646,7 @@ const saveConfig = async () => {
               </div>
             </div>
             {true && (
-              <div className="dealer_container">
+              <div className='dealer_container'>
                 {supplierPerformances?.map((supplier, index) => (
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
@@ -656,27 +657,27 @@ const saveConfig = async () => {
                           marginBottom: "25px",
                         }}
                       >
-                        <span className="index">{index}</span>
-                        <div className="supplierName">
+                        <span className='index'>{index}</span>
+                        <div className='supplierName'>
                           <div
                             style={{ display: "flex", alignItems: "center" }}
                           >
                             <img
                               style={{ width: "25px", marginRight: "25px" }}
                               src={profile}
-                              alt=""
+                              alt=''
                             />
-                            <span className="suplier">{supplier.name}</span>
+                            <span className='suplier'>{supplier.name}</span>
                           </div>
 
-                          <span className="suppplierType">
+                          <span className='suppplierType'>
                             {supplier.type + " Vendor"}
                           </span>
                         </div>
                       </div>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span className="postalAddress">
+                      <span className='postalAddress'>
                         {supplier.postalAddress}
                       </span>
                     </div>
@@ -684,9 +685,9 @@ const saveConfig = async () => {
                 ))}
               </div>
             )}
-            <div className="buttons">
+            <div className='buttons'>
               <button
-                className="backBtn"
+                className='backBtn'
                 onClick={() => {
                   setopenSelectSuplier(false);
                 }}
@@ -694,7 +695,7 @@ const saveConfig = async () => {
                 Close
               </button>
               <button
-                className="saveBtn"
+                className='saveBtn'
                 onClick={() => {
                   setopenSelectSuplier(false);
                   setOpenEditTargets(true);
@@ -708,13 +709,13 @@ const saveConfig = async () => {
       )}
       {openSetRating && (
         <div>
-          <div className="editTargetsContainer1">
-            <div className="editTitle">
-              <span className="edittargetName">Set Rating</span>
+          <div className='editTargetsContainer1'>
+            <div className='editTitle'>
+              <span className='edittargetName'>Set Rating</span>
             </div>
             <div>
               <table
-                className="table text-align-left noTopRadius"
+                className='table text-align-left noTopRadius'
                 style={{ background: "unset" }}
               >
                 <thead>
@@ -725,17 +726,17 @@ const saveConfig = async () => {
                       color: "#707070",
                     }}
                   >
-                    <th scope="col">Rating</th>
-                    <th scope="col">Targets</th>
-                    <th scope="col">Minimim</th>
-                    <th scope="col">Maximun</th>
+                    <th scope='col'>Rating</th>
+                    <th scope='col'>Targets</th>
+                    <th scope='col'>Minimim</th>
+                    <th scope='col'>Maximun</th>
                   </tr>
                 </thead>
                 <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                   <tr>
-                    <td scope="row"></td>
+                    <td scope='row'></td>
                     <td></td>
-                    <td className="subTitle">
+                    <td className='subTitle'>
                       <span
                         style={{ fontFamily: "unset", fontWeight: "unset" }}
                       >
@@ -779,15 +780,15 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Return Rate
                     </td>
                     <td>
                       <select
                         value={config.returnRate.target}
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                       >
-                        <option value="">Select</option>
+                        <option value=''>Select</option>
                         {persentages.map((item, index) => (
                           <option
                             key={index}
@@ -796,7 +797,7 @@ const saveConfig = async () => {
                               let temp = config;
                               temp.returnRate.target = e.target.value;
                               setConfig(temp);
-                        setTemp(e.target.value);
+                              setTemp(e.target.value);
                             }}
                           >
                             {item}
@@ -804,16 +805,16 @@ const saveConfig = async () => {
                         ))}
                       </select>
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         style={{ width: "30%" }}
                         value={config.returnRate.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -824,7 +825,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.returnRate.min.value}
                         style={{
                           width: "30%",
@@ -835,7 +836,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.returnRate.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -846,7 +847,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.returnRate.min.rating}
                         style={{
                           width: "30%",
@@ -857,7 +858,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.returnRate.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -870,13 +871,13 @@ const saveConfig = async () => {
                     </td>
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.returnRate.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -888,13 +889,13 @@ const saveConfig = async () => {
                       </select>
                       <select
                         value={config.returnRate.max.value}
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -906,13 +907,13 @@ const saveConfig = async () => {
                       </select>
                       <select
                         value={config.returnRate.max.rating}
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -925,21 +926,21 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Lead Time
                     </td>
                     <td>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.leadTime.target}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option value="">Select</option>
+                        <option value=''>Select</option>
                         {dates.map((date, index) => (
                           <option key={index} value={date}>
                             {date}
@@ -947,15 +948,15 @@ const saveConfig = async () => {
                         ))}
                       </select>
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.leadTime.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -966,14 +967,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.leadTime.min.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -984,7 +985,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         style={{
                           width: "30%",
                           position: "relative",
@@ -995,7 +996,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1008,13 +1009,13 @@ const saveConfig = async () => {
                     </td>
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.leadTime.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1025,14 +1026,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.leadTime.max.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1043,14 +1044,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         value={config.leadTime.max.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.leadTime.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1063,18 +1064,18 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Breakage Bottle %
                     </td>
                     <td>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.breakageBottle.target}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                         style={{ boxShadow: "0px 4px 8px #54265e26" }}
                       >
@@ -1086,15 +1087,15 @@ const saveConfig = async () => {
                         ))}
                       </select>
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.breakageBottle.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1105,14 +1106,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.breakageBottle.min.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1123,13 +1124,13 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.breakageBottle.min.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                         style={{
                           width: "30%",
@@ -1147,13 +1148,13 @@ const saveConfig = async () => {
                     </td>
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.breakageBottle.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1164,14 +1165,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.breakageBottle.max.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1182,14 +1183,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         value={config.breakageBottle.max.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.breakageBottle.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1202,21 +1203,21 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Dirty Bottle
                     </td>
                     <td>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         value={config.dirtyBottle.target}
                         onClick={(e) => {
                           let temp = config;
                           temp.dirtyBottle.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option value="">Select</option>
+                        <option value=''>Select</option>
                         {persentages.map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1224,15 +1225,15 @@ const saveConfig = async () => {
                         ))}
                       </select>
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.dirtyBottle.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.dirtyBottle.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1243,14 +1244,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.dirtyBottle.min.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.dirtyBottle.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1261,7 +1262,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1272,7 +1273,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1286,13 +1287,13 @@ const saveConfig = async () => {
                     .{" "}
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.dirtyBottle.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.dirtyBottle.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1303,14 +1304,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.dirtyBottle.max.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.dirtyBottle.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1321,14 +1322,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         value={config.dirtyBottle.max.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.dirtyBottle.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1341,37 +1342,37 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#000000" }}>
+                    <td scope='row' style={{ color: "#000000" }}>
                       WAREHOUSE DETAILS
                     </td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Storage Capacity
                     </td>
                     <td>
                       <input
-                        className="filterSelect-1"
-                        type="number"
+                        className='filterSelect-1'
+                        type='number'
                         value={config.warehouseCapacity.target}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       />
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.warehouseCapacity.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1382,14 +1383,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.warehouseCapacity.min.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1400,7 +1401,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1411,7 +1412,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1424,13 +1425,13 @@ const saveConfig = async () => {
                     </td>
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.warehouseCapacity.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1441,14 +1442,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.warehouseCapacity.max.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1459,14 +1460,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         value={config.warehouseCapacity.max.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.warehouseCapacity.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1479,31 +1480,31 @@ const saveConfig = async () => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope="row" style={{ color: "#A20134" }}>
+                    <td scope='row' style={{ color: "#A20134" }}>
                       Bottle Capacity
                     </td>
                     <td>
                       <input
-                        className="filterSelect-1"
-                        type="number"
+                        className='filterSelect-1'
+                        type='number'
                         value={config.bottleCapacity.target}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       />
                     </td>
-                    <td className="middleTextField" style={{ display: "flex" }}>
+                    <td className='middleTextField' style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.bottleCapacity.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1514,14 +1515,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.bottleCapacity.min.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1532,7 +1533,7 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className='filterSelect-1 mt-2'
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1543,7 +1544,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1556,13 +1557,13 @@ const saveConfig = async () => {
                     </td>
                     <td>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         value={config.bottleCapacity.max.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1573,14 +1574,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "30px" }}
                         value={config.bottleCapacity.max.value}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1591,14 +1592,14 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-2 mt-2"
+                        className='filterSelect-2 mt-2'
                         style={{ marginLeft: "20px" }}
                         value={config.bottleCapacity.max.rating}
                         onChange={(e) => {
                           let temp = config;
                           temp.bottleCapacity.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option>{"<"}</option>
@@ -1613,9 +1614,9 @@ const saveConfig = async () => {
                 </tbody>
               </table>
             </div>
-            <div className="buttons">
+            <div className='buttons'>
               <button
-                className="backBtn"
+                className='backBtn'
                 onClick={() => {
                   setOpenEditTargets(false);
                   setOpenSetRating(false);
@@ -1624,7 +1625,7 @@ const saveConfig = async () => {
                 Close
               </button>
               <button
-                className="saveBtn"
+                className='saveBtn'
                 onClick={() => {
                   setForNextBtn(false);
                   console.log(config);

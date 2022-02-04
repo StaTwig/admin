@@ -35,5 +35,8 @@
   "image_upload_success": "Image Uploaded Successfully",
   "image_upload_error": "Image Upload Failed. Please check the type action you want to perform STOREID/KYCNEW/KYCUPLOAD",
   "image_not_found": "Image not found. Matching ID number and type not found. STOREID/Aadhar/Passport",
-  "image_success": "Image"
+  "image_success": "Image",
+  "no_token": "Authorization Token Not Found",
+  "expired_token": "Token expired. Please login again",
+  "invalid_token": "Invalid Token. Please login again"
 }
