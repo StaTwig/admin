@@ -17,7 +17,7 @@ const SideBar = (props) => {
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
-    if (user && user.isCustom) setEnable(false);
+    if (user?.isCustom) setEnable(false);
   }, [user]);
 
   const resetTrackTracePage = () => {

@@ -10,13 +10,12 @@ const eventSchema = Joi.object().keys({
   actor: Joi.object().keys({
     actorid: Joi.string().min(1).max(50).required(),
     actoruserid: Joi.string().min(1).max(50).required(),
-    // actoruserid: Joi.string().email({ tlds: { allow: false } }),
   }),
   stackholders: Joi.object().keys({
     ca: Joi.object().keys({
-      id: Joi.string().min(1).max(50).required(),
-      name: Joi.string().min(1).max(50).required(),
-      address: Joi.string().min(1).max(100).required(),
+      id: Joi.string().optional(),
+      name: Joi.string().optional(),
+      address: Joi.string().optional(),
     }),
     actororg: Joi.object().keys({
       id: Joi.string().min(1).max(50).required(),
