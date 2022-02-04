@@ -291,6 +291,9 @@ const NewInventory = (props) => {
                 {...props}
                 onHide={closeExcelModal} //FailurePopUp
                 setOpenCreatedInventory={setOpenCreatedInventory}
+                setOpenExcel={setOpenExcel}
+                setInventoryError={setInventoryError}
+                setOpenFailInventory={setOpenFailInventory}
               />
             </Modal>
           )}
