@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Delete from "../../assets/icons/Delete.png";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import qty from "../../assets/icons/TotalInventoryAdded_2.png";
@@ -11,8 +12,15 @@ import Serial from "../../assets/icons/serial.png";
 import Select from "react-select";
 
 import "./style.scss";
-
-
+const months = ['Enero' ,'Febrero','Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ];
+const locale = {
+  localize: {
+    month: n => months[n]
+  },
+  formatLong: {
+    date: () => 'dd/yyyy'
+  }
+}
 const truncate = (str, n) => {
   return str?.length > n ? str.substr(0, n - 1) + "..." : str;
 };
@@ -43,6 +51,8 @@ const EditRow = (props) => {
       ? true
       : false
   );
+  const mfgLocale = t("mfg_date");
+  const expLocale = t("exp_date");
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -335,6 +345,7 @@ const EditRow = (props) => {
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
+                    locale={(mfgLocale==="Fecha de fabricación")?locale:"en"}
                     className='form-control text-center'
                     onChange={(date) =>
                       handleInventoryChange(idx, "manufacturingDate", date)
@@ -355,6 +366,7 @@ const EditRow = (props) => {
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
+                    locale={(expLocale==="Fecha de caducidad")?locale:"en"}
                     className='form-control text-center'
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
