@@ -146,11 +146,18 @@ exports.fetchPurchaseOrders = [
               );
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
+<<<<<<< HEAD
                   console.log(element);
+=======
+                  // console.log(element)
+>>>>>>> 79f56fcb78d024fcb846eb87e02798dfdd0195a3
                   const product = await ProductModel.findOne({
-                    id: element.id,
+                    name: element.id,
                   });
                   element.unitofMeasure = product?.unitofMeasure;
+                  element.manufacturer = product?.manufacturer;
+                  element.type = product?.type;
+                  // console.log(product)
                 })
               );
             } else {
@@ -446,7 +453,7 @@ exports.addPOsFromExcel = [
         return {
           id: po.id || 0,
           externalId: po["UNICEf PO Number"],
-          creationDate: po["Document Date"],
+          creationDate: new Date().toISOString(),
           lastUpdatedOn: new Date().toISOString(),
           poStatus: req.user.id == po["Vendor"] ? "APPROVED" : "CREATED",
           supplier: {

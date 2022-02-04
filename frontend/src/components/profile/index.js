@@ -44,16 +44,10 @@ class Profile extends React.Component {
       wareIds: [],
       signup_date: "",
       warehouseLocations: [],
-      warehouseAddress_country: "",
-      warehouseAddress_city: "",
-      warehouseAddress_firstline: "",
-      warehouseAddress_zipcode: "",
-      warehouseAddress_secondline: "",
-      warehouseAddress_state: "",
       title: "",
       warehouseLocByOrg: [],
       image: "",
-      preferredLanguage: "EN",
+      preferredLanguage: "EN"
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -76,15 +70,10 @@ class Profile extends React.Component {
         status,
         role,
         location,
-        warehouseAddress_country,
-        warehouseAddress_city,
-        warehouseAddress_firstline,
-        warehouseAddress_zipcode,
-        warehouseAddress_secondline,
-        warehouseAddress_state,
         signup_date,
         title,
         preferredLanguage,
+        warehouses
       } = response.data.data;
       this.setState({
         profile_picture,
@@ -99,12 +88,7 @@ class Profile extends React.Component {
         role,
         profileData: response.data.data,
         location,
-        warehouseAddress_country,
-        warehouseAddress_city,
-        warehouseAddress_firstline,
-        warehouseAddress_zipcode,
-        warehouseAddress_secondline,
-        warehouseAddress_state,
+        warehouseLocations: warehouses,
         signup_date,
         title,
         preferredLanguage,
@@ -370,11 +354,12 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className='form-group'>
+                    <div className='form-group2'>
                       <label htmlFor='shipmentId'>{t("phone")}</label>
                       <PhoneInput
-                        className='form-group'
-                        country={"in"}
+                        className='form-group mobile-number'
+                        country={"cr"}
+                        preferredCountries={["cr"]}
                         placeholder={t("enter_phone_number")}
                         // style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}

@@ -68,7 +68,7 @@ const FilterDropDown = (props) => {
                           }}
                           className='btn btn-outline-primary btn-sm'
                         >
-                          {item.value}
+                          {item.label}
                         </button>
                       </StyledMenuItem>
           );
@@ -92,7 +92,7 @@ const FilterDropDown = (props) => {
                 props.onChangeOfFilterDropDown(index, props.type, item.value);
               }}
             >
-              {item.value}
+              {item.label}
             </li>
           );
         })}

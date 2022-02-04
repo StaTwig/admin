@@ -412,9 +412,9 @@ const Orders = (props) => {
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: t("excel"), checked: false },
-      { key: "pdf", value: t("pdf"), checked: false },
-      { key: "email", value: t("mail"), checked: false },
+      { key: "excel", value: "excel", label: t("excel"), checked: false },
+      { key: "pdf",   value: "pdf", label: t("pdf"), checked: false },
+      { key: "email", value: "mail", label: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);

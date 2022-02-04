@@ -125,7 +125,7 @@ function Table(props) {
                   <div className="user-info">
                     <h5 className="table-h5-text text-muted">
                       {truncate(
-                        products[0]?.name +
+                        (products[0]?.name || products[0]?.productId) +
                         (products.length > 1
                           ? " + " + (products.length - 1) + " more"
                           : ""),

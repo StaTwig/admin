@@ -102,6 +102,7 @@ const NewOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
+      onCountryChange('Costa Rica');
       const orgs = await getAllOrganisations();
       setAllOrganisations(
         orgs.data.map((item) => {
@@ -198,6 +199,7 @@ const NewOrder = (props) => {
         };
       });
       setReceiverWarehousesRegion(rr);
+      onCountryChange('Costa Rica');
     } catch (err) {
       setErrorMessage(err);
     }
@@ -432,12 +434,6 @@ const NewOrder = (props) => {
           if (!values.toOrg) {
             errors.toOrg = t("required");
           }
-          if (!values.toOrgLocRegion) {
-            errors.toOrgLocRegion = t("required");
-          }
-          if (!values.toOrgLocCountry) {
-            errors.toOrgLocCountry = t("required");
-          }
           if (!values.toOrgLoc) {
             errors.toOrgLoc = t("required");
           }
@@ -449,6 +445,7 @@ const NewOrder = (props) => {
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(false);
           onAssign(values);
+          
         }}
       >
         {({
@@ -696,7 +693,7 @@ const NewOrder = (props) => {
                   </div>
                 </div>
 
-                <div className='row'>
+                {/* <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
                       <label className='' htmlFor='delLocation'>
@@ -743,9 +740,6 @@ const NewOrder = (props) => {
                           options={receiverWarehousesRegion}
                           noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
@@ -796,13 +790,10 @@ const NewOrder = (props) => {
                           options={receiverWarehousesCountry}
                           noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
@@ -947,7 +938,6 @@ const NewOrder = (props) => {
               <div className='value'>{quantity}</div>
               <div className='d-flex'>
                 <button
-                  type='button'
                   className='btn btn-outline-primary font-bold mr-2 mt-3'
                   onClick={() => {
                     dispatch(resetReviewPos({}));
@@ -957,7 +947,9 @@ const NewOrder = (props) => {
                   <b>{t("cancel")}</b>
                 </button>
 
-                <button className='btn btn-orange fontSize20 font-bold mt-3'>
+                <button 
+                  className='btn btn-orange fontSize20 font-bold mt-3' 
+                  type='submit'>
                   <img
                     src={OrderIcon}
                     width='20'
@@ -966,7 +958,7 @@ const NewOrder = (props) => {
                     alt='Order'
                   />
                   <span>
-                    <b>{t("review_order")}</b>
+                    <b>Review Order</b>
                   </span>
                 </button>
               </div>
