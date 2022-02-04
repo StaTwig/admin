@@ -18,7 +18,7 @@ import Serial from "../../assets/icons/serial.png";
 import "./style.scss";
 
 const VerifyInventory = (props) => {
-  const { t } = props;
+  const { t, i18n } = props;
   const dispatch = useDispatch();
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
@@ -63,6 +63,9 @@ const VerifyInventory = (props) => {
     props.history.push("/newinventory");
   };
 
+
+  const schemaClass =  'ml-1 text-muted text-review-column';
+
   return (
     <div className='verifyinventory'>
       <div className='d-flex flex-row justify-content-between'>
@@ -76,44 +79,47 @@ const VerifyInventory = (props) => {
           <h5 className='head ml-1'>{t("description_of_goods")}</h5>
           <div>
             <div className='row p1-1 mt-4'>
-              <span className='col-3'>
+              <span className={i18n.language === 'en' ? 'col-3  ' : 'col-2'}>
                 <img src={Product} width='15' height='15' alt='Product' />
-                <span className='ml-1 text-muted'>{t("product_name")}</span>
+                <span className={schemaClass}>{t("product_name")}</span>
               </span>
-              <span className='col-2'>
+              <span className={'col-2'}>
                 <img
                   src={Manufacturer}
                   width='15'
                   height='15'
                   alt={t("manufacturer")}
                 />
-                <span className='ml-1 text-muted'>{t("manufacturer")}</span>
+                <span  className={schemaClass}>{t("manufacturer")}</span>
               </span>
               <span
-                className='col-1'
+                className={'col-1'}
                 style={{ position: "relative", left: "-40px" }}
               >
-                <img src={Quantity} width='24' height='15' alt='Quantity' />
-                <span className='ml-1 text-muted'>{t("quantity")}</span>
+                <img src={Quantity} width='15' height='15' alt='Quantity' />
+                <span  className={schemaClass}>{t("quantity")}</span>
               </span>
-              <span className='col-1'>
+              <span className={i18n.language === 'en' ? 'col-1' : 'col-2'}
+              >
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
-                <span className='ml-1 text-muted'>{t("mfg_date")}</span>
+                <span  className={schemaClass}>{t("mfg_date")}</span>
               </span>
-              <span className='col-1'>
+              <span className={i18n.language === 'en' ? 'col-1' : 'col-2'}
+              >
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
-                <span className='ml-1 text-muted'>{t("exp_date")}</span>
+                <span  className={schemaClass}>{t("exp_date")}</span>
               </span>
-              <span className='col-2'>
+              <span className={i18n.language === 'en' ? 'col-2' : 'col-1'}
+              >
                 <img src={Batch} width='15' height='15' alt='Batch' />
-                <span className='ml-1 text-muted'>{t("batch_no")}</span>
+                <span  className={schemaClass}>{t("batch_no")}</span>
               </span>
               <span
-                className='col-2'
-                style={{ position: "relative", left: "-60px" }}
+                className={i18n.language === 'en' ? 'col-2' : 'col-2'}
+              style={i18n.language === 'en' ? { position: "relative", left: "-60px" }: {}}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
-                <span className='ml-1 text-muted'>{t("serial_numbers")}</span>
+                <span  className={schemaClass}>{t("serial_numbers")}</span>
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
@@ -124,7 +130,7 @@ const VerifyInventory = (props) => {
               );
               return (
                 <div className='row p-1 mt-4'>
-                  <span className='col-3'>{reviewInventory.productName}</span>
+                  <span className={i18n.language === 'en' ? 'col-3' : 'col-2'}>{reviewInventory.productName}</span>
                   <span className='col-2'>
                     {reviewInventory.manufacturer
                       ? reviewInventory.manufacturer
@@ -139,7 +145,7 @@ const VerifyInventory = (props) => {
                     {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
                     <span>{")"}</span>
                   </span>
-                  <span className='col-1'>
+                  <span className={i18n.language === 'en' ? 'col-1' : 'col-2'}>
                     {reviewInventory.manufacturingDate
                       ? `0${new Date(
                         Date.parse(reviewInventory.manufacturingDate)
@@ -151,7 +157,7 @@ const VerifyInventory = (props) => {
                       ).getFullYear()
                       : ""}
                   </span>
-                  <span className='col-1'>
+                  <span className={i18n.language === 'en' ? 'col-1' : 'col-2'}  >
                     {reviewInventory.expiryDate
                       ? `0${new Date(
                         Date.parse(reviewInventory.expiryDate)
@@ -163,10 +169,10 @@ const VerifyInventory = (props) => {
                       ).getFullYear()
                       : ""}
                   </span>
-                  <span className='col-2'>{reviewInventory.batchNumber}</span>
+                  <span className={i18n.language === 'en' ? 'col-2' : 'col-1'}>{reviewInventory.batchNumber}</span>
                   <span
-                    className='col-2'
-                    style={{ position: "relative", left: "-55px" }}
+                    className={i18n.language === 'en' ? 'col-1' : 'col-2'}
+                    style={i18n.language === 'en' ? { position: "relative", left: "-55px" }: {}} 
                   >
                     {reviewInventory.serialNumber}
                   </span>
