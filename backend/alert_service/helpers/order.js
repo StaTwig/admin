@@ -79,7 +79,10 @@ exports.orderCreated = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ? templateReceiver : templateReceiverSpanish,
+      content:
+        user.preferredLanguage == "EN"
+          ? templateReceiver
+          : templateReceiverSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -87,14 +90,20 @@ exports.orderCreated = async (event) => {
     await sendNotification(dataSender);
   }
   if (event.secondaryOrgId && event.secondaryOrgId !== "null") {
-    const caUsers = await getEligibleUsers(event.secondaryOrgId, "ORGANISATION");
+    const caUsers = await getEligibleUsers(
+      event.secondaryOrgId,
+      "ORGANISATION"
+    );
     for (const user of caUsers) {
       const dataOthers = {
         user: user.id,
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: user.preferredLanguage == "EN" ? templateOthers : templateOthersSpanish,
+        content:
+          user.preferredLanguage == "EN"
+            ? templateOthers
+            : templateOthersSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -115,7 +124,10 @@ exports.orderAccept = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
+      content:
+        creatorUser.preferredLanguage == "EN"
+          ? templateSender
+          : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -132,7 +144,8 @@ exports.orderAccept = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
+      content:
+        user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -152,7 +165,10 @@ exports.orderReject = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
+      content:
+        creatorUser.preferredLanguage == "EN"
+          ? templateSender
+          : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -169,7 +185,8 @@ exports.orderReject = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
+      content:
+        user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -191,8 +208,11 @@ exports.orderPending = async (event) => {
       user: creatorUser.id,
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
-      subject: `Order Alert`,      
-      content: user.preferredLanguage == "EN" ?  templateCustomer : templateCustomerSpanish,
+      subject: `Order Alert`,
+      content:
+        creatorUser.preferredLanguage == "EN"
+          ? templateCustomer
+          : templateCustomerSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -212,7 +232,10 @@ exports.orderPending = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: user.preferredLanguage == "EN" ? templateSupplier : templateSupplierSpanish,
+        content:
+          user.preferredLanguage == "EN"
+            ? templateSupplier
+            : templateSupplierSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -225,7 +248,10 @@ exports.orderPending = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: user.preferredLanguage == "EN" ?  templateCustomer : templateCustomerSpanish,
+        content:
+          user.preferredLanguage == "EN"
+            ? templateCustomer
+            : templateCustomerSpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -255,7 +281,10 @@ exports.orderDefault = async (event) => {
       email: creatorUser.emailId,
       mobile: creatorUser.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ? templateActor : templateActorSpanish,
+      content:
+        creatorUser.preferredLanguage == "EN"
+          ? templateActor
+          : templateActorSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
@@ -277,7 +306,10 @@ exports.orderDefault = async (event) => {
         email: user.emailId,
         mobile: user.phoneNumber,
         subject: `Order Alert`,
-        content: user.preferredLanguage == "EN" ? templateSecondary : templateSecondarySpanish,
+        content:
+          user.preferredLanguage == "EN"
+            ? templateSecondary
+            : templateSecondarySpanish,
         type: "ALERT",
         eventType: "ORDER",
         transactionId: txnId,
@@ -295,7 +327,8 @@ exports.orderDefault = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Order Alert`,
-      content: user.preferredLanguage == "EN" ?  templateActor : templateActorSpanish,
+      content:
+        user.preferredLanguage == "EN" ? templateActor : templateActorSpanish,
       type: "ALERT",
       eventType: "ORDER",
       transactionId: txnId,
