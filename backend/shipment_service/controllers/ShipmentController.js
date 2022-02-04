@@ -2500,14 +2500,29 @@ exports.fetchShipmentIds = [
   async (req, res) => {
     try {
       const { warehouseId } = req.user;
+      console.log(warehouseId)
       await ShipmentModel.find(
         {
-          $or: [
+          $and: [
             {
-              "supplier.locationId": warehouseId,
+              $or: [
+                {
+                  "supplier.locationId": warehouseId,
+                },
+                {
+                  "receiver.locationId": warehouseId,
+                },
+              ],
             },
             {
-              "receiver.locationId": warehouseId,
+              $or: [
+                {
+                  "supplier.id": req.user.organisationId,
+                },
+                {
+                  "receiver.id": req.user.organisationId,
+                },
+              ],
             },
           ],
         },

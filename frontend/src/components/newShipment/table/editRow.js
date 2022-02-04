@@ -112,8 +112,8 @@ const EditRow = (props) => {
     typeof productsList != undefined
   ) {
     let qty;
-    for (var i = 0; i < productsList.length; i++) {
-      if (prod.name === productsList[i].productName) {
+    for (var i = 0; i < productsList?.length; i++) {
+      if (prod.name === productsList[i]?.productName) {
         qty = String(productsList[i].quantity);
         break;
       }

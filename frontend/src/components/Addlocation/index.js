@@ -38,6 +38,7 @@ const AddLocation = (props) => {
     async function fetchAllRegions1() {
       let arr = await fetchAllRegions();
       setallregions(arr.data);
+      fetchAllState1(53);
     }
     fetchAllRegions1();
   }, []);
@@ -106,15 +107,10 @@ const AddLocation = (props) => {
                 addressLine,
                 city,
                 state,
-                country,
                 pincode,
-                region,
               }}
               validate={(values) => {
                 const errors = {};
-                if (!values.region) {
-                  errors.region = t("Required");
-                }
                 if (!values.addressTitle) {
                   errors.addressTitle = t("Required");
                 }
@@ -126,9 +122,6 @@ const AddLocation = (props) => {
                 }
                 if (!values.state) {
                   errors.state = t("Required");
-                }
-                if (!values.country) {
-                  errors.country = t("Required");
                 }
                 if (!values.pincode) {
                   errors.pincode = t("Required");
@@ -179,7 +172,7 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='region'>
@@ -239,7 +232,7 @@ const AddLocation = (props) => {
                               setState("");
                               setCity("");
                             }}
-                            options={allCountries.map((option) => option.name)}
+                            options={allCountries.map((option) => option.spanishName)}
                             renderInput={(params) => (
                               <TextField {...params} label={t('Select_Country')} />
                             )}
@@ -253,7 +246,7 @@ const AddLocation = (props) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
@@ -419,7 +412,6 @@ const AddLocation = (props) => {
                       className='btn btn-yellow float-right font-weight-bold'
                       disabled={
                         !(
-                          values.country &&
                           values.addressTitle &&
                           values.city &&
                           values.state &&

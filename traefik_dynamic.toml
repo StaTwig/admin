@@ -1,14 +1,14 @@
-[http.middlewares.simpleAuth.basicAuth]
-  users = [
-    "admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/"
-  ]
-[http.routers.api]
-  rule = "Host(`test.traefik.vaccineledger.com`)"
-  entrypoints = ["websecure"]
-  middlewares = ["simpleAuth"]
-  service = "api@internal"
-  [http.routers.api.tls]
-    certResolver = "lets-encrypt"
+# [http.middlewares.simpleAuth.basicAuth]
+#   users = [
+#     "admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/"
+#   ]
+# [http.routers.api]
+#   rule = "Host(`test.traefik.vaccineledger.com`)"
+#   entrypoints = ["websecure"]
+#   middlewares = ["simpleAuth"]
+#   service = "api@internal"
+#   [http.routers.api.tls]
+#     certResolver = "lets-encrypt"
 
 [tls.options]
   [tls.options.default]

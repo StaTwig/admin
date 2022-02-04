@@ -36,6 +36,7 @@ exports.getWarehouseDetailsByRegion = [
       const { region } = req.query;
       const warehouseDetails = await WarehouseModel.find({
         "warehouseAddress.region": region,
+        "organisationId": req.user.organisationId,
       });
       return apiResponse.successResponseWithData(
         res,
@@ -56,6 +57,7 @@ exports.getWarehouseDetailsByCountry = [
       const { country } = req.query;
       const warehouseDetails = await WarehouseModel.find({
         "country.countryName": country,
+        "organisationId": req.user.organisationId,
       });
       return apiResponse.successResponseWithData(
         res,

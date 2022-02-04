@@ -146,7 +146,10 @@ router.get(
   "/fetchBatchesOfInventory",
   InventoryController.fetchBatchesOfInventory
 );
-
+router.get(
+  "/reduceBatch",
+  InventoryController.reduceBatch
+);
 router.post(
   "/addInventoriesFromExcel",
   upload.single("excel"),

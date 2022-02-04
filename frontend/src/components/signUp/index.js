@@ -44,7 +44,7 @@ const FormPage = (props) => {
   const [validEmailErr, setValidEmailErr] = useState("");
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const phoneRegex = /^\d{12}$/;
+  const phoneRegex = /^\d{11}$/;
   const other = t('other');
   useEffect(() => {
     async function fetchData() {
@@ -432,7 +432,8 @@ const FormPage = (props) => {
                             </div>
 
                             <PhoneInput
-                              country={"in"}
+                              country={"cr"}
+                              preferredCountries={["cr"]}
                               placeholder={t('enter_phone_number')}
                               inputProps={{
                                 name: "phone",
