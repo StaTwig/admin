@@ -2905,8 +2905,8 @@ exports.reduceBatch = [
        },
        payload: {
          data: {
-           batchNumber: batchNumber,
-           quantityPurchased: quantity
+           batch: batch,
+           quantityPurchased: quantity,
          },
        },
      };
