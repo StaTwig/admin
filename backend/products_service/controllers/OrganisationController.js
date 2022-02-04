@@ -50,6 +50,7 @@ exports.getAllWarehouses = [
   async (req, res) => {
     try {
       const organizations = await WarehouseModel.find({
+        'organisationId': req.user.organisationId,
         $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
       });
       return apiResponse.successResponseWithData(

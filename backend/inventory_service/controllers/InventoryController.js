@@ -498,7 +498,6 @@ exports.insertInventories = [
       let limit = chunkSize;
       let skip = 0;
       let count = 0;
-      const start = new Date();
       async function recursiveFun() {
         skip = chunkSize * count;
         count++;
@@ -574,7 +573,6 @@ exports.addProductsToInventory = [
       let payload = req.body;
       let warehouseId;
       payload.products.forEach((element) => {
-        console.log(element)
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;
       });
@@ -870,7 +868,6 @@ exports.addInventoriesFromExcel = [
           const resData = utility.excludeExpireProduct(data);
 
           const { address } = req.user;
-          let start = new Date();
           let count = 0;
           const chunkSize = 50;
           let limit = chunkSize;
@@ -939,7 +936,10 @@ exports.addInventoriesFromExcel = [
               resData[index].productId = product.id;
               resData[index].type = product.type;
             } else {
-              return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_doesnt_exist);
+              return apiResponse.ErrorResponse(
+                res,
+                responses(req.user.preferredLanguage).product_doesnt_exist
+              );
             }
           }
 
@@ -1409,10 +1409,11 @@ exports.getProductListCounts = [
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
+      const list = productList[0].inventoryDetails;
+      const productArray = [];
+      let productObj;
       for (let j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        const productId = list[j].productId;
         const product = await ProductModel.find({ id: productId });
         if (
           product &&
@@ -1422,7 +1423,7 @@ exports.getProductListCounts = [
           product[0] &&
           product[0].name
         ) {
-          var product1 = {
+          productObj = {
             productCategory: product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
@@ -1431,12 +1432,10 @@ exports.getProductListCounts = [
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
         }
-
-        if (product1.quantity > 0) {
-          productArray.push(product1);
+        if (productObj?.quantity > 0) {
+          productArray.push(productObj);
         }
       }
-
       productArray.sort(function (a, b) {
         if (a.quantity > b.quantity) {
           return -1;
@@ -2842,6 +2841,96 @@ exports.fetchBatchesOfInventory = [
         "Batches of product",
         batches
       );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.reduceBatch = [
+  auth,
+  async (req, res) => {
+    try {
+      const email = req.user.emailId;
+      const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData?.organisationId || null;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+      const { batchNumber, quantity } = req.query;
+      const batch = await AtomModel.findOneAndUpdate(
+        {
+          batchNumbers: batchNumber,
+        },
+        { $inc: { quantity: -Math.abs(quantity || 0) } },
+        { new: true }
+      );
+      const inventory = await InventoryModel.updateOne(
+        { "inventoryDetails.productId": "prod-eey3kskz81etij" },
+        { $inc: { "inventoryDetails.$.quantity": -10 } }
+      );
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        transactionId: batchNumber,
+        eventType: {
+          primary: "BUY",
+          description: "INVENTORY",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: req.user.organisationId || "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: {
+            batch: batch,
+            quantityPurchased: quantity,
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "BUY";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
+        batch,
+        inventory,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
