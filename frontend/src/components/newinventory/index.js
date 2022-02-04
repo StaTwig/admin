@@ -146,6 +146,12 @@ const NewInventory = (props) => {
 
     return error;
   };
+
+  const importError = (message) =>{
+    setInventoryError(message);
+    setOpenFailInventory(true);
+  }
+
   const checkValidationErrors = (validations) => {
     let error = false;
     inventoryState.forEach((inventory) => {
@@ -290,6 +296,7 @@ const NewInventory = (props) => {
               <ExcelPopUp
                 {...props}
                 onHide={closeExcelModal} //FailurePopUp
+                importError={importError}
                 setOpenCreatedInventory={setOpenCreatedInventory}
                 setOpenExcel={setOpenExcel}
                 setInventoryError={setInventoryError}

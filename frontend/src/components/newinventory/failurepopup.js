@@ -14,7 +14,7 @@ const FailurePopUp = (props) => {
         </div>
         <div className='data'>
           {" "}
-          {props.inventoryError === "Check expiryDate" || "all_products_are_expired"
+          {props.inventoryError === "Check expiryDate" || "all_products_are_expired" || "Product Doesn't exist in the inventory."
             ? null
             : "cannot be Empty"}
         </div>

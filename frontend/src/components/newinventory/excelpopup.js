@@ -30,6 +30,9 @@ const ExcelPopUp = (props) => {
       setInventoryError('all_products_are_expired');
       setOpenFailInventory(true);
     }
+    if(result.status === 500){
+      props.importError(result.data.message);
+    }
     dispatch(turnOff());
   };
   return (
