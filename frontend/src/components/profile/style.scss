@@ -78,6 +78,28 @@
     }
   }
 
+  .form-group2{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      // flex-basis: 35%;
+      // flex-grow: inherit;
+      font-size: 16px;
+      width:195% !important;
+    }
+  }
   .form-group,
   .input-group {
     display: grid;
@@ -393,3 +415,6 @@
   white-space: nowrap !important;
   border-bottom: 2px solid #d6d6d6;
 }
+// .mobile-number{
+//   width: 40rem !important;
+// }

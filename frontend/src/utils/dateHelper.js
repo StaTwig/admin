@@ -40,7 +40,6 @@ export const Count = (data) => {
 };
 
 export const formatDate = (date, format) => {
-  console.log(date)
   var d = new Date(date),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),

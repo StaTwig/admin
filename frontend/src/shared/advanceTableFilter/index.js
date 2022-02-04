@@ -34,14 +34,14 @@ const StyledMenu = withStyles({
 ));
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    '&:hover': {
-      backgroundColor: 'transparent',
+    "&:hover": {
+      backgroundColor: "transparent",
     },
-    '&:focus': {
-      backgroundColor: 'transparent',
+    "&:focus": {
+      backgroundColor: "transparent",
     },
-    '&:active': {
-      backgroundColor: 'transparent',
+    "&:active": {
+      backgroundColor: "transparent",
     },
   },
 }))(MenuItem);
@@ -68,17 +68,12 @@ const AdvanceTableFilter = (props) => {
     inventoryProductCategoryAnchorEl,
     setInventoryProductCategoryAnchorEl,
   ] = React.useState(null);
-  const [inventoryManufacturerAnchorEl, setInventoryManufacturerAnchorEl] =
-    React.useState(null);
   const [inventoryfiFilterOnSelect, setInventoryfiFilterOnSelect] =
     React.useState(null);
 
   const [dateFilter, setdateFilter] = React.useState(null);
-
-  const [value, setValue] = React.useState([null, null]);
-
   const dateclick = (event) => {
-    if (props?.shouldEnable === true) setdateFilter(event.currentTarget);
+    setdateFilter(event.currentTarget);
   };
 
   const dateclose = () => {
@@ -161,26 +156,6 @@ const AdvanceTableFilter = (props) => {
                   {t("transitpartiallyfilled")}
                 </button>
               </StyledMenuItem>
-
-              {/* <StyledMenuItem>
-                <button
-                  style={{
-                    padding: "10px",
-                    height: "60px",
-                    width: "200px",
-                    borderRadius: "10px",
-                    whiteSpace: 'initial'
-                  }}
-                  className="btn btn-outline-warning btn-sm font-weight-bold"
-                  color="primary"
-                  onClick={() =>
-                    setStatusFilterOnSelect("PARTIALLYFULFILLED")
-                  }
-                >
-                  {t("partiallyfilled")}
-                </button>
-              </StyledMenuItem> */}
-
               <StyledMenuItem>
                 <button
                   style={{
@@ -294,7 +269,7 @@ const AdvanceTableFilter = (props) => {
             id='customized-menu'
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
+            onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -608,7 +583,7 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
-                style={{ padding: "10px", height: "40px", width: "130px" }}
+                  style={{ padding: "10px", height: "40px", width: "130px" }}
                   className='btn btn-link btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
@@ -666,8 +641,8 @@ const AdvanceTableFilter = (props) => {
   };
 
   const handleInventoryStatusClick = (event) => {
-    if (props?.shouldEnable === true)
-      setInventoryStatusAnchorEl(event?.currentTarget);
+    // if (props?.shouldEnable === true)
+    setInventoryStatusAnchorEl(event?.currentTarget);
   };
 
   const handleInventoryStatusClose = () => {
@@ -980,7 +955,7 @@ const AdvanceTableFilter = (props) => {
                   />
                 </StyledMenuItem>
               ) : (
-                <div>{t('Empty_List')}</div>
+                <div>{t("Empty_List")}</div>
               )}
               <StyledMenuItem>
                 <button
@@ -1057,12 +1032,12 @@ const AdvanceTableFilter = (props) => {
       );
     } else if (columnData === "Date") {
       return (
-        <div className='box col' onClick={dateclick}>
+        <div className='box col' onClick={(e) => dateclick(e)}>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img3}</div>
             <div className='filterTitle'>{props.data.displayColoumn3}</div>
             <div className='filterAction'>
-              <img src={updownarrow} width='9' height='9' />
+              <img src={updownarrow} alt='arrow' width='9' height='9' />
             </div>
           </div>
           <StyledMenu
@@ -1412,7 +1387,6 @@ const AdvanceTableFilter = (props) => {
                     options={props.shipmentIdList}
                     getOptionLabel={(options) => options.id}
                     onChange={(event, newValue) => {
-                      console.log(newValue);
                       setShipmentIdFilterOnSelect(newValue.id);
                     }}
                     style={{ width: "14rem" }}
@@ -1436,7 +1410,7 @@ const AdvanceTableFilter = (props) => {
                   color='primary'
                   onClick={() => setShipmentIdFilterOnSelect("")}
                 >
-                  {t('Clear')}
+                  {t("Clear")}
                 </button>
               </StyledMenuItem>
             </div>
@@ -2026,19 +2000,18 @@ const AdvanceTableFilter = (props) => {
                           className='ml-2'
                           alt='DropDownIcon'
                         />
-                         { props.exportFilterData && (
+                        {props.exportFilterData && (
                           <FilterDropDown
                             data={props.exportFilterData}
                             onChangeOfFilterDropDown={
                               props.onSelectionOfDropdownValue
                             }
                             type={"export"}
-                            MenuBtn = "ExportMenuBtn"
+                            MenuBtn='ExportMenuBtn'
                             anchorElEx={anchorElEx}
                             handleClose1={handleClose1}
                           />
-                          
-                      )}
+                        )}
                       </div>
                     </button>
                   )}

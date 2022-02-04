@@ -31,8 +31,8 @@ const OrganisationPopUp = (props) => {
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region, setregion] = useState("");
-  const [country, setcountry] = useState("");
+  const [region, setregion] = useState("Americas");
+  const [country, setcountry] = useState("Costa Rica");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [allregions, setallregions] = useState([]);
@@ -40,21 +40,24 @@ const OrganisationPopUp = (props) => {
   const [allState, setallState] = useState([]);
   const [allCity, setallCity] = useState([]);
   useEffect(() => {
-    async function fetchAllRegions1() {
-      let arr = await fetchAllRegions();
-      console.log(arr);
-      setallregions(arr.data);
+    // async function fetchAllRegions1() {
+    //   let arr = await fetchAllRegions();
+    //   console.log(arr);
+    //   setallregions(arr.data);
+    // }
+    // fetchAllRegions1();
+
+    async function fetchAllState1() {
+      let res = await fetchStateByCountry(53);
+      setallState(res.data);
     }
-    fetchAllRegions1();
+    fetchAllState1();
   }, []);
-  async function fetchAllCountries1(id) {
-    let res = await fetchCountriesByRegion(id);
-    setallCountries(res.data);
-  }
-  async function fetchAllState1(id) {
-    let res = await fetchStateByCountry(id);
-    setallState(res.data);
-  }
+  // async function fetchAllCountries1(id) {
+  //   let res = await fetchCountriesByRegion(id);
+  //   setallCountries(res.data);
+  // }
+
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
     console.log(res, "All City");
@@ -217,10 +220,9 @@ const OrganisationPopUp = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
-                        {/* <label className="required-field col-sm-6" htmlFor="region">Region</label> */}
                         <Autocomplete
                           value={region}
                           onChange={(event, newValue) => {
@@ -231,10 +233,6 @@ const OrganisationPopUp = (props) => {
                             setCity("");
                           }}
                           id='controllable-states-demo'
-                          // inputValue={inputValue1}
-                          // onInputChange={(event, newInputValue) => {
-                          //   setInputValue1(newInputValue);
-                          // }}
                           options={allregions}
                           style={{ width: 425 }}
                           renderInput={(params) => (
@@ -248,7 +246,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* <AddressField
                       error={errors.city}
@@ -268,10 +266,9 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.state}
                     /> */}
-                  <div className='row'>
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
-                        {/* <label className="required-field col-sm-6" htmlFor="country">Country</label> */}
                         <Autocomplete
                           value={country}
                           onChange={(event, newValue) => {
@@ -295,7 +292,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>

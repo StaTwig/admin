@@ -105,9 +105,9 @@ exports.getAllEventsWithFilter = [
         ? req.query.productManufacturer
         : undefined;
       let status = req.query.status ? req.query.status : undefined;
-      let date = req.query.date ? req.query.date : undefined;
-      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
-      let toDate = req.query.toDate ? req.query.toDate : undefined;
+      let date = req.query.date && req.query.date !== '' ? req.query.date : undefined;
+      let fromDate = req.query.fromDate && req.query.fromDate !== '' ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate && req.query.toDate !== '' ? req.query.toDate : undefined;
 
       switch (req.query.dateFilter) {
         case "today":
@@ -153,7 +153,7 @@ exports.getAllEventsWithFilter = [
         default:
           fromDateFilter = 0;
       }
-
+      console.log(req.query)
       let elementMatchQuery = {};
       elementMatchQuery[`$or`] = [
         { eventTypeDesc: "SHIPMENT" },
@@ -162,7 +162,7 @@ exports.getAllEventsWithFilter = [
       if (date) {
         var givenDate = new Date(date);
         var abc = givenDate;
-        // givenDate = givenDate.toISOString();
+        console.log(date)
         var nextDate = abc.setDate(abc.getDate() + 1);
         nextDate = new Date(nextDate);
         // nextDate = nextDate.split('T')[0];
@@ -172,6 +172,7 @@ exports.getAllEventsWithFilter = [
         };
       }
       if (fromDate && toDate) {
+        console.log('here')
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
         elementMatchQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
@@ -315,6 +316,7 @@ exports.getAllEventsWithFilter = [
               else inventoryRecords.push(eventRecord);
             })
           );
+          console.log(elementMatchQuery)
           return apiResponse.successResponseWithData(res, "Inventory Records", {
             inventoryRecords: inventoryRecords,
             count: inventoryCount,

@@ -56,7 +56,10 @@ exports.shipmentCreate = async (event) => {
     email: getSenderDetails.emailId,
     mobile: getSenderDetails.phoneNumber,
     subject: `Shipment Alert`,
-    content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
+    content:
+      getSenderDetails.preferredLanguage == "EN"
+        ? templateSender
+        : templateSenderSpanish,
     type: "ALERT",
     eventType: "SHIPMENT",
     transactionId: txnId,
@@ -87,7 +90,10 @@ exports.shipmentCreate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: user.preferredLanguage == "EN" ?  templateReceiver : templateReceiverSpanish,
+      content:
+        user.preferredLanguage == "EN"
+          ? templateReceiver
+          : templateReceiverSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -132,7 +138,10 @@ exports.shipmentUpdate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: user.preferredLanguage == "EN" ?  templateSupplier : templateSupplierSpanish,
+      content:
+        user.preferredLanguage == "EN"
+          ? templateSupplier
+          : templateSupplierSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -148,7 +157,10 @@ exports.shipmentUpdate = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: user.preferredLanguage == "EN" ?  templateReceiver : templateReceiverSpanish ,
+      content:
+        user.preferredLanguage == "EN"
+          ? templateReceiver
+          : templateReceiverSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
@@ -170,7 +182,8 @@ exports.shipmentReceive = async (event) => {
       email: user.emailId,
       mobile: user.phoneNumber,
       subject: `Shipment Alert`,
-      content: user.preferredLanguage == "EN" ?  templateSender : templateSenderSpanish,
+      content:
+        user.preferredLanguage == "EN" ? templateSender : templateSenderSpanish,
       type: "ALERT",
       eventType: "SHIPMENT",
       transactionId: txnId,
