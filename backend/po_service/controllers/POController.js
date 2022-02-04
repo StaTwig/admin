@@ -146,18 +146,12 @@ exports.fetchPurchaseOrders = [
               );
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
-<<<<<<< HEAD
-                  console.log(element);
-=======
-                  // console.log(element)
->>>>>>> 79f56fcb78d024fcb846eb87e02798dfdd0195a3
                   const product = await ProductModel.findOne({
                     name: element.id,
                   });
                   element.unitofMeasure = product?.unitofMeasure;
                   element.manufacturer = product?.manufacturer;
                   element.type = product?.type;
-                  // console.log(product)
                 })
               );
             } else {
