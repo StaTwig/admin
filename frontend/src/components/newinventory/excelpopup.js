@@ -26,6 +26,9 @@ const ExcelPopUp = (props) => {
       dispatch(setReviewinventories(result.data.data));
       props.history.push("/reviewinventory");
     }
+    if(result.status === 500){
+      props.importError(result.data.message);
+    }
     dispatch(turnOff());
   };
   return (

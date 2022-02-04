@@ -29,9 +29,9 @@ const product_service_url = process.env.PRODUCT_URL;
 const stream_name = process.env.STREAM;
 const OrganisationModel = require("../models/OrganisationModel");
 const AnalyticsModel = require("../models/AnalyticsModel");
-const CENTRAL_AUTHORITY_ID = null;
-const CENTRAL_AUTHORITY_NAME = null;
-const CENTRAL_AUTHORITY_ADDRESS = null;
+const CENTRAL_AUTHORITY_ID = "null";
+const CENTRAL_AUTHORITY_NAME = "null";
+const CENTRAL_AUTHORITY_ADDRESS = "null";
 
 exports.getTotalCount = [
   auth,
@@ -574,6 +574,7 @@ exports.addProductsToInventory = [
       let payload = req.body;
       let warehouseId;
       payload.products.forEach((element) => {
+        console.log(element)
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;
       });
@@ -938,7 +939,7 @@ exports.addInventoriesFromExcel = [
               resData[index].productId = product.id;
               resData[index].type = product.type;
             } else {
-              // console.log(product);
+              return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_doesnt_exist);
             }
           }
 

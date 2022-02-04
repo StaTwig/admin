@@ -1,30 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Add from "../../assets/icons/add.svg";
 import uploadBlue from "../../assets/icons/coverImage.png";
-// import uploadWhite from '../../assets/icons/UploadWhite.svg';
 import {
   getManufacturers,
   addNewProduct,
   addMultipleProducts,
   getProducts,
 } from "../../actions/poActions";
-
-// import DropdownButton from "../../shared/dropdownButtonGroup";
 import Modal from "../../shared/modal";
 import ProductPopUp from "./productPopUp";
 import "./style.scss";
-import DropdownButton from "./ProductsDropDown";
 import add_icon from "../../assets/icons/add_blue.png";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const AddProduct = (props) => {
   const { t } = props;
-  const [manufacturer, setManufacturer] = useState(
-    t("select") + " " + t("manufacturer")
-  );
-  const [otherManufacturer, setOtherManufacturer] = useState("");
-  const [category, setCategory] = useState(t("select_category"));
+  const [manufacturer, setManufacturer] = useState();
+  const [category, setCategory] = useState();
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productName, setProductName] = useState("");
@@ -43,7 +38,6 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
-      setManufacturers((manufacturers) => [...manufacturers, "Other"]);
       const result = await getProducts();
       const categoryArray = result.map((product) => product.type);
       setCategories(
@@ -61,50 +55,35 @@ const AddProduct = (props) => {
   const [categoryErr, setCategoryErr] = useState(false);
   const [UOMErr, setUOMErr] = useState(false);
   const [descErr, setDescErr] = useState(false);
-  const [otherManufacturerErr, setOtherManufacturerErr] = useState(false);
   const validation = () => {
+    console.log("Manufacturer from valid:", manufacturer);
     if (
       productName === "" ||
-      manufacturer === t("select") + " " + t("manufacturer") ||
-      category === t("select_category") ||
-      UOM === "" ||
-      description === "" ||
-      (manufacturer === "Other" && otherManufacturer === "")
+      manufacturer === undefined ||
+      category === undefined ||
+      UOM === ""
     ) {
       if (productName === "") {
         setPdNameErr(true);
       }
-      if (manufacturer === t("select") + " " + t("manufacturer")) {
+      if (manufacturer === undefined) {
         setManufacturerErr(true);
       }
-      if (category === t("select_category")) {
+      if (category === undefined) {
         setCategoryErr(true);
       }
       if (UOM === "") {
         setUOMErr(true);
-      }
-      if (description === "") {
-        setDescErr(true);
-      }
-      if (manufacturer === "Other" && otherManufacturer === "") {
-        setOtherManufacturerErr(true);
       }
     } else {
       return true;
     }
   };
   const addProduct = async () => {
-    // const data = { manufacturer, productName, productCategory: category, productSubCategory: subCategory, UOM, description };
     const isValid = validation();
     if (isValid) {
       let formData = new FormData();
-
-      if (manufacturer !== "Other") {
-        formData.append("manufacturer", manufacturer);
-      } else {
-        formData.append("manufacturer", otherManufacturer);
-      }
-      // let unitofMeasure =
+      formData.append("manufacturer", manufacturer);
       formData.append("name", productName);
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
@@ -138,6 +117,16 @@ const AddProduct = (props) => {
   // const setExcelFile = (evt) => {
   //   setExcel(evt.target.files[0]);
   // };
+
+  const defaultPropsManufacturer = {
+    options: manufacturers,
+    getOptionLabel: (option) => option,
+  };
+
+  const defaultPropsCategory = {
+    options: categories,
+    getOptionLabel: (option) => option,
+  };
 
   return (
     <div className='addproduct'>
@@ -263,68 +252,94 @@ const AddProduct = (props) => {
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("manufacturer")}</label>
                   <div
-                    className={`form-control ${
+                    className={`w-100 ${
                       manufacturerErr ? "border-danger" : ""
                     }`}
                   >
-                    <DropdownButton
-                      name={manufacturer}
-                      onSelect={(item) => {
+                    <Autocomplete
+                      {...defaultPropsManufacturer}
+                      id='manufacturer controllable-states-demo'
+                      value={manufacturer ? manufacturer : ""}
+                      onChange={(event, newValue) => {
+                        setManufacturer(newValue);
                         setManufacturerErr(false);
-                        setManufacturer(item);
                       }}
-                      groups={manufacturers}
-                      required
+                      inputValue={manufacturer ? manufacturer : ""}
+                      onInputChange={(event, newInputValue) => {
+                        setManufacturer(newInputValue);
+                        setManufacturerErr(false);
+                      }}
+                      autoComplete
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          className={`${
+                            manufacturerErr ? "border-danger" : ""
+                          }`}
+                          name='Manufacturer'
+                          variant='outlined'
+                          placeholder={t("enter_manufacturer")}
+                        />
+                      )}
                     />
+                    {manufacturerErr && (
+                      <span
+                        className='error-msg text-danger mt-3 '
+                        style={{ top: "-10px", left: "0px" }}
+                      >
+                        {t("enter_manufacturer")}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-              {manufacturer == "Other" && (
-                <div className='flex-row'>
-                  <div className='form-group'>
-                    <label htmlFor='shipmentId'>
-                      {t("Other Manufacturer")}
-                    </label>
-                    <input
-                      type='text'
-                      className={`form-control ${
-                        otherManufacturerErr ? "border-danger" : ""
-                      }`}
-                      name='otherManufacturer'
-                      placeholder={t("enter") + " " + t("manufacturer")}
-                      onChange={(e) => {
-                        setManufacturerErr(false);
-                        setOtherManufacturer(e.target.value);
-                        console.log("Manufacturer", otherManufacturer);
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
               <div className='flex-row'>
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("product_category")}</label>
-                  {/* <input
-                    type='text'
-                    className='form-control'
-                    name='productcategory'
-                    placeholder='Enter Product-Category'
-                    onChange={(e) => setCategory(e.target.value)}
-                    value={category}
-                  /> */}
                   <div
-                    className={`form-control ${
-                      categoryErr ? "border-danger" : ""
-                    }`}
+                    className={`w-100 ${categoryErr ? "border-danger" : ""}`}
                   >
-                    <DropdownButton
+                    {/* <DropdownButton
                       name={category}
                       onSelect={(item) => {
                         setCategoryErr(false);
                         setCategory(item);
                       }}
                       groups={categories}
+                    /> */}
+
+                    <Autocomplete
+                      {...defaultPropsCategory}
+                      id='category controllable-states-demo'
+                      value={category ? category : ""}
+                      onChange={(event, newValue) => {
+                        setCategory(newValue);
+                        setCategoryErr(false);
+                      }}
+                      inputValue={category ? category : ""}
+                      onInputChange={(event, newInputValue) => {
+                        setCategory(newInputValue);
+                        setCategoryErr(false);
+                      }}
+                      autoComplete
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          className={`${categoryErr ? "border-danger" : ""}`}
+                          name='Category'
+                          variant='outlined'
+                          placeholder={t("product_category")}
+                        />
+                      )}
                     />
+                    {categoryErr && (
+                      <span
+                        className='error-msg text-danger mt-3 '
+                        style={{ top: "-10px", left: "0px" }}
+                      >
+                        {t("product_category")}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -413,8 +428,3 @@ const AddProduct = (props) => {
 };
 
 export default AddProduct;
-
-/*<button className="btn btn-primary font-bold">
-<img src={uploadWhite} width="14" height="14" className="mr-2" />
-<span>Upload</span>
-</button> */
