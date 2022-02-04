@@ -69,7 +69,10 @@ const routes = (
     <Route path='/newshipment' component={requireAuth(NewShipment)} />
     <Route path='/createshipment' component={requireAuth(CreateShipment)} />
     <Route path='/viewshipment/:id' component={requireAuth(ViewShipment)} />
-    <Route path='/viewgmrshipment/:id' component={requireAuth(ViewGMRShipment)} />
+    <Route
+      path='/viewgmrshipment/:id'
+      component={requireAuth(ViewGMRShipment)}
+    />
     <Route path='/reviewshipment' component={requireAuth(VerifyShipment)} />
     <Route path='/inventory' component={requireAuth(Inventory)} />
     <Route path='/productlist/:id' component={requireAuth(ProductList)} />
@@ -84,48 +87,48 @@ const routes = (
     <Route path='/producttracing' component={requireAuth(ProductTracing)} />
     <Route path='/network' component={requireAuth(Network)} />
     <Route
-      path="/transactionHistory"
+      path='/transactionHistory'
       component={requireAuth(TransactionHistory)}
     />
-    <Route path="/orders" component={requireAuth(Orders)} />
-    <Route path="/neworder" component={requireAuth(NewOrder)} />
-    <Route path="/vieworder/:id" component={requireAuth(ViewOrder)} />
-    <Route path="/revieworder" component={requireAuth(ReviewOrder)} />
-    <Route path="/updateStatus/:id" component={requireAuth(UpdateStatus)} />
+    <Route path='/orders' component={requireAuth(Orders)} />
+    <Route path='/neworder' component={requireAuth(NewOrder)} />
+    <Route path='/vieworder/:id' component={requireAuth(ViewOrder)} />
+    <Route path='/revieworder' component={requireAuth(ReviewOrder)} />
+    <Route path='/updateStatus/:id' component={requireAuth(UpdateStatus)} />
     <Route
-      path="/receiveShipment/:id"
+      path='/receiveShipment/:id'
       component={requireAuth(ReceiveShipment)}
     />
-    <Route path="/Addlocation" component={requireAuth(AddLocation)} />
-    <Route path="/lastMile" component={requireAuth(LastMile)} />
-    <Route path="/enterid" component={requireAuth(enterId)} />
-    <Route path="/editLocation/:id" component={requireAuth(EditLocation)} />
+    <Route path='/Addlocation' component={requireAuth(AddLocation)} />
+    <Route path='/lastMile' component={requireAuth(LastMile)} />
+    <Route path='/enterid' component={requireAuth(enterId)} />
+    <Route path='/editLocation/:id' component={requireAuth(EditLocation)} />
     <Route
-      path="/transactionproducts"
+      path='/transactionproducts'
       component={requireAuth(TransactionProducts)}
     />
-    <Route path="/productcategory" component={requireAuth(ProductCategory)} />
+    <Route path='/productcategory' component={requireAuth(ProductCategory)} />
     <Route
-      path="/productinventory/:category"
+      path='/productinventory/:category'
       component={requireAuth(ProductInventory)}
     />
     <Route
-      path="/productoutofstock"
+      path='/productoutofstock'
       component={requireAuth(ProductInventory)}
     />
     <Route
-      path="/batchnearexpiry/:category"
+      path='/batchnearexpiry/:category'
       component={requireAuth(BatchExpiry)}
     />
-    <Route path="/batchexpired" component={requireAuth(BatchExpiry)} />
+    <Route path='/batchexpired' component={requireAuth(BatchExpiry)} />
     <Route
-      path="/viewinventory/:warehouseId"
+      path='/viewinventory/:warehouseId'
       component={requireAuth(ViewInventory)}
     />
-    <Route path="/addNewCategory" component={requireAuth(AddNewCategory)} />
-    <Route path="/viewexpiry" component={requireAuth(ViewExpiry)} />
-    <Route path="/viewproduct" component={requireAuth(ViewProduct)} />
-    <Route path="/addNewProduct" component={AddProductContainer} />
+    <Route path='/addNewCategory' component={requireAuth(AddNewCategory)} />
+    <Route path='/viewexpiry' component={requireAuth(ViewExpiry)} />
+    <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
+    <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
 
     <Route component={ErrorPageContainer} />
   </Switch>
