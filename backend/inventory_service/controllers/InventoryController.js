@@ -498,7 +498,6 @@ exports.insertInventories = [
       let limit = chunkSize;
       let skip = 0;
       let count = 0;
-      const start = new Date();
       async function recursiveFun() {
         skip = chunkSize * count;
         count++;
@@ -574,7 +573,6 @@ exports.addProductsToInventory = [
       let payload = req.body;
       let warehouseId;
       payload.products.forEach((element) => {
-        console.log(element)
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;
       });
@@ -867,7 +865,6 @@ exports.addInventoriesFromExcel = [
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
           const { address } = req.user;
-          let start = new Date();
           let count = 0;
           const chunkSize = 50;
           let limit = chunkSize;
@@ -937,7 +934,10 @@ exports.addInventoriesFromExcel = [
               data[index].productId = product.id;
               data[index].type = product.type;
             } else {
-              return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_doesnt_exist);
+              return apiResponse.ErrorResponse(
+                res,
+                responses(req.user.preferredLanguage).product_doesnt_exist
+              );
             }
           }
 
@@ -1407,10 +1407,11 @@ exports.getProductListCounts = [
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
+      const list = productList[0].inventoryDetails;
+      const productArray = [];
+      let productObj;
       for (let j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        const productId = list[j].productId;
         const product = await ProductModel.find({ id: productId });
         if (
           product &&
@@ -1420,7 +1421,7 @@ exports.getProductListCounts = [
           product[0] &&
           product[0].name
         ) {
-          var product1 = {
+          productObj = {
             productCategory: product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
@@ -1430,8 +1431,8 @@ exports.getProductListCounts = [
           };
         }
 
-        if (product1.quantity > 0) {
-          productArray.push(product1);
+        if (productObj?.quantity > 0) {
+          productArray.push(productObj);
         }
       }
 

@@ -26,7 +26,7 @@ const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const apiResponse = require("../helpers/apiResponse");
-const { responses } = require("../helpers/responses")
+const { responses } = require("../helpers/responses");
 const auth = require("../middlewares/jwt");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
@@ -146,7 +146,7 @@ exports.fetchPurchaseOrders = [
               );
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
-                  console.log(element)
+                  console.log(element);
                   const product = await ProductModel.findOne({
                     id: element.id,
                   });
@@ -480,8 +480,7 @@ exports.addPOsFromExcel = [
           lastUpdatedBy: createdBy,
         };
       });
-      console.log(poDataArray);
-      var incrementCounter = await CounterModel.update(
+      const incrementCounter = await CounterModel.update(
         {
           "counters.name": "poId",
         },
@@ -496,13 +495,14 @@ exports.addPOsFromExcel = [
         { "counters.$": 1 }
       );
       let dataRows = 0;
+
       for (let i in poDataArray) {
         if (poDataArray[i].externalId != null) {
           const duplicate = await RecordModel.findOne({
             externalId: poDataArray[i].externalId,
           });
           if (duplicate != null) {
-            console.log("****** Duplicate PO");
+            console.log("****** Duplicate PO ***** ");
             delete poDataArray[i];
             i--;
           } else {
@@ -511,14 +511,12 @@ exports.addPOsFromExcel = [
             let productDetails = await ProductModel.findOne({
               id: poDataArray[i].products[0].productId,
             });
-            console.log("PRODUCT DETAILS", productDetails);
             if (productDetails) {
               (poDataArray[i].products[0].name = productDetails.name || ""),
                 (poDataArray[i].products[0].type = productDetails.type || ""),
                 (poDataArray[i].products[0].manufacturer =
                   productDetails.manufacturer || "");
-            } else console.log("PRODUCT NOT FOUND");
-            console.log(dataRows++);
+            }
             const organisationName =
               poDataArray[i].customer.customerOrganisation;
             const customerOrganisation = await OrganisationModel.findOne({
@@ -886,7 +884,7 @@ exports.addPOsFromExcel = [
       );
       return apiResponse.successResponseWithData(
         res,
-        responses(req.user.preferredLanguage || 'EN').upload_result,
+        responses(req.user.preferredLanguage || "EN").upload_result,
         poDataArray
       );
     } catch (err) {
@@ -973,7 +971,10 @@ exports.createOrder = [
       });
       if (supplierOrgData == null) {
         console.log("Supplier not defined");
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).supplier_not_defined);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).supplier_not_defined
+        );
       }
 
       const receiverOrgData = await OrganisationModel.findOne({
@@ -981,7 +982,10 @@ exports.createOrder = [
       });
       if (receiverOrgData == null) {
         console.log("customer not defined");
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).receiver_not_defined);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).receiver_not_defined
+        );
       }
       var datee = new Date();
       datee = datee.toISOString();
@@ -1085,9 +1089,13 @@ exports.createOrder = [
         event_data.payload.data.order_id = poId;
         event_data.transactionId = poId;
         await logEvent(event_data);
-        return apiResponse.successResponseWithData(res, responses(req.user.preferredLanguage).created_order, {
-          poId: poId,
-        });
+        return apiResponse.successResponseWithData(
+          res,
+          responses(req.user.preferredLanguage).created_order,
+          {
+            poId: poId,
+          }
+        );
       } catch (error) {
         console.log(error);
       }
