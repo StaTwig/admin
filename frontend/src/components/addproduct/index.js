@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Add from "../../assets/icons/add.svg";
 import uploadBlue from "../../assets/icons/coverImage.png";
-// import uploadWhite from '../../assets/icons/UploadWhite.svg';
 import {
   getManufacturers,
   addNewProduct,
   addMultipleProducts,
   getProducts,
 } from "../../actions/poActions";
-
-// import DropdownButton from "../../shared/dropdownButtonGroup";
 import Modal from "../../shared/modal";
 import ProductPopUp from "./productPopUp";
 import "./style.scss";
-import DropdownButton from "./ProductsDropDown";
 import add_icon from "../../assets/icons/add_blue.png";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
@@ -42,7 +38,6 @@ const AddProduct = (props) => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
       setManufacturers(manufacturerResult);
-      // setManufacturers(manufacturers => [...manufacturers, "Other"])
       const result = await getProducts();
       const categoryArray = result.map((product) => product.type);
       setCategories(
@@ -61,7 +56,7 @@ const AddProduct = (props) => {
   const [UOMErr, setUOMErr] = useState(false);
   const [descErr, setDescErr] = useState(false);
   const validation = () => {
-    console.log("Manufacturer from valid:", manufacturer)
+    console.log("Manufacturer from valid:", manufacturer);
     if (
       productName === "" ||
       manufacturer === undefined ||
@@ -85,14 +80,10 @@ const AddProduct = (props) => {
     }
   };
   const addProduct = async () => {
-    // const data = { manufacturer, productName, productCategory: category, productSubCategory: subCategory, UOM, description };
     const isValid = validation();
     if (isValid) {
       let formData = new FormData();
-      // console.log("Manufacturer from API:", manufacturer);
-      console.log("Category:", category);
       formData.append("manufacturer", manufacturer);
-      // let unitofMeasure =
       formData.append("name", productName);
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
@@ -151,7 +142,7 @@ const AddProduct = (props) => {
         {/* <div className="d-flex flex-column align-items-center"> */}
         <button
           className='btn-primary btn fontSize20 font-bold mt-1 ml-2'
-        // onClick={() => setMenu(!menu)}
+          // onClick={() => setMenu(!menu)}
         >
           <div className='d-flex align-items-center'>
             <img
@@ -244,8 +235,9 @@ const AddProduct = (props) => {
                   <label htmlFor='shipmentId'> {t("product_name")}</label>
                   <input
                     type='text'
-                    className={`form-control ${pdNameErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${
+                      pdNameErr ? "border-danger" : ""
+                    }`}
                     name='product'
                     placeholder={t("enter") + " " + t("product_name")}
                     onChange={(e) => {
@@ -260,37 +252,33 @@ const AddProduct = (props) => {
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("manufacturer")}</label>
                   <div
-                    className={`w-100 ${manufacturerErr ? "border-danger" : ""
-                      }`}
+                    className={`w-100 ${
+                      manufacturerErr ? "border-danger" : ""
+                    }`}
                   >
                     <Autocomplete
                       {...defaultPropsManufacturer}
-                      id='manufacturer'
+                      id='manufacturer controllable-states-demo'
                       value={manufacturer ? manufacturer : ""}
                       onChange={(event, newValue) => {
                         setManufacturer(newValue);
                         setManufacturerErr(false);
-                        // console.log("Manufacturer:", manufacturer);
-                        // console.log("Manufacturer:", manufacturer)
                       }}
                       inputValue={manufacturer ? manufacturer : ""}
                       onInputChange={(event, newInputValue) => {
                         setManufacturer(newInputValue);
                         setManufacturerErr(false);
-                        // console.log("Manufacturer:", manufacturer)
                       }}
-                      // style={{width:'5vw'}}
-                      id='controllable-states-demo'
                       autoComplete
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          className={`${manufacturerErr ? "border-danger" : ""
-                            }`}
+                          className={`${
+                            manufacturerErr ? "border-danger" : ""
+                          }`}
                           name='Manufacturer'
-                          // margin='normal'
                           variant='outlined'
-                          placeholder={t('enter_manufacturer')}
+                          placeholder={t("enter_manufacturer")}
                         />
                       )}
                     />
@@ -299,7 +287,7 @@ const AddProduct = (props) => {
                         className='error-msg text-danger mt-3 '
                         style={{ top: "-10px", left: "0px" }}
                       >
-                        {t('enter_manufacturer')}
+                        {t("enter_manufacturer")}
                       </span>
                     )}
                   </div>
@@ -309,8 +297,7 @@ const AddProduct = (props) => {
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("product_category")}</label>
                   <div
-                    className={`w-100 ${categoryErr ? "border-danger" : ""
-                      }`}
+                    className={`w-100 ${categoryErr ? "border-danger" : ""}`}
                   >
                     {/* <DropdownButton
                       name={category}
@@ -323,32 +310,25 @@ const AddProduct = (props) => {
 
                     <Autocomplete
                       {...defaultPropsCategory}
-                      id='category'
+                      id='category controllable-states-demo'
                       value={category ? category : ""}
                       onChange={(event, newValue) => {
                         setCategory(newValue);
                         setCategoryErr(false);
-                        // console.log("Manufacturer:", manufacturer);
-                        // console.log("Manufacturer:", manufacturer)
                       }}
                       inputValue={category ? category : ""}
                       onInputChange={(event, newInputValue) => {
                         setCategory(newInputValue);
                         setCategoryErr(false);
-                        // console.log("Manufacturer:", manufacturer)
                       }}
-                      // style={{width:'5vw'}}
-                      id='controllable-states-demo'
                       autoComplete
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          className={`${categoryErr ? "border-danger" : ""
-                            }`}
+                          className={`${categoryErr ? "border-danger" : ""}`}
                           name='Category'
-                          // margin='normal'
                           variant='outlined'
-                          placeholder={t('product_category')}
+                          placeholder={t("product_category")}
                         />
                       )}
                     />
@@ -357,7 +337,7 @@ const AddProduct = (props) => {
                         className='error-msg text-danger mt-3 '
                         style={{ top: "-10px", left: "0px" }}
                       >
-                        {t('product_category')}
+                        {t("product_category")}
                       </span>
                     )}
                   </div>
@@ -400,7 +380,7 @@ const AddProduct = (props) => {
               <button
                 className='fontSize20 font-bold mr-4 addNewBtn'
                 onClick={() => props.history.push("/addNewCategory")}
-              // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
+                // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
               >
                 <img src={Add} width='10' height='10' className='mr-2' alt='' />
                 <span style={{ fontSize: "1vw" }}>{t("add_new_category")}</span>
@@ -448,8 +428,3 @@ const AddProduct = (props) => {
 };
 
 export default AddProduct;
-
-/*<button className="btn btn-primary font-bold">
-<img src={uploadWhite} width="14" height="14" className="mr-2" />
-<span>Upload</span>
-</button> */
