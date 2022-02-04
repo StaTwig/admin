@@ -12,8 +12,6 @@ import { initialState } from "../../reducers/editShipmentReducer";
 
 const VerifyShipment = (props) => {
   const { t } = props;
-  //const [message, setMessage] = useState('');
-  //const [errorMessage, setErrorMessage] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const dispatch = useDispatch();
   const closeModal = () => {
@@ -30,12 +28,8 @@ const VerifyShipment = (props) => {
   };
 
   const onAssign = async () => {
-    console.log("clicked");
-    console.log("review shipment data", reviewShipment);
     const data = reviewShipment;
     const result = await createShipment({ data });
-    console.log(result);
-
     if (result.status !== 400) {
       setOpenCreatedInventory(true);
       dispatch(setEditShipments(initialState));
