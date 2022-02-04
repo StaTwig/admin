@@ -23,7 +23,6 @@ const VerifyInventory = (props) => {
   const reviewInventories = useSelector((state) => {
     return state.reviewInventory;
   });
-  // console.log("reviewInventories",reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,7 +33,6 @@ const VerifyInventory = (props) => {
     dispatch(turnOn());
 
     const postData = reviewInventories.map((inventory) => {
-      // console.log('Inventory details', inventory);
       return {
         productId: inventory.productId,
         batchNumber: inventory.batchNumber,
@@ -91,130 +89,160 @@ const VerifyInventory = (props) => {
               </span>
               <span
                 className='col-1'
-                style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%"}}
+                style={{
+                  position: "relative",
+                  left: "-16px",
+                  flex: "0 0 11.333333%",
+                  maxWidth: "11.333333%",
+                }}
               >
                 <img src={Quantity} width='24' height='15' alt='Quantity' />
                 <span className='ml-1 text-muted'>{t("quantity")}</span>
               </span>
-              <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
+              <span
+                className='col-1'
+                style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
+              >
                 <img src={Mfg_date} width='15' height='15' alt='Date' />
                 <span className='ml-1 text-muted'>{t("mfg_date")}</span>
               </span>
-              <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
+              <span
+                className='col-1'
+                style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
+              >
                 <img src={Expire} width='15' height='15' alt='Expiry Date' />
                 <span className='ml-1 text-muted'>{t("exp_date")}</span>
               </span>
-              <span className='col-2' style={{flex: "0 0 15.666667%",maxWidth: "15.666667%"}}>
+              <span
+                className='col-2'
+                style={{ flex: "0 0 15.666667%", maxWidth: "15.666667%" }}
+              >
                 <img src={Batch} width='15' height='15' alt='Batch' />
                 <span className='ml-1 text-muted'>{t("batch_no")}</span>
               </span>
               <span
                 className='col-2'
-                style={{ position: "relative", left: "-60px",flex: "0 0 15.666667%",maxWidth: "15.666667%" }}
+                style={{
+                  position: "relative",
+                  left: "-60px",
+                  flex: "0 0 15.666667%",
+                  maxWidth: "15.666667%",
+                }}
               >
                 <img src={Serial} width='15' height='15' alt='Serial' />
                 <span className='ml-1 text-muted'>{t("serial_numbers")}</span>
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
-              console.log("Individual Details", reviewInventory);
-              console.log(
-                "Bool",
-                typeof reviewInventory.unitofMeasure === "object"
-              );
               return (
-              <div className='row p-1 mt-4'>
-                <span className='col-3'  style={{ flex: "0 0 20%" }}>{reviewInventory.productName}</span>
-                <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
-                  {reviewInventory.manufacturer
-                    ? reviewInventory.manufacturer
-                    : reviewInventory.manufacturerName}
-                </span>
-                <span
-                  className='col-1'
-                  style={{ position: "relative", left: "-16px",flex: "0 0 11.333333%",maxWidth: "11.333333%",textAlign: "left!important" }}
-                >
-                  {reviewInventory['quantity']}
-                  <span>{"("}</span>
-                  {typeof reviewInventory.unitofMeasure === 'object' && reviewInventory.unitofMeasure != null ? reviewInventory.unitofMeasure.name : reviewInventory['unitOfMeasure.name']}
-                  <span>{")"}</span>
-                </span>
-                <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
-                  {reviewInventory.manufacturingDate
-                    ? `0${
+                <div className='row p-1 mt-4' key={reviewInventory.productId}>
+                  <span className='col-3' style={{ flex: "0 0 20%" }}>
+                    {reviewInventory.productName}
+                  </span>
+                  <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
+                    {reviewInventory.manufacturer
+                      ? reviewInventory.manufacturer
+                      : reviewInventory.manufacturerName}
+                  </span>
+                  <span
+                    className='col-1'
+                    style={{
+                      position: "relative",
+                      left: "-16px",
+                      flex: "0 0 11.333333%",
+                      maxWidth: "11.333333%",
+                      textAlign: "left!important",
+                    }}
+                  >
+                    {reviewInventory["quantity"]}
+                    <span>{"("}</span>
+                    {typeof reviewInventory.unitofMeasure === "object" &&
+                    reviewInventory.unitofMeasure != null
+                      ? reviewInventory.unitofMeasure.name
+                      : reviewInventory["unitOfMeasure.name"]}
+                    <span>{")"}</span>
+                  </span>
+                  <span
+                    className='col-1'
+                    style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
+                  >
+                    {reviewInventory.manufacturingDate
+                      ? `0${
+                          new Date(
+                            Date.parse(reviewInventory.manufacturingDate)
+                          ).getMonth() + 1
+                        }`.slice(-2) +
+                        "/" +
                         new Date(
                           Date.parse(reviewInventory.manufacturingDate)
-                        ).getMonth() + 1
-                      }`.slice(-2) +
-                      "/" +
-                      new Date(
-                        Date.parse(reviewInventory.manufacturingDate)
-                      ).getFullYear()
-                    : ""}
-                </span>
-                <span className='col-1' style={{ flex: "0 0 11.333333%",maxWidth: "11.333333%" }}>
-                  {reviewInventory.expiryDate
-                    ? `0${
+                        ).getFullYear()
+                      : ""}
+                  </span>
+                  <span
+                    className='col-1'
+                    style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
+                  >
+                    {reviewInventory.expiryDate
+                      ? `0${
+                          new Date(
+                            Date.parse(reviewInventory.expiryDate)
+                          ).getMonth() + 1
+                        }`.slice(-2) +
+                        "/" +
                         new Date(
                           Date.parse(reviewInventory.expiryDate)
-                        ).getMonth() + 1
-                      }`.slice(-2) +
-                      "/" +
-                      new Date(
-                        Date.parse(reviewInventory.expiryDate)
-                      ).getFullYear()
-                    : ""}
-                </span>
-                <span className='col-2'>{reviewInventory.batchNumber}</span>
-                <span
-                  className='col-2'
-                  style={{ position: "relative", left: "-77px",flex: "0 0 13.666667%",maxWidth: "15.666667%" }}
-                >
-                  {reviewInventory.serialNumber}
-                </span>
-              </div>
-            );
-          })}
+                        ).getFullYear()
+                      : ""}
+                  </span>
+                  <span className='col-2'>{reviewInventory.batchNumber}</span>
+                  <span
+                    className='col-2'
+                    style={{
+                      position: "relative",
+                      left: "-77px",
+                      flex: "0 0 13.666667%",
+                      maxWidth: "15.666667%",
+                    }}
+                  >
+                    {reviewInventory.serialNumber}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <hr />
-          <div className=''>
-            <div className='d-flex flex-row-reverse'>
-              <button className='btn-primary btn' onClick={onAssign}>
-                <b>{t("save")}</b>
+          <div className='d-flex flex-row-reverse'>
+            <button className='btn-primary btn' onClick={onAssign}>
+              <b>{t("save")}</b>
+            </button>
+            {reviewInventories.length > 0 && reviewInventories[0].manufacturer && (
+              <button className='btn-outline-dark btn mr-2' onClick={onEdit}>
+                <img
+                  src={Pen}
+                  width='15'
+                  height='15'
+                  className='mr-3'
+                  alt={t("edit")}
+                />
+                <span>
+                  <b>{t("edit")}</b>
+                </span>
               </button>
-              {reviewInventories.length > 0 &&
-                reviewInventories[0].manufacturer && (
-                  <button
-                    className='btn-outline-dark btn mr-2'
-                    onClick={onEdit}
-                  >
-                    <img
-                      src={Pen}
-                      width='15'
-                      height='15'
-                      className='mr-3'
-                      alt={t("edit")}
-                    />
-                    <span>
-                      <b>{t('edit')}</b>
-                    </span>
-                  </button>
-                )}
-              {openCreatedInventory && (
-                <Modal
-                  close={() => closeModal()}
-                  size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-                >
-                  <InventoryPopUp
-                    onHide={closeModal} //FailurePopUp
-                    successMessage={successMessage}
-                    errorMessage={errorMessage}
-                    t={t}
-                  />
-                </Modal>
-              )}
-            </div>
+            )}
+            {openCreatedInventory && (
+              <Modal
+                close={() => closeModal()}
+                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+              >
+                <InventoryPopUp
+                  onHide={closeModal} //FailurePopUp
+                  successMessage={successMessage}
+                  errorMessage={errorMessage}
+                  t={t}
+                />
+              </Modal>
+            )}
           </div>
         </div>
       </div>
