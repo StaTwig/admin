@@ -331,7 +331,7 @@ exports.register = [
         const event_data = {
           eventID: cuid(),
           eventTime: new Date().toISOString(),
-          actorWarehouseId: null,
+          actorWarehouseId: "null",
           eventType: {
             primary: "CREATE",
             description: "USER",
@@ -342,19 +342,19 @@ exports.register = [
           },
           stackholders: {
             ca: {
-              id: null,
-              name: null,
-              address: null,
+              id: "null",
+              name: "null",
+              address: "null",
             },
             actororg: {
-              id: req.body.organisationId ? req.body.organisationId : null,
-              name: null,
-              address: null,
+              id: req.body.organisationId ? req.body.organisationId : "null",
+              name: "null",
+              address: "null",
             },
             secondorg: {
-              id: null,
-              name: null,
-              address: null,
+              id: "null",
+              name: "null",
+              address: "null",
             },
           },
           payload: {
@@ -957,6 +957,7 @@ exports.addWarehouse = [
       const loc = await getLatLongByCity(
         warehouseAddress.city + "," + warehouseAddress.country
       );
+      // console.log(loc)
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
@@ -973,7 +974,10 @@ exports.addWarehouse = [
         warehouseInventory: inventoryResult.id,
         status: "NOTVERIFIED",
       });
+
       await warehouse.save();
+      console.log('hello')
+
       await OrganisationModel.findOneAndUpdate(
         {
           id: organisationId,
@@ -984,6 +988,7 @@ exports.addWarehouse = [
           },
         }
       );
+      
       await EmployeeModel.findOneAndUpdate(
         {
           id: req.user.id,
@@ -1022,7 +1027,7 @@ exports.addWarehouse = [
       };
       const token =
         req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-      await axios.post(
+      axios.post(
         `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
         bc_data,
         {
@@ -1031,7 +1036,6 @@ exports.addWarehouse = [
           },
         }
       );
-
       const event_data = {
         eventID: cuid(),
         eventTime: new Date().toISOString(),
@@ -1046,19 +1050,19 @@ exports.addWarehouse = [
         },
         stackholders: {
           ca: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
           actororg: {
-            id: organisationId ? organisationId : null,
-            name: null,
-            address: postalAddress ? postalAddress : null,
+            id: organisationId ? organisationId : "null",
+            name: "null",
+            address: postalAddress ? postalAddress : "null",
           },
           secondorg: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
         },
         payload: {
