@@ -9,7 +9,7 @@ import { turnOn, turnOff } from "../../actions/spinnerActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 
 const ExcelPopUp = (props) => {
-  const { t } = props;
+  const { t , setOpenExcel, setOpenFailInventory, setInventoryError} = props;
   const [excel, setExcel] = useState(null);
   const dispatch = useDispatch();
 
@@ -22,9 +22,13 @@ const ExcelPopUp = (props) => {
     formData.append("excel", excel);
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
-    if (result.status === 200) {
+    if (result.status === 200 && result.data.data?.length !== 0) {
       dispatch(setReviewinventories(result.data.data));
       props.history.push("/reviewinventory");
+    } else if(result.status === 200 && result.data.data?.length === 0) {
+      setOpenExcel(false);
+      setInventoryError('all_products_are_expired');
+      setOpenFailInventory(true);
     }
     if(result.status === 500){
       props.importError(result.data.message);
@@ -84,26 +88,3 @@ const ExcelPopUp = (props) => {
 };
 
 export default ExcelPopUp;
-
-
-function UploadedFileInfo({ file, setExcel }) {
-
-  const formatFileSize = (bytes, precision = 2) => {
-    if (bytes === 0) { return '0 Bytes' }
-
-    const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(precision)) + ' ' + sizes[i];
-  };
-
-  return (
-    <div className="UploadedFileInfo">
-      <h4>Information about current file</h4>
-      <div><strong>Name:</strong> {file?.name} </div>
-      <div><strong>Size:</strong> {formatFileSize(file?.size)} </div>
-      <div><strong>Type:</strong> {file?.type}</div>
-      <button className="UploadedFileInfo-remove-button" onClick={() => setExcel(null)} >Remove File</button>
-    </div>
-  )
-
-} 
