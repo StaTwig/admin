@@ -36,7 +36,6 @@ const UpdateStatus = (props) => {
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // const [isActive, setActive] = useState(false)
   const [shipment, setShipment] = useState({});
   const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
@@ -161,7 +160,7 @@ const UpdateStatus = (props) => {
   const updateStatus = async (values) => {
     const { shipmentId, comments, updateStatusLocation } = values;
 
-    if (updateStatusLocation == "") {
+    if (updateStatusLocation === "") {
       setErrorMessage("Require Update Status Location");
     }
     const data = {
@@ -386,7 +385,11 @@ const UpdateStatus = (props) => {
                           onBlur={handleBlur}
                           onChange={handleChange}
                           value={values.updateStatusLocation}
-                          placeholder={` ${values.updateStatusLocation==""? t('Required'):''}`}
+                          placeholder={` ${
+                            values.updateStatusLocation == ""
+                              ? t("Required")
+                              : ""
+                          }`}
                         />
                         {/* {errors.updateStatusLocation && touched.updateStatusLocation && (
                           <label className="error-msg text-danger mb-1">
@@ -922,13 +925,6 @@ const UpdateStatus = (props) => {
           />
         </Modal>
       )}
-      {/* {message && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-      )}
-
-      {errorMessage && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-      )} */}
     </div>
   );
 };
