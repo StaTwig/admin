@@ -2890,7 +2890,8 @@ exports.reduceBatch = [
            batch: batch,
            quantityPurchased: quantity,
            products: {
-             productId: batch.productId
+             productId: batch.productId,
+             batchNumber: batchNumber
            },
            sender: {
              id: req.user.organisationId
