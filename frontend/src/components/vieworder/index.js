@@ -227,11 +227,15 @@ const ViewOrder = (props) => {
             {t("product_details")}
           </span>
           <div className='row mt-3'>
-            {order?.products?.map((product, index) => (
+            {order?.products?.map((product, index) => {
+              let pr = order.productDetails.filter(d => product.productId === d.id);
+              let prd = pr.length > 0 ? pr[0] : {};
+              let uom = JSON.parse(prd?.unitofMeasure);
+              return(
               <div
                 className={`bg-white shadow padding-added ${
                   index >= 0 ? "mb-5 mr-4" : ""
-                } `}
+                  } `}
                 style={{ width: "27%" }}
                 key={index}
               >
@@ -244,12 +248,12 @@ const ViewOrder = (props) => {
                 </div>
                 <div className='row  p-1'>
                   <span className='col'>{t("product_category")}</span>
-                  <span className=' col text-dark '>{product?.type}</span>
+                  <span className=' col text-dark '>{prd?.type}</span>
                 </div>
                 <div className='row  p-1'>
                   <span className='col'>{t("manufacturer")}</span>
                   <span className=' col text-dark '>
-                    {product.manufacturer}
+                    {prd.manufacturer}
                   </span>
                 </div>
                 <div className='row  p-1'>
@@ -257,16 +261,16 @@ const ViewOrder = (props) => {
                   <span className=' col text-dark '>
                     {product.productQuantity}
                     <span>{"("}</span>
-                    {product.unitofMeasure && product.unitofMeasure.name ? (
-                      <span>{product.unitofMeasure.name}</span>
+                    {uom ? (
+                      <span>{uom.name}</span>
                     ) : (
-                      ""
-                    )}
+                        ""
+                      )}
                     <span>{")"}</span>
                   </span>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>
