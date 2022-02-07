@@ -273,7 +273,7 @@ exports.register = [
               address.city + "," + address.country
             );
             const warehouse = new WarehouseModel({
-              title: "Office",
+              title: "Oficina",
               id: warehouseId,
               warehouseInventory: inventoryId,
               organisationId: organisationId,

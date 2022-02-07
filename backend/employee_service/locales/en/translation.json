@@ -38,5 +38,6 @@
   "image_success": "Image",
   "no_token": "Authorization Token Not Found",
   "expired_token": "Token expired. Please login again",
-  "invalid_token": "Invalid Token. Please login again"
+  "invalid_token": "Invalid Token. Please login again",
+  "default_office": "Office"
 }
