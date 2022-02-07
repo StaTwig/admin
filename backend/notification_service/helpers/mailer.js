@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const emailBodyGenerator = require("../templates");
+const { emailBodyGenerator } = require("../templates");
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_SMTP_HOST,
   port: process.env.EMAIL_SMTP_PORT,
@@ -10,11 +10,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.send = function (from, to, subject, body, source, isOTP) {
+exports.send = function (from, to, subject, data) {
   return transporter.sendMail({
     from: from,
     to: to,
     subject: subject,
-    html: emailBodyGenerator(body, source, isOTP),
+    html: emailBodyGenerator(data.body, data.source, data.isOTP),
   });
 };

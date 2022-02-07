@@ -1,7 +1,8 @@
-const template = (body, source) => {
-  return `<head>
+module.exports = function template(body, source) {
+  return `
+  <html>
+    <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       *,
@@ -267,15 +268,11 @@ const template = (body, source) => {
               <a href="mailto:contactus@statwig.com"<strong>contactus@statwig.com</strong></a>
             </p>
             <h5 class="message-text mt-1">Thanks</h5>
-            <h5 class="message-text mt-1">Team Statwig</h5>
           </section>
         </div>
       </main>
       <footer class="footer"></footer>
     </div>
-  </body>`;
-};
-
-module.exports = {
-  template,
+  </body>
+  </html>`;
 };
