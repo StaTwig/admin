@@ -189,7 +189,7 @@ const ViewOrder = (props) => {
                     {order.customer?.organisation?.id}
                   </span>
                 </div>
-                <div className='w-100'></div>
+                {/* <div className='w-100'></div>
                 <div className='col row mt-3'>
                   <span className='col-4'>{t("region")}</span>
                   <span className=' col  text-dark '>
@@ -201,7 +201,7 @@ const ViewOrder = (props) => {
                   <span className=' col text-dark '>
                     {order.customer?.country}
                   </span>
-                </div>
+                </div> */}
                 <div className='w-100'></div>
                 <div className='col row col-6 mt-3'>
                   <span className='col-4'>{t("delivery_location")}</span>

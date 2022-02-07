@@ -2685,25 +2685,28 @@ exports.fetchInboundShipments = [
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });
-      const inboundShipmentsRes = [];
+      let inboundShipmentsRes = [];
       await asyncForEach(inboundShipmentsList, async (inboundShipment) => {
+        let inboundShipmentData = JSON.parse(
+                  JSON.stringify(inboundShipment)
+                );
         const supplierOrganisation = await OrganisationModel.findOne({
-          id: inboundShipment.supplier.id,
+          id: inboundShipmentData.supplier.id,
         });
         const supplierWarehouse = await WarehouseModel.findOne({
-          id: inboundShipment.supplier.locationId,
+          id: inboundShipmentData.supplier.locationId,
         });
         const receiverOrganisation = await OrganisationModel.findOne({
-          id: inboundShipment.receiver.id,
+          id: inboundShipmentData.receiver.id,
         });
         const receiverWarehouse = await WarehouseModel.findOne({
-          id: inboundShipment.receiver.locationId,
+          id: inboundShipmentData.receiver.locationId,
         });
-        inboundShipment.supplier[`org`] = supplierOrganisation;
-        inboundShipment.supplier[`warehouse`] = supplierWarehouse;
-        inboundShipment.receiver[`org`] = receiverOrganisation;
-        inboundShipment.receiver[`warehouse`] = receiverWarehouse;
-        inboundShipmentsRes.push(inboundShipment);
+        inboundShipmentData.supplier['org'] = supplierOrganisation;
+        inboundShipmentData.supplier['warehouse'] = supplierWarehouse;
+        inboundShipmentData.receiver['org'] = receiverOrganisation;
+        inboundShipmentData.receiver['warehouse'] = receiverWarehouse;
+        inboundShipmentsRes.push(inboundShipmentData);
       });
 
       return apiResponse.successResponseWithMultipleData(

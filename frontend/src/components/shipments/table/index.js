@@ -205,19 +205,19 @@ function Table(props) {
             }
             let supplierAddress = props.user.isCustom
               ? shipment.supplier.locationId
-              : shipment.supplier.warehouse.warehouseAddress;
+              : shipment.supplier.warehouse?.warehouseAddress;
             let wLocation = shipment.supplier.warehouse?.location;
             if (wLocation?.length) {
               supplierAddress =
-                wLocation.firstLine + wLocation.secondLine + wLocation.city;
+                wLocation?.firstLine + wLocation?.secondLine + wLocation?.city;
             }
             let receiverAddress = props.user.isCustom
               ? shipment.receiver.locationId
-              : shipment.receiver.warehouse.warehouseAddress;
+              : shipment.receiver.warehouse?.warehouseAddress;
             let wrLocation = shipment.receiver.warehouse?.location;
             if (wrLocation?.length) {
               supplierAddress =
-                wrLocation.firstLine + wrLocation.secondLine + wrLocation.city;
+                wrLocation?.firstLine + wrLocation?.secondLine + wrLocation?.city;
             }
             return (
               <tr>
@@ -254,19 +254,19 @@ function Table(props) {
                     </h5>
                     <p className='text-muted mb-0 table-p-text'>
                       {`${
-                        supplierAddress.firstLine
-                          ? supplierAddress.firstLine
+                        supplierAddress?.firstLine
+                          ? supplierAddress?.firstLine
                           : props.user.isCustom
                           ? shipment.supplier.locationId
                           : ""
                       } ${
-                        supplierAddress.secondLine
-                          ? supplierAddress.secondLine
+                        supplierAddress?.secondLine
+                          ? supplierAddress?.secondLine
                           : ""
-                      } ${supplierAddress.city ? supplierAddress.city : ""}\n ${
-                        supplierAddress.state ? supplierAddress.state : ""
+                      } ${supplierAddress?.city ? supplierAddress?.city : ""}\n ${
+                        supplierAddress?.state ? supplierAddress?.state : ""
                       }\n ${
-                        supplierAddress.country ? supplierAddress.country : ""
+                        supplierAddress?.country ? supplierAddress?.country : ""
                       } `}
                     </p>
                   </div>
@@ -282,21 +282,21 @@ function Table(props) {
                     </h5>
                     <p className='text-muted mb-0 table-p-text'>
                       {`${
-                        receiverAddress.firstLine
-                          ? receiverAddress.firstLine
+                        receiverAddress?.firstLine
+                          ? receiverAddress?.firstLine
                           : props.user.isCustom
                           ? shipment.receiver.locationId
                           : ""
                       }  ${
-                        receiverAddress.secondLine
-                          ? receiverAddress.secondLine
+                        receiverAddress?.secondLine
+                          ? receiverAddress?.secondLine
                           : ""
                       } ${
-                        receiverAddress.city ? receiverAddress.city : ""
+                        receiverAddress?.city ? receiverAddress?.city : ""
                       } \n ${
-                        receiverAddress.state ? receiverAddress.state : ""
+                        receiverAddress?.state ? receiverAddress?.state : ""
                       } \n ${
-                        receiverAddress.country ? receiverAddress.country : ""
+                        receiverAddress?.country ? receiverAddress?.country : ""
                       } `}
                     </p>
                   </div>
