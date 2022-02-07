@@ -263,7 +263,7 @@ export function config() {
       pushWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/pushWarehouse`,
       addPOsFromExcel: `${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
       getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
       getAllStates: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
