@@ -88,13 +88,10 @@ const AddProduct = (props) => {
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
       formData.append("type", category);
-      formData.append(
-        "unitofMeasure",
-        JSON.stringify({
-          id: UOM,
-          name: UOM,
-        })
-      );
+      formData.append("unitofMeasure", {
+        id: UOM,
+        name: UOM,
+      });
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
@@ -114,9 +111,6 @@ const AddProduct = (props) => {
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
   };
-  // const setExcelFile = (evt) => {
-  //   setExcel(evt.target.files[0]);
-  // };
 
   const defaultPropsManufacturer = {
     options: manufacturers,
@@ -164,7 +158,6 @@ const AddProduct = (props) => {
             />
           </div>
         </button>
-        {/* </div> */}
       </div>
       <div className='card'>
         <div className='card-body'>
