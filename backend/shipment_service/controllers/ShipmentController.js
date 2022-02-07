@@ -33,7 +33,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const excel = require("node-excel-export");
 const { resolve } = require("path");
 const PdfPrinter = require("pdfmake");
-const { responses } = require("../helpers/responses")
+const { responses } = require("../helpers/responses");
 const { asyncForEach } = require("../helpers/utility");
 const { fromUnixTime } = require("date-fns");
 const fontDescriptors = {
@@ -140,23 +140,23 @@ async function poUpdate(id, quantity, poId, shipmentStatus, actor) {
       },
       stackholders: {
         ca: {
-          id: "null",
-          name: "null",
-          address: "null",
+          id: null,
+          name: null,
+          address: null,
         },
         actororg: {
           id: actor.organisationId,
-          name: "null",
-          address: "null",
+          name: null,
+          address: null,
         },
         secondorg: {
-          id: "null",
-          name: "null",
-          address: "null",
+          id: null,
+          name: null,
+          address: null,
         },
       },
       payload: {
-        data: event.payloadData || "null",
+        data: event.payloadData || null,
       },
     };
     await logEvent(event_data);
@@ -349,19 +349,28 @@ exports.createShipment = [
         emailId: req.user.emailId,
       });
       if (empData == null) {
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).email_not_found);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).email_not_found
+        );
       }
       const orgId = empData.organisationId;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
       if (orgData == null) {
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).orgdata_not_found);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).orgdata_not_found
+        );
       }
       const address = orgData.postalAddress;
       const confId = orgData.configuration_id;
       const confData = await ConfigurationModel.findOne({ id: confId });
       if (confData == null) {
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).config_not_found);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).config_not_found
+        );
       }
       const process = confData.process;
       const supplierID = req.body.supplier.id;
@@ -370,14 +379,20 @@ exports.createShipment = [
       });
       if (supplierOrgData == null) {
         console.log("Supplier not defined");
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).supplier_not_defined);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).supplier_not_defined
+        );
       }
 
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.receiver.id,
       });
       if (receiverOrgData == null) {
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).receiver_not_defined);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).receiver_not_defined
+        );
       }
 
       const supplierName = supplierOrgData.name;
@@ -400,7 +415,10 @@ exports.createShipment = [
           id: data.poId,
         });
         if (po == null) {
-          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).orderid_not_defined);
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).orderid_not_defined
+          );
         }
         let quantityMismatch = false;
         po.products.every((product) => {
@@ -503,7 +521,10 @@ exports.createShipment = [
           }
         );
         if (poidupdate == null) {
-          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_not_updated);
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).product_not_updated
+          );
         }
       }
       if (flag != "N") {
@@ -523,7 +544,8 @@ exports.createShipment = [
         if (suppInventoryDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "suppInventoryDetails" + responses(req.user.preferredLanguage).not_found
+            "suppInventoryDetails" +
+              responses(req.user.preferredLanguage).not_found
           );
         }
         const recvWarehouseDetails = await WarehouseModel.findOne({
@@ -532,7 +554,8 @@ exports.createShipment = [
         if (recvWarehouseDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "recvWarehouseDetails" + responses(req.user.preferredLanguage).not_found
+            "recvWarehouseDetails" +
+              responses(req.user.preferredLanguage).not_found
           );
         }
         var recvInventoryId = recvWarehouseDetails.warehouseInventory;
@@ -542,7 +565,8 @@ exports.createShipment = [
         if (recvInventoryDetails == null) {
           return apiResponse.ErrorResponse(
             res,
-            "recvInventoryDetails" + responses(req.user.preferredLanguage).not_found
+            "recvInventoryDetails" +
+              responses(req.user.preferredLanguage).not_found
           );
         }
         var products = data.products;
@@ -625,22 +649,22 @@ exports.createShipment = [
             actorid: user_id,
             actoruserid: email,
           },
-          actorWarehouseId: req.user.warehouseId || "null",
+          actorWarehouseId: req.user.warehouseId || null,
           stackholders: {
             ca: {
-              id: CENTRAL_AUTHORITY_ID || "null",
-              name: CENTRAL_AUTHORITY_NAME || "null",
-              address: CENTRAL_AUTHORITY_NAME || "null",
+              id: CENTRAL_AUTHORITY_ID || null,
+              name: CENTRAL_AUTHORITY_NAME || null,
+              address: CENTRAL_AUTHORITY_NAME || null,
             },
             actororg: {
-              id: orgId || "null",
-              name: orgName || "null",
-              address: address || "null",
+              id: orgId || null,
+              name: orgName || null,
+              address: address || null,
             },
             secondorg: {
-              id: "null",
-              name: "null",
-              address: "null",
+              id: null,
+              name: null,
+              address: null,
             },
           },
           payload: {
@@ -648,18 +672,21 @@ exports.createShipment = [
           },
         };
         if (orgId === supplierID) {
-          event_data.stackholders.secondorg.id = receiverId || "null";
-          event_data.stackholders.secondorg.name = receiverName || "null";
-          event_data.stackholders.secondorg.address = receiverAddress || "null";
+          event_data.stackholders.secondorg.id = receiverId || null;
+          event_data.stackholders.secondorg.name = receiverName || null;
+          event_data.stackholders.secondorg.address = receiverAddress || null;
         } else {
-          event_data.stackholders.secondorg.id = supplierID || "null";
-          event_data.stackholders.secondorg.name = supplierName || "null";
-          event_data.stackholders.secondorg.address = supplierAddress || "null";
+          event_data.stackholders.secondorg.id = supplierID || null;
+          event_data.stackholders.secondorg.name = supplierName || null;
+          event_data.stackholders.secondorg.address = supplierAddress || null;
         }
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
         if (result == null) {
-          return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_saved);
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).shipment_not_saved
+          );
         }
 
         //Blockchain Integration
@@ -689,7 +716,7 @@ exports.createShipment = [
           Misc: "",
         };
 
-        const token = 
+        const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
         await axios.post(
@@ -811,7 +838,10 @@ exports.newShipment = [
       const shipment = new ShipmentModel(data);
       const result = await shipment.save();
       if (result == null) {
-        return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_saved);
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).shipment_not_saved
+        );
       }
 
       //Blockchain Integration
@@ -1207,25 +1237,25 @@ exports.receiveShipment = [
             },
             transactionId: data.id,
             actor: {
-              actorid: user_id || "null",
-              actoruserid: email || "null",
+              actorid: user_id || null,
+              actoruserid: email || null,
             },
-            actorWarehouseId: req.user.warehouseId || "null",
+            actorWarehouseId: req.user.warehouseId || null,
             stackholders: {
               ca: {
-                id: CENTRAL_AUTHORITY_ID || "null",
-                name: CENTRAL_AUTHORITY_NAME || "null",
-                address: CENTRAL_AUTHORITY_ADDRESS || "null",
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: orgId || "null",
-                name: orgName || "null",
-                address: address || "null",
+                id: orgId || null,
+                name: orgName || null,
+                address: address || null,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
@@ -1233,15 +1263,13 @@ exports.receiveShipment = [
             },
           };
           if (orgId === supplierID) {
-            event_data.stackholders.secondorg.id = receiverId || "null";
-            event_data.stackholders.secondorg.name = receiverName || "null";
-            event_data.stackholders.secondorg.address =
-              receiverAddress || "null";
+            event_data.stackholders.secondorg.id = receiverId || null;
+            event_data.stackholders.secondorg.name = receiverName || null;
+            event_data.stackholders.secondorg.address = receiverAddress || null;
           } else {
-            event_data.stackholders.secondorg.id = supplierID || "null";
-            event_data.stackholders.secondorg.name = supplierName || "null";
-            event_data.stackholders.secondorg.address =
-              supplierAddress || "null";
+            event_data.stackholders.secondorg.id = supplierID || null;
+            event_data.stackholders.secondorg.name = supplierName || null;
+            event_data.stackholders.secondorg.address = supplierAddress || null;
           }
           await logEvent(event_data);
 
@@ -1253,7 +1281,7 @@ exports.receiveShipment = [
         } else {
           return apiResponse.successResponse(
             res,
-            responses(req.user.preferredLanguage).shipment_cannot_receive,
+            responses(req.user.preferredLanguage).shipment_cannot_receive
           );
         }
       } else {
@@ -1888,7 +1916,10 @@ exports.updateStatus = [
         { new: true }
       );
       if (!update) {
-        return apiResponse.notFoundResponse(res, responses(req.user.preferredLanguage).shipment_not_found);
+        return apiResponse.notFoundResponse(
+          res,
+          responses(req.user.preferredLanguage).shipment_not_found
+        );
       }
       return apiResponse.successResponseWithData(
         res,
@@ -2014,24 +2045,24 @@ exports.updateTrackingStatus = [
           description: "SHIPMENT_TRACKING",
         },
         actor: {
-          actorid: req.user.id || "null",
-          actoruserid: req.user.emailId || "null",
+          actorid: req.user.id || null,
+          actoruserid: req.user.emailId || null,
         },
         stackholders: {
           ca: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           actororg: {
             id: req.user.organisationId,
-            name: "null",
-            address: "null",
+            name: null,
+            address: null,
           },
           secondorg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
         },
         payload: {
@@ -2039,7 +2070,10 @@ exports.updateTrackingStatus = [
         },
       };
       await logEvent(event_data);
-      return apiResponse.successResponse(res, responses(req.user.preferredLanguage).status_updated);
+      return apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).status_updated
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2262,7 +2296,10 @@ exports.chainOfCustody = [
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res, responses(req.user.preferredLanguage).no_permission);
+          return apiResponse.forbiddenResponse(
+            res,
+            responses(req.user.preferredLanguage).no_permission
+          );
         }
       });
     } catch (err) {
@@ -2486,7 +2523,10 @@ exports.fetchShipmentIds = [
             }
           }
         } else {
-          return apiResponse.forbiddenResponse(res,responses(req.user.preferredLanguage).no_permission);
+          return apiResponse.forbiddenResponse(
+            res,
+            responses(req.user.preferredLanguage).no_permission
+          );
         }
       });
     } catch (err) {
@@ -2500,7 +2540,6 @@ exports.fetchShipmentIds = [
   async (req, res) => {
     try {
       const { warehouseId } = req.user;
-      console.log(warehouseId)
       await ShipmentModel.find(
         {
           $and: [
@@ -2551,15 +2590,16 @@ exports.fetchInboundShipments = [
     try {
       const { skip, limit } = req.query;
       const { warehouseId } = req.user;
+      const status = req.query.status ? req.query.status : undefined;
+      const fromSupplier = req.query.from ? req.query.from : undefined;
+      const toReceiver = req.query.to ? req.query.to : undefined;
+      const shipmentId = req.query.shipmentId
+        ? req.query.shipmentId
+        : undefined;
+      const fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      const toDate = req.query.toDate ? req.query.toDate : undefined;
       let currentDate = new Date();
       let fromDateFilter = 0;
-      let status = req.query.status ? req.query.status : undefined;
-      let fromSupplier = req.query.from ? req.query.from : undefined;
-      let toReceiver = req.query.to ? req.query.to : undefined;
-      let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
-      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
-      let toDate = req.query.toDate ? req.query.toDate : undefined;
-
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -2612,8 +2652,8 @@ exports.fetchInboundShipments = [
       }
 
       if (fromDate && toDate) {
-        var firstDate = new Date(fromDate);
-        var nextDate = new Date(toDate);
+        const firstDate = new Date(fromDate);
+        const nextDate = new Date(toDate);
         whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
@@ -2640,54 +2680,40 @@ exports.fetchInboundShipments = [
       if (toReceiver) {
         whereQuery["receiver.id"] = toReceiver;
       }
-      console.log("In bound whereQuery ======>", whereQuery);
-      try {
-        let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
-        ShipmentModel.find(whereQuery)
-          .skip(parseInt(skip))
-          .limit(parseInt(limit))
-          .sort({ createdAt: -1 })
-          .then((inboundShipmentsList) => {
-            let inboundShipmentsRes = [];
-            let findInboundShipmentData = inboundShipmentsList.map(
-              async (inboundShipment) => {
-                let inboundShipmentData = JSON.parse(
-                  JSON.stringify(inboundShipment)
-                );
-                let supplierOrganisation = await OrganisationModel.findOne({
-                  id: inboundShipmentData.supplier.id,
-                });
-                let supplierWarehouse = await WarehouseModel.findOne({
-                  id: inboundShipmentData.supplier.locationId,
-                });
-                let receiverOrganisation = await OrganisationModel.findOne({
-                  id: inboundShipmentData.receiver.id,
-                });
-                let receiverWarehouse = await WarehouseModel.findOne({
-                  id: inboundShipmentData.receiver.locationId,
-                });
-                inboundShipmentData.supplier[`org`] = supplierOrganisation;
-                inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
-                inboundShipmentData.receiver[`org`] = receiverOrganisation;
-                inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
-                inboundShipmentsRes.push(inboundShipmentData);
-              }
-            );
+      const inboundShipmentsCount = await ShipmentModel.count(whereQuery);
+      const inboundShipmentsList = await ShipmentModel.find(whereQuery)
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .sort({ createdAt: -1 });
+      const inboundShipmentsRes = [];
+      await asyncForEach(inboundShipmentsList, async (inboundShipment) => {
+        const supplierOrganisation = await OrganisationModel.findOne({
+          id: inboundShipment.supplier.id,
+        });
+        const supplierWarehouse = await WarehouseModel.findOne({
+          id: inboundShipment.supplier.locationId,
+        });
+        const receiverOrganisation = await OrganisationModel.findOne({
+          id: inboundShipment.receiver.id,
+        });
+        const receiverWarehouse = await WarehouseModel.findOne({
+          id: inboundShipment.receiver.locationId,
+        });
+        inboundShipment.supplier[`org`] = supplierOrganisation;
+        inboundShipment.supplier[`warehouse`] = supplierWarehouse;
+        inboundShipment.receiver[`org`] = receiverOrganisation;
+        inboundShipment.receiver[`warehouse`] = receiverWarehouse;
+        inboundShipmentsRes.push(inboundShipment);
+      });
 
-            Promise.all(findInboundShipmentData).then(function (results) {
-              return apiResponse.successResponseWithMultipleData(
-                res,
-                "Inbound Shipment Records",
-                {
-                  inboundShipments: inboundShipmentsRes,
-                  count: inboundShipmentsCount,
-                }
-              );
-            });
-          });
-      } catch (err) {
-        return apiResponse.ErrorResponse(res, err.message);
-      }
+      return apiResponse.successResponseWithMultipleData(
+        res,
+        "Inbound Shipment Records",
+        {
+          inboundShipments: inboundShipmentsRes,
+          count: inboundShipmentsCount,
+        }
+      );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -2987,7 +3013,7 @@ exports.trackJourney = [
           if (inwardShipments == null)
             throw new Error(
               responses(req.user.preferredLanguage).id_not_exists
-              );
+            );
 
           shipmentsArray = inwardShipments.taggedShipments;
           shipmentsArray.push(trackingId);
@@ -3209,7 +3235,7 @@ exports.trackJourney = [
           if (poDetails == null)
             throw new Error(
               responses(req.user.preferredLanguage).id_not_exists
-              );
+            );
 
           if (poDetails.shipments.length > 0) {
             outwardShipmentsArray = await ShipmentModel.aggregate([
@@ -3363,8 +3389,15 @@ exports.checkShipmentID = [
       const { shipmentId } = req.query;
       const checkShipment = await ShipmentModel.find({ id: shipmentId });
       if (checkShipment.length > 0)
-        return apiResponse.successResponse(res, responses(req.user.preferredLanguage).shipment_found);
-      else return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).shipment_not_found);
+        return apiResponse.successResponse(
+          res,
+          responses(req.user.preferredLanguage).shipment_found
+        );
+      else
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).shipment_not_found
+        );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }

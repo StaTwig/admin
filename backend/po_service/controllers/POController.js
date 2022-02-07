@@ -146,14 +146,12 @@ exports.fetchPurchaseOrders = [
               );
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
-                  // console.log(element)
                   const product = await ProductModel.findOne({
                     name: element.id,
                   });
                   element.unitofMeasure = product?.unitofMeasure;
                   element.manufacturer = product?.manufacturer;
                   element.type = product?.type;
-                  // console.log(product)
                 })
               );
             } else {
