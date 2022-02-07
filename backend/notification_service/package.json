@@ -1,12 +1,10 @@
 {
-  "name": "theledgernotificationservice",
+  "name": "notification_service",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node notification_server.js",
-    "dev": "nodemon notification_server.js",
-    "test": "nyc _mocha --timeout 10000 --exit --report lcovonly -- -R spec",
-    "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
+    "dev": "nodemon notification_server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -20,5 +18,7 @@
     "nodemailer": "^6.7.2",
     "twilio": "^3.73.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^8.8.0"
+  }
 }

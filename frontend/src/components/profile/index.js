@@ -47,7 +47,7 @@ class Profile extends React.Component {
       title: "",
       warehouseLocByOrg: [],
       image: "",
-      preferredLanguage: "EN"
+      preferredLanguage: "EN",
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -73,7 +73,7 @@ class Profile extends React.Component {
         signup_date,
         title,
         preferredLanguage,
-        warehouses
+        warehouses,
       } = response.data.data;
       this.setState({
         profile_picture,
@@ -113,7 +113,7 @@ class Profile extends React.Component {
     }
 
     const that = this;
-    const r = await getImage(this.props.user.photoId);
+    const r = await getImage(this.props.user?.photoId);
     const reader = new window.FileReader();
     reader.readAsDataURL(r.data);
     reader.onload = function () {
@@ -371,12 +371,15 @@ class Profile extends React.Component {
                     <div className='form-group'>
                       <label htmlFor=''>{t("language")}</label>
                       <Select
-                      noOptionsMessage={() => t("no_options")}
+                        noOptionsMessage={() => t("no_options")}
                         className='my-form-width'
                         placeholder={t("select_the_language")}
                         style={{ fontSize: "14px" }}
-                        options={[{value: 'EN', label: 'English'}, {value: 'ES', label: 'Español'}].map((v) => v)}
-                        onChange={ (language) =>
+                        options={[
+                          { value: "EN", label: "English" },
+                          { value: "ES", label: "Español" },
+                        ].map((v) => v)}
+                        onChange={(language) =>
                           this.setState({ preferredLanguage: language.value })
                         }
                       />
