@@ -340,5 +340,6 @@
   "something_went_wrong": "SOMETHING WENT WRONG",
   "sorry_msg": "We are very sorry for inconvenience.",
   "sorry_reason": "It looks you are trying to access a page that either has been deleted or never been existed",
-  "back_to_home": "Back to Home"
+  "back_to_home": "Back to Home",
+  "all_products_are_expired": "All products are expired"
 }
