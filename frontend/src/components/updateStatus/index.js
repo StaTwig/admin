@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { useSelector } from "react-redux";
@@ -51,7 +51,19 @@ const UpdateStatus = (props) => {
   const [acceptanceDate, setAcceptanceDate] = useState("");
   const [customsDate, setCustomsDate] = useState("");
   const [lastStatusDate, setLastStatusDate] = useState("");
-  React.useEffect(() => {
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await dispatch(getViewShipmentGmr(props.match.params.id));
+      if (result) {
+        setShipment(result);
+      } else {
+        setShipment({});
+      }
+    }
+    fetchData();
+  }, [dispatch, props.match.params.id]);
+  useEffect(() => {
     const acceptanceArr = shipmentData.shipmentUpdates?.filter(
       (u) => u.updateComment === "Acceptance Date"
     );
@@ -75,7 +87,6 @@ const UpdateStatus = (props) => {
   }, [shipmentData]);
 
   const onToggle = async (value) => {
-    console.log(value);
     document.getElementById(value.target.id).checked =
       value.currentTarget.checked;
 
@@ -129,17 +140,6 @@ const UpdateStatus = (props) => {
     checked: {},
     track: {},
   })(Switch);
-  React.useEffect(() => {
-    async function fetchData() {
-      const result = await dispatch(getViewShipmentGmr(props.match.params.id));
-      if (result) {
-        setShipment(result);
-      } else {
-        setShipment({});
-      }
-    }
-    fetchData();
-  }, [dispatch, props.match.params.id]);
 
   const clearImage = () => {
     setPhoto("");
@@ -152,13 +152,11 @@ const UpdateStatus = (props) => {
     const result = await uploadImage(id, formData);
     if (result.status === 200) {
       setMessage("Image Uploaded");
-    } else {
-      console.log(result.status);
     }
   };
 
   const updateStatus = async (values) => {
-    const { shipmentId, comments, updateStatusLocation } = values;
+    const { shipmentId, updateStatusLocation } = values;
 
     if (updateStatusLocation === "") {
       setErrorMessage("Require Update Status Location");
@@ -254,15 +252,12 @@ const UpdateStatus = (props) => {
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          dirty,
         }) => (
           <form onSubmit={handleSubmit} className='mb-3'>
             <div className='card bg-light border-0'>
               <div className='card-body'>
                 <div className='row justify-content-between'>
-                  <div className='col '>
+                  <div className='col'>
                     <div className='panel commonpanle'>
                       <div className='form-group'>
                         <label className='mt-3 text-secondary'>
@@ -315,14 +310,7 @@ const UpdateStatus = (props) => {
                             />
                           </div>
                         </div>
-                      ) : (
-                        ""
-                      )}
-                      {/* {errors.shipmentId && touched.shipmentId && (
-                        <span className="error-msg text-danger row justify-content-end col-8">
-                          {errors.shipmentId}
-                        </span>
-                      )} */}
+                      ) : null}
                     </div>
                     <h6 className='poheads potext m-4'>
                       {t("account_holder_details")}
@@ -375,9 +363,8 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type='text'
-                          // className="form-control mb-2"
                           className={`form-control mb-2 ${
-                            values.updateStatusLocation == ""
+                            values.updateStatusLocation === ""
                               ? "border-danger"
                               : ""
                           }`}
@@ -386,16 +373,11 @@ const UpdateStatus = (props) => {
                           onChange={handleChange}
                           value={values.updateStatusLocation}
                           placeholder={` ${
-                            values.updateStatusLocation == ""
+                            values.updateStatusLocation === ""
                               ? t("Required")
                               : ""
                           }`}
                         />
-                        {/* {errors.updateStatusLocation && touched.updateStatusLocation && (
-                          <label className="error-msg text-danger mb-1">
-                            {errors.updateStatusLocation}
-                          </label>
-                        )} */}
                       </div>
                     </div>
                     {props.user.isCustom ? (
@@ -415,27 +397,25 @@ const UpdateStatus = (props) => {
                           </div>
                           {loader && <Loader />}
                           {!loader && (
-                            <div>
-                              <input
-                                type='text'
-                                className='form-control mb-2'
-                                name='acceptanceDate'
-                                onChange={(e) => console.log(e.target.value)}
-                                value={acceptanceDate}
-                                style={{
-                                  border: "0px",
-                                  color: "#6c757d!important",
-                                }}
-                              />
-                            </div>
+                            <input
+                              type='text'
+                              className='form-control mb-2'
+                              name='acceptanceDate'
+                              onChange={(e) => console.log(e.target.value)}
+                              value={acceptanceDate}
+                              style={{
+                                border: "0px",
+                                color: "#6c757d!important",
+                              }}
+                            />
                           )}
                           <div className='appearDate'>
                             <FormControlLabel
                               control={
                                 <CustomSwitch
-                                  readOnly={acceptanceDate != ""}
-                                  disabled={acceptanceDate != ""}
-                                  checked={acceptanceDate != ""}
+                                  readOnly={acceptanceDate !== ""}
+                                  disabled={acceptanceDate !== ""}
+                                  checked={acceptanceDate !== ""}
                                   onChange={onToggle}
                                   name='checkedB'
                                   id='toggle1'
@@ -481,20 +461,18 @@ const UpdateStatus = (props) => {
                               />
                             </div>
                           )}
-                          <div>
-                            <FormControlLabel
-                              control={
-                                <CustomSwitch
-                                  readOnly={customsDate != ""}
-                                  disabled={customsDate != ""}
-                                  checked={customsDate != ""}
-                                  onChange={onToggle}
-                                  name='checkedB'
-                                  id='toggle2'
-                                />
-                              }
-                            />
-                          </div>
+                          <FormControlLabel
+                            control={
+                              <CustomSwitch
+                                readOnly={customsDate !== ""}
+                                disabled={customsDate !== ""}
+                                checked={customsDate !== ""}
+                                onChange={onToggle}
+                                name='checkedB'
+                                id='toggle2'
+                              />
+                            }
+                          />
                         </div>
                         <div
                           className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${
@@ -523,20 +501,18 @@ const UpdateStatus = (props) => {
                               />
                             </div>
                           )}
-                          <div>
-                            <FormControlLabel
-                              control={
-                                <CustomSwitch
-                                  readOnly={lastStatusDate != ""}
-                                  disabled={lastStatusDate != ""}
-                                  checked={lastStatusDate != ""}
-                                  onChange={onToggle}
-                                  name='checkedB'
-                                  id='toggle3'
-                                />
-                              }
-                            />
-                          </div>
+                          <FormControlLabel
+                            control={
+                              <CustomSwitch
+                                readOnly={lastStatusDate !== ""}
+                                disabled={lastStatusDate !== ""}
+                                checked={lastStatusDate !== ""}
+                                onChange={onToggle}
+                                name='checkedB'
+                                id='toggle3'
+                              />
+                            }
+                          />
                         </div>
                       </div>
                     ) : (
@@ -706,7 +682,6 @@ const UpdateStatus = (props) => {
                             className='row'
                             style={{ margin: "auto", display: "table" }}
                           >
-                            {/* <label>{photo.name?photo.name:""}</label> */}
                             <img
                               src={uploadBlue}
                               name='photo'
@@ -892,7 +867,7 @@ const UpdateStatus = (props) => {
                     <button
                       disabled={!values.updateStatusLocation}
                       className='btn btn-orange fontSize20 font-bold mr-4 product'
-                      onClick={updateStatus}
+                      type='submit'
                     >
                       <span>{t("update_status")}</span>
                     </button>
