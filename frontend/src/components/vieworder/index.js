@@ -193,7 +193,7 @@ const ViewOrder = (props) => {
                 <div className='col row mt-3'>
                   <span className='col-4'>{t("region")}</span>
                   <span className=' col  text-dark '>
-                    {order.customer?.region}
+                    {order.customer?.region || "Americas"}
                   </span>
                 </div>
                 <div className='col row mt-3'>
