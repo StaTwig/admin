@@ -2867,8 +2867,8 @@ exports.reduceBatch = [
         {new: true}
       )
       const inventory = await InventoryModel.updateOne(
-        { 'inventoryDetails.productId':  'prod-eey3kskz81etij'},
-        { $inc: { "inventoryDetails.$.quantity": -10 } }
+        { 'inventoryDetails.productId':  batch.productId},
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
      )
 
      var datee = new Date();

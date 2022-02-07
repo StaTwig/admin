@@ -439,6 +439,7 @@ exports.addPOsFromExcel = [
     try {
       const workbook = XLSX.readFile(req.file.path);
       const sheet_name_list = workbook.SheetNames;
+      let errorsArr = [];
       const data = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
@@ -506,6 +507,7 @@ exports.addPOsFromExcel = [
           });
           if (duplicate != null) {
             console.log("****** Duplicate PO");
+            errorsArr.push(poDataArray[i]);
             delete poDataArray[i];
             i--;
           } else {
