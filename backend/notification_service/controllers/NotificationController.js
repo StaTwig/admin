@@ -12,39 +12,24 @@ const { constants } = require("../helpers/constants");
 const fromMobile = process.env.FROMNO;
 const cuid = require("cuid");
 
-function sendEmail(subject, content, emailId) {
-  mailer
-    .send(constants.confirmEmails.from, emailId, subject, content)
-    .then(() => {
-      return true;
-    })
-    .catch((err) => {
-      console.log(err);
-      return err;
-    });
+function sendEmail(subject, data, emailId) {
+  return mailer.send(constants.confirmEmails.from, emailId, subject, data);
 }
 
 function sendSMS(content, mobile) {
-  console.log("SENDING " + content + " TO " + mobile);
-  client.messages
-    .create({
-      body: content,
-      from: fromMobile,
-      to: mobile,
-    })
-    .then((message) => console.log(message))
-    .catch((err) => console.log(err));
+  return client.messages.create({
+    body: content,
+    from: fromMobile,
+    to: mobile,
+  });
 }
 
 function sendWhatsApp(content, mobile) {
-  client.messages
-    .create({
-      from: `whatsapp:${fromMobile}`,
-      body: content,
-      to: `whatsapp:${mobile}`,
-    })
-    .then((message) => console.log("WhatsApp SENT", message))
-    .catch((err) => console.log(err));
+  return client.messages.create({
+    from: `whatsapp:${fromMobile}`,
+    body: content,
+    to: `whatsapp:${mobile}`,
+  });
 }
 
 async function pushNotification(body) {
@@ -146,19 +131,24 @@ exports.createTwilioBinding = [
 exports.sendOtp = [
   async (req, res) => {
     try {
-      let content =
+      const content =
         "Your OTP to login to " +
         req.body.source +
         " is " +
         req.body.OTP +
-        ". It is valid for 10 minutes";
+        ". It is valid for only 10 minutes";
       if (req.body.mobile) {
         if (req.body.whatsapp && req.body.whatsapp == true)
           sendWhatsApp(content, req.body.mobile);
         else sendSMS(content, req.body.mobile);
       }
-      if (req.body.email) sendEmail("OTP To Login", content, req.body.email);
-      return apiResponse.successResponse(res, "SENT");
+      const data = {
+        body: req.body.OTP,
+        source: req.body.source,
+        isOTP: true,
+      };
+      if (req.body.email) sendEmail("OTP To Login", data, req.body.email);
+      return apiResponse.successResponse(res, "OTP Sent Successfully");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -175,7 +165,15 @@ exports.sendMessage = [
         else sendSMS(req.body.content, req.body.mobile);
       }
       if (req.body.email)
-        sendEmail(req.body.subject, req.body.content, req.body.email);
+        sendEmail(
+          req.body.subject,
+          {
+            body: req.body.content,
+            source: req.body.source,
+            isOTP: false,
+          },
+          req.body.email
+        );
       return apiResponse.successResponse(res, "Message Sent Success");
     } catch (err) {
       console.log(err);
@@ -196,7 +194,15 @@ exports.pushNotifications = [
         }
       }
       if (req.body.email)
-        sendEmail(req.body.subject, req.body.content, req.body.email);
+        sendEmail(
+          req.body.subject,
+          {
+            body: req.body.content,
+            source: req.body.source,
+            isOTP: false,
+          },
+          req.body.email
+        );
       return apiResponse.successResponse(res, "Push Notification Sent");
     } catch (err) {
       console.log(err);
