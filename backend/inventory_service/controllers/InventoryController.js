@@ -498,7 +498,6 @@ exports.insertInventories = [
       let limit = chunkSize;
       let skip = 0;
       let count = 0;
-      const start = new Date();
       async function recursiveFun() {
         skip = chunkSize * count;
         count++;
@@ -574,7 +573,6 @@ exports.addProductsToInventory = [
       let payload = req.body;
       let warehouseId;
       payload.products.forEach((element) => {
-        console.log(element)
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;
       });
@@ -866,8 +864,10 @@ exports.addInventoriesFromExcel = [
             workbook.Sheets[sheet_name_list[0]],
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
+
+          const resData = utility.excludeExpireProduct(data);
+
           const { address } = req.user;
-          let start = new Date();
           let count = 0;
           const chunkSize = 50;
           let limit = chunkSize;
@@ -877,7 +877,7 @@ exports.addInventoriesFromExcel = [
             skip = chunkSize * count;
             count++;
             limit = chunkSize * count;
-            const chunkedData = data.slice(skip, limit);
+            const chunkedData = resData.slice(skip, limit);
             let chunkUrls = [];
             const serialNumbers = chunkedData.map((inventory) => {
               return { id: inventory.serialNumber.trim() };
@@ -888,9 +888,8 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                  inventoriesFound.serialNumber
-                }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                  }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -919,7 +918,7 @@ exports.addInventoriesFromExcel = [
                   const inventoryData = responses.map(
                     (response) => response.data
                   );
-                  if (limit < data.length) {
+                  if (limit < resData.length) {
                     recursiveFun();
                   }
                 })
@@ -929,15 +928,18 @@ exports.addInventoriesFromExcel = [
               });
           }
           recursiveFun();
-          for (const [index, prod] of data.entries()) {
+          for (const [index, prod] of resData.entries()) {
             let product = await ProductModel.findOne({
               name: prod.productName,
             });
             if (product) {
-              data[index].productId = product.id;
-              data[index].type = product.type;
+              resData[index].productId = product.id;
+              resData[index].type = product.type;
             } else {
-              return apiResponse.ErrorResponse(res, responses(req.user.preferredLanguage).product_doesnt_exist);
+              return apiResponse.ErrorResponse(
+                res,
+                responses(req.user.preferredLanguage).product_doesnt_exist
+              );
             }
           }
 
@@ -993,12 +995,12 @@ exports.addInventoriesFromExcel = [
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
           event_data.stackholders.ca.address =
             CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data.products = [...data];
+          event_data.payload.data.products = [...resData];
           // logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
             responses(req.user.preferredLanguage).success,
-            data
+            resData
           );
         } else {
           return apiResponse.ErrorResponse(
@@ -1407,10 +1409,11 @@ exports.getProductListCounts = [
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
+      const list = productList[0].inventoryDetails;
+      const productArray = [];
+      let productObj;
       for (let j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        const productId = list[j].productId;
         const product = await ProductModel.find({ id: productId });
         if (
           product &&
@@ -1420,7 +1423,7 @@ exports.getProductListCounts = [
           product[0] &&
           product[0].name
         ) {
-          var product1 = {
+          productObj = {
             productCategory: product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
@@ -1429,12 +1432,10 @@ exports.getProductListCounts = [
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
         }
-
-        if (product1?.quantity > 0) {
-          productArray.push(product1);
+        if (productObj?.quantity > 0) {
+          productArray.push(productObj);
         }
       }
-
       productArray.sort(function (a, b) {
         if (a.quantity > b.quantity) {
           return -1;
@@ -2860,12 +2861,14 @@ exports.reduceBatch = [
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
       const address = orgData.postalAddress;
-      const {batchNumber, quantity} = req.query;
-      const batch = await AtomModel.findOneAndUpdate({
-        batchNumbers: batchNumber  },
-        { "$inc": { quantity: -Math.abs(quantity || 0) } },
-        {new: true}
-      )
+      const { batchNumber, quantity } = req.query;
+      const batch = await AtomModel.findOneAndUpdate(
+        {
+          batchNumbers: batchNumber,
+        },
+        { $inc: { quantity: -Math.abs(quantity || 0) } },
+        { new: true }
+      );
       const inventory = await InventoryModel.updateOne(
         { 'inventoryDetails.productId':  batch.productId},
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
