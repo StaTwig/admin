@@ -2910,6 +2910,12 @@ exports.reduceBatch = [
          data: {
            batch: batch,
            quantityPurchased: quantity,
+           products: {
+             productId: batch.productId
+           },
+           sender: {
+             id: req.user.organisationId
+           }
          },
        },
      };
