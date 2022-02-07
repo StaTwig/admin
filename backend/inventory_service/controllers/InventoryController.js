@@ -19,19 +19,17 @@ const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
-
+const cuid = require("cuid");
 const fs = require("fs");
-const uniqid = require("uniqid");
-// const path = require('path');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
 const stream_name = process.env.STREAM;
 const OrganisationModel = require("../models/OrganisationModel");
 const AnalyticsModel = require("../models/AnalyticsModel");
-const CENTRAL_AUTHORITY_ID = "null";
-const CENTRAL_AUTHORITY_NAME = "null";
-const CENTRAL_AUTHORITY_ADDRESS = "null";
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
 exports.getTotalCount = [
   auth,
@@ -678,7 +676,6 @@ exports.addProductsToInventory = [
               //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
-                  // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
                     labelId: product.label ? product?.label?.labelId : "QR_2D",
@@ -711,7 +708,7 @@ exports.addProductsToInventory = [
               }
             } else {
               const atom = {
-                id: uniqid("batch-"),
+                id: "batch-" + cuid(),
                 label: {
                   labelId: product.label ? product?.label?.labelId : "QR_2D",
                   labelType: product.label ? product?.label?.labelType : "3232", // ?? WHY ??
@@ -764,59 +761,40 @@ exports.addProductsToInventory = [
               )
             );
           }
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             transactionId: warehouse.warehouseInventory,
             eventType: {
               primary: "ADD",
               description: "INVENTORY",
             },
+            actorWarehouseId: req.user.warehouseId,
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id,
+              actoruserid: email,
             },
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: req.user.organisationId || "null",
-                name: "null",
-                address: "null",
+                id: orgId,
+                name: orgName,
+                address: address,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
-              data: {
-                abc: 123,
-              },
+              data: payload,
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.stackholders.actororg.id = orgId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data = payload;
           await logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
@@ -888,8 +866,9 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                  }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                  inventoriesFound.serialNumber
+                }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -959,19 +938,19 @@ exports.addInventoriesFromExcel = [
             },
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
               actororg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
@@ -984,17 +963,17 @@ exports.addInventoriesFromExcel = [
           event_data.eventTime = datee;
           event_data.eventType.primary = "ADD";
           event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
+          event_data.actor.actorid = user_id || null;
+          event_data.actor.actoruserid = email || null;
           event_data.stackholders.actororg.id =
-            orgId || req.user.organisationId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+            orgId || req.user.organisationId || null;
+          event_data.stackholders.actororg.name = orgName || null;
+          event_data.stackholders.actororg.address = address || null;
+          event_data.actorWarehouseId = req.user.warehouseId || null;
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
           event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
+            CENTRAL_AUTHORITY_ADDRESS || null;
           event_data.payload.data.products = [...resData];
           // logEvent(event_data);
           return apiResponse.successResponseWithData(
@@ -2585,19 +2564,19 @@ exports.deleteProductsFromInventory = [
         },
         stackholders: {
           ca: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           actororg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           secondorg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
         },
         payload: {
@@ -2610,18 +2589,18 @@ exports.deleteProductsFromInventory = [
       event_data.eventTime = datee;
       event_data.eventType.primary = "DELETE";
       event_data.eventType.description = "INVENTORY";
-      event_data.actor.actorid = user_id || "null";
-      event_data.actor.actoruserid = email || "null";
-      event_data.stackholders.actororg.id = orgId || "null";
-      event_data.stackholders.actororg.name = orgName || "null";
-      event_data.stackholders.actororg.address = address || "null";
-      event_data.actorWarehouseId = req.user.warehouseId || "null";
-      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-      event_data.stackholders.secondorg.id = receiverId || "null";
-      event_data.stackholders.secondorg.name = receiverName || "null";
-      event_data.stackholders.secondorg.address = receiverAddress || "null";
+      event_data.actor.actorid = user_id || null;
+      event_data.actor.actoruserid = email || null;
+      event_data.stackholders.actororg.id = orgId || null;
+      event_data.stackholders.actororg.name = orgName || null;
+      event_data.stackholders.actororg.address = address || null;
+      event_data.actorWarehouseId = req.user.warehouseId || null;
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || null;
+      event_data.stackholders.secondorg.id = receiverId || null;
+      event_data.stackholders.secondorg.name = receiverName || null;
+      event_data.stackholders.secondorg.address = receiverAddress || null;
       event_data.payload.data = payload;
 
       await logEvent(event_data);
@@ -2832,7 +2811,7 @@ exports.fetchBatchesOfInventory = [
       const inventoryId = warehouse.warehouseInventory;
       const batches = await AtomModel.find({
         productId: productId,
-        batchNumbers: { $nin: ["", "null", null] },
+        batchNumbers: { $nin: ["", null, null] },
         inventoryIds: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
@@ -2870,69 +2849,67 @@ exports.reduceBatch = [
         { new: true }
       );
       const inventory = await InventoryModel.updateOne(
-        { 'inventoryDetails.productId':  batch.productId},
+        { "inventoryDetails.productId": batch.productId },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
-     )
-
-     var datee = new Date();
-     datee = datee.toISOString();
-     var evid = Math.random().toString(36).slice(2);
-     let event_data = {
-       eventID: null,
-       eventTime: null,
-       transactionId: batchNumber,
-       eventType: {
-         primary: "BUY",
-         description: "INVENTORY",
-       },
-       actor: {
-         actorid: null,
-         actoruserid: null,
-       },
-       stackholders: {
-         ca: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-         actororg: {
-           id: req.user.organisationId || "null",
-           name: "null",
-           address: "null",
-         },
-         secondorg: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-       },
-       payload: {
-         data: {
-           batch: batch,
-           quantityPurchased: quantity,
-         },
-       },
-     };
-     event_data.eventID = "ev0000" + evid;
-     event_data.eventTime = datee;
-     event_data.eventType.primary = "BUY";
-     event_data.eventType.description = "INVENTORY";
-     event_data.actor.actorid = user_id || "null";
-     event_data.actor.actoruserid = email || "null";
-     event_data.stackholders.actororg.id = orgId || "null";
-     event_data.stackholders.actororg.name = orgName || "null";
-     event_data.stackholders.actororg.address = address || "null";
-     event_data.actorWarehouseId = req.user.warehouseId || "null";
-     event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-     event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-     event_data.stackholders.ca.address =
-       CENTRAL_AUTHORITY_ADDRESS || "null";
-     await logEvent(event_data);
-      return apiResponse.successResponseWithData(
-        res,
-        "Subtracted Batch",
-        {batch, inventory}
       );
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        transactionId: batchNumber,
+        eventType: {
+          primary: "BUY",
+          description: "INVENTORY",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: null,
+            name: null,
+            address: null,
+          },
+          actororg: {
+            id: req.user.organisationId || null,
+            name: null,
+            address: null,
+          },
+          secondorg: {
+            id: null,
+            name: null,
+            address: null,
+          },
+        },
+        payload: {
+          data: {
+            batch: batch,
+            quantityPurchased: quantity,
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "BUY";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || null;
+      event_data.actor.actoruserid = email || null;
+      event_data.stackholders.actororg.id = orgId || null;
+      event_data.stackholders.actororg.name = orgName || null;
+      event_data.stackholders.actororg.address = address || null;
+      event_data.actorWarehouseId = req.user.warehouseId || null;
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || null;
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
+        batch,
+        inventory,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
