@@ -47,12 +47,38 @@ function sendWhatsApp(content, mobile) {
     .catch((err) => console.log(err));
 }
 
+async function pushNotification(body) {
+  try {
+    const { content, user, type, transactionId, eventType } = body;
+    let notification = new Notification({
+      id: cuid(),
+      title: "Vaccine Ledger Alert",
+      message: content,
+      user: user,
+      eventType: eventType,
+      transactionId: transactionId,
+    });
+    type == "ALERT"
+      ? (notification.type = "ALERT")
+      : (notification.type = "TRANSACTION");
+    await notification.save();
+    await client.notify.services(twilio_service_id).notifications.create({
+      fcm: { notification: { body: content, title: "New Notification" } },
+      apn: { notification: { body: content, title: "New Notification" } },
+      identity: user,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 exports.getNotifications = [
   auth,
   async (req, res) => {
     try {
+      let resPerPage = Number(req.query.limit) || 20;
+      if (resPerPage > 100) resPerPage = 100;
       const userId = req.user.id;
-      const resPerPage = Number(req.query.limit) || 20;
       const page = Number(req.query.page) || 1;
       const totalRecords = await Notification.countDocuments({
         user: userId,
@@ -83,15 +109,19 @@ exports.getNotifications = [
         };
         return apiResponse.successResponseWithData(
           res,
-          "Operation Success",
+          "List of Notifications",
           data
         );
       } else {
-        return apiResponse.successResponseWithData(res, "No Results Found", []);
+        return apiResponse.successResponseWithData(
+          res,
+          "No Notifications Found",
+          []
+        );
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -100,15 +130,11 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
-      client.notify
-        .services(twilio_service_id)
-        .bindings.create({
-          identity: req.user.id,
-          bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
-          address: req.body.token_id,
-        })
-        .then((binding) => console.log(binding))
-        .catch((err) => console.log(err));
+      await client.notify.services(twilio_service_id).bindings.create({
+        identity: req.user.id,
+        bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
+        address: req.body.token_id,
+      });
       return apiResponse.successResponse(res, "Successfully Registered");
     } catch (err) {
       console.log(err);
@@ -135,7 +161,7 @@ exports.sendOtp = [
       return apiResponse.successResponse(res, "SENT");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -150,7 +176,7 @@ exports.sendMessage = [
       }
       if (req.body.email)
         sendEmail(req.body.subject, req.body.content, req.body.email);
-      return apiResponse.successResponse(res, "SENT");
+      return apiResponse.successResponse(res, "Message Sent Success");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -171,7 +197,7 @@ exports.pushNotifications = [
       }
       if (req.body.email)
         sendEmail(req.body.subject, req.body.content, req.body.email);
-      return apiResponse.successResponse(res, "SENT");
+      return apiResponse.successResponse(res, "Push Notification Sent");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -179,37 +205,13 @@ exports.pushNotifications = [
   },
 ];
 
-async function pushNotification(body) {
-  try {
-    const { content, user, type, transactionId, eventType } = body;
-    let notification = new Notification({
-      id: cuid(),
-      title: "Vaccine Ledger Alert",
-      message: content,
-      user: user,
-      eventType: eventType,
-      transactionId: transactionId,
-    });
-    if (type == "ALERT") notification.type = "ALERT";
-    else notification.type = "TRANSACTION";
-    await notification.save();
-    await client.notify.services(twilio_service_id).notifications.create({
-      fcm: { notification: { body: content, title: "New Notification" } },
-      apn: { notification: { body: content, title: "New Notification" } },
-      identity: user,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 exports.readNotification = [
   auth,
   async (req, res) => {
     try {
       const { id } = req.query;
       await Notification.findOneAndUpdate({ id }, { $set: { isRead: true } });
-      return apiResponse.successResponse(res, "Notification READ Success");
+      return apiResponse.successResponse(res, "Notification Read Success");
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
