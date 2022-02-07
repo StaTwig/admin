@@ -40,16 +40,16 @@ export const Count = (data) => {
 };
 
 export const formatDate = (date, format) => {
-  var d = new Date(date),
+  if (date === "" || date == null) {
+    return "N/A";
+  }
+  let d = new Date(date),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();
-
   if (month.length < 2) month = "0" + month;
   if (day.length < 2) day = "0" + day;
-
   if (format === "mmyyyy") return [month, year].join("/");
-
   return [day, month, year].join("/");
 };
 

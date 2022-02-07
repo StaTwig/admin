@@ -11,7 +11,7 @@ const getLatLongByCity = async (param) => {
         }
       : { latitude: 0, longitude: 0 };
   } catch (e) {
-    console.log(e.response)
+    console.log(e);
     return { latitude: 0, longitude: 0 };
   }
 };

@@ -170,25 +170,27 @@ const Inventory = (props) => {
   };
 
   const onSelectionDateFilter = async (value) => {
-    const fromDate = value[0] == '' ? '' : new Date(new Date(value[0]).toDateString());
+    const fromDate =
+      value[0] === "" ? "" : new Date(new Date(value[0]).toDateString());
     setFromFilterDate(fromDate);
     if (value.length > 1) {
-      const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
+      const toDate =
+        value[0] === "" ? "" : new Date(new Date(value[1]).toDateString());
       setToFilterDate(toDate);
       dispatch(
-      getInventories(
-        0,
-        limit,
-        dateFilter,
-        productNameFilter,
-        productCategoryFilter,
-        statusFilter,
-        fromDate ? fromDate?.toISOString() : null,
-        toDate ? toDate?.toISOString() : null
-      )
-    );
+        getInventories(
+          0,
+          limit,
+          dateFilter,
+          productNameFilter,
+          productCategoryFilter,
+          statusFilter,
+          fromDate ? fromDate?.toISOString() : null,
+          toDate ? toDate?.toISOString() : null
+        )
+      );
     }
-  }
+  };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     setDateFilter(dateFilterSelected);
