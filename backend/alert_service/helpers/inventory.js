@@ -31,7 +31,7 @@ async function getEligibleUsers(warehouseId) {
 exports.inventoryAdd = async (event) => {
   let txnId = event?.transactionId;
   let template = `"Inventory - ${txnId}" has been Added`;
-  let templateSpanish = `"Inventory - ${txnId}" has been Added`;
+  let templateSpanish = `Se agregó "Inventario - ${txnId}"`;
   if (event?.actorId) {
     const actor = await EmployeeModel.findOne({ id: event.actorId });
     let dataSender = {
@@ -50,7 +50,7 @@ exports.inventoryAdd = async (event) => {
 exports.inventoryUpdate = async (event) => {
   let txnId = event?.transactionId;
   let template = `"Inventory - ${txnId}" has been Updated`;
-  let templateSpanish = `"Inventory - ${txnId}" has been Updated`;
+  let templateSpanish = `"Inventario - ${txnId}" ha sido actualizado`;
   if (event?.actorId) {
     const actor = await EmployeeModel.findOne({ id: event.actorId });
     let dataSender = {
@@ -69,7 +69,7 @@ exports.inventoryUpdate = async (event) => {
 exports.inventoryNearExpiry = async (event) => {
   let txnId = event?.transactionId;
   let template = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) will expire soon`;
-  let templateSpanish = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) will expire soon`;
+  let templateSpanish = `"Inventario - ${txnId}" (Cantidad: ${event?.cantidad}) caducará pronto`;
   const employees = await getEligibleUsers(event.actorWarehouseId);
   await asyncForEach(employees, async (user) => {
     const dataReceiver = {
@@ -88,7 +88,7 @@ exports.inventoryNearExpiry = async (event) => {
 exports.inventoryExpired = async (event) => {
   const txnId = event.transactionId;
   const template = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) has expired`;
-  const templateSpanish = `"Inventory - ${txnId}" (Quantity : ${event?.quantity}) has expired`;
+  const templateSpanish = `"Inventario - ${txnId}" (Cantidad: ${event?.quantity}) ha caducado`;
   const employees = await getEligibleUsers(event.actorWarehouseId);
   await asyncForEach(employees, async (user) => {
     const dataReceiver = {
