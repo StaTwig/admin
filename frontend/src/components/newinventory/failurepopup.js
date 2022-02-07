@@ -10,11 +10,11 @@ const FailurePopUp = (props) => {
         <img src={Checked} width='60' height='60' className='mb-3' alt='' />
         <div className='alert'>{t('fail')}!</div>
         <div className='font-weight-bolder error'>
-          ' {props.inventoryError} '
+          ' {t(props.inventoryError)} '
         </div>
         <div className='data'>
           {" "}
-          {props.inventoryError === "Check expiryDate" || "Product Doesn't exist in the inventory."
+          {props.inventoryError === "Check expiryDate" || "all_products_are_expired" || "Product Doesn't exist in the inventory."
             ? null
             : "cannot be Empty"}
         </div>

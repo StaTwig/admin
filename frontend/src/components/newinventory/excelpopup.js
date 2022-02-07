@@ -9,7 +9,7 @@ import { turnOn, turnOff } from "../../actions/spinnerActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 
 const ExcelPopUp = (props) => {
-  const { t } = props;
+  const { t , setOpenExcel, setOpenFailInventory, setInventoryError} = props;
   const [excel, setExcel] = useState(null);
   const dispatch = useDispatch();
 
@@ -22,9 +22,13 @@ const ExcelPopUp = (props) => {
     formData.append("excel", excel);
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
-    if (result.status === 200) {
+    if (result.status === 200 && result.data.data?.length !== 0) {
       dispatch(setReviewinventories(result.data.data));
       props.history.push("/reviewinventory");
+    } else if(result.status === 200 && result.data.data?.length === 0) {
+      setOpenExcel(false);
+      setInventoryError('all_products_are_expired');
+      setOpenFailInventory(true);
     }
     if(result.status === 500){
       props.importError(result.data.message);
