@@ -81,7 +81,7 @@ const AddLocation = (props) => {
       employeess: [],
     };
     const result = await addWarehouse(data);
-    if (result.data.status !== 0) {
+    if (result.status === 200) {
       setAddedLocationModal(true);
     }
   };
