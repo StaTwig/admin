@@ -75,7 +75,7 @@ const FormPage = (props) => {
   });
   const showOrgByType = (value) => {
     let arr = organisations.filter((data) => data.type === value);
-    // arr.push({ name: t('other') });
+    arr.push({ name: t('other') });
     return arr;
   };
 
