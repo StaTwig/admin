@@ -233,8 +233,8 @@ const Header = (props) => {
     return state.user;
   });
 
-  if (profile.photoId != null) {
-    getImage(profile.photoId).then((r) => {
+  if (profile?.photoId != null) {
+    getImage(profile?.photoId).then((r) => {
       const reader = new window.FileReader();
       reader.readAsDataURL(r.data);
       reader.onload = function () {
