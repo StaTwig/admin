@@ -199,10 +199,10 @@ exports.register = [
           } else {
             const country = req.body?.address?.country
               ? req.body.address?.country
-              : "India";
+              : "Costa Rica";
             const region = req.body?.address?.region
               ? req.body.address?.region
-              : "Asia";
+              : "Central America";
             const address = req.body?.address ? req.body.address : {};
             addr =
               address.line1 +
