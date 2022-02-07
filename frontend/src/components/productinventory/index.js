@@ -250,7 +250,7 @@ const ProductInventory = (props) => {
                     }
                     className='bttn1-blue blue-primary'
                   >
-                    Show more
+                    {t('show_more')}
                   </button>
                 </div>
               </div>
