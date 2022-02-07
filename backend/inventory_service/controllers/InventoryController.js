@@ -2626,6 +2626,7 @@ exports.searchProduct = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
+          console.log("queries", req.query);
           const { productName, productType } = req.query;
           req.query.warehouseId
             ? (warehouseId = req.query.warehouseId)
@@ -2657,6 +2658,7 @@ exports.searchProduct = [
               //   }
               // }
             ]).sort({ createdAt: -1 });
+            console.log("Inventory:", inventory);
             return apiResponse.successResponseWithData(
               res,
               "Inventory Details",
@@ -2712,7 +2714,7 @@ exports.autoCompleteSuggestions = [
         {
           $group: {
             _id: "$value",
-            // type: { $first: "$record_type" },
+            type: { $first: "$record_type" },
             // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },

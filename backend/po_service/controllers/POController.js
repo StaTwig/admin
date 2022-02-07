@@ -484,7 +484,7 @@ exports.addPOsFromExcel = [
           lastUpdatedBy: createdBy,
         };
       });
-      const incrementCounter = await CounterModel.update(
+      let incrementCounter = await CounterModel.updateOne(
         {
           "counters.name": "poId",
         },
