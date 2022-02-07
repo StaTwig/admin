@@ -50,7 +50,7 @@ const FormPage = (props) => {
     async function fetchData() {
       const orgs = await getOrganisations();
 
-      // orgs.push({ id: t('other'), name: t('other') });
+      orgs.push({ id: t('other'), name: t('other') });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
