@@ -1,6 +1,5 @@
 const express = require("express");
 const NotificationController = require("../controllers/NotificationController");
-
 const router = express.Router();
 
 router.post("/registerTwillio", NotificationController.createTwilioBinding);

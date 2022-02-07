@@ -34,10 +34,8 @@ const Table = (props) => {
           <div className='' key={index}>
             <Accordion className='mb-3 p-0 table-inventory'>
               <AccordionSummary
-                // expand={display}
                 aria-controls='panel1a-content'
                 id='panel1a-header'
-                //className="rTableRow"
               >
                 {/*<div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>*/}
                 <div

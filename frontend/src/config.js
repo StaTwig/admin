@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://costarica.vaccineledger.com";
+export const TEST_SERVER_URL = "https://test.vaccineledger.com";
 export const TEST_SERVER_URL_FOR_ROAMBEE =
   "https://integrations.vaccineledger.com";
 export const PROD_SERVER_URL = "https://vaccineledger.com";
@@ -12,7 +12,7 @@ export const LOCAL_SERVER_URL_TRACKANDTRACE = "http://localhost:3005";
 export const LOCAL_SERVER_URL_NOTIFICATION = "http://localhost:3006";
 export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3015";
 export const LOCAL_SERVER_URL_EOL = "http://localhost:3017";
-export const LOCAL_SERVER_URL_EVENT = "http://localhost:3014";
+export const LOCAL_SERVER_URL_EVENT = "http://localhost:3013";
 export const LOCAL_SERVER_URL_PRODUCTS = "http://localhost:3010";
 export const LOCAL_SERVER_URL_ALERTS = "http://localhost:3004";
 
