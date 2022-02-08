@@ -2757,8 +2757,13 @@ exports.autoCompleteSuggestions = [
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+              { $project: { _id: 0, value: "$id", record_type: "shipment", org1: "$receiver.id", org2: "$supplier.id"  } },
             ],
+          },
+        },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
           },
         },
         {
@@ -2790,6 +2795,7 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
+      // console.log([suggestions1, suggestions2, suggestions3])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
