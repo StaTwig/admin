@@ -126,11 +126,11 @@ exports.getProductDetailsByWarehouseId = [
         const product = await ProductModel.findOne({ id: list[j].productId });
         if(product){
           const product1 = {
-            productName: product[0]?.name,
-            productId: product[0]?.id,
-            manufacturer: product[0]?.manufacturer,
+            productName: product?.name,
+            productId: product?.id,
+            manufacturer: product?.manufacturer,
             quantity: list[j].quantity ? list[j].quantity : 0,
-            unitofMeasure: product[0]?.unitofMeasure,
+            unitofMeasure: product?.unitofMeasure,
           };
           productArray.push(product1);
         }
