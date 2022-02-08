@@ -230,7 +230,7 @@ const ViewOrder = (props) => {
             {order?.products?.map((product, index) => {
               let pr = order.productDetails.filter(d => product.productId === d.id);
               let prd = pr.length > 0 ? pr[0] : {};
-              let uom = JSON.parse(prd?.unitofMeasure);
+              let uom = typeof prd?.unitofMeasure === "string" ? JSON.parse(prd?.unitofMeasure) : prd?.unitofMeasure;
               return(
               <div
                 className={`bg-white shadow padding-added ${

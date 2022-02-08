@@ -128,7 +128,7 @@ exports.fetchPurchaseOrders = [
         permissionRequired: ["viewPO"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
-        if (permissionResult.success) {
+        if (permissionResult.success)  {
           let inboundPOs, outboundPOs, poDetails;
           try {
             if (poId != null) {
@@ -144,6 +144,7 @@ exports.fetchPurchaseOrders = [
                   poDetails = data;
                 }
               );
+              if(poDetails.length)
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({

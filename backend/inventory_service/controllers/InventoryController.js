@@ -555,11 +555,10 @@ exports.addProductsToInventory = [
       const empData = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      const orgId = empData?.organisationId || null;
+      const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
-
+      const address = orgData?.postalAddress;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
