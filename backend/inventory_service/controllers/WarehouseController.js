@@ -120,13 +120,10 @@ exports.getProductDetailsByWarehouseId = [
       });
       const val = warehouseDetails.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      console.log(val)
       const list = productList[0].inventoryDetails;
       const productArray = [];
       for (let j = 0; j < list.length; j++) {
-        console.log(list[j])
         const product = await ProductModel.findOne({ id: list[j].productId });
-        console.log(product)
         if(product){
           const product1 = {
             productName: product[0]?.name,
