@@ -147,7 +147,7 @@ exports.fetchPurchaseOrders = [
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({
-                    name: element.id,
+                    $or: [{name: element.id}, {id: element.id}],
                   });
                   element.unitofMeasure = product?.unitofMeasure;
                   element.manufacturer = product?.manufacturer;
