@@ -2690,7 +2690,12 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        { $project: { _id: 0, value: "$id", record_type: "order", org1: "$customer.customerOrganisation", org2: "supplier.supplierOrganisation" } },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+          },
+        },
         {
           $unionWith: {
             coll: "products",
@@ -2757,8 +2762,13 @@ exports.autoCompleteSuggestions = [
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+              { $project: { _id: 0, value: "$id", record_type: "shipment", org1: "$receiver.id", org2: "$supplier.id"  } },
             ],
+          },
+        },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
           },
         },
         {
@@ -2790,6 +2800,7 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
+      // console.log([suggestions1, suggestions2, suggestions3])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
@@ -2849,9 +2860,11 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
+      const warehouse = await WarehouseModel.findOne({ id: req.user.warehouseId });
+
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId },
-        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
+        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity) } }
      )
 
      var datee = new Date();

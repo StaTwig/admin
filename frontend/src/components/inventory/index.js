@@ -297,7 +297,7 @@ const Inventory = (props) => {
             currentInventoriesCount={currentInventoriesCount}
             inventoryNearExpiration={inventoryNearExpiration}
             inventoryExpired={inventoryExpired}
-            setData={props.setData}
+            // setData={props.setData}
             t={t}
           />
         </div>
