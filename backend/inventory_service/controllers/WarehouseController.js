@@ -120,18 +120,23 @@ exports.getProductDetailsByWarehouseId = [
       });
       const val = warehouseDetails.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
+      console.log(val)
       const list = productList[0].inventoryDetails;
       const productArray = [];
       for (let j = 0; j < list.length; j++) {
-        const product = await ProductModel.find({ id: list[j].productId });
-        const product1 = {
-          productName: product[0].name,
-          productId: product[0].id,
-          manufacturer: product[0].manufacturer,
-          quantity: list[j].quantity ? list[j].quantity : 0,
-          unitofMeasure: product[0].unitofMeasure,
-        };
-        productArray.push(product1);
+        console.log(list[j])
+        const product = await ProductModel.findOne({ id: list[j].productId });
+        console.log(product)
+        if(product){
+          const product1 = {
+            productName: product[0]?.name,
+            productId: product[0]?.id,
+            manufacturer: product[0]?.manufacturer,
+            quantity: list[j].quantity ? list[j].quantity : 0,
+            unitofMeasure: product[0]?.unitofMeasure,
+          };
+          productArray.push(product1);
+        }
       }
       const { firstLine, secondLine, city, state, country, zipCode } =
         warehouseDetails.warehouseAddress;
@@ -164,6 +169,7 @@ exports.getProductDetailsByWarehouseId = [
         }
       );
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
