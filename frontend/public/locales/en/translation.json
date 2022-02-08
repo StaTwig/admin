@@ -248,6 +248,7 @@
   "update_msg": "This shipment has been already delivered.",
   "reference_shipment_id": "Reference Shipment ID",
   "fetch": "Fetch",
+  "next": "Next",
   "delivery_details": "Delivery details",
   "label_code": "Label code",
   "enter_delivery_date": "Enter delivery date",
