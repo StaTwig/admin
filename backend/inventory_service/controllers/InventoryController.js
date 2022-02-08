@@ -1909,7 +1909,6 @@ async function getFilterConditions(filters) {
     } else {
       matchCondition.orgType = filters.orgType;
     }
-    console.log(matchCondition, matchWarehouseCondition);
     const organisations = await OrganisationModel.aggregate([
       {
         $match: matchCondition,
@@ -1938,7 +1937,6 @@ async function getFilterConditions(filters) {
     ]);
 
     let orgs = [];
-    console.log(organisations);
     for (let org in organisations) {
       orgs.push(organisations[org]["id"]);
     }
@@ -2626,7 +2624,6 @@ exports.searchProduct = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          console.log("queries", req.query);
           const { productName, productType } = req.query;
           req.query.warehouseId
             ? (warehouseId = req.query.warehouseId)
@@ -2658,7 +2655,6 @@ exports.searchProduct = [
               //   }
               // }
             ]).sort({ createdAt: -1 });
-            console.log("Inventory:", inventory);
             return apiResponse.successResponseWithData(
               res,
               "Inventory Details",
@@ -2853,74 +2849,72 @@ exports.reduceBatch = [
       const inventory = await InventoryModel.updateOne(
         { "inventoryDetails.productId": batch.productId },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
-     )
-
-     var datee = new Date();
-     datee = datee.toISOString();
-     var evid = Math.random().toString(36).slice(2);
-     let event_data = {
-       eventID: null,
-       eventTime: null,
-       transactionId: batchNumber,
-       eventType: {
-         primary: "BUY",
-         description: "INVENTORY",
-       },
-       actor: {
-         actorid: null,
-         actoruserid: null,
-       },
-       stackholders: {
-         ca: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-         actororg: {
-           id: req.user.organisationId || "null",
-           name: "null",
-           address: "null",
-         },
-         secondorg: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-       },
-       payload: {
-         data: {
-           batch: batch,
-           quantityPurchased: quantity,
-           products: {
-             productId: batch.productId,
-             batchNumber: batchNumber
-           },
-           sender: {
-             id: req.user.organisationId
-           }
-         },
-       },
-     };
-     event_data.eventID = "ev0000" + evid;
-     event_data.eventTime = datee;
-     event_data.eventType.primary = "BUY";
-     event_data.eventType.description = "INVENTORY";
-     event_data.actor.actorid = user_id || "null";
-     event_data.actor.actoruserid = email || "null";
-     event_data.stackholders.actororg.id = orgId || "null";
-     event_data.stackholders.actororg.name = orgName || "null";
-     event_data.stackholders.actororg.address = address || "null";
-     event_data.actorWarehouseId = req.user.warehouseId || "null";
-     event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-     event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-     event_data.stackholders.ca.address =
-       CENTRAL_AUTHORITY_ADDRESS || "null";
-     await logEvent(event_data);
-      return apiResponse.successResponseWithData(
-        res,
-        "Subtracted Batch",
-        {batch, inventory}
       );
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        transactionId: batchNumber,
+        eventType: {
+          primary: "BUY",
+          description: "INVENTORY",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: req.user.organisationId || "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: {
+            batch: batch,
+            quantityPurchased: quantity,
+            products: {
+              productId: batch.productId,
+              batchNumber: batchNumber,
+            },
+            sender: {
+              id: req.user.organisationId,
+            },
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "BUY";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
+        batch,
+        inventory,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);

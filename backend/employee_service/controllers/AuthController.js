@@ -123,40 +123,43 @@ exports.register = [
     .trim()
     .withMessage("organization_validation_error"),
   // body("emailId")
-    // .trim()
-    // .toLowerCase()
-    // .custom(async (value) => {
-    //   if (value) {
-    //     const emailId = value.toLowerCase().replace("", "");
-    //     let user;
-    //     if (!emailId.match(emailRegex))
-    //       return Promise.reject("not_valid_email");
-    //     if (emailId.indexOf("@") > -1)
-    //       user = await EmployeeModel.findOne({ emailId });
-    //     if (user) {
-    //       return Promise.reject("account_already_exists");
-    //     }
-    //   }
+  // .trim()
+  // .toLowerCase()
+  // .custom(async (value) => {
+  //   if (value) {
+  //     const emailId = value.toLowerCase().replace("", "");
+  //     let user;
+  //     if (!emailId.match(emailRegex))
+  //       return Promise.reject("not_valid_email");
+  //     if (emailId.indexOf("@") > -1)
+  //       user = await EmployeeModel.findOne({ emailId });
+  //     if (user) {
+  //       return Promise.reject("account_already_exists");
+  //     }
+  //   }
   //   }),
   // body("phoneNumber").custom(async (value) => {
   //   if (value) {
-      // const emailId = value.toLowerCase().replace("", "");
-      // let phone = "";
-      // let user;
-      // if (!emailId.match(phoneRegex)) return Promise.reject("not_valid_phone");
-      // phone = "+" + value;
-      // user = await EmployeeModel.findOne({ phoneNumber: phone });
-      // if (user) {
-      //   return Promise.reject("account_already_exists");
-      // }
+  // const emailId = value.toLowerCase().replace("", "");
+  // let phone = "";
+  // let user;
+  // if (!emailId.match(phoneRegex)) return Promise.reject("not_valid_phone");
+  // phone = "+" + value;
+  // user = await EmployeeModel.findOne({ phoneNumber: phone });
+  // if (user) {
+  //   return Promise.reject("account_already_exists");
+  // }
   //   }
   // }),
   async (req, res) => {
     try {
       if (req.body.emailId == "" && req.body.phoneNumber == "") {
-        return apiResponse.ErrorResponse(req, res, "Enter either emailId or phoneNumber");
-      }
-      else if (req.body.emailId != "") {
+        return apiResponse.ErrorResponse(
+          req,
+          res,
+          "Enter either emailId or phoneNumber"
+        );
+      } else if (req.body.emailId != "") {
         let emailId = req.body.emailId;
         emailId = emailId.trim();
         emailId = emailId.toLowerCase();
@@ -169,13 +172,13 @@ exports.register = [
         if (user) {
           return apiResponse.ErrorResponse(req, res, "account_already_exists");
         }
-      }
-      else if(req.body.phoneNumber!=""){
+      } else if (req.body.phoneNumber != "") {
         let phoneNumber = req.body.phoneNumber;
         phoneNumber = phoneNumber.toLowerCase().replace("", "");
         let phone = "";
         let user;
-        if (!phoneNumber.match(phoneRegex)) return apiResponse.ErrorResponse(req, res, "not_valid_phone");
+        if (!phoneNumber.match(phoneRegex))
+          return apiResponse.ErrorResponse(req, res, "not_valid_phone");
         phone = "+" + phoneNumber;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
         if (user) {
@@ -336,7 +339,6 @@ exports.register = [
       let phoneNumber = null;
       if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
 
-      
       const user = new EmployeeModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -352,7 +354,7 @@ exports.register = [
 
       let bc_data;
 
-      if(emailId!=null){
+      if (emailId != null) {
         bc_data = {
           username: emailId,
           password: "",
@@ -360,8 +362,7 @@ exports.register = [
           role: "",
           email: emailId,
         };
-      }
-      else if(phoneNumber!=null){
+      } else if (phoneNumber != null) {
         bc_data = {
           username: phoneNumber,
           password: "",
@@ -371,7 +372,6 @@ exports.register = [
         };
       }
 
-      
       await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
       const event_data = {
         eventID: cuid(),
@@ -407,7 +407,7 @@ exports.register = [
         },
       };
       await logEvent(event_data);
-      
+
       return apiResponse.successResponse(req, res, "user_registered_success");
     } catch (err) {
       console.log(err);
@@ -1002,7 +1002,6 @@ exports.addWarehouse = [
       const loc = await getLatLongByCity(
         warehouseAddress.city + "," + warehouseAddress.country
       );
-      // console.log(loc)
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
@@ -1021,8 +1020,6 @@ exports.addWarehouse = [
       });
 
       await warehouse.save();
-      console.log('hello')
-
       await OrganisationModel.findOneAndUpdate(
         {
           id: organisationId,

@@ -163,7 +163,6 @@ exports.getAnalytics = [
         ],
       });
       shipment.inboundShipments = inboundShipments;
-      // console.log("Number of Incoming shipments ", numIncomingShipments);
 
       const outboundShipments = await ShipmentModel.count({
         $and: [
@@ -172,7 +171,6 @@ exports.getAnalytics = [
         ],
       });
       shipment.outboundShipments = outboundShipments;
-      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
 
       const inboundAlerts = await ShipmentModel.count({
         $and: [
@@ -180,7 +178,6 @@ exports.getAnalytics = [
           { status: { $in: ["DAMAGED"] } },
         ],
       });
-      // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
       shipment.inboundAlerts = inboundAlerts;
 
       const outboundAlerts = await ShipmentModel.count({
@@ -189,7 +186,6 @@ exports.getAnalytics = [
           { status: { $in: ["DAMAGED"] } },
         ],
       });
-      // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
       shipment.outboundAlerts = outboundAlerts;
 
       data.overview = overview;
@@ -367,16 +363,6 @@ exports.getAnalytics = [
       var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
 
       var numseconds = ((seconds % 86400) % 3600) % 60;
-      console.log(
-        numdays +
-          "days " +
-          numhours +
-          "hrs " +
-          numminutes +
-          "min " +
-          numseconds +
-          "sec"
-      );
       var averageOrderProcessingTime =
         numdays + "days " + numhours + "hrs " + numminutes + "min";
 
@@ -410,7 +396,6 @@ exports.getOverviewAnalytics = [
         ],
       });
       overview.outboundShipments = outboundShipments;
-      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
 
       const inboundShipments = await ShipmentModel.count({
         $and: [
@@ -419,7 +404,6 @@ exports.getOverviewAnalytics = [
         ],
       });
       overview.inboundShipments = inboundShipments;
-      // console.log("Number of Incoming shipments ", numIncomingShipments);
 
       const totalProductCategory = await ProductModel.distinct("type");
       overview.totalProductCategory = totalProductCategory.length;
@@ -434,14 +418,12 @@ exports.getOverviewAnalytics = [
 
       var count = 0;
       var sum = 0;
-      console.log("Records : ", records.length);
       for (var i = 0; i < records.length; i++) {
         for (var j = 0; j < shipments.length; j++) {
           if (records[i].id === shipments[j].poId) {
             count++;
             var shipmentCreationTime = shipments[j].createdAt;
             var poCreationTime = records[i].createdAt;
-            console.log(shipmentCreationTime);
             sum = sum + (shipmentCreationTime - poCreationTime);
           }
         }
@@ -459,16 +441,6 @@ exports.getOverviewAnalytics = [
       var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
 
       var numseconds = ((seconds % 86400) % 3600) % 60;
-      console.log(
-        numdays +
-          "days " +
-          numhours +
-          "hrs " +
-          numminutes +
-          "min " +
-          numseconds +
-          "sec"
-      );
       var averageOrderProcessingTime =
         numdays + "d " + numhours + "h " + numminutes + "m";
 
@@ -477,7 +449,6 @@ exports.getOverviewAnalytics = [
       // const numPO = await POModel.count();
       // const numSO = await ShippingOrderModel.count();
       // var pendingOrders = numPO + numSO;
-      // console.log("Pending Orders ", pendingOrders);
       const pendingOrders = await RecordModel.count({
         $and: [
           { "supplier.supplierOrganisation": organisationId },
@@ -489,7 +460,6 @@ exports.getOverviewAnalytics = [
 
       data.overview = overview;
 
-      console.log("Response", data);
       return apiResponse.successResponseWithData(res, "Analytics", data);
     } catch (err) {
       console.log(err);
@@ -521,7 +491,6 @@ exports.getInventoryAnalytics = [
       inventory.stockOut = stockOut.length
         ? stockOut[0].inventoryDetails.filter((i) => i.quantity < 1).length
         : 0;
-      // console.log("Products with zero Inventory (stockOut) ", stockOut);
 
       var today = new Date();
       var nextMonth = new Date();
@@ -613,7 +582,6 @@ exports.getInventoryAnalytics = [
       //   }]
       // );
 
-      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
       //   inventory.batchExpiringThisMonth = 0
       //   if(batchExpiringThisMonth.length !== 0){
       //     inventory.batchExpiringThisMonth = batchExpiringThisMonth[0].total;
@@ -637,7 +605,6 @@ exports.getInventoryAnalytics = [
       //     }
       //   }]
       // );
-      //   // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
       //   inventory.batchExpiringInThreeMonths = 0
       //   if(batchExpiringInThreeMonths.length !== 0){
       //     inventory.batchExpiringInThreeMonths = batchExpiringInThreeMonths[0].total;
@@ -661,7 +628,6 @@ exports.getInventoryAnalytics = [
       //     }
       //   }]
       // );
-      //   // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
       //   inventory.batchExpiringInSixMonths = 0
       //   if(batchExpiringInSixMonths.length !== 0){
       //     inventory.batchExpiringInSixMonths = batchExpiringInSixMonths[0].total;
@@ -681,7 +647,6 @@ exports.getInventoryAnalytics = [
       //       }
       //     }]
       //   );
-      //   // console.log("Batches Expired ", batchExpired[0].total);
       //   inventory.batchExpiredToday = 0
       //   if(batchExpiredToday.length !== 0){
       //     inventory.batchExpiredToday = batchExpiredToday[0].total;
@@ -705,7 +670,6 @@ exports.getInventoryAnalytics = [
       //       }
       //     }]
       //   );
-      //   // console.log("Batches Expired ", batchExpired[0].total);
       //   inventory.batchExpiredLastWeek = 0
       //   if(batchExpiredLastWeek.length !== 0){
       //     inventory.batchExpiredLastWeek = batchExpiredLastWeek[0].total;
@@ -729,7 +693,6 @@ exports.getInventoryAnalytics = [
       //       }
       //     }]
       //   );
-      //   // console.log("Batches Expired ", batchExpired[0].total);
       //   inventory.batchExpiredLastMonth = 0
       //   if(batchExpiredLastMonth.length !== 0){
       //     inventory.batchExpiredLastMonth = batchExpiredLastMonth[0].total;
@@ -753,7 +716,6 @@ exports.getInventoryAnalytics = [
       //       }
       //     }]
       //   );
-      //   // console.log("Batches Expired ", batchExpired[0].total);
       //   inventory.batchExpiredLastYear = 0
       //   if(batchExpiredLastYear.length !== 0){
       //     inventory.batchExpiredLastYear = batchExpiredLastYear[0].total;
@@ -784,16 +746,11 @@ exports.getShipmentAnalytics = [
         ],
       });
       shipment.inboundShipments = inboundShipments;
-      // console.log("Number of Incoming shipments ", numIncomingShipments);
 
       const outboundShipments = await ShipmentModel.count({
-        $and: [
-          { "supplier.locationId": warehouseId },
-          // { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
-        ],
+        $and: [{ "supplier.locationId": warehouseId }],
       });
       shipment.outboundShipments = outboundShipments;
-      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
 
       const inboundAlerts = await ShipmentModel.count({
         $and: [
@@ -805,7 +762,6 @@ exports.getShipmentAnalytics = [
           },
         ],
       });
-      // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
       shipment.inboundAlerts = inboundAlerts;
 
       const outboundAlerts = await ShipmentModel.count({
@@ -818,7 +774,6 @@ exports.getShipmentAnalytics = [
           },
         ],
       });
-      // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
       shipment.outboundAlerts = outboundAlerts;
 
       data.shipment = shipment;
