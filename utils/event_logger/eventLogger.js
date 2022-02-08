@@ -57,7 +57,7 @@ async function logEvent(data) {
         }
       }
     )
-    .clone();
+    // .clone();
   } else {
     const err = {
       message: "Data Invalid : Fields incorrect",

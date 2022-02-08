@@ -88,10 +88,10 @@ const AddProduct = (props) => {
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
       formData.append("type", category);
-      formData.append("unitofMeasure", {
+      formData.append("unitofMeasure", JSON.stringify({
         id: UOM,
         name: UOM,
-      });
+      }));
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
