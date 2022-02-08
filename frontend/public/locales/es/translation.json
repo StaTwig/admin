@@ -372,5 +372,9 @@
   "sorry_reason": "Parece que está intentando acceder a una página que ha sido eliminada o que nunca existió",
   "back_to_home": "De vuelta a casa",
   "products_out_of_stock": "productos agotados",
+  "by": "por",
+  "updated_location": "Ubicación Actualizada",
+  "batch_number": "Número de lote",
+  "serial_number": "Número de serie",
   "all_products_are_expired": "Todos los productos están vencidos"
 }

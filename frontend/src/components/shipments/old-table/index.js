@@ -23,8 +23,8 @@ const Table = (props) => {
     props.onPageChange(value);
   };
   return (
-    <div className='table'>
-      <div className='rTable'>
+    <div className="table">
+      <div className="rTable">
         {/* <div className="rTableHeading">
             <div className="rTableHead">Customer</div> 
             <div className="rTableHead">Shipment ID</div>
@@ -43,10 +43,10 @@ const Table = (props) => {
               <span />
             </div>
           </div> */}
-        <div className=''>
+        <div className="">
           {shipments.length === 0 && (
-            <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
-              No records found
+            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
+              {t("no_records_found")}
             </div>
           )}
           {shipments.map((shipment, index) => {
@@ -70,7 +70,7 @@ const Table = (props) => {
             }
             return (
               <div
-                className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow'
+                className="col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow"
                 key={index}
               >
                 {" "}
@@ -79,21 +79,21 @@ const Table = (props) => {
                   <div className="combine-data">{shipment.receiver.id}</div>
                 </div> */}
                 <div
-                  className='col-1 txt1'
+                  className="col-1 txt1"
                   style={{ padding: 0, left: "10px" }}
                 >
-                  <span className='text-primary'>{shipment.id}</span>
+                  <span className="text-primary">{shipment.id}</span>
                   {shipment?.shipmentAlerts?.length > 0 && (
                     <span
                       style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
-                      className='rounded p-1'
+                      className="rounded p-1"
                     >
-                      <img style={{ height: 15 }} src={alert} alt='Alert' />
+                      <img style={{ height: 15 }} src={alert} alt="Alert" />
                     </span>
                   )}
                 </div>
                 <div
-                  className='col-1 txt1'
+                  className="col-1 txt1"
                   style={{ position: "relative", left: "4.5%" }}
                 >
                   {shipment?.shippingDate?.length === 10
@@ -101,13 +101,13 @@ const Table = (props) => {
                     : formatDate(shipment.shippingDate)}
                 </div>
                 <div
-                  className='col-3 txt1 '
+                  className="col-3 txt1 "
                   style={{ position: "relative", left: "10%" }}
                 >
-                  <p className='mb-0'>
+                  <p className="mb-0">
                     {shipment.supplier.org ? shipment.supplier.org.name : "-"}
                   </p>
-                  <p className='address mb-0 text-muted'>{`${
+                  <p className="address mb-0 text-muted">{`${
                     supplierAddress.firstLine ? supplierAddress.firstLine : ""
                   } ${
                     supplierAddress.secondLine ? supplierAddress.secondLine : ""
@@ -118,13 +118,13 @@ const Table = (props) => {
                   } `}</p>
                 </div>
                 <div
-                  className='col-3 txt1 '
+                  className="col-3 txt1 "
                   style={{ position: "relative", left: "12%" }}
                 >
-                  <p className='mb-0'>
+                  <p className="mb-0">
                     {shipment.receiver.org ? shipment.receiver.org.name : "-"}
                   </p>
-                  <p className='mb-0 address text-muted'>{`${
+                  <p className="mb-0 address text-muted">{`${
                     receiverAddress.firstLine ? receiverAddress.firstLine : ""
                   }  ${
                     receiverAddress.secondLine ? receiverAddress.secondLine : ""
@@ -135,7 +135,7 @@ const Table = (props) => {
                   } `}</p>
                 </div>
                 <div
-                  className='rTableCell'
+                  className="rTableCell"
                   style={{ position: "relative", left: "10%" }}
                 >
                   <div className={`status secondary-bg ml-3 ${statusStyle}`}>
@@ -143,11 +143,11 @@ const Table = (props) => {
                   </div>
                 </div>
                 <div
-                  className='col-1 txt1'
+                  className="col-1 txt1"
                   style={{ paddingLeft: 0, position: "relative", left: "8%" }}
                 >
                   <button
-                    className='button btn-primary text-light btn-sm ml-1'
+                    className="button btn-primary text-light btn-sm ml-1"
                     onClick={() => {
                       const data = shipments[index];
                       dispatch(setTracingShipments(data));
@@ -157,18 +157,18 @@ const Table = (props) => {
                     <img
                       style={{ padding: 1, height: 15 }}
                       src={location}
-                      alt='Location'
+                      alt="Location"
                     />
-                    <span className='pl-1 text-white'>Track</span>
+                    <span className="pl-1 text-white">Track</span>
                   </button>
                 </div>
                 <div
-                  className='rTableCell'
+                  className="rTableCell"
                   style={{ position: "relative", left: "4.5%" }}
                 >
                   <Link
                     to={`/viewshipment/${shipment.id}`}
-                    className='button btn-sm'
+                    className="button btn-sm"
                     style={{ width: "60px" }}
                   >
                     View
@@ -178,16 +178,16 @@ const Table = (props) => {
             );
           })}
           {shipments?.length > 0 && (
-            <div className='d-flex flex-row-reverse'>
+            <div className="d-flex flex-row-reverse">
               <Pagination
                 showFirstButton
                 showLastButton
-                color='primary'
+                color="primary"
                 count={Math.ceil(props.count / 10)}
                 onChange={handlePageChange}
               />
               <span
-                className='mx-5 my-1 rounded text-dark'
+                className="mx-5 my-1 rounded text-dark"
                 style={{ fontSize: "14px" }}
               >
                 Total Records {props.count}{" "}
