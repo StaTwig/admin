@@ -230,7 +230,7 @@ const ViewOrder = (props) => {
             {order?.products?.map((product, index) => {
               let pr = order.productDetails.filter(d => product.productId === d.id);
               let prd = pr.length > 0 ? pr[0] : {};
-              let uom = typeof prd?.unitofMeasure === "string" ? JSON.parse(prd?.unitofMeasure) : prd?.unitofMeasure;
+              let uom = prd?.unitofMeasure ? typeof prd?.unitofMeasure === "string" ? JSON.parse(prd?.unitofMeasure) : prd?.unitofMeasure : product.unitofMeasure;
               return(
               <div
                 className={`bg-white shadow padding-added ${
@@ -248,12 +248,12 @@ const ViewOrder = (props) => {
                 </div>
                 <div className='row  p-1'>
                   <span className='col'>{t("product_category")}</span>
-                  <span className=' col text-dark '>{prd?.type}</span>
+                  <span className=' col text-dark '>{prd?.type ? prd?.type : product.type}</span>
                 </div>
                 <div className='row  p-1'>
                   <span className='col'>{t("manufacturer")}</span>
                   <span className=' col text-dark '>
-                    {prd.manufacturer}
+                    {prd.manufacturer ? prd.manufacturer : product.manufacturer}
                   </span>
                 </div>
                 <div className='row  p-1'>
