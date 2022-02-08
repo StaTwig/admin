@@ -2849,9 +2849,11 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
+      const warehouse = await WarehouseModel.findOne({ id: req.user.warehouseId });
+
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId },
-        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
+        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity) } }
      )
 
      var datee = new Date();
