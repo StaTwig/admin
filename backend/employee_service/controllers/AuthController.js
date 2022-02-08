@@ -377,6 +377,7 @@ exports.register = [
         eventID: cuid(),
         eventTime: new Date().toISOString(),
         actorWarehouseId: "null",
+        transactionId: employeeId,
         eventType: {
           primary: "CREATE",
           description: "USER",
@@ -1735,7 +1736,7 @@ exports.emailverify = [
       const emailId = req.query.emailId;
       const phoneNumber = req.query.phoneNumber;
       const email = await EmployeeModel.find(
-        { $or: [{ phoneNumber: "+" + phoneNumber }, { emailId: emailId }] },
+        { $or: [{ phoneNumber: "+" + phoneNumber }, { emailId: emailId ? emailId : '' }] },
         "emailId phoneNumber"
       );
       return apiResponse.successResponseWithData(
