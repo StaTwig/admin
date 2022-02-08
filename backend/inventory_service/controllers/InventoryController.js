@@ -2690,7 +2690,12 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        { $project: { _id: 0, value: "$id", record_type: "order", org1: "$customer.customerOrganisation", org2: "supplier.supplierOrganisation" } },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+          },
+        },
         {
           $unionWith: {
             coll: "products",
