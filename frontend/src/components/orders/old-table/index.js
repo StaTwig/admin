@@ -6,7 +6,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import "./style.scss";
 
 const Table = (props) => {
-  const { ordrs, visible } = props;
+  const { ordrs, visible, t } = props;
   const orders = ordrs();
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
@@ -19,12 +19,12 @@ const Table = (props) => {
     }
   });
   return (
-    <div className='table pr-1'>
-      <div className='rTable'>
-        <div className=''>
+    <div className="table pr-1">
+      <div className="rTable">
+        <div className="">
           {orders.length === 0 && (
-            <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
-              No records found
+            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
+              {t("no_records_found")}
             </div>
           )}
           {orders.map((order, index) => {
@@ -55,30 +55,30 @@ const Table = (props) => {
             const { customer, products, supplier, creatorOrganisation } = order;
             return (
               <div
-                className='col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow'
+                className="col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow"
                 key={index}
               >
                 <div
-                  className='col-2 txt1 txtBlue'
+                  className="col-2 txt1 txtBlue"
                   style={{ position: "relative", left: "-1.5%" }}
                 >
                   {" "}
                   {/*rTableCell */}
-                  <div className='userPic text-right d-flex flex-row'>
+                  <div className="userPic text-right d-flex flex-row">
                     <img
                       src={user}
-                      width='27'
-                      height='18'
-                      alt='User'
-                      className='align-self-center'
+                      width="27"
+                      height="18"
+                      alt="User"
+                      className="align-self-center"
                     />
-                    <div className='flex-column d-flex text-left'>
-                      <span className='text-primary bold'>
+                    <div className="flex-column d-flex text-left">
+                      <span className="text-primary bold">
                         {visible === "two"
                           ? creatorOrganisation?.name
                           : supplier.organisation.name}
                       </span>
-                      <p className='address mb-0 text-primary'>
+                      <p className="address mb-0 text-primary">
                         {visible === "two"
                           ? creatorOrganisation?.id
                           : supplier.organisation.id}
@@ -87,24 +87,24 @@ const Table = (props) => {
                   </div>
                 </div>
                 <div
-                  className='col-1 txt1'
+                  className="col-1 txt1"
                   style={{ position: "relative", left: "-1%" }}
                 >
                   {formatDate(order.creationDate)}
                 </div>
                 <div
-                  className='col-1 txt1'
+                  className="col-1 txt1"
                   style={{ position: "relative", left: "4%" }}
                 >
-                  <p className='mb-0 bold address mb-0 text-muted'>
+                  <p className="mb-0 bold address mb-0 text-muted">
                     {order.id}
                   </p>
                 </div>
                 <div
-                  className='col-2 txt1'
+                  className="col-2 txt1"
                   style={{ position: "relative", left: "8.5%" }}
                 >
-                  <p className='mb-0 bold mb-0 address text-muted'>
+                  <p className="mb-0 bold mb-0 address text-muted">
                     {products[0]?.name +
                       (products.length > 1
                         ? " + " + (products.length - 1) + " more"
@@ -113,11 +113,11 @@ const Table = (props) => {
                 </div>
 
                 <div
-                  className='col-2 txt1 ml-5 d-flex flex-column'
+                  className="col-2 txt1 ml-5 d-flex flex-column"
                   style={{ position: "relative", left: "7%" }}
                 >
                   <span>{customer.warehouse.title}</span>
-                  <span className='text-muted '>
+                  <span className="text-muted ">
                     {customer.warehouse && customer.warehouse.warehouseAddress
                       ? customer.warehouse.warehouseAddress.firstLine +
                         " " +
@@ -127,7 +127,7 @@ const Table = (props) => {
                 </div>
 
                 <div
-                  className='rTableCell '
+                  className="rTableCell "
                   style={{ position: "relative", left: "9%" }}
                 >
                   <div
@@ -139,10 +139,10 @@ const Table = (props) => {
                 </div>
 
                 <div
-                  className='rTableCell'
+                  className="rTableCell"
                   style={{ position: "relative", left: "7%" }}
                 >
-                  <Link to={`/vieworder/${order.id}`} className='button'>
+                  <Link to={`/vieworder/${order.id}`} className="button">
                     View
                   </Link>
                 </div>
@@ -150,16 +150,16 @@ const Table = (props) => {
             );
           })}
           {orders?.length > 0 && (
-            <div className='d-flex flex-row-reverse'>
+            <div className="d-flex flex-row-reverse">
               <Pagination
                 showFirstButton
                 showLastButton
-                color='primary'
+                color="primary"
                 count={Math.ceil(props.count / 10)}
                 onChange={handlePageChange}
               />
               <span
-                className='mx-5 my-1 rounded text-dark'
+                className="mx-5 my-1 rounded text-dark"
                 style={{ fontSize: "14px" }}
               >
                 Total Records {props.count}{" "}

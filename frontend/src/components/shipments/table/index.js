@@ -50,7 +50,7 @@ function Table(props) {
         <tbody>
           {/* {shipments.length === 0 && (
             <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
-              No records found
+              {t("no_records_found")}
             </div>
           )}
           {shipments.map((shipment, index) => {
@@ -186,7 +186,7 @@ function Table(props) {
 
           {/* {shipments.length === 0 && (
             <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
-              No records found
+              {t("no_records_found")}
             </div>
           )} */}
 
