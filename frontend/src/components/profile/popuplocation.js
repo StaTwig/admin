@@ -49,7 +49,7 @@ const PopUpLocation = (props) => {
       }
     }
   };
-
+console.log(props.wareHouses)
   return (
     <div className="addLocation">
       <center>
@@ -137,7 +137,8 @@ const PopUpLocation = (props) => {
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
-            onHide={closeModalAddedLocation} //FailurePopUp
+            onHide={closeModalAddedLocation}
+            t={t} //FailurePopUp
           />
         </Modal>
       )}
