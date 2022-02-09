@@ -23,25 +23,23 @@ const Table = (props) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
   return (
-    <div className='table'>
-      <div className='rTable'>
+    <div className="table">
+      <div className="rTable">
         {inventoryDetails.length === 0 && (
-          <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
-            No records found
+          <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
+            {t("no_records_found")}
           </div>
         )}
         {inventoryDetails.map((inventory, index) => (
-          <div className='' key={index}>
-            <Accordion className='mb-3 p-0 table-inventory'>
+          <div className="" key={index}>
+            <Accordion className="mb-3 p-0 table-inventory">
               <AccordionSummary
-                // expand={display}
-                aria-controls='panel1a-content'
-                id='panel1a-header'
-                //className="rTableRow"
+                aria-controls="panel1a-content"
+                id="panel1a-header"
               >
                 {/*<div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>*/}
                 <div
-                  className='col-4 txt1 text-left'
+                  className="col-4 txt1 text-left"
                   style={{
                     position: "relative",
                     left: "0%",
@@ -49,19 +47,19 @@ const Table = (props) => {
                     fontSize: "14px",
                   }}
                 >
-                  <div className='d-flex flex-column txtBlue'>
+                  <div className="d-flex flex-column txtBlue">
                     <div>{inventory.productDetails.name}</div>
                   </div>
                 </div>
                 <div
-                  className='col-2 txt1 text-left'
+                  className="col-2 txt1 text-left"
                   style={{ position: "relative", left: "3%", fontSize: "14px" }}
                 >
                   {inventory.productDetails.type}
                 </div>
                 {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                 <div
-                  className='col txt1'
+                  className="col txt1"
                   style={{
                     position: "relative",
                     left: "10%",
@@ -72,7 +70,7 @@ const Table = (props) => {
                   {formatDate(inventory.createdAt)}
                 </div>
                 <div
-                  className='col txt1 text-right'
+                  className="col txt1 text-right"
                   style={{
                     position: "relative",
                     left: "13%",
@@ -91,7 +89,7 @@ const Table = (props) => {
                   ) : null}
                 </div>
                 <div
-                  className='rTableCell'
+                  className="rTableCell"
                   style={{
                     position: "relative",
                     left: "13%",
@@ -100,31 +98,36 @@ const Table = (props) => {
                 >
                   {inventory.eventTypePrimary !== "ADD" ? (
                     inventory.eventTypePrimary === "RECEIVE" ? (
-                      <div className='status secondary-bg bg-success'>
+                      <div className="status secondary-bg bg-success">
                         {" "}
                         {t("received")}
                       </div>
                     ) : (
+                      inventory.eventTypePrimary !== "BUY" ?
                       <div className='status secondary-bg bg-warning'>
                         {t("sent")}
                       </div>
+                      :
+                      <div className='status secondary-bg bg-warning'>
+                      {t("Sold")}
+                    </div>
                     )
                   ) : (
-                    <div className='status secondary-bg bg-primary'>
+                    <div className="status secondary-bg bg-primary">
                       {t("added")}
                     </div>
                   )}
                 </div>
                 <div
-                  className=' rTableCell m-1'
+                  className=" rTableCell m-1"
                   style={{ position: "relative", left: "7.5%" }}
                 >
-                  <span className='drop-pad rounded-circle '>
+                  <span className="drop-pad rounded-circle ">
                     <img
                       src={dropdownIcon}
-                      height='8'
-                      width='14'
-                      alt='DropDownIcon'
+                      height="8"
+                      width="14"
+                      alt="DropDownIcon"
                     />{" "}
                   </span>
                 </div>
@@ -139,31 +142,31 @@ const Table = (props) => {
               <AccordionDetails>
                 <Typography>
                   <TableContainer>
-                    <Tablee className='table-borderless lg acc-table'>
+                    <Tablee className="table-borderless lg acc-table">
                       <TableBody>
                         {inventory.eventTypePrimary === "CREATE" ||
                         inventory.eventTypePrimary === "RECEIVE" ? (
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>{t("shipment_id")}</div>
+                                <div className="d-head">{t("shipment_id")}</div>
                               </TableCell>
                               <div>
-                                <TableCell align='left'>
+                                <TableCell align="left">
                                   {inventory.shipmentDetails.id}
                                 </TableCell>
                               </div>
                             </TableRow>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>
+                                <div className="d-head">
                                   {inventory.eventTypePrimary === "CREATE"
                                     ? t("to_organisation")
                                     : t("from_organisation")}
                                 </div>
                               </TableCell>
-                              <div className=''>
-                                <TableCell align='left'>
+                              <div className="">
+                                <TableCell align="left">
                                   {inventory.eventTypePrimary === "CREATE"
                                     ? inventory.receiverDetails[0].name
                                     : inventory.senderDetails[0].name}
@@ -172,14 +175,14 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>
+                                <div className="d-head">
                                   {inventory.eventTypePrimary === "CREATE"
                                     ? t("to_location")
                                     : t("from_locations")}
                                 </div>
                               </TableCell>
-                              <div className=''>
-                                <TableCell align='left'>
+                              <div className="">
+                                <TableCell align="left">
                                   {inventory.eventTypePrimary === "CREATE"
                                     ? inventory.receiverDetails[0].postalAddress
                                     : inventory.senderDetails[0].postalAddress}
@@ -191,10 +194,10 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>{t("mfg_date")}</div>
+                                <div className="d-head">{t("mfg_date")}</div>
                               </TableCell>
-                              <div className='ml-5'>
-                                <TableCell align='left'>
+                              <div className="ml-5">
+                                <TableCell align="left">
                                   {formatDate(
                                     inventory.payloadData.data.products.mfgDate,
                                     "mmyyyy"
@@ -203,11 +206,11 @@ const Table = (props) => {
                               </div>
                             </TableRow>
                             <TableRow>
-                              <TableCell align='left'>
-                                <div className='d-head'>{t("exp_date")}</div>
+                              <TableCell align="left">
+                                <div className="d-head">{t("exp_date")}</div>
                               </TableCell>
-                              <div className='ml-5'>
-                                <TableCell align='left'>
+                              <div className="ml-5">
+                                <TableCell align="left">
                                   {formatDate(
                                     inventory.payloadData.data.products.expDate,
                                     "mmyyyy"
@@ -216,14 +219,14 @@ const Table = (props) => {
                               </div>
                             </TableRow>
                             <TableRow>
-                              <TableCell align='left'>
-                                <div className='d-head'>{t("batch")}</div>
+                              <TableCell align="left">
+                                <div className="d-head">{t("batch")}</div>
                               </TableCell>
-                              <div className='ml-5'>
-                                <TableCell align='left'>
+                              <div className="ml-5">
+                                <TableCell align="left">
                                   {
                                     inventory.payloadData.data.products
-                                      .batchNumber
+                                      .batchNumber || inventory.transactionId
                                   }
                                 </TableCell>
                               </div>
@@ -231,7 +234,7 @@ const Table = (props) => {
                           </div>
                         )}
                         <div
-                          className='mt-3'
+                          className="mt-3"
                           style={{
                             position: "absolute ",
                             left: "78% ",
@@ -242,8 +245,8 @@ const Table = (props) => {
                           {inventory.eventTypePrimary === "CREATE" ||
                           inventory.eventTypePrimary === "RECEIVE" ? (
                             <button
-                              type='button'
-                              className='bttn-blue blue-primary'
+                              type="button"
+                              className="bttn-blue blue-primary"
                               onClick={() => {
                                 props.history.push(
                                   `/viewshipment/${inventory.payloadData.data.id}`
@@ -290,16 +293,16 @@ const Table = (props) => {
         ))}
 
         {inventoryCount > 0 && (
-          <div className='d-flex flex-row-reverse'>
+          <div className="d-flex flex-row-reverse">
             <Pagination
               showFirstButton
               showLastButton
-              color='primary'
+              color="primary"
               count={Math.ceil(inventoryCount / 10)}
               onChange={handlePageChange}
             />
             <span
-              className='mx-5 my-1 rounded text-dark'
+              className="mx-5 my-1 rounded text-dark"
               style={{ fontWeight: "400", fontSize: "14px" }}
             >
               {t("total_records")} {inventoryCount}{" "}

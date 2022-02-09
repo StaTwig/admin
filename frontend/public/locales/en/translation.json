@@ -341,5 +341,10 @@
   "sorry_msg": "We are very sorry for inconvenience.",
   "sorry_reason": "It looks you are trying to access a page that either has been deleted or never been existed",
   "back_to_home": "Back to Home",
-  "all_products_are_expired": "All products are expired"
+  "products_out_of_stock": "products out of stock",
+  "all_products_are_expired": "All products are expired",
+  "by": "by",
+  "updated_location": "Updated Location",
+  "batch_number": "Batch Number",
+  "serial_number": "Serial Number"
 }

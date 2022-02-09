@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import updownarrow from "../../assets/icons/up-and-down-1.svg";
 import FilterIcon from "../../assets/icons/Filter.svg";
 import ExportIcon from "../../assets/icons/Export.svg";
@@ -47,31 +47,29 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 const AdvanceTableFilter = (props) => {
   const { t, onSelectionDateFilter } = props;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorElEx, setAnchorElEx] = React.useState(null);
-  const [statusAnchorEl, setStatusAnchorEl] = React.useState(null);
-  const [toShipmentAnchorEl, setToShipmentAnchorEl] = React.useState(null);
-  const [fromShipmentAnchorEl, setFromShipmentAnchorEl] = React.useState(null);
-  const [shipmentIdAnchorEl, setShipmentIdAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElEx, setAnchorElEx] = useState(null);
+  const [statusAnchorEl, setStatusAnchorEl] = useState(null);
+  const [toShipmentAnchorEl, setToShipmentAnchorEl] = useState(null);
+  const [fromShipmentAnchorEl, setFromShipmentAnchorEl] = useState(null);
+  const [shipmentIdAnchorEl, setShipmentIdAnchorEl] = useState(null);
   const [poDeliveryLocationAnchorEl, setPoDeliveryLocationAnchorEl] =
-    React.useState(null);
-  const [poProductNameAnchorEl, setPoProductNameAnchorEl] =
-    React.useState(null);
-  const [poOrderIdAnchorEl, setPoOrderIdAnchorEl] = React.useState(null);
-  const [poFromAnchorEl, setPoFromAnchorEl] = React.useState(null);
-  const [poToAnchorEl, setPoToAnchorEl] = React.useState(null);
-  const [inventoryStatusAnchorEl, setInventoryStatusAnchorEl] =
-    React.useState(null);
+    useState(null);
+  const [poProductNameAnchorEl, setPoProductNameAnchorEl] = useState(null);
+  const [poOrderIdAnchorEl, setPoOrderIdAnchorEl] = useState(null);
+  const [poFromAnchorEl, setPoFromAnchorEl] = useState(null);
+  const [poToAnchorEl, setPoToAnchorEl] = useState(null);
+  const [inventoryStatusAnchorEl, setInventoryStatusAnchorEl] = useState(null);
   const [inventoryProductNameAnchorEl, setInventoryProductNameAnchorEl] =
-    React.useState(null);
+    useState(null);
   const [
     inventoryProductCategoryAnchorEl,
     setInventoryProductCategoryAnchorEl,
-  ] = React.useState(null);
+  ] = useState(null);
   const [inventoryfiFilterOnSelect, setInventoryfiFilterOnSelect] =
-    React.useState(null);
+    useState(null);
 
-  const [dateFilter, setdateFilter] = React.useState(null);
+  const [dateFilter, setdateFilter] = useState(null);
   const dateclick = (event) => {
     setdateFilter(event.currentTarget);
   };
@@ -1110,7 +1108,6 @@ const AdvanceTableFilter = (props) => {
                 keepMounted
                 open={Boolean(inventoryProductCategoryAnchorEl)}
                 onClose={handleInventoryProductCategoryClose}
-                //
               >
                 <div
                   className='d-flex flex-column align-items-center'
@@ -1122,7 +1119,8 @@ const AdvanceTableFilter = (props) => {
                         id='ProductCategory'
                         options={props.productCategories}
                         getOptionLabel={(options) => options.value}
-                        onChange={(event, newValue) => {
+                        onChange={(e, newValue) => {
+                          console.log(newValue)
                           setInventoryProductCategoryFilterOnSelect(
                             newValue.value
                           );

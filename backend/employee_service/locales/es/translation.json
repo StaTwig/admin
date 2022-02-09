@@ -37,5 +37,6 @@
   "image_success": "Imagen",
   "no_token": "Token de autorización no encontrado",
   "expired_token": "Ficha caducada. Por favor inicie sesión de nuevo",
-  "invalid_token": "Simbolo no valido. Por favor inicie sesión de nuevo"
+  "invalid_token": "Simbolo no valido. Por favor inicie sesión de nuevo",
+  "default_office": "Oficina"
 }

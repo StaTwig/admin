@@ -26,6 +26,7 @@ export const getInventories = (
 ) => {
   return async (dispatch) => {
     try {
+      console.log(productCategory)
       dispatch(turnOn());
       let dateF = '';
       if(fromDate && toDate){

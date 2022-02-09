@@ -234,7 +234,7 @@ exports.addProduct = [
               manufacturer: req.body.manufacturer,
               pricing: req.body.pricing,
               //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
-              unitofMeasure: req.body.unitofMeasure,
+              unitofMeasure: JSON.parse(req.body.unitofMeasure),
               characteristicSet: {
                 temperature_max: req.body.characteristicSet?.temperature_max,
                 temperature_min: req.body.characteristicSet?.temperature_min,

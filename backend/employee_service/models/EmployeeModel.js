@@ -4,6 +4,7 @@ const EmployeeSchema = new mongoose.Schema(
     id: { type: String, required: false, unique: true },
     emailId: {
       type: String,
+      default: null,
     },
     walletAddress: {
       type: String,

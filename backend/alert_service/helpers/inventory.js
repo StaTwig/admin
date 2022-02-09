@@ -4,7 +4,7 @@ const { checkPermissionAwait } = require("../middlewares/rbac_middleware");
 const { asyncForEach } = require("./utility");
 
 async function getEligibleUsers(warehouseId) {
-  let eligibleUsers = [];
+  const eligibleUsers = [];
   const users = await EmployeeModel.find({
     warehouseId: { $in: [warehouseId] },
     accountStatus: "ACTIVE",

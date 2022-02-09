@@ -112,7 +112,8 @@ const FormPage = (props) => {
         verifyEmailAndPhoneNo(
           `phoneNumber=${props.phone}`
         ).then((v) => {
-          if (v.data[0].phoneNumber) {
+          console.log(v)
+          if (v?.data[0]?.phoneNumber) {
             setphoneerror(true);
             // setsignupDisable(true);
           } else {

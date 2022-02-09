@@ -246,6 +246,45 @@ exports.getAllEventsWithFilter = [
       });
       inventoryCount =
         inventoryCount.length > 0 ? inventoryCount[0].myCount : 0;
+        console.log([
+          {
+            $lookup: {
+              from: "organisations",
+              localField: "payloadData.data.supplier.id",
+              foreignField: "id",
+              as: "senderDetails",
+            },
+          },
+          {
+            $lookup: {
+              from: "organisations",
+              localField: "payloadData.data.receiver.id",
+              foreignField: "id",
+              as: "receiverDetails",
+            },
+          },
+          {
+            $lookup: {
+              from: "employees",
+              localField: "actorUserId",
+              foreignField: "emailId",
+              as: "employeeDetails",
+            },
+          },
+          { $unwind: "$employeeDetails" },
+          { $unwind: "$payloadData.data.products" },
+          {
+            $lookup: {
+              from: "products",
+              localField: LocalField,
+              foreignField: "id",
+              as: "productDetails",
+            },
+          },
+          { $unwind: "$productDetails" },
+          { $match: elementMatchQuery },
+          { $sort: { createdAt: -1 } },
+        ])
       EventModal.aggregate([
         {
           $lookup: {
@@ -309,7 +348,8 @@ exports.getAllEventsWithFilter = [
               }
               eventRecord[`payloadData`] = payloadRecord;
               if (
-                eventRecord["eventTypePrimary"] !== "ADD" &&
+                eventRecord["eventTypePrimary"] !== "BUY" &&
+                // eventRecord["eventTypePrimary"] !== "ADD" &&
                 eventRecord[`shipmentDetails`] === null
               )
                 console.log("deleted entry");

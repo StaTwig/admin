@@ -659,9 +659,12 @@ const EditLocation = (props) => {
         {addedLocationModal && (
           <Modal
             close={() => closeModalAddedLocation()}
+            t={props.t}
             size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <SuccessPopup
+              
+            t={props.t}
               onHide={closeModalAddedLocation} //FailurePopUp
             />
           </Modal>

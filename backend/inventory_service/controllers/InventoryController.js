@@ -19,19 +19,17 @@ const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
-
+const cuid = require("cuid");
 const fs = require("fs");
-const uniqid = require("uniqid");
-// const path = require('path');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
 const stream_name = process.env.STREAM;
 const OrganisationModel = require("../models/OrganisationModel");
 const AnalyticsModel = require("../models/AnalyticsModel");
-const CENTRAL_AUTHORITY_ID = "null";
-const CENTRAL_AUTHORITY_NAME = "null";
-const CENTRAL_AUTHORITY_ADDRESS = "null";
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
 exports.getTotalCount = [
   auth,
@@ -557,11 +555,10 @@ exports.addProductsToInventory = [
       const empData = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      const orgId = empData?.organisationId || null;
+      const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
-
+      const address = orgData?.postalAddress;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
@@ -678,7 +675,6 @@ exports.addProductsToInventory = [
               //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
-                  // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
                     labelId: product.label ? product?.label?.labelId : "QR_2D",
@@ -711,7 +707,7 @@ exports.addProductsToInventory = [
               }
             } else {
               const atom = {
-                id: uniqid("batch-"),
+                id: "batch-" + cuid(),
                 label: {
                   labelId: product.label ? product?.label?.labelId : "QR_2D",
                   labelType: product.label ? product?.label?.labelType : "3232", // ?? WHY ??
@@ -764,59 +760,40 @@ exports.addProductsToInventory = [
               )
             );
           }
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             transactionId: warehouse.warehouseInventory,
             eventType: {
               primary: "ADD",
               description: "INVENTORY",
             },
+            actorWarehouseId: req.user.warehouseId,
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id,
+              actoruserid: email,
             },
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: req.user.organisationId || "null",
-                name: "null",
-                address: "null",
+                id: orgId,
+                name: orgName,
+                address: address,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
-              data: {
-                abc: 123,
-              },
+              data: payload,
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.stackholders.actororg.id = orgId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data = payload;
           await logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
@@ -888,8 +865,9 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                  }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                  inventoriesFound.serialNumber
+                }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -959,19 +937,19 @@ exports.addInventoriesFromExcel = [
             },
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
               actororg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
@@ -984,17 +962,17 @@ exports.addInventoriesFromExcel = [
           event_data.eventTime = datee;
           event_data.eventType.primary = "ADD";
           event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
+          event_data.actor.actorid = user_id || null;
+          event_data.actor.actoruserid = email || null;
           event_data.stackholders.actororg.id =
-            orgId || req.user.organisationId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+            orgId || req.user.organisationId || null;
+          event_data.stackholders.actororg.name = orgName || null;
+          event_data.stackholders.actororg.address = address || null;
+          event_data.actorWarehouseId = req.user.warehouseId || null;
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
           event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
+            CENTRAL_AUTHORITY_ADDRESS || null;
           event_data.payload.data.products = [...resData];
           // logEvent(event_data);
           return apiResponse.successResponseWithData(
@@ -2585,19 +2563,19 @@ exports.deleteProductsFromInventory = [
         },
         stackholders: {
           ca: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           actororg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           secondorg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
         },
         payload: {
@@ -2610,18 +2588,18 @@ exports.deleteProductsFromInventory = [
       event_data.eventTime = datee;
       event_data.eventType.primary = "DELETE";
       event_data.eventType.description = "INVENTORY";
-      event_data.actor.actorid = user_id || "null";
-      event_data.actor.actoruserid = email || "null";
-      event_data.stackholders.actororg.id = orgId || "null";
-      event_data.stackholders.actororg.name = orgName || "null";
-      event_data.stackholders.actororg.address = address || "null";
-      event_data.actorWarehouseId = req.user.warehouseId || "null";
-      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-      event_data.stackholders.secondorg.id = receiverId || "null";
-      event_data.stackholders.secondorg.name = receiverName || "null";
-      event_data.stackholders.secondorg.address = receiverAddress || "null";
+      event_data.actor.actorid = user_id || null;
+      event_data.actor.actoruserid = email || null;
+      event_data.stackholders.actororg.id = orgId || null;
+      event_data.stackholders.actororg.name = orgName || null;
+      event_data.stackholders.actororg.address = address || null;
+      event_data.actorWarehouseId = req.user.warehouseId || null;
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || null;
+      event_data.stackholders.secondorg.id = receiverId || null;
+      event_data.stackholders.secondorg.name = receiverName || null;
+      event_data.stackholders.secondorg.address = receiverAddress || null;
       event_data.payload.data = payload;
 
       await logEvent(event_data);
@@ -2647,6 +2625,7 @@ exports.searchProduct = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
+          console.log("queries", req.query);
           const { productName, productType } = req.query;
           req.query.warehouseId
             ? (warehouseId = req.query.warehouseId)
@@ -2678,6 +2657,7 @@ exports.searchProduct = [
               //   }
               // }
             ]).sort({ createdAt: -1 });
+            console.log("Inventory:", inventory);
             return apiResponse.successResponseWithData(
               res,
               "Inventory Details",
@@ -2710,7 +2690,12 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        { $project: { _id: 0, value: "$id", record_type: "order", org1: "$customer.customerOrganisation", org2: "supplier.supplierOrganisation" } },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+          },
+        },
         {
           $unionWith: {
             coll: "products",
@@ -2733,7 +2718,7 @@ exports.autoCompleteSuggestions = [
         {
           $group: {
             _id: "$value",
-            // type: { $first: "$record_type" },
+            type: { $first: "$record_type" },
             // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
@@ -2777,8 +2762,13 @@ exports.autoCompleteSuggestions = [
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+              { $project: { _id: 0, value: "$id", record_type: "shipment", org1: "$receiver.id", org2: "$supplier.id"  } },
             ],
+          },
+        },
+        {
+          $match: {
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
           },
         },
         {
@@ -2810,6 +2800,7 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
+      // console.log([suggestions1, suggestions2, suggestions3])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
@@ -2832,7 +2823,7 @@ exports.fetchBatchesOfInventory = [
       const inventoryId = warehouse.warehouseInventory;
       const batches = await AtomModel.find({
         productId: productId,
-        batchNumbers: { $nin: ["", "null", null] },
+        batchNumbers: { $nin: ["", null, null] },
         inventoryIds: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
@@ -2869,68 +2860,79 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
-      const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": "prod-eey3kskz81etij" },
-        { $inc: { "inventoryDetails.$.quantity": -10 } }
-      );
+      const warehouse = await WarehouseModel.findOne({ id: req.user.warehouseId });
 
-      var datee = new Date();
-      datee = datee.toISOString();
-      var evid = Math.random().toString(36).slice(2);
-      let event_data = {
-        eventID: null,
-        eventTime: null,
-        transactionId: batchNumber,
-        eventType: {
-          primary: "BUY",
-          description: "INVENTORY",
-        },
-        actor: {
-          actorid: null,
-          actoruserid: null,
-        },
-        stackholders: {
-          ca: {
-            id: "null",
-            name: "null",
-            address: "null",
-          },
-          actororg: {
-            id: req.user.organisationId || "null",
-            name: "null",
-            address: "null",
-          },
-          secondorg: {
-            id: "null",
-            name: "null",
-            address: "null",
-          },
-        },
-        payload: {
-          data: {
-            batch: batch,
-            quantityPurchased: quantity,
-          },
-        },
-      };
-      event_data.eventID = "ev0000" + evid;
-      event_data.eventTime = datee;
-      event_data.eventType.primary = "BUY";
-      event_data.eventType.description = "INVENTORY";
-      event_data.actor.actorid = user_id || "null";
-      event_data.actor.actoruserid = email || "null";
-      event_data.stackholders.actororg.id = orgId || "null";
-      event_data.stackholders.actororg.name = orgName || "null";
-      event_data.stackholders.actororg.address = address || "null";
-      event_data.actorWarehouseId = req.user.warehouseId || "null";
-      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-      await logEvent(event_data);
-      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
-        batch,
-        inventory,
-      });
+      const inventory = await InventoryModel.updateOne(
+        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity) } }
+     )
+
+     var datee = new Date();
+     datee = datee.toISOString();
+     var evid = Math.random().toString(36).slice(2);
+     let event_data = {
+       eventID: null,
+       eventTime: null,
+       transactionId: batchNumber,
+       eventType: {
+         primary: "BUY",
+         description: "INVENTORY",
+       },
+       actor: {
+         actorid: null,
+         actoruserid: null,
+       },
+       stackholders: {
+         ca: {
+           id: "null",
+           name: "null",
+           address: "null",
+         },
+         actororg: {
+           id: req.user.organisationId || "null",
+           name: "null",
+           address: "null",
+         },
+         secondorg: {
+           id: "null",
+           name: "null",
+           address: "null",
+         },
+       },
+       payload: {
+         data: {
+           batch: batch,
+           quantityPurchased: quantity,
+           products: {
+             productId: batch.productId,
+             batchNumber: batchNumber
+           },
+           sender: {
+             id: req.user.organisationId
+           }
+         },
+       },
+     };
+     event_data.eventID = "ev0000" + evid;
+     event_data.eventTime = datee;
+     event_data.eventType.primary = "BUY";
+     event_data.eventType.description = "INVENTORY";
+     event_data.actor.actorid = user_id || "null";
+     event_data.actor.actoruserid = email || "null";
+     event_data.stackholders.actororg.id = orgId || "null";
+     event_data.stackholders.actororg.name = orgName || "null";
+     event_data.stackholders.actororg.address = address || "null";
+     event_data.actorWarehouseId = req.user.warehouseId || "null";
+     event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+     event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+     event_data.stackholders.ca.address =
+       CENTRAL_AUTHORITY_ADDRESS || "null";
+     await logEvent(event_data);
+      return apiResponse.successResponseWithData(
+        res,
+        "Subtracted Batch",
+        {batch, inventory}
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
