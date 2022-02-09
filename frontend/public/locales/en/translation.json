@@ -347,5 +347,6 @@
   "by": "by",
   "updated_location": "Updated Location",
   "batch_number": "Batch Number",
-  "serial_number": "Serial Number"
+  "serial_number": "Serial Number",
+  "sold":"Sold"
 }
