@@ -54,7 +54,7 @@ const Overview = (props) => {
               <div className='d-flex flex-column'>
                 <div className='title'>{t('total_outbound_shipments')}</div>
                 <div className='count1'>
-                  {overviewAnalytics.outboundShipments}
+                  {overviewAnalytics?.outboundShipments}
                   <small className='dayStatus ml-1'></small>
                 </div>
               </div>
@@ -73,7 +73,7 @@ const Overview = (props) => {
               <div className='d-flex flex-column'>
                 <div className='title'>{t('total_inbound_shipments')}</div>
                 <div className='count3'>
-                  {overviewAnalytics.inboundShipments}
+                  {overviewAnalytics?.inboundShipments}
                   <small className='dayStatus ml-1'></small>
                 </div>
               </div>
@@ -87,7 +87,7 @@ const Overview = (props) => {
               <div className='d-flex flex-column'>
                 <div className='title'>{t('total_product_category')}</div>
                 <div className='count2'>
-                  {overviewAnalytics.totalProductCategory}
+                  {overviewAnalytics?.totalProductCategory}
                   <small className='dayStatus ml-1'></small>
                 </div>
               </div>
@@ -105,7 +105,7 @@ const Overview = (props) => {
               <div className='d-flex flex-column'>
                 <div className='title'>{t('avg_order_processing_time')}</div>
                 <div className='count4'>
-                  {overviewAnalytics.averageOrderProcessingTime}
+                  {overviewAnalytics?.averageOrderProcessingTime}
                   <small className='dayStatus ml-1'></small>
                 </div>
               </div>
@@ -119,7 +119,7 @@ const Overview = (props) => {
               <div className='d-flex flex-column'>
                 <div className='title'>{t('pending_orders')}</div>
                 <div className='count5'>
-                  {overviewAnalytics.pendingOrders}{" "}
+                  {overviewAnalytics?.pendingOrders}{" "}
                   <small className='dayStatus'></small>
                 </div>
               </div>

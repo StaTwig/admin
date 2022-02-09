@@ -507,7 +507,7 @@ const EditRow = (props) => {
                         closeModal();
                       }}
                     >
-                      Next
+                      {t("next")}
                     </button>
                     <button
                       type='button'
@@ -518,7 +518,7 @@ const EditRow = (props) => {
                       }}
                       className='btn btn-outline-dark'
                     >
-                      CANCEL
+                      {t("cancel")}
                     </button>
                   </div>
                 </Modal>

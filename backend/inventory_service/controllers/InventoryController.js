@@ -1909,7 +1909,6 @@ async function getFilterConditions(filters) {
     } else {
       matchCondition.orgType = filters.orgType;
     }
-    console.log(matchCondition, matchWarehouseCondition);
     const organisations = await OrganisationModel.aggregate([
       {
         $match: matchCondition,
@@ -1938,7 +1937,6 @@ async function getFilterConditions(filters) {
     ]);
 
     let orgs = [];
-    console.log(organisations);
     for (let org in organisations) {
       orgs.push(organisations[org]["id"]);
     }
@@ -2712,7 +2710,7 @@ exports.autoCompleteSuggestions = [
         {
           $group: {
             _id: "$value",
-            // type: { $first: "$record_type" },
+            type: { $first: "$record_type" },
             // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
@@ -2870,25 +2868,32 @@ exports.reduceBatch = [
         },
         stackholders: {
           ca: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
           actororg: {
-            id: req.user.organisationId || null,
-            name: null,
-            address: null,
+            id: req.user.organisationId || "null",
+            name: "null",
+            address: "null",
           },
           secondorg: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
         },
         payload: {
           data: {
             batch: batch,
             quantityPurchased: quantity,
+            products: {
+              productId: batch.productId,
+              batchNumber: batchNumber,
+            },
+            sender: {
+              id: req.user.organisationId,
+            },
           },
         },
       };
@@ -2896,15 +2901,15 @@ exports.reduceBatch = [
       event_data.eventTime = datee;
       event_data.eventType.primary = "BUY";
       event_data.eventType.description = "INVENTORY";
-      event_data.actor.actorid = user_id || null;
-      event_data.actor.actoruserid = email || null;
-      event_data.stackholders.actororg.id = orgId || null;
-      event_data.stackholders.actororg.name = orgName || null;
-      event_data.stackholders.actororg.address = address || null;
-      event_data.actorWarehouseId = req.user.warehouseId || null;
-      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
-      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
-      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || null;
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
       await logEvent(event_data);
       return apiResponse.successResponseWithData(res, "Subtracted Batch", {
         batch,

@@ -50,7 +50,7 @@ const FormPage = (props) => {
     async function fetchData() {
       const orgs = await getOrganisations();
 
-      // orgs.push({ id: t('other'), name: t('other') });
+      orgs.push({ id: t('other'), name: t('other') });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
@@ -75,7 +75,7 @@ const FormPage = (props) => {
   });
   const showOrgByType = (value) => {
     let arr = organisations.filter((data) => data.type === value);
-    // arr.push({ name: t('other') });
+    arr.push({ name: t('other') });
     return arr;
   };
 
