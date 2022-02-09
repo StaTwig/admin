@@ -2686,10 +2686,23 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order",createdBy: "$createdBy", org1: "$customer.customerOrganisation", org2: "$supplier.supplierOrganisation" } },
+        {
+          $project: {
+            _id: 0,
+            value: "$id",
+            record_type: "order",
+            createdBy: "$createdBy",
+            org1: "$customer.customerOrganisation",
+            org2: "$supplier.supplierOrganisation",
+          },
+        },
         {
           $match: {
-            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId},{createdBy: req.user.id}]
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+              { createdBy: req.user.id },
+            ],
           },
         },
         {
@@ -2741,13 +2754,24 @@ exports.autoCompleteSuggestions = [
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment", org1: "$receiver.id", org2: "$supplier.id"  } },
+              {
+                $project: {
+                  _id: 0,
+                  value: "$id",
+                  record_type: "shipment",
+                  org1: "$receiver.id",
+                  org2: "$supplier.id",
+                },
+              },
             ],
           },
         },
         {
           $match: {
-            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+            ],
           },
         },
         {
@@ -2839,7 +2863,9 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
-      const warehouse = await WarehouseModel.findOne({ id: req.user.warehouseId });
+      const warehouse = await WarehouseModel.findOne({
+        id: req.user.warehouseId,
+      });
 
       const inventory = await InventoryModel.updateOne(
         { "inventoryDetails.productId": batch.productId },
