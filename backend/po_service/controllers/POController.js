@@ -146,7 +146,7 @@ exports.fetchPurchaseOrders = [
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({
-                    name: element.id,
+                    $or: [{ name: element.id }, { id: element.id }],
                   });
                   element.unitofMeasure = product?.unitofMeasure;
                   element.manufacturer = product?.manufacturer;
@@ -964,7 +964,6 @@ exports.createOrder = [
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type;
         element.unitofMeasure = product?.unitofMeasure;
-        console.log(product);
       });
       const createdBy = req.user.id;
       const purchaseOrder = new RecordModel({
@@ -978,13 +977,11 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy: createdBy,
       });
-      console.log(purchaseOrder);
       const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.supplierOrganisation,
       });
       if (supplierOrgData == null) {
-        console.log("Supplier not defined");
         return apiResponse.ErrorResponse(
           res,
           responses(req.user.preferredLanguage).supplier_not_defined
@@ -995,7 +992,6 @@ exports.createOrder = [
         id: req.body.customer.customerOrganisation,
       });
       if (receiverOrgData == null) {
-        console.log("customer not defined");
         return apiResponse.ErrorResponse(
           res,
           responses(req.user.preferredLanguage).receiver_not_defined

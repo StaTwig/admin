@@ -103,9 +103,14 @@ const Table = (props) => {
                         {t("received")}
                       </div>
                     ) : (
-                      <div className="status secondary-bg bg-warning">
+                      inventory.eventTypePrimary !== "BUY" ?
+                      <div className='status secondary-bg bg-warning'>
                         {t("sent")}
                       </div>
+                      :
+                      <div className='status secondary-bg bg-warning'>
+                      {t("Sold")}
+                    </div>
                     )
                   ) : (
                     <div className="status secondary-bg bg-primary">
@@ -221,7 +226,7 @@ const Table = (props) => {
                                 <TableCell align="left">
                                   {
                                     inventory.payloadData.data.products
-                                      .batchNumber
+                                      .batchNumber || inventory.transactionId
                                   }
                                 </TableCell>
                               </div>

@@ -393,7 +393,6 @@ exports.generateCodes = async function (req, res) {
       fs
         .createWriteStream(`${__dirname}/../images/codes.pdf`)
         .on("close", () => {
-          console.log("file done");
           var path = require("path");
           res.sendFile(path.resolve(`${__dirname}/../images/codes.pdf`));
         })
