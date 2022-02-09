@@ -26,7 +26,7 @@ import {
   fetchAllairwayBillNumber,
 } from "../../actions/shippingOrderAction";
 import { getImage } from "../../actions/notificationActions";
-import { getOrderIds } from "../../actions/poActions";
+import { getOrderIds, searchProduct } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import setAuthToken from "../../utils/setAuthToken";
 import TextField from "@material-ui/core/TextField";
@@ -98,12 +98,12 @@ const Header = (props) => {
     { refs: [ref1] }
   );
 
-  function onSearchChange(e) {
-    setSearchString(e?._id);
-    setSearchType(e?.type);
-    axios
-      .get(`${config().getSuggestions}?searchString=${e}`)
-      .then((resp) => setOptions([...resp.data.data]));
+  const onSearchChange = async (e) => {
+    const response = await axios.get(`${config().getSuggestions}?searchString=${e}`);
+    console.log(response, "response from search API");
+    setOptions([...response.data.data]);
+    setSearchString(options[0]?._id);
+    setSearchType(options[0]?.type);
   }
 
   const closeModalFail = () => {
@@ -162,7 +162,8 @@ const Header = (props) => {
     return result;
   }
 
-  const onSeach = () => {
+  const onSeach = async () => {
+    console.log("OnSeach", searchType);
     if (search.substring(0, 2) === "SH") {
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
@@ -193,9 +194,11 @@ const Header = (props) => {
         } else setInvalidSearch(true);
       });
     } else if (searchType === "productName") {
+      // const response = await axios.get(`${config().searchProduct}&productName=${searchString}`);
       axios
         .get(`${config().searchProduct}&productName=${searchString}`)
         .then((resp) => {
+          console.log("response from search product:", searchProduct);
           if (resp.data.data.length > 0)
             props.history.push(`/viewproduct`, { data: resp.data.data[0] });
           else
@@ -203,7 +206,8 @@ const Header = (props) => {
               `The product "${searchString}" is not found in the inventory`
             );
         })
-        .catch((err) => alert(err.response.data.message));
+        .catch((err) => {
+          alert(err.response.data.message)});
     } else if (searchType === "productType") {
       axios
         .get(`${config().searchProduct}&productType=${searchString}`)
@@ -406,6 +410,7 @@ const Header = (props) => {
                     onSearchChange(newInputValue);
                   }}
                   onChange={(event, newValue) => {
+                    console.log("event:", event);
                     onSearchChange(newValue);
                     onSeach();
                   }}

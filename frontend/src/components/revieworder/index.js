@@ -161,7 +161,7 @@ const ReviewOrder = (props) => {
                     {order.rtypeName}/{order.toOrg}
                   </span>
                 </div>
-                <div className='w-100'></div>
+                {/* <div className='w-100'></div>
                 <div className='col row mt-3'>
                   <span className='col-4'>{t("region")}:</span>
                   <span className=' col  text-dark '>{order.toOrgRegion}</span>
@@ -169,7 +169,7 @@ const ReviewOrder = (props) => {
                 <div className='col row mt-3'>
                   <span className='col-4'>{t("country")}:</span>
                   <span className=' col text-dark '>{order.toOrgCountry}</span>
-                </div>
+                </div> */}
                 <div className='w-100'></div>
                 <div className='col row  mt-3'>
                   <span className='col-4'>{t("organisation_location")}:</span>

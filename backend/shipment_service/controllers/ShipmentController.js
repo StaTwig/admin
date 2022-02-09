@@ -475,7 +475,6 @@ exports.createShipment = [
                 }
               );
             } catch (err) {
-              console.log("failed to set ORDER PROCESSING TIME");
               console.log(err);
             }
           }
@@ -503,7 +502,6 @@ exports.createShipment = [
                 }
               );
             } catch (err) {
-              console.log("failed to set orderpror");
               console.log(err);
             }
           }
@@ -2685,25 +2683,26 @@ exports.fetchInboundShipments = [
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });
-      const inboundShipmentsRes = [];
+      let inboundShipmentsRes = [];
       await asyncForEach(inboundShipmentsList, async (inboundShipment) => {
+        let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment));
         const supplierOrganisation = await OrganisationModel.findOne({
-          id: inboundShipment.supplier.id,
+          id: inboundShipmentData.supplier.id,
         });
         const supplierWarehouse = await WarehouseModel.findOne({
-          id: inboundShipment.supplier.locationId,
+          id: inboundShipmentData.supplier.locationId,
         });
         const receiverOrganisation = await OrganisationModel.findOne({
-          id: inboundShipment.receiver.id,
+          id: inboundShipmentData.receiver.id,
         });
         const receiverWarehouse = await WarehouseModel.findOne({
-          id: inboundShipment.receiver.locationId,
+          id: inboundShipmentData.receiver.locationId,
         });
-        inboundShipment.supplier[`org`] = supplierOrganisation;
-        inboundShipment.supplier[`warehouse`] = supplierWarehouse;
-        inboundShipment.receiver[`org`] = receiverOrganisation;
-        inboundShipment.receiver[`warehouse`] = receiverWarehouse;
-        inboundShipmentsRes.push(inboundShipment);
+        inboundShipmentData.supplier["org"] = supplierOrganisation;
+        inboundShipmentData.supplier["warehouse"] = supplierWarehouse;
+        inboundShipmentData.receiver["org"] = receiverOrganisation;
+        inboundShipmentData.receiver["warehouse"] = receiverWarehouse;
+        inboundShipmentsRes.push(inboundShipmentData);
       });
 
       return apiResponse.successResponseWithMultipleData(
@@ -3541,7 +3540,6 @@ exports.exportInboundShipments = [
       if (toReceiver) {
         whereQuery["receiver.id"] = toReceiver;
       }
-      console.log("In bound whereQuery ======>", whereQuery);
       try {
         let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
@@ -3716,7 +3714,6 @@ exports.exportOutboundShipments = [
         whereQuery["receiver.id"] = toReceiver;
       }
 
-      console.log("Out bound whereQuery ======>", whereQuery);
       try {
         let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
         ShipmentModel.find(whereQuery)
@@ -3955,7 +3952,6 @@ function buildExcelReport(req, res, dataForExcel) {
 }
 
 function buildPdfReport(req, res, data, orderType) {
-  // console.log(data)
   var rows = [];
   rows.push([
     { text: "Shipment ID", bold: true },
@@ -3977,7 +3973,6 @@ function buildPdfReport(req, res, data, orderType) {
     { text: "Shipment Date", bold: true },
     { text: "Shipment Estimate Date", bold: true },
   ]);
-  // console.log(rows[0].length)
   for (var i = 0; i < data.length; i++) {
     rows.push([
       data[i].id || "N/A",
@@ -4228,7 +4223,6 @@ exports.trackJourneyOnBlockchain = [
             };
             outwardShipmentsArray.push(shipmentOutwardData);
           }
-          console.log("outwardShipmentArray", outwardShipmentsArray);
 
           const shipmentQueryTracked = {
             selector: {
@@ -4321,7 +4315,6 @@ exports.trackJourneyOnBlockchain = [
 ];
 
 function matchConditionShipmentOnBlockchain(filters) {
-  console.log("mc", filters);
   let matchCondition = {
     $and: [],
   };
@@ -4396,7 +4389,6 @@ function matchConditionShipmentOnBlockchain(filters) {
       ],
     });
   }
-  console.log("mcres", JSON.stringify(matchCondition));
   return matchCondition;
 }
 
@@ -4446,7 +4438,6 @@ function getShipmentFilterConditionOnBlockhain(filters, warehouseIds) {
       let endDateOfTheMonth = moment(startDateOfTheMonth)
         .endOf("month")
         .format(DATE_FORMAT);
-      console.log(startDateOfTheMonth, endDateOfTheMonth);
       matchCondition.createdOn = {
         $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
         $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`),
@@ -4461,7 +4452,6 @@ function getShipmentFilterConditionOnBlockhain(filters, warehouseIds) {
         .quarter(filters.quarter)
         .endOf("quarter")
         .format(DATE_FORMAT);
-      console.log(startDateOfTheQuarter, endDateOfTheQuarter);
       matchCondition.createdOn = {
         $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
         $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`),
@@ -4480,7 +4470,6 @@ function getShipmentFilterConditionOnBlockhain(filters, warehouseIds) {
       if (filters.year === currentYear) {
         endDateOfTheYear = currentDate;
       }
-      console.log(startDateOfTheYear, endDateOfTheYear);
       matchCondition.createdOn = {
         $gte: new Date(startDateOfTheYear),
         $lte: new Date(endDateOfTheYear),
@@ -4566,7 +4555,6 @@ exports.fetchShipmentsForAbInBevOnBlockchain = [
           receiverWarehouseDetails: receiverWarehouseDetails.data.data,
           //receiverOrgDetails: receiverOrgDetails.data.data,
         };
-        //                console.log("123",shipmentInwardData)
         shipmentsArray.push(shipmentInwardData);
       }
 
