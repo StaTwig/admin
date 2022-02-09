@@ -12,7 +12,6 @@ const fontDescriptors = {
 };
 const printer = new PdfPrinter(fontDescriptors);
 const axios = require("axios");
-const uniqid = require("uniqid");
 const date = require("date-and-time");
 const moment = require("moment");
 const POModel = require("../models/POModel");
@@ -407,8 +406,21 @@ exports.createPurchaseOrder = [
       } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       creationDate = new Date(creationDate);
+      const poId = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "productId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      );
       const purchaseOrder = new RecordModel({
-        id: uniqid("po-"),
+        id: poId.counters[5].format + poId.counters[5].value,
         externalId,
         creationDate,
         supplier,

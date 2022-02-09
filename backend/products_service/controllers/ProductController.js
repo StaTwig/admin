@@ -1,13 +1,20 @@
 const ProductModel = require("../models/ProductModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
+const CounterModel = require("../models/CounterModel");
 const { body, validationResult } = require("express-validator");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const moveFile = require("move-file");
 const fs = require("fs");
 const QRCode = require("qrcode");
-const uniqid = require("uniqid");
 const array = require("lodash/array");
+const PdfPrinter = require("pdfmake");
+const printer = new PdfPrinter(fonts); //helper file to prepare responses.
+const auth = require("../middlewares/jwt");
+const apiResponse = require("../helpers/apiResponse");
+const utility = require("../helpers/utility");
+const OrganisationModel = require("../models/OrganisationModel");
+const { responses } = require("../helpers/responses");
 const fonts = {
   Roboto: {
     normal: "fonts/Roboto-Regular.ttf",
@@ -16,15 +23,6 @@ const fonts = {
     bolditalics: "fonts/Roboto-MediumItalic.ttf",
   },
 };
-
-const PdfPrinter = require("pdfmake");
-const printer = new PdfPrinter(fonts); //helper file to prepare responses.
-const auth = require("../middlewares/jwt");
-const apiResponse = require("../helpers/apiResponse");
-const utility = require("../helpers/utility");
-const OrganisationModel = require("../models/OrganisationModel");
-const { responses } = require("../helpers/responses");
-
 exports.getProducts = [
   auth,
   async (req, res) => {
@@ -142,9 +140,21 @@ exports.addMultipleProducts = [
             })
             .filter((product, index) => index > 0);
           await utility.asyncForEach(products, async (product) => {
-            const product_unique = uniqid("prod-");
+            const productId = await CounterModel.findOneAndUpdate(
+              {
+                "counters.name": "productId",
+              },
+              {
+                $inc: {
+                  "counters.$.value": 1,
+                },
+              },
+              {
+                new: true,
+              }
+            );
             const productDetail = new ProductModel({
-              id: product_unique,
+              id: productId.counters[6].format + productId.counters[6].value,
               externalId: product.externalId,
               name: product.name,
               shortName: product.shortName,
@@ -224,9 +234,21 @@ exports.addProduct = [
             await otherManufacturer.save();
           }
           if (permissionResult.success) {
-            const product_unique = uniqid("prod-");
+            const productId = await CounterModel.findOneAndUpdate(
+              {
+                "counters.name": "productId",
+              },
+              {
+                $inc: {
+                  "counters.$.value": 1,
+                },
+              },
+              {
+                new: true,
+              }
+            );
             const product = new ProductModel({
-              id: product_unique,
+              id: productId.counters[6].format + productId.counters[6].value,
               externalId: req.body.externalId,
               name: req.body.name,
               shortName: req.body.shortName,
@@ -305,9 +327,20 @@ exports.generateCodes = async function (req, res) {
       return apiResponse.ErrorResponse(res, "Limit cannot be more than 1000");
     if (type === "qrcode") {
       for (let i = 0; i < limit; i++) {
-        const uniqueId = uniqid();
-        const qrCode = await QRCode.toDataURL(uniqueId);
-
+        const qrId = await CounterModel.findOneAndUpdate(
+          {
+            "counters.name": "qrCode",
+          },
+          {
+            $inc: {
+              "counters.$.value": 1,
+            },
+          },
+          {
+            new: true,
+          }
+        );
+        const qrCode = await QRCode.toDataURL(qrId.counters[9].value);
         qrCodes.push(qrCode);
       }
     }
