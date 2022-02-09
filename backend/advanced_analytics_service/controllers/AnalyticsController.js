@@ -163,7 +163,6 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 
 async function getReturnsOrg(org, analytics, filters, from, to) {
   if (!analytics.length) {
-    console.log("EMPTY ANALYTICS");
     return {
       sales: 0,
       targetSales: 0,
@@ -406,8 +405,6 @@ function getFilterConditionsSkuOrgType(filters) {
       matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
     }
   }
-  console.log(matchCondition);
-
   return matchCondition;
 }
 
@@ -697,7 +694,6 @@ function getSKUAnalyticsFilterConditions(filters) {
         .tz("Etc/IST")
         .endOf("month")
         .format(DATE_FORMAT);
-      //console.log("START",startDateOfTheMonth,"END",endDateOfTheMonth)
       matchCondition.uploadDate = {
         $gte: new Date(startDateOfTheMonth),
         $lte: new Date(endDateOfTheMonth),
@@ -715,7 +711,6 @@ function getSKUAnalyticsFilterConditions(filters) {
         .tz("Etc/IST")
         .endOf("quarter")
         .format(DATE_FORMAT);
-      //console.log("start",startDateOfTheQuarter,"END",endDateOfTheQuarter)
       matchCondition.uploadDate = {
         $gte: new Date(startDateOfTheQuarter),
         $lte: new Date(endDateOfTheQuarter),
@@ -732,7 +727,6 @@ function getSKUAnalyticsFilterConditions(filters) {
         .tz("Etc/IST")
         .endOf("year")
         .format(DATE_FORMAT);
-      //console.log("START",startDateOfTheYear,"END",endDateOfTheYear)
       if (filters.year === currentYear) {
         endDateOfTheYear = currentDate;
       }
@@ -825,42 +819,61 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
   return matchCondition;
 }
 
-async function getSupplierRatings(supplierDetails,ratingSchema){
+async function getSupplierRatings(supplierDetails, ratingSchema) {
   let rating;
-  if(ratingSchema!=null){
-      rating = {
-      returnRating : await calculateRating(supplierDetails.returnRate,ratingSchema?.returnRate),
-      leadRating : await calculateRating(supplierDetails?.leadTime ? supplierDetails?.leadTime[0]?.avgLeadTime : null ,ratingSchema?.leadTime),
-      bottleCapacityRating : await calculateRating(supplierDetails.storageCapacity?.bottleCapacity,ratingSchema?.bottleCapacity),
-      storageCapacityRating : await calculateRating(supplierDetails.storageCapacity?.sqft,ratingSchema?.warehouseCapacity),
-      dirtyBottlesRating : await calculateRating(supplierDetails.dirtyBottles,ratingSchema?.dirtyBottle),
-      breakageRating : await calculateRating(supplierDetails?.breakage,ratingSchema?.breakageBottle),
-    }
-  }
-  else{
+  if (ratingSchema != null) {
+    rating = {
+      returnRating: await calculateRating(
+        supplierDetails.returnRate,
+        ratingSchema?.returnRate
+      ),
+      leadRating: await calculateRating(
+        supplierDetails?.leadTime
+          ? supplierDetails?.leadTime[0]?.avgLeadTime
+          : null,
+        ratingSchema?.leadTime
+      ),
+      bottleCapacityRating: await calculateRating(
+        supplierDetails.storageCapacity?.bottleCapacity,
+        ratingSchema?.bottleCapacity
+      ),
+      storageCapacityRating: await calculateRating(
+        supplierDetails.storageCapacity?.sqft,
+        ratingSchema?.warehouseCapacity
+      ),
+      dirtyBottlesRating: await calculateRating(
+        supplierDetails.dirtyBottles,
+        ratingSchema?.dirtyBottle
+      ),
+      breakageRating: await calculateRating(
+        supplierDetails?.breakage,
+        ratingSchema?.breakageBottle
+      ),
+    };
+  } else {
     rating = {};
   }
-  console.log("THE RATING IS",rating)
   return rating;
 }
 
-async function calculateRating(value,schema){
-  if(value && schema){
-    if(schema){
-      let temp =  value/schema.target < 1 ? ((value/schema.target) * (schema.max.rating - schema.min.rating)) + schema.min.rating : ((value/schema.target) / (schema.max.rating - schema.min.rating)) + schema.min.rating;
-      if(schema.min.operator=="<" && value < schema.min.value){
-        return parseInt(schema.min.rating)
-      }
-      else if(schema.min.operator==">" && value > schema.min.value){
-        return parseInt(schema.min.rating)
-      }
-      else if(schema.max.operator==">" && value > schema.max.value){
-        return parseInt(schema.max.rating)
-      }
-      else if(schema.min.operator=="<" && value < schema.min.value){
-        return parseInt(schema.max.rating)
-      }
-      else return parseInt(temp);
+async function calculateRating(value, schema) {
+  if (value && schema) {
+    if (schema) {
+      let temp =
+        value / schema.target < 1
+          ? (value / schema.target) * (schema.max.rating - schema.min.rating) +
+            schema.min.rating
+          : value / schema.target / (schema.max.rating - schema.min.rating) +
+            schema.min.rating;
+      if (schema.min.operator == "<" && value < schema.min.value) {
+        return parseInt(schema.min.rating);
+      } else if (schema.min.operator == ">" && value > schema.min.value) {
+        return parseInt(schema.min.rating);
+      } else if (schema.max.operator == ">" && value > schema.max.value) {
+        return parseInt(schema.max.rating);
+      } else if (schema.min.operator == "<" && value < schema.min.value) {
+        return parseInt(schema.max.rating);
+      } else return parseInt(temp);
     }
   }
   return 0;
@@ -1409,7 +1422,6 @@ exports.getStatsByOrg = [
         { $match: getConditionsOrgWarehouse(filters) },
       ]);
       // organizations = organizations.filter(o => o.warehouseDetails.warehouseAddress.state == filters.state && o.warehouseDetails.warehouseAddress.city == filters.district);
-      // console.log(organizations);
 
       for (let organization of organizations) {
         let warehouseIds = await _getWarehouseIdsByOrg(organization);
@@ -1676,7 +1688,6 @@ exports.getStatsBySKUOrgType = [
         response.push(temp);
       }
 
-      console.log(response);
       return apiResponse.successResponseWithData(
         res,
         "Operation Success",
@@ -1988,7 +1999,6 @@ async function calculateReturnRateByOrg(supplierOrg) {
     // 	warehouseIds = warehouses[0].warehouseIds;
     // }
     let warehouseIds = await _getWarehouseIdsByOrg(supplierOrg);
-    // console.log("Warehouses",warehouseIds)
     let Analytics = await AnalyticsModel.find({
       warehouseId: {
         $in: [...warehouseIds],
@@ -2003,7 +2013,6 @@ async function calculateReturnRateByOrg(supplierOrg) {
       //totalReturns = await getReturns(analytic.data, moment().startOf('month'), today, warehouseIds);
       totalSales = totalSales + parseInt(analytic.sales);
     }
-    // console.log(Analytics)
     let b_arr = [];
     const breweries = await OrganisationModel.find(
       { type: "BREWERY", status: "ACTIVE" },
@@ -2024,7 +2033,6 @@ async function calculateReturnRateByOrg(supplierOrg) {
     }
     // totalReturns = await getReturnsOrg(supplierOrg, Analytics);
     totalReturns = quantity;
-    // console.log(totalReturns)
     if (totalReturns && totalSales) {
       returnRate = parseFloat((totalReturns / totalSales) * 100).toFixed(2);
     }
@@ -2092,7 +2100,6 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
     let dirtyBottles = 0;
     let breakage = 0;
     // for (let shipment of shipments) {
-    //console.log(shipment)
     let totalProductd = 0;
     // let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
     let shipmentUpdates = shipments.filter(
@@ -2209,7 +2216,6 @@ exports.getSupplierPerformance = [
     try {
       const orgType = req.query.supplierType;
       const keyString = "GSP" + orgType;
-      console.log(keyString);
       var bool = false;
       client.get(keyString, (err, data) => {
         if (!err && data != null) {
@@ -2225,18 +2231,24 @@ exports.getSupplierPerformance = [
       let matchCondition = {};
       // let matchQuery = {
       //   $match: {
-         
+
       //   },
       // }
 
       if (!orgType || orgType === "ALL") {
         matchCondition = {
           $or: [{ type: "S1" }, { type: "S2" }, { type: "S3" }],
-          postalAddress: { $regex: req.query.location ? req.query.location : "", $options: "i" },
+          postalAddress: {
+            $regex: req.query.location ? req.query.location : "",
+            $options: "i",
+          },
         };
       } else {
         matchCondition.type = orgType;
-        matchCondition[`postalAddress`] =  { $regex: req.query.location ? req.query.location : "", $options: "i" };
+        matchCondition[`postalAddress`] = {
+          $regex: req.query.location ? req.query.location : "",
+          $options: "i",
+        };
       }
       matchCondition.status = "ACTIVE";
       const supplierOrgs = await OrganisationModel.aggregate([
@@ -2292,16 +2304,23 @@ exports.getSupplierPerformance = [
         supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
         supplier.breakage = dirtyBreakage.breakage;
         let supplierDetails = {
-          leadTime : supplier.leadTime,
-          returnRate : supplier.returnRate,
-          storageCapacity : supplier.storageCapacity,
-          dirtyBottles : supplier.dirtyBottles,
-          breakage : supplier.breakage
-        }
+          leadTime: supplier.leadTime,
+          returnRate: supplier.returnRate,
+          storageCapacity: supplier.storageCapacity,
+          dirtyBottles: supplier.dirtyBottles,
+          breakage: supplier.breakage,
+        };
         // console.log({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
-        let ratingSchema = await ConfigModel.findOne({ vendorId : supplier.id  })
-        if(!ratingSchema) ratingSchema = await ConfigModel.findOne({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
-        supplier.rating = await getSupplierRatings(supplierDetails,ratingSchema)
+        let ratingSchema = await ConfigModel.findOne({ vendorId: supplier.id });
+        if (!ratingSchema)
+          ratingSchema = await ConfigModel.findOne({
+            district: supplier.postalAddress?.split(",")[1].trim(),
+            vendorType: supplier.type,
+          });
+        supplier.rating = await getSupplierRatings(
+          supplierDetails,
+          ratingSchema
+        );
       }
 
       client.set(
@@ -2760,63 +2779,68 @@ exports.updateTargetSales = [
   auth,
   async function (req, res) {
     try {
-      for(uniqueTarget of req.body){
-      const Analytics = await AnalyticsModel.updateMany(
-        { depot: { $in: [...uniqueTarget.depot] } },
-        [
-        {
-          $set: {
-            "targetSales": {
-              $divide: [{ $multiply: ["$sales", parseInt(uniqueTarget.percentage, 10)] }, 100]
-            }
-          }
-        }
-      ]
-      )
-    }
-      return apiResponse.successResponse(res, `Updated Target Sales`)
-    }
-    catch (err) {
+      for (uniqueTarget of req.body) {
+        const Analytics = await AnalyticsModel.updateMany(
+          { depot: { $in: [...uniqueTarget.depot] } },
+          [
+            {
+              $set: {
+                targetSales: {
+                  $divide: [
+                    {
+                      $multiply: [
+                        "$sales",
+                        parseInt(uniqueTarget.percentage, 10),
+                      ],
+                    },
+                    100,
+                  ],
+                },
+              },
+            },
+          ]
+        );
+      }
+      return apiResponse.successResponse(res, `Updated Target Sales`);
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
-  }
-]
+  },
+];
 
 exports.getTargetSales = [
   auth,
-  async function (req ,res) {
+  async function (req, res) {
     try {
-      const depots = await AnalyticsModel.aggregate(
-        [
-          {
-            $group:
-              {
-                _id : { depot: "$depot" },
-                totalTarget: { $sum: "$targetSales" },
-                totalSales: { $sum: "$sales" },
-              }
-          },
+      const depots = await AnalyticsModel.aggregate([
         {
-         $project : {
-           depot : 1,
-           percentage : { $multiply : [{ $divide: ["$totalTarget", "$totalSales"] } ,100 ] }
-         }
-        }
-        ]
-     )
-     return apiResponse.successResponseWithData(res,"Depot targets",depots)
+          $group: {
+            _id: { depot: "$depot" },
+            totalTarget: { $sum: "$targetSales" },
+            totalSales: { $sum: "$sales" },
+          },
+        },
+        {
+          $project: {
+            depot: 1,
+            percentage: {
+              $multiply: [{ $divide: ["$totalTarget", "$totalSales"] }, 100],
+            },
+          },
+        },
+      ]);
+      return apiResponse.successResponseWithData(res, "Depot targets", depots);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
     }
-    catch(err){
-      return apiResponse.ErrorResponse(res, err)
-    }
-  }
-]
+  },
+];
 
 exports.getAllConfiguration = [
   auth,
   async function (req, res) {
     try {
-      let configuration = await ConfigModel.find(req.query)
+      let configuration = await ConfigModel.find(req.query);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -2832,17 +2856,18 @@ exports.setNewConfiguration = [
   auth,
   async function (req, res) {
     try {
-      const query = req.body.district? { district : req.body.district, vendorType : req.body.vendorType } : { vendorId : vendorId }
-      const configExists = await ConfigModel.findOne(query)
+      const query = req.body.district
+        ? { district: req.body.district, vendorType: req.body.vendorType }
+        : { vendorId: vendorId };
+      const configExists = await ConfigModel.findOne(query);
       let config;
-      if(!configExists){
+      if (!configExists) {
         config = new ConfigModel(req.body);
         await config.save();
+      } else {
+        config = await ConfigModel.findOneAndUpdate(query, { $set: req.body });
       }
-      else {
-       config = await ConfigModel.findOneAndUpdate(query, { $set : req.body });
-      }
-      return apiResponse.successResponse(res,"Saved new config")
+      return apiResponse.successResponse(res, "Saved new config");
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }

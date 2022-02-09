@@ -1908,7 +1908,6 @@ async function getFilterConditions(filters) {
     } else {
       matchCondition.orgType = filters.orgType;
     }
-    console.log(matchCondition, matchWarehouseCondition);
     const organisations = await OrganisationModel.aggregate([
       {
         $match: matchCondition,
@@ -1937,7 +1936,6 @@ async function getFilterConditions(filters) {
     ]);
 
     let orgs = [];
-    console.log(organisations);
     for (let org in organisations) {
       orgs.push(organisations[org]["id"]);
     }
@@ -2625,7 +2623,6 @@ exports.searchProduct = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          console.log("queries", req.query);
           const { productName, productType } = req.query;
           req.query.warehouseId
             ? (warehouseId = req.query.warehouseId)
@@ -2657,7 +2654,6 @@ exports.searchProduct = [
               //   }
               // }
             ]).sort({ createdAt: -1 });
-            console.log("Inventory:", inventory);
             return apiResponse.successResponseWithData(
               res,
               "Inventory Details",
@@ -2690,10 +2686,23 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order", org1: "$customer.customerOrganisation", org2: "supplier.supplierOrganisation" } },
+        {
+          $project: {
+            _id: 0,
+            value: "$id",
+            record_type: "order",
+            createdBy: "$createdBy",
+            org1: "$customer.customerOrganisation",
+            org2: "$supplier.supplierOrganisation",
+          },
+        },
         {
           $match: {
-            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+              { createdBy: req.user.id },
+            ],
           },
         },
         {
@@ -2710,23 +2719,6 @@ exports.autoCompleteSuggestions = [
             ],
           },
         },
-        {
-          $match: {
-            value: { $regex: searchString ? searchString : "", $options: "i" },
-          },
-        },
-        {
-          $group: {
-            _id: "$value",
-            type: { $first: "$record_type" },
-            // airWayBillNo: { $first: "$airWayBillNo" },
-          },
-        },
-        { $limit: 5 },
-      ]).sort({ createdAt: -1 });
-
-      const suggestions2 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "products",
@@ -2746,29 +2738,40 @@ exports.autoCompleteSuggestions = [
             value: { $regex: searchString ? searchString : "", $options: "i" },
           },
         },
-        { $limit: 5 },
         {
           $group: {
             _id: "$value",
             type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
+            // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
+        { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
       const suggestions3 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment", org1: "$receiver.id", org2: "$supplier.id"  } },
+              {
+                $project: {
+                  _id: 0,
+                  value: "$id",
+                  record_type: "shipment",
+                  org1: "$receiver.id",
+                  org2: "$supplier.id",
+                },
+              },
             ],
           },
         },
         {
           $match: {
-            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+            ],
           },
         },
         {
@@ -2800,11 +2803,11 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
-      // console.log([suggestions1, suggestions2, suggestions3])
+      // console.log( [...new Set([...suggestions1, ...suggestions2, ...suggestions3])])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
-        [...suggestions1, ...suggestions2, ...suggestions3]
+        [...new Set([...suggestions1, ...suggestions3])]
       );
     } catch (err) {
       console.log(err);
@@ -2860,79 +2863,79 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
-      const warehouse = await WarehouseModel.findOne({ id: req.user.warehouseId });
+      const warehouse = await WarehouseModel.findOne({
+        id: req.user.warehouseId,
+      });
 
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
-        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity) } }
-     )
-
-     var datee = new Date();
-     datee = datee.toISOString();
-     var evid = Math.random().toString(36).slice(2);
-     let event_data = {
-       eventID: null,
-       eventTime: null,
-       transactionId: batchNumber,
-       eventType: {
-         primary: "BUY",
-         description: "INVENTORY",
-       },
-       actor: {
-         actorid: null,
-         actoruserid: null,
-       },
-       stackholders: {
-         ca: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-         actororg: {
-           id: req.user.organisationId || "null",
-           name: "null",
-           address: "null",
-         },
-         secondorg: {
-           id: "null",
-           name: "null",
-           address: "null",
-         },
-       },
-       payload: {
-         data: {
-           batch: batch,
-           quantityPurchased: quantity,
-           products: {
-             productId: batch.productId,
-             batchNumber: batchNumber
-           },
-           sender: {
-             id: req.user.organisationId
-           }
-         },
-       },
-     };
-     event_data.eventID = "ev0000" + evid;
-     event_data.eventTime = datee;
-     event_data.eventType.primary = "BUY";
-     event_data.eventType.description = "INVENTORY";
-     event_data.actor.actorid = user_id || "null";
-     event_data.actor.actoruserid = email || "null";
-     event_data.stackholders.actororg.id = orgId || "null";
-     event_data.stackholders.actororg.name = orgName || "null";
-     event_data.stackholders.actororg.address = address || "null";
-     event_data.actorWarehouseId = req.user.warehouseId || "null";
-     event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-     event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-     event_data.stackholders.ca.address =
-       CENTRAL_AUTHORITY_ADDRESS || "null";
-     await logEvent(event_data);
-      return apiResponse.successResponseWithData(
-        res,
-        "Subtracted Batch",
-        {batch, inventory}
+        { "inventoryDetails.productId": batch.productId },
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
       );
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        transactionId: batchNumber,
+        eventType: {
+          primary: "BUY",
+          description: "INVENTORY",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: req.user.organisationId || "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: {
+            batch: batch,
+            quantityPurchased: quantity,
+            products: {
+              productId: batch.productId,
+              batchNumber: batchNumber,
+            },
+            sender: {
+              id: req.user.organisationId,
+            },
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "BUY";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
+        batch,
+        inventory,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);

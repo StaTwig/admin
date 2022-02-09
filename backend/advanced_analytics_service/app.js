@@ -65,8 +65,4 @@ app.use((err, req, res) => {
     return apiResponse.unauthorizedResponse(res, err.message);
   }
 });
-// setTimeout(function () {
-// 	console.log("Exiting ...")
-// 	return process.exit(1);
-// }, 45000);
 module.exports = app;
