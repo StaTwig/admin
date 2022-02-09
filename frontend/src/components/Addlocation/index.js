@@ -95,11 +95,11 @@ const AddLocation = (props) => {
   }
   return (
     <div>
-      <div className='addproduct'>
-        <h1 className='breadcrumb'>{t('ADD_NEW_LOCATION')}</h1>
+      <div className="addproduct">
+        <h1 className="breadcrumb">{t("ADD_NEW_LOCATION")}</h1>
 
-        <div className='card'>
-          <div className='card-body'>
+        <div className="card">
+          <div className="card-body">
             <Formik
               enableReinitialize={true}
               initialValues={{
@@ -144,20 +144,20 @@ const AddLocation = (props) => {
                 setFieldValue,
                 dirty,
               }) => (
-                <form onSubmit={handleSubmit} className='mb-3'>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressTitle'>
-                          {t('Address_Title')}*
+                <form onSubmit={handleSubmit} className="mb-3">
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressTitle">
+                          {t("Address_Title")}*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          className='addlocP'
-                          type='text'
-                          id='referenceShipmentId'
-                          name='addressTitle'
-                          placeholder={t('Enter_Title')}
+                          className="addlocP"
+                          type="text"
+                          id="referenceShipmentId"
+                          name="addressTitle"
+                          placeholder={t("Enter_Title")}
                           value={values.addressTitle}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -247,19 +247,19 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div> */}
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='state'>
-                          {t('State')}*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="state">
+                          {t("State")}*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
-                                {t('Select_State')}
+                              <div className="select-placeholder-text">
+                                {t("Select_State")}
                               </div>
                             }
                             value={state}
@@ -271,11 +271,14 @@ const AddLocation = (props) => {
                             }}
                             options={allState.map((option) => option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label={t('Select_State')} />
+                              <TextField
+                                {...params}
+                                label={t("Select_State")}
+                              />
                             )}
                           />
                           {errors.state && touched.state && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.state}
                             </span>
                           )}
@@ -284,19 +287,19 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='city'>
-                          {t('City')}*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="city">
+                          {t("City")}*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select controllable-states-demo'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
-                                {t('Select_City')}
+                              <div className="select-placeholder-text">
+                                {t("Select_City")}
                               </div>
                             }
                             value={city}
@@ -305,7 +308,7 @@ const AddLocation = (props) => {
                             }}
                             options={allCity.map((Option) => Option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label={t('Select_City')} />
+                              <TextField {...params} label={t("Select_City")} />
                             )}
                           />
                           {/* <Autocomplete
@@ -319,7 +322,7 @@ const AddLocation = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         /> */}
                           {errors.city && touched.city && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.city}
                             </span>
                           )}
@@ -328,18 +331,18 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressLine'>
-                          {t('Address_Line')}*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressLine">
+                          {t("Address_Line")}*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          placeholder={t('Enter_Address_Line')}
-                          className='addlocP mt-2'
-                          name='addressTitle'
+                          id="standard-basic"
+                          placeholder={t("Enter_Address_Line")}
+                          className="addlocP mt-2"
+                          name="addressTitle"
                           value={values.addressLine}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -365,19 +368,19 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-16'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='Select Location'>
-                          {t('Pincode')}*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-16">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="Select Location">
+                          {t("pincode")}*
                         </label>
                         <input
-                          type='number'
+                          type="number"
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          placeholder={t('Pincode')}
-                          className='addlocP mt-2'
-                          name='pincode'
+                          id="standard-basic"
+                          placeholder={t("pincode")}
+                          className="addlocP mt-2"
+                          name="pincode"
                           value={values.pincode}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -407,9 +410,9 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='d-flex flex-row-reverse'>
+                  <div className="d-flex flex-row-reverse">
                     <button
-                      className='btn btn-yellow float-right font-weight-bold'
+                      className="btn btn-yellow float-right font-weight-bold"
                       disabled={
                         !(
                           values.addressTitle &&
@@ -419,13 +422,13 @@ const AddLocation = (props) => {
                           addressLine.length > 0
                         )
                       }
-                      type='submit'
+                      type="submit"
                     >
-                      <span>{t('Request_Admin_For_Approval')}</span>
+                      <span>{t("Request_Admin_For_Approval")}</span>
                     </button>
                     <button
-                      type='button'
-                      className='btn btn-white shadow-radius font-bold mr-3 font-weight-bold'
+                      type="button"
+                      className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold"
                       onClick={() => {
                         props.history.push({
                           pathname: "/profile",
@@ -433,7 +436,7 @@ const AddLocation = (props) => {
                         });
                       }}
                     >
-                      {t('Cancel')}
+                      {t("Cancel")}
                     </button>
                   </div>
                 </form>
@@ -453,7 +456,7 @@ const AddLocation = (props) => {
         {addedLocationModal && (
           <Modal
             close={() => closeModalAddedLocation()}
-            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <SuccessPopup
               onHide={closeModalAddedLocation} //FailurePopUp
