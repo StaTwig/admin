@@ -485,11 +485,11 @@ const AdvanceTableFilter = (props) => {
             )}
           </div>
           <StyledMenu
+                      onBlur={handleInventoryStatusClose}
             className='filter-dropdown'
             id='customized-menu'
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -505,7 +505,7 @@ const AdvanceTableFilter = (props) => {
                   className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
-                  onClick={() => setStatusFilterOnSelect("CREATED")}
+                  onClick={() => {handleInventoryStatusClose()}}
                 >
                   {t("shipped")}
                 </button>
