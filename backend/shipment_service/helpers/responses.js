@@ -45,6 +45,6 @@ exports.responses = (language) => {
             id_not_exists: "La identificación no existe, intente rastrear los ID existentes"
         }
     };
-    const conf = resps[language];
+    const conf = resps[language || 'ES'];
     return conf;
 }

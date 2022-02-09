@@ -23,6 +23,6 @@ exports.responses = (language) => {
             created_order: "Orden creado",
         }
     };
-    const conf = resps[language];
+    const conf = resps[language || 'ES'];
     return conf;
 }

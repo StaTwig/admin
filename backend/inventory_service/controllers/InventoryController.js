@@ -2690,10 +2690,10 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order", org1: "$customer.customerOrganisation", org2: "supplier.supplierOrganisation" } },
+        { $project: { _id: 0, value: "$id", record_type: "order",createdBy: "$createdBy", org1: "$customer.customerOrganisation", org2: "$supplier.supplierOrganisation" } },
         {
           $match: {
-            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId}]
+            $or: [{org1: req.user.organisationId},{org2: req.user.organisationId},{createdBy: req.user.id}]
           },
         },
         {
@@ -2710,23 +2710,6 @@ exports.autoCompleteSuggestions = [
             ],
           },
         },
-        {
-          $match: {
-            value: { $regex: searchString ? searchString : "", $options: "i" },
-          },
-        },
-        {
-          $group: {
-            _id: "$value",
-            type: { $first: "$record_type" },
-            // airWayBillNo: { $first: "$airWayBillNo" },
-          },
-        },
-        { $limit: 5 },
-      ]).sort({ createdAt: -1 });
-
-      const suggestions2 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "products",
@@ -2746,18 +2729,18 @@ exports.autoCompleteSuggestions = [
             value: { $regex: searchString ? searchString : "", $options: "i" },
           },
         },
-        { $limit: 5 },
         {
           $group: {
             _id: "$value",
             type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
+            // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
+        { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
       const suggestions3 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "shipments",
@@ -2800,11 +2783,11 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
-      // console.log([suggestions1, suggestions2, suggestions3])
+      // console.log( [...new Set([...suggestions1, ...suggestions2, ...suggestions3])])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
-        [...suggestions1, ...suggestions2, ...suggestions3]
+        [...new Set([...suggestions1, ...suggestions3])]
       );
     } catch (err) {
       console.log(err);

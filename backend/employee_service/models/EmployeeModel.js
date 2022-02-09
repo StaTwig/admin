@@ -35,7 +35,7 @@ const EmployeeSchema = new mongoose.Schema(
         "/usermanagement/api/auth/images/e835ac51d35cfbe691e485b64397f3a5",
     },
     phoneNumber: { type: String, required: false, default: "" },
-    preferredLanguage: { type: String, required: false, default: "EN" },
+    preferredLanguage: { type: String, required: false, default: "ES" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },
     department: { type: String, required: false, default: "engineering" },
     organisationId: {

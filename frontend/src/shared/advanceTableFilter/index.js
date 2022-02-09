@@ -442,6 +442,22 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "130px",
+                    borderRadius: "10px",
+                  }}
+                  className='btn btn-outline-success btn-sm font-weight-bold'
+                  variant='outlined'
+                  color='primary'
+                  onClick={() => setInventoryStatusFilterOnSelect("BUY")}
+                >
+                  {t("SOLD")}
+                </button>
+              </StyledMenuItem>
+              <StyledMenuItem>
+                <button
                   className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
@@ -469,11 +485,11 @@ const AdvanceTableFilter = (props) => {
             )}
           </div>
           <StyledMenu
+                      onBlur={handleInventoryStatusClose}
             className='filter-dropdown'
             id='customized-menu'
             anchorEl={inventoryStatusAnchorEl}
             keepMounted
-            // onBlur={handleInventoryStatusClose}
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
           >
@@ -489,7 +505,7 @@ const AdvanceTableFilter = (props) => {
                   className='btn btn-outline-primary btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
-                  onClick={() => setStatusFilterOnSelect("CREATED")}
+                  onClick={() => {handleInventoryStatusClose()}}
                 >
                   {t("shipped")}
                 </button>
