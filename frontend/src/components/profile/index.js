@@ -369,7 +369,7 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group" style={{display: 'none'}}>
                       <label htmlFor="">{t("language")}</label>
                       <Select
                         noOptionsMessage={() => t("no_options")}
