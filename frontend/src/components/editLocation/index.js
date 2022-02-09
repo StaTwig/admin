@@ -70,6 +70,12 @@ const EditLocation = (props) => {
       setState(warehouseInfo.warehouseAddress.state);
     }
 
+    async function fetchAllState1() {
+      let res = await fetchStateByCountry(53);
+      setallState(res.data);
+    }
+
+    fetchAllState1();
     fetchData();
   }, [id]);
 
@@ -77,10 +83,7 @@ const EditLocation = (props) => {
     let res = await fetchCountriesByRegion(id);
     setallCountries(res.data);
   }
-  async function fetchAllState1(id) {
-    let res = await fetchStateByCountry(id);
-    setallState(res.data);
-  }
+
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
     setallCity(res.data);
@@ -229,7 +232,7 @@ const EditLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='region'>
@@ -264,8 +267,8 @@ const EditLocation = (props) => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className='row'>
+                  </div> */}
+                  {/* <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='country'>
@@ -295,22 +298,6 @@ const EditLocation = (props) => {
                               <TextField {...params} label='Select Country' />
                             )}
                           />
-                          {/* <Autocomplete
-                          value={values.country}
-                          onChange={(event, newValue) => {
-                            // handleChange(event);
-                            setFieldValue("country",newValue);
-                            let v = search(newValue,allCountries);
-                            fetchAllState1(v);
-                            setCountry(newValue);
-                            setState("");
-                            setCity("");
-                          }}
-                          id="controllable-states-demo"
-                          options={allCountries.map((option)=>option.name)}
-                          style={{ width: 800 }}
-                          renderInput={(params) => <TextField {...params} label="Select Country"  />}
-                        /> */}
                           {errors.country && touched.country && (
                             <span className='error-msg text-danger-ANL'>
                               {errors.country}
@@ -319,7 +306,7 @@ const EditLocation = (props) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
