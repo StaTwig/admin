@@ -442,6 +442,22 @@ const AdvanceTableFilter = (props) => {
               </StyledMenuItem>
               <StyledMenuItem>
                 <button
+                  style={{
+                    padding: "10px",
+                    height: "40px",
+                    width: "130px",
+                    borderRadius: "10px",
+                  }}
+                  className='btn btn-outline-success btn-sm font-weight-bold'
+                  variant='outlined'
+                  color='primary'
+                  onClick={() => setInventoryStatusFilterOnSelect("BUY")}
+                >
+                  {t("SOLD")}
+                </button>
+              </StyledMenuItem>
+              <StyledMenuItem>
+                <button
                   className='btn btn-link btn-sm font-weight-bold'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("")}
