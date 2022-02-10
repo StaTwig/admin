@@ -8,8 +8,7 @@ const moveFile = require("move-file");
 const fs = require("fs");
 const QRCode = require("qrcode");
 const array = require("lodash/array");
-const PdfPrinter = require("pdfmake");
-const printer = new PdfPrinter(fonts); //helper file to prepare responses.
+const PdfPrinter = require("pdfmake"); //helper file to prepare responses.
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
@@ -23,6 +22,7 @@ const fonts = {
     bolditalics: "fonts/Roboto-MediumItalic.ttf",
   },
 };
+const printer = new PdfPrinter(fonts);
 exports.getProducts = [
   auth,
   async (req, res) => {
