@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://test.admin.vaccineledger.com";
+export const TEST_SERVER_URL = "https://costarica.admin.vaccineledger.com";
 export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
 export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io:9001";
 export const ABINBEV_TEST_SERVER_URL =
@@ -244,7 +244,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || "test"; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || "local"; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
 
   return conf;
