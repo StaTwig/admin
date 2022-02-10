@@ -62,7 +62,7 @@ const LocationRequests = (props) => {
           <button
             type="button"
             style={{borderStyle:"solid",borderWidth:"thin",width:"8vw",fontWeight:"bold"}}
-            className=" rounded btn-outline-success mr-3 pl-2 pr-2 btnstyles"
+            className="bg-white rounded btn-outline-success bg-green mr-3 pl-2 pr-2 btnstyles"
             onClick={() => {
               modifyLocations({
                 id: row?.id,
@@ -77,7 +77,7 @@ const LocationRequests = (props) => {
           <button
             type="button"
             style={{borderStyle:"solid",borderWidth:"thin",width:"8vw",fontWeight:"bold"}}
-            className=" rounded btn-outline-danger pl-2 pr-2 btnstyles"
+            className="bg-white rounded btn-outline-danger bg-red pl-2 pr-2 btnstyles"
             onClick={() => {
               modifyLocations({
                 id: row?.id,
