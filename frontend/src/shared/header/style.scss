@@ -570,7 +570,7 @@
   }
 }
 .MuiOutlinedInput-notchedOutline {
-  border-color: #0b65c1 !important;
+  border-color: #0093e9 !important;
   border-radius: 15px !important;
   height: 3.2rem;
 }
@@ -720,4 +720,18 @@
   font-size: 14px;
   text-align: right;
   font-weight: 700;
+}
+.Auto-search-icon{
+  position: absolute;
+  right: 0.8rem;
+  top: 1.8rem;
+  cursor: pointer;
+  color: #0b65c1 !important;
+  transition: all 0.5s;
+}
+.Auto-search-icon:hover{
+  color: #6f7174 !important;
+}
+.MuiInputBase-input.MuiOutlinedInput-input.MuiAutocomplete-input{
+  padding: 0.2rem 3rem 0 0 !important;
 }

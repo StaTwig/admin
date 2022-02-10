@@ -44,36 +44,35 @@ const BatchExpiry = (props) => {
       <div className="row">
         <div className=" p-2 rounded full-width-ribbon">
           <div className=" row filter">
-            <div style={{ width: "14%" }}>
+            <div style={{ width: "14%" }} className="flex-align">
               <img src={Product} width="24" height="24" alt="Product Name" />
               <span className="ml-2 font-small">{t("product_name")}</span>
             </div>
-            <div style={{ width: "16%" }}>
+            <div style={{ width: "16%" }} className="flex-align">
               <img
                 src={Quantity}
                 width="35"
                 height="24"
-                alt="Product Category"
-              />
+                alt="Product Category"         />
               <span className="ml-2 font-small">{t("product_category")}</span>
             </div>
-            <div style={{ width: "15%" }}>
+            <div style={{ width: "15%" }} className="flex-align">
               <img src={user} width="16" height="24" alt="Manufacturer" />
               <span className="ml-2 font-small">{t("manufacturer")}</span>
             </div>
-            <div style={{ width: "12%" }} className="p-0">
+            <div style={{ width: "12%" }} className="flex-align p-0">
               <img src={Quantity} width="35" height="24" alt="Quantity" />
               <span className="ml-2 font-small">{t("quantity")}</span>
             </div>
-            <div style={{ width: "13%" }}>
+            <div style={{ width: "13%" }} className="flex-align">
               <img src={Quantity} width="35" height="24" alt="Batch Number" />
               <span className="ml-2 font-small">{t("batch_number")}</span>
             </div>
-            <div style={{ width: "11%" }} className="pl-0">
+            <div style={{ width: "11%" }} className="flex-align pl-0">
               <img src={calender} width="35" height="24" alt="Mfg Date" />
               <span className="ml-1 font-small">{t("mfg_date")}</span>
             </div>
-            <div style={{ width: "12%" }} className="p-0">
+            <div style={{ width: "12%" }} className="flex-align p-0">
               <img src={calender} width="35" height="24" alt="Exp Date" />
               <span className="ml-1 font-small">{t("exp_date")}</span>
             </div>

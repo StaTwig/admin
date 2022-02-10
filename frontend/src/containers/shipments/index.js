@@ -7,7 +7,7 @@ import { getShipments, resetShipments } from "../../actions/shipmentActions";
 import { useTranslation } from "react-i18next";
 
 const ShipmentContainer = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [shipments, setShipments] = useState([]);
   const shipmentsCount = useSelector((state) => {
@@ -32,6 +32,7 @@ const ShipmentContainer = (props) => {
             setShipments={setShipments}
             shipmentsCount={shipmentsCount}
             t={t}
+            i18n={i18n}
             {...props}
           />
         </div>
