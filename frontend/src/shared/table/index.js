@@ -109,7 +109,7 @@ const Table = (props) => {
                       </div>
                       :
                       <div className='status secondary-bg bg-warning'>
-                      {t("Sold")}
+                      {t("sold")}
                     </div>
                     )
                   ) : (

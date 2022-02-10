@@ -448,12 +448,12 @@ const AdvanceTableFilter = (props) => {
                     width: "130px",
                     borderRadius: "10px",
                   }}
-                  className='btn btn-outline-success btn-sm font-weight-bold'
+                  className='btn btn-outline-warning btn-sm font-weight-bold'
                   variant='outlined'
                   color='primary'
                   onClick={() => setInventoryStatusFilterOnSelect("BUY")}
                 >
-                  {t("SOLD")}
+                  {t("sold")}
                 </button>
               </StyledMenuItem>
               <StyledMenuItem>

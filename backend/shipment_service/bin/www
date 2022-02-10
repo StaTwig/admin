@@ -36,9 +36,9 @@ app.set("port", port);
  */
 const server = http.createServer(app);
 
-// (async () => {
-//   await MqttConnection();
-// })();
+(async () => {
+  await MqttConnection();
+})();
 
 /**
  * Event listener for HTTP server "error" event.

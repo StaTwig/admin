@@ -12,7 +12,6 @@ const fontDescriptors = {
 };
 const printer = new PdfPrinter(fontDescriptors);
 const axios = require("axios");
-const uniqid = require("uniqid");
 const date = require("date-and-time");
 const moment = require("moment");
 const POModel = require("../models/POModel");
@@ -148,7 +147,7 @@ exports.fetchPurchaseOrders = [
               await Promise.all(
                 poDetails[0]?.products.map(async (element) => {
                   const product = await ProductModel.findOne({
-                    $or: [{name: element.id}, {id: element.id}],
+                    $or: [{ name: element.id }, { id: element.id }],
                   });
                   element.unitofMeasure = product?.unitofMeasure;
                   element.manufacturer = product?.manufacturer;
@@ -363,8 +362,7 @@ exports.changePOStatus = [
                 else newEvent.eventTypePrimary = "REJECT";
                 newEvent.payloadData.data = req.body;
                 let event_body = new Event(newEvent);
-                let result = await event_body.save();
-                console.log(result);
+                await event_body.save();
               } catch (error) {
                 console.log(error);
               }
@@ -409,8 +407,21 @@ exports.createPurchaseOrder = [
       } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       creationDate = new Date(creationDate);
+      const poId = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "productId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      );
       const purchaseOrder = new RecordModel({
-        id: uniqid("po-"),
+        id: poId.counters[5].format + poId.counters[5].value,
         externalId,
         creationDate,
         supplier,
@@ -954,7 +965,6 @@ exports.createOrder = [
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type;
         element.unitofMeasure = product?.unitofMeasure;
-        console.log(product);
       });
       const createdBy = req.user.id;
       const purchaseOrder = new RecordModel({
@@ -968,13 +978,11 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy: createdBy,
       });
-      console.log(purchaseOrder);
       const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.supplierOrganisation,
       });
       if (supplierOrgData == null) {
-        console.log("Supplier not defined");
         return apiResponse.ErrorResponse(
           res,
           responses(req.user.preferredLanguage).supplier_not_defined
@@ -985,7 +993,6 @@ exports.createOrder = [
         id: req.body.customer.customerOrganisation,
       });
       if (receiverOrgData == null) {
-        console.log("customer not defined");
         return apiResponse.ErrorResponse(
           res,
           responses(req.user.preferredLanguage).receiver_not_defined
