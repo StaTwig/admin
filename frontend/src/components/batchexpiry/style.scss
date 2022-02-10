@@ -167,9 +167,6 @@
       @media (min-width: $xl) {
         font-size: 14px;
       }
-      @media (min-width: $sm,$md,$lg) {
-        font-size: 12px;
-      }
     }
 
     .count {
@@ -211,4 +208,8 @@
   height: 30px;
   font-size: 13px;
   background: #fff;
+}
+.flex-align{
+  display: flex;
+  align-items: center;
 }
