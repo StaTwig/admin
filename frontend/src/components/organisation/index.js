@@ -34,6 +34,8 @@ const Organisations = (props) => {
     setShowDropDownForType
   } = props;
 
+  console.log("Organisation List:", organisationList);
+
 
 
   organisationList.sort(function (a, b) {

@@ -166,7 +166,7 @@ const Details = (props) => {
           </span>
           
           <span className="colum txt1 " style={{position:"relative", left:"0.8rem"}}>
-            {org?.region?.regionName}
+            {org?.region?.name}
           </span>
           
           <span className="colum txt1 font-weight-bold text-secondory text-center switchBar">
