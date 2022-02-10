@@ -57,7 +57,7 @@ class Profile extends React.Component {
 
   async componentDidMount() {
     const response = await getUserInfoUpdated();
-    if (response.status === 200) {
+    if (response?.status === 200) {
       const {
         profile_picture,
         email,
@@ -94,12 +94,13 @@ class Profile extends React.Component {
         preferredLanguage,
       });
     }
-
     const item = this.state.organisation.split("/")[1];
     const wareHouseResponse = await getWarehouseByOrgId(item);
-    if (wareHouseResponse.status === 1) {
+    console.log(wareHouseResponse)
+    if (wareHouseResponse.status === 1 || wareHouseResponse.success) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
+      console.log(wareHouseAddresses)
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: response.data.data.warehouses.filter(

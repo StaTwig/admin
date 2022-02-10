@@ -196,7 +196,6 @@ exports.track = [
                 const product = await ProductModel.find({
                   name: products[j].productName,
                 });
-                console.log("pro", product);
                 var product1 = {
                   productName: product[0].name,
                   manufacturer: product[0].manufacturer,
@@ -228,7 +227,6 @@ exports.track = [
                   dateTime: shippingOrderDetails[0].updatedAt,
                 };
                 soCustodayDetails.push(shippingOrderCustody);
-                console.log("soc", soCustodayDetails);
               }
 
               if (poId != null) {
@@ -241,7 +239,6 @@ exports.track = [
                   dateTime: poDetails[0].updatedAt,
                 };
                 poCustodyDetails.push(poCustody);
-                console.log("poc", poCustodyDetails);
                 var supplierOrganisationId = JSON.parse(
                   JSON.stringify(poDetails[0])
                 ).supplier.supplierOrganisation;
@@ -284,7 +281,6 @@ exports.track = [
             AtomModel.findOne({
               id: trackingNumber,
             }).then(async (user) => {
-              console.log(user.shipmentIds[0]);
               var shipmentIds = user.shipmentIds;
               RecordModel.find({
                 "shipments.shipment_id": shipmentIds[0],

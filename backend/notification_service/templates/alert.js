@@ -1,225 +1,97 @@
 module.exports = function template(body, source) {
-  return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      *,
-      *::after,
-      *::before {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: sans-serif;
-        background: #eee;
-      }
-      .container {
-        width: 100%;
-        max-width: 60rem;
-        display: block;
-        margin: 0 auto;
-        padding: 0 2rem;
-      }
-      .container-main {
-        width: 100%;
-        max-width: 60rem;
-        display: block;
-        margin: 0 auto;
-      }
-
-      /* Header */
-      .header {
-        width: 100%;
-        height: 25vh;
-        background-color: rgb(127, 195, 250);
-      }
-      .footer {
-        width: 100%;
-        height: 25vh;
-        background-color: rgb(127, 195, 250);
-      }
-      .brand {
-        width: 100%;
-        height: 25vh;
-        display: grid;
-        place-content: center;
-      }
-      .logo {
-        width: 100%;
-      }
-      .main {
-        background: #fff;
-      }
-      .content {
-        text-align: center;
-        padding-bottom: 3rem;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-      }
-      .banner-small {
-        display: block;
-        margin: 0 auto;
-        width: 40%;
-        margin: 2.5rem 0;
-      }
-      .message-text {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #111;
-        line-height: 1.5rem;
-      }
-      .link-text {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: rgb(0, 140, 255);
-        cursor: pointer;
-      }
-      .link-text:hover {
-        color: rgb(64, 169, 255);
-      }
-      .small-text {
-        width: 60%;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: rgb(107, 107, 107);
-        line-height: 1.5rem;
-      }
-
-      .mt-0 {
-        margin: 0.4rem 0;
-      }
-      .mt-1 {
-        margin: 1rem 0;
-      }
-      .mt-2 {
-        margin: 1.5rem 0;
-      }
-      .mt-3 {
-        margin: 2rem 0;
-      }
-
-      @media screen and (max-width: 786px) {
-        .header {
-          width: 100%;
-          height: 20vh;
-        }
-        .footer {
-          width: 100%;
-          height: 20vh;
-        }
-        .brand {
-          width: 100%;
-          height: 20vh;
-        }
-        .message-text {
-          font-size: 1rem;
-        }
-        .link-text {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: rgb(0, 140, 255);
-          cursor: pointer;
-        }
-        .link-text:hover {
-          color: rgb(64, 169, 255);
-        }
-        .small-text {
-          width: 90%;
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: rgb(107, 107, 107);
-        }
-
-        .mt-0 {
-          margin: 0.3rem 0;
-        }
-        .mt-1 {
-          margin: 0.8rem 0;
-        }
-        .mt-2 {
-          margin: 1.2rem 0;
-        }
-        .mt-3 {
-          margin: 1.6rem 0;
-        }
-      }
-
-      @media screen and (max-width: 586px) {
-        .header {
-          height: 16vh;
-        }
-        .footer {
-          height: 16vh;
-        }
-        .brand {
-          height: 16vh;
-        }
-        .content {
-          padding-bottom: 1.5rem;
-        }
-        .message-text {
-          font-size: 0.85rem;
-        }
-        .link-text {
-          font-size: 0.9rem;
-        }
-        .small-text {
-          width: 100%;
-          font-size: 0.9rem;
-          margin-bottom: 2rem;
-        }
-        .mt-0 {
-          margin: 0.2rem 0;
-        }
-        .mt-1 {
-          margin: 0.7rem 0;
-        }
-        .mt-2 {
-          margin: 1rem 0;
-        }
-        .mt-3 {
-          margin: 1.4rem 0;
-        }
-      }
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      @media screen and (max-width: 600px) {
+              img.brandlogo{
+                width: 200px !important;
+                max-width: 200px !important;
+              }
+              img.bannerImg{
+                width: 260px !important;
+                max-width: 260px !important;
+              }
+            }
+            @media screen and (max-width: 400px) {
+              img.brandlogo{
+                width: 160px !important;
+                max-width: 160px !important;
+              }
+              img.bannerImg{
+                width: 200px !important;
+                max-width: 200px !important;
+              }
+            }
+            @media screen and (max-width: 300px) {
+              img.brandlogo{
+                width: 120px !important;
+                max-width: 120px !important;
+              }
+              img.bannerImg{
+                width: 160px !important;
+                max-width: 160px !important;
+              }
+            }
     </style>
   </head>
-  <body>
-    <div class="container-main">
-      <header class="header">
-        <div class="container">
-          <div class="brand">
-          <a href="${source}">
-            <img src="https://test.vaccineledger.com/logo.png" alt="Otp" class="logo" />
-            </a>
-          </div>
-        </div>
-      </header>
-      <main class="main">
-        <div class="container">
-          <section class="content">
-          <a href="${source}">
-            <img src="https://test.vaccineledger.com/alert.png" alt="illustration" class="banner-small" />
-            </a>
-            <h5 class="message-text">
-                ${body}
-            </h5>
-            <a href="${source}>"<h6 class="link-text mt-2">Click here to Login</h6></a>
-            <p class="small-text">
-              In case of any queries or if you didn't request this, you can
-              ignore this email or let us know at
-              <a href="mailto:contactus@statwig.com"<strong>contactus@statwig.com</strong></a>
-            </p>
-            <h5 class="message-text mt-1">Thanks, Team Statwig</h5>
-          </section>
-        </div>
-      </main>
-      <footer class="footer"></footer>
-    </div>
+  <body style="margin:0;padding:0;background-color:#f9f9fc;">
+    <center class="wrapper" style="width:100%;table-layout:fixed;background-color:#f9f9fc;">
+      <div class="webkit" style="max-width:600px;background-color:#ffffff;">
+        <table class="outer" align="center" style="Margin:0 auto;width:100%;max-width:600px;border-spacing:0;font-family:sans-serif;color:#333333;">
+          <tr>
+            <td style="padding:0;">
+              <table width="100%" style="border-spacing:0;border-spacing: 0;">
+                <tr>
+                  <td style="padding:0;background-color: #8fc5f8;padding: 30px;text-align: center;">
+                    <a href="${source}" style="text-decoration: none;"><img class="brandlogo" src="https://test.vaccineledger.com/logo.png" width="280" alt="logo" style="border:0;"></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0;">
+              <table width="100%" style="border-spacing:0;border-spacing: 0;">
+                <tr>
+                  <td style="padding:0;padding: 30px;text-align: center;">
+                    <img class="bannerImg" src="https://test.vaccineledger.com/alert.png" width="360" alt="logo" style="border:0;">
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0;">
+              <table width="100%" style="border-spacing:0;border-spacing: 0;">
+                <tr>
+                  <td style="padding:0;padding: 10px 30px;text-align: center;">
+                    <p style="font-size: 1rem;font-weight: 700;color: #222222;line-height: 1.5rem;Margin-bottom: 20px">${body}</p>
+                    <a href="${source}" class="link-text" style="font-size: 0.9rem;font-weight: 600;color: #008cff;text-decoration: none;Margin-bottom: 20px;">Click here to Login</a>
+                    <p class="small-text" style="font-size: 0.9rem;font-weight: 500;color: #6b6b6b;line-height: 1.5rem;Margin-bottom: 20px;padding: 0 20px;">
+                      In case of any queries or if you didn't request this, you can
+                      ignore this email or let us know at
+                      <strong><a href="mailto:contactus@statwig.com" style="font-size: 1rem;color: #4a4a4a;text-decoration: none;">contactus@statwig.com</a></strong>
+                    </p>
+                    <p style="font-size: 1rem;font-weight: 700;color: #222222;line-height: 1.5rem;Margin-bottom: 20px">Thanks</p>
+                    <p style="font-size: 1rem;font-weight: 700;color: #222222;line-height: 1.5rem;Margin-bottom: 20px">Team Statwig</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0;background-color: #8fc5f8;height: 5rem;">
+              <table width="100%" style="border-spacing:0;border-spacing: 0;">
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
   </body>
 </html>`;
 };

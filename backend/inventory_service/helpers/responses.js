@@ -33,6 +33,6 @@ exports.responses = (language) => {
             product_doesnt_exist: "El producto no existe en el inventario."
         }
     };
-    const conf = resps[language];
+    const conf = resps[language || 'ES'];
     return conf;
 }

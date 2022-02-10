@@ -80,8 +80,8 @@ exports.deleteEventById = [
         });
       }
     } catch (err) {
-      // console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -105,9 +105,16 @@ exports.getAllEventsWithFilter = [
         ? req.query.productManufacturer
         : undefined;
       let status = req.query.status ? req.query.status : undefined;
-      let date = req.query.date && req.query.date !== '' ? req.query.date : undefined;
-      let fromDate = req.query.fromDate && req.query.fromDate !== '' ? req.query.fromDate : undefined;
-      let toDate = req.query.toDate && req.query.toDate !== '' ? req.query.toDate : undefined;
+      let date =
+        req.query.date && req.query.date !== "" ? req.query.date : undefined;
+      let fromDate =
+        req.query.fromDate && req.query.fromDate !== ""
+          ? req.query.fromDate
+          : undefined;
+      let toDate =
+        req.query.toDate && req.query.toDate !== ""
+          ? req.query.toDate
+          : undefined;
 
       switch (req.query.dateFilter) {
         case "today":
@@ -153,7 +160,6 @@ exports.getAllEventsWithFilter = [
         default:
           fromDateFilter = 0;
       }
-      console.log(req.query)
       let elementMatchQuery = {};
       elementMatchQuery[`$or`] = [
         { eventTypeDesc: "SHIPMENT" },
@@ -162,7 +168,6 @@ exports.getAllEventsWithFilter = [
       if (date) {
         var givenDate = new Date(date);
         var abc = givenDate;
-        console.log(date)
         var nextDate = abc.setDate(abc.getDate() + 1);
         nextDate = new Date(nextDate);
         // nextDate = nextDate.split('T')[0];
@@ -172,7 +177,6 @@ exports.getAllEventsWithFilter = [
         };
       }
       if (fromDate && toDate) {
-        console.log('here')
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
         elementMatchQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
@@ -246,45 +250,6 @@ exports.getAllEventsWithFilter = [
       });
       inventoryCount =
         inventoryCount.length > 0 ? inventoryCount[0].myCount : 0;
-        console.log([
-          {
-            $lookup: {
-              from: "organisations",
-              localField: "payloadData.data.supplier.id",
-              foreignField: "id",
-              as: "senderDetails",
-            },
-          },
-          {
-            $lookup: {
-              from: "organisations",
-              localField: "payloadData.data.receiver.id",
-              foreignField: "id",
-              as: "receiverDetails",
-            },
-          },
-          {
-            $lookup: {
-              from: "employees",
-              localField: "actorUserId",
-              foreignField: "emailId",
-              as: "employeeDetails",
-            },
-          },
-          { $unwind: "$employeeDetails" },
-          { $unwind: "$payloadData.data.products" },
-          {
-            $lookup: {
-              from: "products",
-              localField: LocalField,
-              foreignField: "id",
-              as: "productDetails",
-            },
-          },
-          { $unwind: "$productDetails" },
-          { $match: elementMatchQuery },
-          { $sort: { createdAt: -1 } },
-        ])
       EventModal.aggregate([
         {
           $lookup: {
@@ -330,7 +295,6 @@ exports.getAllEventsWithFilter = [
           let inventoryRecords = [];
           await Promise.all(
             eventRecords.map(async function (event) {
-              // console.log(event);
               let eventRecord = JSON.parse(JSON.stringify(event));
               let payloadRecord = event.payloadData;
               eventRecord[`inventoryQuantity`] =
@@ -356,14 +320,13 @@ exports.getAllEventsWithFilter = [
               else inventoryRecords.push(eventRecord);
             })
           );
-          console.log(elementMatchQuery)
           return apiResponse.successResponseWithData(res, "Inventory Records", {
             inventoryRecords: inventoryRecords,
             count: inventoryCount,
           });
         });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -385,7 +348,7 @@ exports.fetchProductDetailsList = [
         );
       });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
