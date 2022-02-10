@@ -98,12 +98,12 @@ function Table(props) {
                       <h5 className="mb-0 table-h5-text ">
                         {visible === "two"
                           ? creatorOrganisation?.name
-                          : supplier.organisation.name}
+                          : supplier.organisation?.name}
                       </h5>
                       <p className="mb-0 table-p-text ">
                         {visible === "two"
                           ? creatorOrganisation?.id
-                          : supplier.organisation.id}
+                          : supplier.organisation?.id}
                       </p>
                     </div>
                   </div>

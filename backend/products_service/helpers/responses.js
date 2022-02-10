@@ -15,6 +15,6 @@ exports.responses = (language) => {
 
         }
     };
-    const conf = resps[language];
+    const conf = resps[language || 'ES'];
     return conf;
 }

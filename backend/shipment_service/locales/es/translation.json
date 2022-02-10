@@ -1,0 +1,21 @@
+{
+    "Shipment_ID": "Identificación del envío",
+    "Reference_Order_ID": "ID de pedido de referencia",
+    "Product_Category": "categoria de producto",
+    "Product_Name": "nombre del producto",
+    "Product_ID": "ID del Producto",
+    "Quantity": "Cantidad",
+    "Batch_Number": "Número de lote",
+    "Expiry_Date": "Fecha de caducidad",
+    "Manufacturer": "Fabricante",
+    "From_Organization_Name": "Desde el nombre de la organización",
+    "Delivery_Organization_Name": "Nombre de la organización de entrega",
+    "Delivery_Organization_ID": "ID de la organización de entrega",
+    "Delivery_Organization_Location_Details": "Detalles de la ubicación de la organización de entrega",
+    "Transit_Number": "Número de Tránsito",
+    "Label_Code": "Código de etiqueta",
+    "Shipment_Date": "Fecha de envío",
+    "Shipment_Estimate_Date": "Fecha estimada de envío",
+    "Inbound shipments": "Envíos entrantes",
+    "Outbound shipments": "Envíos salientes" 
+}

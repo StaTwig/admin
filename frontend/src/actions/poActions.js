@@ -284,10 +284,17 @@ export const getOrganizationsByTypes = async (id) => {
   }
 };
 
-export const getExportFile = async (url, value) => {
+export const getExportFile = async (url, value,language) => {
   try {
+    if (language === undefined || language === "en-US") {
+      language = "en";
+    }
+    console.log({language});
     const result = await axios.get(url, {
       responseType: "blob",
+      headers: {
+        "Accept-Language": language,
+      },
     });
     return result.data;
   } catch (e) {

@@ -555,11 +555,10 @@ exports.addProductsToInventory = [
       const empData = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      const orgId = empData?.organisationId || null;
+      const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
-
+      const address = orgData?.postalAddress;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
@@ -2687,7 +2686,25 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        {
+          $project: {
+            _id: 0,
+            value: "$id",
+            record_type: "order",
+            createdBy: "$createdBy",
+            org1: "$customer.customerOrganisation",
+            org2: "$supplier.supplierOrganisation",
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+              { createdBy: req.user.id },
+            ],
+          },
+        },
         {
           $unionWith: {
             coll: "products",
@@ -2702,23 +2719,6 @@ exports.autoCompleteSuggestions = [
             ],
           },
         },
-        {
-          $match: {
-            value: { $regex: searchString ? searchString : "", $options: "i" },
-          },
-        },
-        {
-          $group: {
-            _id: "$value",
-            type: { $first: "$record_type" },
-            // airWayBillNo: { $first: "$airWayBillNo" },
-          },
-        },
-        { $limit: 5 },
-      ]).sort({ createdAt: -1 });
-
-      const suggestions2 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "products",
@@ -2738,23 +2738,39 @@ exports.autoCompleteSuggestions = [
             value: { $regex: searchString ? searchString : "", $options: "i" },
           },
         },
-        { $limit: 5 },
         {
           $group: {
             _id: "$value",
             type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
+            // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
+        { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
       const suggestions3 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+              {
+                $project: {
+                  _id: 0,
+                  value: "$id",
+                  record_type: "shipment",
+                  org1: "$receiver.id",
+                  org2: "$supplier.id",
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
             ],
           },
         },
@@ -2787,10 +2803,11 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
+      // console.log( [...new Set([...suggestions1, ...suggestions2, ...suggestions3])])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
-        [...suggestions1, ...suggestions2, ...suggestions3]
+        [...new Set([...suggestions1, ...suggestions3])]
       );
     } catch (err) {
       console.log(err);
@@ -2846,6 +2863,10 @@ exports.reduceBatch = [
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
       );
+      const warehouse = await WarehouseModel.findOne({
+        id: req.user.warehouseId,
+      });
+
       const inventory = await InventoryModel.updateOne(
         { "inventoryDetails.productId": batch.productId },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }

@@ -26,7 +26,7 @@ function Cards(props) {
   return (
     <div className="grid-tile-container">
           <Link to="/productcategory">
-            <div onClick={() => props.setData("one")} className="grid-tiles">
+            <div className="grid-tiles">
               <div className="picture truck-bg">
                 <img src={TotalInventoryAdded} alt="truck" />
               </div>

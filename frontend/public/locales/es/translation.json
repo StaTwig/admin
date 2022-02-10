@@ -377,5 +377,8 @@
   "updated_location": "Ubicación Actualizada",
   "batch_number": "Número de lote",
   "serial_number": "Número de serie",
-  "all_products_are_expired": "Todos los productos están vencidos"
+  "all_products_are_expired": "Todos los productos están vencidos",
+  "shipmentinbound": "envío entrante",
+  "shipmentoutbound": "envío saliente",
+  "sold":"Vendida"
 }
