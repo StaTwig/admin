@@ -125,7 +125,7 @@ const UserDetails = (props) => {
               </div>
             )}
           </span>
-          <span className={`text-left ${viewButton ? `` : `align-self-center`} locationText`}>
+          <span className={`text-left ${viewButton ? `` : `align-self-center`} locationText us-location`}>
             { user?.location }
           </span>
           <span className={` w-25  ${viewButton ? `` : `align-self-center`} walletText txtWrapu`}>

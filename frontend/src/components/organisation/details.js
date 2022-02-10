@@ -88,7 +88,7 @@ const Details = (props) => {
     <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
           <div className="userPic  rounded" 
-            style={{ width: '160px',display:"flex",flexDirection:"column"}}>
+            style={{width:"160px",display:"flex",flexDirection:"column"}}>
             {org?.logoId && (
               <img
                 src={org?.logoId}
@@ -152,16 +152,15 @@ const Details = (props) => {
               
           </div>
 
-          <span className="col-2 ml-5 txt1" 
+          <span className="col-2 ml-5 txt1 mo-address" 
             style={{
              display:"flex",
              flexDirection:"column",
-             position:"relative",
-             right:"2rem"}}>
+             position:"relative",}}>
             {org?.postalAddress}
           </span>
           
-          <span className="colum txt1" style={{position:"relative", left:"0.4rem"}}>
+          <span className="colum txt1 mocoun" style={{position:"relative"}}>
             {org?.country?.countryName}
           </span>
           

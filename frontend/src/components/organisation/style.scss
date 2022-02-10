@@ -255,3 +255,40 @@ input:checked + .slider:before {
   flex-direction: row;
   justify-content: space-between;
 }
+.mo-create{
+  position: relative;
+  left: 1.2rem;
+  @media screen and (min-width:"1286px"){
+    left: 1.6rem;
+  }
+  @media screen and (min-width:"1486px"){
+    left: 2.2rem;
+  }
+  @media screen and (min-width:"1586px"){
+    left: 3.6rem;
+  }
+}
+.mo-address{
+  right: 0.4rem !important;
+  @media screen and (min-width:"1286px"){
+    right: 2.4rem !important;
+  }
+  @media screen and (min-width:"1466px"){
+    right: 1.4rem !important;
+  }
+  @media screen and (min-width:"1566px"){
+    right: 0.4rem !important;
+  }
+}
+.mocoun{
+  left: 0.4rem !important;
+  @media screen and (min-width:"1286px"){
+    left: 0rem !important;
+  }
+  @media screen and (min-width:"1466px"){
+    left: 1rem !important;
+  }
+  @media screen and (min-width:"1566px"){
+    left: 2.5rem !important;
+  }
+}
