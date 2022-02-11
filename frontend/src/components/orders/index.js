@@ -26,7 +26,7 @@ import { config } from "../../config";
 import { isAuthenticated } from "../../utils/commonHelper";
 
 const Orders = (props) => {
-  const { t } = props;
+  const { t, i18n } = props;
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
@@ -481,7 +481,7 @@ const Orders = (props) => {
 
     if (visible === "one") {
       nameOfFile =
-        "ordersoutbound" +
+        t("ordersoutbound") +
         today.getFullYear().toString() +
         "/" +
         (today.getMonth() + 1).toString() +
@@ -489,7 +489,7 @@ const Orders = (props) => {
         today.getDate().toString();
     } else if (visible === "two") {
       nameOfFile =
-        "ordersinbound" +
+        t("ordersinbound") +
         today.getFullYear() +
         "/" +
         (today.getMonth() + 1) +
@@ -497,7 +497,7 @@ const Orders = (props) => {
         today.getDate();
     }
 
-    getExportFile(url).then((response) => {
+    getExportFile(url, value, i18n.language).then((response) => {
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {

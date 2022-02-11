@@ -380,12 +380,12 @@ const ReceiveShipment = (props) => {
         </div>
         <div className='col-sm-4'>
           <div className='row justify-content-between'>
-            <h6 className='heading mt-3 mb-3 ml-4'> {t("upload_image")}e</h6>
+            <h6 className='heading mt-3 mb-3 ml-4'> {t("upload_image")}</h6>
             <button
               className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
               onClick={uploadPhoto}
               style={{ position: "relative", bottom: "10px" }}
-            >
+            > 
               {/* <img
                     src={uploadWhite}
                     width="35"
