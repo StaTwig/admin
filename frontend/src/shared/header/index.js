@@ -202,9 +202,9 @@ const Header = (props) => {
           if (resp.data.data.length > 0)
             props.history.push(`/viewproduct`, { data: resp.data.data[0] });
           else
-            alert(
-              `The product "${searchString}" is not found in the inventory`
-            );
+          alert(
+            `${t("the_product")} "${searchString}" ${t("not_found_in_inventory")}`
+          );
         })
         .catch((err) => {
           alert(err.response.data.message)});
@@ -215,9 +215,9 @@ const Header = (props) => {
           if (resp.data.data.length > 0)
             props.history.push(`/productinventory/${searchString}`);
           else
-            alert(
-              `Theere are no products belonging to type: "${searchString}" in your inventory`
-            );
+          alert(
+            `${t("there_no_products_type:")} "${searchString}" ${t("in_your_inventory")}`
+          );
         })
         .catch((err) => alert(err.response.data.message));
     }
