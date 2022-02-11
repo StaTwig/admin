@@ -380,5 +380,8 @@
   "all_products_are_expired": "Todos los productos están vencidos",
   "shipmentinbound": "envío entrante",
   "shipmentoutbound": "envío saliente",
-  "sold":"Vendida"
+  "sold":"Vendida",
+  "ordersoutbound": "pedidos salientes",
+  "ordersinbound": "pedidos entrantes",
+  "upload_image": "cargar imagen"
 }

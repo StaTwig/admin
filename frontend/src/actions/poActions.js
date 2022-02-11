@@ -289,7 +289,6 @@ export const getExportFile = async (url, value,language) => {
     if (language === undefined || language === "en-US") {
       language = "en";
     }
-    console.log({language});
     const result = await axios.get(url, {
       responseType: "blob",
       headers: {

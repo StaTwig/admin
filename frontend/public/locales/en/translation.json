@@ -350,5 +350,8 @@
   "serial_number": "Serial Number",
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
-  "sold":"Sold"
+  "sold":"Sold",
+  "ordersoutbound": "ordersoutbound",
+  "ordersinbound": "ordersinbound",
+  "upload_image": "upload image"
 }
