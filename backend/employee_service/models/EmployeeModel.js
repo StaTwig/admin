@@ -43,7 +43,7 @@ const EmployeeSchema = new mongoose.Schema(
       required: true,
     },
     warehouseId: { type: Array, required: false, default: "NA" },
-    pendingWarehouseId: { type: Array, required: false, default: "NA" },
+    pendingWarehouseId: { type: Array, required: false, default: [] },
     affiliatedOrganisations: {
       type: Array,
       required: false,

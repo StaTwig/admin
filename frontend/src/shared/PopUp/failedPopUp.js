@@ -3,6 +3,7 @@ import "./styles.scss";
 import Checked from "../../assets/icons/cancel.svg";
 
 const FailedPopUp = (props) => {
+  console.log(props.message)
   return (
     <div className='popup'>
       <div className='d-flex  flex-column align-items-center'>

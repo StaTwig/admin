@@ -133,7 +133,7 @@ const FormPage = (props) => {
   const changeFn = (value_new, e) => {
     setValue(value_new);
     let orgs = organisationsArr.filter((org) =>
-      org.name.toLowerCase().includes(value_new.toLowerCase())
+      org.name.toLowerCase().includes(value_new)
     );
     setOrganisations(orgs);
     if (
@@ -679,7 +679,7 @@ const FormPage = (props) => {
                                 }}
                                 id='debug'
                                 debug
-                                getOptionLabel={(option) => option.name.toLocaleLowerCase()}
+                                getOptionLabel={(option) => option.name}
                                 options={showOrgByType(selectedType)}
                                 // disabled={lastNameError && firstNameError
                                 //   && phoneNumberError && emailErrorMsg

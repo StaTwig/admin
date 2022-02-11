@@ -33,7 +33,9 @@ const ExcelPopUp = (props) => {
       }
     }
 
-    if (result && result.status === 200 && notNullValues !== 0) {
+    if (result && result.status === 200
+      && notNullValues !== 0
+      ) {
       setopenSuccesfulOrder(true);
       setModalProps({
         message: "Created Successfully!",
@@ -42,6 +44,9 @@ const ExcelPopUp = (props) => {
       });
     } else {
       setopenFailedPop(true);
+      setModalProps({
+        message: "Records not added due to duplication",
+      });
     }
     dispatch(turnOff());
   };
@@ -113,7 +118,7 @@ const ExcelPopUp = (props) => {
           )}
           {openFailedPopup && (
             <Modal close={() => closeModalFailedPopUp()} size='modal-sm'>
-              <FailPopup onHide={closeModalFailedPopUp} t={t} />
+              <FailPopup message={modalProps.message} onHide={closeModalFailedPopUp} t={t} />
             </Modal>
           )}
         </div>

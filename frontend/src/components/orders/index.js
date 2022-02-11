@@ -14,6 +14,7 @@ import dropdownIcon from "../../assets/icons/drop-down.svg";
 import ExcelPopUp from "./ExcelPopup";
 import Cards from "./cards/cards";
 import Modal from "../../shared/modal";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
 import Status from "../../assets/icons/Status.svg";
 import {
   getSentPOs,
@@ -24,7 +25,7 @@ import {
 } from "../../actions/poActions";
 import { config } from "../../config";
 import { isAuthenticated } from "../../utils/commonHelper";
-
+import { useDispatch } from "react-redux";
 const Orders = (props) => {
   const { t, i18n } = props;
   const [menu, setMenu] = useState(false);
@@ -34,7 +35,7 @@ const Orders = (props) => {
   const [skip, setSkip] = useState(0);
   const [limit] = useState(10);
   const [alerts, setAlerts] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [outboundRecords, setOutboundRecords] = useState([]);
   const [inboundRecords, setInboundRecords] = useState([]);
   const [dateFilter, setDateFilter] = useState("");
@@ -68,7 +69,9 @@ const Orders = (props) => {
         setOrderIdFilter("");
         setStatusFilter("");
         setLocationFilter("");
-        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit, fromFilterDate, toFilterDate); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        dispatch(turnOn());
+        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit, "", ""); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        dispatch(turnOff());
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
       } else {
@@ -79,6 +82,7 @@ const Orders = (props) => {
         setOrderIdFilter("");
         setStatusFilter("");
         setLocationFilter("");
+        dispatch(turnOn());
         const inboundRes = await getReceivedPOs(
           "",
           "",
@@ -88,9 +92,11 @@ const Orders = (props) => {
           "",
           0,
           limit,
-          fromFilterDate,
-          toFilterDate
+          "",
+          ""
         ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
+        dispatch(turnOff());
+
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count);
       }
@@ -185,7 +191,9 @@ const Orders = (props) => {
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     setDateFilter(dateFilterSelected);
     setSkip(0);
+    console.log('hi')
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -198,9 +206,11 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -213,6 +223,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -222,6 +233,7 @@ const Orders = (props) => {
     setLocationFilter(locationFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -234,9 +246,11 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit;
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -249,6 +263,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -258,6 +273,7 @@ const Orders = (props) => {
     setProductNameFilter(productNameFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -270,9 +286,11 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -285,6 +303,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -294,6 +313,7 @@ const Orders = (props) => {
     setOrderIdFilter(orderIdFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilterSelected,
@@ -308,7 +328,9 @@ const Orders = (props) => {
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilterSelected,
@@ -321,6 +343,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -330,6 +353,7 @@ const Orders = (props) => {
     setStatusFilter(statusFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -344,7 +368,9 @@ const Orders = (props) => {
       ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -357,6 +383,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -367,6 +394,7 @@ const Orders = (props) => {
     setToFilter(fromToFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         fromToFilterSelected,
         orderIdFilter,
@@ -381,7 +409,9 @@ const Orders = (props) => {
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromToFilterSelected,
         orderIdFilter,
@@ -394,6 +424,7 @@ const Orders = (props) => {
         fromFilterDate,
         toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -428,6 +459,7 @@ const Orders = (props) => {
         toDate.setDate(toDate.getDate() + 1);
       setToFilterDate(toDate);
        if (visible === "one") {
+        dispatch(turnOn());
         const outboundRes = await getSentPOs(
           toFilter,
           orderIdFilter,
@@ -442,7 +474,9 @@ const Orders = (props) => {
         ); //to, orderId, productName, deliveryLocation, date, skip, limit
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
+        dispatch(turnOff());
       } else {
+        dispatch(turnOn());
         const inboundRes = await getReceivedPOs(
           fromFilter,
           orderIdFilter,
@@ -457,6 +491,7 @@ const Orders = (props) => {
         ); //from, orderId, productName, deliveryLocation, date, skip, limit
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count);
+        dispatch(turnOff());
       }
     }
   }
@@ -607,6 +642,16 @@ const Orders = (props) => {
           visible={visible}
           setShowExportFilter={setShowExportFilter}
           t={t}
+          setFromToFilterOnSelect={setFromToFilterOnSelect}
+          setOrderIdNameFilterOnSelect={setOrderIdNameFilterOnSelect}
+          setStatusFilterOnSelect={setStatusFilterOnSelect}
+          setProductNameFilterOnSelect={setProductNameFilterOnSelect}
+          setLocationFilterOnSelect={setLocationFilterOnSelect}
+          setDateFilterOnSelect={setDateFilterOnSelect}
+          onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          onSelectionDateFilter={onSelectionDateFilter}
+          setFromFilterDate={setFromFilterDate}
+          setToFilterDate={setToFilterDate}
         />
       </div>
       <div className='ribben-space'>
