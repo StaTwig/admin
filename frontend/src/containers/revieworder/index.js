@@ -11,6 +11,9 @@ const ReviewOrderContainer = (props) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState([]);
   const { id } = props.match.params;
+  const evTypep = window.performance.getEntriesByType("navigation")[0];
+  if(evTypep && evTypep.type === 'reload')
+  window.location.href='orders';
   useEffect(() => {
     dispatch(getOrder(id)).then((results) => {
       setOrder(results);

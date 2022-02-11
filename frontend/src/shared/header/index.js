@@ -330,6 +330,9 @@ const Header = (props) => {
       onSeach();
     }
   };
+  const onIcon = (event) => {
+      onSeach();
+  };
   const imgs = config().fetchProfileImage;
   const search_placeholder =
     t("search") + " " + t("po_id") + "/" + t("shipment_id");
@@ -394,8 +397,9 @@ const Header = (props) => {
                   id="free-solo-demo"
                   freeSolo
                   //value={search}
-                  forcePopupIcon={true}
-                  popupIcon={<Search style={{ color: "#0b65c1" }} />}
+                  disableClearable
+                  // forcePopupIcon={true}
+                  // popupIcon={<Search style={{ color: "#0b65c1" }} onClick={onIcon} />}
                   options={options}
                   getOptionLabel={(option) => option._id}
                   filterOptions={filterOptions}
@@ -420,9 +424,11 @@ const Header = (props) => {
                       label={search_placeholder}
                       margin="normal"
                       variant="outlined"
+                      sx={{width:"7rem"}}
                     />
                   )}
                 />
+                <Search className="Auto-search-icon" style={{  }} onClick={onIcon} />
               </div>
             </li>
             {/* Notification Icons */}
