@@ -355,7 +355,7 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className="form-group2">
+                    <div className="form-group2 mb-3">
                       <label htmlFor="shipmentId">{t("phone")}</label>
                       <PhoneInput
                         className="form-group mobile-number"
@@ -369,7 +369,7 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label htmlFor="">{t("language")}</label>
                       <Select
                         noOptionsMessage={() => t("no_options")}
@@ -384,7 +384,7 @@ class Profile extends React.Component {
                           this.setState({ preferredLanguage: language.value })
                         }
                       />
-                    </div>
+                    </div> */}
                     <div className="col">
                       <div className="row">
                         <div className="row location">
