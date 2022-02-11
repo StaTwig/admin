@@ -114,7 +114,7 @@ const ExcelPopUp = (props) => {
           )}
           {openFailedPopup && (
             <Modal close={() => closeModalFailedPopUp()} size='modal-sm'>
-              <FailPopup onHide={closeModalFailedPopUp} t={t} />
+              <FailPopup onHide={closeModalFailedPopUp} message={t("something_went_wrong")} t={t} />
             </Modal>
           )}
         </div>
