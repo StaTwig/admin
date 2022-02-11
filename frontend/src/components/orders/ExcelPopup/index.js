@@ -27,6 +27,7 @@ const ExcelPopUp = (props) => {
     const result = await addPOsFromExcel(formData);
     let arr = result.data.data;
     let notNullValues = 0;
+    if(arr && arr.length > 0)
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] != null) {
         notNullValues++;
