@@ -354,5 +354,19 @@
   "serial_number": "Serial Number",
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
-  "sold":"Sold"
+  "sold":"Sold",
+  "the_product":"The product",
+  "not_found_in_inventory":"is not found in the inventory",
+  "there_no_products_type":"There are no products belonging to type:",
+  "in_your_inventory":"in your inventory",
+  "quantity_not_more_error":"Quantity cannot be more than ordered quantity",
+  "check_delivery_date":"Check delivery date",
+  "check_shipment_reference_id":"Check Shipment Reference ID",
+  "shipment_cannot_be_empty":"Shipment ID cannot be Empty",
+  "shipment_has_to_be_delivered":"Shipment has to be delivered",
+  "invalid_shipmentid_enter":"Invalid ShipmentID Please Enter a Valid Shipment ID",
+  "cannot_be_empty":"Cannot be Empty",
+  "check_batch_number":"Check Batch Number",
+  "product_not_exist_inventory":"The product doesn't exist in this inventory",
+  "check":"Check"
 }
