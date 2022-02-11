@@ -20,10 +20,11 @@ const ProductInventory = (props) => {
   const categoryArray = products
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
+  
 
   const categoryArrayNew = [
-    category,
-    ...categoryArray.filter((value) => value !== category),
+    (category ? category : products[0]?.type),
+    ...categoryArray.filter((value) => value !== (category ? category : products[0]?.type)),
   ];
   useEffect(() => {
     if (props.match && props.match.params && props.match.params.category) {
@@ -98,21 +99,21 @@ const ProductInventory = (props) => {
           >
             {categoryArrayNew.map((cat) => (
               <div
-                className={`panel m-2 ${category === cat && `active`}`}
+                className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
                 onClick={() => changeType(cat)}
               >
                 <div className='flex flex-column'>
                   <div className='picture'>
                     <img
                       src={
-                        category === cat ? TotalInventoryAdded : ProductSelected
+                        (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
                       }
                       alt='truck'
                     />
                   </div>
                   <div
                     className={`pt-3 flex text-dark font-weight-bold ${
-                      category === cat || `text-muted`
+                      (category ? category : products[0]?.type) === cat || `text-muted`
                     }`}
                   >
                     {cat}
@@ -136,21 +137,21 @@ const ProductInventory = (props) => {
       <div  className='row ml-0 flex-nowrap'>
             {categoryArrayNew.map((cat) => (
               <div
-                className={`panel m-2 ${category === cat && `active`}`}
+                className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
                 onClick={() => changeType(cat)}
               >
                 <div className='flex flex-column'>
                   <div className='picture'>
                     <img
                       src={
-                        category === cat ? TotalInventoryAdded : ProductSelected
+                        (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
                       }
                       alt='truck'
                     />
                   </div>
                   <div
                     className={`pt-3 flex text-dark font-weight-bold ${
-                      category === cat || `text-muted`
+                      (category ? category : products[0]?.type) === cat || `text-muted`
                     }`}
                   >
                     {cat}

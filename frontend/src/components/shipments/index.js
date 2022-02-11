@@ -25,7 +25,7 @@ import { isAuthenticated } from "../../utils/commonHelper";
 import Cards from "./cards/cards";
 
 const ShipmentAnalytic = (props) => {
-  const { t } = props;
+  const { t, i18n } = props;
   const [visible, setvisible] = useState("one");
   const [skip, setSkip] = useState(0);
   const [limit] = useState(10);
@@ -415,7 +415,7 @@ const ShipmentAnalytic = (props) => {
 
     if (visible === "one") {
       nameOfFile =
-        "shipmentinbound" +
+        t("shipmentinbound") +
         today.getFullYear().toString() +
         "/" +
         (today.getMonth() + 1).toString() +
@@ -424,15 +424,15 @@ const ShipmentAnalytic = (props) => {
       // console.log(name, name);
     } else if (visible === "two") {
       nameOfFile =
-        "shipmentoutbound" +
+        t("shipmentoutbound") +
         today.getFullYear() +
         "/" +
         (today.getMonth() + 1) +
         "/" +
         today.getDate();
     }
-    getExportFile(url, value).then((response) => {
-      console.log(response);
+    getExportFile(url, value, i18n.language).then((response) => {
+     
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {

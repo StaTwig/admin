@@ -77,7 +77,7 @@ const Table = (props) => {
                     fontSize: "14px",
                   }}
                 >
-                  {inventory.inventoryQuantity}
+                  {inventory.inventoryQuantity || inventory.payloadData?.data?.quantityPurchased}
                   {inventory.productDetails.unitofMeasure ? (
                     inventory.productDetails.unitofMeasure.name ? (
                       <span>
