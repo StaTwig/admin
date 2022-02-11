@@ -82,7 +82,7 @@ const FormPage = (props) => {
   const handleEmailVerification = () => {
     if (props.email) {
       if (props.email.match(emailRegex) === null) {
-        setEmailErrorMsg("E-MailId is not valid")
+        setEmailErrorMsg("emailId_is_not_valid")
       } else {
         setEmailErrorMsg("")
         verifyEmailAndPhoneNo(
@@ -106,7 +106,7 @@ const FormPage = (props) => {
   const handlePhoneVerification = () => {
     if (props.phone) {
       if (props.phone.match(phoneRegex) === null) {
-        setPhoneErrorMsg("Invalid mobile number")
+        setPhoneErrorMsg("invalid_phone_number");
       } else {
         setPhoneErrorMsg("")
         verifyEmailAndPhoneNo(
@@ -399,7 +399,7 @@ const FormPage = (props) => {
                             )}
                             {(emailErrorMsg !== '') && (
                               <span className='error-msg text-dangerS'>
-                                {emailErrorMsg}
+                                {t(emailErrorMsg)}
                               </span>
                             )}
                             {phoneNumberError && email.length <= 0 && mobileNumber.length <= 0 && (
@@ -469,7 +469,7 @@ const FormPage = (props) => {
                           )}
                           {(phoneErrorMsg !== '') && (
                             <span className='error-msg text-dangerS'>
-                              {phoneErrorMsg}
+                              {t(phoneErrorMsg)}
                             </span>
                           )}
                           {phoneNumberError && mobileNumber.length <= 0 && email.length <= 0 && (
