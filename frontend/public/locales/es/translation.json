@@ -26,6 +26,8 @@
   "welcome": "Bienvenido",
   "login_to_continue": "Iniciar sesión para continuar",
   "email_id": "Identificación de correo",
+  "emailId_is_not_valid":"inválido Identificación de correo",
+  "invalid_phone_number":"inválido Número de teléfono",
   "phone_number": "Número de teléfono",
   "phone": "Teléfono",
   "or": "O",

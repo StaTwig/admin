@@ -26,6 +26,8 @@
   "welcome": "Welcome",
   "login_to_continue": "Login to continue",
   "email_id": "Email ID",
+  "emailId_is_not_valid":"Invalid Email ID",
+  "invalid_phone_number":"Invalid Phone Number",
   "phone_number": "Phone Number",
   "or": "OR",
   "enter_phone_number": "Enter Phone number",
