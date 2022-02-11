@@ -16,6 +16,7 @@ const SearchBar = (props) => {
         }
         setTimer(setTimeout(() => {
             props.onChangeOfSearchInput(query, props.type);
+            props.setSuggItemIndex(-1)
         }, debounceInterval));
       }, [query]);
     
@@ -34,6 +35,8 @@ const SearchBar = (props) => {
                     placeholder={t('search')}
                     value={query}
                     onChange={handleOnChange}
+                    onKeyDown={(e) => props.handleSearcherInputKeyDown(e, props.type)}
+                    autoComplete="off"
                 />
                 <img src={SearchIcon} alt='searchIcon' id={props.type === 'searchBarTopPanel' 
                     ? 'input_img' : 'input_img_for_drp'} />

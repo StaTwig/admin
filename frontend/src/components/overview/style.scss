@@ -64,4 +64,32 @@
     overflow: hidden;
     height: 2.3rem;
     padding: 5px 20px;
+    background-color: #fff !important;
+}
+.btnstyles:hover{
+  // font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+  height: 2.3rem;
+  padding: 5px 20px;
+  background-color: #fff !important;
+}
+.bg-green{
+  color: #28a745 !important;
+    border-color: #28a745 !important;
+}
+.bg-green:hover{
+  border-color: #28a745 !important;
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+.bg-red{
+  color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+.bg-red:hover{
+  color: #fff !important;
+  background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
 }

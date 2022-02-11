@@ -51,6 +51,7 @@ const AddressDetails = (props) => {
             <Maps
               lat={address.location.latitude}
               lng={address.location.longitude}
+              region={address.region.regionName}
             />
           )}
         </div>
