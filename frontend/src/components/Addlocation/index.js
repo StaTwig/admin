@@ -18,7 +18,7 @@ const AddLocation = (props) => {
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
-  const [country, setcountry] = useState("");
+  // const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
@@ -61,7 +61,7 @@ const AddLocation = (props) => {
       organisationId: props.user.organisationId,
       postalAddress: props.user.postalAddress,
       region: values.region,
-      country: props.user.warehouseAddress_country,
+      country: props.user.warehouses[0].warehouseAddress.country,
       // location: {
       //   longitude: '0',
       //   latitude: '0',
@@ -73,7 +73,7 @@ const AddLocation = (props) => {
         secondLine: null,
         city: values.city,
         state: values.state,
-        country: values.country,
+        country: props.user.warehouses[0].warehouseAddress.country,
         landmark: null,
         zipCode: values.pincode,
       },
