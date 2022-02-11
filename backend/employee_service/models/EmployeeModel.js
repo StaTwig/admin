@@ -32,6 +32,7 @@ const EmployeeSchema = new mongoose.Schema(
     phoneNumber: { type: String, required: false, default: "" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },
     department: { type: String, required: false, default: "engineering" },
+    pendingWarehouseId: { type: Array, required: false, default: [] },
     organisationId: {
       type: String,
       required: true,
