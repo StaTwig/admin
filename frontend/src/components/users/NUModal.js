@@ -4,15 +4,18 @@ import { Formik } from "formik";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
+import PhoneInput from "react-phone-input-2";
+
 import { t } from "i18next";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
   const [buttonText, setButtonText] = useState("NEXT")
   const [wh, setWH] = useState("Select a Location");
-  const [disableButton, setDisableBtn] = useState(false);
+  const [disableButton, setDisableBtn] = useState(true);
   const [disableRoleBtn, setDisanleRole] = useState(false);
   const [changeComponent, setChangeComponent] = useState('role');
+  const [phoneNumber, setPhoneNumber] = useState(null);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
@@ -30,9 +33,9 @@ const NUModal = (props) => {
   const setEmail = (event) => {
     setData({ ...data, ...{ emailId: event.target.value } });
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value))
-      setDisableBtn(false)
-    else
       setDisableBtn(true)
+    else
+      setDisableBtn(false)
   };
 
   const setWarehouse = (name, id) => {
@@ -46,6 +49,8 @@ const NUModal = (props) => {
   console.log(disableRoleBtn);
 
   const unDisableNxtBtn = () => {
+    if(phoneNumber?.length > 3)
+      return true;
     if(props.data.id && disableRoleBtn) {
       return false;
     }
@@ -90,13 +95,13 @@ const NUModal = (props) => {
           const errors = {};
           // console.log(values);
 
-          if (!values.email) {
-            errors.email = t('Required');
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = "Invalid email address";
-          }
+          // if (!values.email && !phoneNumber) {
+          //   errors.email = t('Required');
+          // } else if (
+          //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email) && !phoneNumber
+          // ) {
+          //   errors.email = "Invalid email address";
+          // }
           if (!values.role) {
             errors.role = t('Required');
           }
@@ -130,8 +135,7 @@ const NUModal = (props) => {
             </p>
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow" 
               style={{ justifyContent: 'space-between'}}>
-              <div className="input-group" 
-                style={{ width: '65%', alignItems: 'center' }}>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <input
                   type="text"
                   name="email"
@@ -151,6 +155,26 @@ const NUModal = (props) => {
                   disabled={ changeComponent === "address" && disableButton ? true : false }
                 />
               </div>
+              <div className="input-group"  style={{ width: '45%', alignItems: 'center' }}>
+              <PhoneInput
+                        className={`form-group mobile-number ${
+                          errors.email ? "border-danger" : ""
+                        }`}
+                        country={"cr"}
+                        preferredCountries={["cr"]}
+                        placeholder={t("enter_phone_number")}
+                        style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
+                        value={phoneNumber}
+                        onChange={(phone) =>{
+                          setPhoneNumber(phone);
+                          setData({ ...data, ...{ emailId: "null" }, ...{phoneNumber: phone} })
+                          setDisableBtn(false);
+                          setUserAlreadyExits(false);
+                        }
+                        }
+                      />
+              </div>
+
                 {userAlreadyExits && (
                   <div  style={{position:"absolute",top:"4.8rem",left:"2rem",zIndex:"5",color:"rgb(244, 33, 46)"}}>
                      <span>{t('email_has_already_been_taken')}</span>
@@ -232,7 +256,8 @@ const NUModal = (props) => {
             <div className="d-flex flex-row-reverse p-3">
               {changeComponent === "role" ? 
                 (
-                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); scrolling.current.scrollTop = 0  }} disabled = {unDisableNxtBtn()}>
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => {setChangeComponent('address');setButtonText('ADD USER'); scrolling.current.scrollTop = 0  }} 
+                  disabled = {disableButton}>
                     {t(buttonText)}
                   </button>
                 ) : (
