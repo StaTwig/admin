@@ -44,7 +44,7 @@ const DropDownFilter = (props) => {
         setShowDropDownForRole
     } = props
     const [suggItemIndex, setSuggItemIndex] = useState(-1);
-
+    const length = props.data.length;
 
     useEffect(() => {
         if (suggItemIndex < 0) return;
@@ -90,6 +90,12 @@ const DropDownFilter = (props) => {
                         </li>
                     )
                 })}
+                <li 
+                    className={`sugg-item${length}`}
+                    onClick={() => props.onClickOfDropDownItem("", "", "")}
+                >
+                    Clear
+                </li>
             </ul>
         </div>
     )
