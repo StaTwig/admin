@@ -371,5 +371,6 @@
   "check":"Check",
   "ordersoutbound": "ordersoutbound",
   "ordersinbound": "ordersinbound",
-  "upload_image": "upload image"
+  "upload_image": "upload image",
+  "records_duplication":"Records not added due to duplication"
 }

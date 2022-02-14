@@ -38,14 +38,14 @@ const ExcelPopUp = (props) => {
       ) {
       setopenSuccesfulOrder(true);
       setModalProps({
-        message: "Created Successfully!",
+        message: `${t("created")}${t("successfully")}`,
         OrderLength: notNullValues,
         type: "Success",
       });
     } else {
       setopenFailedPop(true);
       setModalProps({
-        message: "Records not added due to duplication",
+        message: t("records_duplication"),
       });
     }
     dispatch(turnOff());

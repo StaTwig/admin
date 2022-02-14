@@ -401,5 +401,6 @@
   "check":"Cheque",
   "ordersoutbound": "pedidos salientes",
   "ordersinbound": "pedidos entrantes",
-  "upload_image": "cargar imagen"
+  "upload_image": "cargar imagen",
+  "records_duplication":"Registros no agregados debido a la duplicación"
 }
