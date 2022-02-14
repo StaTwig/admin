@@ -600,7 +600,7 @@ exports.createShipment = [
               }
             );
           }
-          if (products[count].serialNumbersRange != null || products[count].serialNumbersRange.length > 0) {
+          if (products[count].serialNumbersRange != null) {
             const serialNumbers = Array.isArray(products[count].serialNumbersRange) ? products[count].serialNumbersRange : products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
@@ -646,7 +646,6 @@ exports.createShipment = [
             }
           }
         }
-        console.log("hdhdh");
         
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
         const updates = {
