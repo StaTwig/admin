@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from '../searchBar';
 import "./style.scss";
 import useOnclickOutside from "react-cool-onclickoutside";
-
+import { t } from "i18next";
 const DropDownFilter = (props) => {
 
     let ref = useOnclickOutside(() => {
@@ -44,7 +44,7 @@ const DropDownFilter = (props) => {
         setShowDropDownForRole
     } = props
     const [suggItemIndex, setSuggItemIndex] = useState(-1);
-
+    const length = props.data.length;
 
     useEffect(() => {
         if (suggItemIndex < 0) return;
@@ -86,10 +86,16 @@ const DropDownFilter = (props) => {
                             className={`sugg-item${index}`}
                             onClick={() => props.onClickOfDropDownItem(index, props.type, item.value)}
                         >
-                            {item.value}
+                            {t(item.value)}
                         </li>
                     )
                 })}
+                <li 
+                    className={`sugg-item${length}`}
+                    onClick={() => props.onClickOfDropDownItem("", "", "")}
+                >
+                    {t('Clear')}
+                </li>
             </ul>
         </div>
     )

@@ -128,11 +128,15 @@ const OrganisationContainer = (props) => {
   // };
 
   const filterOrganisationListBasedOnTopPanelSearchInput = (inputValue, type) => {
+    console.log("Search Bar:", inputValue)
+    const value = inputValue;
     if (type === 'searchBarTopPanel' && inputValue.length > 0) {
       const filteredList = orgList.filter(item => {
         return item.name.toLowerCase().includes(inputValue.toLowerCase()) || item.primaryContactId.toLowerCase().includes(inputValue.toLowerCase())
+        // return item.name.toLowerCase().includes(inputValue.toLowerCase())
       });
-      setOrganisationList(filteredList);
+      console.log("Filtered List",filteredList);
+      setOrganisationList([...filteredList]);
     } else {
       setOrganisationList([...orgList]);
     }
@@ -178,6 +182,7 @@ const OrganisationContainer = (props) => {
   }
 
   const onSelectionOfDropdownValue = (index, type, value) => {
+    console.log("Type:", type);
     if (type === 'orgType') {
       setOrgTypeData([...setCheckedAndUnCheckedOfProvidedList(orgTypeData, index)]);
       setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, orgTypeData, index);
@@ -199,6 +204,9 @@ const OrganisationContainer = (props) => {
       setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else {
+      setQueryKey("");
+      setQueryValue("");
+      markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
       setOrgTypeData([...setCheckedAndUnCheckedOfProvidedList(orgTypeData)]);
     }
   };
@@ -224,7 +232,7 @@ const OrganisationContainer = (props) => {
           )}
           <Organisations
             {...props}
-            organisationList={orgList}
+            organisationList={organisationList}
             modifyOrg={updateOrgs}
             showModals={showModals}
             setShowModals={setShowModals}

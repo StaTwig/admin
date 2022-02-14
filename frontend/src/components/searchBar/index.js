@@ -10,18 +10,20 @@ const SearchBar = (props) => {
     const [ timer, setTimer] = useState();
 
     //debounce logic
-    useEffect(() => {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        setTimer(setTimeout(() => {
-            props.onChangeOfSearchInput(query, props.type);
-            props.setSuggItemIndex(-1)
-        }, debounceInterval));
-      }, [query]);
+    // useEffect(() => {
+    //     if (timer) {
+    //       clearTimeout(timer);
+    //     }
+    //     setTimer(setTimeout(() => {
+    //         props.onChangeOfSearchInput(e.target.value, props.type);
+    //         props.setSuggItemIndex(-1)
+    //     }, debounceInterval));
+    //   }, [query]);
     
     const handleOnChange = (e) => {
         setQuery(e.target.value);
+        console.log("Target Search:", e.target.value);
+        props.onChangeOfSearchInput(e.target.value, props.type);
     };
 
     return (
@@ -35,7 +37,7 @@ const SearchBar = (props) => {
                     placeholder={t('search')}
                     value={query}
                     onChange={handleOnChange}
-                    onKeyDown={(e) => props.handleSearcherInputKeyDown(e, props.type)}
+                    // onKeyDown={(e) => props.handleSearcherInputKeyDown(e, props.type)}
                     autoComplete="off"
                 />
                 <img src={SearchIcon} alt='searchIcon' id={props.type === 'searchBarTopPanel' 

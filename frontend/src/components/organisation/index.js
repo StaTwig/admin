@@ -34,7 +34,7 @@ const Organisations = (props) => {
     setShowDropDownForType
   } = props;
 
-  console.log("Organisation List:", organisationList);
+  // console.log("Organisation List:", organisationList);
 
 
 

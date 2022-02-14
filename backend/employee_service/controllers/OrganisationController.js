@@ -82,12 +82,20 @@ exports.getOrgs = [
           try {
             const employeeEmail = await EmployeeModel.findOne({
               id: users[c].primaryContactId,
-            }).select("emailId");
-            EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.emailId);
-            users[c].primaryContactId = employeeEmail.emailId;
+            }).select("emailId phoneNumber");
+            if(employeeEmail.emailId!=null){
+              EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.emailId);
+              users[c].primaryContactId = employeeEmail.emailId;
+            }
+            else{
+              EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.phoneNumber);
+              users[c].primaryContactId = employeeEmail.phoneNumber;
+            }
+
           } catch (err) {}
         }
       }
+      // console.log("Users", users);
       return apiResponse.successResponseWithData(
         res,
         "Organisation list",
