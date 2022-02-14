@@ -41,7 +41,7 @@ const PoChainOfCustody = (props) => {
                     op >= index && index !== 0 ? `col-5` : `col-10`
                   }`}
                 >
-                  <span className='font-weight-bold'>{r.status}</span>
+                  <span className='font-weight-bold'>t({r.status})</span>
                   {op === -1 && (
                     <div className='text-primary mt-2'>
                       <span className=' '>Order ID: </span>
