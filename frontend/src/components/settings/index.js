@@ -241,7 +241,7 @@ const Settings = (props) => {
   return (
     <>
       <div className='settings'>
-        <h1 className='breadcrumb'>SETTINGS</h1>
+        <h1 className='breadcrumb'>{t("settings")}</h1>
         <div className='card'>
           <div className='card-body'>
             <div className='mt-4'>
@@ -271,14 +271,14 @@ const Settings = (props) => {
                           : "nav-link text-secondary"
                       }
                     >
-                      Manage Alerts
+                      {t("manage")} {t("alerts")}
                     </div>
                   </li>
                 </ul>
               </div>
               <div className='subscription-type'>
                 <span className='subscription-alert-header-text'>
-                  {"Get alerts on mobile or Email"}
+                  {t("get_alerts_on")} {t("mobile")} {t("or")} {t("Email")}
                 </span>
                 <div className='subscription-alert-section'>
                   <input
@@ -295,7 +295,7 @@ const Settings = (props) => {
                     className='subscription-alert-label'
                     style={{ color: emailClicked ? "black" : "grey" }}
                   >
-                    {"Email"}
+                    {t("Email")}
                   </label>
                 </div>
                 <div className='subscription-alert-section'>
@@ -319,7 +319,7 @@ const Settings = (props) => {
                       color: smsClicked ? "black" : "grey",
                     }}
                   >
-                    {"Mobile SMS"} &nbsp;
+                    {t("mobile")} {"SMS"} &nbsp;
                     {disabledQuesMark && (
                       <span
                         onClick={() => {
@@ -334,7 +334,7 @@ const Settings = (props) => {
                   </label>
                   {mobileAlert && (
                     <p className='register-mobile-alert'>
-                      ( Please register Mobile Number to get alerts )
+                     {t("mobile_alert_msg")}
                     </p>
                   )}
                   <label
@@ -356,14 +356,14 @@ const Settings = (props) => {
                           : "#000000",
                       }}
                     >
-                      {"( Please register Mobile number to get alerts )"}
+                      {t("mobile_alert_msg")}
                     </p>
                   )}
                 </div>
               </div>
               <div className='alert-type'>
                 <span className='subscription-alert-header-text'>
-                  {"Select alerts Type"}
+                  {t("select")} {t("alerts")} {t("type")}
                 </span>
                 <div className='subscription-alert-section'>
                   <input
@@ -382,7 +382,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Orders Alerts"}
+                    {t("orders")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -417,7 +417,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Inventory Alerts"}
+                    {t("inventory")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -452,7 +452,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Shipment Alerts"}
+                    {t("shipment")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -480,7 +480,7 @@ const Settings = (props) => {
                     createNewAlert();
                   }}
                 >
-                  <span>Save</span>
+                  <span>{t("save")}</span>
                 </button>
               </div>
               {showModal && (
