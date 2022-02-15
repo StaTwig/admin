@@ -10,6 +10,7 @@ exports.responses = (language) => {
             supplier_not_defined: "Supplier not defined",
             receiver_not_defined: "Receiver not defined",
             created_order: "Created order",
+            invalid_excel: "Uploaded excel file is invalid",
         },
         ES: {
             po_status: "Por estado",
@@ -21,6 +22,7 @@ exports.responses = (language) => {
             supplier_not_defined: "Proveedor no definido",
             receiver_not_defined: "Receptor no definido",
             created_order: "Orden creado",
+            invalid_excel: "El archivo de Excel subido no es válido",
         }
     };
     const conf = resps[language || 'ES'];

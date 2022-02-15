@@ -31,6 +31,7 @@ const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const wrapper = require("../models/DBWrapper");
 const excel = require("node-excel-export");
+const { compareArrays } = require("../helpers/utility");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const po_stream_name = process.env.PO_STREAM;
@@ -127,7 +128,7 @@ exports.fetchPurchaseOrders = [
         permissionRequired: ["viewPO"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
-        if (permissionResult.success)  {
+        if (permissionResult.success) {
           let inboundPOs, outboundPOs, poDetails;
           try {
             if (poId != null) {
@@ -143,17 +144,17 @@ exports.fetchPurchaseOrders = [
                   poDetails = data;
                 }
               );
-              if(poDetails.length)
-              await Promise.all(
-                poDetails[0]?.products.map(async (element) => {
-                  const product = await ProductModel.findOne({
-                    $or: [{ name: element.id }, { id: element.id }],
-                  });
-                  element.unitofMeasure = product?.unitofMeasure;
-                  element.manufacturer = product?.manufacturer;
-                  element.type = product?.type;
-                })
-              );
+              if (poDetails.length)
+                await Promise.all(
+                  poDetails[0]?.products.map(async (element) => {
+                    const product = await ProductModel.findOne({
+                      $or: [{ name: element.id }, { id: element.id }],
+                    });
+                    element.unitofMeasure = product?.unitofMeasure;
+                    element.manufacturer = product?.manufacturer;
+                    element.type = product?.type;
+                  })
+                );
             } else {
               await userPurchaseOrders(
                 "supplier",
@@ -454,6 +455,53 @@ exports.addPOsFromExcel = [
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
       );
+
+      // Validate incoming Excel columns
+      const expectedColNames = req.user.preferredLanguage === "EN" ? [
+        'UNICEf PO Number',
+        'PO Item#',
+        'Vendor',
+        'Vendor Name',
+        'Document Date',
+        'Your Reference',
+        'Incoterms',
+        'Incoterms (Part 2)',
+        'Material',
+        'Material Description',
+        'Plant',
+        'Order Quantity',
+        'Order Unit',
+        'Unit Id',
+        'IP Code',
+        'IP Name'
+      ] : [
+          'UNICEf PO Número',
+          'PO Articulo#',
+          'Vendedor',
+          'Nombre Del Vendedor',
+          'Fecha Del Documento',
+          'Tu Referencia',
+          'Incoterms',
+          'Incoterms (Part 2)',
+          'Material',
+          'Material Descripción',
+          'Planta',
+          'Ordene La Cantidad',
+          'Unidad De Pedido',
+          'Unidad Id',
+          'IP Código',
+          'IP Nombre'
+        ];
+
+      if (!compareArrays(expectedColNames, Object.keys(data[0]))) {
+        // Invalid format logic
+        return apiResponse.validationErrorWithData(
+          res,
+          responses(req.user.preferredLanguage).invalid_excel,
+          Object.keys(data[0])
+        );
+      }
+
       const createdBy = req.user.id;
       let poDataArray = [];
       poDataArray = data.map((po) => {
