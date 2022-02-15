@@ -155,6 +155,8 @@
   "received": "Recibida",
   "fullyfulfilled":"Cumplida",
   "fullyfilled": "Cumplida",
+  "transit&fullyfulfilled": "Tránsito y cumplido",
+  "transit&partiallyfulfilled": "Tránsito y parcialmente cumplido",
   "transitfullyfilled": "Tránsito y cumplido",
   "transitpartiallyfilled": "Tránsito y parcialmente cumplido",
   "partiallyfilled": "Parcialmente cumplido",
