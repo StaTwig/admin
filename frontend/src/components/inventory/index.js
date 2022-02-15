@@ -365,11 +365,11 @@ const Inventory = (props) => {
                             {product.productName.length <= MAX_LENGTH ? (
                               <div>{product.productName}</div>
                             ) : (
-                              <div>{`${product.productName.substring(
-                                0,
-                                MAX_LENGTH
-                              )}...`}</div>
-                            )}
+                                <div>{`${product.productName.substring(
+                                  0,
+                                  MAX_LENGTH
+                                )}...`}</div>
+                              )}
                           </div>
 
                           {/* <p className="product">{product.productName}</p> */}
@@ -377,11 +377,11 @@ const Inventory = (props) => {
                             {t("quantity")} : {product.quantity}
                             <span>{"  ("}</span>
                             {product.unitofMeasure &&
-                            product.unitofMeasure.name ? (
-                              <span>{product.unitofMeasure.name}</span>
-                            ) : (
-                              ""
-                            )}
+                              product.unitofMeasure.name ? (
+                                <span>{product.unitofMeasure.name}</span>
+                              ) : (
+                                ""
+                              )}
                             <span>{")"}</span>
                           </h3>
                         </div>

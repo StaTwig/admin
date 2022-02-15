@@ -17,15 +17,16 @@ const ProductInventory = (props) => {
   const { products, inventories } = props;
   const [scrollX, setscrollX] = useState(0);
   const [scrolEnd, setscrolEnd] = useState(false);
+  const [outOfStockProducts, setOutOfStockProducts] = useState();
   const categoryArray = products
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
-  
 
   const categoryArrayNew = [
     (category ? category : products[0]?.type),
     ...categoryArray.filter((value) => value !== (category ? category : products[0]?.type)),
   ];
+
   useEffect(() => {
     if (props.match && props.match.params && props.match.params.category) {
       let prodArray = [];
@@ -42,13 +43,13 @@ const ProductInventory = (props) => {
     } else {
       setEnable(false);
       const inv = inventories.filter((r) => r.inventoryDetails.quantity <= 0);
-      setData(inventories.filter((r) => r.inventoryDetails.quantity <= 0));
+      setOutOfStockProducts(inv);
     }
   }, [inventories, props]);
   const changeType = (cat) => {
     setCategory(cat);
     let prodArray = [];
-    inventories.map((val) => {
+    outOfStockProducts.map((val) => {
       // if(val.payloadData.data.products){
       // val.payloadData.data.products.map((productRecord)=>{
       if (val.products.type === cat) {
@@ -59,6 +60,14 @@ const ProductInventory = (props) => {
     });
     setData(prodArray);
   };
+
+  // Initialize products list & category 
+  useEffect(() => {
+    if (!category && categoryArrayNew && outOfStockProducts) {
+      changeType(categoryArrayNew[0]);
+    }
+  });
+
   const ref = useRef(null);
 
   const scrollCheck = () => {
@@ -91,75 +100,73 @@ const ProductInventory = (props) => {
   function scrollingCategory() {
     return (
       <div className='main'>
-          <div
-            onScroll={scrollCheck}
-            style={{ overflowX: "scroll" }}
-            className='row ml-0 flex-nowrap'
-            ref={ref}
-          >
-            {categoryArrayNew.map((cat) => (
-              <div
-                className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
-                onClick={() => changeType(cat)}
-              >
-                <div className='flex flex-column'>
-                  <div className='picture'>
-                    <img
-                      src={
-                        (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
-                      }
-                      alt='truck'
-                    />
-                  </div>
-                  <div
-                    className={`pt-3 flex text-dark font-weight-bold ${
-                      (category ? category : products[0]?.type) === cat || `text-muted`
+        <div
+          onScroll={scrollCheck}
+          style={{ overflowX: "scroll" }}
+          className='row ml-0 flex-nowrap'
+          ref={ref}
+        >
+          {categoryArrayNew.map((cat) => (
+            <div
+              className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
+              onClick={() => changeType(cat)}
+            >
+              <div className='flex flex-column'>
+                <div className='picture'>
+                  <img
+                    src={
+                      (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
+                    }
+                    alt='truck'
+                  />
+                </div>
+                <div
+                  className={`pt-3 flex text-dark font-weight-bold ${(category ? category : products[0]?.type) === cat || `text-muted`
                     }`}
-                  >
-                    {cat}
-                  </div>
+                >
+                  {cat}
                 </div>
               </div>
-            ))}
-          </div>
-          <button className='toggle-button-right' onClick={() => scroll(+100)}>
-            <img src={Next} className='toggle-icon-next' alt='truck' />
-          </button>
-          <button className='toggle-button-left' onClick={() => scroll(-100)}>
-            <img src={Next} className='toggle-icon-back' alt='truck' />
-          </button>
+            </div>
+          ))}
         </div>
+        <button className='toggle-button-right' onClick={() => scroll(+100)}>
+          <img src={Next} className='toggle-icon-next' alt='truck' />
+        </button>
+        <button className='toggle-button-left' onClick={() => scroll(-100)}>
+          <img src={Next} className='toggle-icon-back' alt='truck' />
+        </button>
+      </div>
     )
   }
 
   function nonScrollingCategory() {
     return (
-      <div  className='row ml-0 flex-nowrap'>
-            {categoryArrayNew.map((cat) => (
-              <div
-                className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
-                onClick={() => changeType(cat)}
-              >
-                <div className='flex flex-column'>
-                  <div className='picture'>
-                    <img
-                      src={
-                        (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
-                      }
-                      alt='truck'
-                    />
-                  </div>
-                  <div
-                    className={`pt-3 flex text-dark font-weight-bold ${
-                      (category ? category : products[0]?.type) === cat || `text-muted`
-                    }`}
-                  >
-                    {cat}
-                  </div>
-                </div>
+      <div className='row ml-0 flex-nowrap'>
+        {categoryArrayNew.map((cat) => (
+          <div
+            className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
+            onClick={() => changeType(cat)}
+          >
+            <div className='flex flex-column'>
+              <div className='picture'>
+                <img
+                  src={
+                    (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
+                  }
+                  alt='truck'
+                />
               </div>
-            ))}
-        </div>
+              <div
+                className={`pt-3 flex text-dark font-weight-bold ${(category ? category : products[0]?.type) === cat || `text-muted`
+                  }`}
+              >
+                {cat}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     )
   }
 
@@ -185,13 +192,13 @@ const ProductInventory = (props) => {
                 alt='Add'
               />
               <span>
-                <b style={{textTransform: "uppercase"}} >{t('add_new_category')}</b>
+                <b style={{ textTransform: "uppercase" }} >{t('add_new_category')}</b>
               </span>
             </button>
           </Link>
         </div>
       </div>
-      {enable && categoryArrayNew.length > 5 ? scrollingCategory() : nonScrollingCategory() }
+      {enable && categoryArrayNew.length > 5 ? scrollingCategory() : nonScrollingCategory()}
       <div className='row'>
         <div className='p-2 mt-3 rounded full-width-ribbon'>
           <div className='row filter'>
