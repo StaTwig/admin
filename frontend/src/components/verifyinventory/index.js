@@ -29,6 +29,8 @@ const VerifyInventory = (props) => {
   const closeModal = () => {
     props.history.push("/inventory");
   };
+
+  console.log("Review Inventories:", reviewInventories);
   const onAssign = async () => {
     dispatch(turnOn());
 
@@ -137,6 +139,33 @@ const VerifyInventory = (props) => {
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
+              console.log(reviewInventory.expiryDate);
+              var expiryMonth;
+              var manufMonth;
+              if(reviewInventory.expiryDate.length==24){
+                manufMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.manufacturingDate)
+                  ).getMonth() + 1
+                }`
+                expiryMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.expiryDate)
+                  ).getMonth() + 1
+                }`
+              }
+              else{
+                manufMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.manufacturingDate)
+                  ).getDate()
+                }`
+                expiryMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.expiryDate)
+                  ).getDate()
+                }`
+              }
               return (
                 <div className='row p-1 mt-4' key={reviewInventory.productId}>
                   <span className='col-3' style={{ flex: "0 0 20%" }}>
@@ -171,9 +200,7 @@ const VerifyInventory = (props) => {
                   >
                     {reviewInventory.manufacturingDate
                       ? `0${
-                          new Date(
-                            Date.parse(reviewInventory.manufacturingDate)
-                          ).getMonth() + 1
+                          manufMonth
                         }`.slice(-2) +
                         "/" +
                         new Date(
@@ -188,7 +215,7 @@ const VerifyInventory = (props) => {
                     {reviewInventory.expiryDate
                       ? `0${
                           new Date(
-                            Date.parse(reviewInventory.expiryDate)
+                            expiryMonth
                           ).getMonth() + 1
                         }`.slice(-2) +
                         "/" +
