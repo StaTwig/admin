@@ -27,6 +27,7 @@ const ExcelPopUp = (props) => {
     const result = await addPOsFromExcel(formData);
     let arr = result.data.data;
     let notNullValues = 0;
+    if(arr && arr.length > 0)
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] != null) {
         notNullValues++;
@@ -113,7 +114,7 @@ const ExcelPopUp = (props) => {
           )}
           {openFailedPopup && (
             <Modal close={() => closeModalFailedPopUp()} size='modal-sm'>
-              <FailPopup onHide={closeModalFailedPopUp} t={t} />
+              <FailPopup onHide={closeModalFailedPopUp} message={t("something_went_wrong")} t={t} />
             </Modal>
           )}
         </div>
