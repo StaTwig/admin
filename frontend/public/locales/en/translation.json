@@ -355,6 +355,7 @@
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
   "sold":"Sold",
+  "expired_records_found": "expired record(s) found",
   "the_product":"The product",
   "not_found_in_inventory":"is not found in the inventory",
   "there_no_products_type":"There are no products belonging to type:",
