@@ -202,12 +202,13 @@ const Header = (props) => {
           if (resp.data.data.length > 0)
             props.history.push(`/viewproduct`, { data: resp.data.data[0] });
           else
-          alert(
-            `${t("the_product")} "${searchString}" ${t("not_found_in_inventory")}`
-          );
+            alert(
+              `${t("the_product")} "${searchString}" ${t("not_found_in_inventory")}`
+            );
         })
         .catch((err) => {
-          alert(err.response.data.message)});
+          alert(err.response.data.message)
+        });
     } else if (searchType === "productType") {
       axios
         .get(`${config().searchProduct}&productType=${searchString}`)
@@ -215,9 +216,9 @@ const Header = (props) => {
           if (resp.data.data.length > 0)
             props.history.push(`/productinventory/${searchString}`);
           else
-          alert(
-            `${t("there_no_products_type:")} "${searchString}" ${t("in_your_inventory")}`
-          );
+            alert(
+              `${t("there_no_products_type:")} "${searchString}" ${t("in_your_inventory")}`
+            );
         })
         .catch((err) => alert(err.response.data.message));
     }
@@ -237,15 +238,18 @@ const Header = (props) => {
     return state.user;
   });
 
-  if (profile?.photoId != null) {
-    getImage(profile?.photoId).then((r) => {
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data);
-      reader.onload = function () {
-        setImage(reader.result);
-      };
-    });
-  }
+  useEffect(() => {
+    if (profile?.photoId != null) {
+      getImage(profile?.photoId).then((r) => {
+        const reader = new window.FileReader();
+        reader.readAsDataURL(r.data);
+        reader.onload = function () {
+          setImage(reader.result);
+        };
+      });
+    }
+  }, [profile?.photoId])
+
 
   function changeNotifications(value, num) {
     turnOn();
@@ -331,7 +335,7 @@ const Header = (props) => {
     }
   };
   const onIcon = (event) => {
-      onSeach();
+    onSeach();
   };
   const imgs = config().fetchProfileImage;
   const search_placeholder =
@@ -424,11 +428,11 @@ const Header = (props) => {
                       label={search_placeholder}
                       margin="normal"
                       variant="outlined"
-                      sx={{width:"7rem"}}
+                      sx={{ width: "7rem" }}
                     />
                   )}
                 />
-                <Search className="Auto-search-icon" style={{  }} onClick={onIcon} />
+                <Search className="Auto-search-icon" style={{}} onClick={onIcon} />
               </div>
             </li>
             {/* Notification Icons */}
