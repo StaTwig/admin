@@ -359,6 +359,7 @@
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
   "sold":"Sold",
+  "expired_records_found": "expired record(s) found",
   "the_product":"The product",
   "not_found_in_inventory":"is not found in the inventory",
   "there_no_products_type":"There are no products belonging to type:",
@@ -372,5 +373,12 @@
   "cannot_be_empty":"Cannot be Empty",
   "check_batch_number":"Check Batch Number",
   "product_not_exist_inventory":"The product doesn't exist in this inventory",
-  "check":"Check"
+  "check":"Check",
+  "ordersoutbound": "ordersoutbound",
+  "ordersinbound": "ordersinbound",
+  "upload_image": "upload image",
+  "records_duplication":"Records not added due to duplication",
+  "transit&fullyfulfilled":"transit&fullyfulfilled",
+  "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No.",
+  "past_expiry": "Expiry Date cannot be in the past"
 }

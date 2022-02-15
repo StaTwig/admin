@@ -232,6 +232,7 @@ export const getShipmentsById = (query) => {
 export const createShipment = async (data) => {
   try {
     const result = await axios.post(config().createShipmentUrl, data);
+    console.log(result)
     return result.data.data;
   } catch (e) {
     return e.response;

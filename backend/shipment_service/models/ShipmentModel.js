@@ -52,6 +52,7 @@ const ShipmentSchema = new mongoose.Schema(
         rejectionRate: { type: Number, default: 0.0 },
         labelId: String,
         productCategory: String,
+        serialNumbersRange: { type: Array, default: [] },
         unitofMeasure: {
           id: { type: String },
           name: {
