@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Delete from "../../assets/icons/Delete.png";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import isBefore from "date-fns/isBefore";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import qty from "../../assets/icons/TotalInventoryAdded_2.png";
@@ -45,6 +45,8 @@ const EditRow = (props) => {
     productId,
     inventories,
     t,
+    setOpenFailInventory,
+    setInventoryError
   } = props;
   const [addMore, setAddMore] = useState(
     manufacturingDate || expiryDate || batchNumber || serialNumber
@@ -370,9 +372,14 @@ const EditRow = (props) => {
                     className='form-control text-center'
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
-                    onChange={(date) =>
-                      handleInventoryChange(idx, "expiryDate", date)
-                    }
+                    onChange={(date) =>{
+                      if(isBefore(date, new Date())){
+                        setInventoryError(t("past_expiry"));
+                        setOpenFailInventory(true);
+                        return;
+                      }
+                      handleInventoryChange(idx, "expiryDate", date);
+                    }}
                     selected={
                       expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate
                     }

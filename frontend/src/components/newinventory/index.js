@@ -315,6 +315,8 @@ const NewInventory = (props) => {
         handleCategoryChange={onCategoryChange}
         prods={products}
         t={t}
+        setOpenFailInventory={setOpenFailInventory}
+        setInventoryError={setInventoryError}
       />
 
       <div className='d-flex justify-content-between'>

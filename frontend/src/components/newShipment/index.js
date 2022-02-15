@@ -363,7 +363,8 @@ const NewShipment = (props) => {
               t: t,
             });
           } else {
-            setShipmentError(result.data.message);
+            
+            setShipmentError(result?.data?.message);
             setOpenShipmentFail(true);
             setErrorMessage("Create Shipment Failed");
           }
@@ -777,7 +778,18 @@ const NewShipment = (props) => {
                                   products_temp[i].name =
                                     result.products[i].productName;
                                   products_temp[i].productQuantity =
-                                    result.products[i].productQuantity 
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantity
+                                  ) -
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantityDelivered || 0
+                                  ) -
+                                  parseInt(
+                                    result.products[i]
+                                      .productQuantityTaggedSent || 0
+                                  );
                                   products_temp[i].type =
                                     result.products[i].productCategory;
                                   delete products_temp[i]
