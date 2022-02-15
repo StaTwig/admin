@@ -44,6 +44,7 @@ const ProductInventory = (props) => {
       setEnable(false);
       const inv = inventories.filter((r) => r.inventoryDetails.quantity <= 0);
       setOutOfStockProducts(inv);
+      setData(inv);
     }
   }, [inventories, props]);
   const changeType = (cat) => {
@@ -60,13 +61,6 @@ const ProductInventory = (props) => {
     });
     setData(prodArray);
   };
-
-  // Initialize products list & category 
-  useEffect(() => {
-    if (!category && categoryArrayNew && outOfStockProducts) {
-      changeType(categoryArrayNew[0]);
-    }
-  });
 
   const ref = useRef(null);
 
@@ -108,20 +102,20 @@ const ProductInventory = (props) => {
         >
           {categoryArrayNew.map((cat) => (
             <div
-              className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
+              className={`panel m-2 ${(category && category === cat) ? `active` : ``}`}
               onClick={() => changeType(cat)}
             >
               <div className='flex flex-column'>
                 <div className='picture'>
                   <img
                     src={
-                      (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
+                      (category && category === cat) ? TotalInventoryAdded : ProductSelected
                     }
                     alt='truck'
                   />
                 </div>
                 <div
-                  className={`pt-3 flex text-dark font-weight-bold ${(category ? category : products[0]?.type) === cat || `text-muted`
+                  className={`pt-3 flex text-dark font-weight-bold ${(category && category === cat) || `text-muted`
                     }`}
                 >
                   {cat}
@@ -145,20 +139,20 @@ const ProductInventory = (props) => {
       <div className='row ml-0 flex-nowrap'>
         {categoryArrayNew.map((cat) => (
           <div
-            className={`panel m-2 ${(category ? category : products[0]?.type) === cat && `active`}`}
+            className={`panel m-2 ${(category && category === cat) ? `active` : ``}`}
             onClick={() => changeType(cat)}
           >
             <div className='flex flex-column'>
               <div className='picture'>
                 <img
                   src={
-                    (category ? category : products[0]?.type) === cat ? TotalInventoryAdded : ProductSelected
+                    (category && category === cat) ? TotalInventoryAdded : ProductSelected
                   }
                   alt='truck'
                 />
               </div>
               <div
-                className={`pt-3 flex text-dark font-weight-bold ${(category ? category : products[0]?.type) === cat || `text-muted`
+                className={`pt-3 flex text-dark font-weight-bold ${(category && category === cat) || `text-muted`
                   }`}
               >
                 {cat}
