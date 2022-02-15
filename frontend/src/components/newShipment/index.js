@@ -813,11 +813,11 @@ const NewShipment = (props) => {
                                   ) -
                                   parseInt(
                                     result.poDetails[0].products[i]
-                                      .productQuantityShipped || 0
+                                      .productQuantityDelivered || 0
                                   ) -
                                   parseInt(
-                                    result.poDetails[0].products[i]
-                                      .productQuantityDelivered || 0
+                                    result.products[i]
+                                      .productQuantityTaggedSent || 0
                                   );
                                   products_temp[i].type =
                                     result.products[i].productCategory;
