@@ -3,6 +3,7 @@ const WarehouseModel = require("../models/WarehouseModel");
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const { responses } = require("../helpers/responses");
+const EmployeeModel = require("../models/EmployeeModel");
 
 exports.getOrganisations = [
   async (req, res) => {
@@ -26,9 +27,18 @@ exports.getWarehouses = [
   auth,
   async (req, res) => {
     try {
+      let existingWarehouses = ['NA'];
+      if (req.query.showNewWarehouses) {
+        // Fetch user and return only new warehouses
+        const user = await EmployeeModel.findOne({ id: req.user.id });
+
+        existingWarehouses = user.warehouseId;
+        existingWarehouses = existingWarehouses.concat(user.pendingWarehouseId);
+      }
       const organisations = await WarehouseModel.find({
         organisationId: req.query.id,
         status: "ACTIVE",
+        id: { $nin: existingWarehouses }
       });
       return apiResponse.successResponseWithData(
         res,

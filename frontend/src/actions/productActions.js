@@ -47,7 +47,7 @@ export const fetchAllRegions = async () => {
 
 export const fetchCountriesByRegion = async (id) => {
   try {
-    const result = await axios.get(config().fetchCountriesByRegion+id);
+    const result = await axios.get(config().fetchCountriesByRegion + id);
     return result.data;
   } catch (e) {
     return [];
@@ -55,7 +55,7 @@ export const fetchCountriesByRegion = async (id) => {
 };
 export const fetchStateByCountry = async (id) => {
   try {
-    const result = await axios.get(config().fetchStateByCountry+id);
+    const result = await axios.get(config().fetchStateByCountry + id);
     return result.data;
   } catch (e) {
     return [];
@@ -63,15 +63,15 @@ export const fetchStateByCountry = async (id) => {
 };
 export const fetchCitiesByState = async (id) => {
   try {
-    const result = await axios.get(config().fetchCitiesByState+id);
+    const result = await axios.get(config().fetchCitiesByState + id);
     return result.data;
   } catch (e) {
     return [];
   }
 };
-export const getWarehouseByOrgId = async (id) => {
+export const getWarehouseByOrgId = async (id, showNewWarehouses = false) => {
   try {
-    const result = await axios.get(config().getWarehouseByOrgId+id);
+    const result = await axios.get(config().getWarehouseByOrgId + id + `&showNewWarehouses=${showNewWarehouses}`);
     return result.data;
   } catch (e) {
     return [];
