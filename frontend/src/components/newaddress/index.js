@@ -56,6 +56,10 @@ const NewAddress = (props) => {
     let res = await fetchCountriesByRegion(id);
     setallCountries(res.data);
   };
+  // async function fetchAllState1(){
+  //   let res = await fetchStateByCountry(53);
+  //   setallState(res.data);
+  // };
   async function fetchAllCity1(id){
     let res = await fetchCitiesByState(id);
     setallCity(res.data);
@@ -69,7 +73,7 @@ const NewAddress = (props) => {
     dispatch(getWareHouses());
 
     async function fetchAllState1(){
-      let res = await fetchStateByCountry('53');
+      let res = await fetchStateByCountry(53);
       setallState(res.data);
     };
 
