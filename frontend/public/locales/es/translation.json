@@ -380,5 +380,6 @@
   "all_products_are_expired": "Todos los productos están vencidos",
   "shipmentinbound": "envío entrante",
   "shipmentoutbound": "envío saliente",
-  "sold":"Vendida"
+  "sold":"Vendida",
+  "expired_records_found": "registros vencidos encontrados"
 }

@@ -350,5 +350,6 @@
   "serial_number": "Serial Number",
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
-  "sold":"Sold"
+  "sold":"Sold",
+  "expired_records_found": "expired record(s) found"
 }
