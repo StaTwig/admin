@@ -1783,6 +1783,14 @@ exports.viewShipment = [
                 path: "$receiver.org",
               },
             },
+            {
+              $lookup: {
+                from: "records",
+                localField: "poId",
+                foreignField: "id",
+                as: "poDetails",
+              },
+            },
           ]);
           const Shipment = shipment.length ? shipment[0] : [];
           await asyncForEach(Shipment.products, async (element) => {
