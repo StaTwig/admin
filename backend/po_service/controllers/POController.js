@@ -1974,85 +1974,85 @@ function buildExcelReport(req, res, dataForExcel) {
 
   const specification = {
     id: {
-      displayName: "Order ID",
+      displayName: req.t("Order_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 120,
     },
     createdBy: {
-      displayName: "Order Created By",
+      displayName: req.t("Order_Created_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: "10",
     },
     supplierOrgId: {
-      displayName: "ORG ID - Creator",
+      displayName: req.t("ORG_ID_-_Creator"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiveIncharge: {
-      displayName: "Order Received By",
+      displayName: req.t("Order_Received_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiverOrg: {
-      displayName: "ORG ID - Receiver",
+      displayName: req.t("ORG_ID_-_Receiver"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productCategory: {
-      displayName: "Product Category",
+      displayName: req.t("Product_Category"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productName: {
-      displayName: "Product Name",
+      displayName: req.t("Product_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productId: {
-      displayName: "Product ID",
+      displayName: req.t("Product_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productQuantity: {
-      displayName: "Quantity",
+      displayName: req.t("Quantity"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     manufacturer: {
-      displayName: "Manufacturer",
+      displayName: req.t("Manufacturer"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgName: {
-      displayName: "Delivery Organization Name",
+      displayName: req.t("Delivery_Organization_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgId: {
-      displayName: "Delivery Organization ID",
+      displayName: req.t("Delivery_Organization_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgLocation: {
-      displayName: "Delivery Organization Location Details",
+      displayName: req.t("Delivery_Organization_Location_Details"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     status: {
-      displayName: "Status",
+      displayName: req.t("Status"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
@@ -2074,20 +2074,20 @@ function buildExcelReport(req, res, dataForExcel) {
 async function buildPdfReport(req, res, data, orderType) {
   const rows = [];
   rows.push([
-    { text: "Order Id", bold: true },
-    { text: "Order created By", bold: true },
-    { text: "Creator Org Id", bold: true },
-    { text: "Creator Org Name", bold: true },
-    { text: "ORG ID - Receiver", bold: true },
-    { text: "Product Category", bold: true },
-    { text: "Product Name", bold: true },
-    { text: "Product ID", bold: true },
-    { text: "Quantity", bold: true },
-    { text: "Manufacturer", bold: true },
-    { text: "Delivery Organization Name", bold: true },
-    { text: "Delivery Organization ID", bold: true },
-    { text: "Delivery Organization Location Details", bold: true },
-    { text: "Status", bold: true },
+    { text: req.t("Order_ID"), bold: true },
+    { text: req.t("Order_Created_By"), bold: true },
+    { text: req.t("Creator_Org_Id"), bold: true },
+    { text: req.t("Creator_Org_Name"), bold: true },
+    { text: req.t("ORG_ID_-_Receiver"), bold: true },
+    { text: req.t("Product_Category"), bold: true },
+    { text: req.t("Product_Name"), bold: true },
+    { text:  req.t("Product_ID"), bold: true },
+    { text: req.t("Quantity"), bold: true },
+    { text: req.t("Manufacturer"), bold: true },
+    { text: req.t("Delivery_Organization_Name"), bold: true },
+    { text: req.t("Delivery_Organization_ID"), bold: true },
+    { text: req.t("Delivery_Organization_Location_Details"), bold: true },
+    { text: req.t("Status"), bold: true },
   ]);
   for (let i = 0; i < data.length; i++) {
     let OrgName = await OrganisationModel.findOne({
@@ -2116,7 +2116,7 @@ async function buildPdfReport(req, res, data, orderType) {
     pageSize: "A3",
     pageOrientation: "landscape",
     content: [
-      { text: `${orderType} Purchase order`, fontSize: 34, style: "header" },
+      { text: req.t(`${orderType}_Purchase_order`), fontSize: 34, style: "header" },
       {
         table: {
           headerRows: 1,

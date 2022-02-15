@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 const OrdersContainer = (props) => {
   const [orders, setOrders] = useState([]);
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     (async () => {
       const result = await dispatch(getPOs());
@@ -25,7 +25,7 @@ const OrdersContainer = (props) => {
       <div className='d-flex'>
         <Sidebar {...props} t={t} />
         <div className='content'>
-          <Orders orders={orders} setOrders={setOrders} {...props} t={t} />
+          <Orders orders={orders} setOrders={setOrders} {...props} i18n={i18n} t={t} />
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ import { config } from "../../config";
 import { isAuthenticated } from "../../utils/commonHelper";
 import { useDispatch } from "react-redux";
 const Orders = (props) => {
-  const { t } = props;
+  const { t, i18n } = props;
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
@@ -445,7 +445,7 @@ const Orders = (props) => {
     setExportFilterData([
       { key: "excel", value: "excel", label: t("excel"), checked: false },
       { key: "pdf",   value: "pdf", label: t("pdf"), checked: false },
-      { key: "email", value: "mail", label: t("mail"), checked: false },
+      // { key: "email", value: "mail", label: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
   }, []);
@@ -516,7 +516,7 @@ const Orders = (props) => {
 
     if (visible === "one") {
       nameOfFile =
-        "ordersoutbound" +
+        t("ordersoutbound") +
         today.getFullYear().toString() +
         "/" +
         (today.getMonth() + 1).toString() +
@@ -524,7 +524,7 @@ const Orders = (props) => {
         today.getDate().toString();
     } else if (visible === "two") {
       nameOfFile =
-        "ordersinbound" +
+        t("ordersinbound") +
         today.getFullYear() +
         "/" +
         (today.getMonth() + 1) +
@@ -532,7 +532,7 @@ const Orders = (props) => {
         today.getDate();
     }
 
-    getExportFile(url).then((response) => {
+    getExportFile(url, value, i18n.language).then((response) => {
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {
