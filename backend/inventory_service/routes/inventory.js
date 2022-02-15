@@ -136,7 +136,6 @@ router.post(
 );
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
-router.get("/trackProduct", InventoryController.trackProduct);
 router.get("/searchProduct", InventoryController.searchProduct);
 router.get(
   "/getsearchsuggestions",
@@ -146,10 +145,7 @@ router.get(
   "/fetchBatchesOfInventory",
   InventoryController.fetchBatchesOfInventory
 );
-router.get(
-  "/reduceBatch",
-  InventoryController.reduceBatch
-);
+router.get("/reduceBatch", InventoryController.reduceBatch);
 router.post(
   "/addInventoriesFromExcel",
   upload.single("excel"),

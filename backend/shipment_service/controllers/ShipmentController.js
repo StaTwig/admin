@@ -2022,16 +2022,16 @@ exports.updateTrackingStatus = [
   auth,
   async (req, res) => {
     try {
-      const data = req.body;
-      data.shipmentUpdates.updatedOn = date.format(
-        new Date(),
-        "DD/MM/YYYY HH:mm"
-      );
-      data.shipmentUpdates.updatedBy = req.user.id;
-      data.shipmentUpdates.status = "UPDATED";
+      const data = JSON.parse(req.body.shipmentUpdates);
+      const Upload = await uploadFile(req.file);
+      await unlinkFile(req.file.path);
+      data.imageId = Upload.key;
+      data.updatedOn = new Date().toISOString();
+      data.updatedBy = req.user.id;
+      data.status = "UPDATED";
       const shipment = await ShipmentModel.findOneAndUpdate(
         { id: req.body.id },
-        { $push: { shipmentUpdates: data.shipmentUpdates } }
+        { $push: { shipmentUpdates: data } }
       );
       const event_data = {
         eventID: cuid(),
