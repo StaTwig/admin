@@ -32,7 +32,6 @@ const UpdateStatus = (props) => {
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
-  const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [shipment, setShipment] = useState({});
   const [count, setCount] = useState("");
@@ -91,23 +90,22 @@ const UpdateStatus = (props) => {
     if (value.target.id === "toggle1") setLoader(true);
     else if (value.target.id === "toggle2") setLoaderC(true);
     else if (value.target.id === "toggle3") setLoaderL(true);
-    const data = {
-      id: id,
-      shipmentUpdates: {
-        updateComment:
-          value.target.id === "toggle1"
-            ? "Acceptance Date"
-            : value.target.id === "toggle2"
-            ? "Customs clearance Date"
-            : "Last Status",
-        updatedBy: profile.firstName,
-        orgid: profile.organisation,
-        orglocation: profile.location,
-        updatedAt: "InTransit",
-        isAlertTrue: true,
-      },
-    };
-    const result = await updateTrackingStatus(data);
+    const updateComment =
+      value.target.id === "toggle1"
+        ? "Acceptance Date"
+        : value.target.id === "toggle2"
+        ? "Customs clearance Date"
+        : "Last Status";
+    const formData = new FormData();
+    formData.append("photo", photo, photo.name);
+    formData.append("id", id);
+    formData.append("updateComment", updateComment);
+    formData.append("updatedBy", profile.firstName);
+    formData.append("orgId", profile.organisation);
+    formData.append("orgLocation", profile.location);
+    formData.append("updatedAt", "InTransit");
+    formData.append("isAlertTrue", true);
+    const result = await updateTrackingStatus(formData);
     if (result.status === 200) {
       setTimeout(() => {
         if (value.target.id === "toggle1")
@@ -147,10 +145,7 @@ const UpdateStatus = (props) => {
   const uploadPhoto = async () => {
     const formData = new FormData();
     formData.append("photo", photo, photo.name);
-    const result = await uploadImage(id, formData);
-    if (result.status === 200) {
-      setMessage("Image Uploaded");
-    }
+    await uploadImage(id, formData);
   };
 
   const updateStatus = async (values) => {
@@ -162,21 +157,16 @@ const UpdateStatus = (props) => {
     const formData = new FormData();
     formData.append("photo", photo, photo.name);
     formData.append("id", shipmentId);
-    formData.append(
-      "shipmentUpdates",
-      JSON.stringify({
-        updateComment: comment,
-        updatedBy: profile.firstName,
-        orgid: profile.organisation,
-        orglocation: profile.location,
-        updatedAt: updateStatusLocation,
-        isAlertTrue: true,
-      })
-    );
+    formData.append("updateComment", comment);
+    formData.append("updatedBy", profile.id);
+    formData.append("orgId", profile.organisation);
+    formData.append("orgLocation", profile.location);
+    formData.append("updatedAt", updateStatusLocation);
+    formData.append("isAlertTrue", true);
+
     const result = await updateTrackingStatus(formData);
     if (result.status === 200) {
       setOpenUpdatedStatus(true);
-      setMessage("Status updated Successfully");
     } else {
       setOpenShipmentFail(true);
       setErrorMessage("Failed to Update");
@@ -260,7 +250,7 @@ const UpdateStatus = (props) => {
                         <div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Airway Bill No
+                              {t("airway_bill")}
                             </label>
                             <input
                               type='text'
@@ -272,7 +262,7 @@ const UpdateStatus = (props) => {
                           </div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Quantity
+                              {t("quantity")}
                             </label>
                             <input
                               type='text'
@@ -284,7 +274,7 @@ const UpdateStatus = (props) => {
                           </div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Weight
+                              {t("weight")}
                             </label>
                             <input
                               type='text'
@@ -571,9 +561,7 @@ const UpdateStatus = (props) => {
                                 style={{
                                   fontSize: "14px",
                                   resize: "none",
-                                  //borderBottom: "none",
                                   marginTop: "40px",
-                                  //marginBottom:"10px"
                                 }}
                                 type='text'
                                 className='form-control'
@@ -774,9 +762,7 @@ const UpdateStatus = (props) => {
                                 style={{
                                   fontSize: "14px",
                                   resize: "none",
-                                  //borderBottom: "none",
                                   marginTop: "40px",
-                                  //marginBottom:"10px"
                                 }}
                                 type='text'
                                 className='form-control'
@@ -834,25 +820,13 @@ const UpdateStatus = (props) => {
         )}
       </Formik>
       {openUpdatedStatus && (
-        <Modal
-          close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <SuccessPopup
-            onHide={closeModal} //FailurePopUp
-            t={t}
-          />
+        <Modal close={() => closeModal()} size='modal-sm'>
+          <SuccessPopup onHide={closeModal} t={t} />
         </Modal>
       )}
       {openShipmentFail && (
-        <Modal
-          close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <FailPopup
-            onHide={closeModalFail}
-            t={t} //FailurePopUp
-          />
+        <Modal close={() => closeModalFail()} size='modal-sm'>
+          <FailPopup onHide={closeModalFail} t={t} />
         </Modal>
       )}
     </div>

@@ -184,7 +184,7 @@
   "deliver_to": "Deliver To",
   "select_delivery_location": "Select Delivery Location",
   "reviesuccessw_order": "Review Order",
-  "": "Success",
+  "success": "Success",
   "check_product_quantity": "Check product quantity",
   "check_product_category": "Check Product Category",
   "check_product_type": "Check Product Type",
@@ -312,7 +312,6 @@
   "Pincode": "Pincode",
   "Request_Admin_For_Approval": "Request Admin For Approval",
   "Cancel": "Cancel",
-  "Success": "Success",
   "Request_Successfully_Sent_for_Approval": "Request Successfully Sent for Approval",
   "OK": "OK",
   "language": "Language",
@@ -350,5 +349,7 @@
   "serial_number": "Serial Number",
   "shipmentinbound": "shipmentinbound",
   "shipmentoutbound": "shipmentoutbound",
-  "sold": "Sold"
+  "sold": "Sold",
+  "airway_bill": "Airway Bill Number",
+  "weight": "Weight"
 }

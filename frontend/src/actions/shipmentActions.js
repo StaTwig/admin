@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { config } from "../config";
 import {
   GET_SHIPMENTS_FAILURE,
@@ -371,12 +370,21 @@ export const uploadImage = async (id, formData) => {
 
 export const fetchImage = async (id) => {
   try {
-    const configObject = config();
-    const url = configObject.fetchImage + id;
-    const result = await axios.get(url);
-    return result;
+    const result = await axios.get(config().fetchImage + id);
+    return result?.data?.data;
   } catch (e) {
-    return e.response;
+    return [];
+  }
+};
+
+export const getImage = async (id) => {
+  try {
+    const result = await axios.get(config().getImage + "/" + id, {
+      responseType: "blob",
+    });
+    return result.data;
+  } catch (e) {
+    return null;
   }
 };
 

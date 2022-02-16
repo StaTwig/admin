@@ -380,5 +380,7 @@
   "all_products_are_expired": "Todos los productos están vencidos",
   "shipmentinbound": "envío entrante",
   "shipmentoutbound": "envío saliente",
-  "sold":"Vendida"
+  "sold": "Vendida",
+  "airway_bill": "Numero de embarque aereo",
+  "weight": "Peso"
 }
