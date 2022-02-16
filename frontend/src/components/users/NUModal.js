@@ -41,13 +41,10 @@ const NUModal = (props) => {
 
   // Enabling next button on validation
   useEffect(() => {
-    console.log("UseEffect - ", data?.role, data?.emailId, data?.phoneNumber);
     var flag = false;
     // Email or Phone should exist
     if (data?.emailId) {
-      console.log("Email ", data?.emailId);
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(data?.emailId)) {
-        console.log("Email triggered!");
         flag = true;
       }
     } else {
@@ -128,7 +125,6 @@ const NUModal = (props) => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log("Values - ", values);
           setSubmitting(false);
           onSuccess();
         }}

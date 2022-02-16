@@ -60,16 +60,16 @@ const DashBoardContainer = (props) => {
     dispatch(getWareHouses());
     async function loadData() {
 
-      try{
+      try {
         const result = await getLocationApproval();
         result.data.sort(function (a, b) {
           return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
         });
-  
-        console.log('GetLocationApproval',result.data);
+
+        console.log('GetLocationApproval', result.data);
         setLocationApprovals(result.data);
       }
-      catch(err){
+      catch (err) {
         console.log('Error from Location Appoval', error);
       }
     }
@@ -86,8 +86,14 @@ const DashBoardContainer = (props) => {
 
   const acceptApproval = async (data) => {
     let result;
-    if (data?.emailId) result = await addOrgUser(data);
-    else result = await verifyOrgUser(data);
+    if (!data?.id) {
+      console.log("New user fired!");
+      result = await addOrgUser(data);
+    }
+    else {
+      console.log("Approve user fired!");
+      result = await verifyOrgUser(data);
+    }
     if (result.status == 200) {
       if (data.rindex) reqPending.splice(data.rindex, 1);
       setMessage(result.data.message);
@@ -169,7 +175,7 @@ const DashBoardContainer = (props) => {
       }, 3000);
     }
   };
-  
+
   const redirectToConfigurationPage = () => {
     props.history.push(`/configuration`);
   };
