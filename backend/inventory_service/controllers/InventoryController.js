@@ -2881,7 +2881,7 @@ exports.reduceBatch = [
       const { batchNumber, quantity } = req.query;
       const batch = await AtomModel.findOneAndUpdate(
         {
-          batchNumbers: batchNumber,
+          batchNumbers: {$in:[batchNumber]},
         },
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
@@ -2891,7 +2891,7 @@ exports.reduceBatch = [
       });
 
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId },
+        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
       );
 
