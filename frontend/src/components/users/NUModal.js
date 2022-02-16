@@ -119,6 +119,10 @@ const NUModal = (props) => {
           // ) {
           //   errors.email = "Invalid email address";
           // }
+          if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            errors.email = 'Invalid email address';
+          }
+
           if (!values.role) {
             errors.role = t('Required');
           }
@@ -158,7 +162,7 @@ const NUModal = (props) => {
                     type="text"
                     name="email"
                     id="email"
-                    className={`form-control ${errors.email ? "border-danger" : ""
+                    className={`form-control ${errors.email && touched.email ? "border-danger" : ""
                       }`}
                     placeholder={t('enter_email')}
                     readOnly={data?.ref != undefined ? true : false}
