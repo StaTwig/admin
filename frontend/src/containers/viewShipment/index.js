@@ -3,7 +3,6 @@ import ViewShipment from "../../components/viewShipment";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { getViewShipment } from "../../actions/shipmentActions";
-import { useDispatch } from "react-redux";
 import { chainOfCustody, fetchImage } from "../../actions/shipmentActions";
 import { useTranslation } from "react-i18next";
 
@@ -13,39 +12,27 @@ const ViewGMRShipmentContainer = (props) => {
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] =
     useState([]);
   const [imagesData, setImagesData] = useState([]);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
-      const result = await dispatch(getViewShipment(props.match.params.id));
-      if (result) {
-        setTrackData(result);
+      const trackResult = await getViewShipment(props.match.params.id);
+      if (trackResult.success) {
+        setTrackData(trackResult.data);
       } else {
         setTrackData({});
       }
-    }
-    fetchData();
-  }, [dispatch, props.match.params.id]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const result = await chainOfCustody(props.match.params.id);
-      if (result && result?.status === 200) {
+      const shipmentResult = await chainOfCustody(props.match.params.id);
+      console.log("SHIPMENT RESUlT", shipmentResult);
+      if (shipmentResult.success) {
         setShippmentChainOfCustodyData(
-          result.data.data["shipmentChainOfCustody"]
+          shipmentResult.data["shipmentChainOfCustody"]
         );
       } else {
         setShippmentChainOfCustodyData([]);
       }
-    }
-    fetchData();
-  }, [props.match.params.id]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const result = await fetchImage(props.match.params.id);
-      if (result?.status === 200) {
-        setImagesData(result.data.data);
+      const imageResult = await fetchImage(props.match.params.id);
+      if (imageResult.success) {
+        setImagesData(imageResult.data);
       } else {
         setImagesData([]);
       }
