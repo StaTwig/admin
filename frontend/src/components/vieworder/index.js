@@ -68,7 +68,7 @@ const ViewOrder = (props) => {
         <h1 className='breadcrumb'>{t("view_order")}</h1>
 
         {order?.supplier?.supplierOrganisation === user?.organisationId &&
-        order.poStatus === "CREATED" ? (
+          order.poStatus === "CREATED" ? (
           <div className='d-flex'>
             {isEnabled && (
               <>
@@ -90,9 +90,8 @@ const ViewOrder = (props) => {
                     {t("reject_order")}
                   </button>
                 </Link>
-                
               </>
-              )}
+            )}
             <Link to={`/orders`}>
               <button className='btn btn-outline-primary mt-2'>
                 <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
@@ -202,20 +201,40 @@ const ViewOrder = (props) => {
                     {order.customer?.country}
                   </span>
                 </div> */}
-                <div className='w-100'></div>
-                <div className='col row col-6 mt-3'>
+                <div className='w-100 mt-3'></div>
+                <div className='col row'>
                   <span className='col-4'>{t("delivery_location")}</span>
-                  <span className=' col ml-2 text-dark '>
+                  <span className=' col text-dark '>
                     {order &&
-                    order.customer &&
-                    order.customer.warehouse &&
-                    order.customer.warehouse.warehouseAddress
+                      order.customer &&
+                      order.customer.warehouse &&
+                      order.customer.warehouse.warehouseAddress
                       ? order.customer.warehouse.title +
-                        " / " +
-                        order.customer.warehouse.warehouseAddress.firstLine +
-                        " " +
-                        order.customer.warehouse.warehouseAddress.city
+                      " / " +
+                      order.customer.warehouse.warehouseAddress.firstLine +
+                      " " +
+                      order.customer.warehouse.warehouseAddress.city
                       : null}
+                  </span>
+                </div>
+
+                <div className='col row'>
+                  <span className='col-4'>{t("country")}</span>
+                  <span className=' col text-dark '>
+                    {order &&
+                      order.customer &&
+                      Boolean(order.customer?.country) ? order.customer?.country : ""
+                    }
+                  </span>
+                </div>
+
+                <div className='w-100 mt-3'></div>
+                <div className='col row col-6'>
+                  <span className='col-4'>{t("region")}</span>
+                  <span className=' col text-dark '>
+                    {order &&
+                      order.customer &&
+                      order.customer.region}
                   </span>
                 </div>
               </div>
@@ -231,46 +250,46 @@ const ViewOrder = (props) => {
               let pr = order.productDetails.filter(d => product.productId === d.id);
               let prd = pr.length > 0 ? pr[0] : {};
               let uom = prd?.unitofMeasure ? typeof prd?.unitofMeasure === "string" ? JSON.parse(prd?.unitofMeasure) : prd?.unitofMeasure : product.unitofMeasure;
-              return(
-              <div
-                className={`bg-white shadow padding-added ${
-                  index >= 0 ? "mb-5 mr-4" : ""
-                  } `}
-                style={{ width: "27%" }}
-                key={index}
-              >
-                <span className=' p-1 font-weight-normal text-primary '>
-                  {product.name}
-                </span>
-                <div className='row  p-1'>
-                  <span className='col'>{t("product_id")}</span>
-                  <span className=' col text-dark '>{product.productId}</span>
-                </div>
-                <div className='row  p-1'>
-                  <span className='col'>{t("product_category")}</span>
-                  <span className=' col text-dark '>{prd?.type ? prd?.type : product.type}</span>
-                </div>
-                <div className='row  p-1'>
-                  <span className='col'>{t("manufacturer")}</span>
-                  <span className=' col text-dark '>
-                    {prd.manufacturer ? prd.manufacturer : product.manufacturer}
+              return (
+                <div
+                  className={`bg-white shadow padding-added ${index >= 0 ? "mb-5 mr-4" : ""
+                    } `}
+                  style={{ width: "27%" }}
+                  key={index}
+                >
+                  <span className=' p-1 font-weight-normal text-primary '>
+                    {product.name}
                   </span>
-                </div>
-                <div className='row  p-1'>
-                  <span className='col'>{t("quantity")}</span>
-                  <span className=' col text-dark '>
-                    {product.productQuantity}
-                    <span>{"("}</span>
-                    {uom ? (
-                      <span>{uom.name}</span>
-                    ) : (
+                  <div className='row  p-1'>
+                    <span className='col'>{t("product_id")}</span>
+                    <span className=' col text-dark '>{product.productId}</span>
+                  </div>
+                  <div className='row  p-1'>
+                    <span className='col'>{t("product_category")}</span>
+                    <span className=' col text-dark '>{prd?.type ? prd?.type : product.type}</span>
+                  </div>
+                  <div className='row  p-1'>
+                    <span className='col'>{t("manufacturer")}</span>
+                    <span className=' col text-dark '>
+                      {prd.manufacturer ? prd.manufacturer : product.manufacturer}
+                    </span>
+                  </div>
+                  <div className='row  p-1'>
+                    <span className='col'>{t("quantity")}</span>
+                    <span className=' col text-dark '>
+                      {product.productQuantity}
+                      <span>{"("}</span>
+                      {uom ? (
+                        <span>{uom.name}</span>
+                      ) : (
                         ""
                       )}
-                    <span>{")"}</span>
-                  </span>
+                      <span>{")"}</span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )})}
+              )
+            })}
           </div>
         </div>
       </div>
