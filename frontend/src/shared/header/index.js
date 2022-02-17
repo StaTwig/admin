@@ -6,7 +6,6 @@ import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
-import Spinner from "../../components/spinner/index.js";
 import "./Header.css";
 import { Avatar, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { MenuOutlined, Search } from "@mui/icons-material";
@@ -236,17 +235,12 @@ const Header = (props) => {
     // setInvalidSearch(true);
   };
   const profile = useSelector((state) => {
-    console.log("profile USE SELECTOR", state.user);
     return state.user;
   });
   useEffect(() => {
     if (profile?.photoId != null) {
-      getImage(profile?.photoId).then((r) => {
-        const reader = new window.FileReader();
-        reader.readAsDataURL(r.data);
-        reader.onload = function () {
-          setImage(reader.result);
-        };
+      getImage(profile?.photoId).then((result) => {
+        setImage(result.data);
       });
     }
   }, [profile]);
@@ -780,7 +774,7 @@ const Header = (props) => {
                     outline: "5px solid #ddd",
                     outlineOffset: "1px",
                   }}
-                  src={`${image}`}
+                  src={image}
                 ></Avatar>
               </IconButton>
               <Menu

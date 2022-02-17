@@ -1,32 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
-import { config } from "../../config";
-import { getAddress } from "../../utils/commonHelper";
+import { getImage } from "../../actions/shipmentActions";
+import { getAddress, asyncForEach } from "../../utils/commonHelper";
 
 const ChainOfCustody = (props) => {
   const { t } = props;
-  const configObject = config();
-  // const [imageUrl,setImageUrl] = useState(configObject.getImage);
-  const imageUrl = configObject.getImage;
-  const list = [];
-
-  for (const [i, image] of props.imagesData.entries()) {
-    list.push(
-      <img
-        className='mr-3'
-        height='150'
-        width='150'
-        src={imageUrl + image}
-        alt='ImageURL'
-      ></img>
-    );
-    if (i === 1) break;
-  }
-
   const [op, setOp] = useState("");
   const shipmentData = props.shipments[0];
+
+  const loadImage = (image) => {
+    let img = null;
+    getImage(image).then((res) => {
+      img = res.data;
+    });
+    return img;
+  };
+
   return Object.keys(props.shipments).length === 0 || !props.shipments ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -145,8 +136,7 @@ const ChainOfCustody = (props) => {
             </div>
           </div>
         ) : (
-          <div>
-            {" "}
+          <div key={index}>
             {custody.status === "RECEIVED" ? (
               <div className='row mb-3' key={index}>
                 <div></div>
@@ -157,7 +147,7 @@ const ChainOfCustody = (props) => {
                       ? t("delivered")
                       : t("shipped")}
                   </div>
-                  <div className='col panel  chain chainpanle'>
+                  <div className='col panel chain chainpanle'>
                     <div className='row justify-content-between'>
                       <div className='col'>
                         <div>
@@ -225,7 +215,16 @@ const ChainOfCustody = (props) => {
                           <h6 className='poheads potext mt-3 mb-3'>
                             {t("uploaded_image")}
                           </h6>
-                          {list}
+                          {custody?.image ? (
+                            <img
+                              src={custody.image}
+                              alt='Shipment Update'
+                              className='img-fluid'
+                              width={400}
+                            />
+                          ) : (
+                            <strong>N / A</strong>
+                          )}
                         </div>
                       </div>
                     ) : null}
@@ -263,7 +262,7 @@ const ChainOfCustody = (props) => {
                   <div className='color mb-3'>
                     {custody.status === "UPDATED" ? "UPDATED" : "UPDATED"}
                   </div>
-                  <div className='col panel  chain chainpanle'>
+                  <div className='col panel chain chainpanle'>
                     <div className='row justify-content-between'>
                       <div className='col'>
                         <div>
@@ -286,7 +285,7 @@ const ChainOfCustody = (props) => {
                             {" "}
                             {t("organisation_name")}{" "}
                           </span>
-                          <span className='w-75'>{custody.orgid}</span>
+                          <span className='w-75'>{custody?.orgId}</span>
                         </div>
                         <div className=' d-flex flex-row p-1'>
                           <span className='w-75 text-secondary'>
@@ -320,7 +319,16 @@ const ChainOfCustody = (props) => {
                           <h6 className='poheads potext mt-3 mb-3'>
                             {t("uploaded_image")}
                           </h6>
-                          {list}
+                          {custody?.image ? (
+                            <img
+                              src={custody.image}
+                              alt='Shipment Update'
+                              className='img-fluid mx-auto'
+                              width={400}
+                            />
+                          ) : (
+                            <strong>N / A</strong>
+                          )}
                         </div>
                       </div>
                     ) : null}

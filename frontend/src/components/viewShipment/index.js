@@ -104,7 +104,6 @@ const Tracing = (props) => {
             setHighLight={setHighLight}
             t={t}
           />
-
           <h6 className='heading mt-4 mb-3'>{t("product_list")}</h6>
           <ProductList
             shipments={tracking}
@@ -114,6 +113,18 @@ const Tracing = (props) => {
             setMenuProduct={setMenuProduct}
             t={t}
           />
+          {props.imagesData.length > 0 && (
+            <>
+              <h6 className='heading mt-4 mb-3'>{t("images")}</h6>
+              <div className='col panel commonpanle mb-3'>
+                {props.imagesData.map((value, index) => (
+                  <div className='col-sm' key={index}>
+                    <img src={value} className='img-fluid p-1' alt='Shipment' />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <div className='col-sm-8'>
           <div className='row mb-4 mt-0'>
