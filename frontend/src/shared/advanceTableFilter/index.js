@@ -1140,7 +1140,6 @@ const AdvanceTableFilter = (props) => {
                         options={props.productCategories}
                         getOptionLabel={(options) => options.value}
                         onChange={(e, newValue) => {
-                          console.log(newValue);
                           setInventoryProductCategoryFilterOnSelect(
                             newValue.value
                           );

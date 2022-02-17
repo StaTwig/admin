@@ -101,7 +101,6 @@ const Header = (props) => {
     const response = await axios.get(
       `${config().getSuggestions}?searchString=${e}`
     );
-    console.log(response, "response from search API");
     setOptions([...response.data.data]);
     setSearchString(options[0]?._id);
     setSearchType(options[0]?.type);
@@ -164,7 +163,6 @@ const Header = (props) => {
   }
 
   const onSeach = async () => {
-    console.log("OnSeach", searchType);
     if (search.substring(0, 2) === "SH") {
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
@@ -199,7 +197,6 @@ const Header = (props) => {
       axios
         .get(`${config().searchProduct}&productName=${searchString}`)
         .then((resp) => {
-          console.log("response from search product:", searchProduct);
           if (resp.data.data.length > 0)
             props.history.push(`/viewproduct`, { data: resp.data.data[0] });
           else
@@ -411,7 +408,6 @@ const Header = (props) => {
                     onSearchChange(newInputValue);
                   }}
                   onChange={(event, newValue) => {
-                    console.log("event:", event);
                     onSearchChange(newValue);
                     onSeach();
                   }}
