@@ -51,15 +51,15 @@ export function config() {
       imgDomainUrl: `${TEST_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -98,15 +98,15 @@ export function config() {
       imgDomainUrl: `${TEST_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     prod: {
       sendOtpUrl: `${PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -145,15 +145,15 @@ export function config() {
       imgDomainUrl: `${PROD_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -193,10 +193,10 @@ export function config() {
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -235,12 +235,12 @@ export function config() {
       imgDomainUrl: `${ABINBEV_PROD_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-     
+
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
   };
 
