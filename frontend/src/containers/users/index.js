@@ -195,7 +195,12 @@ const addresses = useSelector((state) => {
   }
 
   const onSelectionOfDropdownValue = (index, type, value) => {
-    if (type === 'role') {
+    if(type === 'clear'){
+      setQueryValue();
+      setQueryKey();
+      markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
+    }
+    else if (type === 'role') {
       setRoleData([...setCheckedAndUnCheckedOfProvidedList(roleData, index)]);
       setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, roleData, index);
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
@@ -281,6 +286,7 @@ export default UserContainer;
 
 function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
   if(data[index].checked) {
+    console.log(data[index]);
     setQueryValue(value);
     setQueryType(type);
   } else {
