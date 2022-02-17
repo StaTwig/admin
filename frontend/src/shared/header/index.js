@@ -241,7 +241,7 @@ const Header = (props) => {
   useEffect(() => {
     if (profile?.photoId != null) {
       getImage(profile?.photoId).then((r) => {
-        const reader = new window.FileReader();
+        const reader = new FileReader();
         reader.readAsDataURL(r.data);
         reader.onload = function () {
           setImage(reader.result);
