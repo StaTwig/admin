@@ -32,7 +32,7 @@ const EmployeeSchema = new mongoose.Schema(
     photoId: {
       type: String,
       required: false,
-      default: "/images/user.svg",
+      default: "default.jpg",
     },
     phoneNumber: { type: String, required: false, default: "" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },
