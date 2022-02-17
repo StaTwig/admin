@@ -31,8 +31,8 @@ const OrganisationPopUp = (props) => {
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region, setregion] = useState("Americas");
-  const [country, setcountry] = useState("Costa Rica");
+  const [region, setregion] = useState("");
+  const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [allregions, setallregions] = useState([]);
