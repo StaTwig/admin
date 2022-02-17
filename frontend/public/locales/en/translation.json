@@ -103,6 +103,10 @@
   "user_notification": "User Notifications",
   "new": "New",
   "alerts": "Alerts",
+  "manage": "Manage",
+  "get_alerts_on": "Get alerts on",
+  "mobile": "Mobile",
+  "mobile_alert_msg":"Please register Mobile Number to get alerts",
   "transactions": "Transactions",
   "ago": "Ago",
   "no_notifications": "No Notifications",
@@ -374,5 +378,7 @@
   "ordersinbound": "ordersinbound",
   "upload_image": "upload image",
   "records_duplication":"Records not added due to duplication",
+  "transit&fullyfulfilled":"transit&fullyfulfilled",
+  "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No.",
   "past_expiry": "Expiry Date cannot be in the past"
 }

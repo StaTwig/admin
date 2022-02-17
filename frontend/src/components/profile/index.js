@@ -95,12 +95,12 @@ class Profile extends React.Component {
       });
     }
     const item = this.state.organisation.split("/")[1];
-    const wareHouseResponse = await getWarehouseByOrgId(item);
-    console.log(wareHouseResponse)
+    const wareHouseResponse = await getWarehouseByOrgId(item, true);
+    console.log("Warehouse response - ", wareHouseResponse)
     if (wareHouseResponse.status === 1 || wareHouseResponse.success) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
-      console.log(wareHouseAddresses)
+      console.log("Warehouse addresses - ", wareHouseAddresses);
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: response.data.data.warehouses.filter(
@@ -266,13 +266,13 @@ class Profile extends React.Component {
                       alt="ProfilePhoto"
                     />
                   ) : (
-                    <img
-                      name="photo"
-                      src={`${image}`}
-                      className="rounded rounded-circle"
-                      alt="ProfilePhoto"
-                    />
-                  )}
+                      <img
+                        name="photo"
+                        src={`${image}`}
+                        className="rounded rounded-circle"
+                        alt="ProfilePhoto"
+                      />
+                    )}
                 </div>
                 <input
                   id="profile"
@@ -296,8 +296,8 @@ class Profile extends React.Component {
                     {t("change_photo")}
                   </button>
                 ) : (
-                  ""
-                )}
+                    ""
+                  )}
               </div>
               <div className="col-8 mt-5">
                 {editMode ? (
@@ -453,34 +453,34 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] === "ACTIVE" && (
-                                    <Link
-                                      to={{
-                                        pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
-                                        state: {
-                                          editMode: this.state.editMode,
-                                        },
-                                      }}
-                                    >
-                                      <button
-                                        className="btn-edit fontSize20 pl-2 pr-10"
-                                        style={{
-                                          height: "35px",
-                                          width: "100px",
+                                      <Link
+                                        to={{
+                                          pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
+                                          state: {
+                                            editMode: this.state.editMode,
+                                          },
                                         }}
                                       >
-                                        <img
-                                          src={Pen}
-                                          width="15"
-                                          height="15"
-                                          className="mr-2"
-                                          alt="Edit"
-                                        />
-                                        <span className="font-weight-bold edit-text">
-                                          {t("edit")}
-                                        </span>
-                                      </button>
-                                    </Link>
-                                  )}
+                                        <button
+                                          className="btn-edit fontSize20 pl-2 pr-10"
+                                          style={{
+                                            height: "35px",
+                                            width: "100px",
+                                          }}
+                                        >
+                                          <img
+                                            src={Pen}
+                                            width="15"
+                                            height="15"
+                                            className="mr-2"
+                                            alt="Edit"
+                                          />
+                                          <span className="font-weight-bold edit-text">
+                                            {t("edit")}
+                                          </span>
+                                        </button>
+                                      </Link>
+                                    )}
                                   {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -490,10 +490,10 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] !== "ACTIVE" && (
-                                    <span className="font-weight-bold badge badge-danger">
-                                      {t("approval_pending")}
-                                    </span>
-                                  )}
+                                      <span className="font-weight-bold badge badge-danger">
+                                        {t("approval_pending")}
+                                      </span>
+                                    )}
                                 </div>
                               </div>
                               <div className="card-body">
@@ -587,187 +587,187 @@ class Profile extends React.Component {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <div className="col">
-                      <div className="row role">
-                        {this.state.role ? (
-                          <span>{this.state.role}</span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
-                      </div>
-                      <div
-                        className="row mb-3"
-                        style={{ fontSize: "35px", fontWeight: "600" }}
-                      >
-                        {this.state.firstName ? (
-                          <span>{this.state.firstName}</span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
+                    <div>
+                      <div className="col">
+                        <div className="row role">
+                          {this.state.role ? (
+                            <span>{this.state.role}</span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
+                        <div
+                          className="row mb-3"
+                          style={{ fontSize: "35px", fontWeight: "600" }}
+                        >
+                          {this.state.firstName ? (
+                            <span>{this.state.firstName}</span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
                         &nbsp;
                         {this.state.lastName ? (
-                          <span>{this.state.lastName}</span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
-                      </div>
-                      <div className="row date-joined">
-                        {this.state.signup_date ? (
-                          <span>
-                            {t("joined_on")}{" "}
-                            {moment(this.state.signup_date).format(
-                              "Do MMMM YYYY"
-                            ) === "Invalid date"
-                              ? this.state.signup_date
-                              : moment(this.state.signup_date).format(
+                            <span>{this.state.lastName}</span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
+                        <div className="row date-joined">
+                          {this.state.signup_date ? (
+                            <span>
+                              {t("joined_on")}{" "}
+                              {moment(this.state.signup_date).format(
+                                "Do MMMM YYYY"
+                              ) === "Invalid date"
+                                ? this.state.signup_date
+                                : moment(this.state.signup_date).format(
                                   "Do MMMM YYYY"
                                 )}
-                          </span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
+                            </span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
+                        <div className="row row-list">
+                          <img
+                            src={Briefcase}
+                            width="20"
+                            height="20"
+                            className="mr-3"
+                            alt="Organisation"
+                          />
+                          {this.state.organisation ? (
+                            <span>{this.state.organisation.split("/")[0]}</span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
+                        <div className="row row-list">
+                          <img
+                            src={Mail}
+                            width="20"
+                            height="20"
+                            className="mr-3"
+                            alt="Address"
+                          />
+                          {this.props.user.emailId ? (
+                            <span>{this.props.user.emailId}</span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
+                        <div className="row row-list">
+                          <img
+                            src={Telephone}
+                            width="20"
+                            height="20"
+                            className="mr-3"
+                            alt="Phone Number"
+                          />
+                          {this.state.phoneNumber ? (
+                            <span>
+                              +{this.state.phoneNumber.replaceAll("+", "")}
+                            </span>
+                          ) : (
+                              <span>N/A</span>
+                            )}
+                        </div>
                       </div>
-                      <div className="row row-list">
-                        <img
-                          src={Briefcase}
-                          width="20"
-                          height="20"
-                          className="mr-3"
-                          alt="Organisation"
-                        />
-                        {this.state.organisation ? (
-                          <span>{this.state.organisation.split("/")[0]}</span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
+                      <div className="col mt-5">
+                        <div className="row location">{t("my_locations")}</div>
                       </div>
-                      <div className="row row-list">
-                        <img
-                          src={Mail}
-                          width="20"
-                          height="20"
-                          className="mr-3"
-                          alt="Address"
-                        />
-                        {this.props.user.emailId ? (
-                          <span>{this.props.user.emailId}</span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
-                      </div>
-                      <div className="row row-list">
-                        <img
-                          src={Telephone}
-                          width="20"
-                          height="20"
-                          className="mr-3"
-                          alt="Phone Number"
-                        />
-                        {this.state.phoneNumber ? (
-                          <span>
-                            +{this.state.phoneNumber.replaceAll("+", "")}
-                          </span>
-                        ) : (
-                          <span>N/A</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="col mt-5">
-                      <div className="row location">{t("my_locations")}</div>
-                    </div>
-                    <div
-                      className="row"
-                      style={{ width: "50vw", overflow: "hidden" }}
-                    >
-                      {Object.keys(this.state.warehouseLocations).map((id) => {
-                        return (
-                          <div className="col">
-                            <div className="location-cards mt-1">
-                              <div className="custom-card p-3">
-                                <div className="card-header">
-                                  <div className="d-flex align-items-center justify-content-between">
-                                    <h3
-                                      className="card-title font-weight-bold"
-                                      style={{ fontSize: "18px" }}
-                                    >
-                                      {
-                                        this.state.warehouseLocations[id][
-                                          "title"
-                                        ]
-                                      }
-                                      <div
-                                        style={{
-                                          fontSize: "15px",
-                                          fontWeight: "400",
-                                        }}
+                      <div
+                        className="row"
+                        style={{ width: "50vw", overflow: "hidden" }}
+                      >
+                        {Object.keys(this.state.warehouseLocations).map((id) => {
+                          return (
+                            <div className="col">
+                              <div className="location-cards mt-1">
+                                <div className="custom-card p-3">
+                                  <div className="card-header">
+                                    <div className="d-flex align-items-center justify-content-between">
+                                      <h3
+                                        className="card-title font-weight-bold"
+                                        style={{ fontSize: "18px" }}
                                       >
                                         {
                                           this.state.warehouseLocations[id][
-                                            "id"
+                                          "title"
                                           ]
                                         }
-                                      </div>
-                                    </h3>
-                                    {this.state.warehouseLocations[id][
-                                      "status"
-                                    ] !== "ACTIVE" && (
-                                      <div className="font-weight-bold badge badge-danger ml-3">
-                                        {t("approval_pending")}
-                                      </div>
-                                    )}
+                                        <div
+                                          style={{
+                                            fontSize: "15px",
+                                            fontWeight: "400",
+                                          }}
+                                        >
+                                          {
+                                            this.state.warehouseLocations[id][
+                                            "id"
+                                            ]
+                                          }
+                                        </div>
+                                      </h3>
+                                      {this.state.warehouseLocations[id][
+                                        "status"
+                                      ] !== "ACTIVE" && (
+                                          <div className="font-weight-bold badge badge-danger ml-3">
+                                            {t("approval_pending")}
+                                          </div>
+                                        )}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="card-body">
-                                  <div className="total">
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.city && (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.city
-                                        }
-                                      </span>
-                                    )}
+                                  <div className="card-body">
+                                    <div className="total">
+                                      {this.state.warehouseLocations[id]
+                                        .warehouseAddress.city && (
+                                          <span>
+                                            {
+                                              this.state.warehouseLocations[id]
+                                                .warehouseAddress.city
+                                            }
+                                          </span>
+                                        )}
 
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.state && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.state
-                                        }
-                                      </span>
-                                    )}
+                                      {this.state.warehouseLocations[id]
+                                        .warehouseAddress.state && (
+                                          <span>
+                                            ,
+                                            {
+                                              this.state.warehouseLocations[id]
+                                                .warehouseAddress.state
+                                            }
+                                          </span>
+                                        )}
 
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.country && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.country
-                                        }
-                                      </span>
-                                    )}
-                                  </div>
+                                      {this.state.warehouseLocations[id]
+                                        .warehouseAddress.country && (
+                                          <span>
+                                            ,
+                                            {
+                                              this.state.warehouseLocations[id]
+                                                .warehouseAddress.country
+                                            }
+                                          </span>
+                                        )}
+                                    </div>
 
-                                  <div className="full-address">
-                                    {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.firstLine ? (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.firstLine
-                                        }
-                                      </span>
-                                    ) : (
-                                      <span>N/A</span>
-                                    )}
-                                  </div>
-                                  {/* <div className="full-address">
+                                    <div className="full-address">
+                                      {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
+                                      {this.state.warehouseLocations[id]
+                                        .warehouseAddress.firstLine ? (
+                                          <span>
+                                            {
+                                              this.state.warehouseLocations[id]
+                                                .warehouseAddress.firstLine
+                                            }
+                                          </span>
+                                        ) : (
+                                          <span>N/A</span>
+                                        )}
+                                    </div>
+                                    {/* <div className="full-address">
                                    
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.secondLine ? (
@@ -779,29 +779,29 @@ class Profile extends React.Component {
                                       </span>
                                     ) : null}
                                       </div>*/}
-                                  <div className="pin-code">
-                                    {t("pincode")} :{" "}
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.zipCode ? (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.zipCode
-                                        }
-                                      </span>
-                                    ) : (
-                                      <span>N/A</span>
-                                    )}
+                                    <div className="pin-code">
+                                      {t("pincode")} :{" "}
+                                      {this.state.warehouseLocations[id]
+                                        .warehouseAddress.zipCode ? (
+                                          <span>
+                                            {
+                                              this.state.warehouseLocations[id]
+                                                .warehouseAddress.zipCode
+                                            }
+                                          </span>
+                                        ) : (
+                                          <span>N/A</span>
+                                        )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
               {!editMode ? (
                 // <div>
@@ -822,26 +822,26 @@ class Profile extends React.Component {
                   <span>{t("edit")}</span>
                 </button>
               ) : (
-                // </div>
-                <div
-                  className="d-flex flex-row justify-content-between"
-                  style={{ position: "relative", left: -100 }}
-                >
-                  <button
-                    className="buttonS btn btn-outline-primary mr-2"
-                    onClick={this.onCancel}
+                  // </div>
+                  <div
+                    className="d-flex flex-row justify-content-between"
+                    style={{ position: "relative", left: -100 }}
                   >
-                    <span>{t("cancel")}</span>
-                  </button>
-                  <button
-                    className="buttonS btn-orange btn"
-                    onClick={this.onSubmit}
-                  >
-                    {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}>  */}
-                    <span>{t("save")}</span>
-                  </button>
-                </div>
-              )}
+                    <button
+                      className="buttonS btn btn-outline-primary mr-2"
+                      onClick={this.onCancel}
+                    >
+                      <span>{t("cancel")}</span>
+                    </button>
+                    <button
+                      className="buttonS btn-orange btn"
+                      onClick={this.onSubmit}
+                    >
+                      {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}>  */}
+                      <span>{t("save")}</span>
+                    </button>
+                  </div>
+                )}
               <div className="">
                 {this.state.message && (
                   <Modal1

@@ -134,9 +134,11 @@ const NewInventory = (props) => {
               ? validationVariable
               : validationVariable.toLocaleDateString()
           )
-        ).getMonth() + 1
+        ).getMonth() + 1 
       }`.slice(-2);
       let d = todayDate.substring(0, 2);
+      a = a.toString();
+      console.log("A B C D", a, b , c,d);
       if (a < b || (a === b && c <= d)) {
         setInventoryError("Check expiryDate");
         setOpenFailInventory(true);

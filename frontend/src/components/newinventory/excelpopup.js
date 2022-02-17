@@ -9,7 +9,7 @@ import { turnOn, turnOff } from "../../actions/spinnerActions";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 
 const ExcelPopUp = (props) => {
-  const { t , setOpenExcel, setOpenFailInventory, setInventoryError} = props;
+  const { t, setOpenExcel, setOpenFailInventory, setInventoryError } = props;
   const [excel, setExcel] = useState(null);
   const dispatch = useDispatch();
 
@@ -25,19 +25,22 @@ const ExcelPopUp = (props) => {
     if (result.status === 200 && result.data.data?.length !== 0) {
       dispatch(setReviewinventories(result.data.data));
       props.history.push("/reviewinventory");
-    } else if(result.status === 200 && result.data.data?.length === 0) {
+    } else if (result.status === 200 && result.data.data?.length === 0) {
       setOpenExcel(false);
       setInventoryError('all_products_are_expired');
       setOpenFailInventory(true);
     }
-    if(result.status === 500){
+    if (result.status === 400) {
+      props.importError(result.data.message);
+    }
+    if (result.status === 500) {
       props.importError(result.data.message);
     }
     dispatch(turnOff());
   };
   return (
     <div className='excelpopup col'>
-      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? {height: '200px'} : {height: '220px'}}>
+      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? { height: '200px' } : { height: '220px' }}>
         <img
           src={uploadBlue}
           name='photo'
@@ -50,7 +53,7 @@ const ExcelPopUp = (props) => {
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='row' style={{position: 'relative'}}
+        <div className='row' style={{ position: 'relative' }}
         >
           <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
             display: "block",

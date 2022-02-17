@@ -191,15 +191,18 @@ const NewOrder = (props) => {
 
   const onOrgTypeChange = async (value) => {
     try {
+      console.log("Values from Organisation Type change:", value);
       const region = await getRegions(value);
+      console.log("Regions:", region);
       const rr = region.data.map((v) => {
         return {
           value: v,
           label: v,
         };
       });
+      console.log("rr");
       setReceiverWarehousesRegion(rr);
-      onCountryChange('Costa Rica');
+      onCountryChange(value, 'Costa Rica');
     } catch (err) {
       setErrorMessage(err);
     }
@@ -221,9 +224,11 @@ const NewOrder = (props) => {
     }
   };
 
-  const onCountryChange = async (idd) => {
+  const onCountryChange = async (type, idd) => {
     try {
-      const org = await getOrganizations(orgType, idd);
+      console.log("from function:", orgType);
+      console.log("id from function:", idd);
+      const org = await getOrganizations(type, idd);
       setOrgDetails(org.data);
       const oo = org.data.map((v) => {
         return {
@@ -679,121 +684,18 @@ const NewOrder = (props) => {
                             setFieldValue("toOrgLoc", "");
                             setFieldValue("toOrgLocRegion", "");
                             setFieldValue("toOrgLocCountry", "");
+                            setOrgType("");
                             setOrgType(v.label);
                             onOrgTypeChange(v.label);
+                            console.log("OrgType from dropdown:", v.label);
                           }}
                           options={orgTypes}
                           noOptionsMessage={() => t("no_options")}
                         />
-                        {/* {errors.rtype && touched.rtype && (
-                            <span className="error-msg text-danger">{errors.rtype}</span>
-                          )} */}
                       </div>
                     </div>
                   </div>
                 </div>
-
-                {/* <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='delLocation'>
-                        {t("region")}*
-                      </label>
-                      <div
-                        className={`line ${
-                          errors.toOrgLocRegion && touched.toOrgLocRegion
-                            ? "border-danger"
-                            : ""
-                        }`}
-                      >
-                        <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
-                          placeholder={
-                            <div className='select-placeholder-text'>
-                              {t("select_delivery_location")}
-                            </div>
-                          }
-                          value={
-                            values.toOrgLocRegion === ""
-                              ? t("select_delivery_location")
-                              : {
-                                  value: values.toOrgLocRegion,
-                                  label: values.toOrgRegion,
-                                }
-                          }
-                          defaultInputValue={values.toOrgRegion}
-                          onChange={(v) => {
-                            setFieldValue("toOrgRegion", v.label);
-                            setFieldValue("toOrgLocRegion", v.value);
-                            setRegion(v.label);
-                            onRegionChange(v.label);
-                            setFieldValue("toOrg", "");
-                            setFieldValue("toOrgName", "");
-                            setFieldValue("toOrgCountry", "");
-                            // setFieldValue("toOrgRegion", "");
-                            setFieldValue("toOrgLoc", "");
-                            // setFieldValue("toOrgLocRegion", "");
-                            setFieldValue("toOrgLocCountry", "");
-                          }}
-                          isDisabled={values.rtypeName === ""}
-                          options={receiverWarehousesRegion}
-                          noOptionsMessage={() => t("no_options")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='delLocation'>
-                        {t("country")}*
-                      </label>
-                      <div
-                        className={`line ${
-                          errors.toOrgLocCountry && touched.toOrgLocCountry
-                            ? "border-danger"
-                            : ""
-                        }`}
-                      >
-                        <Select
-                          placeholder={
-                            <div className='select-placeholder-text'>
-                              {t("select_delivery_location")}
-                            </div>
-                          }
-                          value={
-                            values.toOrgLocCountry === ""
-                              ? t("select_delivery_location")
-                              : {
-                                  value: values.toOrgLocCountry,
-                                  label: values.toOrgCountry,
-                                }
-                          }
-                          defaultInputValue={values.toOrgCountry}
-                          onChange={(v) => {
-                            setFieldValue("toOrgCountry", v.label);
-                            setFieldValue("toOrgLocCountry", v.value);
-                            setCountry(v.label);
-                            onCountryChange(v.label);
-                            setFieldValue("toOrg", "");
-                            setFieldValue("toOrgName", "");
-                            // setFieldValue("toOrgCountry", "");
-                            // setFieldValue("toOrgRegion", "");
-                            setFieldValue("toOrgLoc", "");
-                            // setFieldValue("toOrgLocRegion", "");
-                            // setFieldValue("toOrgLocCountry", "");
-                          }}
-                          isDisabled={values.rtypeName === ""}
-                          options={receiverWarehousesCountry}
-                          noOptionsMessage={() => t("no_options")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='name form-group'>
@@ -840,6 +742,7 @@ const NewOrder = (props) => {
                             //   const selOrg = orgDetails.filter((value) => {
                             //     return value.name==v.label;
                             // });
+                            console.log("Organisation Name:", v);
                             setFieldValue("toOrg", v.value);
                             setFieldValue("toOrgName", v.label);
                             onOrgChange(v.value);

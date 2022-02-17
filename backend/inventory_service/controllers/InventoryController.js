@@ -842,6 +842,30 @@ exports.addInventoriesFromExcel = [
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
 
+          // Validate excel format
+          // I'm not sure how to put camel case field names in spanish so only validating english
+          const expectedColNames = [
+            'productName',
+            'manufacturerName',
+            'quantity',
+            'unitOfMeasure.name',
+            'manufacturingDate',
+            'expiryDate',
+            'storageConditionsMax',
+            'batchNumber',
+            'serialNumber',
+            'storageConditionsMin',
+            'orderID'
+          ];
+          if (!utility.compareArrays(expectedColNames, Object.keys(data[0]))) {
+            // Invalid format logic
+            return apiResponse.validationErrorWithData(
+              res,
+              responses(req.user.preferredLanguage).invalid_excel,
+              Object.keys(data[0])
+            );
+          }
+
           const resData = utility.excludeExpireProduct(data);
 
           const { address } = req.user;
@@ -865,9 +889,8 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                  inventoriesFound.serialNumber
-                }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                  }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -2858,7 +2881,7 @@ exports.reduceBatch = [
       const { batchNumber, quantity } = req.query;
       const batch = await AtomModel.findOneAndUpdate(
         {
-          batchNumbers: batchNumber,
+          batchNumbers: {$in:[batchNumber]},
         },
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
@@ -2868,7 +2891,7 @@ exports.reduceBatch = [
       });
 
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId },
+        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
       );
 
