@@ -23,6 +23,17 @@ const member = async (key, value) => {
   });
 };
 
+const get = async (key) => {
+  return new Promise((resolve, reject) => {
+    client.get(key, (err, reply) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(reply);
+    });
+  });
+};
+
 const checkPermissions = async (request, next) => {
   try {
     const required_permission = request["permissionRequired"];
@@ -72,7 +83,30 @@ const checkPermissionAwait = async (request) => {
     return false;
   }
 };
+
+const getImageURL = async (key) => {
+  try {
+    const result = await get(key);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const setImageURL = async (key, value) => {
+  try {
+    const result = await client.set(key, value, "EX", 3600);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 module.exports = {
   checkPermissions: checkPermissions,
   checkPermissionAwait: checkPermissionAwait,
+  getImageURL: getImageURL,
+  setImageURL: setImageURL,
 };

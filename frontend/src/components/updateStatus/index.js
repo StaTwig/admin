@@ -28,13 +28,10 @@ const UpdateStatus = (props) => {
   const { id } = props.match.params;
   const billNo = shipmentData?.airWayBillNo;
   const { quantity, weight } = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [organisationName, setOrganisationName] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
-  const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [shipment, setShipment] = useState({});
   const [count, setCount] = useState("");
@@ -93,23 +90,22 @@ const UpdateStatus = (props) => {
     if (value.target.id === "toggle1") setLoader(true);
     else if (value.target.id === "toggle2") setLoaderC(true);
     else if (value.target.id === "toggle3") setLoaderL(true);
-    const data = {
-      id: id,
-      shipmentUpdates: {
-        updateComment:
-          value.target.id === "toggle1"
-            ? "Acceptance Date"
-            : value.target.id === "toggle2"
-            ? "Customs clearance Date"
-            : "Last Status",
-        updatedBy: profile.firstName,
-        orgid: profile.organisation,
-        orglocation: profile.location,
-        updatedAt: "InTransit",
-        isAlertTrue: true,
-      },
-    };
-    const result = await updateTrackingStatus(data);
+    const updateComment =
+      value.target.id === "toggle1"
+        ? "Acceptance Date"
+        : value.target.id === "toggle2"
+        ? "Customs clearance Date"
+        : "Last Status";
+    const formData = new FormData();
+    formData.append("photo", photo, photo.name);
+    formData.append("id", id);
+    formData.append("updateComment", updateComment);
+    formData.append("updatedBy", profile.firstName);
+    formData.append("orgId", profile.organisation);
+    formData.append("orgLocation", profile.location);
+    formData.append("updatedAt", "InTransit");
+    formData.append("isAlertTrue", true);
+    const result = await updateTrackingStatus(formData);
     if (result.status === 200) {
       setTimeout(() => {
         if (value.target.id === "toggle1")
@@ -149,10 +145,7 @@ const UpdateStatus = (props) => {
   const uploadPhoto = async () => {
     const formData = new FormData();
     formData.append("photo", photo, photo.name);
-    const result = await uploadImage(id, formData);
-    if (result.status === 200) {
-      setMessage("Image Uploaded");
-    }
+    await uploadImage(id, formData);
   };
 
   const updateStatus = async (values) => {
@@ -161,21 +154,19 @@ const UpdateStatus = (props) => {
     if (updateStatusLocation === "") {
       setErrorMessage("Require Update Status Location");
     }
-    const data = {
-      id: shipmentId,
-      shipmentUpdates: {
-        updateComment: comment,
-        updatedBy: profile.firstName,
-        orgid: profile.organisation,
-        orglocation: profile.location,
-        updatedAt: updateStatusLocation,
-        isAlertTrue: true,
-      },
-    };
-    const result = await updateTrackingStatus(data);
+    const formData = new FormData();
+    formData.append("photo", photo, photo.name);
+    formData.append("id", shipmentId);
+    formData.append("updateComment", comment);
+    formData.append("updatedBy", profile.id);
+    formData.append("orgId", profile.organisation);
+    formData.append("orgLocation", profile.location);
+    formData.append("updatedAt", updateStatusLocation);
+    formData.append("isAlertTrue", true);
+
+    const result = await updateTrackingStatus(formData);
     if (result.status === 200) {
       setOpenUpdatedStatus(true);
-      setMessage("Status updated Successfully");
     } else {
       setOpenShipmentFail(true);
       setErrorMessage("Failed to Update");
@@ -195,20 +186,7 @@ const UpdateStatus = (props) => {
   };
   return (
     <div className='updateStatus'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t("update_status")}</h1>
-        {/* <div className="d-flex">
-          <button className="btn btn-primary font-weight-bold">
-            <img
-              src={uploadWhite}
-              width="20"
-              height="17"
-              className="mr-2 mb-1"
-            />
-            <span>Upload</span>
-          </button>
-        </div> */}
-      </div>
+      <h1 className='breadcrumb m-3'>{t("update_status")}</h1>
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -225,19 +203,12 @@ const UpdateStatus = (props) => {
         }}
         validate={(values) => {
           const errors = {};
-
           if (!values.shipmentId) {
             errors.shipmentId = t("Required");
           }
           if (!values.updateStatusLocation) {
             errors.updateStatusLocation = t("Required");
           }
-          // if (!values.comments) {
-          //   errors.comments = "Required";
-          // }
-          // if (!values.alerttrue) {
-          //   errors.alerttrue = "Required";
-          // }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -253,7 +224,11 @@ const UpdateStatus = (props) => {
           handleBlur,
           handleSubmit,
         }) => (
-          <form onSubmit={handleSubmit} className='mb-3'>
+          <form
+            onSubmit={handleSubmit}
+            className='mb-3'
+            encType='multipart/form-data'
+          >
             <div className='card bg-light border-0'>
               <div className='card-body'>
                 <div className='row justify-content-between'>
@@ -275,7 +250,7 @@ const UpdateStatus = (props) => {
                         <div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Airway Bill No
+                              {t("airway_bill")}
                             </label>
                             <input
                               type='text'
@@ -287,7 +262,7 @@ const UpdateStatus = (props) => {
                           </div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Quantity
+                              {t("quantity")}
                             </label>
                             <input
                               type='text'
@@ -299,7 +274,7 @@ const UpdateStatus = (props) => {
                           </div>
                           <div className='form-group'>
                             <label className='mt-3 text-secondary'>
-                              Weight
+                              {t("weight")}
                             </label>
                             <input
                               type='text'
@@ -324,9 +299,8 @@ const UpdateStatus = (props) => {
                           type='text'
                           className='form-control mb-2'
                           name='firstName'
-                          onChange={(e) => setFirstName(e.target.value)}
                           value={profile.firstName}
-                          readonly
+                          readOnly
                         />
                       </div>
                       <div className='form-group'>
@@ -337,26 +311,10 @@ const UpdateStatus = (props) => {
                           type='text'
                           className='form-control mb-2'
                           name='organisationName'
-                          onChange={(e) => setOrganisationName(e.target.value)}
                           value={profile.organisation}
-                          readonly
+                          readOnly
                         />
                       </div>
-                      {/* <div className="form-group">
-                        <label className="mb-1 text-secondary">
-                          Organisation Location*
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="organisationLocation"
-                          onChange={(e) =>
-                            setOrganisationLocation(e.target.value)
-                          }
-                          value={profile.location}
-                          readonly
-                        />
-                      </div> */}
                       <div className='form-group mb-0'>
                         <label className='mb-1 text-secondary'>
                           {t("update_status") + " " + t("location")}
@@ -401,7 +359,6 @@ const UpdateStatus = (props) => {
                               type='text'
                               className='form-control mb-2'
                               name='acceptanceDate'
-                              onChange={(e) => console.log(e.target.value)}
                               value={acceptanceDate}
                               style={{
                                 border: "0px",
@@ -604,9 +561,7 @@ const UpdateStatus = (props) => {
                                 style={{
                                   fontSize: "14px",
                                   resize: "none",
-                                  //borderBottom: "none",
                                   marginTop: "40px",
-                                  //marginBottom:"10px"
                                 }}
                                 type='text'
                                 className='form-control'
@@ -630,10 +585,10 @@ const UpdateStatus = (props) => {
                       </>
                     )}
                   </div>
-                  <div className='col '>
+                  <div className='col'>
                     <div className='row'>
                       <h6 className='col font-weight-bold mt-4'>
-                        {t("upload_image")}
+                        {t("uploaded_image")}
                       </h6>
                       <button
                         type='button'
@@ -652,32 +607,33 @@ const UpdateStatus = (props) => {
                     </div>
                     <div className='d-flex flex-column upload bg-white col-9 p-5'>
                       {photo ? (
-                        <div>
-                          <div
-                            className='row'
-                            style={{ margin: "auto", display: "table" }}
-                          >
-                            <img
-                              onClick={clearImage}
-                              width='20'
-                              height='20'
-                              src={crossIcon}
-                              style={{ position: "relative", left: "15vw" }}
-                              alt='Clear'
-                            />
-                            <img
-                              src={photoUrl}
-                              name='photo'
-                              width='250'
-                              height='125'
-                              className='mt-1'
-                              style={{ margin: "auto", display: "table" }}
-                              alt='PhotoURL'
-                            />
-                          </div>
+                        <div className='row'>
+                          <img
+                            onClick={clearImage}
+                            width='20'
+                            height='20'
+                            src={crossIcon}
+                            style={{
+                              position: "absolute",
+                              top: "2vh",
+                              right: "2vw",
+                              cursor: "pointer",
+                            }}
+                            alt='Clear'
+                          />
+                          <img
+                            src={photoUrl}
+                            name='photo'
+                            className='mt-1'
+                            style={{
+                              width: "100%",
+                              objectFit: "contain",
+                            }}
+                            alt='PhotoURL'
+                          />
                         </div>
                       ) : (
-                        <div>
+                        <>
                           <div
                             className='row'
                             style={{ margin: "auto", display: "table" }}
@@ -717,36 +673,23 @@ const UpdateStatus = (props) => {
                           >
                             <label
                               className='btn btn-primary'
-                              style={{ margin: 0, height: "5vh" }}
+                              style={{ margin: 1, height: "4vh" }}
                             >
                               {t("browse_files")}
                               <input
                                 type='file'
                                 className='select'
                                 onChange={setFile}
-                              />{" "}
+                              />
                             </label>
                           </div>
-                        </div>
+                        </>
                       )}
                     </div>
                     {props.user.isCustom && (
                       <>
                         <h6 className='poheads potext m-4'>{t("comment")}</h6>
                         <div className='panel commonpanle mb-5'>
-                          {/* <div className='form-group mb-0'>
-                        <input
-                          type='text'
-                          className='form-control mb-2'
-                          name='comments'
-                          //style={{ flexBasis: "100%" }}
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder='Enter comments here...'
-                          value={values.comments}
-                        />
-                      </div> */}
-
                           <div className=' pt-2 pb-2 d-flex row'>
                             <span
                               onClick={() => {
@@ -819,9 +762,7 @@ const UpdateStatus = (props) => {
                                 style={{
                                   fontSize: "14px",
                                   resize: "none",
-                                  //borderBottom: "none",
                                   marginTop: "40px",
-                                  //marginBottom:"10px"
                                 }}
                                 type='text'
                                 className='form-control'
@@ -879,25 +820,13 @@ const UpdateStatus = (props) => {
         )}
       </Formik>
       {openUpdatedStatus && (
-        <Modal
-          close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <SuccessPopup
-            onHide={closeModal} //FailurePopUp
-            t={t}
-          />
+        <Modal close={() => closeModal()} size='modal-sm'>
+          <SuccessPopup onHide={closeModal} t={t} />
         </Modal>
       )}
       {openShipmentFail && (
-        <Modal
-          close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <FailPopup
-            onHide={closeModalFail}
-            t={t} //FailurePopUp
-          />
+        <Modal close={() => closeModalFail()} size='modal-sm'>
+          <FailPopup onHide={closeModalFail} t={t} />
         </Modal>
       )}
     </div>
