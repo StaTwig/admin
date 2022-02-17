@@ -20,12 +20,11 @@ const moment = require("moment");
 const CENTRAL_AUTHORITY_ID = "null";
 const CENTRAL_AUTHORITY_NAME = "null";
 const CENTRAL_AUTHORITY_ADDRESS = "null";
-const checkPermissions =
-  require("../middlewares/rbac_middleware").checkPermissions;
+const { checkPermissions } = require("../middlewares/rbac_middleware");
 const logEvent = require("../../../utils/event_logger");
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const axios = require("axios");
-const { uploadFile, getFileStream } = require("../helpers/s3");
+const { uploadFile, getSignedUrl } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const cuid = require("cuid");
@@ -224,7 +223,7 @@ async function userShipments(mode, warehouseId, skip, limit) {
   if (mode != "id") criteria = mode + ".locationId";
   else criteria = mode;
   matchCondition[criteria] = warehouseId;
-  const shipments = await ShipmentModel.aggregate([
+  let shipments = await ShipmentModel.aggregate([
     {
       $match: matchCondition,
     },
@@ -287,6 +286,15 @@ async function userShipments(mode, warehouseId, skip, limit) {
     .skip(parseInt(skip))
 
     .limit(parseInt(limit));
+  for (let i = 0; i < shipments.length; i++) {
+    for (let j = 0; j < shipments[i].shipmentUpdates.length; j++) {
+      if (shipments[i].shipmentUpdates[j]?.imageId) {
+        shipments[i].shipmentUpdates[j].image = await getSignedUrl(
+          shipments[i].shipmentUpdates[j].imageId
+        );
+      }
+    }
+  }
   return shipments;
 }
 
@@ -1030,7 +1038,6 @@ exports.receiveShipment = [
           po.products.every((product) => {
             data.products.every((p) => {
               if (product.id === p.productID) {
-                // console.log(product, p)
                 const po_product_quantity =
                   product.productQuantity || product.quantity;
                 let shipment_product_qty = 0;
@@ -1039,7 +1046,6 @@ exports.receiveShipment = [
                     parseInt(product.productQuantityDelivered) +
                     parseInt(p.productQuantity);
                 else shipment_product_qty = p.productQuantity;
-                // console.log(shipment_product_qty, po_product_quantity)
                 if (
                   parseInt(shipment_product_qty) < parseInt(po_product_quantity)
                 ) {
@@ -1161,15 +1167,16 @@ exports.receiveShipment = [
               }
             }
           }
-
-          const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
+          const Upload = await uploadFile(req.file);
+          await unlinkFile(req.file.path);
           const updates = {
-            updatedOn: currDateTime,
+            updatedOn: new Date().toISOString(),
+            imageId: Upload.key,
+            updatedBy: req.user.id,
             updateComment: data.comment,
             status: "RECEIVED",
             products: products,
           };
-
           const updateData = await ShipmentModel.findOneAndUpdate(
             { id: req.body.id },
             {
@@ -2002,17 +2009,24 @@ exports.fetchImage = [
   auth,
   async (req, res) => {
     try {
-      const Id = req.query.id;
-      let imageArray = [];
-      const result = await ShipmentModel.find({ id: Id }, { imageDetails: 1 });
-      imageArray = result[0].imageDetails;
+      const result = await ShipmentModel.find(
+        { id: req.query.id },
+        { imageDetails: 1 }
+      );
+      const imageArray = result[0].imageDetails || [];
       const resArray = [];
-      for (let i = 0; i < imageArray.length; i++) {
-        const s = "/images/" + imageArray[i];
-        resArray.push(s);
-      }
-      return apiResponse.successResponseWithData(res, "Images", resArray);
+      await asyncForEach(imageArray, async (image) => {
+        const signedUrl = await getSignedUrl(image);
+        resArray.push(signedUrl);
+      });
+
+      return apiResponse.successResponseWithData(
+        res,
+        "Images of Shipment",
+        resArray
+      );
     } catch (e) {
+      console.log(e);
       return apiResponse.ErrorResponse(res, e.message);
     }
   },
@@ -2022,7 +2036,13 @@ exports.updateTrackingStatus = [
   auth,
   async (req, res) => {
     try {
-      const data = JSON.parse(req.body.shipmentUpdates);
+      const data = {
+        updateComment: req.body.updateComment,
+        orgId: req.body.orgId,
+        orgLocation: req.body.orgLocation,
+        updatedAt: req.body.updateStatusLocation,
+        isAlertTrue: req.body.isAlertTrue,
+      };
       const Upload = await uploadFile(req.file);
       await unlinkFile(req.file.path);
       data.imageId = Upload.key;
@@ -2277,7 +2297,15 @@ exports.chainOfCustody = [
               ]).sort({
                 createdAt: -1,
               });
-
+              for (let i = 0; i < shipments.length; i++) {
+                for (let j = 0; j < shipments[i].shipmentUpdates.length; j++) {
+                  if (shipments[i].shipmentUpdates[j]?.imageId) {
+                    shipments[i].shipmentUpdates[j].image = await getSignedUrl(
+                      shipments[i].shipmentUpdates[j].imageId
+                    );
+                  }
+                }
+              }
               return apiResponse.successResponseWithData(
                 res,
                 responses(req.user.preferredLanguage).status_updated,
@@ -3440,13 +3468,17 @@ exports.fetchairwayBillNumber = [
 exports.Image = [
   auth,
   async (req, res) => {
-    const FileStream = getFileStream(req.params.key);
-    FileStream.pipe(res);
+    try {
+      const signedUrl = await getSignedUrl(req.params.key);
+      return apiResponse.successResponseWithData(res, "Image URL", signedUrl);
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
   },
 ];
 
 exports.exportInboundShipments = [
-  //inbound shipments with filter(shipmentId, from, to, status, date)
   auth,
   async (req, res) => {
     try {
