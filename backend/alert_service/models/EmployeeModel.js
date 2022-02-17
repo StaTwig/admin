@@ -46,7 +46,7 @@ const EmployeeSchema = new mongoose.Schema(
       required: false,
     },
     role: { type: String, required: false, default: "powerUser" },
-    preferredLanguage: { type: String, required: true, default: "EN" },
+    preferredLanguage: { type: String, required: true, default: "ES" },
     postalAddress: {
       type: String,
       required: false,

@@ -4,6 +4,7 @@ import "./style.scss";
 
 const EditTable = (props) => {
   const [visible, setVisible] = useState(false);
+  const {setOpenFailInventory, setInventoryError } = props;
   return (
     <div className=''>
       <div className='d-flex flex-column'>
@@ -36,6 +37,8 @@ const EditTable = (props) => {
             {...inventory}
             idx={index}
             setVisible={setVisible}
+            setOpenFailInventory={setOpenFailInventory}
+            setInventoryError={setInventoryError}
           />
         ))}
       </div>

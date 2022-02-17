@@ -31,6 +31,7 @@ const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const wrapper = require("../models/DBWrapper");
 const excel = require("node-excel-export");
+const { compareArrays } = require("../helpers/utility");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const po_stream_name = process.env.PO_STREAM;
@@ -127,7 +128,7 @@ exports.fetchPurchaseOrders = [
         permissionRequired: ["viewPO"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
-        if (permissionResult.success)  {
+        if (permissionResult.success) {
           let inboundPOs, outboundPOs, poDetails;
           try {
             if (poId != null) {
@@ -143,17 +144,17 @@ exports.fetchPurchaseOrders = [
                   poDetails = data;
                 }
               );
-              if(poDetails.length)
-              await Promise.all(
-                poDetails[0]?.products.map(async (element) => {
-                  const product = await ProductModel.findOne({
-                    $or: [{ name: element.id }, { id: element.id }],
-                  });
-                  element.unitofMeasure = product?.unitofMeasure;
-                  element.manufacturer = product?.manufacturer;
-                  element.type = product?.type;
-                })
-              );
+              if (poDetails.length)
+                await Promise.all(
+                  poDetails[0]?.products.map(async (element) => {
+                    const product = await ProductModel.findOne({
+                      $or: [{ name: element.id }, { id: element.id }],
+                    });
+                    element.unitofMeasure = product?.unitofMeasure;
+                    element.manufacturer = product?.manufacturer;
+                    element.type = product?.type;
+                  })
+                );
             } else {
               await userPurchaseOrders(
                 "supplier",
@@ -454,6 +455,53 @@ exports.addPOsFromExcel = [
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
       );
+
+      // Validate incoming Excel columns
+      const expectedColNames = req.user.preferredLanguage === "EN" ? [
+        'UNICEf PO Number',
+        'PO Item#',
+        'Vendor',
+        'Vendor Name',
+        'Document Date',
+        'Your Reference',
+        'Incoterms',
+        'Incoterms (Part 2)',
+        'Material',
+        'Material Description',
+        'Plant',
+        'Order Quantity',
+        'Order Unit',
+        'Unit Id',
+        'IP Code',
+        'IP Name'
+      ] : [
+          'UNICEf PO Número',
+          'PO Articulo#',
+          'Vendedor',
+          'Nombre Del Vendedor',
+          'Fecha Del Documento',
+          'Tu Referencia',
+          'Incoterms',
+          'Incoterms (Part 2)',
+          'Material',
+          'Material Descripción',
+          'Planta',
+          'Ordene La Cantidad',
+          'Unidad De Pedido',
+          'Unidad Id',
+          'IP Código',
+          'IP Nombre'
+        ];
+
+      if (!compareArrays(expectedColNames, Object.keys(data[0]))) {
+        // Invalid format logic
+        return apiResponse.validationErrorWithData(
+          res,
+          responses(req.user.preferredLanguage).invalid_excel,
+          Object.keys(data[0])
+        );
+      }
+
       const createdBy = req.user.id;
       let poDataArray = [];
       poDataArray = data.map((po) => {
@@ -480,8 +528,8 @@ exports.addPOsFromExcel = [
           },
           products: [
             {
-              productId: po["Material"],
-              id: po["Material"],
+              // productId: po["Material"],
+              name: po["Material"],
               productQuantity: po["Order Quantity"],
               quantity: po["Order Quantity"],
               unitofMeasure: {
@@ -524,10 +572,11 @@ exports.addPOsFromExcel = [
             poDataArray[i].id =
               poCounter.counters[0].format + poCounter.counters[0].value++;
             let productDetails = await ProductModel.findOne({
-              id: poDataArray[i].products[0].productId,
+              name: poDataArray[i].products[0].name,
             });
             if (productDetails) {
-              (poDataArray[i].products[0].name = productDetails.name || ""),
+              (poDataArray[i].products[0].productId = productDetails.productId || productDetails.id || ""),
+              (poDataArray[i].products[0].id = productDetails.id || ""),
                 (poDataArray[i].products[0].type = productDetails.type || ""),
                 (poDataArray[i].products[0].manufacturer =
                   productDetails.manufacturer || "");
@@ -1973,85 +2022,85 @@ function buildExcelReport(req, res, dataForExcel) {
 
   const specification = {
     id: {
-      displayName: "Order ID",
+      displayName: req.t("Order_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 120,
     },
     createdBy: {
-      displayName: "Order Created By",
+      displayName: req.t("Order_Created_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: "10",
     },
     supplierOrgId: {
-      displayName: "ORG ID - Creator",
+      displayName: req.t("ORG_ID_-_Creator"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiveIncharge: {
-      displayName: "Order Received By",
+      displayName: req.t("Order_Received_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiverOrg: {
-      displayName: "ORG ID - Receiver",
+      displayName: req.t("ORG_ID_-_Receiver"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productCategory: {
-      displayName: "Product Category",
+      displayName: req.t("Product_Category"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productName: {
-      displayName: "Product Name",
+      displayName: req.t("Product_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productId: {
-      displayName: "Product ID",
+      displayName: req.t("Product_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productQuantity: {
-      displayName: "Quantity",
+      displayName: req.t("Quantity"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     manufacturer: {
-      displayName: "Manufacturer",
+      displayName: req.t("Manufacturer"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgName: {
-      displayName: "Delivery Organization Name",
+      displayName: req.t("Delivery_Organization_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgId: {
-      displayName: "Delivery Organization ID",
+      displayName: req.t("Delivery_Organization_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgLocation: {
-      displayName: "Delivery Organization Location Details",
+      displayName: req.t("Delivery_Organization_Location_Details"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     status: {
-      displayName: "Status",
+      displayName: req.t("Status"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
@@ -2073,20 +2122,20 @@ function buildExcelReport(req, res, dataForExcel) {
 async function buildPdfReport(req, res, data, orderType) {
   const rows = [];
   rows.push([
-    { text: "Order Id", bold: true },
-    { text: "Order created By", bold: true },
-    { text: "Creator Org Id", bold: true },
-    { text: "Creator Org Name", bold: true },
-    { text: "ORG ID - Receiver", bold: true },
-    { text: "Product Category", bold: true },
-    { text: "Product Name", bold: true },
-    { text: "Product ID", bold: true },
-    { text: "Quantity", bold: true },
-    { text: "Manufacturer", bold: true },
-    { text: "Delivery Organization Name", bold: true },
-    { text: "Delivery Organization ID", bold: true },
-    { text: "Delivery Organization Location Details", bold: true },
-    { text: "Status", bold: true },
+    { text: req.t("Order_ID"), bold: true },
+    { text: req.t("Order_Created_By"), bold: true },
+    { text: req.t("Creator_Org_Id"), bold: true },
+    { text: req.t("Creator_Org_Name"), bold: true },
+    { text: req.t("ORG_ID_-_Receiver"), bold: true },
+    { text: req.t("Product_Category"), bold: true },
+    { text: req.t("Product_Name"), bold: true },
+    { text:  req.t("Product_ID"), bold: true },
+    { text: req.t("Quantity"), bold: true },
+    { text: req.t("Manufacturer"), bold: true },
+    { text: req.t("Delivery_Organization_Name"), bold: true },
+    { text: req.t("Delivery_Organization_ID"), bold: true },
+    { text: req.t("Delivery_Organization_Location_Details"), bold: true },
+    { text: req.t("Status"), bold: true },
   ]);
   for (let i = 0; i < data.length; i++) {
     let OrgName = await OrganisationModel.findOne({
@@ -2115,7 +2164,7 @@ async function buildPdfReport(req, res, data, orderType) {
     pageSize: "A3",
     pageOrientation: "landscape",
     content: [
-      { text: `${orderType} Purchase order`, fontSize: 34, style: "header" },
+      { text: req.t(`${orderType}_Purchase_order`), fontSize: 34, style: "header" },
       {
         table: {
           headerRows: 1,

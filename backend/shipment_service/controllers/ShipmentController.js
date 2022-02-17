@@ -595,7 +595,7 @@ exports.createShipment = [
               req.user
             );
           //Case - create shipment with Batch Number
-          if (products[count].batchNumber != null) {
+          if (products[count].batchNumber != null && products[count].batchNumber != undefined) {
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
@@ -607,35 +607,54 @@ exports.createShipment = [
                 },
               }
             );
-          } else if (products[count].serialNumber != null) {
-            const serialNumbers = products[count].serialNumbersRange.split("-");
+          }
+          if (products[count].serialNumbersRange != null) {
+            const serialNumbers = Array.isArray(products[count].serialNumbersRange) ? products[count].serialNumbersRange : products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
-              const serialNumbersFrom = parseInt(
-                serialNumbers[0].split(/(\d+)/)[1]
-              );
-              const serialNumbersTo = parseInt(
-                serialNumbers[1].split(/(\d+)/)[1]
-              );
-
-              const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-              for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-                const updateAtoms = await AtomModel.findOneAndUpdate(
-                  {
-                    id: `${serialNumberText}${i}`,
-                    inventoryIds: suppInventoryId,
-                  },
-                  {
-                    $set: {
-                      "inventoryIds.$": recvInventoryId,
+              if (Array.isArray(products[count].serialNumbersRange)) {
+                for (let i = 0; i < serialNumbers.length; i++) {
+                  const updateAtoms = await AtomModel.findOneAndUpdate(
+                    {
+                      id: `${serialNumbers[i]}`,
+                      inventoryIds: suppInventoryId,
                     },
-                  }
+                    {
+                      $set: {
+                        "inventoryIds.$": recvInventoryId,
+                      },
+                    }
+                  );
+                  atomsArray.push(updateAtoms);
+                }
+              }
+              else {
+                const serialNumbersFrom = parseInt(
+                  serialNumbers[0].split(/(\d+)/)[1]
                 );
-                atomsArray.push(updateAtoms);
+                const serialNumbersTo = parseInt(
+                  serialNumbers[1].split(/(\d+)/)[1]
+                );
+                const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+                for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+                  const updateAtoms = await AtomModel.findOneAndUpdate(
+                    {
+                      id: `${serialNumberText}${i}`,
+                      inventoryIds: suppInventoryId,
+                    },
+                    {
+                      $set: {
+                        "inventoryIds.$": recvInventoryId,
+                      },
+                    }
+                  );
+                  atomsArray.push(updateAtoms);
+                }
               }
             }
           }
         }
+        
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
         const updates = {
           updatedOn: currDateTime,
@@ -1788,6 +1807,14 @@ exports.viewShipment = [
             {
               $unwind: {
                 path: "$receiver.org",
+              },
+            },
+            {
+              $lookup: {
+                from: "records",
+                localField: "poId",
+                foreignField: "id",
+                as: "poDetails",
               },
             },
           ]);

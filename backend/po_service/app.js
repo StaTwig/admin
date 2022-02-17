@@ -33,6 +33,32 @@ mongoose
     process.exit(1);
   });
 
+// language conversion
+
+const i18next = require("i18next");
+const backend = require("i18next-fs-backend");
+const i18nextMiddleware = require("i18next-http-middleware");
+
+i18next
+  .use(backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    detection: {
+      order: ["querystring", "cookie", "header"],
+      //   lookupQuerystring: "lang",
+      //   lookupCookie: "lang",
+      lookupHeader: "accept-language",
+    },
+    preload: ['en', 'es'],
+    fallbackLng: "en",
+    backend: {
+      loadPath: "./locales/{{lng}}/translation.json",
+    },
+  });
+
+app.use(i18nextMiddleware.handle(i18next));
+
+
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {
   app.use(logger("dev"));

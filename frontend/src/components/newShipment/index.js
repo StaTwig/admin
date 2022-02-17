@@ -242,35 +242,6 @@ const NewShipment = (props) => {
     }
   };
 
-  // const dates = ["shipmentDate", "estimateDeliveryDate"];
-
-  // const dateValidation = (date) => {
-  //   try {
-  //     let error = false;
-  //     let a = eval(date[0]);
-  //     let b = eval(date[1]);
-
-  //     if (a > b) {
-  //       setShipmentError("Check deliveryDate");
-  //       setOpenShipmentFail(true);
-  //       error = true;
-  //     }
-  //     return error;
-  //   } catch (err) {
-  //     setOpenShipmentFail(true);
-  //   }
-
-  //   let error = false;
-  //   let a = eval(date[0]);
-  //   let b = eval(date[1]);
-
-  //   if (a > b) {
-  //     setShipmentError("Check deliveryDate");
-  //     setOpenShipmentFail(true);
-  //     error = true;
-  //   }
-  //   return error;
-  // };
 
   const onAssign = async (values) => {
     let error = false;
@@ -291,10 +262,10 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) {
         error = true;
-        errorMsg = "product quantity";
+        errorMsg = `${t("product")}${t("quantity")}`;
       } else if (!p.batchNumber) {
         error = true;
-        errorMsg = "batch number";
+        errorMsg = t("batch_number");
       }
     });
     if (!error) {
@@ -350,10 +321,10 @@ const NewShipment = (props) => {
         }
       }
       if (check === 1) {
-        setShipmentError("Check product quantity");
+        setShipmentError(t("check_product_quantity"));
         setOpenShipmentFail(true);
       } else if (check === 2) {
-        setShipmentError("Check Batch Number");
+        setShipmentError(t("check_batch_numberssssssssssss"));
         setOpenShipmentFail(true);
       } else {
         let i, j;
@@ -372,7 +343,7 @@ const NewShipment = (props) => {
           }
 
           if (!flag) {
-            setShipmentError("The product doesn't exist in this inventory");
+            setShipmentError(t("product_not_exist_inventory"));
             setOpenShipmentFail(true);
             break;
           }
@@ -392,14 +363,15 @@ const NewShipment = (props) => {
               t: t,
             });
           } else {
-            setShipmentError(result.data.message);
+            
+            setShipmentError(result?.data?.message);
             setOpenShipmentFail(true);
             setErrorMessage("Create Shipment Failed");
           }
         }
       }
     } else {
-      setShipmentError("Check " + errorMsg);
+      setShipmentError(t("check")+" "+ errorMsg);
       setOpenShipmentFail(true);
     }
   };
@@ -412,7 +384,7 @@ const NewShipment = (props) => {
       soDetailsClone.products[i].productQuantity =
         soDetailsClone.products[i].orderedQuantity;
       setOrderDetails(soDetailsClone);
-      alert("Quantity cannot be more than ordered quantity");
+      alert(t("quantity_not_more_error"));
       return;
     }
     soDetailsClone.products[i].productQuantity = value;
@@ -758,7 +730,7 @@ const NewShipment = (props) => {
                         dispatch(turnOn());
                         setDisabled(false);
                         if (values.shipmentID.length == 0) {
-                          setShipmentError("ShipmentID cannot be Empty");
+                          setShipmentError(t("shipment_cannot_be_empty"));
                           setOpenShipmentFail(true);
                           dispatch(turnOff());
                         } else {
@@ -770,7 +742,7 @@ const NewShipment = (props) => {
                             if (result.status !== "RECEIVED") {
                               values.shipmentID = "";
                               // alert("The shipment has to be delivered first");
-                              setShipmentError("Shipment has to be delivered");
+                              setShipmentError(t("shipment_has_to_be_delivered"));
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
                             } else {
@@ -792,7 +764,7 @@ const NewShipment = (props) => {
                               setFieldValue("toOrg", "");
 
                               if (result.status === 500) {
-                                setShipmentError("Check Shipment Reference ID");
+                                setShipmentError(t("check_shipment_reference_id"));
                                 setOpenShipmentFail(true);
                               } else {
                                 setOrderDetails(result);
@@ -806,7 +778,18 @@ const NewShipment = (props) => {
                                   products_temp[i].name =
                                     result.products[i].productName;
                                   products_temp[i].productQuantity =
-                                    result.products[i].productQuantity 
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantity
+                                  ) -
+                                  parseInt(
+                                    result.poDetails[0].products[i]
+                                      .productQuantityDelivered || 0
+                                  ) -
+                                  parseInt(
+                                    result.products[i]
+                                      .productQuantityTaggedSent || 0
+                                  );
                                   products_temp[i].type =
                                     result.products[i].productCategory;
                                   delete products_temp[i]
@@ -824,7 +807,7 @@ const NewShipment = (props) => {
                             }
                           } else {
                             setShipmentError(
-                              "Invalid ShipmentID Please Enter a Valid ShipmentID"
+                              t("invalid_shipmentid_enter")
                             );
                             setOpenShipmentFail(true);
                             dispatch(turnOff());

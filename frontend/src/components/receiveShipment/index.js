@@ -303,7 +303,7 @@ const ReceiveShipment = (props) => {
               className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
               onClick={uploadPhoto}
               style={{ position: "relative", bottom: "10px" }}
-            >
+            > 
               {/* <img
                     src={uploadWhite}
                     width="35"
