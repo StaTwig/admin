@@ -30,7 +30,6 @@ exports.MqttConnection = () => {
           messageArray = JSON.parse(messageArray.toString());
           if (topic == "/test/vacus/sensor") {
             for (const message of messageArray) {
-              console.log("message", message);
               const result = await getCurrentShipment(message.vehicleID);
               message.shipmentId = result?.id || null;
               await saveSensorData(message);
