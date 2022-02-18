@@ -70,7 +70,7 @@ const UserContainer = (props) => {
   const usersList = useSelector((state) => {
     return state.organisation.users;
   });
-  // usersList.reverse();
+  // usersList.slice(0).reverse();
   const permissions = useSelector((state) => {
     return state.organisation.permissions;
   });
