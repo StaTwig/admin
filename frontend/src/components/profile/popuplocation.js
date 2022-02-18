@@ -25,6 +25,7 @@ const PopUpLocation = (props) => {
 
   const updateStatus = async (wareHouse) => {
     const data = {
+      id: wareHouse.id || null,
       title: wareHouse.title,
       organisationId: wareHouse.organisationId,
       postalAddress: wareHouse.postalAddress,
