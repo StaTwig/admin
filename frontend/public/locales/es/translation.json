@@ -409,7 +409,7 @@
   "ordersoutbound": "pedidos salientes",
   "ordersinbound": "pedidos entrantes",
   "upload_image": "cargar imagen",
-  "records_duplication":"Registros no agregados debido a la duplicación",
+  "records_duplication":"Los registros no se agregan, por favor, compruebe si los registros se duplican y existen almacenes.",
   "transit&fullyfulfilled": "tránsito y totalmente cumplido",
   "past_expiry": "La fecha de caducidad no puede estar en el pasado"
 }

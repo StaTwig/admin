@@ -377,7 +377,7 @@
   "ordersoutbound": "ordersoutbound",
   "ordersinbound": "ordersinbound",
   "upload_image": "upload image",
-  "records_duplication":"Records not added due to duplication",
+  "records_duplication":"Records not added, please check if the records are duplicated and warehouses exist",
   "transit&fullyfulfilled":"transit&fullyfulfilled",
   "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No.",
   "past_expiry": "Expiry Date cannot be in the past"
