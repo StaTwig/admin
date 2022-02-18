@@ -18,24 +18,21 @@ import ShipmentFailPopUp from "../newShipment/shipmentFailPopUp";
 
 const ReceiveShipment = (props) => {
   const { t } = props;
-  // let shipmentDetails = props.trackData.shipmentDetails;
+  const id = props.match.params.id;
   const tracking = props.trackData;
+  const dispatch = useDispatch();
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [delivered, setDelivered] = useState(0);
-  const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
-  // const [shipmentId, setShipmentId] = useState([]);
   const [qtyArr, setQtyArr] = useState([
     ...Array(props.trackData?.products?.length).keys(),
   ]);
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
-  const [photo2, setPhoto2] = useState("");
-  const [photoUrl2, setPhotoUrl2] = useState(undefined);
   const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
@@ -43,7 +40,6 @@ const ReceiveShipment = (props) => {
   const [ErrorMsg, setErrorMsg] = useState("");
   const [FailPopUp, setFailPopUp] = useState(false);
   const [commentEnabled, setCommentEnabled] = useState(false);
-  const id = props.match.params.id;
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
@@ -55,20 +51,11 @@ const ReceiveShipment = (props) => {
     }
     fetchairwayBill();
   }, []);
-  const defaultProps = {
-    options: transitNumberArray,
-    getOptionLabel: (option) => option.airWayBillNo,
-  };
-  const flatProps = {
-    options: transitNumberArray.map((option) => option.airWayBillNo),
-  };
 
   const setFile = (evt) => {
     setFiles(evt.target.files);
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
     setPhoto(evt.target.files[0]);
-    // setPhotoUrl2(URL.createObjectURL(evt.target.files[1]));
-    // setPhoto2(evt.target.files[1]);
   };
 
   const clearImage = () => {
@@ -76,71 +63,26 @@ const ReceiveShipment = (props) => {
     setPhotoUrl(undefined);
   };
 
-  const clearImage2 = () => {
-    setPhoto2("");
-    setPhotoUrl2(undefined);
-  };
-  const defaultData = {
-    label: {
-      labelType: "QR_2DBAR",
-      labelId: "123445",
-    },
-    supplier: {
-      id: "emp-1jpv5xx3kmkkck4e",
-      locationId: "AP001",
-    },
-    receiver: {
-      id: "emp-18gpp20egkkf54n59",
-      locationId: "AP002",
-    },
-    transactionIds: [],
-    _id: "60588f346570743b5f9ebbf7",
-    airWayBillNo: "7464840",
-    shippingOrderId: "so-1jpv8pdklqnvl7g",
-    externalShipmentId: "",
-    shippingDate: "2021-03-30T00:00:00.000Z",
-    expectedDeliveryDate: "2021-04-03T00:00:00.000Z",
-    actualDeliveryDate: "2021-04-03T00:00:00.000Z",
-    status: "UPDATED",
-    products: [
-      {
-        _id: "60588f346570743b5f9ebbf8",
-        productID: "prod-9bhkk6yiutx",
-        productQuantity: 100,
-        productName: "Biohib",
-        manufacturer: "Bharath Biotech",
-      },
-    ],
-    poId: "po-g7kn51ef6klnqk02v",
-    id: "SHjXsVBDOmTz",
-    createdAt: "2021-03-22T12:36:04.250Z",
-    updatedAt: "2021-03-22T12:36:04.250Z",
-    __v: 0,
-    comment: "",
-    imagesDetails: [],
-  };
-
   const receiveShipment = async () => {
-    let data = tracking ? tracking : defaultData;
-    // let formData = new FormData();
-
-    // formData.append(shipmentDetails[0]);
-    // formData.append("billNo", billNo);
-    data.comment = comment;
-    //data.imagesDetails = [];
-    qtyArr.map((value, index) => {
-      // data.products[index]["productId"] = data.products[index].productID;
+    let data = tracking;
+    for (const [index, value] of qtyArr.entries()) {
       data.products[index].productQuantity =
         data.products[index].productQuantity <= parseInt(value)
           ? data.products[index].productQuantity
           : parseInt(value);
-    });
-
-    //data.products[0].productQuantity = parseInt(delivered);
+      const formData = new FormData();
+      formData.append("photo", photo, photo.name);
+      formData.append("supplier", JSON.stringify(data.supplier));
+      formData.append("receiver", JSON.stringify(data.receiver));
+      formData.append("status", "RECEIVED");
+      formData.append("comment", comment);
+      formData.append("products", JSON.stringify(data.products));
+      formData.append("poId", data.poId);
+      formData.append("id", data.id);
+    }
     dispatch(turnOn());
     const result = await receiveApi(data);
     if (result.status === 200) {
-      //setOpenUpdatedStatus(true);
       setreceiveShipmentModal(true);
     } else {
       setErrorMsg(result.data);
@@ -165,7 +107,6 @@ const ReceiveShipment = (props) => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
       formData.append("photo", files[i], files[i].name);
-
       const result = await uploadImage(id, formData);
       if (result.status === 200) {
         setMessage("Image Uploaded");
@@ -214,18 +155,16 @@ const ReceiveShipment = (props) => {
             </div>
 
             {FailPopUp && (
-              <Modal
-                close={() => closeModalShipment()}
-                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-              >
-                <FailedPopup onHide={closeModalShipment} ErrorMsg={ErrorMsg} t={t} />
+              <Modal close={() => closeModalShipment()} size='modal-sm'>
+                <FailedPopup
+                  onHide={closeModalShipment}
+                  ErrorMsg={ErrorMsg}
+                  t={t}
+                />
               </Modal>
             )}
             {openUpdatedStatus && (
-              <Modal
-                close={() => closeModal()}
-                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-              ></Modal>
+              <Modal close={() => closeModal()} size='modal-sm'></Modal>
             )}
           </div>
         </div>
@@ -239,7 +178,6 @@ const ReceiveShipment = (props) => {
                 name='id'
                 type='text'
                 className='form-control ml-5 '
-                //onChange={(e) => setshipmentId(e.target.value)}
                 size='35'
                 value={id}
               />
@@ -251,28 +189,10 @@ const ReceiveShipment = (props) => {
           >
             <div className='form-group pt-2'>
               <label className='text-secondary pt-2'>{t("transit_no")}.</label>
-              {/* <div className="mb-2" style={{width: 300 }}>
-                        <Autocomplete 
-                          {...defaultProps}
-                          id="billNo"
-                          style={{position:"relative",top:"-20px"}}
-                          value={value}
-                          onChange={(event, newValue) => {
-                            setValue(newValue);
-                          }}
-                          billNo={billNo}
-                          onInputChange={(event, newInputValue) => {
-                            setBillNo(newInputValue);
-                          }}
-                          debug
-                          renderInput={(params) => <TextField {...params} name="billNo" label="Transit No." margin="normal" />}
-                        />
-                        </div> */}
               <input
                 type='text'
                 className='form-control ml-5'
                 name='billNo'
-                //onChange={(e) => setBillNo(e.target.value)}
                 size='35'
                 value={props.trackData.airWayBillNo}
               />
@@ -359,9 +279,7 @@ const ReceiveShipment = (props) => {
                   style={{
                     fontSize: "14px",
                     resize: "none",
-                    //borderBottom: "none",
                     marginTop: "40px",
-                    //marginBottom:"10px"
                   }}
                   type='text'
                   className='form-control'
@@ -380,7 +298,7 @@ const ReceiveShipment = (props) => {
         </div>
         <div className='col-sm-4'>
           <div className='row justify-content-between'>
-            <h6 className='heading mt-3 mb-3 ml-4'> {t("upload_image")}</h6>
+            <h6 className='heading mt-3 mb-3 ml-4'> {t("uploaded_image")}</h6>
             <button
               className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
               onClick={uploadPhoto}
@@ -440,7 +358,7 @@ const ReceiveShipment = (props) => {
                               </div> */}
               </div>
             ) : (
-              <div>
+              <>
                 <div
                   className='row '
                   style={{ margin: "auto", display: "table" }}
@@ -471,8 +389,6 @@ const ReceiveShipment = (props) => {
                   style={{
                     margin: "auto",
                     display: "table",
-                    //position: "relative",
-                    //top: "0%",
                   }}
                 >
                   <label
@@ -488,7 +404,7 @@ const ReceiveShipment = (props) => {
                     />{" "}
                   </label>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -512,14 +428,8 @@ const ReceiveShipment = (props) => {
         />
       </div>
       {receiveShipmentModal && (
-        <Modal
-          close={() => closeModalShipment()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <SuccessPopup
-            onHide={closeModalShipment}
-            t={t} //FailurePopUp
-          />
+        <Modal close={() => closeModalShipment()} size='modal-sm'>
+          <SuccessPopup onHide={closeModalShipment} t={t} />
         </Modal>
       )}
       {/* {openShipmentFail && (
@@ -534,9 +444,8 @@ const ReceiveShipment = (props) => {
         )}   */}
       {message && (
         <div className='d-flex justify-content-center mt-3'>
-          {" "}
           <Alert severity='success'>
-            <AlertTitle>Success</AlertTitle>
+            <AlertTitle>{t("success")}</AlertTitle>
             {message}
           </Alert>
         </div>

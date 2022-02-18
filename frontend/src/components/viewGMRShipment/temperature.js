@@ -20,7 +20,6 @@ const Chart = (props) => {
   async function fetchData(success, fail) {
     const result = await temperatureGraph(props.shipmentId, page);
     if (result.success) {
-      success(result.data.graph);
       setPage(result.data.page);
       setNextPage(result.data.nextPage);
       if (min > result.data.metaData.min) {
@@ -29,6 +28,7 @@ const Chart = (props) => {
       if (max < result.data.metaData.max) {
         setMax(result.data.metaData.max);
       }
+      success(result.data.graph);
     } else {
       fail(result.message);
     }
@@ -50,11 +50,11 @@ const Chart = (props) => {
               </div>
             ) : null}
             {page > 1 ? (
-              <div className='icon-container-alt right-arrow'>
-                <ArrowForward
-                  className='icon-gmr'
-                  onClick={handleNextHistory}
-                />
+              <div
+                className='icon-container-alt right-arrow'
+                onClick={handleNextHistory}
+              >
+                <ArrowForward className='icon-gmr' />
               </div>
             ) : null}
           </div>

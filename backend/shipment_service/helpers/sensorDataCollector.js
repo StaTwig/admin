@@ -19,7 +19,7 @@ exports.saveSensorData = async (sensorData) => {
     sensorId: sensorData.id,
     vehicleId: sensorData.vehicleID,
     shipmentId: sensorData.shipmentId,
-    timestamp: sensorData.timestamp,
+    timestamp: new Date(sensorData.timestamp),
     coordinates: {
       X: sensorData.X,
       Y: sensorData.Y,
