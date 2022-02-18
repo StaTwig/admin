@@ -141,7 +141,7 @@ const ReceiveShipment = (props) => {
               <button
                 className='btn-primary btn fontSize20 font-bold mr-2 mt-3'
                 onClick={receiveShipment}
-                disabled={isDisabled || comment === ""}
+                disabled={isDisabled}
               >
                 <img
                   src={returnShipment}
@@ -303,7 +303,7 @@ const ReceiveShipment = (props) => {
               className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
               onClick={uploadPhoto}
               style={{ position: "relative", bottom: "10px" }}
-            > 
+            >
               {/* <img
                     src={uploadWhite}
                     width="35"
@@ -337,7 +337,7 @@ const ReceiveShipment = (props) => {
                     showRotate={true}
                     name='photo'
                     className='mt-1 modal-image'
-                    // style={{ margin: "auto", display: "table" }}
+                  // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
                 <button type='button' className='btn btn-link float-right'>
@@ -358,54 +358,54 @@ const ReceiveShipment = (props) => {
                               </div> */}
               </div>
             ) : (
-              <>
-                <div
-                  className='row '
-                  style={{ margin: "auto", display: "table" }}
-                >
-                  {/* <label>{photo.name?photo.name:""}</label> */}
-                  <img
-                    src={uploadBlue}
-                    name='photo'
-                    width='50'
-                    height='50'
-                    className='mt-1'
+                <>
+                  <div
+                    className='row '
                     style={{ margin: "auto", display: "table" }}
-                    alt='Upload'
-                  />
-                  <label className='mt-3'>
-                    {t("drag_drop") + " " + t("files_here")}{" "}
-                    <input type='file' className='select' onChange={setFile} />{" "}
-                  </label>
-                </div>
-                <div
-                  className='row mb-3'
-                  style={{ margin: "auto", display: "table" }}
-                >
-                  {t("or")}
-                </div>
-                <div
-                  className='row'
-                  style={{
-                    margin: "auto",
-                    display: "table",
-                  }}
-                >
-                  <label
-                    className='btn btn-primary'
-                    style={{ margin: 0, height: "max-content" }}
                   >
-                    {t("browse_files")}
-                    <input
-                      type='file'
-                      multiple={true}
-                      className='select'
-                      onChange={setFile}
-                    />{" "}
-                  </label>
-                </div>
-              </>
-            )}
+                    {/* <label>{photo.name?photo.name:""}</label> */}
+                    <img
+                      src={uploadBlue}
+                      name='photo'
+                      width='50'
+                      height='50'
+                      className='mt-1'
+                      style={{ margin: "auto", display: "table" }}
+                      alt='Upload'
+                    />
+                    <label className='mt-3'>
+                      {t("drag_drop") + " " + t("files_here")}{" "}
+                      <input type='file' className='select' onChange={setFile} />{" "}
+                    </label>
+                  </div>
+                  <div
+                    className='row mb-3'
+                    style={{ margin: "auto", display: "table" }}
+                  >
+                    {t("or")}
+                  </div>
+                  <div
+                    className='row'
+                    style={{
+                      margin: "auto",
+                      display: "table",
+                    }}
+                  >
+                    <label
+                      className='btn btn-primary'
+                      style={{ margin: 0, height: "max-content" }}
+                    >
+                      {t("browse_files")}
+                      <input
+                        type='file'
+                        multiple={true}
+                        className='select'
+                        onChange={setFile}
+                      />{" "}
+                    </label>
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </div>
