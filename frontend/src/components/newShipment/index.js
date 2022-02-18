@@ -1173,13 +1173,13 @@ const NewShipment = (props) => {
                           placeholder={
                             disabled
                               ? values.toOrgRegion
-                              : t("select_region")
+                              : t("Select_Region")
                           }
 
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgRegion === ""
-                              ? t("select_region")
+                              ? t("Select_Region")
                               : { value: values.toOrgRegion, label: values.toOrgRegion }
                           }
                           onChange={(v) => {
@@ -1228,17 +1228,16 @@ const NewShipment = (props) => {
                           placeholder={
                             values.toOrgCountry !== ""
                               ? values.toOrgCountry
-                              : t("select_country")
+                              : t("Select_Country")
                           }
 
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgRegion === ""
-                              ? t("select_country")
+                              ? t("Select_Country")
                               : { value: values.toOrgCountry, label: values.toOrgCountry }
                           }
                           onChange={(v) => {
-                            console.log({ v })
                             setFieldValue("toOrgLoc", "");
                             setFieldValue("toOrgCountry", v.label);
                             // settoOrgLocLabel(v.label);
