@@ -413,5 +413,6 @@
   "upload_image": "cargar imagen",
   "records_duplication":"Registros no agregados debido a la duplicación",
   "transit&fullyfulfilled": "tránsito y totalmente cumplido",
-  "past_expiry": "La fecha de caducidad no puede estar en el pasado"
+  "past_expiry": "La fecha de caducidad no puede estar en el pasado",
+  "no_locations_available": "No hay ubicaciones disponibles"
 }
