@@ -275,7 +275,7 @@ const NUModal = (props) => {
                 {changeComponent === "role" ?
                   (
                     <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0 }}
-                      disabled={disableButton}>
+                      disabled={disableButton || userAlreadyExits}>
                       {t(buttonText)}
                     </button>
                   ) : (
