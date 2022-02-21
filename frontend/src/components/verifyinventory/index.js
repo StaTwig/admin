@@ -29,8 +29,6 @@ const VerifyInventory = (props) => {
   const closeModal = () => {
     props.history.push("/inventory");
   };
-
-  console.log("Review Inventories:", reviewInventories);
   const onAssign = async () => {
     dispatch(turnOn());
 
@@ -139,7 +137,6 @@ const VerifyInventory = (props) => {
               </span>
             </div>
             {reviewInventories.map((reviewInventory) => {
-              console.log(reviewInventory.expiryDate);
               var expiryMonth;
               var manufMonth;
               if(reviewInventory.expiryDate.length==24){
