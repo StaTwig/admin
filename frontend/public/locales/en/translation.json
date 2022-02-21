@@ -382,5 +382,6 @@
   "transit&fullyfulfilled":"transit&fullyfulfilled",
   "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Enter Order ID or Serial No. or Shipment No. or Transit No.",
   "past_expiry": "Expiry Date cannot be in the past",
-  "no_locations_available": "No locations available"
+  "no_locations_available": "No locations available",
+  "Failure": "Failure"
 }
