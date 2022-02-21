@@ -1239,7 +1239,7 @@ exports.uploadImage = [
             emailId: emailId,
           },
           {
-            $set: { photoId: `/usermanagement/api/auth/images/${Upload.key}` },
+            $set: { photoId: Upload.key },
           },
           { new: true }
         );
@@ -1733,7 +1733,12 @@ exports.emailverify = [
       const emailId = req.query.emailId;
       const phoneNumber = req.query.phoneNumber;
       const email = await EmployeeModel.find(
-        { $or: [{ phoneNumber: "+" + phoneNumber }, { emailId: emailId ? emailId : '' }] },
+        {
+          $or: [
+            { phoneNumber: "+" + phoneNumber },
+            { emailId: emailId ? emailId : "" },
+          ],
+        },
         "emailId phoneNumber"
       );
       return apiResponse.successResponseWithData(

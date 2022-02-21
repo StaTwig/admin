@@ -32,8 +32,7 @@ var EmployeeSchema = new mongoose.Schema(
     photoId: {
       type: String,
       required: false,
-      default:
-        "/usermanagement/api/auth/images/e835ac51d35cfbe691e485b64397f3a5",
+      default: "default.jpg",
     },
     phoneNumber: { type: String, required: false, default: "" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },

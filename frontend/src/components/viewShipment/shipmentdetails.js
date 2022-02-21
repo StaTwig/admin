@@ -4,8 +4,6 @@ import "./style.scss";
 
 const ShipmentDetails = (props) => {
   const { t } = props;
-  // console.log('Shipment Details');
-  // console.log(props.shipments);
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
