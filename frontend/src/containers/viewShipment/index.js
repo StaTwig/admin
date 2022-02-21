@@ -22,7 +22,6 @@ const ViewGMRShipmentContainer = (props) => {
         setTrackData({});
       }
       const shipmentResult = await chainOfCustody(props.match.params.id);
-      console.log("SHIPMENT RESUlT", shipmentResult);
       if (shipmentResult.success) {
         setShippmentChainOfCustodyData(
           shipmentResult.data["shipmentChainOfCustody"]
