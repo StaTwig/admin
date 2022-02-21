@@ -332,5 +332,6 @@
     "integration":"Integration",
     "analytics":"Analytics",
     "rules":"Rules",
-    "send_otp":"Send OTP"
+    "send_otp":"Send OTP",
+    "email_has_already_been_taken": "Email has already been taken"
 }
