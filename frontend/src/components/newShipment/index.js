@@ -1103,6 +1103,7 @@ const NewShipment = (props) => {
                     </div>
                   </div>
 
+
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>

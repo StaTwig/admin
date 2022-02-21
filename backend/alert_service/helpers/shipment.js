@@ -110,6 +110,7 @@ exports.shipmentUpdate = async (event) => {
     event?.payloadData?.data?.receiver?.id
   );
   const templateActor = `"Shipment - ${txnId}" has been Updated`;
+  const templateActorSpanish = `"Envío - ${txnId}" ha sido actualizado`;
   const templateSupplier = `"Shipment - ${txnId}" to Organization - ${receiverOrgName} has been Updated`;
   const templateSupplierSpanish = `"Envío - ${txnId}" a la Organización - ${receiverOrgName} ha sido actualizado`;
   const templateReceiver = `"Shipment - ${txnId}" from Organization - ${actorOrgName} has been Updated`;
@@ -120,7 +121,10 @@ exports.shipmentUpdate = async (event) => {
     email: getSenderDetails.emailId,
     mobile: getSenderDetails.phoneNumber,
     subject: `Shipment Alert`,
-    content: templateActor,
+    content:
+      getSenderDetails.preferredLanguage == "EN"
+        ? templateActor
+        : templateActorSpanish,
     type: "ALERT",
     eventType: "SHIPMENT",
     transactionId: txnId,
