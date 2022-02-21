@@ -960,6 +960,16 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
+      let warehouseExists = await WarehouseModel.findOne({id: req.body.id});
+      if(warehouseExists){
+          await EmployeeModel.findOneAndUpdate({id: req.user.id},  { $push: { warehouseId: req.body.id } });
+          return apiResponse.successResponseWithData(
+            req,
+            res,
+            "add_warehouse_success",
+            warehouseExists
+          );
+      }
       const invCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "inventoryId" },
         {

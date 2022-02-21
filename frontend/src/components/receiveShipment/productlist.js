@@ -40,7 +40,7 @@ const ProductList = (props) => {
                         deliveredProductList.push(deliveredProduct);
                         props.setDelivered(deliveredProductList);
                         props.setIndex(index);
-                        if (deliveredProduct) setIsVisible(false);
+                        // if (deliveredProduct) setIsVisible(false);
                       }}
                       className='btn btn-outline-warning mt-2 mr-1 p-1'
                     >
@@ -92,7 +92,7 @@ const ProductList = (props) => {
                   ) : (
                     <input
                       className='form-control quantity-received'
-                      value={deliveredProduct}
+                      // value={deliveredProduct}
                       placeholder={t('Enter_the_Quantity')}
                       // maxLength={product.productQuantity.length}
                       onChange={(e) => {
@@ -139,6 +139,7 @@ const ProductList = (props) => {
           <FailPopup
             message='Quantity cannot be greater than sent'
             onHide={closeModalFail} //FailurePopUp
+            t={t}
           />
         </Modal>
       )}

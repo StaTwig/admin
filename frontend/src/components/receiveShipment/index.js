@@ -200,7 +200,7 @@ const ReceiveShipment = (props) => {
               <button
                 className='btn-primary btn fontSize20 font-bold mr-2 mt-3'
                 onClick={receiveShipment}
-                disabled={isDisabled || comment === ""}
+                disabled={isDisabled}
               >
                 <img
                   src={returnShipment}
