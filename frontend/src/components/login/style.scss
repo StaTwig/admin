@@ -270,6 +270,13 @@ background-color: $white;
     top:40px;
     font-size: 15px;
   }
+  .text-dangerMobile{
+    color:rgb(216, 9, 9);
+    position:relative;
+    left:25px;
+    top:-10px;    
+    font-size: 15px;
+  }
   .text-dangerON{
     color:rgb(216, 9, 9);
     position:relative;
@@ -297,4 +304,14 @@ background-color: $white;
   font-size: 16px;
   letter-spacing: 2px;
 }
-
+.phone-Input-new-login{
+  width: 131.5% !important;
+  margin-left: 2.5rem;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #707070 !important;
+  padding-bottom: 0.6rem;
+}
+.phone-Input-new-login > input{
+  border: none;
+  outline: none;
+}

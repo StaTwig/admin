@@ -7,8 +7,9 @@ import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import { isValidPhoneNumber } from 'react-phone-number-input'
 import { getImage } from "../../actions/notificationActions";
 import SuccessPopUp from "./successPopup";
 import { getUserInfoUpdated, updateProfile } from "../../actions/userActions";
@@ -343,16 +344,16 @@ class Profile extends React.Component {
                     <div className='form-group2 mb-3'>
                       <label htmlFor='shipmentId'>{t("phone")}</label>
                       <PhoneInput
-                        className='form-group mobile-number'
-                        country={"cr"}
-                        preferredCountries={["cr"]}
-                        placeholder={t("enter_phone_number")}
-                        // style={{ position: "absolute", marginLeft: "64%" }}
-                        value={this.state.phoneNumber}
-                        onChange={(phone) =>
-                          this.setState({ phoneNumber: phone })
-                        }
-                      />
+                              defaultCountry="IN"
+                             className="phone-Input-new-profile"
+                             placeholder={t("enter_phone_number")}
+                             // style={{ position: "absolute", marginLeft: "64%" }}
+                             value={this.state.phoneNumber}
+                             onChange={(phone) =>
+                               this.setState({ phoneNumber: phone })
+                             }
+                            
+                              />
                     </div>
                     {/* <div className="form-group">
                       <label htmlFor="">{t("language")}</label>

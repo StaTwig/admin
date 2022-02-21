@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { getOrganisations } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./style.scss";
 import User from "../../assets/icons/user.png";
@@ -105,7 +106,7 @@ const FormPage = (props) => {
 
   const handlePhoneVerification = () => {
     if (props.phone) {
-      if (props.phone.match(phoneRegex) === null) {
+      if (isValidPhoneNumber(props.phone) === false) {
         setPhoneErrorMsg("invalid_phone_number");
       } else {
         setPhoneErrorMsg("")
@@ -115,16 +116,15 @@ const FormPage = (props) => {
           console.log(v)
           if (v?.data[0]?.phoneNumber) {
             setphoneerror(true);
-            // setsignupDisable(true);
           } else {
             setphoneerror(false);
             setPhoneErrorMsg("")
-            //setsignupDisable(false);
           }
         })
       }
     }
   }
+
 
   async function verifyEmailandPhoneNo(value) {
     let result = await verifyEmailAndPhoneNo(value);
@@ -410,11 +410,12 @@ const FormPage = (props) => {
                           </div>
 
                           <div
-                            className='form-group'
+                            className='form-group form-padding'
                             style={{
                               position: "relative",
                               left: "-15px",
                               bottom: "20px",
+                              marginBottom:"0.2rem !important"
                             }}
                           >
                             <div
@@ -433,18 +434,14 @@ const FormPage = (props) => {
                             </div>
 
                             <PhoneInput
-                              country={"cr"}
-                              preferredCountries={["cr"]}
-                              placeholder={t('enter_phone_number')}
-                              inputProps={{
-                                name: "phone",
-                                required: false,
-                                // defaultCountry: "IN",
-                                // enableSearch: true,
-                              }}
-                              value={props.phone}
-                              onChange={(e) => {
-                                setChecker(true);
+                              defaultCountry="IN"
+                             placeholder="Enter phone number"
+                             className="phone-Input-new"
+                             value={props.phone}
+                             onChange={(e) => {
+                               console.log(e)
+                              setChecker(true);
+                              if(e){
                                 if (e.length > 0) {
                                   setPhoneNumberError(false);
                                   setMailError(false)
@@ -452,33 +449,33 @@ const FormPage = (props) => {
                                   setsignupDisable(true);
                                 }
                                 setMobileNumber(e);
-                                props.onphoneChange(e);
-                              }}
-                              onKeyDown={handlePhoneVerification()}
-                            />
+                              props.onphoneChange(e);
+                              }
+                            }}
+                            onKeyDown={handlePhoneVerification()}
+                            
+                              />
                           </div>
                           {errors.phone && touched.phone && (
-                            <span className='error-msg text-dangerS'>
+                            <span className='error-msg text-dangerMobile'>
                               {errors.phone}
                             </span>
                           )}
                           {phoneError && (
-                            <span className='error-msg text-dangerS'>
+                            <span className='error-msg text-dangerMobile'>
                               {t('phone_number')} {t('already')} {t('registered')}
                             </span>
                           )}
                           {(phoneErrorMsg !== '') && (
-                            <span className='error-msg text-dangerS'>
+                            <span className='error-msg text-dangerMobile'>
                               {t(phoneErrorMsg)}
                             </span>
                           )}
                           {phoneNumberError && mobileNumber.length <= 0 && email.length <= 0 && (
-                            <span className='error-msg text-dangerS'>
+                            <span className='error-msg text-dangerMobile'>
                               {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
                             </span>
                           )}
-
-                          <div className='pb-3'></div>
                           <div
                             className='form-group'
                             style={{

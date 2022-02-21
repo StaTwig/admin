@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import "./style.scss";
 import User from "../../assets/icons/mail.png";
@@ -105,10 +106,10 @@ const FormLoginPage = (props) => {
                       />
                     </div>
                     <div style={{ position: "absolute", left: "-20px" }}>
-                      <PhoneInput
-                        country={"cr"}
-                        preferredCountries={["cr"]}
-                        placeholder={t('enter_phone_number')}
+                    <PhoneInput
+                              defaultCountry="IN"
+                             className="phone-Input-new-login"
+                             placeholder={t('enter_phone_number')}
                         inputProps={{
                           name: "phone",
                           required: true,
@@ -116,7 +117,8 @@ const FormLoginPage = (props) => {
                         }}
                         value={phone}
                         onChange={onPhoneChange}
-                      />
+                            
+                              />
                     </div>
                   </div>
 
