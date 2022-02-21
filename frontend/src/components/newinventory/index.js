@@ -31,13 +31,15 @@ const NewInventory = (props) => {
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
       setProducts(
-        result.filter((item) => item.name !== 'category').map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
+        result
+          .filter((item) => item.name !== "category")
+          .map((item) => {
+            return {
+              value: item.name,
+              label: item.name,
+              ...item,
+            };
+          })
       );
       const categoryArray = result.map((product) => product.type);
       setCategory(
@@ -107,7 +109,7 @@ const NewInventory = (props) => {
     "manufacturer",
     "batchNumber",
     "quantity",
-    "unitofMeasure"
+    "unitofMeasure",
   ];
 
   const month = new Date().getMonth() + 1;
@@ -134,7 +136,7 @@ const NewInventory = (props) => {
               ? validationVariable
               : validationVariable.toLocaleDateString()
           )
-        ).getMonth() + 1 
+        ).getMonth() + 1
       }`.slice(-2);
       let d = todayDate.substring(0, 2);
       a = a.toString();
@@ -148,10 +150,10 @@ const NewInventory = (props) => {
     return error;
   };
 
-  const importError = (message) =>{
+  const importError = (message) => {
     setInventoryError(message);
     setOpenFailInventory(true);
-  }
+  };
 
   const checkValidationErrors = (validations) => {
     let error = false;
@@ -186,11 +188,7 @@ const NewInventory = (props) => {
       return;
     }
 
-    //Store in reducer
     dispatch(setReviewinventories(inventoryState));
-
-    //Redirect to review page.
-
     props.history.push("/reviewinventory");
   };
 
@@ -247,7 +245,7 @@ const NewInventory = (props) => {
   return (
     <div className='Newinventory'>
       <div className='d-flex justify-content-between mb-0'>
-        <h1 className='breadcrumb mt-3'>{t('add_inventory')}</h1>
+        <h1 className='breadcrumb mt-3'>{t("add_inventory")}</h1>
         <div className='d-flex flex-column align-items-center'>
           {isAuthenticated("importInventory") && (
             <button
@@ -264,7 +262,7 @@ const NewInventory = (props) => {
                   alt='Export'
                 />
                 <span>
-                  <b>{t('import')}</b>
+                  <b>{t("import")}</b>
                 </span>
                 <img
                   src={dropdownIcon}
@@ -283,14 +281,14 @@ const NewInventory = (props) => {
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
-                {t('excel')}
+                {t("excel")}
               </button>
-              <button className=' btn btn-outline-info'> {t('other')}</button>
+              <button className=' btn btn-outline-info'> {t("other")}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
-              title={t('import')}
+              title={t("import")}
               close={() => closeExcelModal()}
               size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
@@ -328,7 +326,7 @@ const NewInventory = (props) => {
           <div style={{ fontSize: "14px" }}>
             +
             <span>
-              <b>{t('add_another_product')}</b>
+              <b>{t("add_another_product")}</b>
             </span>
           </div>
         </button>
@@ -341,7 +339,7 @@ const NewInventory = (props) => {
         <button className='btn-orange btn' onClick={onProceedToReview}>
           <img src={review} width='20' className='' alt='' />
           <span className='ml-1'>
-            <b>{t('review_product')}</b>
+            <b>{t("review_product")}</b>
           </span>
         </button>
         <button
@@ -352,7 +350,7 @@ const NewInventory = (props) => {
             props.history.push("/inventory");
           }}
         >
-          <b>{t('cancel')}</b>
+          <b>{t("cancel")}</b>
         </button>
       </div>
       {openCreatedInventory && (
@@ -361,7 +359,7 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <InventoryPopUp
-          t={t}
+            t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -373,7 +371,7 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailurePopUp
-          t={t}
+            t={t}
             onHide={closeModalFail} //FailurePopUp
             inventoryError={inventoryError}
           />
@@ -385,32 +383,14 @@ const NewInventory = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
-          t={t}
+            t={t}
             onHide={closeModalFail1} //FailurePopUp
             shipmentError={inventoryError}
           />
         </Modal>
       )}
-      {/* {errorMessage && 
-        <div className=""> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-        } */}
     </div>
   );
 };
 
 export default NewInventory;
-
-/*<button className="btn-primary btn" onClick={onAddInventory}>
-          {' '}
-          Add Inventory
-        </button>*/
-
-/* <div className="d-flex flex-column">
-      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  className="select" onChange={setExcelFile}/>
-      <button
-        className="btn-primary btn  w-50 mt-2"
-        onClick={uploadExcel}
-      >
-       <img src={uploadBlue} width="14" height="14" className="mr-2" /> <span>Upload</span>
-      </button>
-      </div>*/
