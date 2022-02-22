@@ -48,6 +48,7 @@ const Users = (props) => {
     addresses
   } = props;
 
+  console.log(roleData);
 
   return (
     <div className="users">
