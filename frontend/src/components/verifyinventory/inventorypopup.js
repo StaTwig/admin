@@ -30,7 +30,7 @@ const InventoryPopUp = ({ successMessage, errorMessage, onHide, t }) => {
         />
         <div className='alert'>
           {successMessage && `${t("success")}!`}
-          {errorMessage && t("Failure")}
+          {errorMessage && `${t("Failure")}`}
         </div>
         <div className='data'>{successMessage && t("successfully")}</div>
         <div className='data mb-4'>
