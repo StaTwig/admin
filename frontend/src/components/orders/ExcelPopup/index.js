@@ -21,7 +21,7 @@ const ExcelPopUp = (props) => {
     if (!isXls) {
       setopenFailedPop(true);
       setModalProps({
-        message: t("you_can_only_upload_XLS_file!"),
+        message: t("you_can_only_upload_XLS_file"),
       });
     } else
       setExcel(evt.target.files[0]);
