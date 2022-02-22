@@ -69,20 +69,20 @@ const ReceiveShipment = (props) => {
         data.products[index].productQuantity <= parseInt(value)
           ? data.products[index].productQuantity
           : parseInt(value);
-      const formData = new FormData();
-      if (photo) {
-        formData.append("photo", photo, photo.name);
-      }
-      formData.append("supplier", JSON.stringify(data.supplier));
-      formData.append("receiver", JSON.stringify(data.receiver));
-      formData.append("status", "RECEIVED");
-      formData.append("comment", comment);
-      formData.append("products", JSON.stringify(data.products));
-      formData.append("poId", data.poId);
-      formData.append("id", data.id);
     }
+    const formData = new FormData();
+    if (photo) {
+      formData.append("photo", photo, photo.name);
+    }
+    formData.append("supplier", JSON.stringify(data.supplier));
+    formData.append("receiver", JSON.stringify(data.receiver));
+    formData.append("status", "RECEIVED");
+    formData.append("comment", comment);
+    formData.append("products", JSON.stringify(data.products));
+    formData.append("poId", data.poId);
+    formData.append("id", data.id);
     dispatch(turnOn());
-    const result = await receiveApi(data);
+    const result = await receiveApi(formData);
     if (result.status === 200) {
       setreceiveShipmentModal(true);
     } else {
