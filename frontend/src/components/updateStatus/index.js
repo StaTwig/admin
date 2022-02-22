@@ -627,6 +627,7 @@ const UpdateStatus = (props) => {
                             className='mt-1'
                             style={{
                               width: "100%",
+                              maxHeight: "40vh",
                               objectFit: "contain",
                             }}
                             alt='PhotoURL'
