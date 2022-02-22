@@ -199,22 +199,36 @@ const Map = (props) => {
         .setLngLat([popL.long, popL.lat])
         .setHTML(
           `<div class="pt-1 text-white pb-1 pl-2 pr-2">
-              <div class="row"><span class="col-7 disabled">${t("shipment_id")}:</span> <span class=" col-3 font-weight-bold">${shipment.id}</span></div>
-              <div class="row"> <span class="col-5 disabled text-decoration-underline"> ${user?.walletAddress}</span> </div>
+              <div class="row"><span class="col-7 disabled">${t(
+                "shipment_id"
+              )}:</span> <span class=" col-3 font-weight-bold">${
+            shipment.id
+          }</span></div>
+              <div class="row"> <span class="col-5 disabled text-decoration-underline"> ${
+                user?.walletAddress
+              }</span> </div>
               <div class="row pt-1 pb-1">
                 <div class="col-1"> </div> 
                 <div class="col-2 disabled">${t("from")}:</div> 
                 <div class="col">
-                  <div class="font-weight-bold">${shipment.supplier.org.name} </div>
-                  <div class="disabled">${shipment.supplier?.warehouse?.warehouseAddress?.city}</div>
+                  <div class="font-weight-bold">${
+                    shipment.supplier.org.name
+                  } </div>
+                  <div class="disabled">${
+                    shipment.supplier?.warehouse?.warehouseAddress?.city
+                  }</div>
                 </div>
               </div>
               <div class="row pt-1 pb-1">
                 <div class="col-1"> </div>
                 <div class="col-2 disabled">${t("to")}:</div>
                 <div class="col">
-                  <div class="font-weight-bold">${shipment.receiver.org.name}</div>
-                  <div class="disabled">${shipment.receiver?.warehouse?.warehouseAddress?.city}</div>
+                  <div class="font-weight-bold">${
+                    shipment.receiver.org.name
+                  }</div>
+                  <div class="disabled">${
+                    shipment.receiver?.warehouse?.warehouseAddress?.city
+                  }</div>
                 </div>
               </div>
             </div>`
@@ -231,9 +245,8 @@ const Map = (props) => {
     });
     const language = new MapboxLanguage({ defaultLanguage: lang });
     map.addControl(language);
-    // Clean up on unmount
     return () => map.remove();
-  }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props]);
 
   return (
     <div>

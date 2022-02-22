@@ -595,7 +595,10 @@ exports.createShipment = [
               req.user
             );
           //Case - create shipment with Batch Number
-          if (products[count].batchNumber != null && products[count].batchNumber != undefined) {
+          if (
+            products[count].batchNumber != null &&
+            products[count].batchNumber != undefined
+          ) {
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
@@ -609,7 +612,11 @@ exports.createShipment = [
             );
           }
           if (products[count].serialNumbersRange != null) {
-            const serialNumbers = Array.isArray(products[count].serialNumbersRange) ? products[count].serialNumbersRange : products[count].serialNumbersRange.split("-");
+            const serialNumbers = Array.isArray(
+              products[count].serialNumbersRange
+            )
+              ? products[count].serialNumbersRange
+              : products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
               if (Array.isArray(products[count].serialNumbersRange)) {
@@ -627,8 +634,7 @@ exports.createShipment = [
                   );
                   atomsArray.push(updateAtoms);
                 }
-              }
-              else {
+              } else {
                 const serialNumbersFrom = parseInt(
                   serialNumbers[0].split(/(\d+)/)[1]
                 );
@@ -654,7 +660,7 @@ exports.createShipment = [
             }
           }
         }
-        
+
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
         const updates = {
           updatedOn: currDateTime,
@@ -1186,11 +1192,14 @@ exports.receiveShipment = [
               }
             }
           }
-          const Upload = await uploadFile(req.file);
-          await unlinkFile(req.file.path);
+          let Upload = null;
+          if (req.file) {
+            Upload = await uploadFile(req.file);
+            await unlinkFile(req.file.path);
+          }
           const updates = {
             updatedOn: new Date().toISOString(),
-            imageId: Upload.key,
+            imageId: Upload?.key || null,
             updatedBy: req.user.id,
             updateComment: data.comment,
             status: "RECEIVED",
@@ -1312,6 +1321,7 @@ exports.receiveShipment = [
         return apiResponse.forbiddenResponse(res, "Access denied");
       }
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
