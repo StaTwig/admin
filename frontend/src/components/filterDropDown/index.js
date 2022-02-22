@@ -69,11 +69,6 @@ const FilterDropDown = (props) => {
                       );
                     }}
                     type='button'
-                    style={{
-                      padding: "10px",
-                      height: "40px",
-                      width: "130px",
-                    }}
                   >
                     {item.label}
                   </button>

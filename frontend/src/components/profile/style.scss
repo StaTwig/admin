@@ -415,6 +415,14 @@
   white-space: nowrap !important;
   border-bottom: 2px solid #d6d6d6;
 }
-// .mobile-number{
-//   width: 40rem !important;
-// }
+.phone-Input-new-profile{
+  width: 64% !important;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #707070 !important;
+  padding-bottom: 0.6rem;
+}
+.phone-Input-new-profile > input{
+  border: none;
+  outline: none;
+}
