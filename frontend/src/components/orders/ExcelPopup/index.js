@@ -17,7 +17,14 @@ const ExcelPopUp = (props) => {
   const [modalProps, setModalProps] = useState({});
 
   const setExcelFile = (evt) => {
-    setExcel(evt.target.files[0]);
+    const isXls = evt.target.files[0].type === 'application/vnd.ms-excel';
+    if (!isXls) {
+      setopenFailedPop(true);
+      setModalProps({
+        message: t("you_can_only_upload_XLS_file!"),
+      });
+    } else
+      setExcel(evt.target.files[0]);
   };
   props.setMenu(false);
   const uploadExcel = async () => {
@@ -87,6 +94,7 @@ const ExcelPopUp = (props) => {
           <input
             type='file'
             id='fileE'
+            accept="application/vnd.ms-excel"
             style={{ visibility: "hidden" }}
             className='mb-3 excelSpace'
             onChange={setExcelFile}
