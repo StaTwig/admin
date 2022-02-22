@@ -97,6 +97,14 @@ body {
   border-radius: 10px !important;
 }
 
+.btn-outline-primary:hover {
+  background-color: $primaryBlue !important;
+  color: $white !important;
+  border-color: $primaryBlue !important;
+  border-width: 1px !important;
+  border-radius: 10px !important;
+}
+
 .custom-card {
   box-shadow: 0px 3px 10px $grey;
   border-radius: 15px;

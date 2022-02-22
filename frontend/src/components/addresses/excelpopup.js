@@ -36,21 +36,36 @@ const ExcelPopUp = (props) => {
 
   return (
     <div className="excelpopup col p-4">
-      <div className="d-flex flex-column upload mb-5 ml-5">
+      <div className="d-flex flex-column upload pb-3 mb-5 ml-5">
         <img
           src={uploadBlue}
           name="photo"
           width="50"
           height="50"
-          className="mt-2"
+          className="mt-3"
         />
         <div>{t(`Drag and drop your Excel file here`)}</div>
         <div>{t('or')}</div>
-        <input
-          type="file"
-          className="mb-3 excelSpace"
-          onChange={setExcelFile}
-        />
+        <div className='row' style={{ position: 'relative', display:"flex", flexDirection:"column" }}
+        >
+          <label htmlFor='fileE' className='mt-2 btn-primary' style={{
+            display: "block",
+            margin: "0 auto",
+            padding:"10px 25px",
+            cursor:"pointer"
+          }}>
+            {t("select_a_file")}
+          </label>
+
+          <input
+            type='file'
+            id='fileE'
+            style={{ visibility: "hidden", display:"none" }}
+            className='mb-3 excelSpace'
+            onChange={setExcelFile}
+          />
+          {excel !== null && <p className="file-name py-2">{excel?.name}</p>}
+        </div>
       </div>
       {visible && (
         <span className="  text-success d-flex flex-row-reverse pr-5 pb-2">
