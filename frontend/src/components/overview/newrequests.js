@@ -69,6 +69,7 @@ const NewRequests = (props) => {
               setData({
                 id: requestRow?.id,
                 ref: requestRow?.emailId,
+                emailId: requestRow?.emailId, // Same as above but for a different purpose
                 phoneNumber: requestRow?.phoneNumber,
                 rindex: rindex,
               });
