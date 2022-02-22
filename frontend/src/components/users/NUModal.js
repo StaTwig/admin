@@ -61,6 +61,7 @@ const NUModal = (props) => {
     if (!data?.role) {
       flag = true;
     }
+    
     setDisableBtn(flag);
   })
 
@@ -84,15 +85,14 @@ const NUModal = (props) => {
   }
 
   const verifyEmailIds = (event) => {
-
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
       setUserAlreadyExits(false)
     }
     else {
-      const valifyEmail = usersList.forEach((user, index) => {
+      setUserAlreadyExits(false)
+      usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
           setUserAlreadyExits(true)
-          console.log("user already exits")
         }
       })
     }
@@ -195,7 +195,7 @@ const NUModal = (props) => {
 
                 {userAlreadyExits && (
                   <div style={{ position: "absolute", top: "4.8rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
-                    <span>{t('email_has_already_been_taken')}</span>
+                    <span>{t('Email_ID_Already_registered')}</span>
                   </div>
                 )}
                 <button
@@ -279,7 +279,7 @@ const NUModal = (props) => {
                       {t(buttonText)}
                     </button>
                   ) : (
-                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
+                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
                       {t(buttonText)}
                     </button>
                   )}
