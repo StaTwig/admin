@@ -1833,6 +1833,12 @@ exports.viewShipment = [
               id: element.productID,
             });
             element.unitofMeasure = product.unitofMeasure;
+
+            const batch = await AtomModel.findOne({
+              batchNumbers: element.batchNumber,
+            });
+            element.mfgDate = batch?.attributeSet.mfgDate;
+            element.expDate = batch?.attributeSet.expDate;
           });
           return apiResponse.successResponseWithData(
             res,

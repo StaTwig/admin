@@ -3,6 +3,12 @@ import "./style.scss";
 
 const ProductList = (props) => {
   const { t } = props;
+
+  const getVisibleDate = (dateString) => {
+    let date = new Date(dateString);
+    return date.toLocaleDateString();
+  }
+
   return Object.keys(props.shipments).length === 0 ? (
     <div className='row panel justify-content-between'>N/A</div>
   ) : (
@@ -28,6 +34,8 @@ const ProductList = (props) => {
                 {t("quantity") + " " + t("received")}
               </li>
               <li className='mb-1 text-secondary'>{t("label_code")}</li>
+              <li className='mb-1 text-secondary'>{t("mfg_date")}</li>
+              <li className='mb-1 text-secondary'>{t("exp_date")}</li>
             </ul>
             <ul className='elemens w-75'>
               <li className='mb-1'>{product.productName}</li>
@@ -56,6 +64,8 @@ const ProductList = (props) => {
                 <span>{")"}</span>
               </li>
               <li className='mb-1'>{props.shipments.label.labelId}</li>
+              <li className='mb-1'>{getVisibleDate(product.mfgDate)}</li>
+              <li className='mb-1'>{getVisibleDate(product.expDate)}</li>
             </ul>
             <div></div>
           </div>
