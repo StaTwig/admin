@@ -65,7 +65,7 @@ const UserContainer = (props) => {
       }
       fetchData();
     }
-  }, [queryKey]);
+  }, [queryKey, message]);
 
   const usersList = useSelector((state) => {
     return state.organisation.users;
@@ -74,10 +74,10 @@ const UserContainer = (props) => {
   const permissions = useSelector((state) => {
     return state.organisation.permissions;
   });
-const addresses = useSelector((state) => {
+  const addresses = useSelector((state) => {
     return state.organisation.addresses;
   });
-  
+
   const prepareDropdownData = (data) => {
     let finalDropDownData = [];
     data?.forEach(item => {
@@ -98,20 +98,20 @@ const addresses = useSelector((state) => {
   useEffect(() => {
     const originalList = userStateList.length > 0 ? userStateList : usersList;
     console.log(userStateList, usersList);
-    if(originalList.length > 0) {
+    if (originalList.length > 0) {
       setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
       setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
-  
+
       setAccountStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
       setAccountStatusReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
-  
+
       setCalenderFilterJsonData([
-      { key: 'today', value: 'Today', checked: false },
-      { key: 'thisWeek', value: 'This week', checked: false },
-      { key: 'thisMonth', value: 'This Month', checked: false },
-      { key: 'threeMonths', value: 'Last 3 Months', checked: false },
-      { key: 'sixMonths', value: 'Last 6 Months', checked: false },
-      { key: 'thisYear', value: 'This Year', checked: false }]);
+        { key: 'today', value: 'Today', checked: false },
+        { key: 'thisWeek', value: 'This week', checked: false },
+        { key: 'thisMonth', value: 'This Month', checked: false },
+        { key: 'threeMonths', value: 'Last 3 Months', checked: false },
+        { key: 'sixMonths', value: 'Last 6 Months', checked: false },
+        { key: 'thisYear', value: 'This Year', checked: false }]);
     };
 
   }, [userStateList]);
@@ -195,7 +195,7 @@ const addresses = useSelector((state) => {
   }
 
   const onSelectionOfDropdownValue = (index, type, value) => {
-    if(type === 'clear'){
+    if (type === 'clear') {
       setQueryValue();
       setQueryKey();
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
@@ -285,7 +285,7 @@ const addresses = useSelector((state) => {
 export default UserContainer;
 
 function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
-  if(data[index].checked) {
+  if (data[index].checked) {
     console.log(data[index]);
     setQueryValue(value);
     setQueryType(type);
