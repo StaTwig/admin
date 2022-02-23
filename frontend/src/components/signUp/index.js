@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { getOrganisations } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
-import { isValidPhoneNumber } from 'react-phone-number-input';
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./style.scss";
 import User from "../../assets/icons/user.png";
@@ -18,7 +18,8 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import TextField from "@material-ui/core/TextField";
 import { verifyEmailAndPhoneNo } from "../../actions/userActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { COUNTRY_CODE } from "../../constants/countryCode";
 
 const FormPage = (props) => {
   const { t, i18n } = useTranslation();
@@ -46,12 +47,12 @@ const FormPage = (props) => {
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const phoneRegex = /^\d{11}$/;
-  const other = t('other');
+  const other = t("other");
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
 
-      orgs.push({ id: t('other'), name: t('other') });
+      orgs.push({ id: t("other"), name: t("other") });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
@@ -76,55 +77,50 @@ const FormPage = (props) => {
   });
   const showOrgByType = (value) => {
     let arr = organisations.filter((data) => data.type === value);
-    arr.push({ name: t('other') });
+    arr.push({ name: t("other") });
     return arr;
   };
 
   const handleEmailVerification = () => {
     if (props.email) {
       if (props.email.match(emailRegex) === null) {
-        setEmailErrorMsg("emailId_is_not_valid")
+        setEmailErrorMsg("emailId_is_not_valid");
       } else {
-        setEmailErrorMsg("")
-        verifyEmailAndPhoneNo(
-          `emailId=${props.email}`
-        ).then((v) => {
+        setEmailErrorMsg("");
+        verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v) => {
           if (v.data.length) {
             setemailerror(true);
             //setemailerror(true);
             setsignupDisable(true);
           } else {
             setemailerror(false);
-            setEmailErrorMsg("")
+            setEmailErrorMsg("");
             //setsignupDisable(false);
             //setsignupDisable(false);
           }
-        })
+        });
       }
     }
-  }
+  };
 
   const handlePhoneVerification = () => {
     if (props.phone) {
       if (isValidPhoneNumber(props.phone) === false) {
         setPhoneErrorMsg("invalid_phone_number");
       } else {
-        setPhoneErrorMsg("")
-        verifyEmailAndPhoneNo(
-          `phoneNumber=${props.phone}`
-        ).then((v) => {
-          console.log(v)
+        setPhoneErrorMsg("");
+        verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v) => {
+          console.log(v);
           if (v?.data[0]?.phoneNumber) {
             setphoneerror(true);
           } else {
             setphoneerror(false);
-            setPhoneErrorMsg("")
+            setPhoneErrorMsg("");
           }
-        })
+        });
       }
     }
-  }
-
+  };
 
   async function verifyEmailandPhoneNo(value) {
     let result = await verifyEmailAndPhoneNo(value);
@@ -140,13 +136,13 @@ const FormPage = (props) => {
       organisationsArr.filter(
         (org) => org.name.toLowerCase() === value_new.toLowerCase()
       ).length &&
-      value_new !== t('other')
+      value_new !== t("other")
     )
       props.onOrgChange(false);
     else {
       props.onOrgChange(true);
       if (e) {
-        setValue(t('other'));
+        setValue(t("other"));
       }
     }
     props.onOrganisationChange({ id: 0, name: value_new });
@@ -165,39 +161,41 @@ const FormPage = (props) => {
   }
 
   return (
-    <div className='login-wrapper'>
-      <div className='container'>
-        <div className='mobile-header '>
-          <div className='branding'>
-            <img src={logo} alt='vaccineledger' />
+    <div className="login-wrapper">
+      <div className="container">
+        <div className="mobile-header ">
+          <div className="branding">
+            <img src={logo} alt="vaccineledger" />
           </div>
         </div>
 
-        <div className='row'>
-          <div className='col-m-6 col-lg-6'>
-            <div className='form-content'>
-              <img className='logo' src={logo} alt='Logo' />
-              <h1>{t('welcome')},</h1>
-              <p>{t('signup')} {t('to')} {t('continue').toLowerCase()}</p>
+        <div className="row">
+          <div className="col-m-6 col-lg-6">
+            <div className="form-content">
+              <img className="logo" src={logo} alt="Logo" />
+              <h1>{t("welcome")},</h1>
+              <p>
+                {t("signup")} {t("to")} {t("continue").toLowerCase()}
+              </p>
             </div>
           </div>
-          <div className='col-m-6 col-lg-6'>
-            <div className='card'>
+          <div className="col-m-6 col-lg-6">
+            <div className="card">
               {props.adminAwaiting ? (
                 <>
                   <img
-                    alt=''
+                    alt=""
                     src={Waiting}
-                    height='150'
-                    width='150'
-                    className='align-self-center mt-5 mb-2'
+                    height="150"
+                    width="150"
+                    className="align-self-center mt-5 mb-2"
                   />
-                  <div className='font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve'>
-                    {t('signup_success_message')}
+                  <div className="font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve">
+                    {t("signup_success_message")}
                   </div>
                 </>
               ) : (
-                <div className='card-body'>
+                <div className="card-body">
                   <Formik
                     enableReinitialize={true}
                     initialValues={{
@@ -211,10 +209,10 @@ const FormPage = (props) => {
                     validate={(values) => {
                       const errors = {};
                       if (!values.firstName) {
-                        errors.firstName = t('required');
+                        errors.firstName = t("required");
                       }
                       if (!values.lastName) {
-                        errors.lastName = t('required');
+                        errors.lastName = t("required");
                       }
                       //if (!values.email) {
                       // errors.email = "Required";
@@ -223,7 +221,7 @@ const FormPage = (props) => {
                       //    errors.phone = "Required";
                       //  }
                       if (!values.org) {
-                        errors.org = t('required');
+                        errors.org = t("required");
                       }
                       return errors;
                     }}
@@ -243,13 +241,16 @@ const FormPage = (props) => {
                       setFieldValue,
                       dirty,
                     }) => (
-                      <form onSubmit={handleSubmit} onKeyDown={(e) =>
-                        e.keyCode === 13 && e.preventDefault()
-                      }
-                        className='mb-5'>
-                        <div className='login-form mt-1 pl-5 pr-5 ml-5'>
-                          <div className='card-title mr-5'>{t('signup')}</div>
-                          <div className='form-group flex-column '>
+                      <form
+                        onSubmit={handleSubmit}
+                        onKeyDown={(e) =>
+                          e.keyCode === 13 && e.preventDefault()
+                        }
+                        className="mb-5"
+                      >
+                        <div className="login-form mt-1 pl-5 pr-5 ml-5">
+                          <div className="card-title mr-5">{t("signup")}</div>
+                          <div className="form-group flex-column ">
                             <div
                               style={{
                                 position: "absolute",
@@ -258,18 +259,18 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt=''
+                                alt=""
                                 src={User}
-                                height='19px'
-                                width='17px'
+                                height="19px"
+                                width="17px"
                               />
                             </div>
 
                             <TextField
-                              id='standard-basic'
-                              label={t('first_name')}
-                              className='form-controll ml-4'
-                              name='firstName'
+                              id="standard-basic"
+                              label={t("first_name")}
+                              className="form-controll ml-4"
+                              name="firstName"
                               value={props.firstName}
                               onChange={(e) => {
                                 setChecker(true);
@@ -284,20 +285,20 @@ const FormPage = (props) => {
                               }}
                             />
                             {errors.firstName && touched.firstName && (
-                              <span className='error-msg text-dangerS'>
+                              <span className="error-msg text-dangerS">
                                 {errors.firstName}
                               </span>
                             )}
 
                             {firstNameError && (
-                              <span className='error-msg text-dangerS'>
-                                {t('first_name')} {t('is')} {t('required')}
+                              <span className="error-msg text-dangerS">
+                                {t("first_name")} {t("is")} {t("required")}
                               </span>
                             )}
                           </div>
 
                           <div
-                            className='form-group flex-column'
+                            className="form-group flex-column"
                             style={{ position: "relative", top: "-10px" }}
                           >
                             <div
@@ -308,17 +309,17 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt=''
+                                alt=""
                                 src={User}
-                                height='19px'
-                                width='17px'
+                                height="19px"
+                                width="17px"
                               />
                             </div>
                             <TextField
-                              id='standard-basic'
-                              label={t('last_name')}
-                              className=' form-controll ml-4'
-                              name='lastName'
+                              id="standard-basic"
+                              label={t("last_name")}
+                              className=" form-controll ml-4"
+                              name="lastName"
                               value={props.lastName}
                               onChange={(e) => {
                                 setChecker(true);
@@ -333,20 +334,20 @@ const FormPage = (props) => {
                               }}
                             />
                             {errors.lastName && touched.lastName && (
-                              <span className='error-msg text-dangerS'>
+                              <span className="error-msg text-dangerS">
                                 {errors.lastName}
                               </span>
                             )}
 
                             {lastNameError && (
-                              <span className='error-msg text-dangerS'>
-                                {t('last_name')} {t('is')} {t('required')}
+                              <span className="error-msg text-dangerS">
+                                {t("last_name")} {t("is")} {t("required")}
                               </span>
                             )}
                           </div>
 
                           <div
-                            className='form-group flex-column'
+                            className="form-group flex-column"
                             style={{ position: "relative", top: "-20px" }}
                           >
                             <div
@@ -357,25 +358,25 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt='Mail Icon'
+                                alt="Mail Icon"
                                 src={Mail}
-                                height='14px'
-                                width='19px'
+                                height="14px"
+                                width="19px"
                               />
                             </div>
                             <TextField
-                              id='standard-basic'
-                              label={t('email_id')}
-                              className='form-controll ml-4'
-                              name='email'
+                              id="standard-basic"
+                              label={t("email_id")}
+                              className="form-controll ml-4"
+                              name="email"
                               type="email"
-                              autoCapitalize='none'
+                              autoCapitalize="none"
                               value={props.email.toLowerCase()}
                               onChange={(e) => {
                                 setChecker(true);
                                 if (e.target.value.length > 0) {
-                                  setEmailErrorMsg("")
-                                  setemailerror(false)
+                                  setEmailErrorMsg("");
+                                  setemailerror(false);
                                   setPhoneNumberError(false);
                                   setMailError(false);
                                 } else {
@@ -388,34 +389,37 @@ const FormPage = (props) => {
                               handleBlur={handleEmailVerification()}
                             />
                             {errors.email && touched.email && (
-                              <span className='error-msg text-dangerS'>
+                              <span className="error-msg text-dangerS">
                                 {errors.email}
                               </span>
                             )}
                             {emailError && (
-                              <span className='error-msg text-dangerS'>
-                                {t('email_id')} {t('already')} {t('registered')}
+                              <span className="error-msg text-dangerS">
+                                {t("email_id")} {t("already")} {t("registered")}
                               </span>
                             )}
-                            {(emailErrorMsg !== '') && (
-                              <span className='error-msg text-dangerS'>
+                            {emailErrorMsg !== "" && (
+                              <span className="error-msg text-dangerS">
                                 {t(emailErrorMsg)}
                               </span>
                             )}
-                            {phoneNumberError && email.length <= 0 && mobileNumber.length <= 0 && (
-                              <span className='error-msg text-dangerS'>
-                                {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
-                              </span>
-                            )}
+                            {phoneNumberError &&
+                              email.length <= 0 &&
+                              mobileNumber.length <= 0 && (
+                                <span className="error-msg text-dangerS">
+                                  {t("phone_number")} {t("or")} {t("email_id")}{" "}
+                                  {t("is")} {t("required")}
+                                </span>
+                              )}
                           </div>
 
                           <div
-                            className='form-group form-padding'
+                            className="form-group form-padding"
                             style={{
                               position: "relative",
                               left: "-15px",
                               bottom: "20px",
-                              marginBottom:"0.2rem !important"
+                              marginBottom: "0.2rem !important",
                             }}
                           >
                             <div
@@ -426,58 +430,63 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt='Phone icon'
+                                alt="Phone icon"
                                 src={Phone}
-                                height='20px'
-                                width='20px'
+                                height="20px"
+                                width="20px"
                               />
                             </div>
 
                             <PhoneInput
-                              defaultCountry="IN"
-                             placeholder="Enter phone number"
-                             className="phone-Input-new"
-                             value={props.phone}
-                             onChange={(e) => {
-                               console.log(e)
-                              setChecker(true);
-                              if(e){
-                                if (e.length > 0) {
-                                  setPhoneNumberError(false);
-                                  setMailError(false)
-                                } else {
-                                  setsignupDisable(true);
+                              international
+                              countryCallingCodeEditable={false}
+                              defaultCountry={COUNTRY_CODE}
+                              placeholder={t("enter_phone_number")}
+                              className="phone-Input-new"
+                              value={props.phone}
+                              onChange={(e) => {
+                                console.log(e);
+                                setChecker(true);
+                                if (e) {
+                                  if (e.length > 0) {
+                                    setPhoneNumberError(false);
+                                    setMailError(false);
+                                  } else {
+                                    setsignupDisable(true);
+                                  }
+                                  setMobileNumber(e);
+                                  props.onphoneChange(e);
                                 }
-                                setMobileNumber(e);
-                              props.onphoneChange(e);
-                              }
-                            }}
-                            onKeyDown={handlePhoneVerification()}
-                            
-                              />
+                              }}
+                              onKeyDown={handlePhoneVerification()}
+                            />
                           </div>
                           {errors.phone && touched.phone && (
-                            <span className='error-msg text-dangerMobile'>
+                            <span className="error-msg text-dangerMobile">
                               {errors.phone}
                             </span>
                           )}
                           {phoneError && (
-                            <span className='error-msg text-dangerMobile'>
-                              {t('phone_number')} {t('already')} {t('registered')}
+                            <span className="error-msg text-dangerMobile">
+                              {t("phone_number")} {t("already")}{" "}
+                              {t("registered")}
                             </span>
                           )}
-                          {(phoneErrorMsg !== '') && (
-                            <span className='error-msg text-dangerMobile'>
+                          {phoneErrorMsg !== "" && (
+                            <span className="error-msg text-dangerMobile">
                               {t(phoneErrorMsg)}
                             </span>
                           )}
-                          {phoneNumberError && mobileNumber.length <= 0 && email.length <= 0 && (
-                            <span className='error-msg text-dangerMobile'>
-                              {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
-                            </span>
-                          )}
+                          {phoneNumberError &&
+                            mobileNumber.length <= 0 &&
+                            email.length <= 0 && (
+                              <span className="error-msg text-dangerMobile">
+                                {t("phone_number")} {t("or")} {t("email_id")}{" "}
+                                {t("is")} {t("required")}
+                              </span>
+                            )}
                           <div
-                            className='form-group'
+                            className="form-group"
                             style={{
                               position: "relative",
                               left: "30px",
@@ -493,14 +502,14 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt='Phone icon'
+                                alt="Phone icon"
                                 src={organisationType}
-                                height='28px'
-                                width='24px'
+                                height="28px"
+                                width="24px"
                               />
                             </div>
                             <div
-                              className='form-controll'
+                              className="form-controll"
                               style={{
                                 position: "relative",
                                 bottom: "5px",
@@ -519,13 +528,14 @@ const FormPage = (props) => {
                                   }
                                   if (
                                     (email.length > 0 ||
-                                      mobileNumber.length > 0)
-                                    && emailErrorMsg === '' &&
-                                    phoneErrorMsg === '' &&
-                                    (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
+                                      mobileNumber.length > 0) &&
+                                    emailErrorMsg === "" &&
+                                    phoneErrorMsg === "" &&
+                                    (emailError || !phoneNumberError) &&
+                                    (!emailError || phoneNumberError)
                                   ) {
                                     setPhoneNumberError(true);
-                                    setMailError(true)
+                                    setMailError(true);
                                   }
 
                                   setFieldValue("type", item);
@@ -534,13 +544,13 @@ const FormPage = (props) => {
                                   setorgType(item);
                                   setValue("");
                                 }}
-                                id='debug'
+                                id="debug"
                                 options={orgTypeArray}
                                 debug
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation_type')}
+                                    label={t("organisation_type")}
                                   />
                                 )}
                               />
@@ -593,7 +603,7 @@ const FormPage = (props) => {
                         <img src={dropdownIcon} width="15" height="10" />
                   </div> */}
                             {errors.org && touched.org && (
-                              <span className='error-msg text-dangerO '>
+                              <span className="error-msg text-dangerO ">
                                 {" "}
                                 {errors.org}{" "}
                               </span>
@@ -601,7 +611,7 @@ const FormPage = (props) => {
                           </div>
 
                           <div
-                            className='form-group'
+                            className="form-group"
                             style={{
                               position: "relative",
                               left: "30px",
@@ -617,18 +627,18 @@ const FormPage = (props) => {
                               }}
                             >
                               <img
-                                alt='Phone icon'
+                                alt="Phone icon"
                                 src={org}
-                                height='19px'
-                                width='22px'
+                                height="19px"
+                                width="22px"
                               />
                             </div>
                             <div
-                              className='form-controll'
+                              className="form-controll"
                               style={{
                                 position: "relative",
                                 bottom: "25px",
-                                width: "345px"
+                                width: "345px",
                               }}
                             >
                               <Autocomplete
@@ -641,18 +651,22 @@ const FormPage = (props) => {
                                   }
                                   if (
                                     (mobileNumber.length <= 0 ||
-                                      email.length <= 0) && emailErrorMsg === '' && phoneErrorMsg === '' && (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
+                                      email.length <= 0) &&
+                                    emailErrorMsg === "" &&
+                                    phoneErrorMsg === "" &&
+                                    (emailError || !phoneNumberError) &&
+                                    (!emailError || phoneNumberError)
                                   ) {
                                     setPhoneNumberError(true);
-                                    setMailError(true)
+                                    setMailError(true);
                                   }
                                   setFieldValue("org", item);
                                   props.onOrganisationChange(item);
-                                  if (item.name !== t('other')) {
+                                  if (item.name !== t("other")) {
                                     setValue(item.name);
                                     props.onOrgChange(false);
                                   }
-                                  if (item.name === t('other')) {
+                                  if (item.name === t("other")) {
                                     props.onOrgChange(true);
 
                                     if (
@@ -660,21 +674,21 @@ const FormPage = (props) => {
                                       lastName.length > 0 &&
                                       orgType.length > 0 &&
                                       (email.length > 0 ||
-                                        mobileNumber.length > 0)
-                                      && emailErrorMsg === '' &&
-                                      phoneErrorMsg === '' 
+                                        mobileNumber.length > 0) &&
+                                      emailErrorMsg === "" &&
+                                      phoneErrorMsg === ""
                                       // &&
                                       // (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
                                     ) {
                                       props.onOrgChange(true);
                                     } else {
                                       setPhoneNumberError(true);
-                                      setMailError(true)
+                                      setMailError(true);
                                       props.onOrgChange(false);
                                     }
                                   }
                                 }}
-                                id='debug'
+                                id="debug"
                                 debug
                                 getOptionLabel={(option) => option.name}
                                 options={showOrgByType(selectedType)}
@@ -685,7 +699,7 @@ const FormPage = (props) => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation_name')}
+                                    label={t("organisation_name")}
                                   />
                                 )}
                               />
@@ -737,45 +751,48 @@ const FormPage = (props) => {
                     className="text"
                   />  */}
                             </div>
-                            <span className="Organisation-type-msg">{t("organisation_name_info")}</span>
+                            <span className="Organisation-type-msg">
+                              {t("organisation_name_info")}
+                            </span>
                             {/* <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
                   </div> */}
                             {errors.org && touched.org && (
-                              <span className='error-msg text-dangerON'>
+                              <span className="error-msg text-dangerON">
                                 {errors.org}
                               </span>
                             )}
-                            {(validEmailErr !== '') && (
-                              <span className='error-msg text-dangerON'>
+                            {validEmailErr !== "" && (
+                              <span className="error-msg text-dangerON">
                                 {validEmailErr}
                               </span>
                             )}
                           </div>
                           {props.errorMessage && (
-                            <div className='mt-3 mr-4'>
+                            <div className="mt-3 mr-4">
                               {" "}
-                              <Alert variant='filled' severity='error'>
-                                <AlertTitle>{t('error')}</AlertTitle>
+                              <Alert variant="filled" severity="error">
+                                <AlertTitle>{t("error")}</AlertTitle>
                                 {props.errorMessage}
                               </Alert>
                             </div>
                           )}
+                          {console.log(props.errorMessage)}
 
-                          <div className='text-center'>
+                          <div className="text-center">
                             <br></br>
                             <button
-                              type='submit'
-                              className='buttonS btn btn-primary mr-5'
+                              type="submit"
+                              className="buttonS btn btn-primary mr-5"
                               disabled={signupDisable}
                             >
-                              {t('signup')}
+                              {t("signup")}
                             </button>
                           </div>
-                          <div className='signup-link text-center mt-3 mb-4 mr-5'>
-                            {t('already')} {t('have')} {t('an')} {t('account')}?{" "}
-                            <Link to='/login'>
-                              <b>{t('login')}</b>
+                          <div className="signup-link text-center mt-3 mb-4 mr-5">
+                            {t("already")} {t("have")} {t("an")} {t("account")}?{" "}
+                            <Link to="/login">
+                              <b>{t("login")}</b>
                             </Link>
                           </div>
                         </div>
