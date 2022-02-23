@@ -1051,11 +1051,10 @@ exports.receiveShipment = [
           });
         }
         var flag = "Y";
-        if (data.poId === null) {
+        if (data.poId == "null") {
           flag = "YS";
         }
-
-        if (flag == "Y") {
+        if (flag === "Y") {
           const po = await RecordModel.findOne({
             id: data.poId,
           });
