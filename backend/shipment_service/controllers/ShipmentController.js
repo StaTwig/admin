@@ -3073,6 +3073,9 @@ exports.trackJourney = [
                 {
                   airWayBillNo: trackingId,
                 },
+                {
+                  "products.batchNumber": trackingId,
+                },
               ],
             },
             {
@@ -3176,6 +3179,9 @@ exports.trackJourney = [
                   {
                     airWayBillNo: trackingId,
                   },
+                {
+                  "products.batchNumber": trackingId,
+                },
                 ],
               },
             },
