@@ -5,7 +5,7 @@ import Cross from "../../assets/icons/crossRed.svg";
 
 const InventoryPopUp = ({ successMessage, errorMessage, onHide, t }) => {
   const imagePath = successMessage ? Checked : Cross;
-  
+
   const errMsgTrans = () => {
     const msgArr = errorMessage.split(" ");
     const firstFiveWord = msgArr.slice(0, 5).join(" ");
