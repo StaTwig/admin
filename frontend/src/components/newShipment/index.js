@@ -394,6 +394,7 @@ const NewShipment = (props) => {
   };
 
   const handleBatchChange = (value, i) => {
+    console.log("Batch:", value, i);
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].batchNumber = value;
     setOrderDetails(soDetailsClone);
@@ -725,6 +726,7 @@ const NewShipment = (props) => {
                       style={{ height: "25px", width: "50px" }}
                       className='btn btn-fetch'
                       onClick={async () => {
+                        console.log("Fetch button");
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
                         setAddProducts((p) => []);
