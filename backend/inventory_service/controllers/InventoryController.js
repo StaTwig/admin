@@ -2654,7 +2654,7 @@ exports.searchProduct = [
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};
-            elementMatchQuery["id"] = warehouse.warehouseInventory;
+            // elementMatchQuery["id"] = warehouse.warehouseInventory;
             if (productName) {
               elementMatchQuery[`products.name`] = productName;
             }
