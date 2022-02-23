@@ -292,7 +292,9 @@ const EditRow = (props) => {
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
-                handleQuantityChange(e.target.value, index);
+                if(Object.keys(selectedBatch).length === 0||selectedBatch.quant>e.target.value){
+                  handleQuantityChange(e.target.value, index);
+                }
               }}
             />
           </div>

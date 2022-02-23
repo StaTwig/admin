@@ -140,6 +140,8 @@ const NewInventory = (props) => {
       }`.slice(-2);
       let d = todayDate.substring(0, 2);
       a = a.toString();
+      console.log(validationVariable);
+      console.log(a, b, c, d);
       if (a < b || (a === b && c <= d)) {
         setInventoryError("Check expiryDate");
         setOpenFailInventory(true);
