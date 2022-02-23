@@ -135,7 +135,7 @@ const OrganisationContainer = (props) => {
         return item.name.toLowerCase().includes(inputValue.toLowerCase()) || item.primaryContactId.toLowerCase().includes(inputValue.toLowerCase())
         // return item.name.toLowerCase().includes(inputValue.toLowerCase())
       });
-      console.log("Filtered List",filteredList);
+      console.log("Filtered List", filteredList);
       setOrganisationList([...filteredList]);
     } else {
       setOrganisationList([...orgList]);
@@ -232,7 +232,7 @@ const OrganisationContainer = (props) => {
           )}
           <Organisations
             {...props}
-            organisationList={organisationList}
+            organisationList={orgList}
             modifyOrg={updateOrgs}
             showModals={showModals}
             setShowModals={setShowModals}
