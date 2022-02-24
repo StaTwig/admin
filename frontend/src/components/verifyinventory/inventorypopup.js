@@ -5,7 +5,7 @@ import Cross from "../../assets/icons/crossRed.svg";
 
 const InventoryPopUp = ({ successMessage, errorMessage, onHide, t }) => {
   const imagePath = successMessage ? Checked : Cross;
-  
+
   const errMsgTrans = () => {
     const msgArr = errorMessage.split(" ");
     const firstFiveWord = msgArr.slice(0, 5).join(" ");
@@ -30,7 +30,7 @@ const InventoryPopUp = ({ successMessage, errorMessage, onHide, t }) => {
         />
         <div className='alert'>
           {successMessage && `${t("success")}!`}
-          {errorMessage && t("Failure")}
+          {errorMessage && `${t("Failure")}`}
         </div>
         <div className='data'>{successMessage && t("successfully")}</div>
         <div className='data mb-4'>

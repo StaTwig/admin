@@ -55,6 +55,7 @@ const ViewShipmentContainer = (props) => {
             imagesData={imagesData}
             openInTrackingPage={openInTrackingPage}
             t={t}
+            i18n={i18n}
             {...props}
           />
         </div>

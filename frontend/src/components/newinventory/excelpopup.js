@@ -27,7 +27,7 @@ const ExcelPopUp = (props) => {
       props.history.push("/reviewinventory");
     } else if (result.status === 200 && result.data.data?.length === 0) {
       setOpenExcel(false);
-      setInventoryError('all_products_are_expired');
+      setInventoryError("all_products_are_expired");
       setOpenFailInventory(true);
     }
     if (result.status === 400) {
@@ -40,7 +40,10 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? { height: '200px' } : { height: '220px' }}>
+      <div
+        className='d-flex flex-column upload mb-5 ml-5'
+        style={excel === null ? { height: "200px" } : { height: "220px" }}
+      >
         <img
           src={uploadBlue}
           name='photo'
@@ -53,12 +56,15 @@ const ExcelPopUp = (props) => {
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='row' style={{ position: 'relative' }}
-        >
-          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
-            display: "block",
-            margin: "0 auto"
-          }}>
+        <div className='row' style={{ position: "relative" }}>
+          <label
+            htmlFor='fileE'
+            className='mb-3 mt-3 btn btn-primary d-center'
+            style={{
+              display: "block",
+              margin: "0 auto",
+            }}
+          >
             {t("select_a_file")}
           </label>
 
@@ -69,7 +75,7 @@ const ExcelPopUp = (props) => {
             className='mb-3 excelSpace'
             onChange={setExcelFile}
           />
-          {excel !== null && <p className="file-name">{excel?.name}</p>}
+          {excel !== null && <p className='file-name'>{excel?.name}</p>}
         </div>
       </div>
       <div className='row justify-content-between'>
@@ -81,7 +87,11 @@ const ExcelPopUp = (props) => {
           >
             {t("cancel")}
           </button>
-          <button className='btn-primary btn mr-4 import-disable-button' disabled={excel === null ? true : false} onClick={uploadExcel}>
+          <button
+            className='btn-primary btn mr-4 import-disable-button'
+            disabled={excel === null ? true : false}
+            onClick={uploadExcel}
+          >
             {t("import")}
           </button>
         </div>

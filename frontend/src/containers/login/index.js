@@ -71,8 +71,11 @@ const LoginContainer = (props) => {
           }}
           onPhoneChange={(value) => {
             setPhone(value);
-            let temp_phone = value.slice(2, value.length);
+            if(value){
+              let temp_phone = value.slice(2, value.length);
             if (temp_phone !== "") setemailFieldDisable(true);
+            else setemailFieldDisable(false);
+            }
             else setemailFieldDisable(false);
           }}
           email={email}

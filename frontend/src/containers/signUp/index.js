@@ -95,21 +95,21 @@ const SignupContainer = (props) => {
   };
 
   return (
-    <div className='container-fluid p-0' tabIndex='-1' onKeyDown={onkeydown}>
+    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
       {showModal && (
         <Modal
           isMandatory={true}
           close={() => closeModal()}
-          size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <OrganisationPopUp onHide={closeModal} onSignup={onSignup} />
         </Modal>
       )}
       <MobileHeader {...props} />
       {innerWidth > 1024 && (
-        <nav className='navbar sticky-top navbar-expand-lg'>
-          <Link className='navbar-brand' to='/'>
-            <img src={logo} width='230' height='30' alt='logo' />
+        <nav className="navbar sticky-top navbar-expand-lg">
+          <Link className="navbar-brand" to="/">
+            <img src={logo} width="230" height="30" alt="logo" />
           </Link>
         </nav>
       )}

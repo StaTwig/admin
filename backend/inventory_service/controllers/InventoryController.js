@@ -746,6 +746,14 @@ exports.addProductsToInventory = [
               if (res) {
                 duplicateBatch = true;
                 duplicateBatchNo = res.batchNumbers[0];
+                if (duplicateBatch) {
+                  return apiResponse.ErrorResponse(
+                    res,
+                    responses(req.user.preferredLanguage).batchExists(
+                      duplicateBatchNo
+                    )
+                  );
+                }
                 break;
               }
             }

@@ -60,7 +60,7 @@ const AddCategory = (props) => {
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
-      if (result.success) {
+      if (result?.success) {
         setOpenCreatedInventory(true);
       }
     }
@@ -111,9 +111,8 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type='text'
-                    className={`form-control ${
-                      catNameErr ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${catNameErr ? "border-danger" : ""
+                      }`}
                     name='product'
                     placeholder={t("enter") + " " + t("category_name")}
                     onChange={(e) => {
@@ -135,9 +134,8 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type='text'
-                    className={`form-control ${
-                      catDescErr ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${catDescErr ? "border-danger" : ""
+                      }`}
                     name='product'
                     placeholder={t("enter") + " " + t("category_description")}
                     onChange={(e) => {
@@ -162,9 +160,8 @@ const AddCategory = (props) => {
             </button>
           </Link>
           <button
-            className={`btn ${
-              BtnVisible ? "btn-orange" : "add-btn-orange"
-            } fontSize20 font-bold mb-2 mt-0`}
+            className={`btn ${BtnVisible ? "btn-orange" : "add-btn-orange"
+              } fontSize20 font-bold mb-2 mt-0`}
             // onClick={() => {
             //   BtnVisible && addProduct;
             // }}

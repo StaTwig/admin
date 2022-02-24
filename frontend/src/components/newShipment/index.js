@@ -139,22 +139,24 @@ const NewShipment = (props) => {
           })
       );
 
-      const warehouses = await getWarehouseByOrgId(orgSplit[1]);
-      setSenderWarehouses(
-        warehouses.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
-              : v?.title + "/" + v.postalAddress,
-          };
-        })
-      );
+      const warehouses = await getWarehouseByOrgId(orgSplit?.length ? orgSplit[1] : "");
+      if(warehouses) {
+        setSenderWarehouses(
+          warehouses.data.map((v) => {
+            return {
+              ...v,
+              value: v.id,
+              label: v?.warehouseAddress
+                ? v?.title +
+                  "/" +
+                  v?.warehouseAddress?.firstLine +
+                  ", " +
+                  v?.warehouseAddress?.city
+                : v?.title + "/" + v.postalAddress,
+            };
+          })
+        );
+      }
 
       const orgType = await getOrganizationsTypewithauth("CONF000");
       setOrgTypes(
@@ -392,6 +394,7 @@ const NewShipment = (props) => {
   };
 
   const handleBatchChange = (value, i) => {
+    console.log("Batch:", value, i);
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].batchNumber = value;
     setOrderDetails(soDetailsClone);
@@ -723,6 +726,7 @@ const NewShipment = (props) => {
                       style={{ height: "25px", width: "50px" }}
                       className='btn btn-fetch'
                       onClick={async () => {
+                        console.log("Fetch button");
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
                         setAddProducts((p) => []);
@@ -735,9 +739,10 @@ const NewShipment = (props) => {
                           dispatch(turnOff());
                         } else {
                           if (validShipmentID) {
-                            let result = await dispatch(
-                              getViewShipment(values.shipmentID)
-                            );
+                            let result = await getViewShipment(values.shipmentID);
+
+                            // This is required.
+                            result = result.data;
 
                             if (result.status !== "RECEIVED") {
                               values.shipmentID = "";
