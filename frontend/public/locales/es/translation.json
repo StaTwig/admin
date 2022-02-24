@@ -244,6 +244,7 @@
   "add_new_category": "Añadir nueva categoria",
   "add_new_product": "Agregar nuevo producto",
   "add_image": "AÑADIR IMAGEN",
+  "upload_error":"el archivo no es compatible.Prueba con jpg jpeg png extensiones.",
   "unit_of_measure": "Unidad de medida",
   "short_description": "Breve descripción",
   "category_name": "Nombre de la categoría",

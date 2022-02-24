@@ -244,6 +244,7 @@
   "add_new_category": "Add new category",
   "add_new_product": "Add new product",
   "add_image": "ADD IMAGE",
+  "upload_error": "File does not support.Try with jpg, jpeg, png extensions.",
   "unit_of_measure": "Unit of Measure",
   "short_description": "Short Description",
   "select_category": "Select Category",

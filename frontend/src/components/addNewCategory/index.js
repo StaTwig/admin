@@ -15,6 +15,7 @@ const AddCategory = (props) => {
   const [description, setDescription] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [BtnVisible, setBtnVisible] = useState(true);
+  const [image, setImage] = useState(false);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -22,8 +23,15 @@ const AddCategory = (props) => {
   };
 
   const setFile = (evt) => {
-    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
-    setPhoto(evt.target.files[0]);
+    const fileExtension = evt.target.files[0].name.split(".").at(-1);
+    const allowedFileTypes = ["jpg", "jpeg", "png"];
+    if (!allowedFileTypes.includes(fileExtension)) {
+      setImage(t("upload_error"));
+    } else {
+      setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
+      setPhoto(evt.target.files[0]);
+      setImage(false);
+    }
   };
 
   const [catNameErr, setCategoryNameErr] = useState(false);
@@ -93,9 +101,15 @@ const AddCategory = (props) => {
                         type='file'
                         className='select'
                         onChange={setFile}
+                        accept="image/*"
                       />{" "}
                     </label>
                   </div>
+                  {image && (
+                    <span className="error-msg text-dangerS" style={{ color: "#d80909", fontSize: "15px" }}>
+                      {image}
+                    </span>
+                  )}
                 </div>
               </div>
 
