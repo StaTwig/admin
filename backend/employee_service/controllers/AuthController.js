@@ -22,7 +22,7 @@ const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRegex = /^\d{11}$/;
+const phoneRegex = /^[\+]\d{11,12}$/;
 
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
@@ -175,6 +175,7 @@ exports.register = [
       } else if (req.body.phoneNumber != "") {
         let phoneNumber = req.body.phoneNumber;
         phoneNumber = phoneNumber.toLowerCase().replace("", "");
+        console.log("Phone - ", phoneNumber);
         let phone = "";
         let user;
         if (!phoneNumber.match(phoneRegex))
