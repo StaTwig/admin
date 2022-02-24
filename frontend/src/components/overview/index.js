@@ -14,7 +14,11 @@ const DashBoard = (props) => {
   const [title, setTitle] = useState("");
   const [btnTxt, setBtnTxt] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const closeModal = () => setShowModal(false);
+  const [isAddNewUser, toggleAddNewUser] = useState(false);
+  const closeModal = () => {
+    setShowModal(false);
+    toggleAddNewUser(false);
+  }
   const {
     requestsPending,
     permissions,
@@ -48,6 +52,7 @@ const DashBoard = (props) => {
             data={data}
             permissions={permissions}
             addresses={addresses}
+            isAddNewUser={isAddNewUser}
             onSuccess={() => {
               acceptApproval(data);
               closeModal();
@@ -67,6 +72,7 @@ const DashBoard = (props) => {
             onClick={() => {
               setTitle("ADD NEW USER");
               setBtnTxt("ADD USER");
+              toggleAddNewUser(true);
               setData([]);
               setShowModal(true);
             }}

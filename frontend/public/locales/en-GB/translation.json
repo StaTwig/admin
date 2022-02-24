@@ -284,5 +284,7 @@
     "mobile_no":"Mobile No",
     "date_time": "Date & Time",
     "version": "Version",
-    "made_with_care": "Made with Care"
+    "made_with_care": "Made with Care",
+    "enter_first_name": "Enter First Name",
+    "enter_last_name": "Enter Last Name"
 }
