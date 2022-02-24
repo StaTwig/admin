@@ -32,7 +32,7 @@ const DashBoard = (props) => {
   requestsPending.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
-locationApprovals.sort(function (a, b) {
+  locationApprovals.sort(function (a, b) {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   });
   return (
@@ -53,7 +53,7 @@ locationApprovals.sort(function (a, b) {
               closeModal();
             }}
             onHide={closeModal}
-            
+
             setData={setData}
             redirectToConfigurationPage={redirectToConfigurationPage}
           />
@@ -79,7 +79,7 @@ locationApprovals.sort(function (a, b) {
       </div>
       <div className="d-flex flex-row ">
         <div className="panel w-50 mr-3 mt-3">
-          <h5 className="sub-header" style={{fontWeight:"bold"}}>{t('request_pending')}</h5>
+          <h5 className="sub-header" style={{ fontWeight: "bold" }}>{t('request_pending')}</h5>
           {requestsPending.map((row, index) => (
             <NewRequests
               requestRow={row}
@@ -118,7 +118,7 @@ locationApprovals.sort(function (a, b) {
             {recentRequestsSent.length == 0 && <NoRecordsFound />}
           </div> */}
           <div className="">
-            <h5 className="sub-header" style={{fontWeight:"bold"}}>{t('location_approvals')}</h5>
+            <h5 className="sub-header" style={{ fontWeight: "bold" }}>{t('location_approvals')}</h5>
             {locationApprovals.map((row, index) => (
               <LocationRequests
                 row={row}

@@ -21,6 +21,9 @@
   text-align: center;
   width: 10%;
 }
+.special-label{
+  display: none;
+}
 .w-20 {
   // align-self: center;
   // text-align: center;
@@ -316,4 +319,16 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+.us-location{
+  left: -60px;
+  @media screen and (min-width:"1286px"){
+    left: -62px;
+  }
+  @media screen and (min-width:"1486px"){
+    left: -75px;
+  }
+  @media screen and (min-width:"1586px"){
+    left: -76px;
+  }
 }

@@ -48,6 +48,7 @@ const Users = (props) => {
     addresses
   } = props;
 
+  console.log(roleData);
 
   return (
     <div className="users">
@@ -63,7 +64,10 @@ const Users = (props) => {
             permissions={permissions}
             addresses={addresses}
             onSuccess={() => {
-              addUser(data);
+              let data1 = data;
+              console.log(data.emailId)
+              data.emailId = (data.emailId === "null") ? null : data.emailId; 
+              addUser(data1);
               closeModal();
             }}
             setData={setData}

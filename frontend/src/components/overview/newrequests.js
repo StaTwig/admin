@@ -69,13 +69,15 @@ const NewRequests = (props) => {
               setData({
                 id: requestRow?.id,
                 ref: requestRow?.emailId,
+                emailId: requestRow?.emailId, // Same as above but for a different purpose
+                phoneNumber: requestRow?.phoneNumber,
                 rindex: rindex,
               });
               setTitle("ASSIGN USER ROLE");
               setBtnTxt("ASSIGN");
               setShowModal(true);
             }}
-            style = {{width:"10vw"}}
+            style={{ width: "10vw" }}
           >
             {t('accept_request')}
           </button>
@@ -88,7 +90,7 @@ const NewRequests = (props) => {
                 rindex: rindex,
               });
             }}
-            style = {{width:"10vw"}}
+            style={{ width: "10vw" }}
           >
             {t('reject_request')}
           </button>

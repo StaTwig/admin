@@ -10,7 +10,7 @@
 
   ul {
     list-style-type: none;
-    overflow: scroll;
+    overflow-y: scroll;
     padding: 0px;
     margin: 15px 0px 0px 15px;
     position: relative;
@@ -39,4 +39,12 @@
 
 .selected {
   background-color: #F6F6F6;
+}
+.clear-btn{
+  list-style: none;
+  padding:0.4rem 0 0 0.6rem;
+  cursor: pointer;
+  font-size: 14px;
+      text-align: left;
+      color: #0093e9;
 }

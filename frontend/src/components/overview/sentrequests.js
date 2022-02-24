@@ -18,10 +18,10 @@ const SentRequests = (props) => {
       validate={(values) => {
         const errors = {};
         if (!values.employee) {
-          errors.employee = "Required";
+          errors.employee = t('Required');
         }
         if (!values.org) {
-          errors.org = "Required";
+          errors.org = t('Required');
         }
         return errors;
       }}

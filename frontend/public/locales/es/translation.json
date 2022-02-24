@@ -38,6 +38,7 @@
     "enter_otp": "Ingrese OTP",
     "enter": "ingresar",
     "required": "Requerido",
+    "Required":"Requerido",
     "otp_doesnt_match": "OTP no coincide",
     "didnt_receive_the_otp": "No recibió el OTP",
     "resend_code": "REENVIAR CODIGO",
@@ -110,7 +111,7 @@
     "no_notifications": "No Notificaciones",
     "my_profile": "Mi perfil",
     "settings": "Ajustes",
-    "logout": "cerrar sesión en la cuenta",
+    "logout": "cerrar sesión",
     "orders": "Pedidos",
     "inventory": "Inventario",
     "shipments": "envios",
@@ -401,5 +402,6 @@
     "NOTVERIFIED":"NO VERIFICADO",
     "Enter the email address of the users you'd like to add or invite and choose the role they should have.":"Ingrese la dirección de correo electrónico de los usuarios que desea agregar o invitar y elija el rol que deben tener.",
     "ADD NEW USER":"AÑADIR NUEVO USUARIO",
-    "Description":"Descripción"
+    "Description":"Descripción",
+    "Clear":"Claro"
 }   

@@ -41,8 +41,8 @@ const NewAddress = (props) => {
 
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region,setregion] = useState("");
-  const [country, setcountry] = useState("");
+  const [region,setregion] = useState("Americas");
+  const [country, setcountry] = useState("Costa Rica");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
@@ -56,10 +56,10 @@ const NewAddress = (props) => {
     let res = await fetchCountriesByRegion(id);
     setallCountries(res.data);
   };
-  async function fetchAllState1(id){
-    let res = await fetchStateByCountry(id);
-    setallState(res.data);
-  };
+  // async function fetchAllState1(){
+  //   let res = await fetchStateByCountry(53);
+  //   setallState(res.data);
+  // };
   async function fetchAllCity1(id){
     let res = await fetchCitiesByState(id);
     setallCity(res.data);
@@ -71,6 +71,13 @@ const NewAddress = (props) => {
 
   useEffect(() => {
     dispatch(getWareHouses());
+
+    async function fetchAllState1(){
+      let res = await fetchStateByCountry(53);
+      setallState(res.data);
+    };
+
+    fetchAllState1();
   }, []);
 
   const getGeoLocation = async () => {
@@ -204,25 +211,25 @@ const NewAddress = (props) => {
                 validate={(values) => {
                   const errors = {};
                   if (!values.title) {
-                    errors.title = "Required";
+                    errors.title = t('Required');
                   }
                   if (!values.pincode) {
-                    errors.pincode = "Required";
+                    errors.pincode = t('Required');
                   }
                   if (!values.region) {
-                    errors.region = "Required";
+                    errors.region = t('Required');
                   }
                   if (!values.area) {
-                    errors.area = "Required";
+                    errors.area = t('Required');
                   }
                   if (!values.town) {
-                    errors.town = "Required";
+                    errors.town = t('Required');
                   }
                   if (!values.state) {
-                    errors.state = "Required";
+                    errors.state = t('Required');
                   }
                   if (!values.country) {
-                    errors.country = "Required";
+                    errors.country = t('Required');
                   }
                   return errors;
                 }}
@@ -261,7 +268,7 @@ const NewAddress = (props) => {
                         <span className="error-msg text-dangerS">{errors.title}</span>
                         )}  */} 
 
-                        <Autocomplete
+                        {/* <Autocomplete
                           value={values.region}
                           onBlur={handleBlur}
                           onChange={(event, newValue) => {
@@ -277,14 +284,15 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }}{...params} className="mb-3" /*error={errors.region}  touched={touched.region} */ label={t("Select Region")}  />}
-                        />
+                        }}{...params} className="mb-3" label={t("Select Region")}  />}
+                        /> */}
+
                         {/* {errors.region && touched.region && (
                           <span className="error-msg text-danger-ANL">
                             {errors.region}
                           </span>
                         )} */}
-                        <Autocomplete
+                        {/* <Autocomplete
                           value={values.country}
                           onChange={(event, newValue) => {
                             setFieldValue("country",newValue);
@@ -300,12 +308,7 @@ const NewAddress = (props) => {
                           renderInput={(params) => <TextField style={{
                             width:"425px"
                         }} {...params} className="mb-3"  label={t("Select Country")}  />}
-                        />
-                        {/* {errors.country && touched.country && (
-                          <span className="error-msg text-danger-ANL">
-                            {errors.country}
-                          </span>
-                        )} */}
+                        /> */}
                         <Autocomplete
                           onBlur={handleBlur}
                           value={values.state}
@@ -458,21 +461,30 @@ const NewAddress = (props) => {
                       value={values.pincode}
                     /> */}<br/>
 
-                    {
+                    {/* {
                       Object.keys(addr).length == 0 ? 
-                      <div className="w-50 d-flex flex-row-reverse" style={{float:"right", position:"relative", left:"330px"}}>
                         <button type="submit" 
-                          className="btn btn-warning"
-                          style={{backgroundColor:'#b2b0aa', borderColor: '#b2b0aa'}} >
+                          className="btn btn-success"
+                          >
                           <i
                             className="fa fa-plus txt pr-2"
                             aria-hidden="true"
                           ></i>
                           <span className="txt">{t('Add New Address')}</span>
                         </button>
-                      </div> :
-                        ``
-                    }
+                      :
+                        <></>
+                    } */}
+                        <button type="submit" 
+                          className="btn btn-success"
+                          style={{position:"absolute", right:"20vw"}}
+                          >
+                          <i
+                            className="fa fa-plus txt pr-2"
+                            aria-hidden="true"
+                          ></i>
+                          <span className="txt">{t('Add New Address')}</span>
+                        </button>
                     
                   </form>
                 )}

@@ -72,13 +72,13 @@ const FormVerifyPage = (props) => {
                     validate={(values) => {
                       const errors = {};
                       if (!values.otp0) {
-                        errors.otp0 = "Required";
+                        errors.otp0 = t('Required');
                       } else if (!values.otp1) {
-                        errors.otp1 = "Required";
+                        errors.otp1 = t('Required');
                       } else if (!values.otp2) {
-                        errors.otp2 = "Required";
+                        errors.otp2 = t('Required');
                       } else if (!values.otp3) {
-                        errors.otp3 = "Required";
+                        errors.otp3 = t('Required');
                       }
                       return errors;
                     }}
