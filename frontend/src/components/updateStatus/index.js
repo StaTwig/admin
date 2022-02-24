@@ -155,7 +155,9 @@ const UpdateStatus = (props) => {
       setErrorMessage("Require Update Status Location");
     }
     const formData = new FormData();
-    formData.append("photo", photo, photo.name);
+    if (photo) {
+      formData.append("photo", photo, photo.name);
+    }
     formData.append("id", shipmentId);
     formData.append("updateComment", comment);
     formData.append("updatedBy", profile.id);
@@ -627,6 +629,7 @@ const UpdateStatus = (props) => {
                             className='mt-1'
                             style={{
                               width: "100%",
+                              maxHeight: "40vh",
                               objectFit: "contain",
                             }}
                             alt='PhotoURL'

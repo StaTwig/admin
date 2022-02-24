@@ -29,14 +29,14 @@ const SideBar = (props) => {
   };
 
   return (
-    <div className='sidebar'>
+    <div className="sidebar">
       <ul>
         {isAuthenticated("overview") && enable && (
           <li className={url === "/overview" ? "active" : "inactive"}>
-            <Link to='/overview' className='nav-look-link'>
+            <Link to="/overview" className="nav-look-link">
               <img
                 src={url === "/overview" ? HomeIcon : HomeIcon}
-                alt='Overview'
+                alt="Overview"
               />
               <span>{t("overview")}</span>
             </Link>
@@ -50,16 +50,16 @@ const SideBar = (props) => {
                 url === "/orders" || url === "/neworder" ? "active" : ""
               }
             >
-              <Link to='/orders' className='d-inline-block'>
+              <Link to="/orders" className="d-inline-block">
                 <img
                   src={
                     url === "/orders" || url === "/neworder"
                       ? OrderSelectedIcon
                       : OrderSelectedIcon
                   }
-                  alt='Orders'
+                  alt="Orders"
                 />
-                <span className='ml-2'>{t("orders")}</span>
+                <span className="ml-2">{t("orders")}</span>
               </Link>
             </li>
           )}
@@ -78,7 +78,7 @@ const SideBar = (props) => {
                 : ""
             }
           >
-            <Link to='/inventory' className='d-inline-block'>
+            <Link to="/inventory" className="d-inline-block">
               <img
                 src={
                   url === "/inventory" ||
@@ -92,9 +92,9 @@ const SideBar = (props) => {
                     ? InventoryIcon
                     : InventoryIcon
                 }
-                alt='Inventory'
+                alt="Inventory"
               />
-              <span className='ml-2'>{t("inventory")}</span>
+              <span className="ml-2">{t("inventory")}</span>
             </Link>
           </li>
         )}
@@ -109,7 +109,7 @@ const SideBar = (props) => {
                 : ""
             }
           >
-            <Link to='/shipments' className='d-inline-block'>
+            <Link to="/shipments" className="d-inline-block">
               <img
                 src={
                   url === "/shipments" ||
@@ -118,34 +118,34 @@ const SideBar = (props) => {
                     ? shipIcon
                     : shipIcon
                 }
-                alt='Shippment'
+                alt="Shippment"
               />
-              <span className='ml-2'>{t("shipments")}</span>
+              <span className="ml-2">{t("shipments")}</span>
             </Link>
           </li>
         )}
 
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
-            <Link to='/dashboard' className='d-inline-block'>
+            <Link to="/dashboard" className="d-inline-block">
               <img
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt='Shipment'
+                alt="Shipment"
               />
-              <span className='ml-2'>{t("network")}</span>
+              <span className="ml-2">{t("network")}</span>
             </Link>
           </li>
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
             <Link
-              to='/track'
-              className='nav-look-link d-inline-block'
+              to="/track"
+              className="nav-look-link d-inline-block"
               onClick={resetTrackTracePage}
             >
               <img
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track &amp; Trace'
+                alt="Track &amp; Trace"
               />
               <span>{t("trackntrace")}</span>
             </Link>
@@ -153,13 +153,13 @@ const SideBar = (props) => {
         )}
         {enable && (
           <li className={url === "/lastMile" ? "active" : ""}>
-            <Link to='/lastMile' className='d-inline-block'>
+            <Link to="/lastMile" className="d-inline-block">
               <img
                 src={url === "/lastMile" ? lastMileIcon : lastMileIcon}
-                alt='lastMile'
+                alt="lastMile"
               />
 
-              <span className='ml-2'>{t("lastmile")}</span>
+              <span className="ml-2">{t("lastmile")}</span>
             </Link>
           </li>
         )}

@@ -14,7 +14,6 @@ import FailedPopup from "./failPopup";
 import { fetchairwayBillNumber } from "../../actions/shipmentActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ModalImage from "react-modal-image";
-import ShipmentFailPopUp from "../newShipment/shipmentFailPopUp";
 
 const ReceiveShipment = (props) => {
   const { t } = props;
@@ -31,7 +30,7 @@ const ReceiveShipment = (props) => {
   const [qtyArr, setQtyArr] = useState([
     ...Array(props.trackData?.products?.length).keys(),
   ]);
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [count, setCount] = useState("");
   const [comment, setComment] = useState("");
@@ -70,18 +69,20 @@ const ReceiveShipment = (props) => {
         data.products[index].productQuantity <= parseInt(value)
           ? data.products[index].productQuantity
           : parseInt(value);
-      const formData = new FormData();
-      formData.append("photo", photo, photo.name);
-      formData.append("supplier", JSON.stringify(data.supplier));
-      formData.append("receiver", JSON.stringify(data.receiver));
-      formData.append("status", "RECEIVED");
-      formData.append("comment", comment);
-      formData.append("products", JSON.stringify(data.products));
-      formData.append("poId", data.poId);
-      formData.append("id", data.id);
     }
+    const formData = new FormData();
+    if (photo) {
+      formData.append("photo", photo, photo.name);
+    }
+    formData.append("supplier", JSON.stringify(data.supplier));
+    formData.append("receiver", JSON.stringify(data.receiver));
+    formData.append("status", "RECEIVED");
+    formData.append("comment", comment);
+    formData.append("products", JSON.stringify(data.products));
+    formData.append("poId", data.poId);
+    formData.append("id", data.id);
     dispatch(turnOn());
-    const result = await receiveApi(data);
+    const result = await receiveApi(formData);
     if (result.status === 200) {
       setreceiveShipmentModal(true);
     } else {
@@ -141,7 +142,7 @@ const ReceiveShipment = (props) => {
               <button
                 className='btn-primary btn fontSize20 font-bold mr-2 mt-3'
                 onClick={receiveShipment}
-                disabled={isDisabled || comment === ""}
+                disabled={isDisabled}
               >
                 <img
                   src={returnShipment}
@@ -168,42 +169,43 @@ const ReceiveShipment = (props) => {
             )}
           </div>
         </div>
-        <div className='d-flex  flex-auto'>
-          <div className='panel commonpanle mr-4' style={{ width: "32%" }}>
-            <div className='form-group pt-2'>
-              <label className='mb-1 text-secondary pt-2'>
-                {t("shipment_id")}:
-              </label>
-              <input
-                name='id'
-                type='text'
-                className='form-control ml-5 '
-                size='35'
-                value={id}
-              />
+        <div className='w-75 row row-cols'>
+          <div className='col'>
+            <div className='panel commonpanle'>
+              <div className='form-group justify-content-around'>
+                <label className='mt-2 text-secondary'>
+                  {t("shipment_id")}:
+                </label>
+                <input
+                  disabled={true}
+                  name='id'
+                  type='text'
+                  className='form-control'
+                  value={id || ""}
+                />
+              </div>
             </div>
           </div>
-          <div
-            className='panel commonpanle'
-            style={{ width: "32%", height: "100px" }}
-          >
-            <div className='form-group pt-2'>
-              <label className='text-secondary pt-2'>{t("transit_no")}.</label>
-              <input
-                type='text'
-                className='form-control ml-5'
-                name='billNo'
-                size='35'
-                value={props.trackData.airWayBillNo}
-              />
+          <div className='col'>
+            <div className='panel commonpanle'>
+              <div className='form-group justify-content-around'>
+                <label className='mt-2 text-secondary'>
+                  {t("transit_no")}:
+                </label>
+                <input
+                  disabled={true}
+                  type='text'
+                  className='form-control'
+                  name='billNo'
+                  value={props.trackData.airWayBillNo || ""}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className='row'>
         <div className='col-sm-4'>
-          {/* <h6 className="heading mb-3">SHIPMENT SUMMARY</h6> */}
-          {/* <ShipmentSummary shipments={tracking} /> */}
           <h6 className='heading mt-3 mb-3 ml-3'>{t("shipment_details")}</h6>
           <ShipmentDetails
             shipments={tracking}
@@ -217,7 +219,7 @@ const ReceiveShipment = (props) => {
         <div className='col-sm-4'>
           <h6 className='heading mt-3 mb-3 ml-3'>{t("comment")}</h6>
           <div className='col panel commonpanle'>
-            <div className=' pt-2 pb-2 d-flex row'>
+            <div className='pt-2 pb-2 d-flex row'>
               <span
                 onClick={() => {
                   setCount("r1");
@@ -269,32 +271,18 @@ const ReceiveShipment = (props) => {
                 {t("other")}
               </span>
             </div>
-            <div
-              className='form-group'
-              style={{ width: "150%", height: "60px" }}
-            >
-              {commentEnabled && (
-                <input
-                  disabled={!commentEnabled}
-                  style={{
-                    fontSize: "14px",
-                    resize: "none",
-                    marginTop: "40px",
-                  }}
-                  type='text'
-                  className='form-control'
-                  name='Comment'
-                  onChange={(e) => setComment(e.target.value)}
-                  size='40'
-                  cols='120'
-                  rows='7'
-                  placeholder={t("enter") + " " + t("comment")}
-                  value={comment}
-                />
-              )}
-            </div>
+            {commentEnabled && (
+              <textarea
+                disabled={!commentEnabled}
+                type='text'
+                className='w-100 form-control'
+                name='Comment'
+                onChange={(e) => setComment(e.target.value)}
+                placeholder={t("enter") + " " + t("comment")}
+                value={comment}
+              />
+            )}
           </div>
-          {/* <button type="button" className="btn btn-primary float-right" style={{position:"relative", bottom:"70px"}}>Submit</button> */}
         </div>
         <div className='col-sm-4'>
           <div className='row justify-content-between'>
@@ -303,12 +291,7 @@ const ReceiveShipment = (props) => {
               className='btn btn-orange font-weight-bold mr-4 pl-4 pr-4'
               onClick={uploadPhoto}
               style={{ position: "relative", bottom: "10px" }}
-            > 
-              {/* <img
-                    src={uploadWhite}
-                    width="35"
-                    height="17"
-                  /> */}
+            >
               <span style={{ fontSize: "15px" }}> {t("upload")}</span>
             </button>
           </div>
@@ -337,25 +320,11 @@ const ReceiveShipment = (props) => {
                     showRotate={true}
                     name='photo'
                     className='mt-1 modal-image'
-                    // style={{ margin: "auto", display: "table" }}
                   />
                 </div>
                 <button type='button' className='btn btn-link float-right'>
                   {t("view_all")}
                 </button>
-                {/* <div className="row">
-                                {photoUrl >
-                                  0 && (
-                                  <ModalImage
-                                    small={photo}
-                                    className=""
-                                    large={image}
-                                    showRotate={true}
-                                    hideZoom={false}
-                                    alt="Upload Image"
-                                  />
-                                )}
-                              </div> */}
               </div>
             ) : (
               <>
@@ -363,7 +332,6 @@ const ReceiveShipment = (props) => {
                   className='row '
                   style={{ margin: "auto", display: "table" }}
                 >
-                  {/* <label>{photo.name?photo.name:""}</label> */}
                   <img
                     src={uploadBlue}
                     name='photo'
@@ -432,16 +400,6 @@ const ReceiveShipment = (props) => {
           <SuccessPopup onHide={closeModalShipment} t={t} />
         </Modal>
       )}
-      {/* {openShipmentFail && (
-          <Modal
-            close={() => closeModalFail()}
-            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-          >
-            <FailPopup
-              onHide={closeModalFail} //FailurePopUp
-            />
-          </Modal>
-        )}   */}
       {message && (
         <div className='d-flex justify-content-center mt-3'>
           <Alert severity='success'>

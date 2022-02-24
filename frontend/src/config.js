@@ -261,7 +261,7 @@ export function config() {
       getWarehouseById: `${TEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       pushWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/pushWarehouse`,
-      addPOsFromExcel: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
+      addPOsFromExcel: `${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
       getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,

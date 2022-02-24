@@ -17,7 +17,14 @@ const ExcelPopUp = (props) => {
   const [modalProps, setModalProps] = useState({});
 
   const setExcelFile = (evt) => {
-    setExcel(evt.target.files[0]);
+    const isXls = evt.target.files[0].type === 'application/vnd.ms-excel';
+    if (!isXls) {
+      setopenFailedPop(true);
+      setModalProps({
+        message: t("you_can_only_upload_XLS_file"),
+      });
+    } else
+      setExcel(evt.target.files[0]);
   };
   props.setMenu(false);
   const uploadExcel = async () => {
@@ -25,24 +32,25 @@ const ExcelPopUp = (props) => {
     formData.append("excel", excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
-    let arr = result.data.data;
-    let notNullValues = 0;
-    if(arr && arr.length > 0)
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] != null) {
-        notNullValues++;
-      }
-    }
+    if (result && result.status === 200) {
+      let arr = result.data.data;
+      let notNullValues = 0;
+      if (arr && arr.length > 0)
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] != null) {
+            notNullValues++;
+          }
+        }
 
-    if (result && result.status === 200
-      && notNullValues !== 0
+      if (notNullValues !== 0
       ) {
-      setopenSuccesfulOrder(true);
-      setModalProps({
-        message: `${t("created")}${t("successfully")}`,
-        OrderLength: notNullValues,
-        type: "Success",
-      });
+        setopenSuccesfulOrder(true);
+        setModalProps({
+          message: `${t("created")}${t("successfully")}`,
+          OrderLength: notNullValues,
+          type: "Success",
+        });
+      }
     } else {
       setopenFailedPop(true);
       setModalProps({
@@ -61,7 +69,7 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? {height: '200px'} : {height: '220px'}}>
+      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? { height: '200px' } : { height: '220px' }}>
         <img
           src={uploadBlue}
           name='photo'
@@ -74,7 +82,7 @@ const ExcelPopUp = (props) => {
           "{t("drag_drop")}" {t("your_excel_file_here")}
         </div>
         <div>{t("or")}</div>
-        <div className='row' style={{position: 'relative'}}
+        <div className='row' style={{ position: 'relative' }}
         >
           <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
             display: "block",
@@ -86,11 +94,12 @@ const ExcelPopUp = (props) => {
           <input
             type='file'
             id='fileE'
+            accept="application/vnd.ms-excel"
             style={{ visibility: "hidden" }}
             className='mb-3 excelSpace'
             onChange={setExcelFile}
           />
-        {excel !== null && <p className="file-name">{excel?.name}</p>}
+          {excel !== null && <p className="file-name">{excel?.name}</p>}
         </div>
       </div>
       <div className='row justify-content-between'>
@@ -111,7 +120,7 @@ const ExcelPopUp = (props) => {
               size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <SuccessOrderPopUp
-              t={t}
+                t={t}
                 onHide={closeModal} // onHide={closeModal} //FailurePopUp
                 {...modalProps}
               />

@@ -595,7 +595,10 @@ exports.createShipment = [
               req.user
             );
           //Case - create shipment with Batch Number
-          if (products[count].batchNumber != null && products[count].batchNumber != undefined) {
+          if (
+            products[count].batchNumber != null &&
+            products[count].batchNumber != undefined
+          ) {
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
@@ -609,7 +612,11 @@ exports.createShipment = [
             );
           }
           if (products[count].serialNumbersRange != null) {
-            const serialNumbers = Array.isArray(products[count].serialNumbersRange) ? products[count].serialNumbersRange : products[count].serialNumbersRange.split("-");
+            const serialNumbers = Array.isArray(
+              products[count].serialNumbersRange
+            )
+              ? products[count].serialNumbersRange
+              : products[count].serialNumbersRange.split("-");
             let atomsArray = [];
             if (serialNumbers.length > 1) {
               if (Array.isArray(products[count].serialNumbersRange)) {
@@ -627,8 +634,7 @@ exports.createShipment = [
                   );
                   atomsArray.push(updateAtoms);
                 }
-              }
-              else {
+              } else {
                 const serialNumbersFrom = parseInt(
                   serialNumbers[0].split(/(\d+)/)[1]
                 );
@@ -654,7 +660,7 @@ exports.createShipment = [
             }
           }
         }
-        
+
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
         const updates = {
           updatedOn: currDateTime,
@@ -977,15 +983,16 @@ exports.receiveShipment = [
         const orgName = empData.name;
         const orgData = await OrganisationModel.findOne({ id: orgId });
         const address = orgData.postalAddress;
-        const supplierID = req.body.supplier.id;
-        const receiverId = req.body.receiver.id;
+        const supplierID = JSON.parse(req.body.supplier).id;
+        const receiverId = JSON.parse(req.body.receiver).id;
+        const receivedProducts = JSON.parse(data.products);
         let supplierName = "";
         let supplierAddress = "";
         let receiverName = "";
         let receiverAddress = "";
         if (supplierID) {
           const supplierOrgData = await OrganisationModel.findOne({
-            id: req.body.supplier.id,
+            id: supplierID,
           });
           supplierName = supplierOrgData.name;
           supplierAddress = supplierOrgData.postalAddress;
@@ -993,7 +1000,7 @@ exports.receiveShipment = [
 
         if (receiverId) {
           const receiverOrgData = await OrganisationModel.findOne({
-            id: req.body.receiver.id,
+            id: receiverId,
           });
           receiverName = receiverOrgData.name;
           receiverAddress = receiverOrgData.postalAddress;
@@ -1002,7 +1009,6 @@ exports.receiveShipment = [
         var actuallyShippedQuantity = 0;
         var productNumber = -1;
         if (shipmentInfo != null) {
-          const receivedProducts = data.products;
           var shipmentProducts = shipmentInfo[0].products;
           shipmentProducts.forEach((product) => {
             productNumber = productNumber + 1;
@@ -1045,17 +1051,16 @@ exports.receiveShipment = [
           });
         }
         var flag = "Y";
-        if (data.poId === null) {
+        if (data.poId == "null") {
           flag = "YS";
         }
-
-        if (flag == "Y") {
+        if (flag === "Y") {
           const po = await RecordModel.findOne({
             id: data.poId,
           });
           let quantityMismatch = false;
           po.products.every((product) => {
-            data.products.every((p) => {
+            receivedProducts.every((p) => {
               if (product.id === p.productID) {
                 const po_product_quantity =
                   product.productQuantity || product.quantity;
@@ -1091,14 +1096,14 @@ exports.receiveShipment = [
         }
         if (flag != "N") {
           const suppWarehouseDetails = await WarehouseModel.findOne({
-            id: data.supplier.locationId,
+            id: JSON.parse(data.supplier).locationId,
           });
           var suppInventoryId = suppWarehouseDetails.warehouseInventory;
           const recvWarehouseDetails = await WarehouseModel.findOne({
-            id: data.receiver.locationId,
+            id: JSON.parse(data.receiver).locationId,
           });
           var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-          var products = data.products;
+          var products = receivedProducts;
           var count = 0;
           var totalProducts = 0;
           var totalReturns = 0;
@@ -1110,7 +1115,7 @@ exports.receiveShipment = [
             totalReturns = totalReturns + products[count].productQuantity;
             shipmentRejectionRate =
               ((totalProducts - totalReturns) / totalProducts) * 100;
-            data.products[count]["productId"] = data.products[count].productID;
+            products[count]["productId"] = products[count].productID;
             await inventoryUpdate(
               products[count].productID,
               products[count].productQuantity,
@@ -1186,11 +1191,14 @@ exports.receiveShipment = [
               }
             }
           }
-          const Upload = await uploadFile(req.file);
-          await unlinkFile(req.file.path);
+          let Upload = null;
+          if (req.file) {
+            Upload = await uploadFile(req.file);
+            await unlinkFile(req.file.path);
+          }
           const updates = {
             updatedOn: new Date().toISOString(),
-            imageId: Upload.key,
+            imageId: Upload?.key || null,
             updatedBy: req.user.id,
             updateComment: data.comment,
             status: "RECEIVED",
@@ -1312,6 +1320,7 @@ exports.receiveShipment = [
         return apiResponse.forbiddenResponse(res, "Access denied");
       }
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1824,6 +1833,12 @@ exports.viewShipment = [
               id: element.productID,
             });
             element.unitofMeasure = product.unitofMeasure;
+
+            const batch = await AtomModel.findOne({
+              batchNumbers: element.batchNumber,
+            });
+            element.mfgDate = batch?.attributeSet.mfgDate;
+            element.expDate = batch?.attributeSet.expDate;
           });
           return apiResponse.successResponseWithData(
             res,
@@ -2063,6 +2078,7 @@ exports.updateTrackingStatus = [
   auth,
   async (req, res) => {
     try {
+      let Upload = null;
       const data = {
         updateComment: req.body.updateComment,
         orgId: req.body.orgId,
@@ -2070,9 +2086,11 @@ exports.updateTrackingStatus = [
         updatedAt: req.body.updateStatusLocation,
         isAlertTrue: req.body.isAlertTrue,
       };
-      const Upload = await uploadFile(req.file);
-      await unlinkFile(req.file.path);
-      data.imageId = Upload.key;
+      if (req.file) {
+        Upload = await uploadFile(req.file);
+        await unlinkFile(req.file.path);
+      }
+      data.imageId = Upload?.key || null;
       data.updatedOn = new Date().toISOString();
       data.updatedBy = req.user.id;
       data.status = "UPDATED";
@@ -3055,6 +3073,9 @@ exports.trackJourney = [
                 {
                   airWayBillNo: trackingId,
                 },
+                {
+                  "products.batchNumber": trackingId,
+                },
               ],
             },
             {
@@ -3158,6 +3179,9 @@ exports.trackJourney = [
                   {
                     airWayBillNo: trackingId,
                   },
+                {
+                  "products.batchNumber": trackingId,
+                },
                 ],
               },
             },
