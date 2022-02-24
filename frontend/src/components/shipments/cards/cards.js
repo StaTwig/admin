@@ -9,7 +9,7 @@ import "../style.scss";
 import "./cards.scss";
 
 function Cards(props) {
-  const {t} = props;
+  const { t } = props;
   const [shipmentAnalytics, setShipmentAnalytics] = useState({});
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +26,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text-cards font-weight-bold">{t('Inbound_Shipment')}</p>
+          <p className="recived-text-cards font-weight-bold">{t('inbound_shipments')}</p>
           <h1 className="count recived-text-cards">
             {shipmentAnalytics.inboundShipments}
           </h1>
@@ -39,7 +39,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="sent-text font-weight-bold">{t('Outbound_Shipment')}</p>
+          <p className="sent-text font-weight-bold">{t('outbound_shipments')}</p>
           <h1 className="count sent-text">
             {shipmentAnalytics.outboundShipments}
           </h1>
@@ -55,7 +55,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="inbound-text font-weight-bold">{t('Inbound_Alert')}</p>
+          <p className="inbound-text font-weight-bold">{t('inbound_alert')}</p>
           <h1 className="count inbound-text">
             {shipmentAnalytics.inboundAlerts}
           </h1>
@@ -71,7 +71,7 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="outbound-text font-weight-bold">{t('Outbound_Alert')}</p>
+          <p className="outbound-text font-weight-bold">{t('outbound_alert')}</p>
           <h1 className="count outbound-text">
             {shipmentAnalytics.outboundAlerts}
           </h1>

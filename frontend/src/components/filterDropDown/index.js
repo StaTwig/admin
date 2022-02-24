@@ -4,7 +4,6 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./style.scss";
 
-
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #D3D4D5",
@@ -27,14 +26,14 @@ const StyledMenu = withStyles({
 ));
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    '&:hover': {
-      backgroundColor: 'transparent',
+    "&:hover": {
+      backgroundColor: "transparent",
     },
-    '&:focus': {
-      backgroundColor: 'transparent',
+    "&:focus": {
+      backgroundColor: "transparent",
     },
-    '&:active': {
-      backgroundColor: 'transparent',
+    "&:active": {
+      backgroundColor: "transparent",
     },
   },
 }))(MenuItem);
@@ -42,62 +41,74 @@ const StyledMenuItem = withStyles((theme) => ({
 const FilterDropDown = (props) => {
   return (
     <>
-    {props.MenuBtn === "ExportMenuBtn" ? (<StyledMenu
-                    id='customized-menu'
-                    anchorEl={props.anchorElEx}
-                    keepMounted
-                    open={Boolean(props.anchorElEx)}
-                    onClose={props.handleClose1}
-                    onBlur={props.handleClose1}
+      {props.MenuBtn === "ExportMenuBtn" ? (
+        <StyledMenu
+          id='customized-menu'
+          anchorEl={props.anchorElEx}
+          keepMounted
+          open={Boolean(props.anchorElEx)}
+          onClose={props.handleClose1}
+          onBlur={props.handleClose1}
+        >
+          <div className='d-flex flex-column align-items-center'>
+            {props.data.map((item, index) => {
+              return (
+                <StyledMenuItem key={index}>
+                  <button
+                    className={
+                      item.checked
+                        ? "li-element-selected btn btn-outline-primary btn-sm"
+                        : "li-element btn btn-outline-primary btn-sm"
+                    }
+                    key={index}
+                    onClick={() => {
+                      props.onChangeOfFilterDropDown(
+                        index,
+                        props.type,
+                        item.value
+                      );
+                    }}
+                    type='button'
                   >
-                    <div className='d-flex flex-column align-items-center'>
-                    {props.data.map((item, index) => {
-          return (
-            <StyledMenuItem>
-                        <button
-                        className={item.checked ? "li-element-selected" : "li-element"}
-                        key={item.key}
-                        onClick={() => {
-                          props.onChangeOfFilterDropDown(index, props.type, item.value);
-                        }}
-                          type='button'
-                          style={{
-                            padding: "10px",
-                            height: "40px",
-                            width: "130px",
-                          }}
-                          className='btn btn-outline-primary btn-sm'
-                        >
-                          {item.label}
-                        </button>
-                      </StyledMenuItem>
-          );
-        })}
-                    </div>
-                  </StyledMenu>) : ( <div
-      className={`card rounded bg-white border-white 
+                    {item.label}
+                  </button>
+                </StyledMenuItem>
+              );
+            })}
+          </div>
+        </StyledMenu>
+      ) : (
+        <div
+          className={`card rounded bg-white border-white 
         ${
           props.type === "export"
             ? "filter-card-export-container"
             : "filter-card-container"
         }`}
-    >
-      <ul className='ul-element'>
-        {props.data.map((item, index) => {
-          return (
-            <li
-              className={item.checked ? "li-element-selected" : "li-element"}
-              key={item.key}
-              onClick={() => {
-                props.onChangeOfFilterDropDown(index, props.type, item.value);
-              }}
-            >
-              {item.label}
-            </li>
-          );
-        })}
-      </ul>
-    </div>)}
+        >
+          <ul className='ul-element'>
+            {props.data.map((item, index) => {
+              return (
+                <li
+                  className={
+                    item.checked ? "li-element-selected" : "li-element"
+                  }
+                  key={index}
+                  onClick={() => {
+                    props.onChangeOfFilterDropDown(
+                      index,
+                      props.type,
+                      item.value
+                    );
+                  }}
+                >
+                  {item.label}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </>
   );
 };

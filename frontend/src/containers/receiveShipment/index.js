@@ -13,9 +13,9 @@ const ReceiveShipmentContainer = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await dispatch(getViewShipment(props.match.params.id));
-      if (result) {
-        setTrackData(result);
+      const result = await getViewShipment(props.match.params.id);
+      if (result.success) {
+        setTrackData(result.data);
       } else {
         setTrackData({});
       }
