@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 const ViewExpiryContainer = (props) => {
 const { t, i18n } = useTranslation();
   const [inventories, setInventories] = useState([props.location.state.data]);
-  // console.log(props.location.state.data);
-  //setInventories([]);
   return (
     <div className="container-fluid p-0">
       <Header {...props} t={t}/>

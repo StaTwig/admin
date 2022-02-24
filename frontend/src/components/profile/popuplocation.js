@@ -114,6 +114,7 @@ console.log(props.wareHouses)
                 }}
                 groups={props.wareHouses}
                 type="AddLocationType"
+                t={t}
               />
             </div>
           </div>

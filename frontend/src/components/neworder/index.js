@@ -102,7 +102,7 @@ const NewOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      onCountryChange('Costa Rica');
+      onCountryChange("Costa Rica");
       const orgs = await getAllOrganisations();
       setAllOrganisations(
         orgs.data.map((item) => {
@@ -202,7 +202,7 @@ const NewOrder = (props) => {
       });
       console.log("rr");
       setReceiverWarehousesRegion(rr);
-      onCountryChange(value, 'Costa Rica');
+      onCountryChange(value, "Costa Rica");
     } catch (err) {
       setErrorMessage(err);
     }
@@ -450,7 +450,6 @@ const NewOrder = (props) => {
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(false);
           onAssign(values);
-          
         }}
       >
         {({
@@ -648,7 +647,7 @@ const NewOrder = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low'>
                 <label htmlFor='client' className='headsup'>
-                {t("order_to")}
+                  {t("order_to")}
                 </label>
 
                 <div className='row'>
@@ -850,9 +849,10 @@ const NewOrder = (props) => {
                   <b>{t("cancel")}</b>
                 </button>
 
-                <button 
-                  className='btn btn-orange fontSize20 font-bold mt-3' 
-                  type='submit'>
+                <button
+                  className='btn btn-orange fontSize20 font-bold mt-3'
+                  type='submit'
+                >
                   <img
                     src={OrderIcon}
                     width='20'
@@ -875,7 +875,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
-          t={t}
+            t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -887,7 +887,7 @@ const NewOrder = (props) => {
           size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
-          t={t}
+            t={t}
             onHide={closeModalFail} //FailurePopUp
             shipmentError={shipmentError}
           />
@@ -900,7 +900,7 @@ const NewOrder = (props) => {
           size='modal-md'
         >
           <ShipmentFailPopUp
-          t={t}
+            t={t}
             onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
             shipmentError={shipmentError}
           />

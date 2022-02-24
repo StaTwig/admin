@@ -7,6 +7,7 @@ import "./LocationDropdown.scss";
 const LocationDropdown = (props) => {
   const [menu, setMenu] = useState(false);
   const {
+    t,
     groups,
     name,
     name2,
@@ -154,7 +155,7 @@ const LocationDropdown = (props) => {
                 }}
               >
                 <div className='locationAdress'>
-                  No Locations available
+                  {t("no_locations_available")}
                 </div>
               </span>
             )

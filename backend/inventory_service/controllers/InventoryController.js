@@ -746,6 +746,14 @@ exports.addProductsToInventory = [
               if (res) {
                 duplicateBatch = true;
                 duplicateBatchNo = res.batchNumbers[0];
+                if (duplicateBatch) {
+                  return apiResponse.ErrorResponse(
+                    res,
+                    responses(req.user.preferredLanguage).batchExists(
+                      duplicateBatchNo
+                    )
+                  );
+                }
                 break;
               }
             }
@@ -826,8 +834,6 @@ exports.addInventoriesFromExcel = [
       });
       const orgId = empData.organisationId;
       const orgName = empData.name;
-      const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
           const dir = `uploads`;
@@ -944,30 +950,28 @@ exports.addInventoriesFromExcel = [
             }
           }
 
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             eventType: {
-              primary: "CREATE",
-              description: "SHIPMENT_CREATION",
+              primary: "ADD",
+              description: "INVENTORY",
             },
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id || null,
+              actoruserid: email || null,
             },
+            actorWarehouseId: req.user.warehouseId,
             stackholders: {
               ca: {
-                id: null,
-                name: null,
-                address: null,
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: null,
-                name: null,
-                address: null,
+                id: orgId || req.user.organisationId || null,
+                name: orgName || null,
+                address: address || null,
               },
               secondorg: {
                 id: null,
@@ -977,27 +981,11 @@ exports.addInventoriesFromExcel = [
             },
             payload: {
               data: {
-                abc: 123,
+                products: [...resData],
               },
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || null;
-          event_data.actor.actoruserid = email || null;
-          event_data.stackholders.actororg.id =
-            orgId || req.user.organisationId || null;
-          event_data.stackholders.actororg.name = orgName || null;
-          event_data.stackholders.actororg.address = address || null;
-          event_data.actorWarehouseId = req.user.warehouseId || null;
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || null;
-          event_data.payload.data.products = [...resData];
-          // logEvent(event_data);
+          logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
             responses(req.user.preferredLanguage).success,
@@ -1010,36 +998,6 @@ exports.addInventoriesFromExcel = [
           );
         }
       });
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.trackProduct = [
-  auth,
-  async (req, res) => {
-    try {
-      const { serialNumber } = req.query;
-      InventoryModel.findOne({ serialNumber: serialNumber }).then(
-        async (user) => {
-          let txnIDs = user.transactionIds;
-          let items_array = [];
-          await utility.asyncForEach(txnIDs, async (txnId) => {
-            const response = await axios.get(
-              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`
-            );
-            const items = response.data.items;
-            items_array.push(items);
-          });
-          return apiResponse.successResponseWithData(
-            res,
-            responses(req.user.preferredLanguage).success,
-            items_array
-          );
-        }
-      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
