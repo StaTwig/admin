@@ -178,9 +178,9 @@ exports.register = [
         console.log("Phone - ", phoneNumber);
         let phone = "";
         let user;
-        if (!phoneNumber.match(phoneRegex))
-          return apiResponse.ErrorResponse(req, res, "not_valid_phone");
-        phone = "+" + phoneNumber;
+        // if (!phoneNumber.match(phoneRegex))
+        //   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
+        // phone = "+" + phoneNumber;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
         if (user) {
           return apiResponse.ErrorResponse(req, res, "account_already_exists");
@@ -338,7 +338,7 @@ exports.register = [
         emailId = req.body.emailId.toLowerCase().replace(" ", "");
 
       let phoneNumber = null;
-      if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
+      // if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
 
       const user = new EmployeeModel({
         firstName: req.body.firstName,
@@ -752,7 +752,7 @@ exports.updateProfile = [
       const {
         firstName,
         lastName,
-        phoneNumber = "",
+        phoneNumber = null,
         warehouseId,
         organisation,
         preferredLanguage,
@@ -761,7 +761,7 @@ exports.updateProfile = [
       const organisationId = organisation.split("/")[1];
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
+      employee.phoneNumber = phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       employee.preferredLanguage = preferredLanguage;
