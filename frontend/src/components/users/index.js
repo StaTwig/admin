@@ -63,6 +63,7 @@ const Users = (props) => {
             data={data}
             permissions={permissions}
             addresses={addresses}
+            isAddNewUser={true}
             onSuccess={() => {
               let data1 = data;
               console.log(data.emailId)

@@ -403,5 +403,7 @@
     "Enter the email address of the users you'd like to add or invite and choose the role they should have.":"Ingrese la dirección de correo electrónico de los usuarios que desea agregar o invitar y elija el rol que deben tener.",
     "ADD NEW USER":"AÑADIR NUEVO USUARIO",
     "Description":"Descripción",
-    "Clear":"Claro"
-}   
+    "Clear":"Claro",
+    "enter_first_name": "Ingrese el nombre",
+    "enter_last_name": "Introduzca el apellido"
+}
