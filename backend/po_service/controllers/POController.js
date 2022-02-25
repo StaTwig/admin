@@ -451,6 +451,7 @@ exports.addPOsFromExcel = [
       const workbook = XLSX.readFile(req.file.path);
       const sheet_name_list = workbook.SheetNames;
       let errorsArr = [];
+      let warningArr = [];
       const data = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
@@ -598,6 +599,7 @@ exports.addPOsFromExcel = [
                   poDataArray[i].customer.shippingAddress.shippingAddressId
                 )
               ) {
+                warningArr.push(`Warehouse ${poDataArray[i].customer.shippingAddress.shippingAddressId} doesn't exist in customer organisation`);
                 delete poDataArray[i];
                 continue;
               }
@@ -949,7 +951,7 @@ exports.addPOsFromExcel = [
       return apiResponse.successResponseWithData(
         res,
         responses(req.user.preferredLanguage || "EN").upload_result,
-        poDataArray
+        {inserted: poDataArray, unininserted: warningArr, duplicate: errorsArr}
       );
     } catch (err) {
       console.log(err);

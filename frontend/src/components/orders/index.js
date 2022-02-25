@@ -59,9 +59,61 @@ const Orders = (props) => {
     !isAuthenticated("viewOutboundOrders")
   )
     props.history.push(`/profile`);
+
+
+  // const sendData = () => {
+  //   let rtnArr = visible === "one" ? outboundRecords : inboundRecords;
+  //   const status = visible === "one" ? "REJECTED" :  "CREATED";
+  //   if (alerts) {
+  //     rtnArr = rtnArr.filter((row) => row.poStatus === status);
+  //     setStatusFilterOnSelect(status);
+  //   }
+  //   return rtnArr ? rtnArr : [];
+  // };
+
+  const setStatusFilterOnSelect = async (statusFilterSelected) => {
+    setStatusFilter(statusFilterSelected);
+    setSkip(0);
+    if (visible === "one") {
+      dispatch(turnOn());
+      const outboundRes = await getSentPOs(
+        toFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilter,
+        dateFilter,
+        statusFilterSelected,
+        0,
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count);
+      dispatch(turnOff());
+    } else {
+      dispatch(turnOn());
+      const inboundRes = await getReceivedPOs(
+        fromFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilter,
+        dateFilter,
+        statusFilterSelected,
+        0,
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count);
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
-      if (visible === "one") {
+      if (visible === "one" && alerts === false) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -74,7 +126,28 @@ const Orders = (props) => {
         dispatch(turnOff());
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
-      } else {
+      } else if (visible === "one" && alerts === true) {
+        const statusFilterSelected = "REJECTED";
+        setStatusFilter(statusFilterSelected);
+        setSkip(0);
+        dispatch(turnOn());
+        const outboundRes = await getSentPOs(
+          toFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count);
+        dispatch(turnOff());
+      }
+      else if (visible === "two" && alerts === false) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -99,6 +172,24 @@ const Orders = (props) => {
 
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count);
+      } else if (visible === "two" && alerts === true) {
+        dispatch(turnOn());
+        const statusFilterSelected = "CREATED";
+        const inboundRes = await getReceivedPOs(
+          fromFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); //from, orderId, productName, deliveryLocation, date, skip, limit
+        dispatch(turnOff());
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count);
       }
       const orderIdListRes = await getOrderIds();
       setPoOrderIdList(orderIdListRes);
@@ -113,7 +204,7 @@ const Orders = (props) => {
       setSkip(0);
     }
     fetchData();
-  }, [limit, visible]);
+  }, [limit, visible, alerts]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
@@ -349,45 +440,7 @@ const Orders = (props) => {
     }
   };
 
-  const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    setStatusFilter(statusFilterSelected);
-    setSkip(0);
-    if (visible === "one") {
-      dispatch(turnOn());
-      const outboundRes = await getSentPOs(
-        toFilter,
-        orderIdFilter,
-        productNameFilter,
-        locationFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit,
-        fromFilterDate,
-        toFilterDate
-      ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
-      setOutboundRecords(outboundRes.data.outboundPOs);
-      setCount(outboundRes.data.count);
-      dispatch(turnOff());
-    } else {
-      dispatch(turnOn());
-      const inboundRes = await getReceivedPOs(
-        fromFilter,
-        orderIdFilter,
-        productNameFilter,
-        locationFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit,
-        fromFilterDate,
-        toFilterDate
-      ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      dispatch(turnOff());
-      setInboundRecords(inboundRes.data.inboundPOs);
-      setCount(inboundRes.data.count);
-    }
-  };
+
 
   const setFromToFilterOnSelect = async (fromToFilterSelected) => {
     setFromFilter(fromToFilterSelected);
@@ -430,21 +483,12 @@ const Orders = (props) => {
     }
   };
 
-  const sendData = () => {
-    let rtnArr = visible === "one" ? outboundRecords : inboundRecords;
-    const status = visible === "one" ? "REJECTED" :  "CREATED";
-    if (alerts) {
-      rtnArr = rtnArr.filter((row) => row.poStatus === status);
-      setStatusFilterOnSelect(status);
-    }
-    
-    return rtnArr ? rtnArr : [];
-  };
+
 
   useEffect(() => {
     setExportFilterData([
       { key: "excel", value: "excel", label: t("excel"), checked: false },
-      { key: "pdf",   value: "pdf", label: t("pdf"), checked: false },
+      { key: "pdf", value: "pdf", label: t("pdf"), checked: false },
       // { key: "email", value: "mail", label: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
@@ -455,10 +499,10 @@ const Orders = (props) => {
     setFromFilterDate(fromDate);
     if (value.length > 1) {
       const toDate = value[0] == '' ? '' : new Date(new Date(value[1]).toDateString());
-      if(toDate)
+      if (toDate)
         toDate.setDate(toDate.getDate() + 1);
       setToFilterDate(toDate);
-       if (visible === "one") {
+      if (visible === "one") {
         dispatch(turnOn());
         const outboundRes = await getSentPOs(
           toFilter,
@@ -500,14 +544,12 @@ const Orders = (props) => {
     setShowExportFilter(false);
     let url = "";
     if (visible === "one") {
-      url = `${
-        config().getExportFileForOutboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
+      url = `${config().getExportFileForOutboundPurchaseOrdersUrl
+        }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
     if (visible === "two") {
-      url = `${
-        config().getExportFileForInboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
+      url = `${config().getExportFileForInboundPurchaseOrdersUrl
+        }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
 
     var today = new Date();
@@ -541,8 +583,7 @@ const Orders = (props) => {
         link.href = downloadUrl;
         link.setAttribute(
           "download",
-          `${nameOfFile}.${
-            value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
+          `${nameOfFile}.${value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
         document.body.appendChild(link);
@@ -658,7 +699,9 @@ const Orders = (props) => {
         <Table
           {...props}
           skip={skip}
-          ordrs={sendData}
+          inboundRecords={inboundRecords}
+          outboundRecords={outboundRecords}
+          alerts={alerts}
           visible={visible}
           count={count}
           onPageChange={onPageChange}

@@ -1390,10 +1390,11 @@ exports.getProductListCounts = [
             manufacturer: product && product[0] && product[0].manufacturer,
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
+          if (productObj?.quantity > 0) {
+            productArray.push(productObj);
+          }
         }
-        if (productObj?.quantity > 0) {
-          productArray.push(productObj);
-        }
+
       }
       productArray.sort(function (a, b) {
         if (a.quantity > b.quantity) {
