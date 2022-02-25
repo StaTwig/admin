@@ -97,29 +97,31 @@ const Users = (props) => {
         <div className="filter">
           <div className="row" style={{ flexBasis: '95%' }}>
             <span
-               className="col box headerText col-1 ml-5 mr-5"
-               style={{position:"relative",
-                left:"15px",
-                justifyContent:"unset"}}
-               >{t('name')}</span>
+              className="col box headerText col-1 ml-5 mr-5"
+              style={{
+                position: "relative",
+                left: "15px",
+                justifyContent: "unset"
+              }}
+            >{t('name')}</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText' style={{paddingLeft:"10px",justifyContent:"unset"}}>
-              <span className="headerText" 
-                  onClick={() => {
-                    setShowDropDownForRole(!showDropDownForRole);
-                  }}
-                  style={{cursor:"pointer"}}>{t('role')}
+            <div className='col box headerText' style={{ paddingLeft: "10px", justifyContent: "unset" }}>
+              <span className="headerText"
+                onClick={() => {
+                  setShowDropDownForRole(!showDropDownForRole);
+                }}
+                style={{ cursor: "pointer" }}>{t('role')}
               </span>
               <img
-              class='headerText'
-              style={{
-                width: '7px',
-                height: '10px',
-                marginTop: '0px',
-                marginLeft: '68px',
-                cursor:"pointer"
-              }}
+                class='headerText'
+                style={{
+                  width: '7px',
+                  height: '10px',
+                  marginTop: '0px',
+                  marginLeft: '68px',
+                  cursor: "pointer"
+                }}
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
@@ -128,7 +130,7 @@ const Users = (props) => {
               />
               {showDropDownForRole && roleData &&
                 <DropDownFilter
-                  setShowDropDownForRole = {setShowDropDownForRole}
+                  setShowDropDownForRole={setShowDropDownForRole}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={roleData}
                   type={'role'}
@@ -138,28 +140,28 @@ const Users = (props) => {
             </div>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('location')}</span>
+            <span className="headerText col box headerText pl-2" style={{ justifyContent: "unset" }}>{t('location')}</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('wallet_address')}</span>
+            <span className="headerText col box headerText pl-2" style={{ justifyContent: "unset" }}>{t('wallet_address')}</span>
 
             <div class="vl text-center"></div>
-            <span className="headerText col box headerText pl-2" style={{justifyContent:"unset"}}>{t('email_mobile')}</span>
+            <span className="headerText col box headerText pl-2" style={{ justifyContent: "unset" }}>{t('email_mobile')}</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText pl-2' style={{justifyContent:"unset"}}>
+            <div className='col box headerText pl-2' style={{ justifyContent: "unset" }}>
               <span className="headerText" onClick={() => {
                 setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
-              }} style={{cursor:"pointer"}}>{t('account_status')}</span>
+              }} style={{ cursor: "pointer" }}>{t('account_status')}</span>
               <img
-              class='headerText'
-              style={{
-                width: '7px',
-                height: '10px',
-                marginTop: '0px',
-                marginLeft: '50px',
-                cursor:"pointer"
-              }}
+                class='headerText'
+                style={{
+                  width: '7px',
+                  height: '10px',
+                  marginTop: '0px',
+                  marginLeft: '50px',
+                  cursor: "pointer"
+                }}
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
@@ -168,7 +170,7 @@ const Users = (props) => {
               />
               {showDropDownForAccountStatus &&
                 <DropDownFilter
-                  setShowDropDownForAccountStatus = {setShowDropDownForAccountStatus}
+                  setShowDropDownForAccountStatus={setShowDropDownForAccountStatus}
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={accountStatusData}
                   type={'accountStatus'}
@@ -199,7 +201,7 @@ const Users = (props) => {
         </div>
       </div>
       <div className='userList-container'>
-        {usersList?.map((row, index) => (
+        {usersList?.slice(0).reverse().map((row, index) => (
           <UserDetails
             key={index}
             user={row}
