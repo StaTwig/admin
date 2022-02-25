@@ -348,7 +348,7 @@
   "Your_Shipment_Status_has_been": "Your Shipment Status has been",
   "Added_to_inventory":"Added to inventory",
   "Validation Error": "Validation Error",
-  "you_can_only_upload_XLS_file":"You can only upload XLS file!",
+  "you_can_only_upload_excel_formats":"You can only upload EXCEL formats!",
   "something_went_wrong": "SOMETHING WENT WRONG",
   "sorry_msg": "We are very sorry for inconvenience.",
   "sorry_reason": "It looks you are trying to access a page that either has been deleted or never been existed",
