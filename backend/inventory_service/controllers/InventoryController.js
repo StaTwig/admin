@@ -1390,10 +1390,11 @@ exports.getProductListCounts = [
             manufacturer: product && product[0] && product[0].manufacturer,
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
+          if (productObj?.quantity > 0) {
+            productArray.push(productObj);
+          }
         }
-        if (productObj?.quantity > 0) {
-          productArray.push(productObj);
-        }
+
       }
       productArray.sort(function (a, b) {
         if (a.quantity > b.quantity) {
@@ -2611,7 +2612,7 @@ exports.searchProduct = [
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};
-            elementMatchQuery["id"] = warehouse.warehouseInventory;
+            // elementMatchQuery["id"] = warehouse.warehouseInventory;
             if (productName) {
               elementMatchQuery[`products.name`] = productName;
             }

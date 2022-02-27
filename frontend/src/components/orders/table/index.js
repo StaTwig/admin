@@ -7,8 +7,9 @@ import "./style.scss";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
-  const { ordrs, visible, t } = props;
-  const orders = ordrs();
+  const { visible,outboundRecords,inboundRecords, t } = props;
+  const orders = visible === "one" ? outboundRecords : inboundRecords;
+
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };

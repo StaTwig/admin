@@ -98,9 +98,8 @@ const Header = (props) => {
   );
 
   const onSearchChange = async (e) => {
-    const response = await axios.get(
-      `${config().getSuggestions}?searchString=${e}`
-    );
+    const response = await axios.get(`${config().getSuggestions}?searchString=${e}`);
+    // console.log(response, "response from search API");
     setOptions([...response.data.data]);
     setSearchString(options[0]?._id);
     setSearchType(options[0]?.type);
@@ -198,7 +197,7 @@ const Header = (props) => {
         .get(`${config().searchProduct}&productName=${searchString}`)
         .then((resp) => {
           if (resp.data.data.length > 0)
-            props.history.push(`/viewproduct`, { data: resp.data.data[0] });
+            props.history.push(`/viewproduct`, { data: resp.data.data });
           else
             alert(
               `${t("the_product")} "${searchString}" ${t("not_found_in_inventory")}`
@@ -406,6 +405,7 @@ const Header = (props) => {
                   }
                   inputValue={search}
                   onInputChange={(event, newInputValue) => {
+                    
                     setSearch(newInputValue);
                     onSearchChange(newInputValue);
                   }}

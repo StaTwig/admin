@@ -38,7 +38,7 @@ const ProductList = (props) => {
                         deliveredProductList.push(deliveredProduct);
                         props.setDelivered(deliveredProductList);
                         props.setIndex(index);
-                        if (deliveredProduct) setIsVisible(false);
+                        // if (deliveredProduct) setIsVisible(false);
                       }}
                       className='btn btn-outline-warning mt-2 mr-1 p-1'
                     >
@@ -132,7 +132,8 @@ const ProductList = (props) => {
         <Modal close={() => closeModalFail()} size='modal-sm'>
           <FailPopup
             message='Quantity cannot be greater than sent'
-            onHide={closeModalFail}
+            onHide={closeModalFail} //FailurePopUp
+            t={t}
           />
         </Modal>
       )}
