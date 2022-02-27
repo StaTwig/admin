@@ -333,5 +333,8 @@
     "analytics":"Analytics",
     "rules":"Rules",
     "send_otp":"Send OTP",
-    "Email_ID_Already_registered": "Email ID Already registered"
+    "Email_ID_Already_registered": "Email ID Already registered",
+    "email_has_already_been_taken": "Email has already been taken",
+    "enter_first_name": "Enter First Name",
+    "enter_last_name": "Enter Last Name"
 }

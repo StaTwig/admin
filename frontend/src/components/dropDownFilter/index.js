@@ -90,13 +90,19 @@ const DropDownFilter = (props) => {
                         </li>
                     )
                 })}
-                <li 
+                {/* <li 
                     className={`sugg-item${length}`}
-                    onClick={() => props.onClickOfDropDownItem("", "", "")}
+                    onClick={() => props.onClickOfDropDownItem(props.data.length, "", "")}
+                >
+                    {t('Clear')}
+                </li> */}
+            </ul>
+            <li 
+                    className={"clear-btn"}
+                    onClick={() => props.onClickOfDropDownItem("", "clear", "")}
                 >
                     {t('Clear')}
                 </li>
-            </ul>
         </div>
     )
 }

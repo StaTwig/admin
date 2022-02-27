@@ -34,6 +34,14 @@ const NUModal = (props) => {
     setData({ ...data, ...{ emailId: event.target.value } });
   };
 
+  const setFirstName = (event) => {
+    setData({ ...data, ...{firstName: event.target.value }});
+  };
+
+  const setLastName = (event) => {
+    setData({ ...data, ...{lastName: event.target.value }});
+  };
+
   const setWarehouse = (name, id) => {
     setWH(name);
     setData({ ...data, ...{ warehouse: id } });
@@ -41,13 +49,10 @@ const NUModal = (props) => {
 
   // Enabling next button on validation
   useEffect(() => {
-    console.log("UseEffect - ", data?.role, data?.emailId, data?.phoneNumber);
     var flag = false;
     // Email or Phone should exist
     if (data?.emailId) {
-      console.log("Email ", data?.emailId);
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(data?.emailId)) {
-        console.log("Email triggered!");
         flag = true;
       }
     } else {
@@ -107,7 +112,7 @@ const NUModal = (props) => {
     <div className="p-0">
       <Formik
         innerRef={formikRef}
-        initialValues={{ email: data?.ref, role: "", warehouse: "" }}
+        initialValues={{ email: data?.ref, role: "", warehouse: "", first_name: "", last_name: "" }}
         validate={(values) => {
           const errors = {};
           // console.log(values);
@@ -123,6 +128,14 @@ const NUModal = (props) => {
             errors.email = 'Invalid email address';
           }
 
+          if(props.isAddNewUser && !values.first_name) {
+            errors.first_name = "Enter first name";
+          }
+
+          if(props.isAddNewUser && !values.last_name) {
+            errors.last_name = "Enter last name";
+          }
+
           if (!values.role) {
             errors.role = t('Required');
           }
@@ -132,7 +145,6 @@ const NUModal = (props) => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log("Values - ", values);
           setSubmitting(false);
           onSuccess();
         }}
@@ -155,6 +167,45 @@ const NUModal = (props) => {
               >
                 {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
               </p>
+
+              {props.isAddNewUser && 
+                <div className="pl-4 pr-4 pt-3 d-flex pb-4"
+                  style={{ justifyContent: 'space-between' }}>
+                  <div className="input-group" style={{ width: '49.5%', alignItems: 'center' }}>
+                    <input
+                      type="text"
+                      name="first_name"
+                      id="first_name"
+                      className={`form-control ${errors.first_name && touched.first_name ? "border-danger" : ""
+                        }`}
+                      placeholder={t('enter_first_name')}
+                      onChange={(e) => {
+                        setFirstName(e);
+                        handleChange(e);
+                      }}
+                      onBlur={handleBlur}
+                      value={values.first_name}
+                    />
+                  </div>
+                  <div className="input-group" style={{ width: '49.5%', alignItems: 'center' }}>
+                    <input
+                      type="text"
+                      name="last_name"
+                      id="last_name"
+                      className={`form-control ${errors.last_name && touched.last_name ? "border-danger" : ""
+                        }`}
+                      placeholder={t('enter_last_name')}
+                      onChange={(e) => {
+                        setLastName(e);
+                        handleChange(e);
+                      }}
+                      onBlur={handleBlur}
+                      value={values.last_name}
+                    />
+                  </div>
+                </div>
+              }
+
               <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
                 style={{ justifyContent: 'space-between' }}>
                 <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
