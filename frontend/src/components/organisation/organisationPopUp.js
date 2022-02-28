@@ -32,7 +32,7 @@ const OrganisationPopUp = (props) => {
           dispatch(turnOn());
           const result = await getAddressByLatLong(position);
           dispatch(turnOff());
-          if (result.status === 200) {
+          if (result?.status === 200) {
             await setAddress(result);
           } else {
             setShowModal(true);
@@ -70,13 +70,13 @@ const OrganisationPopUp = (props) => {
                 city: address?.City ? address?.City : "",
                 state: address?.AdditionalData?.length
                   ? address?.AdditionalData?.filter(
-                      (row) => row.key == "StateName"
-                    )[0].value
+                    (row) => row.key == "StateName"
+                  )[0].value
                   : "",
                 country: address?.AdditionalData?.length
                   ? address?.AdditionalData?.filter(
-                      (row) => row.key == "CountryName"
-                    )[0].value
+                    (row) => row.key == "CountryName"
+                  )[0].value
                   : "",
               }}
               validate={(values) => {
