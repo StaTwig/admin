@@ -109,7 +109,7 @@ export const getManufacturers = async () => {
 export const addNewProduct = async (data) => {
   try {
     const result = await axios.post(config().addNewProduct, data, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { "Content-Type": "multipart/form-data", "Access-Control-Allow-Origin": "*" },
     });
     return result.data;
   } catch (e) {

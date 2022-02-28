@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://costarica.vaccineledger.com";
+export const TEST_SERVER_URL = "https://test.vaccineledger.com";
 export const TEST_SERVER_URL_FOR_ROAMBEE =
   "https://integrations.vaccineledger.com";
 export const PROD_SERVER_URL = "https://vaccineledger.com";
@@ -59,7 +59,7 @@ export function config() {
       getProductsByCategoryUrl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductsByCategory?type=`,
       getProductsByInventoryUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/getProductsByInventory?invId=`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
-      getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/productmanagement/api/products/getManufacturer`,
+      getManufacturers: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getManufacturer`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -563,7 +563,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
