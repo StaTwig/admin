@@ -236,7 +236,7 @@ exports.addProduct = [
           if (permissionResult.success) {
             const productId = await CounterModel.findOneAndUpdate(
               {
-                "counters.name": "productId",
+                "counters.name": "poId",
               },
               {
                 $inc: {
@@ -248,14 +248,14 @@ exports.addProduct = [
               }
             );
             const product = new ProductModel({
-              id: productId.counters[6].format + productId.counters[6].value,
+              id: productId?.counters[5].format + productId?.counters[5].value,
               externalId: req.body.externalId,
               name: req.body.name,
               shortName: req.body.shortName,
               type: req.body.type,
               manufacturer: req.body.manufacturer,
               pricing: req.body.pricing,
-              //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
+              photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
               unitofMeasure: JSON.parse(req.body.unitofMeasure),
               characteristicSet: {
                 temperature_max: req.body.characteristicSet?.temperature_max,

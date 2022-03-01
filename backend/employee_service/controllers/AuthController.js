@@ -22,7 +22,7 @@ const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRegex = /^\d{11}$/;
+const phoneRegex = /^[\+]\d{11,12}$/;
 
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
@@ -175,11 +175,12 @@ exports.register = [
       } else if (req.body.phoneNumber != "") {
         let phoneNumber = req.body.phoneNumber;
         phoneNumber = phoneNumber.toLowerCase().replace("", "");
+        console.log("Phone - ", phoneNumber);
         let phone = "";
         let user;
-        if (!phoneNumber.match(phoneRegex))
-          return apiResponse.ErrorResponse(req, res, "not_valid_phone");
-        phone = "+" + phoneNumber;
+        // if (!phoneNumber.match(phoneRegex))
+        //   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
+        // phone = "+" + phoneNumber;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
         if (user) {
           return apiResponse.ErrorResponse(req, res, "account_already_exists");
@@ -337,7 +338,7 @@ exports.register = [
         emailId = req.body.emailId.toLowerCase().replace(" ", "");
 
       let phoneNumber = null;
-      if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
+      // if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
 
       const user = new EmployeeModel({
         firstName: req.body.firstName,
@@ -751,7 +752,7 @@ exports.updateProfile = [
       const {
         firstName,
         lastName,
-        phoneNumber = "",
+        phoneNumber = null,
         warehouseId,
         organisation,
         preferredLanguage,
@@ -760,7 +761,7 @@ exports.updateProfile = [
       const organisationId = organisation.split("/")[1];
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
+      employee.phoneNumber = phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       employee.preferredLanguage = preferredLanguage;

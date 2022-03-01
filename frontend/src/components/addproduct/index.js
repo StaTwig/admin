@@ -29,6 +29,7 @@ const AddProduct = (props) => {
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [excel, setExcel] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [image, setImage] = useState(false);
 
   const closeModal = () => {
     setOpenCreatedInventory(false);
@@ -95,6 +96,7 @@ const AddProduct = (props) => {
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
+      console.log("Result:", result);
       if (result?.success) {
         setOpenCreatedInventory(true);
       }
@@ -108,8 +110,15 @@ const AddProduct = (props) => {
     }
   };
   const setFile = (evt) => {
-    setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
-    setPhoto(evt.target.files[0]);
+    const fileExtension = evt.target.files[0].name.split(".").at(-1);
+    const allowedFileTypes = ["jpg", "jpeg", "png"];
+    if (!allowedFileTypes.includes(fileExtension)) {
+      setImage(t("upload_error"));
+    } else {
+      setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
+      setPhoto(evt.target.files[0]);
+      setImage(false);
+    }
   };
 
   const defaultPropsManufacturer = {
@@ -214,9 +223,15 @@ const AddProduct = (props) => {
                     type='file'
                     className='select'
                     onChange={setFile}
+                    accept="image/*"
                   />{" "}
                 </label>
               </div>
+              {image && (
+                <span className="error-msg text-dangerS" style={{ color: "#d80909", fontSize: "15px" }}>
+                  {image}
+                </span>
+              )}
             </div>
 
             <div

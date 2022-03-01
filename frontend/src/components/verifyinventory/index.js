@@ -139,17 +139,29 @@ const VerifyInventory = (props) => {
             {reviewInventories.map((reviewInventory) => {
               var expiryMonth;
               var manufMonth;
-              console.log("reviewInventory:", reviewInventory.expiryDate.length);
-              if(reviewInventory.expiryDate.length==24){
+              console.log("reviewInventory:", reviewInventory.expiryDate);
+              if(typeof reviewInventory.expiryDate=="object"){
                 manufMonth = `${
                   new Date(
-                    Date.parse(reviewInventory.manufacturingDate)
+                    reviewInventory.manufacturingDate
                   ).getMonth() + 1
                 }`
                 expiryMonth = `${
                   new Date(
-                    Date.parse(reviewInventory.expiryDate)
+                    reviewInventory.expiryDate
                   ).getMonth() + 1
+                }`
+              }
+              else if(reviewInventory.expiryDate.length==24){
+                manufMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.manufacturingDate)
+                  ).getMonth() +1
+                }`
+                expiryMonth = `${
+                  new Date(
+                    Date.parse(reviewInventory.expiryDate)
+                  ).getMonth() +1
                 }`
               }
               else{

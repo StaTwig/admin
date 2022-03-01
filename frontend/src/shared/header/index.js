@@ -235,10 +235,8 @@ const Header = (props) => {
   });
   useEffect(() => {
     if (profile?.photoId != null) {
-
       getImage(profile?.photoId).then((result) => {
         setImage(result.data);
-
       });
     }
   }, [profile]);
