@@ -164,7 +164,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -202,7 +204,9 @@ const Inventory = (props) => {
         dateFilterSelected,
         productNameFilter,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -217,7 +221,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         productCategoryFilter,
-        statusFilterSelected
+        statusFilterSelected,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -234,7 +240,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilterSelected,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -251,7 +259,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         manufacturerFilterSelected,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productManufacturer, status)
   };
@@ -268,7 +278,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         categoryFilterSelected,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategory, status)
   };
