@@ -4,7 +4,7 @@
   top: -22px;
   left: 90px;
   margin-right: 150px;
-  margin-left:-30px;
+  margin-left: -30px;
   //overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
@@ -223,4 +223,12 @@
 .temperature-icon {
   width: 15px;
   height: 31px;
+}
+.update-image-holder {
+  object-fit: cover;
+  height: 20rem;
+}
+.update-image-holder > img {
+  width: 60% !important;
+  height: 100%;
 }
