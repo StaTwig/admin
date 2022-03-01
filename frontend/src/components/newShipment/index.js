@@ -140,7 +140,7 @@ const NewShipment = (props) => {
       );
 
       const warehouses = await getWarehouseByOrgId(orgSplit?.length ? orgSplit[1] : "");
-      if(warehouses) {
+      if (warehouses) {
         setSenderWarehouses(
           warehouses.data.map((v) => {
             return {
@@ -148,10 +148,10 @@ const NewShipment = (props) => {
               value: v.id,
               label: v?.warehouseAddress
                 ? v?.title +
-                  "/" +
-                  v?.warehouseAddress?.firstLine +
-                  ", " +
-                  v?.warehouseAddress?.city
+                "/" +
+                v?.warehouseAddress?.firstLine +
+                ", " +
+                v?.warehouseAddress?.city
                 : v?.title + "/" + v.postalAddress,
             };
           })
@@ -162,11 +162,11 @@ const NewShipment = (props) => {
       setOrgTypes(
         orgType.data.length > 0
           ? orgType.data[0].organisationTypes.map((item) => {
-              return {
-                value: item.id,
-                label: item.name,
-              };
-            })
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
           : []
       );
 
@@ -198,10 +198,10 @@ const NewShipment = (props) => {
             value: v.id,
             label: v?.warehouseAddress
               ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
+              "/" +
+              v?.warehouseAddress?.firstLine +
+              ", " +
+              v?.warehouseAddress?.city
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -294,16 +294,16 @@ const NewShipment = (props) => {
         expectedDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-                estimateDeliveryDate.getTime() -
-                  estimateDeliveryDate.getTimezoneOffset() * 60000
-              ).toISOString()
+              estimateDeliveryDate.getTime() -
+              estimateDeliveryDate.getTimezoneOffset() * 60000
+            ).toISOString()
             : "",
         actualDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-                estimateDeliveryDate.getTime() -
-                  estimateDeliveryDate.getTimezoneOffset() * 60000
-              ).toISOString()
+              estimateDeliveryDate.getTime() -
+              estimateDeliveryDate.getTimezoneOffset() * 60000
+            ).toISOString()
             : "",
         status: "CREATED",
         products: products,
@@ -365,7 +365,7 @@ const NewShipment = (props) => {
               t: t,
             });
           } else {
-            
+
             setShipmentError(result?.data?.message);
             setOpenShipmentFail(true);
             setErrorMessage("Create Shipment Failed");
@@ -373,7 +373,7 @@ const NewShipment = (props) => {
         }
       }
     } else {
-      setShipmentError(t("check")+" "+ errorMsg);
+      setShipmentError(t("check") + " " + errorMsg);
       setOpenShipmentFail(true);
     }
   };
@@ -399,6 +399,7 @@ const NewShipment = (props) => {
     soDetailsClone.products[i].batchNumber = value;
     setOrderDetails(soDetailsClone);
   };
+
 
   const handleLabelIdChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -537,7 +538,7 @@ const NewShipment = (props) => {
                       </label>
                       <div className='line'>
                         <Select
-                        noOptionsMessage={() => t("no_options")}
+                          noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           placeholder={t("enter") + " " + t("order_id")}
                           onChange={async (v) => {
@@ -581,9 +582,9 @@ const NewShipment = (props) => {
                             }
                             setReceiverOrgLoc(
                               result.poDetails[0].customer.warehouse.title +
-                                "/" +
-                                result.poDetails[0].customer.warehouse
-                                  .postalAddress
+                              "/" +
+                              result.poDetails[0].customer.warehouse
+                                .postalAddress
                             );
                             setReceiverOrgId(
                               result.poDetails[0].customer.organisation.name
@@ -608,8 +609,8 @@ const NewShipment = (props) => {
                             setFieldValue(
                               "toOrg",
                               result.poDetails[0].customer.organisation.id +
-                                "/" +
-                                result.poDetails[0].customer.organisation.name
+                              "/" +
+                              result.poDetails[0].customer.organisation.name
                             );
                             // settoOrgLocLabel(result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name)
                             let wa = result.poDetails[0].customer.warehouse;
@@ -617,22 +618,22 @@ const NewShipment = (props) => {
                               "toOrgLoc",
                               result.poDetails[0].customer.shippingAddress
                                 .shippingAddressId +
+                              "/" +
+                              (wa?.warehouseAddress
+                                ? wa?.title +
                                 "/" +
-                                (wa?.warehouseAddress
-                                  ? wa?.title +
-                                    "/" +
-                                    wa?.warehouseAddress?.firstLine +
-                                    ", " +
-                                    wa?.warehouseAddress?.city
-                                  : wa?.title + "/" + wa.postalAddress)
+                                wa?.warehouseAddress?.firstLine +
+                                ", " +
+                                wa?.warehouseAddress?.city
+                                : wa?.title + "/" + wa.postalAddress)
                             );
                             settoOrgLocLabel(
                               wa?.warehouseAddress
                                 ? wa?.title +
-                                    "/" +
-                                    wa?.warehouseAddress?.firstLine +
-                                    ", " +
-                                    wa?.warehouseAddress?.city
+                                "/" +
+                                wa?.warehouseAddress?.firstLine +
+                                ", " +
+                                wa?.warehouseAddress?.city
                                 : wa?.title + "/" + wa.postalAddress
                             );
                             setFieldValue(
@@ -756,7 +757,7 @@ const NewShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-                               
+
                                 result.products[i].orderedQuantity =
                                   result.products[i].productQuantity;
                               }
@@ -783,18 +784,18 @@ const NewShipment = (props) => {
                                   products_temp[i].name =
                                     result.products[i].productName;
                                   products_temp[i].productQuantity =
-                                  parseInt(
-                                    result.poDetails[0].products[i]
-                                      .productQuantity
-                                  ) -
-                                  parseInt(
-                                    result.poDetails[0].products[i]
-                                      .productQuantityDelivered || 0
-                                  ) -
-                                  parseInt(
-                                    result.products[i]
-                                      .productQuantityTaggedSent || 0
-                                  );
+                                    parseInt(
+                                      result.poDetails[0].products[i]
+                                        .productQuantity
+                                    ) -
+                                    parseInt(
+                                      result.poDetails[0].products[i]
+                                        .productQuantityDelivered || 0
+                                    ) -
+                                    parseInt(
+                                      result.products[i]
+                                        .productQuantityTaggedSent || 0
+                                    );
                                   products_temp[i].type =
                                     result.products[i].productCategory;
                                   delete products_temp[i]
@@ -894,10 +895,10 @@ const NewShipment = (props) => {
                           groups={senderOrganisation}
                         /> */}
                         <Select
-                        noOptionsMessage={() => t("no_options")}
+                          noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={true}
-                          onChange={(v) => {}}
+                          onChange={(v) => { }}
                           placeholder={senderOrganisation[0]}
                           defaultInputValue={senderOrganisation[0]}
                           value={senderOrganisation[0]}
@@ -918,11 +919,10 @@ const NewShipment = (props) => {
                         {t("organisation_location")}*
                       </label>
                       <div
-                        className={`line ${
-                          errors.fromOrgLoc && touched.fromOrgLoc
+                        className={`line ${errors.fromOrgLoc && touched.fromOrgLoc
                             ? "border-danger"
                             : ""
-                        }`}
+                          }`}
                       >
                         {/* <DropdownButton
                           name={senderOrgLoc}
@@ -951,7 +951,7 @@ const NewShipment = (props) => {
                           groups={senderWarehouses}
                         /> */}
                         <Select
-                        noOptionsMessage={() => t("no_options")}
+                          noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={false}
                           placeholder={
@@ -983,9 +983,9 @@ const NewShipment = (props) => {
                             values.fromOrgLoc === ""
                               ? t("select") + " " + t("organisation_location")
                               : {
-                                  value: values.fromOrgLoc,
-                                  label: FromOrgLabel,
-                                }
+                                value: values.fromOrgLoc,
+                                label: FromOrgLabel,
+                              }
                           }
                           options={senderWarehouses.filter(
                             (ele, ind) =>
@@ -1019,12 +1019,11 @@ const NewShipment = (props) => {
                         {t("organisation_type")}*
                       </label>
                       <div
-                        className={`line ${
-                          errors.rtype && touched.rtype ? "border-danger" : ""
-                        }`}
+                        className={`line ${errors.rtype && touched.rtype ? "border-danger" : ""
+                          }`}
                       >
                         <Select
-                        noOptionsMessage={() => t("no_options")}
+                          noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={
@@ -1056,9 +1055,8 @@ const NewShipment = (props) => {
                         {t("organisation_name")}*
                       </label>
                       <div
-                        className={`line ${
-                          errors.toOrg && touched.toOrg ? "border-danger" : ""
-                        }`}
+                        className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : ""
+                          }`}
                       >
                         {/* <DropdownButton
                           name={receiverOrgId}
@@ -1074,7 +1072,7 @@ const NewShipment = (props) => {
                           groups={allOrganisations}
                         /> */}
                         <Select
-                        noOptionsMessage={() => t("no_options")}
+                          noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
                           //isDisabled={disabled}
                           placeholder={
@@ -1115,11 +1113,10 @@ const NewShipment = (props) => {
                         {t("delivery_location")}*
                       </label>
                       <div
-                        className={`line ${
-                          errors.toOrgLoc && touched.toOrgLoc
+                        className={`line ${errors.toOrgLoc && touched.toOrgLoc
                             ? "border-danger"
                             : ""
-                        }`}
+                          }`}
                       >
                         {/* <DropdownButton
                           name={receiverOrgLoc}
@@ -1189,11 +1186,10 @@ const NewShipment = (props) => {
                       {t("transit_no")}*
                     </label>
                     <input
-                      className={`input refship ${
-                        errors.airWayBillNo && touched.airWayBillNo
+                      className={`input refship ${errors.airWayBillNo && touched.airWayBillNo
                           ? "border-danger"
                           : ""
-                      }`}
+                        }`}
                       type='text'
                       id='referenceShipmentId'
                       name='airWayBillNo'
@@ -1215,11 +1211,10 @@ const NewShipment = (props) => {
                         {t("shipment_date")}*
                       </label>
                       <div
-                        className={`input refship ${
-                          errors.shipmentDate && touched.shipmentDate
+                        className={`input refship ${errors.shipmentDate && touched.shipmentDate
                             ? "border-danger"
                             : ""
-                        }`}
+                          }`}
                       >
                         <DatePicker
                           ref={ref1}
@@ -1289,12 +1284,11 @@ const NewShipment = (props) => {
                         {t("estimated_delivery_date")}
                       </label>
                       <div
-                        className={`input refship ${
-                          errors.estimateDeliveryDate &&
-                          touched.estimateDeliveryDate
+                        className={`input refship ${errors.estimateDeliveryDate &&
+                            touched.estimateDeliveryDate
                             ? "border-danger"
                             : ""
-                        }`}
+                          }`}
                       >
                         <DatePicker
                           ref={ref2}
@@ -1307,8 +1301,8 @@ const NewShipment = (props) => {
                           selected={
                             values.estimateDeliveryDate
                               ? new Date(
-                                  Date.parse(values.estimateDeliveryDate)
-                                )
+                                Date.parse(values.estimateDeliveryDate)
+                              )
                               : values.estimateDeliveryDate
                           }
                           minDate={new Date()}
@@ -1432,22 +1426,44 @@ const NewShipment = (props) => {
                       );
                       setAddProducts((prod) => [...newArr]);
                     }}
-                    handleBatchChange={(v, i) => {
+                    handleBatchChange={(v, i, batch) => {
                       let newArr = [...addProducts];
-                      newArr[i].batchNumber = v;
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
+                      if (batch.length > 1 && batch[0].index === i) {
+                        batch.forEach((elem) => {
+                            newArr[elem.index] = {...addProducts[0]};
+                            newArr[elem.index].batchNumber = elem.bnp;
+                            newArr[elem.index].productQuantity = elem.quant;
+                          })
+                        setFieldValue(
+                          "products",
+                          newArr.map((row) => ({
+                            productCategory: row.type,
+                            productID: row.id,
+                            productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
+                            productName: row.name,
+                            manufacturer: row.manufacturer,
+                            quantity: row.quantity,
+                          }))
+                        );
+                        setAddProducts(() => [ ...newArr]);
+                      } else if(batch.length === 1) {
+                        newArr[i].batchNumber = v;
+                        setFieldValue(
+                          "products",
+                          newArr.map((row) => ({
+                            productCategory: row.type,
+                            productID: row.id,
+                            productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
+                            productName: row.name,
+                            manufacturer: row.manufacturer,
+                            quantity: row.quantity,
+                          }))
+                        );
+                        setAddProducts(() => [ ...newArr]);
+                      }
+                      
                     }}
                     enableDelete={true}
                     onRemoveRow={(index) => {
