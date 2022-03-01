@@ -248,7 +248,7 @@ const ProductInventory = (props) => {
                   <button
                     type='button'
                     onClick={() =>
-                      props.history.push(`/viewproduct`, { data: inv })
+                      props.history.push(`/viewproduct`, { data: [inv] })
                     }
                     className='bttn1-blue blue-primary'
                   >
