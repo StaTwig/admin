@@ -31,8 +31,8 @@ const OrganisationPopUp = (props) => {
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region, setregion] = useState("Americas");
-  const [country, setcountry] = useState("Costa Rica");
+  const [region, setregion] = useState("");
+  const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [allregions, setallregions] = useState([]);
@@ -40,23 +40,23 @@ const OrganisationPopUp = (props) => {
   const [allState, setallState] = useState([]);
   const [allCity, setallCity] = useState([]);
   useEffect(() => {
-    // async function fetchAllRegions1() {
-    //   let arr = await fetchAllRegions();
-    //   console.log(arr);
-    //   setallregions(arr.data);
-    // }
-    // fetchAllRegions1();
-
-    async function fetchAllState1() {
-      let res = await fetchStateByCountry(53);
-      setallState(res.data);
+    async function fetchAllRegions1() {
+      let arr = await fetchAllRegions();
+      console.log(arr);
+      setallregions(arr.data);
     }
-    fetchAllState1();
+    fetchAllRegions1();
+
   }, []);
-  // async function fetchAllCountries1(id) {
-  //   let res = await fetchCountriesByRegion(id);
-  //   setallCountries(res.data);
-  // }
+  async function fetchAllState1(id) {
+    let res = await fetchStateByCountry(id);
+    setallState(res.data);
+  }
+  // fetchAllState1();
+  async function fetchAllCountries1(id) {
+    let res = await fetchCountriesByRegion(id);
+    setallCountries(res.data);
+  }
 
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
@@ -220,7 +220,7 @@ const OrganisationPopUp = (props) => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className='row'>
+                  <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
@@ -246,7 +246,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div> */}
+                  </div>
 
                   {/* <AddressField
                       error={errors.city}
@@ -266,7 +266,7 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.state}
                     /> */}
-                  {/* <div className='row'>
+                  <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
@@ -292,7 +292,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
