@@ -25,7 +25,6 @@ const SoChainOfCustody = (props) => {
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  if (update.isOrder) console.log(data);
 
   return (
     <>
