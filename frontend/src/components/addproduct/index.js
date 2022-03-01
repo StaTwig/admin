@@ -96,6 +96,7 @@ const AddProduct = (props) => {
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
+      console.log("Result:", result);
       if (result?.success) {
         setOpenCreatedInventory(true);
       }
