@@ -390,5 +390,6 @@
   "past_expiry": "Expiry Date cannot be in the past",
   "no_locations_available": "No locations available",
   "Failure": "Failure",
-  "enter_qunatity": "Enter Quantity"
+  "enter_qunatity": "Enter Quantity",
+  "Product_Doesn't_exist_in_the_inventory": "Product Doesn't exist in the inventory."
 }

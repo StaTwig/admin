@@ -945,7 +945,9 @@ exports.addInventoriesFromExcel = [
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                responses(req.user.preferredLanguage).product_doesnt_exist
+                // preffered Langauge in not working in correct manner.
+                // responses(req.user.preferredLanguage).product_doesnt_exist
+                "Product_Doesn't_exist_in_the_inventory"
               );
             }
           }
