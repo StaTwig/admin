@@ -411,7 +411,6 @@ const UpdateStatus = (props) => {
                                 type='text'
                                 className='form-control mb-2'
                                 name='customsClearanceDate'
-                                onChange={(e) => console.log(e.target.value)}
                                 value={customsDate}
                                 style={{
                                   border: "0px",

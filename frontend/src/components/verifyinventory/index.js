@@ -139,7 +139,6 @@ const VerifyInventory = (props) => {
             {reviewInventories.map((reviewInventory) => {
               var expiryMonth;
               var manufMonth;
-              console.log("reviewInventory:", reviewInventory.expiryDate);
               if(typeof reviewInventory.expiryDate=="object"){
                 manufMonth = `${
                   new Date(
