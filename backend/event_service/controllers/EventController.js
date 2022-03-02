@@ -179,6 +179,8 @@ exports.getAllEventsWithFilter = [
       if (fromDate && toDate) {
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
+        nextDate = nextDate.setDate(nextDate.getDate() + 1);
+        nextDate = new Date(nextDate);
         elementMatchQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
       }
       if (productName) {
