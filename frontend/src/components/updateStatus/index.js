@@ -48,6 +48,7 @@ const UpdateStatus = (props) => {
   const [acceptanceDate, setAcceptanceDate] = useState("");
   const [customsDate, setCustomsDate] = useState("");
   const [lastStatusDate, setLastStatusDate] = useState("");
+  const [tryAgainEnabled, setTryAgainEnabled] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -149,6 +150,13 @@ const UpdateStatus = (props) => {
   };
 
   const updateStatus = async (values) => {
+    if(shipmentData.status === "RECEIVED") {
+      setErrorMessage("delivered_shipments_cannot_be_updated");
+      setTryAgainEnabled(false);
+      setOpenShipmentFail(true);
+      return;
+    }
+
     const { shipmentId, updateStatusLocation } = values;
 
     if (updateStatusLocation === "") {
@@ -165,6 +173,10 @@ const UpdateStatus = (props) => {
     formData.append("orgLocation", profile.location);
     formData.append("updatedAt", updateStatusLocation);
     formData.append("isAlertTrue", true);
+
+    for(var pair of formData.entries()) {
+      console.log(pair[0] + " : ", pair[1]);
+    }
 
     const result = await updateTrackingStatus(formData);
     if (result.status === 200) {
@@ -185,6 +197,7 @@ const UpdateStatus = (props) => {
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
+    if(shipmentData.status === "RECEIVED") props.history.push(`/shipments`);
   };
   return (
     <div className='updateStatus'>
@@ -411,7 +424,6 @@ const UpdateStatus = (props) => {
                                 type='text'
                                 className='form-control mb-2'
                                 name='customsClearanceDate'
-                                onChange={(e) => console.log(e.target.value)}
                                 value={customsDate}
                                 style={{
                                   border: "0px",
@@ -829,7 +841,7 @@ const UpdateStatus = (props) => {
       )}
       {openShipmentFail && (
         <Modal close={() => closeModalFail()} size='modal-sm'>
-          <FailPopup onHide={closeModalFail} t={t} />
+          <FailPopup onHide={closeModalFail} t={t} errorMessage={errorMessage} tryAgainEnabled={tryAgainEnabled} />
         </Modal>
       )}
     </div>

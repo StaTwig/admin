@@ -8,16 +8,17 @@ import user from "../../assets/icons/brand.svg";
 import Quantity from "../../assets/icons/Quantity.png";
 import Product from "../../assets/icons/Producttype.png";
 import Next from "../../assets/icons/back.png";
-
+import { useHistory, useParams } from 'react-router-dom';
 const ProductInventory = (props) => {
+  const history = useHistory();
   const { t } = props;
-  const [category, setCategory] = useState(props.match.params?.category);
+  const { category } = useParams();
   const [data, setData] = useState([]);
   const [enable, setEnable] = useState(true);
   const { products, inventories } = props;
   const [scrollX, setscrollX] = useState(0);
   const [scrolEnd, setscrolEnd] = useState(false);
-  const [outOfStockProducts, setOutOfStockProducts] = useState();
+  const [outOfStockProducts, setOutOfStockProducts] = useState([]);
   const categoryArray = products
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
@@ -26,14 +27,14 @@ const ProductInventory = (props) => {
     (category ? category : products[0]?.type),
     ...categoryArray.filter((value) => value !== (category ? category : products[0]?.type)),
   ];
-
+  
   useEffect(() => {
-    if (props.match && props.match.params && props.match.params.category) {
+    if (props.match && props.match.params && category) {
       let prodArray = [];
       inventories.map((val) => {
         // if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
         //     val.payloadData.data.products.map((productRecord)=>{
-        if (val.products.type === props.match.params?.category) {
+        if (val.products.type ===  category) {
           prodArray.push(val);
           //     }
           // })
@@ -46,9 +47,10 @@ const ProductInventory = (props) => {
       setOutOfStockProducts(inv);
       setData(inv);
     }
-  }, [inventories, props]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inventories, category]);
   const changeType = (cat) => {
-    setCategory(cat);
+    history.replace(`/productinventory/${cat}`);
     let prodArray = [];
     outOfStockProducts.map((val) => {
       // if(val.payloadData.data.products){
@@ -103,7 +105,9 @@ const ProductInventory = (props) => {
           {categoryArrayNew.map((cat) => (
             <div
               className={`panel m-2 ${(category && category === cat) ? `active` : ``}`}
-              onClick={() => changeType(cat)}
+              onClick={() => {
+                changeType(cat)
+              }}
             >
               <div className='flex flex-column'>
                 <div className='picture'>
@@ -248,7 +252,7 @@ const ProductInventory = (props) => {
                   <button
                     type='button'
                     onClick={() =>
-                      props.history.push(`/viewproduct`, { data: inv })
+                      props.history.push(`/viewproduct`, { data: [inv] })
                     }
                     className='bttn1-blue blue-primary'
                   >

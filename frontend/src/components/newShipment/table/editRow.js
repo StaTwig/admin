@@ -54,7 +54,7 @@ const EditRow = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [ModelProd, setModelProduct] = useState({});
   const [batches, setBatches] = useState([]);
-  const [selectedBatch, setSelectedBatch] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState({});
   const [selectedIndex, setSelectedIndex] = useState();
   const [expired, setExpired] = useState(0);
   const [BatchSelected, setBatchSelected] = useState([]);
@@ -121,23 +121,22 @@ const EditRow = (props) => {
     }
     if (i < productsList.length) {
       prod.productQuantity = qty;
-      handleQuantityChange(prod.productQuantity, i);
+      handleQuantityChange(prod.productQuantity, index);
       updateQuantity();
     }
   }
 
   async function changeBatch(batch, index) {
-    batch.forEach((elem) => {
-      handleBatchChange(elem.bnp, elem.index, batch);
-    })
-    setSelectedBatch([])
+    handleBatchChange(batch.bnp, index);
+    handleQuantityChange(batch.quant, index);
     // closeModal()
   }
   async function fetchBatches(prod, index) {
     setSelectedIndex(index);
     setModelProduct(prod);
     let res = await axios.get(
-      `${config().fetchBatchesOfInventory}?productId=${prod.id
+      `${config().fetchBatchesOfInventory}?productId=${
+        prod.id
       }&wareId=${warehouseID}`
     );
     let buffer = res.data.data;
@@ -169,11 +168,8 @@ const EditRow = (props) => {
     }
   };
   const handleChange = (value) => {
-    value.index = selectedIndex;
-    setSelectedIndex((prevIndex) => prevIndex + 1);
-    setSelectedBatch(prevBatch => [...prevBatch, value]);
+    setSelectedBatch(value);
   };
-
   const setQuantity = (value) => {
     let buffer = selectedBatch;
     buffer.quant = value;
@@ -215,11 +211,11 @@ const EditRow = (props) => {
                       </div>
                     }
                     value={
-                      prod.type === undefined || prod.id === undefined
+                      prod.productCategory === undefined || prod.id === undefined
                         ? null
-                        : { value: prod.id, label: prod.type }
+                        : { value: prod.id, label: prod.productCategory }
                     }
-                    defaultInputValue={prod.type}
+                    defaultInputValue={prod.productCategory}
                     onChange={(v) => {
                       handleCategoryChange(index, v.value, prod.batchNumber);
                       handleBatchChange("", index);
@@ -227,7 +223,7 @@ const EditRow = (props) => {
                     options={category}
                   />
                 ) : (
-                  prod.type
+                  prod.productCategory
                 )}
               </div>
             </div>
@@ -259,8 +255,8 @@ const EditRow = (props) => {
                     }
                     value={
                       prod.id === undefined ||
-                        prod.name === undefined ||
-                        prod.name === ""
+                      prod.name === undefined ||
+                      prod.name === ""
                         ? null
                         : { value: prod.id, label: prod.name }
                     }
@@ -296,7 +292,7 @@ const EditRow = (props) => {
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
-                if (Object.keys(selectedBatch).length === 0 || selectedBatch[index].quant > e.target.value) {
+                if(Object.keys(selectedBatch).length === 0||selectedBatch.quant>e.target.value){
                   handleQuantityChange(e.target.value, index);
                 }
               }}
@@ -367,7 +363,7 @@ const EditRow = (props) => {
                           {t("no_records_found")}
                         </div>
                         <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">
-                          {expired ? `${expired} ` + t("expired_records_found") : ""}
+                          {expired ? `${expired} ` + t("expired_records_found")  : ""}
                         </div>
                       </div>
                     ) : (
@@ -418,9 +414,9 @@ const EditRow = (props) => {
                                 >
                                   {product.attributeSet.mfgDate.length > 0
                                     ? formatDate(
-                                      product.attributeSet.mfgDate,
-                                      "mmyyyy"
-                                    )
+                                        product.attributeSet.mfgDate,
+                                        "mmyyyy"
+                                      )
                                     : "-"}
                                 </div>
                                 <div
@@ -429,9 +425,9 @@ const EditRow = (props) => {
                                 >
                                   {product.attributeSet.expDate.length > 0
                                     ? formatDate(
-                                      product.attributeSet.expDate,
-                                      "mmyyyy"
-                                    )
+                                        product.attributeSet.expDate,
+                                        "mmyyyy"
+                                      )
                                     : "-"}
                                 </div>
                                 <div
