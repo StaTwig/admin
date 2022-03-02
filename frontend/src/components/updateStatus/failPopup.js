@@ -3,7 +3,8 @@ import "./style.scss";
 import Cancel from "../../assets/icons/cancel.svg";
 
 const FailPopup = (props) => {
-  const { t } = props;
+  const { t, errorMessage, tryAgainEnabled } = props;
+
   return (
     <div className='shipmentpopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -15,9 +16,9 @@ const FailPopup = (props) => {
           alt='Cancel'
         />
         <div className='alert font-weight-bolder'>{t("fail")}!</div>
-        <div className='data mb-3'> {t("please") + " " + t("try_again")} </div>
+        <div className='data mb-3'> {tryAgainEnabled ? t("please") + " " + t("try_again") : t(errorMessage)} </div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          {t("try_again")}
+          {tryAgainEnabled ? t("try_again") : t("cancel")}
         </button>
       </div>
     </div>

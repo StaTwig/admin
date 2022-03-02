@@ -418,5 +418,6 @@
   "past_expiry": "La fecha de caducidad no puede estar en el pasado",
   "no_locations_available": "No hay ubicaciones disponibles",
   "enter_qunatity": "Ingrese la cantidad",
-  "Product_Doesn't_exist_in_the_inventory": "El producto no existe en el inventario."
+  "Product_Doesn't_exist_in_the_inventory": "El producto no existe en el inventario.",
+  "delivered_shipments_cannot_be_updated": "Los envíos entregados no se pueden actualizar"
 }
