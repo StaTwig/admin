@@ -2083,7 +2083,7 @@ exports.updateTrackingStatus = [
         updateComment: req.body.updateComment,
         orgId: req.body.orgId,
         orgLocation: req.body.orgLocation,
-        updatedAt: req.body.updateStatusLocation,
+        updatedAt: req.body.updatedAt,
         isAlertTrue: req.body.isAlertTrue,
       };
       if (req.file) {

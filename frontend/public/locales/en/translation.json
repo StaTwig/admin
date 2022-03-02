@@ -390,5 +390,6 @@
   "past_expiry": "Expiry Date cannot be in the past",
   "no_locations_available": "No locations available",
   "Failure": "Failure",
-  "enter_qunatity": "Enter Quantity"
+  "enter_qunatity": "Enter Quantity",
+  "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated"
 }

@@ -417,5 +417,6 @@
   "records_duplication":"Registros no agregados debido a la duplicación",
   "past_expiry": "La fecha de caducidad no puede estar en el pasado",
   "no_locations_available": "No hay ubicaciones disponibles",
-  "enter_qunatity": "Ingrese la cantidad"
+  "enter_qunatity": "Ingrese la cantidad",
+  "delivered_shipments_cannot_be_updated": "Los envíos entregados no se pueden actualizar"
 }
