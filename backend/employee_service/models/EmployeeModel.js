@@ -34,7 +34,7 @@ const EmployeeSchema = new mongoose.Schema(
       default: "default.jpg",
     },
     phoneNumber: { type: String, required: false, default: "" },
-    preferredLanguage: { type: String, required: false, default: "ES" },
+    preferredLanguage: { type: String, required: false, default: "EN" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },
     department: { type: String, required: false, default: "engineering" },
     organisationId: {
