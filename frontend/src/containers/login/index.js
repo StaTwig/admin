@@ -70,6 +70,7 @@ const LoginContainer = (props) => {
             else setphoneFieldDisable(false);
           }}
           onPhoneChange={(value) => {
+            console.log("Phone:", phone);
             setPhone(value);
             if(value){
               let temp_phone = value.slice(2, value.length);
