@@ -97,13 +97,6 @@ const Header = (props) => {
     { refs: [ref1] }
   );
 
-  const onSearchChange = async (e) => {
-    const response = await axios.get(`${config().getSuggestions}?searchString=${e}`);
-    // console.log(response, "response from search API");
-    setOptions([...response.data.data]);
-    setSearchString(options[0]?._id);
-    setSearchType(options[0]?.type);
-  };
 
   const closeModalFail = () => {
     setInvalidSearch(false);
@@ -161,8 +154,11 @@ const Header = (props) => {
     return result;
   }
 
-  const onSeach = async () => {
+  const onSeach = async (searchValue) => {
+    console.log(searchValue);
+    
     if (search.substring(0, 2) === "SH") {
+      console.log("SH");
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
         if (shippingIds.indexOf(search) !== -1) {
@@ -171,6 +167,7 @@ const Header = (props) => {
         } else setInvalidSearch(true);
       });
     } else if (search.substring(0, 2) === "PO") {
+      console.log("po")
       getAllOrderIDs().then((result) => {
         let orderIds = result.map((so) => so.id);
         if (orderIds.indexOf(search) !== -1) {
@@ -194,13 +191,13 @@ const Header = (props) => {
     } else if (searchType === "productName") {
       // const response = await axios.get(`${config().searchProduct}&productName=${searchString}`);
       axios
-        .get(`${config().searchProduct}&productName=${searchString}`)
+        .get(`${config().searchProduct}&productName=${searchValue}`)
         .then((resp) => {
           if (resp.data.data.length > 0)
             props.history.push(`/viewproduct`, { data: resp.data.data });
           else
             alert(
-              `${t("the_product")} "${searchString}" ${t("not_found_in_inventory")}`
+              `${t("the_product")} "${searchValue}" ${t("not_found_in_inventory")}`
             );
         })
         .catch((err) => {
@@ -208,13 +205,13 @@ const Header = (props) => {
         });
     } else if (searchType === "productType") {
       axios
-        .get(`${config().searchProduct}&productType=${searchString}`)
+        .get(`${config().searchProduct}&productType=${searchValue}`)
         .then((resp) => {
           if (resp.data.data.length > 0)
-            props.history.push(`/productinventory/${searchString}`);
+            props.history.push(`/productinventory/${searchValue}`);
           else
             alert(
-              `${t("there_no_products_type:")} "${searchString}" ${t("in_your_inventory")}`
+              `${t("there_no_products_type:")} "${searchValue}" ${t("in_your_inventory")}`
             );
         })
         .catch((err) => alert(err.response.data.message));
@@ -319,16 +316,42 @@ const Header = (props) => {
     }
   };
 
-  const onkeydown = (event) => {
-    if (event.keyCode === 13) {
-      onSeach();
-    }
-  };
-  const onIcon = (event) => {
-    onSeach();
-  };
+  // const onkeydown = (event) => {
+  //   if (event.keyCode === 13) {
+  //     onSeach();
+  //   }
+  // };
+  // const onIcon = (event) => {
+  //   onSeach();
+  // };
   const search_placeholder =
     t("search") + " " + t("po_id") + "/" + t("shipment_id");
+
+
+
+  // const [value, setValue] = useState(null);
+  const onSearchChange = async (e) => {
+    const response = await axios.get(`${config().getSuggestions}?searchString=${e}`);
+    // console.log(response, "response from search API");
+    setOptions([...response.data.data]);
+    // setValue(e);
+    // setSearchString(e);
+  };
+  
+  useEffect(() => {
+    setSearchType(options[0]?.type);
+  },[options])
+
+  const defaultProps = {
+    options,
+    getOptionLabel: (option) => {
+      if (option._id === undefined) {
+        return option;
+      }
+      return option._id;
+    },
+  };
+
 
   return (
     <div className='navBar'>
@@ -386,30 +409,33 @@ const Header = (props) => {
                   )}
                 /> */}
               <div className='search-form' tabIndex='-1' onKeyDown={onkeydown}>
-                <Autocomplete
+                {/* <Autocomplete
                   id='free-solo-demo'
                   freeSolo
                   //value={search}
                   disableClearable
+                  // autoComplete
                   // forcePopupIcon={true}
                   // popupIcon={<Search style={{ color: "#0b65c1" }} onClick={onIcon} />}
                   options={options}
-                  getOptionLabel={(option) => option._id}
-                  filterOptions={filterOptions}
+                  // getOptionLabel={(option) => option._id}
+                  // filterOptions={filterOptions}
                   placeholder={search_placeholder}
                   onFocus={(e) => (e.target.placeholder = "")}
                   onBlur={(e) =>
                     (e.target.placeholder = { search_placeholder })
                   }
-                  inputValue={search}
-                  onInputChange={(event, newInputValue) => {
+                  value={searchString}
+                  // inputValue={search}
+                  // onInputChange={(event, newInputValue) => {
                     
-                    setSearch(newInputValue);
-                    onSearchChange(newInputValue);
-                  }}
+                  //   setSearch(newInputValue);
+                  //   onSearchChange(newInputValue);
+                  // }}
                   onChange={(event, newValue) => {
+                    console.log({ newValue });
                     onSearchChange(newValue);
-                    onSeach();
+                    // onSeach();  
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -425,6 +451,36 @@ const Header = (props) => {
                   className='Auto-search-icon'
                   style={{}}
                   onClick={onIcon}
+                /> */}
+                <Autocomplete
+                  {...defaultProps}
+                  id="controlled-demo"
+                  value={searchString}
+                  disableClearable
+                  placeholder={search_placeholder}
+                  onFocus={(e) => (e.target.placeholder = "")}
+                  onBlur={(e) =>
+                    (e.target.placeholder = { search_placeholder })
+                  }
+                  onInputChange={(event, newInputValue) => {
+                    console.log({ newInputValue });
+                      setSearch(newInputValue);
+                      onSearchChange(newInputValue);
+                    }}
+                  onChange={(event, newValue) => {
+                    console.log("onchange ", newValue);
+                    // onSearchChange(newValue);
+                    setSearchString(newValue._id);
+                    onSeach(newValue._id)
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params}
+                      label={search_placeholder}
+                      sx={{ width: "7rem" }}
+                      margin='normal'
+                      variant='outlined'
+                    />
+                  )}
                 />
               </div>
             </li>
