@@ -219,6 +219,8 @@ const NewShipment = (props) => {
         setErrorMessage("err");
         return false;
       }
+
+      console.log(prods);
       setProducts(
         prods.data.map((item) => {
           return {
@@ -409,6 +411,7 @@ const NewShipment = (props) => {
   const onCategoryChange = async (index, value, setFieldValue) => {
     try {
       const warehouse = await searchProduct(value, selectedWarehouse);
+      console.log("Warehouse:", warehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
       newArr[index] = {
@@ -961,6 +964,7 @@ const NewShipment = (props) => {
                             let res = await onWarehouseChange(
                               v.warehouseInventory
                             );
+                            console.log("Result from warehouse change:", res);
                             if (!res) {
                               return;
                             }
