@@ -736,24 +736,16 @@ exports.addProductsToInventory = [
               atomsArray.push(atom);
             }
             for (let i = 0; i < atomsArray.length; i++) {
-              let res = await AtomModel.findOne({
+              let batchDup = await AtomModel.findOne({
                 batchNumbers: atomsArray[i].batchNumbers[0],
                 inventoryIds: warehouse.warehouseInventory,
               });
-              if (!res) {
+              if (!batchDup) {
                 continue;
               }
-              if (res) {
+              if (batchDup) {
                 duplicateBatch = true;
-                duplicateBatchNo = res.batchNumbers[0];
-                if (duplicateBatch) {
-                  return apiResponse.ErrorResponse(
-                    res,
-                    responses(req.user.preferredLanguage).batchExists(
-                      duplicateBatchNo
-                    )
-                  );
-                }
+                duplicateBatchNo = batchDup.batchNumbers[0];
                 break;
               }
             }
