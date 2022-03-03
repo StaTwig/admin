@@ -391,5 +391,6 @@
   "no_locations_available": "No locations available",
   "Failure": "Failure",
   "enter_qunatity": "Enter Quantity",
+  "Product_Doesn't_exist_in_the_inventory": "Product Doesn't exist in the inventory.",
   "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated"
 }
