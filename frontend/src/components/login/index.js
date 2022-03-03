@@ -120,6 +120,7 @@ const FormLoginPage = (props) => {
                         }}
                         value={phone}
                         onChange={onPhoneChange}
+                        maxLength={15}
                       />
                     </div>
                   </div>
