@@ -459,7 +459,7 @@ export const addAddress = async (data) => {
       },
       region: {
         regionId: "reg123",
-        regionName: "Earth Prime",
+        regionName: data.region,
       },
       location: {
         longitude: data?.positions?.length
