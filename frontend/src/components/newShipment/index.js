@@ -920,8 +920,8 @@ const NewShipment = (props) => {
                       </label>
                       <div
                         className={`line ${errors.fromOrgLoc && touched.fromOrgLoc
-                            ? "border-danger"
-                            : ""
+                          ? "border-danger"
+                          : ""
                           }`}
                       >
                         {/* <DropdownButton
@@ -1114,8 +1114,8 @@ const NewShipment = (props) => {
                       </label>
                       <div
                         className={`line ${errors.toOrgLoc && touched.toOrgLoc
-                            ? "border-danger"
-                            : ""
+                          ? "border-danger"
+                          : ""
                           }`}
                       >
                         {/* <DropdownButton
@@ -1187,8 +1187,8 @@ const NewShipment = (props) => {
                     </label>
                     <input
                       className={`input refship ${errors.airWayBillNo && touched.airWayBillNo
-                          ? "border-danger"
-                          : ""
+                        ? "border-danger"
+                        : ""
                         }`}
                       type='text'
                       id='referenceShipmentId'
@@ -1212,8 +1212,8 @@ const NewShipment = (props) => {
                       </label>
                       <div
                         className={`input refship ${errors.shipmentDate && touched.shipmentDate
-                            ? "border-danger"
-                            : ""
+                          ? "border-danger"
+                          : ""
                           }`}
                       >
                         <DatePicker
@@ -1285,9 +1285,9 @@ const NewShipment = (props) => {
                       </label>
                       <div
                         className={`input refship ${errors.estimateDeliveryDate &&
-                            touched.estimateDeliveryDate
-                            ? "border-danger"
-                            : ""
+                          touched.estimateDeliveryDate
+                          ? "border-danger"
+                          : ""
                           }`}
                       >
                         <DatePicker
@@ -1411,7 +1411,7 @@ const NewShipment = (props) => {
                     category={category}
                     handleQuantityChange={(v, i) => {
                       let newArr = [...addProducts];
-                      newArr[i].productQuantity = v;
+                      newArr[0].productQuantity = v;
                       setFieldValue(
                         "products",
                         newArr.map((row) => ({
@@ -1430,10 +1430,10 @@ const NewShipment = (props) => {
                       let newArr = [...addProducts];
                       if (batch.length > 1 && batch[0].index === i) {
                         batch.forEach((elem) => {
-                            newArr[elem.index] = {...addProducts[0]};
-                            newArr[elem.index].batchNumber = elem.bnp;
-                            newArr[elem.index].productQuantity = elem.quant;
-                          })
+                          newArr[elem.index] = { ...addProducts[0] };
+                          newArr[elem.index].batchNumber = elem.bnp;
+                          newArr[elem.index].productQuantity = elem.quant;
+                        })
                         setFieldValue(
                           "products",
                           newArr.map((row) => ({
@@ -1446,8 +1446,8 @@ const NewShipment = (props) => {
                             quantity: row.quantity,
                           }))
                         );
-                        setAddProducts(() => [ ...newArr]);
-                      } else if(batch.length === 1) {
+                        setAddProducts(() => [...newArr]);
+                      } else if (batch.length === 1) {
                         newArr[i].batchNumber = v;
                         setFieldValue(
                           "products",
@@ -1461,9 +1461,9 @@ const NewShipment = (props) => {
                             quantity: row.quantity,
                           }))
                         );
-                        setAddProducts(() => [ ...newArr]);
+                        setAddProducts(() => [...newArr]);
                       }
-                      
+
                     }}
                     enableDelete={true}
                     onRemoveRow={(index) => {

@@ -88,14 +88,13 @@ const FormPage = (props) => {
       } else {
         setEmailErrorMsg("");
         verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v) => {
+          console.log("v", v);
           if (v.data.length) {
             setemailerror(true);
-            //setemailerror(true);
             setsignupDisable(true);
           } else {
             setemailerror(false);
             setEmailErrorMsg("");
-            //setsignupDisable(false);
             //setsignupDisable(false);
           }
         });

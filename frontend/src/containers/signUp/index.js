@@ -57,8 +57,8 @@ const SignupContainer = (props) => {
     } else if (result.status === 500) {
       setErrorMessage(result.data.message);
     } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
+      const err = result.data;
+      setErrorMessage(err.message);
       setShowModal(false);
     }
     dispatch(turnOff());
