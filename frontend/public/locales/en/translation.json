@@ -335,5 +335,6 @@
     "send_otp":"Send OTP",
     "email_has_already_been_taken": "Email has already been taken",
     "enter_first_name": "Enter First Name",
-    "enter_last_name": "Enter Last Name"
+    "enter_last_name": "Enter Last Name",
+    "phoneNumber_has_already_been_taken": "Phone Number has already been taken"
 }
