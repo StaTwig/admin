@@ -88,16 +88,26 @@ const EditRow = (props) => {
   const new_products = [];
 
   if (typeof products != "undefined" && typeof productsList != "undefined") {
-    for (var i = 0; i < products.length; i++) {
-      let check = false;
-      for (var j = 0; j < productsList.length; j++) {
-        if (products[i].label === productsList[j].productName) {
-          check = true;
+    // console.log({ products, productsList });
+    // for (var i = 0; i < products.length; i++) {
+    //   let check = false;
+    //   for (var j = 0; j < productsList.length; j++) {
+    //     if (products[i].label === productsList[j].productName) {
+    //       check = true;
+    //       break;
+    //     }
+    //   }
+    //   if (check) {
+    //     new_products.push(products[i]);
+    //   }
+    // }
+    const uniqueProductName = [...new Set(products.map((product) => product.label))]
+    for (let i = 0; i < uniqueProductName.length; i++) {
+      for (let j = 0; j < products.length; j++) {
+        if (uniqueProductName[i] === products[j].label) {
+          new_products.push(products[j]);
           break;
         }
-      }
-      if (check) {
-        new_products.push(products[i]);
       }
     }
   }
