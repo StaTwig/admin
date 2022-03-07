@@ -21,21 +21,23 @@ const Track = (props) => {
     props.match.params.id ? true : false
   );
   const { i18n } = useTranslation();  // langDetector.detect()
-  console.log("lang", i18n.language);
-
-  useEffect(() => {
-    props.setTrackTraceData({ setValue, value, resetData, setIsSubmitted })
-  }, [value])
-
+  
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
+    setTrackTraceData,
     searchData,
     resetData,
     lang,
     t
   } = props;
-  console.log(shippmentChainOfCustodyData)
+
+  useEffect(() => {
+    setTrackTraceData({ setValue, value, resetData, setIsSubmitted })
+  }, [value])
+
+  console.log("Shipment update - ", shippmentChainOfCustodyData);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   // const onSeach = useCallback(async (v = value) => {
   //   if (v) {
@@ -44,11 +46,6 @@ const Track = (props) => {
   //   } else setMsg("Required");
   //   setIsSubmitted(true);
   // });
-
-  useEffect(() => {
-    props.setTrackTraceData({ setValue, value, resetData, setIsSubmitted })
-  }, [value])
-
 
 
   if (!isAuthenticated("trackAndTrace")) props.history.push(`/profile`);
@@ -249,7 +246,6 @@ const Track = (props) => {
                             setOp={setOp}
                             data={row}
                             update={r}
-                            update={r}
                             index={i + 3}
                             parentIndex={
                               newArr.length && row.id !== value ? cIndex : index
@@ -302,7 +298,7 @@ const Track = (props) => {
                 <div className='current-info'>
                   <div className='info'>Last Upadated on</div>
                   <div className='info'>
-                    {Object.keys(props.latestIotShipmentData).length > 0
+                  {Object.keys(props.latestIotShipmentData).length > 0
                       ? formatTimeAMPM(
                           /**props.latestIotShipmentData.temp['UnixTimeStamp']*/ new Date()
                           .toString()

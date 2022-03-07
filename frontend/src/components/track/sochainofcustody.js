@@ -85,10 +85,10 @@ const SoChainOfCustody = (props) => {
                 )}
                 <div className='text-primary col-2'>
                   <div className='text-muted'>
-                    {update.updatedOn.split(" ")[0]}
+                    {new Date(update.updatedOn).toDateString()}
                   </div>
                   <div className='text-muted'>
-                    {formatTimeAMPM(update.updatedOn.split(" ")[1])}
+                    {formatTimeAMPM(new Date(update.updatedOn).toString().split(" ")[4])}
                   </div>
                 </div>
               </div>
