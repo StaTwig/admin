@@ -30,6 +30,12 @@ const EditRow = (props) => {
     t,
   } = props;
 
+  // console.log("Products:", prod);
+
+  if(prod.productCategory!=null){
+    prod.type = prod.productCategory;
+  }
+
   const headers = {
     coloumn1: t("product_name"),
     coloumn2: t("manufacturer"),
