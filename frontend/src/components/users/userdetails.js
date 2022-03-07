@@ -106,7 +106,7 @@ const UserDetails = (props) => {
             className="blockquote-footer ml-3 txtWrapu text-left"
             style={{ marginLeft: '21px' }}
           >
-            {user?.emailId}
+            {user?.emailId ? user?.emailId : user?.phoneNumber}
           </div>
         </div>
         <span
