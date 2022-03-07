@@ -160,7 +160,7 @@ export const verifyOrgUser = async (data) => {
   try {
     const result = await axios.get(
       `${config().verifyOrgUserUrl}?id=${data.id}&role=${data.role
-      }&warehouseId=${data.warehouse}`
+      }&warehouseId=${data.warehouse}&phoneNumber=${data.phoneNumber}`
     );
     return result;
   } catch (e) {
