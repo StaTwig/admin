@@ -59,9 +59,9 @@ exports.addressesOfOrgWarehouses = [
 function getConditionForLocationApprovals(type, id) {
   let matchConditions = { };
   // let matchConditions = { status: "NOTVERIFIED" };
-  // let matchConditions = {
-  //   $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
-  // };
+  matchConditions = {
+    $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
+  };
   if (type != "CENTRAL_AUTHORITY") matchConditions.organisationId = id;
   return matchConditions;
 }
@@ -88,7 +88,7 @@ exports.getLocationApprovals = [
             pipeline: [
               {
                 $match: {
-                  $expr: { $in: ["$$wid", "$pendingWarehouseId"] },
+                  $expr: { $in: ["$$wid", {$ifNull: ["$pendingWarehouseId", []]}] },
                 },
               },
             ],
