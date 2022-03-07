@@ -26,32 +26,23 @@ const LoginContainer = (props) => {
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
     const data = { emailId: email !== "" ? email : phone };
-    // console.log("phone:", phone.length);
-
-    if(phone.length<13){
-      setErrorMessage("Provide Valid Phone Number");
-      dispatch(turnOff());  
+    const result = await sendOtp(data, i18n.language);
+    if (result?.status === 200) {
+      props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
+    } else if (result?.status === 500) {
+      const err = result.data.message;
+      setErrorMessage(err);
+    } else if (result?.status === 404) {
+      const err = result.data.message;
+      setErrorMessage(err);
+    } else if (result?.status === 401) {
+      const err = result.data.message;
+      setErrorMessage(err);
+    } else {
+      const err = result.data.data.emailId;
+      setErrorMessage(err);
     }
-    else{
-      const result = await sendOtp(data, i18n.language);
-      if (result?.status === 200) {
-        props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
-      } else if (result?.status === 500) {
-        const err = result.data.message;
-        setErrorMessage(err);
-      } else if (result?.status === 404) {
-        const err = result.data.message;
-        setErrorMessage(err);
-      } else if (result?.status === 401) {
-        const err = result.data.message;
-        setErrorMessage(err);
-      } else {
-        const err = result.data.data.emailId;
-        setErrorMessage(err);
-      }
-      dispatch(turnOff());      
-    }
-
+    dispatch(turnOff());
   });
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
@@ -79,6 +70,7 @@ const LoginContainer = (props) => {
             else setphoneFieldDisable(false);
           }}
           onPhoneChange={(value) => {
+            console.log("Phone:", phone);
             setPhone(value);
             if(value){
               let temp_phone = value.slice(2, value.length);
