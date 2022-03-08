@@ -66,6 +66,7 @@ const NUModal = (props) => {
     if (!data?.role) {
       flag = true;
     }
+    
     setDisableBtn(flag);
   })
 
@@ -89,15 +90,14 @@ const NUModal = (props) => {
   }
 
   const verifyEmailIds = (event) => {
-
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
       setUserAlreadyExits(false)
     }
     else {
-      const valifyEmail = usersList.forEach((user, index) => {
+      setUserAlreadyExits(false)
+      usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
           setUserAlreadyExits(true)
-          console.log("user already exits")
         }
       })
     }
@@ -205,7 +205,6 @@ const NUModal = (props) => {
                 </div>
               </div>
             }
-
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
               style={{ justifyContent: 'space-between' }}>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
@@ -226,6 +225,11 @@ const NUModal = (props) => {
                   value={values.email}
                   disabled={changeComponent === "address" && disableButton ? true : false}
                 />
+                {userAlreadyExits && (
+                  <div style={{ position: "absolute", top: "4.8rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
+                    <span>{t('Email_ID_Already_registered')}</span>
+                  </div>
+                )}
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <PhoneInput
@@ -329,12 +333,12 @@ const NUModal = (props) => {
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0 }}
                     disabled={disableButton || userAlreadyExits}>
                     {t(buttonText)}
-                  </button>
-                ) : (
-                  <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
-                    {t(buttonText)}
-                  </button>
-                )}
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
+                      {t(buttonText)}
+                    </button>
+                  )}
               {changeComponent === "address" &&
                 <button
                   type="button"

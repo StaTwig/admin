@@ -21,9 +21,12 @@ const SearchBar = (props) => {
     //   }, [query]);
     
     const handleOnChange = (e) => {
-        setQuery(e.target.value);
-        console.log("Target Search:", e.target.value);
-        props.onChangeOfSearchInput(e.target.value, props.type);
+        e.preventDefault(); 
+        if(e.key != 'Enter'){
+            setQuery(e.target.value);
+            console.log("Target Search:", e.target.value);
+            props.onChangeOfSearchInput(e.target.value, props.type);
+        }
     };
 
     return (

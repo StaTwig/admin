@@ -133,7 +133,6 @@ const OrganisationContainer = (props) => {
     if (type === 'searchBarTopPanel' && inputValue.length > 0) {
       const filteredList = orgList.filter(item => {
         return item.name.toLowerCase().includes(inputValue.toLowerCase()) || item.primaryContactId.toLowerCase().includes(inputValue.toLowerCase())
-        // return item.name.toLowerCase().includes(inputValue.toLowerCase())
       });
       console.log("Filtered List", filteredList);
       setOrganisationList([...filteredList]);
@@ -232,7 +231,7 @@ const OrganisationContainer = (props) => {
           )}
           <Organisations
             {...props}
-            organisationList={orgList}
+            organisationList={organisationList}
             modifyOrg={updateOrgs}
             showModals={showModals}
             setShowModals={setShowModals}
