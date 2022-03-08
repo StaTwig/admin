@@ -222,14 +222,13 @@ exports.addUser = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           try {
-
             const { organisationId, organisationName } = req.user;
             const email = (!req.body.emailId || req.body.emailId == "null") ? null : req.body.emailId;
             const warehouse = req.body.warehouse;
             const firstName = req.body.firstName;
             const lastName = req.body.lastName;
             // const firstName = email?.split("@")[0];
-            const phoneNumber = req.body.phoneNumber;
+            const phoneNumber = req.body.phoneNumber ? "+" + req.body.phoneNumber : null;
             const incrementCounterEmployee = await CounterModel.updateOne(
               {
                 "counters.name": "employeeId",
