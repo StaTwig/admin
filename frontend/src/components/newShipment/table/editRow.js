@@ -30,12 +30,6 @@ const EditRow = (props) => {
     t,
   } = props;
 
-  // console.log("Products:", prod);
-
-  if(prod.productCategory!=null){
-    prod.type = prod.productCategory;
-  }
-
   const headers = {
     coloumn1: t("product_name"),
     coloumn2: t("manufacturer"),
@@ -60,7 +54,7 @@ const EditRow = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [ModelProd, setModelProduct] = useState({});
   const [batches, setBatches] = useState([]);
-  const [selectedBatch, setSelectedBatch] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState({});
   const [selectedIndex, setSelectedIndex] = useState();
   const [expired, setExpired] = useState(0);
   const [BatchSelected, setBatchSelected] = useState([]);
@@ -94,26 +88,16 @@ const EditRow = (props) => {
   const new_products = [];
 
   if (typeof products != "undefined" && typeof productsList != "undefined") {
-    // console.log({ products, productsList });
-    // for (var i = 0; i < products.length; i++) {
-    //   let check = false;
-    //   for (var j = 0; j < productsList.length; j++) {
-    //     if (products[i].label === productsList[j].productName) {
-    //       check = true;
-    //       break;
-    //     }
-    //   }
-    //   if (check) {
-    //     new_products.push(products[i]);
-    //   }
-    // }
-    const uniqueProductName = [...new Set(products.map((product) => product.label))]
-    for (let i = 0; i < uniqueProductName.length; i++) {
-      for (let j = 0; j < products.length; j++) {
-        if (uniqueProductName[i] === products[j].label) {
-          new_products.push(products[j]);
+    for (var i = 0; i < products.length; i++) {
+      let check = false;
+      for (var j = 0; j < productsList.length; j++) {
+        if (products[i].label === productsList[j].productName) {
+          check = true;
           break;
         }
+      }
+      if (check) {
+        new_products.push(products[i]);
       }
     }
   }
@@ -137,16 +121,14 @@ const EditRow = (props) => {
     }
     if (i < productsList.length) {
       prod.productQuantity = qty;
-      handleQuantityChange(prod.productQuantity, i);
+      handleQuantityChange(prod.productQuantity, index);
       updateQuantity();
     }
   }
 
   async function changeBatch(batch, index) {
-    batch.forEach((elem) => {
-      handleBatchChange(elem.bnp, elem.index, batch);
-    })
-    setSelectedBatch([])
+    handleBatchChange(batch.bnp, index, [batch]);
+    handleQuantityChange(batch.quant, index);
     // closeModal()
   }
   async function fetchBatches(prod, index) {
@@ -185,11 +167,8 @@ const EditRow = (props) => {
     }
   };
   const handleChange = (value) => {
-    value.index = selectedIndex;
-    setSelectedIndex((prevIndex) => prevIndex + 1);
-    setSelectedBatch(prevBatch => [...prevBatch, value]);
+    setSelectedBatch(value);
   };
-
   const setQuantity = (value) => {
     let buffer = selectedBatch;
     buffer.quant = value;
@@ -233,7 +212,9 @@ const EditRow = (props) => {
                     value={
                       prod.type === undefined || prod.id === undefined
                         ? null
-                        : { value: prod.id, label: prod.type }
+                        : {
+                          value: prod.id, label: prod.type
+                        }
                     }
                     defaultInputValue={prod.type}
                     onChange={(v) => {
@@ -312,7 +293,7 @@ const EditRow = (props) => {
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
-                if (Object.keys(selectedBatch).length === 0 || selectedBatch[index].quant > e.target.value) {
+                if (Object.keys(selectedBatch).length === 0 || selectedBatch.quant > e.target.value) {
                   handleQuantityChange(e.target.value, index);
                 }
               }}
