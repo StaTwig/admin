@@ -70,6 +70,7 @@ const NUModal = (props) => {
     if (!data?.role) {
       flag = true;
     }
+    
     setDisableBtn(flag);
   })
 
@@ -93,11 +94,11 @@ const NUModal = (props) => {
   }
 
   const verifyEmailIds = (event) => {
-
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
       setUserAlreadyExits('')
     }
     else {
+      setUserAlreadyExits('');
       usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
           setUserAlreadyExits('email_has_already_been_taken')
@@ -224,7 +225,6 @@ const NUModal = (props) => {
                 </div>
               </div>
             }
-
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
               style={{ justifyContent: 'space-between' }}>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
@@ -357,12 +357,13 @@ const NUModal = (props) => {
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
-                  </button>
-                ) : (
-                  <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
-                    {t(buttonText)}
-                  </button>
-                )}
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
+                      {t(buttonText)}
+                    </button>
+                  )}
+                
               {changeComponent === "address" &&
                 <button
                   type="button"
