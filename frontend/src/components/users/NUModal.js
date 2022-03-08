@@ -70,6 +70,7 @@ const NUModal = (props) => {
     if (!data?.role) {
       flag = true;
     }
+    
     setDisableBtn(flag);
   })
 
@@ -93,11 +94,12 @@ const NUModal = (props) => {
   }
 
   const verifyEmailIds = (event) => {
-
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
       setUserAlreadyExits('')
     }
     else {
+
+      setUserAlreadyExits('')
       usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
           setUserAlreadyExits('email_has_already_been_taken')
@@ -350,6 +352,7 @@ const NUModal = (props) => {
                 </span>
               )}
             </div> */}
+
             <div className="d-flex w-100 divider"></div>
             <div className="d-flex flex-row-reverse p-3">
               {changeComponent === "role" ?
@@ -358,11 +361,12 @@ const NUModal = (props) => {
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
                   </button>
-                ) : (
-                  <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable}>
-                    {t(buttonText)}
-                  </button>
-                )}
+                  ) : (
+                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
+                      {t(buttonText)}
+                    </button>
+                  )}
+                
               {changeComponent === "address" &&
                 <button
                   type="button"
