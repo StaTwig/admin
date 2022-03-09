@@ -5,7 +5,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
-
+import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
 
 const NUModal = (props) => {
@@ -232,8 +232,9 @@ const NUModal = (props) => {
                     className={`form-group mobile-number ${errors.email ? "border-danger" : ""
                       }`}
                     country={"cr"}
-                    preferredCountries={["cr"]}
+                    preferredCountries={["cr", "in"]}
                     placeholder={t("enter_phone_number")}
+                    inputStyle={{ maxWidth: "95%" }}
                     style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
                     value={phoneNumber}
                     onChange={(phone) => {
