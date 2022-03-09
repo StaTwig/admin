@@ -242,9 +242,6 @@ const FormPage = (props) => {
                     }) => (
                       <form
                         onSubmit={handleSubmit}
-                        onKeyDown={(e) =>
-                          e.keyCode === 13 && e.preventDefault()
-                        }
                         className="mb-5"
                       >
                         <div className="login-form mt-1 pl-5 pr-5 ml-5">
