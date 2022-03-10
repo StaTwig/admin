@@ -34,14 +34,11 @@ const ExcelPopUp = (props) => {
     formData.append("excel", excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
-    console.log("Result - ", result);
     if (result && result.status === 200) {
       let arr = result.data.data.inserted;
-      console.log("Inserted records - ", result.data.data.inserted);
       let notNullValues = 0;
       if (arr && arr.length > 0)
         for (let i = 0; i < arr.length; i++) {
-          console.log(arr[i]);
           if (arr[i] != null) {
             notNullValues++;
           }
