@@ -100,6 +100,7 @@ class Profile extends React.Component {
     if (wareHouseResponse.status === 1 || wareHouseResponse.success) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
+
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: response.data.data.warehouses.filter(
@@ -407,6 +408,7 @@ class Profile extends React.Component {
                                   {...this.props}
                                   closeModal={this.closeModal}
                                   wareHouses={this.state.warehouseLocByOrg}
+                                  setWareHouseLocations={(v) => this.setState({warehouseLocations: [...this.state.warehouseLocations,v] }) }
                                 />
                               </Modal>
                             )}
