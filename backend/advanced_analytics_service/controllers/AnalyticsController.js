@@ -2815,19 +2815,58 @@ exports.getTargetSales = [
       const depots = await AnalyticsModel.aggregate([
         {
           $group: {
-            _id: { depot: "$depot" },
+            _id: { depot: "$depot", warehouseId: "$warehouseId" },
             totalTarget: { $sum: "$targetSales" },
             totalSales: { $sum: "$sales" },
+          },
+        },
+        {
+          $lookup: {
+            from: "warehouses",
+            localField: "_id.warehouseId",
+            foreignField: "id",
+            as: "warehouse"
+          }
+        },
+        {
+            $set: {
+                warehouse: { $arrayElemAt: ["$warehouse", 0] }
+            }
+        },
+        {
+            $set: {
+                district: "$warehouse.warehouseAddress.city"
+            }
+        },
+        {
+            $unset: [
+                "warehouse"
+            ]
+        },
+        {
+          $group: {
+            _id: { depot: "$district"},
+            totalTarget: { $sum: "$totalTarget" },
+            totalSales: { $sum: "$totalSales" },
+            depots: { $push: "$_id.depot" }
           },
         },
         {
           $project: {
             depot: 1,
             percentage: {
-              $multiply: [{ $divide: ["$totalTarget", "$totalSales"] }, 100],
+              $cond: [
+                { $or: [{ $eq: ["$totalSales", 0] }, { $eq: ["$totalTarget", NaN] }] }, 
+                "N/A", 
+                { $multiply: [{ $divide: ["$totalTarget", "$totalSales"]}, 100] }
+              ],
             },
+            depots: 1
           },
         },
+        {
+          $sort: { "_id.depot": 1 }
+        }
       ]);
       return apiResponse.successResponseWithData(res, "Depot targets", depots);
     } catch (err) {

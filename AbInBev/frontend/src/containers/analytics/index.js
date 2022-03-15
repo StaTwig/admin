@@ -14,13 +14,13 @@ const AnalyticsContainer = (props) => {
 
   useEffect(() => {
     (async () => {
-      const result = await dispatch(getAllStates());
+      const result = await getAllStates();
       setStates(result.data);
-      const results = await dispatch(getAllSKUs());
+      const results = await getAllSKUs();
       setSKUs(results.data);
-      const b_results = await dispatch(getAllBrands());
+      const b_results = await getAllBrands();
       setBrands(b_results.data);
-      const s_result = await dispatch(getAnalyticsByBrand('?date_filter_type=by_yearly&year='+new Date().getFullYear()));
+      const s_result = await getAnalyticsByBrand('?date_filter_type=by_yearly&year='+new Date().getFullYear());
       setBrandstat(s_result.data);
       let n = [];
       for (let a of s_result.data) {
