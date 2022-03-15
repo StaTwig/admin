@@ -25,9 +25,12 @@ exports.MqttConnection = () => {
         console.log("Error:", error);
       });
 
-      client.on("message", async (topic, messageArray) => {
+      client.on("message", async (topic, messageArr) => {
         try {
-          messageArray = JSON.parse(messageArray.toString());
+          let messageArray = JSON.parse(messageArr.toString());
+          if (!Array.isArray(messageArray)) {
+            messageArray = [messageArray];
+          }
           if (topic == "/test/vacus/sensor") {
             for (const message of messageArray) {
               const result = await getCurrentShipment(message.vehicleID);
