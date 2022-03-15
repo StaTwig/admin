@@ -148,7 +148,7 @@ const Targets = (props) => {
     selectedArray.map((e) =>
       arr.push({
         depot: [e.value],
-        percentage: parseInt(displayDistricts[e.index].percentage),
+        percentage: displayDistricts[e.index].percentage,
       })
     );
     updateTargets(arr);
@@ -187,8 +187,8 @@ const Targets = (props) => {
               <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center'>
                 <h1 className='h2'>Targets</h1>
                 <button
-                  className={!(countChecked || checkedAllDis) ? 'saveBtnDisabled' : 'saveBtn'}
-                  disabled={!(countChecked || checkedAllDis)}
+                  className={!(countChecked || checkedAllDis || district) ? 'saveBtnDisabled' : 'saveBtn'}
+                  disabled={!(countChecked || checkedAllDis || district)}
                   onClick={() => {
                     onSave();
                   }}
@@ -244,27 +244,27 @@ const Targets = (props) => {
                       <span>{district._id.depot}</span>
                       <div className='returTarget'>
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage}%
+                          {Math.floor(district.percentage)}%
                         </span>
                       </div>
 
                       <div className='setReturnTarget'>
-                          <select
-                            value={`${district.percentage}`}
-                            style={{ borderRadius: "10px" }}
-                            disabled={isChecked.indexOf(index) === -1}
-                            onChange={(e) => {
-                              let array = displayDistricts;
-                              array[index].percentage = e.target.value;
-                              console.log(array[index]);
-                              setDisplayDistricts([...array]);
-                              console.log(e.target.value);
-                            }}
-                          >
-                            {percentageList?.map((item, index) => (
-                              <option value={item.value}>{item.value}%</option>
-                            ))}
-                          </select>
+                        <select
+                          value={`${district.percentage}`}
+                          style={{ borderRadius: "10px" }}
+                          disabled={isChecked.indexOf(index) === -1}
+                          onChange={(e) => {
+                            let array = displayDistricts;
+                            array[index].percentage = e.target.value;
+                            console.log(array[index]);
+                            setDisplayDistricts([...array]);
+                            console.log(e.target.value);
+                          }}
+                        >
+                          {percentageList?.map((item, index) => (
+                            <option value={item.value}>{item.value}%</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   ))}
