@@ -188,8 +188,7 @@ const ViewGMRShipment = (props) => {
           )}
 
           <ChainOfCustody
-            // chain={chain}
-            //setChain={setChain}
+            t={t}
             shipments={shippmentChainOfCustodyData}
             imagesData={props.imagesData}
             setHighLight={setHighLight}
