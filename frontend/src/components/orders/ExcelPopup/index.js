@@ -35,7 +35,7 @@ const ExcelPopUp = (props) => {
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
     if (result && result.status === 200) {
-      let arr = result.data.data;
+      let arr = result.data.data.inserted;
       let notNullValues = 0;
       if (arr && arr.length > 0)
         for (let i = 0; i < arr.length; i++) {
@@ -44,20 +44,22 @@ const ExcelPopUp = (props) => {
           }
         }
 
-      if (notNullValues !== 0
-      ) {
+      if (notNullValues !== 0) {
         setopenSuccesfulOrder(true);
         setModalProps({
           message: `${t("created")}${t("successfully")}`,
           OrderLength: notNullValues,
           type: "Success",
         });
+      } else {
+        setopenFailedPop(true);
+        setModalProps({
+          message: t("records_duplication"),
+        });
       }
     } else {
       setopenFailedPop(true);
-      setModalProps({
-        message: t("records_duplication"),
-      });
+      setModalProps({message: "Invalid excel"})
     }
     dispatch(turnOff());
   };
