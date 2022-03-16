@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Chart from "./temperature";
+import DriverGraph from "./driverGraph";
 import ShipmentSummary from "./shipmentsummary";
 import ShipmentDetails from "./shipmentdetails";
 import ProductList from "./productlist";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
+import shipmentsvg from "../../assets/icons/Shippmentselected.svg";
 import back from "../../assets/icons/back.png";
 import UpdateStatus from "../../assets/icons/Update_Status.png";
 import "./style.scss";
@@ -12,12 +14,18 @@ import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
 import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
+import { customReceiveShipment } from "../../actions/shipmentActions";
+import SuccessPopup from "./successPopup";
+import FailedPopup from "./FailedPopup";
 const ViewGMRShipment = (props) => {
+  const { t } = props;
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
+  const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
+  const [FailPopUp, setFailPopUp] = useState(false);
   const tracking = props.trackData;
   const status = tracking.status;
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
@@ -25,6 +33,21 @@ const ViewGMRShipment = (props) => {
   if (!isAuthenticated("viewShipment")) props.history.push(`/profile`);
   const closeModalShipping = () => {
     setOpenShipping(false);
+  };
+
+  const receiveShipment = async (id) => {
+    const res = await customReceiveShipment(id);
+    if (res.success) {
+      setreceiveShipmentModal(true);
+    } else {
+      setFailPopUp(true);
+    }
+  };
+
+  const closeModalShipment = () => {
+    setFailPopUp(false);
+    setreceiveShipmentModal(false);
+    props.history.push("/shipments");
   };
 
   return (
@@ -60,6 +83,22 @@ const ViewGMRShipment = (props) => {
               </button>
             </Link>
           )}
+          <button
+            className='btn btn-primary mr-4 mt-3 chain'
+            disabled={status === "RECEIVED"}
+            onClick={() => {
+              receiveShipment(id);
+            }}
+          >
+            <img
+              src={shipmentsvg}
+              fill='#000000'
+              height='17'
+              className='mr-2 mb-1'
+              alt='Receive Shipment'
+            />
+            <b>Receive Shipment</b>
+          </button>
         </div>
       </div>
       <div className='row'>
@@ -85,16 +124,16 @@ const ViewGMRShipment = (props) => {
           />
         </div>
         <div className='col-sm-8'>
-          <p className='heading'>TEMPERATURE</p>
-          <Chart shipmentId={id} />
-          {/* <button
-            className='btn btn-outline-* fontSize200 enlargeTemperature float-right'
-            onClick={() =>
-              window.open("http://iot.vaccineledger.com", "_blank")
-            }
-          >
-            SHOW MORE
-          </button> */}
+          <div className='d-flex'>
+            <div className='col-sm-7'>
+              <p className='heading'>TEMPERATURE</p>
+              <Chart shipmentId={id} />
+            </div>
+            <div className='col-sm-5 ml-2'>
+              <p className='heading'>DRIVER STATS</p>
+              <DriverGraph shipmentId={id} />
+            </div>
+          </div>
           {openShipping && (
             <Modal
               title='Shipping Order Details'
@@ -158,6 +197,17 @@ const ViewGMRShipment = (props) => {
             setMenuProduct={setMenuProduct}
             setProductHighLight={setProductHighLight}
           />
+
+          {receiveShipmentModal && (
+            <Modal close={() => closeModalShipment()} size='modal-sm'>
+              <SuccessPopup onHide={closeModalShipment} t={t} />
+            </Modal>
+          )}
+          {FailPopUp && (
+            <Modal close={() => closeModalShipment()} size='modal-sm'>
+              <FailedPopup onHide={closeModalShipment} t={t} />
+            </Modal>
+          )}
         </div>
       </div>
     </div>
