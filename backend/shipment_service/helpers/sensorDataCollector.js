@@ -1,5 +1,13 @@
+const axios = require("axios");
 const SensorModel = require("../models/SensorModel");
 const ShipmentModel = require("../models/ShipmentModel");
+
+const INTEL_AUTH_URL =
+  process.env.INTEL_AUTH_URL ||
+  "https://external-api-dev-0-7.smnp.adsdcsp.com/api/v0/login";
+const INTEL_TRIPDETAILS_URL =
+  process.env.INTEL_TRIP_DETAILS ||
+  "https://external-api-dev-0-7.smnp.adsdcsp.com/api/v0/tripDetails";
 
 exports.getCurrentShipment = async (vehicleId) => {
   const shipment = await ShipmentModel.findOne({
@@ -103,4 +111,59 @@ exports.getMetaData = async (shipmentId) => {
     ...sensorsData.map((sensor) => sensor.temperature)
   ).toFixed(2);
   return { min, max, avg };
+};
+
+exports.tripDetailsCall = async (plateId, start, end) => {
+  try {
+    const authToken = await axios.post(
+      INTEL_AUTH_URL,
+      {
+        userName: process.env.INTEL_USERNAME,
+        password: process.env.INTEL_PASSWORD,
+      },
+      {
+        headers: {
+          "x-api-key": process.env.INTEL_API_KEY,
+        },
+      }
+    );
+    const tripDetails = await axios.post(
+      INTEL_TRIPDETAILS_URL,
+      {
+        plateNo: plateId,
+        startTime: start,
+        endTime: end,
+      },
+      {
+        headers: {
+          "x-api-key": process.env.INTEL_API_KEY,
+          Authorization: authToken.data.token,
+        },
+      }
+    );
+    return tripDetails.data.trips;
+  } catch (err) {
+    console.log(err.response);
+    return false;
+  }
+};
+
+exports.saveTripDetails = async (plateId, start, end) => {
+  const tripDetails = await this.tripDetailsCall(plateId, start, end);
+  if (tripDetails) {
+    const oldShipment = await ShipmentModel.findOne({
+      vehicleId: plateId,
+    });
+    if (JSON.stringify(tripDetails) !== JSON.stringify(oldShipment.trips)) {
+      await ShipmentModel.findOneAndUpdate(
+        { airWayBillNo: plateId },
+        {
+          $set: {
+            trips: tripDetails,
+          },
+        },
+        { new: true, upsert: true, sort: { _id: -1 } }
+      );
+    }
+  }
 };

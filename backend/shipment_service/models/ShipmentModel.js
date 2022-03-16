@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const ShipmentSchema = new mongoose.Schema(
+const { SchemaTypes, Schema, model } = require("mongoose");
+const ShipmentSchema = new Schema(
   {
     id: { type: String, required: true, unique: true },
     shippingOrderId: String,
@@ -64,8 +64,23 @@ const ShipmentSchema = new mongoose.Schema(
     acceptedRequests: [String],
     isCustom: { type: Boolean, default: false },
     vehicleId: String,
+    trips: [
+      {
+        externalId: String,
+        tripScore: String,
+        totalCASAlerts: Number,
+        distance: Number,
+        duration: Number,
+        startTimeInISO: String,
+        endTimeInISO: String,
+        startTime: SchemaTypes.Date,
+        endTime: SchemaTypes.Date,
+        startLocation: String,
+        endLocation: String,
+      },
+    ],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Shipment", ShipmentSchema);
+module.exports = model("Shipment", ShipmentSchema);
