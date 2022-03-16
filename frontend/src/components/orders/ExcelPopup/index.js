@@ -53,13 +53,17 @@ const ExcelPopUp = (props) => {
         });
       } else {
         setopenFailedPop(true);
-        setModalProps({
-          message: t("records_duplication"),
-        });
+        if (result.data.data.invalid.length) {
+          setModalProps({message: t("invalid_records")});
+        } else {
+          setModalProps({
+            message: t("records_duplication"),
+          });
+        }
       }
     } else {
       setopenFailedPop(true);
-      setModalProps({message: "Invalid excel"})
+      setModalProps({message: t("invalid_records")});
     }
     dispatch(turnOff());
   };
