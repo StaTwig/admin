@@ -42,6 +42,7 @@ const PopUpLocation = (props) => {
       console.log("Added Location");
       console.log(result);
       if (result.data.data) {
+        props.setWareHouseLocations(result.data.data);
         setAddedLocationModal(true);
       } else {
         setAlertFlag(true);
