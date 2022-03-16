@@ -88,7 +88,7 @@ const FormPage = (props) => {
       } else {
         setEmailErrorMsg("");
         verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v) => {
-          console.log("v", v);
+          // console.log("v", v);
           if (v.data.length) {
             setemailerror(true);
             setsignupDisable(true);
@@ -157,6 +157,62 @@ const FormPage = (props) => {
   ) {
     setsignupDisable(false);
     setChecker(false);
+  }
+
+
+  const handleOrgName = (event, item, setFieldValue) => {
+    console.log("Entered org name")
+    if (firstName.length <= 0) {
+      setFirstNameError(true);
+    }
+    if (lastName.length <= 0) {
+      setLastNameError(true);
+    }
+    if (
+      (mobileNumber.length <= 0 ||
+        email.length <= 0) &&
+      emailErrorMsg === "" &&
+      phoneErrorMsg === "" &&
+      (emailError || !phoneNumberError) &&
+      (!emailError || phoneNumberError)
+    ) {
+      setPhoneNumberError(true);
+      setMailError(true);
+    }
+    setFieldValue("org", item);
+    props.onOrganisationChange(item);
+    if (item.name !== t("other")) {
+      setValue(item.name);
+      props.onOrgChange(false);
+    }
+    if (item.name === t("other")) {
+      props.onOrgChange(true);
+
+      if (
+        firstName.length > 0 &&
+        lastName.length > 0 &&
+        orgType.length > 0 &&
+        (email.length > 0 ||
+          mobileNumber.length > 0) &&
+        emailErrorMsg === "" &&
+        phoneErrorMsg === ""
+        // &&
+        // (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
+      ) {
+        props.onOrgChange(true);
+      } else {
+        setPhoneNumberError(true);
+        setMailError(true);
+        props.onOrgChange(false);
+      }
+    }
+  }
+
+  const unWantedSubmit = (keyEvent) => {
+   
+    if ((keyEvent.charCode || keyEvent.keyCode) === 13 && keyEvent.keyCode !== 9) {
+      keyEvent.stopPropagation();
+    }
   }
 
   return (
@@ -638,52 +694,7 @@ const FormPage = (props) => {
                               }}
                             >
                               <Autocomplete
-                                onChange={(event, item) => {
-                                  if (firstName.length <= 0) {
-                                    setFirstNameError(true);
-                                  }
-                                  if (lastName.length <= 0) {
-                                    setLastNameError(true);
-                                  }
-                                  if (
-                                    (mobileNumber.length <= 0 ||
-                                      email.length <= 0) &&
-                                    emailErrorMsg === "" &&
-                                    phoneErrorMsg === "" &&
-                                    (emailError || !phoneNumberError) &&
-                                    (!emailError || phoneNumberError)
-                                  ) {
-                                    setPhoneNumberError(true);
-                                    setMailError(true);
-                                  }
-                                  setFieldValue("org", item);
-                                  props.onOrganisationChange(item);
-                                  if (item.name !== t("other")) {
-                                    setValue(item.name);
-                                    props.onOrgChange(false);
-                                  }
-                                  if (item.name === t("other")) {
-                                    props.onOrgChange(true);
-
-                                    if (
-                                      firstName.length > 0 &&
-                                      lastName.length > 0 &&
-                                      orgType.length > 0 &&
-                                      (email.length > 0 ||
-                                        mobileNumber.length > 0) &&
-                                      emailErrorMsg === "" &&
-                                      phoneErrorMsg === ""
-                                      // &&
-                                      // (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
-                                    ) {
-                                      props.onOrgChange(true);
-                                    } else {
-                                      setPhoneNumberError(true);
-                                      setMailError(true);
-                                      props.onOrgChange(false);
-                                    }
-                                  }
-                                }}
+                                onChange={(event, item) => handleOrgName(event, item, setFieldValue)}
                                 id="debug"
                                 debug
                                 getOptionLabel={(option) => option.name}
@@ -773,7 +784,7 @@ const FormPage = (props) => {
                               </Alert>
                             </div>
                           )}
-                          {console.log(props.errorMessage)}
+                          {/* {console.log(props.errorMessage)} */}
 
                           <div className="text-center">
                             <br></br>
