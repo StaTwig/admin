@@ -24,7 +24,7 @@ const ViewGMRShipment = (props) => {
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
-  const [receiveShipmentModal, setreceiveShipmentModal] = useState(true);
+  const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [FailPopUp, setFailPopUp] = useState(false);
   const tracking = props.trackData;
   const status = tracking.status;
@@ -51,13 +51,13 @@ const ViewGMRShipment = (props) => {
   };
 
   return (
-    <div className="tracing">
-      <div className="row justify-content-between">
-        <h1 className="breadcrumb mt-3">VIEW SHIPMENT</h1>
-        <div className="row">
+    <div className='tracing'>
+      <div className='row justify-content-between'>
+        <h1 className='breadcrumb mt-3'>VIEW SHIPMENT</h1>
+        <div className='row'>
           <Link to={`/shipments`}>
-            <button className="btn btn-outline-primary mr-4 mt-3">
-              <img src={back} height="17" className="mr-2 mb-1" alt="Back" />
+            <button className='btn btn-outline-primary mr-4 mt-3'>
+              <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
               Back to shipments
             </button>
           </Link>
@@ -70,21 +70,21 @@ const ViewGMRShipment = (props) => {
               }
             >
               <button
-                className="btn btn-orange mr-4 mt-3 chain"
+                className='btn btn-orange mr-4 mt-3 chain'
                 disabled={status === "RECEIVED"}
               >
                 <img
                   src={UpdateStatus}
-                  height="17"
-                  className="mr-2 mb-1"
-                  alt="Update Status"
+                  height='17'
+                  className='mr-2 mb-1'
+                  alt='Update Status'
                 />
                 <b>Update Status</b>
               </button>
             </Link>
           )}
           <button
-            className="btn btn-primary mr-4 mt-3 chain"
+            className='btn btn-primary mr-4 mt-3 chain'
             disabled={status === "RECEIVED"}
             onClick={() => {
               receiveShipment(id);
@@ -92,20 +92,20 @@ const ViewGMRShipment = (props) => {
           >
             <img
               src={shipmentsvg}
-              fill="#000000"
-              height="17"
-              className="mr-2 mb-1"
-              alt="Receive Shipment"
+              fill='#000000'
+              height='17'
+              className='mr-2 mb-1'
+              alt='Receive Shipment'
             />
             <b>Receive Shipment</b>
           </button>
         </div>
       </div>
-      <div className="row">
-        <div className="col-sm-4">
-          <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
+      <div className='row'>
+        <div className='col-sm-4'>
+          <h6 className='heading mb-3'>SHIPMENT SUMMARY</h6>
           <ShipmentSummary shipments={tracking} />
-          <h6 className="heading mt-4 mb-3">SHIPMENT DETAILS</h6>
+          <h6 className='heading mt-4 mb-3'>SHIPMENT DETAILS</h6>
           <ShipmentDetails
             shipments={tracking}
             setMenuShip={setMenuShip}
@@ -114,7 +114,7 @@ const ViewGMRShipment = (props) => {
             setHighLight={setHighLight}
           />
 
-          <h6 className="heading mt-4 mb-3">PRODUCT LIST</h6>
+          <h6 className='heading mt-4 mb-3'>PRODUCT LIST</h6>
           <ProductList
             shipments={tracking}
             productHighLight={productHighLight}
@@ -123,64 +123,64 @@ const ViewGMRShipment = (props) => {
             setMenuProduct={setMenuProduct}
           />
         </div>
-        <div className="col-sm-8">
-          <div className="d-flex">
-            <div className="col-sm-7">
-              <p className="heading">TEMPERATURE</p>
+        <div className='col-sm-8'>
+          <div className='d-flex'>
+            <div className='col-sm-7'>
+              <p className='heading'>TEMPERATURE</p>
               <Chart shipmentId={id} />
             </div>
-            <div className="col-sm-5 ml-2">
-              <p className="heading">DRIVER STATS</p>
+            <div className='col-sm-5 ml-2'>
+              <p className='heading'>DRIVER STATS</p>
               <DriverGraph shipmentId={id} />
             </div>
           </div>
           {openShipping && (
             <Modal
-              title="Shipping Order Details"
+              title='Shipping Order Details'
               close={() => closeModalShipping()}
-              size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+              size='modal-xl' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <ViewShippingModal shipments={tracking} />
             </Modal>
           )}
-          <h6 className="heading mb-3">CHAIN OF CUSTODY</h6>
+          <h6 className='heading mb-3'>CHAIN OF CUSTODY</h6>
           {shippmentChainOfCustodyData.length === 0 ? (
             <div>N/A</div>
           ) : (
-            <div className="row">
-              <div className="picture">
+            <div className='row'>
+              <div className='picture'>
                 <img
                   src={currentinventory}
-                  alt="truck"
-                  height="15"
-                  width="15"
+                  alt='truck'
+                  height='15'
+                  width='15'
                 />
               </div>
-              <div className="d-flex flex-column">
-                <div className="chain text-secondary">Shipment Number</div>
-                <div className="chain">
+              <div className='d-flex flex-column'>
+                <div className='chain text-secondary'>Shipment Number</div>
+                <div className='chain'>
                   <strong>{shippmentChainOfCustodyData[0].id}</strong>
                 </div>
               </div>
-              <div className="d-flex flex-column  ml-5 mr-3">
-                <div className="dot bg-secondary mt-2 mb-5"></div>
-                <div className="dot bg-info"></div>
+              <div className='d-flex flex-column  ml-5 mr-3'>
+                <div className='dot bg-secondary mt-2 mb-5'></div>
+                <div className='dot bg-info'></div>
               </div>
-              <div className="col">
-                <div className="chain">
+              <div className='col'>
+                <div className='chain'>
                   <strong>
                     {shippmentChainOfCustodyData[0].supplier?.locationId}
                   </strong>
                 </div>
-                <div className="chainhead mb-4">
+                <div className='chainhead mb-4'>
                   {shippmentChainOfCustodyData[0].supplier.id}
                 </div>
-                <div className="chain">
+                <div className='chain'>
                   <strong>
                     {shippmentChainOfCustodyData[0].receiver?.locationId}
                   </strong>
                 </div>
-                <div className="chainhead">
+                <div className='chainhead'>
                   {shippmentChainOfCustodyData[0].receiver.id}
                 </div>
               </div>
@@ -199,12 +199,12 @@ const ViewGMRShipment = (props) => {
           />
 
           {receiveShipmentModal && (
-            <Modal close={() => closeModalShipment()} size="modal-sm">
+            <Modal close={() => closeModalShipment()} size='modal-sm'>
               <SuccessPopup onHide={closeModalShipment} t={t} />
             </Modal>
           )}
           {FailPopUp && (
-            <Modal close={() => closeModalShipment()} size="modal-sm">
+            <Modal close={() => closeModalShipment()} size='modal-sm'>
               <FailedPopup onHide={closeModalShipment} t={t} />
             </Modal>
           )}
