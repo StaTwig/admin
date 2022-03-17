@@ -12,15 +12,28 @@ import Serial from "../../assets/icons/serial.png";
 import Select from "react-select";
 
 import "./style.scss";
-const months = ['Enero' ,'Febrero','Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ];
+const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 const locale = {
   localize: {
-    month: n => months[n]
+    month: (n) => months[n],
   },
   formatLong: {
-    date: () => 'dd/yyyy'
-  }
-}
+    date: () => "dd/yyyy",
+  },
+};
 const truncate = (str, n) => {
   return str?.length > n ? str.substr(0, n - 1) + "..." : str;
 };
@@ -46,7 +59,7 @@ const EditRow = (props) => {
     inventories,
     t,
     setOpenFailInventory,
-    setInventoryError
+    setInventoryError,
   } = props;
   const [addMore, setAddMore] = useState(
     manufacturingDate || expiryDate || batchNumber || serialNumber
@@ -153,7 +166,7 @@ const EditRow = (props) => {
                 groups={category}
               /> */}
               <Select
-              noOptionsMessage={() => t("no_options")}
+                noOptionsMessage={() => t("no_options")}
                 className='no-border'
                 placeholder={
                   <div className='select-placeholder-text-prod-category'>
@@ -180,7 +193,7 @@ const EditRow = (props) => {
                   style={{ position: "relative", left: "-15px" }}
                 >
                   <Select
-                  noOptionsMessage={() => t("no_options")}
+                    noOptionsMessage={() => t("no_options")}
                     className='no-border'
                     placeholder={
                       <div className='select-placeholder-text-prod'>
@@ -347,7 +360,9 @@ const EditRow = (props) => {
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
-                    locale={(mfgLocale==="Fecha de fabricación")?locale:"en"}
+                    locale={
+                      mfgLocale === "Fecha de fabricación" ? locale : "en"
+                    }
                     className='form-control text-center'
                     onChange={(date) =>
                       handleInventoryChange(idx, "manufacturingDate", date)
@@ -368,12 +383,12 @@ const EditRow = (props) => {
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
-                    locale={(expLocale==="Fecha de caducidad")?locale:"en"}
+                    locale={expLocale === "Fecha de caducidad" ? locale : "en"}
                     className='form-control text-center'
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
-                    onChange={(date) =>{
-                      if(isBefore(date, new Date())){
+                    onChange={(date) => {
+                      if (isBefore(date, new Date())) {
                         setInventoryError(t("past_expiry"));
                         setOpenFailInventory(true);
                         return;

@@ -39,7 +39,7 @@ const EnterWareHouse = (props) => {
       <div className='panel mb-3 searchpanel'>
         <div>
           {props.visible
-            ? t('shipment_id')+": " + dashBarData.id
+            ? t("shipment_id") + ": " + dashBarData.id
             : warehouse?.warehouseName}
         </div>
         <div>
@@ -57,10 +57,10 @@ const EnterWareHouse = (props) => {
         {!props.visible && (
           <div className='d-flex text-white flex-row mt-2'>
             <ul className='mr-3 text-light'>
-              <li className='mb-1'>{t('country_id')}</li>
-              <li className='mb-1'>{t('country')}</li>
-              <li className='mb-1'>{t('location')}</li>
-              <li className='mb-1'>{t('location_name')}</li>
+              <li className='mb-1'>{t("country_id")}</li>
+              <li className='mb-1'>{t("country")}</li>
+              <li className='mb-1'>{t("location")}</li>
+              <li className='mb-1'>{t("location_name")}</li>
             </ul>
             <ul className='text-light'>
               <li className='mb-1'>{warehouse?.warehouseCountryId}&nbsp;</li>
@@ -73,7 +73,7 @@ const EnterWareHouse = (props) => {
       </div>
       {props.visible && (
         <div className='d-flex flex-row justify-content-between prod mt-3 mb-2'>
-          <div className='font-size-one'>{t('shipment_details')}</div>
+          <div className='font-size-one'>{t("shipment_details")}</div>
           <button
             className='button btn-primary d-flex text-light pl-3 pr-3 pt-2 pb-2'
             onClick={() => {
@@ -85,7 +85,7 @@ const EnterWareHouse = (props) => {
               src={location}
               alt='location'
             />
-            <span className='pl-1 text-white'>{t('track')}</span>
+            <span className='pl-1 text-white'>{t("track")}</span>
           </button>
         </div>
       )}
@@ -94,45 +94,45 @@ const EnterWareHouse = (props) => {
           <>
             <div className='row'>
               <img src={PinGrey} height='20' width='15' alt='Pin' />
-              <div className='ml-2 text-secondary'>{t('address')}</div>
+              <div className='ml-2 text-secondary'>{t("address")}</div>
             </div>
             <div>{warehouse?.warehouseAddress}</div>
           </>
         ) : (
           <div className=''>
-            <h6>{t('from')}</h6>
+            <h6>{t("from")}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('organisation_name')}</div>
+              <div className='col text-muted'>{t("organisation_name")}</div>
               <div className='col'>{dashBarData.supplier.org.name}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('organisation_location')}</div>
+              <div className='col text-muted'>{t("organisation_location")}</div>
               <div className='col'>
                 {dashBarData.supplier.warehouse.warehouseAddress.city}
               </div>
             </div>
-            <h6 className='pt-2'>{t('to')}</h6>
+            <h6 className='pt-2'>{t("to")}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('organisation_name')}</div>
+              <div className='col text-muted'>{t("organisation_name")}</div>
               <div className='col'>{dashBarData.receiver?.org?.name}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('organisation_location')}</div>
+              <div className='col text-muted'>{t("organisation_location")}</div>
               <div className='col'>
                 {dashBarData.receiver?.warehouse?.warehouseAddress?.city}
               </div>
             </div>
-            <h6 className='pt-2'>{t('delivery_details')}</h6>
+            <h6 className='pt-2'>{t("delivery_details")}</h6>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('transit_no')}</div>
+              <div className='col text-muted'>{t("transit_no")}</div>
               <div className='col'>{dashBarData.airWayBillNo}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('label_code')}</div>
+              <div className='col text-muted'>{t("label_code")}</div>
               <div className='col'>{dashBarData.label.labelId}</div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('shipment_date')}</div>
+              <div className='col text-muted'>{t("shipment_date")}</div>
               <div className='col'>
                 {dashBarData.shippingDate?.length === 10
                   ? dashBarData.shippingDate
@@ -140,7 +140,9 @@ const EnterWareHouse = (props) => {
               </div>
             </div>
             <div className='row pt-1 pb-1'>
-              <div className='col text-muted'>{t('estimated_delivery_date')}</div>
+              <div className='col text-muted'>
+                {t("estimated_delivery_date")}
+              </div>
               <div className='col'>
                 {dashBarData.actualDeliveryDate?.length === 10
                   ? dashBarData.actualDeliveryDate
@@ -152,7 +154,7 @@ const EnterWareHouse = (props) => {
       </div>
       <div className='d-flex flex-row justify-content-between prod mt-3 mb-2'>
         <div className='font-size-one'>
-          {props.visible ? t('product_details') : t('inventory')}
+          {props.visible ? t("product_details") : t("inventory")}
         </div>
         <Link
           to={
@@ -161,7 +163,7 @@ const EnterWareHouse = (props) => {
               : "/viewinventory/" + warehouse?.warehouseId
           }
         >
-          <div className='text-primary '>{t('view_all')}</div>
+          <div className='text-primary '>{t("view_all")}</div>
         </Link>
       </div>
 
@@ -182,7 +184,7 @@ const EnterWareHouse = (props) => {
                 textAlign: "center",
               }}
             >
-              {t('no_records_found')}
+              {t("no_records_found")}
             </h5>
           </center>
         )}

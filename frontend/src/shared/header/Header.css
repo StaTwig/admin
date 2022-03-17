@@ -13,13 +13,13 @@
 .navContainer {
   padding: 0 1.25rem;
 }
-.read{
+.read {
   text-decoration: "none";
-  background-color : #f1eeee;
+  background-color: #f1eeee;
 }
-.unread{
- text-decoration: "none";
- background-color: #fff;
+.unread {
+  text-decoration: "none";
+  background-color: #fff;
 }
 
 .navContent {
