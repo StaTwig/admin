@@ -105,7 +105,7 @@ const ShipmentAnalytic = (props) => {
     fetchData();
     // dispatch(resetShipments());
     dispatch(getAllUsers());
-  }, [dispatch, limit, visible]);
+  }, [dispatch, limit, props.user.isCustom, visible]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
@@ -377,19 +377,19 @@ const ShipmentAnalytic = (props) => {
   useEffect(() => {
     setExportFilterData([
       { key: "excel", value: "excel", label: t("excel"), checked: false },
-      { key: "pdf",   value: "pdf", label: t("pdf"), checked: false },
+      { key: "pdf", value: "pdf", label: t("pdf"), checked: false },
       // { key: "email", value: "mail", label: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
-  }, []);
+  }, [t]);
 
   const onSelectionDateFilter = async (value) => {
     const fromDate =
-      value[0] == "" ? "" : new Date(new Date(value[0]).toDateString());
+      value[0] === "" ? "" : new Date(new Date(value[0]).toDateString());
     setFromFilterDate(fromDate);
     if (value.length > 1) {
       const toDate =
-        value[0] == "" ? "" : new Date(new Date(value[1]).toDateString());
+        value[0] === "" ? "" : new Date(new Date(value[1]).toDateString());
       if (toDate) toDate.setDate(toDate.getDate() + 1);
       setToFilterDate(toDate);
       if (visible === "one") {
@@ -465,7 +465,6 @@ const ShipmentAnalytic = (props) => {
         today.getDate();
     }
     getExportFile(url, value, i18n.language).then((response) => {
-     
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {

@@ -3,16 +3,14 @@ import { useSelector } from "react-redux";
 import infoIcon from "../../assets/icons/info.png";
 import Modal from "../../shared/modal";
 import SuccessPopUp from "./PopUp/successPopUp";
-
 import {
   createUpdateNewAlert,
   getAllManageAlerts,
 } from "../../actions/userActions";
 import "./style.scss";
-import { red } from "@material-ui/core/colors";
 
 const Settings = (props) => {
-  const {t} = props;
+  const { t } = props;
   const [visible, setvisible] = useState("one");
   const [emailClicked, setEmailClicked] = useState(false);
   const [smsClicked, setSmsClicked] = useState(false);
@@ -334,7 +332,7 @@ const Settings = (props) => {
                   </label>
                   {mobileAlert && (
                     <p className='register-mobile-alert'>
-                     {t("mobile_alert_msg")}
+                      {t("mobile_alert_msg")}
                     </p>
                   )}
                   <label
