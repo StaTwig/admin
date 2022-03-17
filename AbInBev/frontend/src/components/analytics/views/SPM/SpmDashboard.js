@@ -119,7 +119,7 @@ const SpmDashboard = (props) => {
   const typeSelected = (type) => {
     setSelectedType(type);
   };
-  console.log(props.selectedType);
+
   function compare(a, b) {
     if (a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`]) {
       return 1;
@@ -349,15 +349,15 @@ const SpmDashboard = (props) => {
                             <tr>
                               <td scope='row' style={{ color: "#A20134" }}>
                                 Storage Capacity
-                                <br />
-                                <span className='subTitle'>Sqft</span>
+                                {/* <br />
+                                <span className='subTitle'>Sqft</span> */}
                               </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
-                                <br />
+                                {/* <br />
                                 <span className='subTitle'>
                                   {perf.storageCapacity.sqft}
-                                </span>
+                                </span> */}
                               </td>
                               <td></td>
                               <td>{config?.storageCapacity?.target || 0}</td>
