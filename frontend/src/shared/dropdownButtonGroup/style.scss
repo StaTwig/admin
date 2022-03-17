@@ -1,5 +1,4 @@
 @import "../../assets/styles/global.scss";
-
 .custom-dropdown {
   position: relative;
   right: 0rem;
@@ -100,22 +99,26 @@
   left: 165px;
   height: 9px;
   width: 14px;
-  @media screen and (min-width:"1266px"){
+  @media screen and (min-width: "1266px") {
     left: 180px;
   }
-  @media screen and (min-width:"1366px"){
+  @media screen and (min-width: "1366px") {
     left: 200px;
   }
-  @media screen and (min-width:"1566px"){
+  @media screen and (min-width: "1566px") {
     left: 225px;
   }
-  @media screen and (min-width:"1766px"){
+  @media screen and (min-width: "1766px") {
     left: 245px;
   }
 }
-.dropdown-menu{
-  right:0 !important;
-  left:unset !important;
-  top:0.6rem !important;
+.dropdown-menu {
+  right: 0 !important;
+  max-height: 30rem !important;
+}
+.dropdown-menu-sm {
+  right: 0 !important;
+  left: unset !important;
+  top: 0.6rem !important;
   max-height: 30rem !important;
 }
