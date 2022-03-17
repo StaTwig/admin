@@ -32,30 +32,25 @@ const Track = (props) => {
     t,
   } = props;
 
-  useEffect(() => {
-    setTrackTraceData({ setValue, value, resetData, setIsSubmitted });
-  }, [resetData, setTrackTraceData, value]);
+  const onSeach = async (v = value) => {
+    if (v) {
+      await searchData(v);
+      setMsg("No data found");
+    } else setMsg("Required");
+    setIsSubmitted(true);
+  };
 
-  console.log("Shipment update - ", shippmentChainOfCustodyData);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const onSeach = useCallback(async (v = value) => {
-  //   if (v) {
-  //     await searchData(v);
-  //     setMsg("No data found");
-  //   } else setMsg("Required");
-  //   setIsSubmitted(true);
-  // });
-
+  // useEffect(() => {
+  //   setTrackTraceData({ setValue, value, resetData, setIsSubmitted });
+  // }, [resetData, setTrackTraceData, value]);
   if (!isAuthenticated("trackAndTrace")) props.history.push(`/profile`);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.match.params.id && shippmentChainOfCustodyData.length === 0) {
       setValue(props.match.params.id);
       setOp(1);
       onSeach(props.match.params.id);
     }
-  }, [onSeach, props, shippmentChainOfCustodyData]);
+  }, [props.match.params.id, shippmentChainOfCustodyData.length]);
 
   const onSearchChange = (e) => {
     setValue(e.target.value);
@@ -71,13 +66,6 @@ const Track = (props) => {
     //   setSearchType('PO');
     //   setOp(-1);
     // }
-  };
-  const onSeach = async (v = value) => {
-    if (v) {
-      await searchData(v);
-      setMsg("No data found");
-    } else setMsg("Required");
-    setIsSubmitted(true);
   };
 
   const onkeydown = (event) => {
