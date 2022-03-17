@@ -167,7 +167,7 @@ const ChainOfCustody = (props) => {
                             Organisation Name{" "}
                           </span>
                           <span className='w-75'>
-                            {shipmentData.receiver.org.name}
+                            {shipmentData?.receiver?.org?.name}
                           </span>
                         </div>
                         <div className='d-flex flex-row p-1'>
@@ -176,14 +176,14 @@ const ChainOfCustody = (props) => {
                             Organisation Location{" "}
                           </span>
                           <span className='w-75'>
-                            {shipmentData.receiver.locationId}
+                            {shipmentData?.receiver?.locationId}
                           </span>
                         </div>
                       </div>
                       <div className='col'>
                         <div className='emp'></div>
                         <div>
-                          Shipment ID : <strong>{shipmentData.id}</strong>
+                          Shipment ID : <strong>{shipmentData?.id}</strong>
                         </div>
                       </div>
                       <div className='d-flex flex-column mr-5'>

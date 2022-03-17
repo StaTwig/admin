@@ -231,7 +231,6 @@ export const getShipmentsById = (query) => {
 export const createShipment = async (data) => {
   try {
     const result = await axios.post(config().createShipmentUrl, data);
-    console.log(result)
     return result.data.data;
   } catch (e) {
     return e.response;
@@ -413,6 +412,28 @@ export const temperatureGraph = async (shipmentId, page) => {
   try {
     const url = config().temperatureGraph;
     const result = await axios.get(url, { params: { shipmentId, page } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
+    return e.response;
+  }
+};
+
+export const getDriverGraph = async (shipmentId) => {
+  try {
+    const url = config().driverGraph;
+    const result = await axios.get(url, { params: { shipmentId } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
+    return e.response;
+  }
+};
+
+export const customReceiveShipment = async (shipmentId) => {
+  try {
+    const url = config().customReceiveShipment;
+    const result = await axios.get(url, { params: { shipmentId } });
     return result.data;
   } catch (e) {
     console.log(e);

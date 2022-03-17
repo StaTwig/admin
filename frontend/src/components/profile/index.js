@@ -49,6 +49,7 @@ class Profile extends React.Component {
       warehouseLocByOrg: [],
       image: "",
       preferredLanguage: "EN",
+      phoneNumberErrorMsg: '',
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -100,6 +101,7 @@ class Profile extends React.Component {
     if (wareHouseResponse.status === 1 || wareHouseResponse.success) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
+
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: response.data.data.warehouses.filter(
@@ -234,6 +236,21 @@ class Profile extends React.Component {
     }
   }
 
+
+  handlePhoneVerification(currentPhone) {
+    const phone = currentPhone;
+    if (phone) {
+      if (isValidPhoneNumber(phone) === false) {
+        this.setState({ phoneNumberErrorMsg: "invalid_phone_number" });
+      } else {
+        this.setState({ phoneNumberErrorMsg: "" });
+      }
+    } else {
+      this.setState({ phoneNumberErrorMsg: "" });
+    }
+  }
+
+
   render() {
     const { editMode, selectedFile, firstName, lastName, image } = this.state;
     const { t } = this.props;
@@ -342,21 +359,36 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className="form-group2 mb-3">
+                    <div className="form-group2 mb-3 relative">
                       <label htmlFor="shipmentId">{t("phone")}</label>
-                      <PhoneInput
+                      {/* <PhoneInput
                         international
                         countryCallingCodeEditable={false}
                         defaultCountry={COUNTRY_CODE}
                         className="phone-Input-new-profile"
                         placeholder={t("enter_phone_number")}
+                        
                         // style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
                           this.setState({ phoneNumber: phone })
                         }
+                      /> */}
+                      <PhoneInput
+                        international={true}
+                        // countryCallingCodeEditable={false}
+                        defaultCountry={COUNTRY_CODE}
+                        className="phone-Input-new-profile"
+                        placeholder={t("enter_phone_number")}
+                        value={this.state.phoneNumber}
+                        onChange={(e) => {
+                          this.setState({ phoneNumber: e })
+                          this.handlePhoneVerification(e);
+                        }
+                        }
                       />
                     </div>
+                    {this.state.phoneNumberErrorMsg !== '' && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
                     {/* <div className="form-group">
                       <label htmlFor="">{t("language")}</label>
                       <Select
@@ -407,6 +439,7 @@ class Profile extends React.Component {
                                   {...this.props}
                                   closeModal={this.closeModal}
                                   wareHouses={this.state.warehouseLocByOrg}
+                                  setWareHouseLocations={(v) => this.setState({warehouseLocations: [...this.state.warehouseLocations,v] }) }
                                 />
                               </Modal>
                             )}
@@ -441,41 +474,41 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] === "ACTIVE" && (
-                                    <Link
-                                      to={{
-                                        pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
-                                        state: {
-                                          editMode: this.state.editMode,
-                                        },
-                                      }}
-                                    >
-                                      <button
-                                        className="btn-edit fontSize20 pl-2 pr-10"
-                                        style={{
-                                          height: "35px",
-                                          width: "100px",
+                                      <Link
+                                        to={{
+                                          pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
+                                          state: {
+                                            editMode: this.state.editMode,
+                                          },
                                         }}
                                       >
-                                        <img
-                                          src={Pen}
-                                          width="15"
-                                          height="15"
-                                          className="mr-2"
-                                          alt="Edit"
-                                        />
-                                        <span className="font-weight-bold edit-text">
-                                          {t("edit")}
-                                        </span>
-                                      </button>
-                                    </Link>
-                                  )}
+                                        <button
+                                          className="btn-edit fontSize20 pl-2 pr-10"
+                                          style={{
+                                            height: "35px",
+                                            width: "100px",
+                                          }}
+                                        >
+                                          <img
+                                            src={Pen}
+                                            width="15"
+                                            height="15"
+                                            className="mr-2"
+                                            alt="Edit"
+                                          />
+                                          <span className="font-weight-bold edit-text">
+                                            {t("edit")}
+                                          </span>
+                                        </button>
+                                      </Link>
+                                    )}
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] !== "ACTIVE" && (
-                                    <span className="font-weight-bold badge badge-danger">
-                                      {t("approval_pending")}
-                                    </span>
-                                  )}
+                                      <span className="font-weight-bold badge badge-danger">
+                                        {t("approval_pending")}
+                                      </span>
+                                    )}
                                 </div>
                               </div>
                               <div className="card-body">
@@ -603,8 +636,8 @@ class Profile extends React.Component {
                             ) === "Invalid date"
                               ? this.state.signup_date
                               : moment(this.state.signup_date).format(
-                                  "Do MMMM YYYY"
-                                )}
+                                "Do MMMM YYYY"
+                              )}
                           </span>
                         ) : (
                           <span>N/A</span>
@@ -675,7 +708,7 @@ class Profile extends React.Component {
                                     >
                                       {
                                         this.state.warehouseLocations[id][
-                                          "title"
+                                        "title"
                                         ]
                                       }
                                       <div
@@ -686,7 +719,7 @@ class Profile extends React.Component {
                                       >
                                         {
                                           this.state.warehouseLocations[id][
-                                            "id"
+                                          "id"
                                           ]
                                         }
                                       </div>
@@ -694,45 +727,45 @@ class Profile extends React.Component {
                                     {this.state.warehouseLocations[id][
                                       "status"
                                     ] !== "ACTIVE" && (
-                                      <div className="font-weight-bold badge badge-danger ml-3">
-                                        {t("approval_pending")}
-                                      </div>
-                                    )}
+                                        <div className="font-weight-bold badge badge-danger ml-3">
+                                          {t("approval_pending")}
+                                        </div>
+                                      )}
                                   </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.city && (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.city
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.city
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.state && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.state
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.state
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.country && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.country
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.country
+                                          }
+                                        </span>
+                                      )}
                                   </div>
 
                                   <div className="full-address">
@@ -802,6 +835,7 @@ class Profile extends React.Component {
                   <button
                     className="buttonS btn-orange btn"
                     onClick={this.onSubmit}
+                    disabled={this.state.phoneNumberErrorMsg !== ''}
                   >
                     <span>{t("save")}</span>
                   </button>

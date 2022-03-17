@@ -14,10 +14,12 @@ const UploadModal = (props) => {
 
   const uploadExcelData = async (data) => {
     let fileData = new FormData();
+    console.log("Data", data);
     fileData.append('excel', data.file);
     fileData.append('collectedDate', data.uploadDate);
     fileData.append('targetPercentage', data.percentage);
     const result = await dispatch(postUploadExcelData(fileData));
+    console.log("Result", result);
     if (result.status === 200) {
       setSuccessMessage(result.data.message);
       setShowSuccessMessage(true);

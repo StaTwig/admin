@@ -219,8 +219,6 @@ const NewShipment = (props) => {
         setErrorMessage("err");
         return false;
       }
-
-      console.log(prods);
       setProducts(
         prods.data.map((item) => {
           return {
@@ -411,7 +409,6 @@ const NewShipment = (props) => {
   const onCategoryChange = async (index, value, setFieldValue) => {
     try {
       const warehouse = await searchProduct(value, selectedWarehouse);
-      console.log("Warehouse:", warehouse);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
       newArr[index] = {
@@ -787,18 +784,18 @@ const NewShipment = (props) => {
                                   products_temp[i].name =
                                     result.products[i].productName;
                                   products_temp[i].productQuantity =
-                                  parseInt(
-                                    result.poDetails[0].products[i]
-                                      .productQuantity
-                                  ) -
-                                  parseInt(
-                                    result.poDetails[0].products[i]
-                                      .productQuantityDelivered || 0
-                                  ) -
-                                  parseInt(
-                                    result.products[i]
-                                      .productQuantityTaggedSent || 0
-                                  );
+                                    parseInt(
+                                      result.poDetails[0].products[i]
+                                        .productQuantity
+                                    ) -
+                                    parseInt(
+                                      result.poDetails[0].products[i]
+                                        .productQuantityDelivered || 0
+                                    ) -
+                                    parseInt(
+                                      result.products[i]
+                                        .productQuantityTaggedSent || 0
+                                    );
                                   products_temp[i].productCategory =
                                     result.products[i].productCategory;
                                   delete products_temp[i]
@@ -964,7 +961,6 @@ const NewShipment = (props) => {
                             let res = await onWarehouseChange(
                               v.warehouseInventory
                             );
-                            console.log("Result from warehouse change:", res);
                             if (!res) {
                               return;
                             }
@@ -1415,7 +1411,7 @@ const NewShipment = (props) => {
                     category={category}
                     handleQuantityChange={(v, i) => {
                       let newArr = [...addProducts];
-                      newArr[0].productQuantity = v;
+                      newArr[i].productQuantity = v;
                       setFieldValue(
                         "products",
                         newArr.map((row) => ({
@@ -1432,7 +1428,7 @@ const NewShipment = (props) => {
                     }}
                     handleBatchChange={(v, i, batch) => {
                       let newArr = [...addProducts];
-                      if (batch.length > 1 && batch[0].index === i) {
+                      if (batch?.length > 1 && batch[0].index === i) {
                         batch.forEach((elem) => {
                           newArr[elem.index] = { ...addProducts[0] };
                           newArr[elem.index].batchNumber = elem.bnp;
@@ -1451,7 +1447,7 @@ const NewShipment = (props) => {
                           }))
                         );
                         setAddProducts(() => [...newArr]);
-                      } else if (batch.length === 1) {
+                      } else if (batch?.length === 1) {
                         newArr[i].batchNumber = v;
                         setFieldValue(
                           "products",
