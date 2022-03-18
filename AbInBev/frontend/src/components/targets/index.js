@@ -9,6 +9,7 @@ const Targets = (props) => {
   const [districts, setDistricts] = useState([]);
   const [params, setParams] = useState({});
   const [returnTarget, setReturnTarget] = useState();
+  const [retTargetEdit, setRetTargetEdit] = useState(false);
   const [checkedAllDis, setCheckedAllDis] = useState(false);
   const [displayDistricts, setDisplayDistricts] = useState([...props.depots]);
   const [district, setDistrict] = useState("");
@@ -133,11 +134,11 @@ const Targets = (props) => {
   };
 
   const onSave = () => {
-    if (isChecked.length === 0 && !checkedAllDis) {
+    if (isChecked.length === 0 && !checkedAllDis && !retTargetEdit) {
       alert("Select something");
       return;
     }
-    if (checkedAllDis) {
+    if (checkedAllDis && retTargetEdit) {
       let data = [
         {
           depot: displayDistricts.map((item) => item._id.depot),
@@ -146,11 +147,15 @@ const Targets = (props) => {
       ];
       updateTargets(data);
     }
+    else {
+      alert('Please select a target');
+      return;
+    }
     let arr = [];
     selectedArray.map((e) =>
       arr.push({
         depot: [e.value],
-        percentage: parseInt(displayDistricts[e.index].percentage),
+        percentage: displayDistricts[e.index].percentage,
       })
     );
     updateTargets(arr);
@@ -189,12 +194,8 @@ const Targets = (props) => {
               <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
                 <h1 className="h2">Targets</h1>
                 <button
-                  className={
-                    !(countChecked || checkedAllDis)
-                      ? "saveBtnDisabled"
-                      : "saveBtn"
-                  }
-                  disabled={!(countChecked || checkedAllDis)}
+                  className={!(countChecked || checkedAllDis) && (!returnTarget) ? 'saveBtnDisabled' : 'saveBtn'}
+                  disabled={!(countChecked || checkedAllDis) && (!returnTarget)}
                   onClick={() => {
                     onSave();
                   }}
@@ -255,7 +256,7 @@ const Targets = (props) => {
                       </div>
                       <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage}%
+                          {Math.floor(district.percentage)}%
                         </span>
                       </div>
 
@@ -330,6 +331,7 @@ const Targets = (props) => {
                     disabled={disableReturnTarget}
                     onChange={(e) => {
                       setReturnTarget(e.target.value);
+                      setRetTargetEdit(true);
                     }}
                   >
                     <option value="">Select Return Target</option>
