@@ -12,13 +12,12 @@ const ReviewOrderContainer = (props) => {
   const [order, setOrder] = useState([]);
   const { id } = props.match.params;
   const evTypep = window.performance.getEntriesByType("navigation")[0];
-  if(evTypep && evTypep.type === 'reload')
-  window.location.href='orders';
+  if (evTypep && evTypep.type === "reload") window.location.href = "orders";
   useEffect(() => {
     dispatch(getOrder(id)).then((results) => {
       setOrder(results);
     });
-  }, [id]);
+  }, [dispatch, id]);
 
   return (
     <div className='container-fluid p-0'>

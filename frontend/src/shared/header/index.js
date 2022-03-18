@@ -8,7 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { Avatar, Divider, IconButton, Menu, MenuItem } from "@mui/material";
-import { MenuOutlined, Search } from "@mui/icons-material";
+import { MenuOutlined } from "@mui/icons-material";
 import {
   getActiveWareHouses,
   getUserInfo,
@@ -25,12 +25,11 @@ import {
   fetchAllairwayBillNumber,
 } from "../../actions/shippingOrderAction";
 import { getImage } from "../../actions/notificationActions";
-import { getOrderIds, searchProduct } from "../../actions/poActions";
+import { getOrderIds } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import setAuthToken from "../../utils/setAuthToken";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import userIcon from "../../assets/icons/brand.png";
 import inventoryIcon from "../../assets/icons/inventorynew.png";
@@ -61,10 +60,7 @@ const Header = (props) => {
   const [limit, setLimit] = useState(10);
   const [newNotifs, setNewNotifs] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const filterOptions = createFilterOptions({
-    //matchFrom: "start",
-    stringify: (option) => option._id,
-  });
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -96,7 +92,6 @@ const Header = (props) => {
     },
     { refs: [ref1] }
   );
-
 
   const closeModalFail = () => {
     setInvalidSearch(false);
@@ -156,18 +151,16 @@ const Header = (props) => {
 
   const onSeach = async (searchValue) => {
     console.log(searchValue);
-    
+
     if (search.substring(0, 2) === "SH") {
-      console.log("SH");
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
         if (shippingIds.indexOf(search) !== -1) {
-          // props.history.push("/overview");
           props.history.push(`/viewshipment/${search}`);
         } else setInvalidSearch(true);
       });
     } else if (search.substring(0, 2) === "PO") {
-      console.log("po")
+      console.log("po");
       getAllOrderIDs().then((result) => {
         let orderIds = result.map((so) => so.id);
         if (orderIds.indexOf(search) !== -1) {
@@ -197,7 +190,9 @@ const Header = (props) => {
             props.history.push(`/viewproduct`, { data: resp.data.data });
           else
             alert(
-              `${t("the_product")} "${searchValue}" ${t("not_found_in_inventory")}`
+              `${t("the_product")} "${searchValue}" ${t(
+                "not_found_in_inventory"
+              )}`
             );
         })
         .catch((err) => {
@@ -211,7 +206,9 @@ const Header = (props) => {
             props.history.push(`/productinventory/${searchValue}`);
           else
             alert(
-              `${t("there_no_products_type:")} "${searchValue}" ${t("in_your_inventory")}`
+              `${t("there_no_products_type:")} "${searchValue}" ${t(
+                "in_your_inventory"
+              )}`
             );
         })
         .catch((err) => alert(err.response.data.message));
@@ -293,7 +290,7 @@ const Header = (props) => {
       }
     }
     fetchApi();
-  }, [alertType]);
+  }, [alertType, dispatch]);
 
   const handleLocation = async (item) => {
     setLocation(item);
@@ -316,31 +313,23 @@ const Header = (props) => {
     }
   };
 
-  // const onkeydown = (event) => {
-  //   if (event.keyCode === 13) {
-  //     onSeach();
-  //   }
-  // };
-  // const onIcon = (event) => {
-  //   onSeach();
-  // };
   const search_placeholder =
     t("search") + " " + t("po_id") + "/" + t("shipment_id");
 
-
-
   // const [value, setValue] = useState(null);
   const onSearchChange = async (e) => {
-    const response = await axios.get(`${config().getSuggestions}?searchString=${e}`);
+    const response = await axios.get(
+      `${config().getSuggestions}?searchString=${e}`
+    );
     // console.log(response, "response from search API");
     setOptions([...response.data.data]);
     // setValue(e);
     // setSearchString(e);
   };
-  
+
   useEffect(() => {
     setSearchType(options[0]?.type);
-  },[options])
+  }, [options]);
 
   const defaultProps = {
     options,
@@ -351,7 +340,6 @@ const Header = (props) => {
       return option._id;
     },
   };
-
 
   return (
     <div className='navBar'>
@@ -454,7 +442,7 @@ const Header = (props) => {
                 /> */}
                 <Autocomplete
                   {...defaultProps}
-                  id="controlled-demo"
+                  id='controlled-demo'
                   value={searchString}
                   disableClearable
                   placeholder={search_placeholder}
@@ -464,17 +452,18 @@ const Header = (props) => {
                   }
                   onInputChange={(event, newInputValue) => {
                     console.log({ newInputValue });
-                      setSearch(newInputValue);
-                      onSearchChange(newInputValue);
-                    }}
+                    setSearch(newInputValue);
+                    onSearchChange(newInputValue);
+                  }}
                   onChange={(event, newValue) => {
                     console.log("onchange ", newValue);
                     // onSearchChange(newValue);
                     setSearchString(newValue._id);
-                    onSeach(newValue._id)
+                    onSeach(newValue._id);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params}
+                    <TextField
+                      {...params}
                       label={search_placeholder}
                       sx={{ width: "7rem" }}
                       margin='normal'

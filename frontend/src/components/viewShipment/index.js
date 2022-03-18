@@ -71,7 +71,6 @@ const Tracing = (props) => {
                 status === "RECEIVED"
                   ? `/viewshipment/${id}`
                   : `/receiveShipment/${id}`
-                  
               }
             >
               <button

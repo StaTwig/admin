@@ -34,7 +34,6 @@ const NewOrder = (props) => {
     option: (provided, state) => ({
       ...provided,
       borderBottom: "1px solid #d6d6d6",
-      // padding: 20,
     }),
     control: () => ({
       display: "flex",
@@ -95,7 +94,6 @@ const NewOrder = (props) => {
   const [shipmentError, setOrderError] = useState("");
   const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
   const [orgTypes, setOrgTypes] = useState([]);
-  const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [orgType, setOrgType] = useState("");
   const [orgDetails, setOrgDetails] = useState([]);
@@ -447,13 +445,13 @@ const NewOrder = (props) => {
             errors.products = t("required");
           }
           if (!values.toOrgRegion) {
-            errors.toOrgRegion = t('required');
+            errors.toOrgRegion = t("required");
           }
-          
+
           if (!values.toOrgCountry) {
-            errors.toOrgCountry = t('required');
+            errors.toOrgCountry = t("required");
           }
-          
+
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -712,7 +710,9 @@ const NewOrder = (props) => {
                       </label>
                       <div
                         className={`line ${
-                          errors.toOrgRegion && touched.toOrgRegion ? "border-danger" : ""
+                          errors.toOrgRegion && touched.toOrgRegion
+                            ? "border-danger"
+                            : ""
                         }`}
                       >
                         <Select
@@ -756,7 +756,9 @@ const NewOrder = (props) => {
                       </label>
                       <div
                         className={`line ${
-                          errors.toOrgCountry && touched.toOrgCountry ? "border-danger" : ""
+                          errors.toOrgCountry && touched.toOrgCountry
+                            ? "border-danger"
+                            : ""
                         }`}
                       >
                         <Select
@@ -771,7 +773,7 @@ const NewOrder = (props) => {
                           defaultInputValue={values.toOrgCountry}
                           onBlur={handleBlur}
                           onChange={(v) => {
-                            console.log({country: v});
+                            console.log({ country: v });
                             setFieldValue("toOrgName", "");
                             setFieldValue("toOrgCountry", v.label);
                             // setFieldValue("toOrgRegion", v.label);
@@ -781,7 +783,7 @@ const NewOrder = (props) => {
                             // setOrgType("");
                             // setOrgType(v.label);
                             // onOrgTypeChange(v.label);
-                            setCountry(v.label)
+                            setCountry(v.label);
                             onCountryChange(orgType, v.label);
                             // console.log("OrgType from dropdown:", v.label);
                           }}

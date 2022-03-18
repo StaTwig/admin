@@ -4,10 +4,10 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useDispatch } from "react-redux";
 import { getOrder } from "../../actions/poActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const ViewOrderContainer = (props) => {
-const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [order, setOrder] = useState([]);
   const { id } = props.match.params;
@@ -17,13 +17,13 @@ const { t, i18n } = useTranslation();
       const results = await dispatch(getOrder(id));
       setOrder(results.poDetails[0]);
     })();
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <div className='container-fluid p-0'>
-      <Header {...props} t={t}/>
+      <Header {...props} t={t} />
       <div className='d-flex'>
-        <Sidebar {...props} t={t}/>
+        <Sidebar {...props} t={t} />
         <div className='content'>
           <ViewOrder order={order} id={id} {...props} t={t} />
         </div>
