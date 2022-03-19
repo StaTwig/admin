@@ -4,7 +4,6 @@ import uploadBlue from "../../assets/icons/coverImage.png";
 import {
   getManufacturers,
   addNewProduct,
-  addMultipleProducts,
   getProducts,
 } from "../../actions/poActions";
 import Modal from "../../shared/modal";
@@ -27,7 +26,6 @@ const AddProduct = (props) => {
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
-  const [excel, setExcel] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [image, setImage] = useState(false);
 
@@ -89,10 +87,13 @@ const AddProduct = (props) => {
       formData.append("shortName", productName);
       formData.append("externalId", Math.random().toString(36).substr(2, 7));
       formData.append("type", category);
-      formData.append("unitofMeasure", JSON.stringify({
-        id: UOM,
-        name: UOM,
-      }));
+      formData.append(
+        "unitofMeasure",
+        JSON.stringify({
+          id: UOM,
+          name: UOM,
+        })
+      );
       formData.append("description", description);
       formData.append("photo", photo);
       const result = await addNewProduct(formData);
@@ -100,13 +101,6 @@ const AddProduct = (props) => {
       if (result?.success) {
         setOpenCreatedInventory(true);
       }
-    }
-  };
-  const addProducts = async () => {
-    let formData = new FormData();
-    formData.append("excel", excel);
-    const result = await addMultipleProducts(formData);
-    if (result.status === 200) {
     }
   };
   const setFile = (evt) => {
@@ -145,7 +139,7 @@ const AddProduct = (props) => {
         {/* <div className="d-flex flex-column align-items-center"> */}
         <button
           className='btn-primary btn fontSize20 font-bold mt-1 ml-2'
-        // onClick={() => setMenu(!menu)}
+          // onClick={() => setMenu(!menu)}
         >
           <div className='d-flex align-items-center'>
             <img
@@ -223,12 +217,15 @@ const AddProduct = (props) => {
                     type='file'
                     className='select'
                     onChange={setFile}
-                    accept="image/*"
+                    accept='image/*'
                   />{" "}
                 </label>
               </div>
               {image && (
-                <span className="error-msg text-dangerS" style={{ color: "#d80909", fontSize: "15px" }}>
+                <span
+                  className='error-msg text-dangerS'
+                  style={{ color: "#d80909", fontSize: "15px" }}
+                >
                   {image}
                 </span>
               )}
@@ -243,8 +240,9 @@ const AddProduct = (props) => {
                   <label htmlFor='shipmentId'> {t("product_name")}</label>
                   <input
                     type='text'
-                    className={`form-control ${pdNameErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${
+                      pdNameErr ? "border-danger" : ""
+                    }`}
                     name='product'
                     placeholder={t("enter") + " " + t("product_name")}
                     onChange={(e) => {
@@ -259,8 +257,9 @@ const AddProduct = (props) => {
                 <div className='form-group'>
                   <label htmlFor='shipmentId'>{t("manufacturer")}</label>
                   <div
-                    className={`w-100 ${manufacturerErr ? "border-danger" : ""
-                      }`}
+                    className={`w-100 ${
+                      manufacturerErr ? "border-danger" : ""
+                    }`}
                   >
                     <Autocomplete
                       {...defaultPropsManufacturer}
@@ -279,8 +278,9 @@ const AddProduct = (props) => {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          className={`${manufacturerErr ? "border-danger" : ""
-                            }`}
+                          className={`${
+                            manufacturerErr ? "border-danger" : ""
+                          }`}
                           name='Manufacturer'
                           variant='outlined'
                           placeholder={t("enter_manufacturer")}
@@ -385,7 +385,7 @@ const AddProduct = (props) => {
               <button
                 className='fontSize20 font-bold mr-4 addNewBtn'
                 onClick={() => props.history.push("/addNewCategory")}
-              // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
+                // style={{position:"relative",top:"2.5rem",height:"2rem",right:"10rem"}}
               >
                 <img src={Add} width='10' height='10' className='mr-2' alt='' />
                 <span style={{ fontSize: "1vw" }}>{t("add_new_category")}</span>

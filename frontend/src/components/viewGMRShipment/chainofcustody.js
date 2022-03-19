@@ -3,12 +3,9 @@ import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
 import { config } from "../../config";
-// import { getAddress } from "../../utils/commonHelper";
-
 const ChainOfCustody = (props) => {
   const { t } = props;
   const configObject = config();
-  // const [imageUrl,setImageUrl] = useState(configObject.getImage);
   const imageUrl = configObject.getImage;
   const list = [];
 
@@ -167,7 +164,7 @@ const ChainOfCustody = (props) => {
                             Organisation Name{" "}
                           </span>
                           <span className='w-75'>
-                            {shipmentData.receiver.org.name}
+                            {shipmentData?.receiver?.org?.name}
                           </span>
                         </div>
                         <div className='d-flex flex-row p-1'>
@@ -176,14 +173,14 @@ const ChainOfCustody = (props) => {
                             Organisation Location{" "}
                           </span>
                           <span className='w-75'>
-                            {shipmentData.receiver.locationId}
+                            {shipmentData?.receiver?.locationId}
                           </span>
                         </div>
                       </div>
                       <div className='col'>
                         <div className='emp'></div>
                         <div>
-                          Shipment ID : <strong>{shipmentData.id}</strong>
+                          Shipment ID : <strong>{shipmentData?.id}</strong>
                         </div>
                       </div>
                       <div className='d-flex flex-column mr-5'>
@@ -239,7 +236,9 @@ const ChainOfCustody = (props) => {
                 <div className='big-dot bg-info ml-4'></div>
                 <div className='col'>
                   <div className='color mb-3'>
-                    {custody.status === "UPDATED" ? t("UPDATED") : t("UPDATED")}
+                    {custody?.status === "UPDATED"
+                      ? t("UPDATED")
+                      : t("UPDATED")}
                   </div>
                   <div className='col panel  chain chainpanle'>
                     <div className='row justify-content-between'>

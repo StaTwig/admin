@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Delete from "../../../assets/icons/Delete.png";
-import Select from "react-select";
 import { getProductList } from "../../../actions/productActions";
 import "./style.scss";
-import Modal from "../../../shared/modal";
-import user from "../../../assets/icons/brand.svg";
-import Quantity from "../../../assets/icons/Quantity.png";
-import Product from "../../../assets/icons/Producttype.png";
-import date from "../../../assets/icons/ShippingDate.svg";
-import Batch from "../../../assets/icons/batch.png";
-import TableFilter from "./tablefilter.js";
-import axios from "axios";
-import { config } from "../../../config";
-import { formatDate } from "../../../utils/dateHelper";
 
 const EditRow = (props) => {
   const {
@@ -26,57 +15,15 @@ const EditRow = (props) => {
     handleBatchChange,
     products,
     check,
-    warehouseID,
   } = props;
 
-  const headers = {
-    coloumn1: "Product Name",
-    coloumn2: "Manufacturer",
-    coloumn3: "Batch Number",
-    coloumn4: "Mfg Date",
-    coloumn5: "Exp Date",
-    coloumn6: "Quantity",
-
-    img1: <img src={Product} width='15' height='15' alt='' />,
-    img2: <img src={user} width='15' height='15' alt='' />,
-    img3: <img src={Batch} width='15' height='15' alt='' />,
-    img4: <img src={date} width='15' height='15' alt='' />,
-    img5: <img src={date} width='15' height='15' alt='' />,
-    img6: <img src={Quantity} width='20' height='15' alt='' />,
-  };
-  const [editButtonStatus, setEditButtonStatus] = useState(false);
-  const [changebtn, setbtn] = useState(false);
-  const [addnew] = useState(!props.category);
-  const [disabled, setDisabled] = useState(true);
   const [productsList, setProductsList] = useState([]);
   const [quantityChecker, setQuantityChecker] = useState(1);
-  const [showModal, setShowModal] = useState(false);
-  const [ModelProd, setModelProduct] = useState({});
-  const [batches, setBatches] = useState([]);
-  const [selectedBatch, setSelectedBatch] = useState({});
-  const [selectedIndex, setSelectedIndex] = useState();
-  const closeModal = () => setShowModal(false);
-
-  const onEditClick = (e) => {
-    setDisabled(!disabled);
-    setEditButtonStatus(true);
-  };
-  const editBatchSelected = (index, type, value) => {
-    let buffer = [...batches];
-    buffer[index][type] = value;
-    setBatches(buffer);
-  };
-
-  const onSaveClick = (e) => {
-    setbtn(true);
-    setDisabled(!disabled);
-    setEditButtonStatus(false);
-  };
 
   useEffect(() => {
     async function fetchData() {
-      const result111 = await getProductList();
-      setProductsList(result111.message);
+      const result = await getProductList();
+      setProductsList(result.message);
     }
 
     fetchData();
@@ -110,7 +57,7 @@ const EditRow = (props) => {
     typeof productsList != undefined
   ) {
     let qty;
-    for (var i = 0; i < productsList.length; i++) {
+    for (let i = 0; i < productsList.length; i++) {
       if (prod.name === productsList[i].productName) {
         qty = String(productsList[i].quantity);
         break;
@@ -123,34 +70,13 @@ const EditRow = (props) => {
     }
   }
 
-  async function changeBatch(batch, index) {
-    handleBatchChange(batch.bnp, index);
-    handleQuantityChange(batch.quant, index);
-    // closeModal()
-  }
-  async function fetchBatches(prod, index) {
-    setSelectedIndex(index);
-    setModelProduct(prod);
-    let res = await axios.get(
-      `${config().fetchBatchesOfInventory}?productId=${
-        prod.id
-      }&wareId=${warehouseID}`
-    );
-    let buffer = res.data.data;
-    buffer.forEach((element) => {
-      element.selected = false;
-      element.editable = false;
-      element.immutableQuantity = element.quantity;
-    });
-    setBatches(buffer);
-  }
   const numbersOnly = (e) => {
-    // Handle paste
+    let key;
     if (e.type === "paste") {
-      var key = e.clipboardData.getData("text/plain");
+      key = e.clipboardData.getData("text/plain");
     } else {
       // Handle key press
-      var key = e.keyCode || e.which;
+      key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
     var regex = /[0-9]/;
@@ -158,25 +84,6 @@ const EditRow = (props) => {
       e.returnValue = false;
       if (e.preventDefault) e.preventDefault();
     }
-  };
-  const handleChange = (value) => {
-    setSelectedBatch(value);
-  };
-  const setQuantity = (value) => {
-    let buffer = selectedBatch;
-    buffer.quant = value;
-    setSelectedBatch(buffer);
-  };
-  const editQuantity = (value, index) => {
-    let buffer = [...batches];
-    if (parseInt(value) > parseInt(buffer[index].immutableQuantity)) {
-      alert("quantity cannot exceed batch limit");
-      return;
-    }
-    buffer[index].quantity = value;
-
-    setBatches(buffer);
-    setQuantity(value);
   };
 
   return (

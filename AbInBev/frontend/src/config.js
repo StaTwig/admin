@@ -181,12 +181,12 @@ export function config() {
       getOrganisationStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOrganisationTypeStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrgType`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
-      getSupplierPerfomance: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/getSupplierPerfomance`,
+      getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
       getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
       getNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getNewConfig`,
-      setNewConfig: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/setNewConfig`,
-      getAllTargets: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/getDepotTargets`,
-      updateTargets: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/updateTargetSales`,
+      setNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/setNewConfig`,
+      getAllTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getDepotTargets`,
+      updateTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/updateTargetSales`,
     },
   };
 

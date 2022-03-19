@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import { getJourneyTrack } from "../../actions/shipmentActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import moment from "moment";
-import { useIotShipmentData } from "../../hooks/useIotShipmentData";
-import { config } from "../../config";
 import queryString from "query-string";
 import { useTranslation } from "react-i18next";
 
@@ -23,43 +21,6 @@ const TrackContainer = (props) => {
     enableTracingZoomOutPageForViewShipment,
     setEnableTracingZoomOutPageForViewShipment,
   ] = useState(false);
-  // const searchData = async (id) => {
-  //   dispatch(turnOn());
-  //   const result = await chainOfCustody(id);
-  //   dispatch(turnOff());
-  //   if (result.status == 200) {
-  //     setPoChainOfCustodyData(result.data.data.poChainOfCustody);
-  //     setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
-  //   }else{
-  //     setPoChainOfCustodyData([]);
-  //     setShippmentChainOfCustodyData([]);
-  //   }
-  // }
-
-  const { status } = queryString.parse(props.location.search);
-  const lastTenIotShipmentData = useIotShipmentData(
-    config().trackLastTenIotShipmentData.replace(
-      ":shipmentId",
-      props.match.params.id
-    ),
-    !status && !enableTracingZoomOutPageForViewShipment ? true : false
-  );
-  const allIotShipmentData = useIotShipmentData(
-    config().trackAllIotShipmentData.replace(
-      ":shipmentId",
-      props.match.params.id
-    ),
-    status === "shipmentView" || enableTracingZoomOutPageForViewShipment
-      ? true
-      : false
-  );
-  const latestIotShipmentData = useIotShipmentData(
-    config().trackLatestShipmentData.replace(
-      ":shipmentId",
-      props.match.params.id
-    ),
-    true
-  );
 
   const searchData = async (id) => {
     dispatch(turnOn());
@@ -155,15 +116,12 @@ const TrackContainer = (props) => {
             poChainOfCustodyData={poChainOfCustodyData}
             shippmentChainOfCustodyData={shippmentChainOfCustodyData}
             viewIotTemperatureSplineline={viewIotTemperatureSplineline}
-            allIotShipmentData={allIotShipmentData}
-            latestIotShipmentData={latestIotShipmentData}
             navigateToOriginalShipmentPage={navigateToOriginalShipmentPage}
             enableTracingZoomOutPageForViewShipment={
               enableTracingZoomOutPageForViewShipment
             }
             zoomOutTemperatureGraph={zoomOutTemperatureGraph}
             navigateBackToTracingPage={navigateBackToTracingPage}
-            lastTenIotShipmentData={lastTenIotShipmentData}
             t={t}
             lang={i18n.resolvedLanguage}
             setTrackTraceData={setTrackTraceData}

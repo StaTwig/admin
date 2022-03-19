@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Location from "../../assets/icons/Location.png";
 import Location1 from "../../assets/icons/add_new_location.png";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import { addWarehouse } from "../../actions/userActions";
 import { Link } from "react-router-dom";
 import SuccessPopup from "../../shared/PopUp/successPopUp";
@@ -12,7 +11,7 @@ const PopUpLocation = (props) => {
   const { t } = props;
   // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse] = useState({});
-  const [selectLocation, setSelectLocation] = useState(t('select_location'));
+  const [selectLocation, setSelectLocation] = useState(t("select_location"));
   const [addedLocationModal, setAddedLocationModal] = useState(false);
   const [alertFlag, setAlertFlag] = useState(false);
 
@@ -42,6 +41,7 @@ const PopUpLocation = (props) => {
       console.log("Added Location");
       console.log(result);
       if (result.data.data) {
+        props.setWareHouseLocations(result.data.data);
         setAddedLocationModal(true);
       } else {
         setAlertFlag(true);
@@ -50,27 +50,30 @@ const PopUpLocation = (props) => {
       }
     }
   };
-console.log(props.wareHouses)
+  console.log(props.wareHouses);
   return (
-    <div className="addLocation">
+    <div className='addLocation'>
       <center>
         <h1 className='addLocationText'>
-          <b>{t('add_location')}</b>
+          <b>{t("add_location")}</b>
         </h1>
       </center>
 
-      <div className="wrapper1">
+      <div className='wrapper1'>
         <Link to={"/Addlocation"}>
-          <button className="btn btn-orange fontSize18 center-display" type="button">
+          <button
+            className='btn btn-orange fontSize18 center-display'
+            type='button'
+          >
             <img
               src={Location1}
-              width="20"
-              height="20"
-              className="mr-2 mb-1"
-              alt="Location"
+              width='20'
+              height='20'
+              className='mr-2 mb-1'
+              alt='Location'
             />
-            <span className="buttonS btn-space">
-              <b>{t('add_new_location')}</b>
+            <span className='buttonS btn-space'>
+              <b>{t("add_new_location")}</b>
             </span>
           </button>
         </Link>
@@ -80,24 +83,25 @@ console.log(props.wareHouses)
         <center>
           <h6>
             {" "}
-            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; {t('or')} &nbsp;&nbsp;&nbsp; ━━━━━━━━━━{" "}
+            ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; {t("or")} &nbsp;&nbsp;&nbsp;
+            ━━━━━━━━━━{" "}
           </h6>
         </center>
       </div>
       <br></br>
-      <div className="ml-5">
-        <div className="col-md-12">
+      <div className='ml-5'>
+        <div className='col-md-12'>
           <div
-            className="form-group-2"
+            className='form-group-2'
             style={{ position: "relative", bottom: "2rem" }}
           >
             <img
               src={Location}
-              className="addLocModalImg pt-2"
-              alt="Location"
+              className='addLocModalImg pt-2'
+              alt='Location'
             ></img>
             <label htmlFor='Select Location' className='addLocModal pt-3'>
-              <b>{t('select_location')}</b>
+              <b>{t("select_location")}</b>
             </label>
             <div
               className={`form-controlAddLoc mr-5 ${
@@ -113,7 +117,7 @@ console.log(props.wareHouses)
                   setSelectLocation(v.title);
                 }}
                 groups={props.wareHouses}
-                type="AddLocationType"
+                type='AddLocationType'
                 t={t}
               />
             </div>
@@ -121,22 +125,26 @@ console.log(props.wareHouses)
         </div>
       </div>
 
-      <div className="wrapper1">
+      <div className='wrapper1'>
         <button
-          disabled={selectLocation === t('select_location')}
-          style={{backgroundColor: '#A6A6A6'}}
-          className={selectLocation === t('select_location') ? 'continueDisabled buttonS btn mt-3' : 'continueDisabled buttonS btn btn-primary mt-3'}
+          disabled={selectLocation === t("select_location")}
+          style={{ backgroundColor: "#A6A6A6" }}
+          className={
+            selectLocation === t("select_location")
+              ? "continueDisabled buttonS btn mt-3"
+              : "continueDisabled buttonS btn btn-primary mt-3"
+          }
           onClick={() => {
             updateStatus(wareHouse);
           }}
         >
-          <span>{t('continue')}</span>
+          <span>{t("continue")}</span>
         </button>
       </div>
       {addedLocationModal && (
         <Modal
           close={() => closeModalAddedLocation()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModalAddedLocation}

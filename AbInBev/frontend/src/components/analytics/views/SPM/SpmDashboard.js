@@ -152,12 +152,12 @@ const SpmDashboard = (props) => {
   return (
     <div>
       {showSuccessPopup && <SuccessPopUp message={"config set succesfully"} />}
-      <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3'>
-        <h1 className='h2'>Dashboard - SPM</h1>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+        <h1 className="h2">Dashboard - SPM</h1>
       </div>
-      <div className='viewTargets'>
+      <div className="viewTargets">
         <button
-          className='targetsBtn'
+          className="targetsBtn"
           onClick={() => {
             setopenSelectSuplier(true);
             setForNextBtn(true);
@@ -166,9 +166,9 @@ const SpmDashboard = (props) => {
           Set Targets
         </button>
       </div>
-      <div className='tableDetals'>
+      <div className="tableDetals">
         <table
-          className='table text-align-left'
+          className="table text-align-left"
           style={{ background: "unset" }}
         >
           <thead
@@ -179,13 +179,13 @@ const SpmDashboard = (props) => {
             }}
           >
             <tr>
-              <th scope='col'>Rank</th>
-              <th scope='col'>Supplier</th>
-              <th scope='col'>Location</th>
-              <th scope='col' style={{ width: "17%" }}>
+              <th scope="col">Rank</th>
+              <th scope="col">Supplier</th>
+              <th scope="col">Location</th>
+              <th scope="col" style={{ width: "17%" }}>
                 Overall Rating
               </th>
-              <th scope='col'></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody style={{ background: "#ffffff" }}>
@@ -200,19 +200,19 @@ const SpmDashboard = (props) => {
                   }`}
                   style={{ fontWeight: "bold", fontFamily: "open sans" }}
                 >
-                  <td scope='row' style={{ verticalAlign: "unset" }}>
+                  <td scope="row" style={{ verticalAlign: "unset" }}>
                     {index + 1}
                   </td>
                   <td>
                     <div
-                      className='tableProfileIconCard justify-content-start'
+                      className="tableProfileIconCard justify-content-start"
                       style={{ lineHeight: "1.5" }}
                     >
-                      <div className='profileIcon'>
-                        <img src={profile} alt='' />
+                      <div className="profileIcon">
+                        <img src={profile} alt="" />
                       </div>
-                      <div className='profileName'>
-                        <span className='profileTitle'>{perf.name}</span>
+                      <div className="profileName">
+                        <span className="profileTitle">{perf.name}</span>
                         <label
                           className={`
                             ${perf.type === "S1" ? "boldGreen" : ""}
@@ -223,8 +223,8 @@ const SpmDashboard = (props) => {
                           {perf.type}
                         </label>
                         {selectedRatingIndex === index && (
-                          <div className='spmDetailsUserCard justify-content-start'>
-                            <div className='profileName'>
+                          <div className="spmDetailsUserCard justify-content-start">
+                            <div className="profileName">
                               <label>
                                 <b>Vendor ID:</b> {perf.id}
                               </label>
@@ -245,7 +245,7 @@ const SpmDashboard = (props) => {
                   <td style={{ position: "relative", verticalAlign: "unset" }}>
                     {/* {selectedRatingIndex !== index ? ( */}
                     <div
-                      className='round round-lg'
+                      className="round round-lg"
                       onClick={() => {
                         `${
                           selectedRatingIndex !== index
@@ -264,11 +264,11 @@ const SpmDashboard = (props) => {
                     </div>
                     {selectedRatingIndex === index && (
                       <div
-                        className='editTargetsContainer'
+                        className="editTargetsContainer"
                         style={{ position: "absolute" }}
                       >
                         <button
-                          className='editTarBtn'
+                          className="editTarBtn"
                           onClick={() => {
                             setOpenEditTargets(true);
                           }}
@@ -285,7 +285,7 @@ const SpmDashboard = (props) => {
                 </tr>
                 {selectedRatingIndex === index ? (
                   <tr>
-                    <td colSpan='5' className='selectedSupplier'>
+                    <td colSpan="5" className="selectedSupplier">
                       <div
                         style={{
                           backgroundColor: "#ffffff",
@@ -293,7 +293,7 @@ const SpmDashboard = (props) => {
                         }}
                       >
                         <table
-                          className='table text-align-left noTopRadius'
+                          className="table text-align-left noTopRadius"
                           style={{ background: "unset" }}
                         >
                           <thead>
@@ -304,10 +304,10 @@ const SpmDashboard = (props) => {
                                 color: "#707070",
                               }}
                             >
-                              <th scope='col'>Criteria</th>
-                              <th scope='col'>Details</th>
-                              <th scope='col'>Weightage</th>
-                              <th scope='col'>Target</th>
+                              <th scope="col">Criteria</th>
+                              <th scope="col">Details</th>
+                              <th scope="col">Weightage</th>
+                              <th scope="col">Target</th>
                             </tr>
                           </thead>
                           <tbody
@@ -317,7 +317,7 @@ const SpmDashboard = (props) => {
                             }}
                           >
                             <tr>
-                              <td scope='row' style={{ color: "#A20134" }}>
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Return Rate
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
@@ -325,7 +325,7 @@ const SpmDashboard = (props) => {
                               <td>{perf?.targets?.returnRateTarget}</td>
                             </tr>
                             <tr>
-                              <td scope='row' style={{ color: "#A20134" }}>
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Lead Time
                               </td>
                               <td>
@@ -348,7 +348,7 @@ const SpmDashboard = (props) => {
                               <td>{perf?.targets?.leadTimeTarget}</td>
                             </tr>
                             <tr>
-                              <td scope='row' style={{ color: "#A20134" }}>
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Storage Capacity
                                 {/* <br />
                                 <span className='subTitle'>Sqft</span> */}
@@ -364,7 +364,7 @@ const SpmDashboard = (props) => {
                               <td>{perf?.targets?.storageCapacityTarget || 0}</td>
                             </tr>
                             <tr>
-                              <td scope='row' style={{ color: "#A20134" }}>
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Dirty Bottles
                               </td>
                               <td>{perf.dirtyBottles}%</td>
@@ -372,7 +372,7 @@ const SpmDashboard = (props) => {
                               <td>{perf?.targets?.dirtyBottlesTarget}</td>
                             </tr>
                             <tr>
-                              <td scope='row' style={{ color: "#A20134" }}>
+                              <td scope="row" style={{ color: "#A20134" }}>
                                 Breakage
                               </td>
                               <td>{perf.breakage}%</td>
@@ -393,13 +393,13 @@ const SpmDashboard = (props) => {
         </table>
       </div>
       {openEditTargets && (
-        <div className='editTargetsContainer1'>
-          <div className='editTitle'>
-            <span className='edittargetName'>Edit Targets</span>
+        <div className="editTargetsContainer1">
+          <div className="editTitle">
+            <span className="edittargetName">Edit Targets</span>
           </div>
           <div>
             <table
-              className='table text-align-left noTopRadius'
+              className="table text-align-left noTopRadius"
               style={{ background: "unset" }}
             >
               <thead>
@@ -410,19 +410,19 @@ const SpmDashboard = (props) => {
                     color: "#707070",
                   }}
                 >
-                  <th scope='col'>Criteria</th>
-                  <th scope='col'>Set Target</th>
-                  <th scope='col'>Weightage</th>
+                  <th scope="col">Criteria</th>
+                  <th scope="col">Set Target</th>
+                  <th scope="col">Weightage</th>
                 </tr>
               </thead>
               <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Return Rate
                   </td>
                   <td>
                     <select
-                      className='filterSelect-1 mt-2'
+                      className="filterSelect-1 mt-2"
                       value={config.returnRate.target}
                       onChange={(e) => {
                         let temp = config;
@@ -442,14 +442,14 @@ const SpmDashboard = (props) => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Lead Time
                   </td>
                   <td>
                     <select
-                      className='filterSelect-1 mt-2'
+                      className="filterSelect-1 mt-2"
                       value={config.leadTime.target}
-                      name='leadtime'
+                      name="leadtime"
                       onChange={(e) => {
                         let temp = config;
                         temp.leadTime.target = e.target.value;
@@ -468,12 +468,12 @@ const SpmDashboard = (props) => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Breakage Bottle %
                   </td>
                   <td>
                     <select
-                      className='filterSelect-1 mt-2'
+                      className="filterSelect-1 mt-2"
                       value={config.breakageBottle.target}
                       style={{ boxShadow: "0px 4px 8px #54265e26" }}
                       onChange={function (e) {
@@ -486,7 +486,7 @@ const SpmDashboard = (props) => {
                         console.log(config);
                       }}
                     >
-                      <option value=''>Select</option>
+                      <option value="">Select</option>
                       {persentages.map((item, index) => (
                         <option key={index} value={item}>
                           {item}
@@ -497,12 +497,12 @@ const SpmDashboard = (props) => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Dirty Bottle
                   </td>
                   <td>
                     <select
-                      className='filterSelect-1 mt-2'
+                      className="filterSelect-1 mt-2"
                       value={config.dirtyBottle.target}
                       onChange={(e) => {
                         let temp = config;
@@ -512,7 +512,7 @@ const SpmDashboard = (props) => {
                         setTemp(e.target.value);
                       }}
                     >
-                      <option value=''>Select</option>
+                      <option value="">Select</option>
                       {persentages.map((item, index) => (
                         <option key={index} value={item}>
                           {item}
@@ -523,19 +523,19 @@ const SpmDashboard = (props) => {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#000000" }}>
+                  <td scope="row" style={{ color: "#000000" }}>
                     WAREHOUSE DETAILS
                   </td>
                   <td></td>
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Storage Capacity
                   </td>
                   <td>
                     <input
-                      className='filterSelect-1'
+                      className="filterSelect-1"
                       value={config.warehouseCapacity.target}
                       onChange={(e) => {
                         let temp = config;
@@ -547,12 +547,12 @@ const SpmDashboard = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <td scope='row' style={{ color: "#A20134" }}>
+                  <td scope="row" style={{ color: "#A20134" }}>
                     Bottle Capacity
                   </td>
                   <td>
                     <input
-                      className='filterSelect-1'
+                      className="filterSelect-1"
                       value={config.bottleCapacity.target}
                       onChange={(e) => {
                         let temp = config;
@@ -566,9 +566,9 @@ const SpmDashboard = (props) => {
               </tbody>
             </table>
           </div>
-          <div className='buttons'>
+          <div className="buttons">
             <button
-              className='backBtn'
+              className="backBtn"
               onClick={() => {
                 setOpenEditTargets(false);
               }}
@@ -576,7 +576,7 @@ const SpmDashboard = (props) => {
               Close
             </button>
             <button
-              className='saveBtn'
+              className="saveBtn"
               onClick={() => {
                 setOpenSetRating(true);
               }}
@@ -586,9 +586,9 @@ const SpmDashboard = (props) => {
       )}
       {openSelectSuplier && (
         <div>
-          <div className='setTargetsContainer'>
-            <div className='editSelectSuplier'>
-              <span className='edittargetName'>Select Supplier</span>
+          <div className="setTargetsContainer">
+            <div className="editSelectSuplier">
+              <span className="edittargetName">Select Supplier</span>
               <img
                 src={cancelIcon}
                 style={{ width: "2rem" }}
@@ -597,14 +597,14 @@ const SpmDashboard = (props) => {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
-                <label className='filterSubHeading mt-3'>Select State</label>
+                <label className="filterSubHeading mt-3">Select State</label>
                 <select
-                  className='filterSelect-1 mt-2'
+                  className="filterSelect-1 mt-2"
                   value={state}
                   style={{ width: "100%" }}
                   onChange={onStateChange}
                 >
-                  <option value=''>Select State</option>
+                  <option value="">Select State</option>
                   {props.states?.map((state, index) => (
                     <option key={index} value={state}>
                       {state}
@@ -613,9 +613,9 @@ const SpmDashboard = (props) => {
                 </select>
               </div>
               <div>
-                <label className='filterSubHeading mt-3'>Select District</label>
+                <label className="filterSubHeading mt-3">Select District</label>
                 <select
-                  className='filterSelect-1 mt-2'
+                  className="filterSelect-1 mt-2"
                   value={configDistrict}
                   style={{ width: "100%" }}
                   onChange={(e) => setConfigDistrict(e.target.value)}
@@ -626,9 +626,9 @@ const SpmDashboard = (props) => {
                   ))}
                 </select>
               </div>
-              <div className='filterSection-1'>
-                <label className='filterSubHeading-1 mt-3'>vendor Type</label>
-                <div className='btn-group vonderType filterButton-1 mt-2 mb-4'>
+              <div className="filterSection-1">
+                <label className="filterSubHeading-1 mt-3">vendor Type</label>
+                <div className="btn-group vonderType filterButton-1 mt-2 mb-4">
                   {["All", "S1", "S2", "S3"].map((type, index) => (
                     <span
                       onClick={() => {
@@ -647,7 +647,7 @@ const SpmDashboard = (props) => {
               </div>
             </div>
             {true && (
-              <div className='dealer_container'>
+              <div className="dealer_container">
                 {supplierPerformances?.map((supplier, index) => (
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
@@ -658,27 +658,27 @@ const SpmDashboard = (props) => {
                           marginBottom: "25px",
                         }}
                       >
-                        <span className='index'>{index}</span>
-                        <div className='supplierName'>
+                        <span className="index">{index}</span>
+                        <div className="supplierName">
                           <div
                             style={{ display: "flex", alignItems: "center" }}
                           >
                             <img
                               style={{ width: "25px", marginRight: "25px" }}
                               src={profile}
-                              alt=''
+                              alt=""
                             />
-                            <span className='suplier'>{supplier.name}</span>
+                            <span className="suplier">{supplier.name}</span>
                           </div>
 
-                          <span className='suppplierType'>
+                          <span className="suppplierType">
                             {supplier.type + " Vendor"}
                           </span>
                         </div>
                       </div>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span className='postalAddress'>
+                      <span className="postalAddress">
                         {supplier.postalAddress}
                       </span>
                     </div>
@@ -686,9 +686,9 @@ const SpmDashboard = (props) => {
                 ))}
               </div>
             )}
-            <div className='buttons'>
+            <div className="buttons">
               <button
-                className='backBtn'
+                className="backBtn"
                 onClick={() => {
                   setopenSelectSuplier(false);
                 }}
@@ -696,7 +696,7 @@ const SpmDashboard = (props) => {
                 Close
               </button>
               <button
-                className='saveBtn'
+                className="saveBtn"
                 onClick={() => {
                   setopenSelectSuplier(false);
                   setOpenEditTargets(true);
@@ -710,13 +710,13 @@ const SpmDashboard = (props) => {
       )}
       {openSetRating && (
         <div>
-          <div className='editTargetsContainer1'>
-            <div className='editTitle'>
-              <span className='edittargetName'>Set Rating</span>
+          <div className="editTargetsContainer1">
+            <div className="editTitle">
+              <span className="edittargetName">Set Rating</span>
             </div>
             <div>
               <table
-                className='table text-align-left noTopRadius'
+                className="table text-align-left noTopRadius"
                 style={{ background: "unset" }}
               >
                 <thead>
@@ -727,17 +727,17 @@ const SpmDashboard = (props) => {
                       color: "#707070",
                     }}
                   >
-                    <th scope='col'>Rating</th>
-                    <th scope='col'>Targets</th>
-                    <th scope='col'>Minimim</th>
-                    <th scope='col'>Maximun</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Targets</th>
+                    <th scope="col">Minimim</th>
+                    <th scope="col">Maximun</th>
                   </tr>
                 </thead>
                 <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                   <tr>
-                    <td scope='row'></td>
+                    <td scope="row"></td>
                     <td></td>
-                    <td className='subTitle'>
+                    <td className="subTitle">
                       <span
                         style={{ fontFamily: "unset", fontWeight: "unset" }}
                       >
@@ -781,15 +781,15 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Return Rate
                     </td>
                     <td>
                       <select
                         value={config.returnRate.target}
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                       >
-                        <option value=''>Select</option>
+                        <option value="">Select</option>
                         {persentages.map((item, index) => (
                           <option
                             key={index}
@@ -806,10 +806,9 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-1 mt-2'
-                        style={{ width: "30%" }}
+                        className="filterSelect-2 mt-2"
                         value={config.returnRate.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -818,7 +817,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -826,12 +824,10 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.returnRate.min.value}
                         style={{
-                          width: "30%",
-                          position: "relative",
-                          left: "15px",
+                          marginLeft: "30px",
                         }}
                         onChange={(e) => {
                           let temp = config;
@@ -840,7 +836,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -848,12 +843,12 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         value={config.returnRate.min.rating}
                         style={{
-                          width: "30%",
                           position: "relative",
                           left: "28px",
+                          width: "30%",
                         }}
                         onChange={(e) => {
                           let temp = config;
@@ -862,7 +857,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -872,7 +866,7 @@ const SpmDashboard = (props) => {
                     </td>
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.returnRate.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -881,7 +875,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -890,7 +883,7 @@ const SpmDashboard = (props) => {
                       </select>
                       <select
                         value={config.returnRate.max.value}
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         onChange={(e) => {
                           let temp = config;
@@ -899,7 +892,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -908,7 +900,7 @@ const SpmDashboard = (props) => {
                       </select>
                       <select
                         value={config.returnRate.max.rating}
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         onChange={(e) => {
                           let temp = config;
@@ -917,7 +909,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -927,12 +918,12 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Lead Time
                     </td>
                     <td>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         value={config.leadTime.target}
                         onChange={(e) => {
                           let temp = config;
@@ -941,7 +932,7 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option value=''>Select</option>
+                        <option value="">Select</option>
                         {dates.map((date, index) => (
                           <option key={index} value={date}>
                             {date}
@@ -949,9 +940,9 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.leadTime.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -960,7 +951,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -968,7 +958,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.leadTime.min.value}
                         onChange={(e) => {
@@ -978,7 +968,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -986,7 +975,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1000,7 +989,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1010,7 +998,7 @@ const SpmDashboard = (props) => {
                     </td>
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.leadTime.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1019,7 +1007,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1027,7 +1014,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.leadTime.max.value}
                         onChange={(e) => {
@@ -1037,7 +1024,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1045,7 +1031,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         value={config.leadTime.max.rating}
                         onChange={(e) => {
@@ -1055,7 +1041,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1065,12 +1050,12 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Breakage Bottle %
                     </td>
                     <td>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         value={config.breakageBottle.target}
                         onChange={(e) => {
                           let temp = config;
@@ -1088,9 +1073,9 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.breakageBottle.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1099,7 +1084,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1107,7 +1091,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.breakageBottle.min.value}
                         onChange={(e) => {
@@ -1117,7 +1101,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1125,7 +1108,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         value={config.breakageBottle.min.rating}
                         onChange={(e) => {
                           let temp = config;
@@ -1139,7 +1122,6 @@ const SpmDashboard = (props) => {
                           left: "28px",
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1149,7 +1131,7 @@ const SpmDashboard = (props) => {
                     </td>
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.breakageBottle.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1158,7 +1140,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1166,7 +1147,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.breakageBottle.max.value}
                         onChange={(e) => {
@@ -1176,7 +1157,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1184,7 +1164,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         value={config.breakageBottle.max.rating}
                         onChange={(e) => {
@@ -1194,7 +1174,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1204,12 +1183,12 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Dirty Bottle
                     </td>
                     <td>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         value={config.dirtyBottle.target}
                         onClick={(e) => {
                           let temp = config;
@@ -1218,7 +1197,7 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option value=''>Select</option>
+                        <option value="">Select</option>
                         {persentages.map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1226,9 +1205,9 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.dirtyBottle.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1237,7 +1216,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1245,7 +1223,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.dirtyBottle.min.value}
                         onChange={(e) => {
@@ -1255,7 +1233,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1263,7 +1240,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1277,7 +1254,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1288,7 +1264,7 @@ const SpmDashboard = (props) => {
                     .{" "}
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.dirtyBottle.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1297,7 +1273,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1305,7 +1280,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.dirtyBottle.max.value}
                         onChange={(e) => {
@@ -1315,7 +1290,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1323,7 +1297,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         value={config.dirtyBottle.max.rating}
                         onChange={(e) => {
@@ -1333,7 +1307,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1343,19 +1316,19 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#000000" }}>
+                    <td scope="row" style={{ color: "#000000" }}>
                       WAREHOUSE DETAILS
                     </td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Storage Capacity
                     </td>
                     <td>
                       <input
-                        className='filterSelect-1'
-                        type='number'
+                        className="filterSelect-1"
+                        type="number"
                         value={config.warehouseCapacity.target}
                         onChange={(e) => {
                           let temp = config;
@@ -1365,9 +1338,9 @@ const SpmDashboard = (props) => {
                         }}
                       />
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.warehouseCapacity.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1376,7 +1349,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1384,7 +1356,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.warehouseCapacity.min.value}
                         onChange={(e) => {
@@ -1394,7 +1366,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1402,7 +1373,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1416,7 +1387,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1426,7 +1396,7 @@ const SpmDashboard = (props) => {
                     </td>
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.warehouseCapacity.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1435,7 +1405,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1443,7 +1412,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.warehouseCapacity.max.value}
                         onChange={(e) => {
@@ -1453,7 +1422,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1461,7 +1429,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         value={config.warehouseCapacity.max.rating}
                         onChange={(e) => {
@@ -1471,7 +1439,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1481,13 +1448,13 @@ const SpmDashboard = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <td scope='row' style={{ color: "#A20134" }}>
+                    <td scope="row" style={{ color: "#A20134" }}>
                       Bottle Capacity
                     </td>
                     <td>
                       <input
-                        className='filterSelect-1'
-                        type='number'
+                        className="filterSelect-1"
+                        type="number"
                         value={config.bottleCapacity.target}
                         onChange={(e) => {
                           let temp = config;
@@ -1497,9 +1464,9 @@ const SpmDashboard = (props) => {
                         }}
                       />
                     </td>
-                    <td className='middleTextField' style={{ display: "flex" }}>
+                    <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.bottleCapacity.min.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1508,7 +1475,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1516,7 +1482,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.bottleCapacity.min.value}
                         onChange={(e) => {
@@ -1526,7 +1492,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1534,7 +1499,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-1 mt-2'
+                        className="filterSelect-1 mt-2"
                         style={{
                           width: "30%",
                           position: "relative",
@@ -1548,7 +1513,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1558,7 +1522,7 @@ const SpmDashboard = (props) => {
                     </td>
                     <td>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         value={config.bottleCapacity.max.operator}
                         onChange={(e) => {
                           let temp = config;
@@ -1567,7 +1531,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1575,7 +1538,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "30px" }}
                         value={config.bottleCapacity.max.value}
                         onChange={(e) => {
@@ -1585,7 +1548,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1593,7 +1555,7 @@ const SpmDashboard = (props) => {
                         ))}
                       </select>
                       <select
-                        className='filterSelect-2 mt-2'
+                        className="filterSelect-2 mt-2"
                         style={{ marginLeft: "20px" }}
                         value={config.bottleCapacity.max.rating}
                         onChange={(e) => {
@@ -1603,7 +1565,6 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1615,9 +1576,9 @@ const SpmDashboard = (props) => {
                 </tbody>
               </table>
             </div>
-            <div className='buttons'>
+            <div className="buttons">
               <button
-                className='backBtn'
+                className="backBtn"
                 onClick={() => {
                   setOpenEditTargets(false);
                   setOpenSetRating(false);
@@ -1626,7 +1587,7 @@ const SpmDashboard = (props) => {
                 Close
               </button>
               <button
-                className='saveBtn'
+                className="saveBtn"
                 onClick={() => {
                   setForNextBtn(false);
                   console.log(config);

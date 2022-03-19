@@ -129,15 +129,11 @@ export const forgotPassword = async (data) => {
 };
 
 export const getUserInfo = () => {
-  try {
-    return async (dispatch) => {
-      const result = await axios.get(config().userInfoUrl);
-      dispatch(setProfile(result.data.data));
-      return result;
-    };
-  } catch (e) {
-    return e.response;
-  }
+  return async (dispatch) => {
+    const result = await axios.get(config().userInfoUrl);
+    dispatch(setProfile(result.data.data));
+    return result;
+  };
 };
 
 export const getActiveWareHouses = async () => {
@@ -231,15 +227,11 @@ export const setUserLocation = (data) => {
 };
 
 export const getAllUsers = () => {
-  try {
-    return async (dispatch) => {
-      const result = await axios.get(config().getAllUsersUrl);
-      dispatch(setAllUsers(result.data.data));
-      return result;
-    };
-  } catch (e) {
-    return e.response;
-  }
+  return async (dispatch) => {
+    const result = await axios.get(config().getAllUsersUrl);
+    dispatch(setAllUsers(result.data.data));
+    return result;
+  };
 };
 
 export const postUserLocation = async (data) => {

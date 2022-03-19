@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import ViewInventory from "../../components/viewInventory";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useTranslation } from "react-i18next";
 
 const ViewProductContainer = (props) => {
-  const { t, i18n } = useTranslation();
-  const [inventories, setInventories] = useState(props.location.state.data);
+  const { t } = useTranslation();
+  const inventories = props.location.state.data;
   return (
     <div className='container-fluid p-0'>
       <Header {...props} t={t} />
