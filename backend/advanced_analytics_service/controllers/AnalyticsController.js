@@ -879,6 +879,24 @@ async function calculateRating(value, schema) {
   return 0;
 }
 
+async function getSupplierTargets(rating) {
+  let targets = {
+    returnRateTarget: "N/A",
+    leadTimeTarget: "N/A",
+    storageCapacityTarget: "N/A",
+    dirtyBottlesTarget: "N/A",
+    breakageTarget: "N/A"
+  };
+  if(rating) {
+    targets.returnRateTarget = rating.returnRate?.target ? rating.returnRate.target : "N/A";
+    targets.leadTimeTarget = rating.leadTime?.target ? rating.leadTime.target : "N/A";
+    targets.storageCapacityTarget = rating.bottleCapacity?.target ? rating.bottleCapacity.target : "N/A";
+    targets.dirtyBottlesTarget = rating.dirtyBottle?.target ? rating.dirtyBottle.target : "N/A";
+    targets.breakageTarget = rating.breakageBottle?.target ? rating.breakageBottle.target : "N/A";
+  }
+  return targets;
+}
+
 /**
  * getOverviewStats.
  *
@@ -2311,16 +2329,23 @@ exports.getSupplierPerformance = [
           breakage: supplier.breakage,
         };
         // console.log({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
-        let ratingSchema = await ConfigModel.findOne({ vendorId: supplier.id });
-        if (!ratingSchema)
-          ratingSchema = await ConfigModel.findOne({
+        let ratingSchema = await ConfigModel.find({ vendorId: supplier.id }).sort({createdAt: -1}).limit(1);
+        if (!ratingSchema.length) {
+          ratingSchema = await ConfigModel.find({
             district: supplier.postalAddress?.split(",")[1].trim(),
             vendorType: supplier.type,
-          });
+          }).sort({createdAt: -1}).limit(1);
+        }
+          
+        if(ratingSchema.length) ratingSchema = ratingSchema[0];
+        else ratingSchema = null;
+        console.log("Rating schema - ", ratingSchema);
+
         supplier.rating = await getSupplierRatings(
           supplierDetails,
           ratingSchema
         );
+        supplier.targets = await getSupplierTargets(ratingSchema);
       }
 
       client.set(

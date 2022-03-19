@@ -107,6 +107,7 @@ const SpmDashboard = (props) => {
           location: props.location,
         })
       ); //
+      console.log("Return data - ", result);
       let _spm = result.data;
       if (_spm.length) {
         sortSupplierPeformances(_spm);
@@ -321,7 +322,7 @@ const SpmDashboard = (props) => {
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
                               <td>{""}</td>
-                              <td>{config?.returnRate?.target}</td>
+                              <td>{perf?.targets?.returnRateTarget}</td>
                             </tr>
                             <tr>
                               <td scope='row' style={{ color: "#A20134" }}>
@@ -344,7 +345,7 @@ const SpmDashboard = (props) => {
                                   : 0}
                               </td>
                               <td></td>
-                              <td>{config?.leadTime?.target}</td>
+                              <td>{perf?.targets?.leadTimeTarget}</td>
                             </tr>
                             <tr>
                               <td scope='row' style={{ color: "#A20134" }}>
@@ -360,7 +361,7 @@ const SpmDashboard = (props) => {
                                 </span> */}
                               </td>
                               <td></td>
-                              <td>{config?.storageCapacity?.target || 0}</td>
+                              <td>{perf?.targets?.storageCapacityTarget || 0}</td>
                             </tr>
                             <tr>
                               <td scope='row' style={{ color: "#A20134" }}>
@@ -368,7 +369,7 @@ const SpmDashboard = (props) => {
                               </td>
                               <td>{perf.dirtyBottles}%</td>
                               <td></td>
-                              <td>{config?.dirtyBottle?.target}</td>
+                              <td>{perf?.targets?.dirtyBottlesTarget}</td>
                             </tr>
                             <tr>
                               <td scope='row' style={{ color: "#A20134" }}>
@@ -376,7 +377,7 @@ const SpmDashboard = (props) => {
                               </td>
                               <td>{perf.breakage}%</td>
                               <td></td>
-                              <td>{config?.breakageBottle?.target}</td>
+                              <td>{perf?.targets?.breakageTarget}</td>
                             </tr>
                           </tbody>
                         </table>
