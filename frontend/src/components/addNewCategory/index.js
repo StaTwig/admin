@@ -51,7 +51,6 @@ const AddCategory = (props) => {
     }
   };
   const addProduct = async () => {
-    // const data = { manufacturer, categoryName, productCategory: category, productSubCategory: subCategory, storageConditions, description };
     const isValid = validation();
     if (isValid) {
       let formData = new FormData();
@@ -101,12 +100,15 @@ const AddCategory = (props) => {
                         type='file'
                         className='select'
                         onChange={setFile}
-                        accept="image/*"
+                        accept='image/*'
                       />{" "}
                     </label>
                   </div>
                   {image && (
-                    <span className="error-msg text-dangerS" style={{ color: "#d80909", fontSize: "15px" }}>
+                    <span
+                      className='error-msg text-dangerS'
+                      style={{ color: "#d80909", fontSize: "15px" }}
+                    >
                       {image}
                     </span>
                   )}
@@ -125,8 +127,9 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type='text'
-                    className={`form-control ${catNameErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${
+                      catNameErr ? "border-danger" : ""
+                    }`}
                     name='product'
                     placeholder={t("enter") + " " + t("category_name")}
                     onChange={(e) => {
@@ -148,8 +151,9 @@ const AddCategory = (props) => {
                   </label>
                   <input
                     type='text'
-                    className={`form-control ${catDescErr ? "border-danger" : ""
-                      }`}
+                    className={`form-control ${
+                      catDescErr ? "border-danger" : ""
+                    }`}
                     name='product'
                     placeholder={t("enter") + " " + t("category_description")}
                     onChange={(e) => {
@@ -174,8 +178,9 @@ const AddCategory = (props) => {
             </button>
           </Link>
           <button
-            className={`btn ${BtnVisible ? "btn-orange" : "add-btn-orange"
-              } fontSize20 font-bold mb-2 mt-0`}
+            className={`btn ${
+              BtnVisible ? "btn-orange" : "add-btn-orange"
+            } fontSize20 font-bold mb-2 mt-0`}
             // onClick={() => {
             //   BtnVisible && addProduct;
             // }}
@@ -192,10 +197,7 @@ const AddCategory = (props) => {
             close={() => closeModal()}
             size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
-            <ProductPopUp
-              onHide={closeModal}
-              t={t} //FailurePopUp
-            />
+            <ProductPopUp onHide={closeModal} t={t} />
           </Modal>
         )}
       </div>

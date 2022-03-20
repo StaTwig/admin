@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import back from "../../assets/icons/back.png";
 import { useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import { isAuthenticated } from "../../utils/commonHelper";
 
 const ViewOrder = (props) => {
   const { order, t } = props;
-  const [alertMessage, setAlertMessage] = useState({});
   if (!isAuthenticated("viewPO")) props.history.push(`/profile`);
   const isEnabled = isAuthenticated("acceptRejectOrder");
   const user = useSelector((state) => {
@@ -49,17 +48,12 @@ const ViewOrder = (props) => {
     status = t("partiallyfilled");
   } else if (order.poStatus === "CANCELLED") {
     statusStyle = "bg-secondary";
-    status = t('cancelled');
+    status = t("cancelled");
   }
 
   const onPOStatusChange = async (status) => {
     const data = { status, orderID: order.id };
-    const result = await changePOStatus(data);
-    if (result.status === 200) {
-      setAlertMessage("Success");
-    } else {
-      setAlertMessage("Fail");
-    }
+    await changePOStatus(data);
   };
 
   return (
@@ -68,7 +62,7 @@ const ViewOrder = (props) => {
         <h1 className='breadcrumb'>{t("view_order")}</h1>
 
         {order?.supplier?.supplierOrganisation === user?.organisationId &&
-          order.poStatus === "CREATED" ? (
+        order.poStatus === "CREATED" ? (
           <div className='d-flex'>
             {isEnabled && (
               <>
@@ -101,7 +95,7 @@ const ViewOrder = (props) => {
           </div>
         ) : (
           <div className='d-flex'>
-            {status == t("sent") &&
+            {status === t("sent") && (
               <Link to={`/orders`}>
                 <button
                   className='btn btn-orange fontSize20 font-bold mr-4 mt-2'
@@ -111,7 +105,7 @@ const ViewOrder = (props) => {
                   {t("cancel_order")}
                 </button>
               </Link>
-            }
+            )}
             <Link to={`/orders`}>
               <button className='btn btn-outline-primary mt-2'>
                 <img src={back} height='17' className='mr-2 mb-1' alt='Back' />
@@ -206,14 +200,14 @@ const ViewOrder = (props) => {
                   <span className='col-4'>{t("delivery_location")}</span>
                   <span className=' col text-dark '>
                     {order &&
-                      order.customer &&
-                      order.customer.warehouse &&
-                      order.customer.warehouse.warehouseAddress
+                    order.customer &&
+                    order.customer.warehouse &&
+                    order.customer.warehouse.warehouseAddress
                       ? order.customer.warehouse.title +
-                      " / " +
-                      order.customer.warehouse.warehouseAddress.firstLine +
-                      " " +
-                      order.customer.warehouse.warehouseAddress.city
+                        " / " +
+                        order.customer.warehouse.warehouseAddress.firstLine +
+                        " " +
+                        order.customer.warehouse.warehouseAddress.city
                       : null}
                   </span>
                 </div>
@@ -221,10 +215,9 @@ const ViewOrder = (props) => {
                 <div className='col row'>
                   <span className='col-4'>{t("country")}</span>
                   <span className=' col text-dark '>
-                    {order &&
-                      order.customer &&
-                      Boolean(order.customer?.country) ? order.customer?.country : ""
-                    }
+                    {order && order.customer && Boolean(order.customer?.country)
+                      ? order.customer?.country
+                      : ""}
                   </span>
                 </div>
 
@@ -232,9 +225,7 @@ const ViewOrder = (props) => {
                 <div className='col row col-6'>
                   <span className='col-4'>{t("region")}</span>
                   <span className=' col text-dark '>
-                    {order &&
-                      order.customer &&
-                      order.customer.region}
+                    {order && order.customer && order.customer.region}
                   </span>
                 </div>
               </div>
@@ -247,13 +238,20 @@ const ViewOrder = (props) => {
           </span>
           <div className='row mt-3'>
             {order?.products?.map((product, index) => {
-              let pr = order.productDetails.filter(d => product.productId === d.id);
+              let pr = order.productDetails.filter(
+                (d) => product.productId === d.id
+              );
               let prd = pr.length > 0 ? pr[0] : {};
-              let uom = prd?.unitofMeasure ? typeof prd?.unitofMeasure === "string" ? JSON.parse(prd?.unitofMeasure) : prd?.unitofMeasure : product.unitofMeasure;
+              let uom = prd?.unitofMeasure
+                ? typeof prd?.unitofMeasure === "string"
+                  ? JSON.parse(prd?.unitofMeasure)
+                  : prd?.unitofMeasure
+                : product.unitofMeasure;
               return (
                 <div
-                  className={`bg-white shadow padding-added ${index >= 0 ? "mb-5 mr-4" : ""
-                    } `}
+                  className={`bg-white shadow padding-added ${
+                    index >= 0 ? "mb-5 mr-4" : ""
+                  } `}
                   style={{ width: "27%" }}
                   key={index}
                 >
@@ -266,12 +264,16 @@ const ViewOrder = (props) => {
                   </div>
                   <div className='row  p-1'>
                     <span className='col'>{t("product_category")}</span>
-                    <span className=' col text-dark '>{prd?.type ? prd?.type : product.type}</span>
+                    <span className=' col text-dark '>
+                      {prd?.type ? prd?.type : product.type}
+                    </span>
                   </div>
                   <div className='row  p-1'>
                     <span className='col'>{t("manufacturer")}</span>
                     <span className=' col text-dark '>
-                      {prd.manufacturer ? prd.manufacturer : product.manufacturer}
+                      {prd.manufacturer
+                        ? prd.manufacturer
+                        : product.manufacturer}
                     </span>
                   </div>
                   <div className='row  p-1'>
@@ -279,16 +281,12 @@ const ViewOrder = (props) => {
                     <span className=' col text-dark '>
                       {product.productQuantity}
                       <span>{"("}</span>
-                      {uom ? (
-                        <span>{uom.name}</span>
-                      ) : (
-                        ""
-                      )}
+                      {uom ? <span>{uom.name}</span> : ""}
                       <span>{")"}</span>
                     </span>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>

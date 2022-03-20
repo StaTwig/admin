@@ -64,33 +64,33 @@ const VerifyInventory = (props) => {
   const schemaClass = "ml-1 text-muted text-review-column";
 
   return (
-    <div className="verifyinventory">
-      <div className="d-flex flex-row justify-content-between">
-        <h1 className="breadcrumb mt-2">{t("review_inventory")}</h1>
+    <div className='verifyinventory'>
+      <div className='d-flex flex-row justify-content-between'>
+        <h1 className='breadcrumb mt-2'>{t("review_inventory")}</h1>
         {/* <button type="button" className="btn btn-outline-info">
           Export
         </button> */}
       </div>
-      <div className="card">
-        <div className="card-body">
-          <h5 className="head ml-1">{t("description_of_goods")}</h5>
+      <div className='card'>
+        <div className='card-body'>
+          <h5 className='head ml-1'>{t("description_of_goods")}</h5>
           <div>
-            <div className="row p1-1 mt-4">
-              <span className="col-3" style={{ flex: "0 0 20%" }}>
-                <img src={Product} width="15" height="15" alt="Product" />
+            <div className='row p1-1 mt-4'>
+              <span className='col-3' style={{ flex: "0 0 20%" }}>
+                <img src={Product} width='15' height='15' alt='Product' />
                 <span className={schemaClass}>{t("product_name")}</span>
               </span>
-              <span className="col-2" style={{ flex: "0 0 14.666667%" }}>
+              <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
                 <img
                   src={Manufacturer}
-                  width="15"
-                  height="15"
+                  width='15'
+                  height='15'
                   alt={t("manufacturer")}
                 />
                 <span className={schemaClass}>{t("manufacturer")}</span>
               </span>
               <span
-                className="col-1"
+                className='col-1'
                 style={{
                   position: "relative",
                   left: "-16px",
@@ -98,32 +98,32 @@ const VerifyInventory = (props) => {
                   maxWidth: "11.333333%",
                 }}
               >
-                <img src={Quantity} width="15" height="15" alt="Quantity" />
+                <img src={Quantity} width='15' height='15' alt='Quantity' />
                 <span className={schemaClass}>{t("quantity")}</span>
               </span>
               <span
-                className="col-1"
+                className='col-1'
                 style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
               >
-                <img src={Mfg_date} width="15" height="15" alt="Date" />
+                <img src={Mfg_date} width='15' height='15' alt='Date' />
                 <span className={schemaClass}>{t("mfg_date")}</span>
               </span>
               <span
-                className="col-1"
+                className='col-1'
                 style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
               >
-                <img src={Expire} width="15" height="15" alt="Expiry Date" />
+                <img src={Expire} width='15' height='15' alt='Expiry Date' />
                 <span className={schemaClass}>{t("exp_date")}</span>
               </span>
               <span
-                className="col-2"
+                className='col-2'
                 style={{ flex: "0 0 15.666667%", maxWidth: "15.666667%" }}
               >
-                <img src={Batch} width="15" height="15" alt="Batch" />
+                <img src={Batch} width='15' height='15' alt='Batch' />
                 <span className={schemaClass}>{t("batch_no")}</span>
               </span>
               <span
-                className="col-2"
+                className='col-2'
                 style={{
                   position: "relative",
                   left: "-60px",
@@ -131,7 +131,7 @@ const VerifyInventory = (props) => {
                   maxWidth: "15.666667%",
                 }}
               >
-                <img src={Serial} width="15" height="15" alt="Serial" />
+                <img src={Serial} width='15' height='15' alt='Serial' />
                 <span className={schemaClass}>{t("serial_numbers")}</span>
               </span>
             </div>
@@ -145,7 +145,7 @@ const VerifyInventory = (props) => {
                 expiryMonth = `${
                   new Date(reviewInventory.expiryDate).getMonth() + 1
                 }`;
-              } else if (reviewInventory.expiryDate.length == 24) {
+              } else if (reviewInventory.expiryDate.length === 24) {
                 manufMonth = `${
                   new Date(
                     Date.parse(reviewInventory.manufacturingDate)
@@ -164,17 +164,17 @@ const VerifyInventory = (props) => {
                 ).getDate()}`;
               }
               return (
-                <div className="row p-1 mt-4" key={reviewInventory.productId}>
-                  <span className="col-3" style={{ flex: "0 0 20%" }}>
+                <div className='row p-1 mt-4' key={reviewInventory.productId}>
+                  <span className='col-3' style={{ flex: "0 0 20%" }}>
                     {reviewInventory.productName}
                   </span>
-                  <span className="col-2" style={{ flex: "0 0 14.666667%" }}>
+                  <span className='col-2' style={{ flex: "0 0 14.666667%" }}>
                     {reviewInventory.manufacturer
                       ? reviewInventory.manufacturer
                       : reviewInventory.manufacturerName}
                   </span>
                   <span
-                    className="col-1"
+                    className='col-1'
                     style={{
                       position: "relative",
                       left: "-16px",
@@ -192,7 +192,7 @@ const VerifyInventory = (props) => {
                     <span>{")"}</span>
                   </span>
                   <span
-                    className="col-1"
+                    className='col-1'
                     style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
                   >
                     {reviewInventory.manufacturingDate
@@ -204,7 +204,7 @@ const VerifyInventory = (props) => {
                       : ""}
                   </span>
                   <span
-                    className="col-1"
+                    className='col-1'
                     style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
                   >
                     {reviewInventory.expiryDate
@@ -219,7 +219,7 @@ const VerifyInventory = (props) => {
                     {reviewInventory.batchNumber}
                   </span>
                   <span
-                    className="col-2"
+                    className='col-2'
                     style={{
                       position: "relative",
                       left: "64px",
@@ -235,17 +235,17 @@ const VerifyInventory = (props) => {
           </div>
 
           <hr />
-          <div className="d-flex flex-row-reverse">
-            <button className="btn-primary btn" onClick={onAssign}>
+          <div className='d-flex flex-row-reverse'>
+            <button className='btn-primary btn' onClick={onAssign}>
               <b>{t("save")}</b>
             </button>
             {reviewInventories.length > 0 && reviewInventories[0].manufacturer && (
-              <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
+              <button className='btn-outline-dark btn mr-2' onClick={onEdit}>
                 <img
                   src={Pen}
-                  width="15"
-                  height="15"
-                  className="mr-3"
+                  width='15'
+                  height='15'
+                  className='mr-3'
                   alt={t("edit")}
                 />
                 <span>
@@ -256,7 +256,7 @@ const VerifyInventory = (props) => {
             {openCreatedInventory && (
               <Modal
                 close={() => closeModal()}
-                size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
               >
                 <InventoryPopUp
                   onHide={closeModal} //FailurePopUp

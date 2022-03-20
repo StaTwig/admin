@@ -4,11 +4,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { updateWarehouse } from "../../actions/userActions";
 import SuccessPopup from "../../shared/PopUp/successPopUp";
 import Modal from "../../shared/modal";
-// import React, { useState,useRef } from 'react';
 import { getWarehouseById } from "../../actions/userActions";
 import {
   fetchAllRegions,
-  fetchCountriesByRegion,
   fetchStateByCountry,
   fetchCitiesByState,
 } from "../../actions/productActions";
@@ -28,7 +26,6 @@ const EditLocation = (props) => {
   const [addedLocationModal, setAddedLocationModal] = useState(false);
 
   const [allregions, setallregions] = useState([]);
-  const [allCountries, setallCountries] = useState([]);
   const [allState, setallState] = useState([]);
   const [allCity, setallCity] = useState([]);
 
@@ -78,11 +75,6 @@ const EditLocation = (props) => {
     fetchAllState1();
     fetchData();
   }, [id]);
-
-  async function fetchAllCountries1(id) {
-    let res = await fetchCountriesByRegion(id);
-    setallCountries(res.data);
-  }
 
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
@@ -650,8 +642,7 @@ const EditLocation = (props) => {
             size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <SuccessPopup
-              
-            t={props.t}
+              t={props.t}
               onHide={closeModalAddedLocation} //FailurePopUp
             />
           </Modal>

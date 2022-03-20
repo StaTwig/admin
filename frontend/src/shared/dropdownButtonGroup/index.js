@@ -25,10 +25,10 @@ const DropdownButtonGroup = (props) => {
   });
   const useParse = name && name.includes("<");
   return (
-    <div className='custom-dropdown' ref={ref}>
+    <div className="custom-dropdown" ref={ref}>
       {isText ? (
         <input
-          className='btn-custom-dropdown form-control'
+          className="btn-custom-dropdown form-control"
           onBlur={() =>
             setTimeout(() => {
               if (value) changeFn(value, "y");
@@ -40,7 +40,7 @@ const DropdownButtonGroup = (props) => {
           }
           onChange={(e) => changeFn(e.target.value)}
           value={value}
-          type='text'
+          type="text"
           onFocus={() => groups.length && setMenu(true)}
           placeholder={placeholder}
           onClick={() => groups.length && setMenu(true)}
@@ -52,12 +52,12 @@ const DropdownButtonGroup = (props) => {
             name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
           }
           // className={`btn-custom-dropdown ${menu && 'active'}`}
-          role='button'
-          type='button'
+          role="button"
+          type="button"
           // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          <div className='loc-text'>
+          <div className="loc-text">
             <div className={`${name?.length > 20 && "textNeg"}`}>
               {useParse ? parse(name) : name.split("|")[0]}
             </div>
@@ -69,7 +69,7 @@ const DropdownButtonGroup = (props) => {
           </div>
           <img
             src={arrowImg ? arrowImg : upDownArrow}
-            alt='downarrow'
+            alt="downarrow"
             className={`${
               props.labelType === "lastmile" ? "lastmile-drop-img" : "customwh"
             }`}
@@ -79,14 +79,21 @@ const DropdownButtonGroup = (props) => {
       {menu && !disabled && (
         <div
           ref={ref}
-          className={`dropdown-menu show transform-group ${dClass}`}
+          // className={`${
+          //   props.labelType === "lastmile"
+          //     ? `dropdown-menu show transform-group ${dClass}`
+          //     : `dropdown-menu show transform-group ${dClass}`
+          // } show transform-group ${dClass}`}
+          className={`${
+            props.labelType === "lastmile" ? "" : "drop-top dropdown-menu-sm"
+          } dropdown-menu show transform-group ${dClass}`}
         >
           {groups &&
             groups.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className='dropdown-item p-1'
+                    className="dropdown-item p-1"
                     onClick={() => {
                       onSelect(item);
                       setMenu(false);

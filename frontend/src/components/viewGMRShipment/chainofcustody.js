@@ -3,12 +3,9 @@ import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
 import { config } from "../../config";
-// import { getAddress } from "../../utils/commonHelper";
-
 const ChainOfCustody = (props) => {
   const { t } = props;
   const configObject = config();
-  // const [imageUrl,setImageUrl] = useState(configObject.getImage);
   const imageUrl = configObject.getImage;
   const list = [];
 
@@ -239,7 +236,9 @@ const ChainOfCustody = (props) => {
                 <div className='big-dot bg-info ml-4'></div>
                 <div className='col'>
                   <div className='color mb-3'>
-                    {custody.status === "UPDATED" ? t("UPDATED") : t("UPDATED")}
+                    {custody?.status === "UPDATED"
+                      ? t("UPDATED")
+                      : t("UPDATED")}
                   </div>
                   <div className='col panel  chain chainpanle'>
                     <div className='row justify-content-between'>

@@ -19,7 +19,7 @@ const ShipmentContainer = (props) => {
       setShipments(results);
       return () => dispatch(resetShipments([]));
     })();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className='container-fluid p-0'>
