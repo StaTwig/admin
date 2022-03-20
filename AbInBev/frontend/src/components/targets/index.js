@@ -133,7 +133,7 @@ const Targets = (props) => {
     }
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     if (isChecked.length === 0 && !checkedAllDis && !retTargetEdit) {
       alert("Select something");
       return;
