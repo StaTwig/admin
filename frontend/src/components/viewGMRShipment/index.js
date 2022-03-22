@@ -17,6 +17,7 @@ import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
 import { customReceiveShipment } from "../../actions/shipmentActions";
 import SuccessPopup from "./successPopup";
 import FailedPopup from "./FailedPopup";
+
 const ViewGMRShipment = (props) => {
   const { t } = props;
   const [menuShip, setMenuShip] = useState(false);
@@ -122,6 +123,18 @@ const ViewGMRShipment = (props) => {
             menuProduct={menuProduct}
             setMenuProduct={setMenuProduct}
           />
+          {props.imagesData.length > 0 && (
+            <>
+              <h6 className='heading mt-4 mb-3'>{t("images")}</h6>
+              <div className='col panel commonpanle mb-3'>
+                {props.imagesData.map((value, index) => (
+                  <div className='col-sm' key={index}>
+                    <img src={value} className='img-fluid p-1' alt='Shipment' />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <div className='col-sm-8'>
           <div className='d-flex'>

@@ -211,7 +211,6 @@ const ChainOfCustody = (props) => {
                               src={custody.image}
                               alt='Shipment Update'
                               className='img-fluid'
-                              width={400}
                             />
                           ) : (
                             <strong>N / A</strong>
@@ -316,7 +315,6 @@ const ChainOfCustody = (props) => {
                                 src={custody.image}
                                 alt='Shipment Update'
                                 className='img-fluid mx-auto'
-                                width={400}
                               />
                             </div>
                           ) : (
