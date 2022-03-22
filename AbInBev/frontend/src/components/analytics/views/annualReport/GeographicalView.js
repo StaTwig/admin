@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
+import React, { useState, useEffect, useMemo } from "react";
+import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 
-import '../../style.scss';
-import bottlesIcon from '../../../../assets/becks_330ml.png';
-import DownArrow from '../../../../assets/down_arrow.png';
+import "../../style.scss";
+import bottlesIcon from "../../../../assets/becks_330ml.png";
+import DownArrow from "../../../../assets/down_arrow.png";
 import {
   getAnalyticsAllStats,
   getAnalyticsByBrand,
-} from '../../../../actions/analyticsAction';
-import { useDispatch } from 'react-redux';
+} from "../../../../actions/analyticsAction";
+import { useDispatch } from "react-redux";
 
 const GeographicalView = (props) => {
   const { states, SKUStats, sku, viewName, brands, brandsArr, Otype } = props;
@@ -35,35 +35,35 @@ const GeographicalView = (props) => {
         (props.params?.district && props.params?.state) ||
         props.params?.year
       ) {
-        let cond = '';
+        let cond = "";
         if (props.params?.district)
-          cond += '?district=' + props.params?.district;
+          cond += "?district=" + props.params?.district;
 
         if (props.params?.year) {
-          if (cond) cond += '&';
-          else cond += '?';
+          if (cond) cond += "&";
+          else cond += "?";
           cond +=
-            'date_filter_type=' +
+            "date_filter_type=" +
             (props.params?.date_filter_type
               ? props.params?.date_filter_type
-              : 'by_yearly') +
-            '&year=' +
+              : "by_yearly") +
+            "&year=" +
             props.params?.year +
-            '&month=' +
+            "&month=" +
             props.params?.month +
-            '&quarter=' +
+            "&quarter=" +
             props.params?.quarter;
         }
 
         if (sku) {
-          if (cond) cond += '&';
-          else cond += '?';
-          cond += '&sku=' + sku;
+          if (cond) cond += "&";
+          else cond += "?";
+          cond += "&sku=" + sku;
         }
         if (Otype) {
-          if (cond) cond += '&';
-          else cond += '?';
-          cond += '&orgType=' + Otype;
+          if (cond) cond += "&";
+          else cond += "?";
+          cond += "&orgType=" + Otype;
         }
         if (cond) {
           (async () => {
@@ -79,15 +79,15 @@ const GeographicalView = (props) => {
         } else setAnalytics(SKUStats);
       } else {
         let n = SKUStats.filter((a) => a.externalId == sku);
-        if (sku == '') setAnalytics(SKUStats);
+        if (sku == "") setAnalytics(SKUStats);
         else setAnalytics(n);
       }
     } else setAnalytics(SKUStats);
-    requestSort('returnRate');
+    requestSort("returnRate");
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {
-    props.onViewChange('DETAILED_GEO_VIEW', param);
+    props.onViewChange("DETAILED_GEO_VIEW", param);
   };
 
   const useSortableData = (items, config = null) => {
@@ -98,10 +98,10 @@ const GeographicalView = (props) => {
       if (sortConfig !== null) {
         sortableItems.sort((a, b) => {
           if (parseInt(a[sortConfig.key]) < parseInt(b[sortConfig.key])) {
-            return sortConfig.direction === 'ascending' ? -1 : 1;
+            return sortConfig.direction === "ascending" ? -1 : 1;
           }
           if (parseInt(a[sortConfig.key]) > parseInt(b[sortConfig.key])) {
-            return sortConfig.direction === 'ascending' ? 1 : -1;
+            return sortConfig.direction === "ascending" ? 1 : -1;
           }
           return 0;
         });
@@ -110,13 +110,13 @@ const GeographicalView = (props) => {
     }, [items, sortConfig]);
 
     const requestSort = (key) => {
-      let direction = 'ascending';
+      let direction = "ascending";
       if (
         sortConfig &&
         sortConfig.key === key &&
-        sortConfig.direction === 'ascending'
+        sortConfig.direction === "ascending"
       ) {
-        direction = 'descending';
+        direction = "descending";
       }
       setSortConfig({ key, direction });
     };
@@ -144,29 +144,29 @@ const GeographicalView = (props) => {
               <th scope="col">SKU</th>
               <th
                 scope="col"
-                onClick={() => requestSort('sales')}
-                className={getClassNamesFor('sales')}
+                onClick={() => requestSort("sales")}
+                className={getClassNamesFor("sales")}
               >
                 Sales
               </th>
               <th
                 scope="col"
-                onClick={() => requestSort('returns')}
-                className={getClassNamesFor('returns')}
+                onClick={() => requestSort("returns")}
+                className={getClassNamesFor("returns")}
               >
                 Return Bottles
               </th>
               <th
                 scope="col"
-                onClick={() => requestSort('targetSales')}
-                className={getClassNamesFor('targetSales')}
+                onClick={() => requestSort("targetSales")}
+                className={getClassNamesFor("targetSales")}
               >
                 Return Target
               </th>
               <th
                 scope="col"
-                onClick={() => requestSort('returnRate')}
-                className={getClassNamesFor('returnRate')}
+                onClick={() => requestSort("returnRate")}
+                className={getClassNamesFor("returnRate")}
               >
                 Return Rate Percentage
               </th>
@@ -187,7 +187,7 @@ const GeographicalView = (props) => {
                           src={
                             brandsArr[
                               brands.indexOf(
-                                analytic.manufacturer?.split(' ').join(''),
+                                analytic.manufacturer?.split(" ").join("")
                               )
                             ]
                           }
@@ -201,18 +201,23 @@ const GeographicalView = (props) => {
                           className="profileTitle"
                           onClick={() => showDetailedGeoView(analytic)}
                         >
-                          {analytic.manufacturer + ' - ' + analytic.name}
+                          {analytic.manufacturer + " - " + analytic.name}
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td>{analytic?.sales.toLocaleString('en-IN')}</td>
+                  <td>
+                    {analytic.sales && analytic.sales.toLocaleString("en-IN")}
+                  </td>
                   <td>
                     {analytic.returns
-                      ? analytic.returns.toLocaleString('en-IN')
+                      ? analytic.returns.toLocaleString("en-IN")
                       : 0}
                   </td>
-                  <td>{analytic.targetSales?analytic.targetSales.toLocaleString('en-IN'):0}</td>
+                  <td>
+                    {analytic.targetSales &&
+                      analytic.targetSales.toLocaleString("en-IN")}
+                  </td>
                   <td>
                     {!isNaN(analytic.returnRate) ? analytic.returnRate : 0}%
                   </td>
