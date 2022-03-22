@@ -32,9 +32,9 @@ const EditRow = (props) => {
   const new_products = [];
 
   if (typeof products != "undefined" && typeof productsList != "undefined") {
-    for (var i = 0; i < products.length; i++) {
+    for (var i = 0; i < products?.length; i++) {
       let check = false;
-      for (var j = 0; j < productsList.length; j++) {
+      for (var j = 0; j < productsList?.length; j++) {
         if (products[i].label === productsList[j].productName) {
           check = true;
           break;
@@ -57,13 +57,13 @@ const EditRow = (props) => {
     typeof productsList != undefined
   ) {
     let qty;
-    for (let i = 0; i < productsList.length; i++) {
+    for (let i = 0; i < productsList?.length; i++) {
       if (prod.name === productsList[i].productName) {
         qty = String(productsList[i].quantity);
         break;
       }
     }
-    if (i < productsList.length) {
+    if (i < productsList?.length) {
       prod.productQuantity = qty;
       handleQuantityChange(prod.productQuantity, index);
       updateQuantity();
