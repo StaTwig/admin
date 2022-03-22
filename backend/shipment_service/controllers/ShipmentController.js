@@ -1408,15 +1408,15 @@ exports.customReceiveShipment = [
       };
       const token =
         req.headers["x-access-token"] || req.headers["authorization"];
-      await axios.put(
-        `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
-        bc_data,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      // await axios.put(
+      //   `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
+      //   bc_data,
+      //   {
+      //     headers: {
+      //       Authorization: token,
+      //     },
+      //   }
+      // );
 
       const event_data = {
         eventID: cuid(),
@@ -2021,12 +2021,25 @@ exports.viewShipmentGmr = [
           const shipment = await ShipmentModel.findOne({
             id: req.query.shipmentId,
           });
-          const startTime = shipment.createdAt;
+          console.log("Shipment ", shipment);
+          const startTime = shipment.shippingDate;
           let endTime = shipment.actualDeliveryDate;
           if (shipment.status === "CREATED") {
-            endTime = new Date();
+            endTime = new Date().toISOString();
           }
-          saveTripDetails(shipment.airWayBillNo, startTime, endTime);
+          console.log(
+            "GMR API CALL ",
+            shipment.id,
+            shipment.airWayBillNo,
+            startTime,
+            endTime
+          );
+          saveTripDetails(
+            shipment.id,
+            shipment.airWayBillNo,
+            startTime,
+            endTime
+          );
           return apiResponse.successResponseWithData(
             res,
             "View Shipment Details",
@@ -5057,6 +5070,11 @@ exports.sensorHistory = [
         (
           Math.max(...arrayLogs.map((sensor) => sensor.temperature)) + 2
         ).toFixed(2) || 0;
+      let avg = 0;
+      for (const el of arrayLogs) {
+        avg += el.temperature;
+      }
+      avg = (avg / arrayLogs.length).toFixed(2);
       return apiResponse.successResponseWithData(res, "Sensor History", {
         page: page,
         limit: limit,
@@ -5065,6 +5083,7 @@ exports.sensorHistory = [
         metaData: {
           min,
           max,
+          avg,
         },
       });
     } catch (err) {
