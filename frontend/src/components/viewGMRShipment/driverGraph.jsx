@@ -31,7 +31,7 @@ const DriverGraph = (props) => {
           <div className='panel-heading'>
             {avg ? (
               <h6 className='panel-title pl-2 pb-4'>
-                Average Trip Score : {avg || "N/A"}
+                Average Trip Score : {parseInt(avg) || "N/A"}
               </h6>
             ) : null}
           </div>
