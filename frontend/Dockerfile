@@ -11,7 +11,7 @@ COPY . /app/
 ENV ENVIRONMENT=test
 
 ENV NODE_ENV=production
- 
+
 RUN yarn run build 
 
 FROM nginx:stable-alpine

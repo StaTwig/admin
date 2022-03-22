@@ -9,7 +9,7 @@ import Spinner from "./containers/Spinner";
 
 const App = ({ history }) => {
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
       <div>
         <Spinner />
         <ConnectedRouter history={history}>{routes}</ConnectedRouter>

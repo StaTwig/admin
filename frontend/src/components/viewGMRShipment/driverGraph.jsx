@@ -26,12 +26,14 @@ const DriverGraph = (props) => {
       <div className='row'>
         <div
           className='col panel commonpanle align-middle'
-          style={{ height: "300px" }}
+          style={{ height: "320px" }}
         >
           <div className='panel-heading'>
-            <h6 className='panel-title pl-2'>
-              Average Trip Score : {avg || "N/A"}
-            </h6>
+            {avg ? (
+              <h6 className='panel-title pl-2 pb-4'>
+                Average Trip Score : {avg || "N/A"}
+              </h6>
+            ) : null}
           </div>
           <AreaChart
             colors={["#2596be", "#666"]}
