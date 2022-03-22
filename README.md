@@ -183,19 +183,20 @@ redis-cli -h <Hostname> -a StaTwig2021
 [ Traefik Article 📃](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/)
 
 
-## Test Coverage (https://docs.google.com/document/d/1jwXpneiggd7duiuxSUVbNvjywzQH0a7d1QBHnXM58NQ/edit#heading=h.31ne2bdq483w)
+## Test Coverage 
+[ Software Test Plan for Vaccine Ledger 📃](https://docs.google.com/document/d/1jwXpneiggd7duiuxSUVbNvjywzQH0a7d1QBHnXM58NQ/edit#heading=h.31ne2bdq483w)
 
 - System Test Plan:
-1.Functional Testing
-2.System Integration Testing
-3.Regression Testing
-4.UAT Support
-5.Automation of test suites, execution and maintenance
-6.Production Sanity Testing
-7.Performance/Load testing
-8.Device testing (Native apps for IOS and Android)
-9.Browser compatibility test
-10.API/Web services testing
+1. Functional Testing
+2. System Integration Testing
+3. Regression Testing
+4. UAT Support
+5. Automation of test suites, execution and maintenance
+6. Production Sanity Testing
+7. Performance/Load testing
+8. Device testing (Native apps for IOS and Android)
+9. Browser compatibility test
+10. API/Web services testing
 
 ## Test Strategy
 
