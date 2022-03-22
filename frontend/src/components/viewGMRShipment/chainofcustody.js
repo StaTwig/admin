@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
-
+import { formatDistanceToNow } from "date-fns";
 const ChainOfCustody = (props) => {
   const { t } = props;
   const [op, setOp] = useState("");
@@ -55,7 +55,7 @@ const ChainOfCustody = (props) => {
                   </div>
                   <div className='d-flex flex-column mr-5'>
                     <div className='emp'></div>
-                    <div>{custody.updatedOn}</div>
+                    <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                     <div></div>
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                         <div></div>
                       </div>
                     </div>
@@ -259,7 +259,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                         <div></div>
                       </div>
                     </div>
