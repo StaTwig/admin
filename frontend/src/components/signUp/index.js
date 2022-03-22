@@ -268,8 +268,7 @@ const FormPage = (props) => {
                     }) => (
                       <form
                         onSubmit={handleSubmit}
-                        onKeyDown={unWantedSubmit}
-                        className='mb-5'
+                        className="mb-5"
                       >
                         <div className='login-form mt-1 pl-5 pr-5 ml-5'>
                           <div className='card-title mr-5'>{t("signup")}</div>
