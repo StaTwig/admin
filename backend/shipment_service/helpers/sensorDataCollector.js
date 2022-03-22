@@ -148,22 +148,23 @@ exports.tripDetailsCall = async (plateId, start, end) => {
   }
 };
 
-exports.saveTripDetails = async (plateId, start, end) => {
+exports.saveTripDetails = async (shipmentId, plateId, start, end) => {
   const tripDetails = await this.tripDetailsCall(plateId, start, end);
   if (tripDetails) {
-    const oldShipment = await ShipmentModel.findOne({
-      vehicleId: plateId,
+    const currentShipment = await ShipmentModel.findOne({
+      id: shipmentId,
     });
-    if (JSON.stringify(tripDetails) !== JSON.stringify(oldShipment.trips)) {
-      await ShipmentModel.findOneAndUpdate(
-        { airWayBillNo: plateId },
+    console.log("Current Shipment ", tripDetails);
+    if (JSON.stringify(tripDetails) !== JSON.stringify(currentShipment.trips)) {
+      const result = await ShipmentModel.updateOne(
+        { id: shipmentId },
         {
           $set: {
             trips: tripDetails,
           },
-        },
-        { new: true, upsert: true, sort: { _id: -1 } }
+        }
       );
+      console.log("DATA UPDATED", result);
     }
   }
 };
