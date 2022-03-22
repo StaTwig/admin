@@ -3,7 +3,7 @@ import "./styles.scss";
 import Checked from "../../assets/icons/cancel.svg";
 
 const FailedPopUp = (props) => {
-  const { t, message , onHide } = props;
+  const { t, message, onHide } = props;
 
   return (
     <div className='popup'>
@@ -15,10 +15,10 @@ const FailedPopUp = (props) => {
           className='mb-3'
           alt='Checked'
         />
-        <div className='alert font-weight-bolder'> {t('fail')}!</div>
+        <div className='alert font-weight-bolder'> {t("fail")}!</div>
         <div className='data mb-3 text-center'>{message}</div>
         <button className='btn-primary btn mb-5' onClick={onHide}>
-        {t('try_again')}
+          {t("try_again")}
         </button>
       </div>
     </div>

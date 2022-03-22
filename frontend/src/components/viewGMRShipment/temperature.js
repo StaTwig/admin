@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LineChart } from "react-chartkick";
 import "chartkick/chart.js";
 import "./style.scss";
@@ -7,10 +7,20 @@ import ArrowForward from "@mui/icons-material/ArrowForwardIosRounded";
 import { temperatureGraph } from "../../actions/shipmentActions";
 
 const Chart = (props) => {
+  const [avg, setAvg] = useState(null);
+  const [intial, setInitial] = useState(null);
   const [min, setMin] = useState(100);
   const [max, setMax] = useState(0);
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState(false);
+  useEffect(() => {
+    async function fetchAvgTemperature() {
+      const result = await temperatureGraph(props.shipmentId, page);
+      setAvg(result.data.metaData.avg);
+      setInitial(result.data.graph);
+    }
+    fetchAvgTemperature();
+  }, [props.shipmentId]);
   const handlePrevHistory = () => {
     setPage(parseInt(page) + 1);
   };
@@ -33,13 +43,19 @@ const Chart = (props) => {
       fail(result.message);
     }
   }
+  console.log("AVG", avg);
   return (
     <>
       <div className='row mb-4 mt-0'>
         <div
           className='col panel commonpanle align-middle'
-          style={{ height: "300px" }}
+          style={{ height: "320px" }}
         >
+          {avg && !isNaN(avg) ? (
+            <h6 className='panel-title pl-2'>
+              Latest Average Temperature: {parseInt(avg) + " °C" || "N/A"}
+            </h6>
+          ) : null}
           <div className='d-flex justify-content-between mb-4 p-relative'>
             {nextPage ? (
               <div

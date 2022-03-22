@@ -2,26 +2,9 @@ import React, { useState } from "react";
 import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
-import { config } from "../../config";
+import { formatDistanceToNow } from "date-fns";
 const ChainOfCustody = (props) => {
   const { t } = props;
-  const configObject = config();
-  const imageUrl = configObject.getImage;
-  const list = [];
-
-  for (const [i, image] of props.imagesData.entries()) {
-    list.push(
-      <img
-        className='mr-3'
-        height='150'
-        width='150'
-        src={imageUrl + image}
-        alt='ImageURL'
-      ></img>
-    );
-    if (i === 1) break;
-  }
-
   const [op, setOp] = useState("");
   const shipmentData = props.shipments[0];
   return Object.keys(props.shipments).length === 0 || !props.shipments ? (
@@ -33,21 +16,23 @@ const ChainOfCustody = (props) => {
           <div className='row  mb-3' key={index}>
             <div className='col'>
               <div className='color mb-3'>
-                {custody.status === "CREATED" ? "SHIPPED" : "Shipped"}
+                {custody.status === "CREATED" ? t("shipped") : t("delivered")}
               </div>
               <div className='col panel  chain chainpanle'>
                 <div className='row justify-content-between'>
                   <div className='col'>
                     <div>
                       <strong>
-                        Shipment{" "}
-                        {custody.status === "CREATED" ? "Shipped" : "SHIPPED"}
+                        {t("shipment")}{" "}
+                        {custody.status === "CREATED"
+                          ? t("shipped")
+                          : t("delivered")}
                       </strong>
                     </div>
                     <h6 className='poheads potext mt-3 mb-3'>From</h6>
                     <div className=' d-flex flex-row p-1'>
                       <span className='w-100  text-secondary'>
-                        Organization Name{" "}
+                        {t("organisation_name")}{" "}
                       </span>
                       <span className='w-100 pl-2'>
                         {shipmentData.supplier.id}
@@ -55,40 +40,22 @@ const ChainOfCustody = (props) => {
                     </div>
                     <div className=' d-flex flex-row p-1'>
                       <span className='w-100 text-secondary'>
-                        Organization Location{" "}
+                        {t("organisation_location")}{" "}
                       </span>
                       <span className='w-100 pl-2 '>
                         {shipmentData.supplier.locationId}
                       </span>
                     </div>
-                    {/* <h6 className="poheads potext mt-3 mb-3">To</h6>
-
-                    <div className=" d-flex flex-row p-1">
-                      <span className="w-100 text-secondary">
-                        {" "}
-                        Organisation Name{" "}
-                      </span>
-                      <span className="w-100 pl-2">{shipmentData.receiver.org.name}</span>
-                    </div>
-                    <div className=" d-flex flex-row p-1">
-                      <span className="w-100 text-secondary">
-                        {" "}
-                        Organisation Location{" "}
-                      </span>
-                      <span className="w-100 pl-2">
-                        {getAddress(shipmentData.receiver.warehouse.warehouseAddress)}
-                      </span>
-                    </div> */}
                   </div>
                   <div className='col'>
                     <div className='emp'></div>
                     <div>
-                      Shipment ID : <strong>{shipmentData.id}</strong>
+                      {t("shipment_id")} : <strong>{shipmentData.id}</strong>
                     </div>
                   </div>
                   <div className='d-flex flex-column mr-5'>
                     <div className='emp'></div>
-                    <div>{custody.updatedOn}</div>
+                    <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                     <div></div>
                   </div>
                 </div>
@@ -101,7 +68,7 @@ const ChainOfCustody = (props) => {
                         props.setMenuShip(true);
                       }}
                     >
-                      View Shipment
+                      {t("view_shipment")}
                     </button>
                     <button
                       className='btn btn-orange dir'
@@ -110,7 +77,7 @@ const ChainOfCustody = (props) => {
                         props.setMenuProduct(true);
                       }}
                     >
-                      View Product List
+                      {t("view") + " " + t("product_list")}
                     </button>
                   </div>
                 ) : null}
@@ -152,16 +119,16 @@ const ChainOfCustody = (props) => {
                       <div className='col'>
                         <div>
                           <strong>
-                            Shipment{" "}
+                            {t("shipment")}{" "}
                             {custody.status === "RECEIVED"
-                              ? "Delivered"
-                              : "DELIVERED"}
+                              ? t("delivered")
+                              : t("shipped")}
                           </strong>
                         </div>
-                        <h6 className='poheads potext mt-3 mb-3'>To</h6>
+                        <h6 className='poheads potext mt-3 mb-3'>{t("to")}</h6>
                         <div className='d-flex flex-row p-1'>
                           <span className='w-75 text-secondary'>
-                            Organisation Name{" "}
+                            {t("organisation_name")}{" "}
                           </span>
                           <span className='w-75'>
                             {shipmentData?.receiver?.org?.name}
@@ -170,7 +137,7 @@ const ChainOfCustody = (props) => {
                         <div className='d-flex flex-row p-1'>
                           <span className='w-75 text-secondary'>
                             {" "}
-                            Organisation Location{" "}
+                            {t("organisation_location")}{" "}
                           </span>
                           <span className='w-75'>
                             {shipmentData?.receiver?.locationId}
@@ -180,26 +147,37 @@ const ChainOfCustody = (props) => {
                       <div className='col'>
                         <div className='emp'></div>
                         <div>
-                          Shipment ID : <strong>{shipmentData?.id}</strong>
+                          {t("shipment_id")} :{" "}
+                          <strong>{shipmentData?.id}</strong>
                         </div>
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                         <div></div>
                       </div>
                     </div>
                     {op === index ? (
                       <div className='row'>
                         <div className='column'>
-                          <h6 className='poheads potext mt-3 mb-3'>Comment*</h6>
+                          <h6 className='poheads potext mt-3 mb-3'>
+                            {t("comment")}**
+                          </h6>
                           {<div>{custody.updateComment}</div>}
                         </div>
                         <div className='column'>
                           <h6 className='poheads potext mt-3 mb-3'>
-                            UploadedImage
+                            {t("uploaded_image")}
                           </h6>
-                          {list}
+                          {custody?.image ? (
+                            <img
+                              src={custody.image}
+                              alt='Shipment Update'
+                              className='img-fluid'
+                            />
+                          ) : (
+                            <strong>N / A</strong>
+                          )}
                         </div>
                       </div>
                     ) : null}
@@ -245,26 +223,29 @@ const ChainOfCustody = (props) => {
                       <div className='col'>
                         <div>
                           <strong>
-                            Shipment{" "}
+                            {t("shipment")}{" "}
                             {custody.status === "UPDATED"
-                              ? "Updated"
-                              : "UPDATED"}
+                              ? t("updated")
+                              : t("updated")}
                           </strong>
                         </div>
                         <div className=' d-flex flex-row p-1'>
-                          <span className='w-75 text-secondary'> By </span>
+                          <span className='w-75 text-secondary'>
+                            {" "}
+                            {t("by")}{" "}
+                          </span>
                           <span className='w-75 '>{custody.updatedBy}</span>
                         </div>
                         <div className=' d-flex flex-row p-1'>
                           <span className='w-75 text-secondary'>
                             {" "}
-                            Organisation Name{" "}
+                            {t("organisation_name")}{" "}
                           </span>
                           <span className='w-75'>{custody.orgid}</span>
                         </div>
                         <div className=' d-flex flex-row p-1'>
                           <span className='w-75 text-secondary'>
-                            Updated Location{" "}
+                            {t("updated_location")}{" "}
                           </span>
                           <span className='w-75 '>{custody.updatedAt}</span>
                         </div>
@@ -272,26 +253,39 @@ const ChainOfCustody = (props) => {
                       <div className='col'>
                         <div className='emp'></div>
                         <div>
-                          Shipment ID : <strong>{shipmentData.id}</strong>
+                          {t("shipment_id")} :{" "}
+                          <strong>{shipmentData.id}</strong>
                         </div>
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
                         <div></div>
                       </div>
                     </div>
                     {op === index ? (
                       <div className='row'>
                         <div className='column'>
-                          <h6 className='poheads potext mt-3 mb-3'>Comment*</h6>
+                          <h6 className='poheads potext mt-3 mb-3'>
+                            {t("comment")}*
+                          </h6>
                           {<div>{custody.updateComment}</div>}
                         </div>
                         <div className='column'>
                           <h6 className='poheads potext mt-3 mb-3'>
-                            UploadedImage
+                            {t("uploaded_image")}
                           </h6>
-                          {list}
+                          {custody?.image ? (
+                            <div className='update-image-holder'>
+                              <img
+                                src={custody.image}
+                                alt='Shipment Update'
+                                className='img-fluid'
+                              />
+                            </div>
+                          ) : (
+                            <strong>N / A</strong>
+                          )}
                         </div>
                       </div>
                     ) : null}
