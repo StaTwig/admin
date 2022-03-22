@@ -2021,7 +2021,16 @@ exports.viewShipmentGmr = [
           const shipment = await ShipmentModel.findOne({
             id: req.query.shipmentId,
           });
-          console.log("Shipment ", shipment);
+          for (let i = 0; i < shipment.shipmentUpdates.length; i++) {
+            if (
+              shipment.shipmentUpdates[i]?.imageId &&
+              shipment.shipmentUpdates[i]?.imageId.length
+            ) {
+              shipment.shipmentUpdates[i].image = await getSignedUrl(
+                shipment.shipmentUpdates[i].imageId
+              );
+            }
+          }
           const startTime = shipment.shippingDate;
           let endTime = shipment.actualDeliveryDate;
           if (shipment.status === "CREATED") {
@@ -2511,7 +2520,10 @@ exports.chainOfCustody = [
               });
               for (let i = 0; i < shipments.length; i++) {
                 for (let j = 0; j < shipments[i].shipmentUpdates.length; j++) {
-                  if (shipments[i].shipmentUpdates[j]?.imageId) {
+                  if (
+                    shipments[i].shipmentUpdates[j]?.imageId &&
+                    shipments[i].shipmentUpdates[j].imageId.length
+                  ) {
                     shipments[i].shipmentUpdates[j].image = await getSignedUrl(
                       shipments[i].shipmentUpdates[j].imageId
                     );
