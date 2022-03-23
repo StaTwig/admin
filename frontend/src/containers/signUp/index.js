@@ -86,7 +86,7 @@ const SignupContainer = (props) => {
 
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
-      checkNcontinue();
+      // checkNcontinue();
     }
   };
 
@@ -119,6 +119,7 @@ const SignupContainer = (props) => {
         lastName={lastName}
         phone={phone}
         onSignup={checkNcontinue}
+        onKeyDown={checkNcontinue}
         adminAwaiting={adminAwaiting}
         onfirstNameChange={(e) => setFirstName(e.target.value)}
         errorMessage={errorMessage}
