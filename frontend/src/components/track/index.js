@@ -25,7 +25,6 @@ const Track = (props) => {
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
-    setTrackTraceData,
     searchData,
     resetData,
     lang,

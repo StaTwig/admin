@@ -661,14 +661,11 @@ exports.createShipment = [
             }
           }
         }
-
-        const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-        const updates = {
-          updatedOn: currDateTime,
+        data.shipmentUpdates = {
+          updatedOn: new Date().toISOString(),
           status: "CREATED",
           products: products,
         };
-        data.shipmentUpdates = updates;
         const event_data = {
           eventID: cuid(),
           eventTime: new Date().toISOString(),
@@ -856,14 +853,11 @@ exports.newShipment = [
       const shipmentId =
         shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
       data.id = shipmentId;
-
-      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      const updates = {
-        updatedOn: currDateTime,
+      data.shipmentUpdates = {
+        updatedOn: new Date().toISOString(),
         status: "CREATED",
         products: data.products,
       };
-      data.shipmentUpdates = updates;
       data.isCustom
         ? (data.vehicleId = data.airWayBillNo)
         : (data.vehicleId = null);
