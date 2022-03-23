@@ -1,6 +1,5 @@
-const apiResponse = require("../helpers/apiResponse");
-const date = require("date-and-time");
 require("dotenv").config();
+const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
@@ -2028,7 +2027,7 @@ exports.viewShipmentGmr = [
           const startTime = shipment.shippingDate;
           let endTime = shipment.actualDeliveryDate;
           if (shipment.status === "CREATED") {
-            endTime = new Date().toISOString();
+            endTime = shipment.expectedDeliveryDate;
           }
           console.log(
             "GMR API CALL ",

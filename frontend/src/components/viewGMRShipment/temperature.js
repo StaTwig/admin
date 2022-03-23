@@ -43,7 +43,6 @@ const Chart = (props) => {
       fail(result.message);
     }
   }
-  console.log("AVG", avg);
   return (
     <>
       <div className='row mb-4 mt-0'>
