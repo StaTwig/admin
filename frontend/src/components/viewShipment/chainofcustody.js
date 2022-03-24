@@ -78,7 +78,10 @@ const ChainOfCustody = (props) => {
                   </div>
                   <div className='d-flex flex-column mr-5'>
                     <div className='emp'></div>
-                    <div>{formatDistanceToNow(custody?.updatedOn)}</div>
+                    <div>
+                      {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                        " ago"}
+                    </div>
                     <div></div>
                   </div>
                 </div>
@@ -190,7 +193,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                         <div></div>
                       </div>
                     </div>
@@ -293,7 +299,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                         <div></div>
                       </div>
                     </div>

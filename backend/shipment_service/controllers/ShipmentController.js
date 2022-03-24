@@ -1,6 +1,5 @@
-const apiResponse = require("../helpers/apiResponse");
-const date = require("date-and-time");
 require("dotenv").config();
+const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
@@ -661,14 +660,11 @@ exports.createShipment = [
             }
           }
         }
-
-        const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-        const updates = {
-          updatedOn: currDateTime,
+        data.shipmentUpdates = {
+          updatedOn: new Date().toISOString(),
           status: "CREATED",
           products: products,
         };
-        data.shipmentUpdates = updates;
         const event_data = {
           eventID: cuid(),
           eventTime: new Date().toISOString(),
@@ -856,14 +852,11 @@ exports.newShipment = [
       const shipmentId =
         shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
       data.id = shipmentId;
-
-      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      const updates = {
-        updatedOn: currDateTime,
+      data.shipmentUpdates = {
+        updatedOn: new Date().toISOString(),
         status: "CREATED",
         products: data.products,
       };
-      data.shipmentUpdates = updates;
       data.isCustom
         ? (data.vehicleId = data.airWayBillNo)
         : (data.vehicleId = null);
@@ -2034,7 +2027,7 @@ exports.viewShipmentGmr = [
           const startTime = shipment.shippingDate;
           let endTime = shipment.actualDeliveryDate;
           if (shipment.status === "CREATED") {
-            endTime = new Date().toISOString();
+            endTime = shipment.expectedDeliveryDate;
           }
           console.log(
             "GMR API CALL ",

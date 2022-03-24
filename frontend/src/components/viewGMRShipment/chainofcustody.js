@@ -29,7 +29,7 @@ const ChainOfCustody = (props) => {
                           : t("delivered")}
                       </strong>
                     </div>
-                    <h6 className='poheads potext mt-3 mb-3'>From</h6>
+                    <h6 className='poheads potext mt-3 mb-3'>{t("from")}</h6>
                     <div className=' d-flex flex-row p-1'>
                       <span className='w-100  text-secondary'>
                         {t("organisation_name")}{" "}
@@ -48,38 +48,62 @@ const ChainOfCustody = (props) => {
                     </div>
                   </div>
                   <div className='col'>
-                    <div className='emp'></div>
                     <div>
                       {t("shipment_id")} : <strong>{shipmentData.id}</strong>
                     </div>
                   </div>
                   <div className='d-flex flex-column mr-5'>
-                    <div className='emp'></div>
-                    <div>{formatDistanceToNow(custody?.updatedOn)}</div>
-                    <div></div>
+                    <div>
+                      {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                        " ago"}
+                    </div>
                   </div>
                 </div>
                 {op === index ? (
-                  <div className='d-flex flex-row mt-4'>
-                    <button
-                      className='btn btn-main-blue dir mr-2'
-                      onClick={() => {
-                        props.setHighLight(true);
-                        props.setMenuShip(true);
-                      }}
-                    >
-                      {t("view_shipment")}
-                    </button>
-                    <button
-                      className='btn btn-orange dir'
-                      onClick={() => {
-                        props.setProductHighLight(true);
-                        props.setMenuProduct(true);
-                      }}
-                    >
-                      {t("view") + " " + t("product_list")}
-                    </button>
-                  </div>
+                  <>
+                    <div className='row'>
+                      <div className='column'>
+                        <h6 className='poheads potext mt-3 mb-3'>
+                          {t("comment")}*
+                        </h6>
+                        {<div>{custody.updateComment || "N/A"}</div>}
+                      </div>
+                      <div className='column'>
+                        <h6 className='poheads potext mt-3 mb-3'>
+                          {t("uploaded_image")}
+                        </h6>
+                        {custody?.image ? (
+                          <img
+                            src={custody.image}
+                            alt='Shipment Update'
+                            className='img-fluid'
+                          />
+                        ) : (
+                          <strong>N / A</strong>
+                        )}
+                      </div>
+                    </div>
+                    <div className='d-flex flex-row mt-4'>
+                      <button
+                        className='btn btn-main-blue dir mr-2'
+                        onClick={() => {
+                          props.setHighLight(true);
+                          props.setMenuShip(true);
+                        }}
+                      >
+                        {t("view_shipment")}
+                      </button>
+                      <button
+                        className='btn btn-orange dir'
+                        onClick={() => {
+                          props.setProductHighLight(true);
+                          props.setMenuProduct(true);
+                        }}
+                      >
+                        {t("view") + " " + t("product_list")}
+                      </button>
+                    </div>
+                  </>
                 ) : null}
                 {op === index ? (
                   <div
@@ -153,8 +177,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
-                        <div></div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                       </div>
                     </div>
                     {op === index ? (
@@ -259,7 +285,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{formatDistanceToNow(custody?.updatedOn)}</div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                         <div></div>
                       </div>
                     </div>

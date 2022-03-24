@@ -41,7 +41,6 @@ const DriverGraph = (props) => {
             height='240px'
             ytitle='Driver Score'
             xtitle='Trips'
-            precision={4}
             data={fetchData}
             refresh={60}
           />
