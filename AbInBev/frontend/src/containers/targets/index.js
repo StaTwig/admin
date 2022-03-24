@@ -23,8 +23,6 @@ const Targets = (props) => {
             }
             const result = await dispatch(getAllStates());
             setStates(result.data)
-            console.log(states)
-            console.log(depots)
         })();
     }, [refresh]);
 

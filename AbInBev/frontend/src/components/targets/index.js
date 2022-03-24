@@ -61,9 +61,9 @@ const Targets = (props) => {
     },
   ]);
   useEffect(() => {
-    if (props.depots) setDisplayDistricts(props.depots.sort());
+    if (props.depots) setDisplayDistricts(props.depots);
   }, [props.depots]);
-  // console.log()
+
   const onStateChange = async (event) => {
     const selectedState = event.target.value;
     setState(selectedState);
@@ -71,7 +71,7 @@ const Targets = (props) => {
     filter.state = selectedState;
     const result = await props.getDistricts(selectedState);
     setDistricts(result.data);
-    setDisplayDistricts(props.depots.sort());
+    setDisplayDistricts(props.depots);
     setParams(filter);
   };
 
@@ -102,7 +102,7 @@ const Targets = (props) => {
   const resetFilters = () => {
     // setState('');
     setDistrict("");
-    setDisplayDistricts(props.depots.sort());
+    setDisplayDistricts(props.depots);
   };
 
   const selectCheckBox = (event, value, index) => {
@@ -133,7 +133,7 @@ const Targets = (props) => {
     }
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     if (isChecked.length === 0 && !checkedAllDis && !retTargetEdit) {
       alert("Select something");
       return;
@@ -141,26 +141,27 @@ const Targets = (props) => {
     if (checkedAllDis && retTargetEdit) {
       let data = [
         {
-          depot: displayDistricts.map((item) => item._id.depot),
+          depot: displayDistricts.map((item) => item.depots).flat(),
           percentage: returnTarget,
         },
       ];
-      updateTargets(data);
+      await updateTargets(data);
+    } else {
+      let arr = [];
+      console.log("In else", selectedArray);
+      selectedArray.map((element) => {
+        let depot_list = displayDistricts.find(depot => depot._id.depot === element.value);
+        depot_list = depot_list.depots;
+        arr.push({
+          depot: depot_list,
+          percentage: parseInt(displayDistricts[element.index].percentage),
+        })
+      });
+      await updateTargets(arr);
     }
-    else {
-      alert('Please select a target');
-      return;
-    }
-    let arr = [];
-    selectedArray.map((e) =>
-      arr.push({
-        depot: [e.value],
-        percentage: displayDistricts[e.index].percentage,
-      })
-    );
-    updateTargets(arr);
     props.refreshPage();
     setIsChecked([]);
+    setCheckedAllDis(false);
   };
 
   return (
@@ -211,6 +212,7 @@ const Targets = (props) => {
                     id="districts"
                     onChange={selectedAllDistricts}
                     style={{ marginRight: "5px" }}
+                    checked={checkedAllDis}
                   />
                   <span className="headerNames">District</span>
                 </div>
@@ -256,7 +258,7 @@ const Targets = (props) => {
                       </div>
                       <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {Math.floor(district.percentage)}%
+                          {district.percentage ? district.percentage + "%" : "N/A"}
                         </span>
                       </div>
 
