@@ -98,11 +98,10 @@ const SpmDashboard = (props) => {
       let configs = await dispatch(
         getNewConfig({ district: configDistrict, vendorType: selectedType })
       );
-      // console.log(configs.data[0]);
-      // let tmp = config;
-      // Object.assign(tmp, configs.data[0]);
+
       if (configs.data.length) setConfig(configs.data[0]);
     })();
+    // Get suppliers list for page
     (async () => {
       const result = await dispatch(
         getSupplierPerformanceByOrgType({

@@ -16,6 +16,8 @@ const BREWERY_ORG = "BREWERY";
 const S1_ORG = "S1";
 const S2_ORG = "S2";
 
+// Util to delete specific cache
+const { batchDelKeysByPattern } = require("../helpers/utility");
 const redis = require("redis");
 const client = redis.createClient({
   host: process.env.REDIS_HOST,
@@ -2236,25 +2238,18 @@ exports.getSupplierPerformance = [
       const location = req.query.location ? req.query.location : "";
       const keyString = "GSP" + orgType + location;
       var bool = false;
-      // DISABLED TEMPORARILY
-      // client.get(keyString, (err, data) => {
-      //   if (!err && data != null) {
-      //     console.log(data);
-      //     bool = true;
-      //     return apiResponse.successResponseWithData(
-      //       res,
-      //       "HIT Cache",
-      //       JSON.parse(data)
-      //     );
-      //   }
-      // });
+      client.get(keyString, (err, data) => {
+        if (!err && data != null) {
+          bool = true;
+          return apiResponse.successResponseWithData(
+            res,
+            "HIT Cache",
+            JSON.parse(data)
+          );
+        }
+      });
 
       let matchCondition = {};
-      // let matchQuery = {
-      //   $match: {
-
-      //   },
-      // }
 
       if (!orgType || orgType === "ALL") {
         matchCondition = {
@@ -2332,6 +2327,7 @@ exports.getSupplierPerformance = [
           breakage: supplier.breakage,
         };
 
+        // Put an aggregate with $or as we need the latest update either for vendorId or district
         let ratingSchema = await ConfigModel.find({ vendorId: supplier.id }).sort({createdAt: -1}).limit(1);
         if (!ratingSchema.length) {
           ratingSchema = await ConfigModel.find({
@@ -2906,7 +2902,11 @@ exports.getAllConfiguration = [
   auth,
   async function (req, res) {
     try {
-      let configuration = await ConfigModel.find(req.query);
+      let query = {
+        district: req.query.district,
+        vendorType: { $in: [req.query.vendorType, "All"] }
+      };
+      let configuration = await ConfigModel.find(query).sort({createdAt: -1});
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -2933,6 +2933,9 @@ exports.setNewConfiguration = [
       } else {
         config = await ConfigModel.findOneAndUpdate(query, { $set: req.body });
       }
+      await batchDelKeysByPattern("GSP*").then((deletedKeysCount) => {
+        console.log("Deleted ", deletedKeysCount, " redis keys.");
+      });
       return apiResponse.successResponse(res, "Saved new config");
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
