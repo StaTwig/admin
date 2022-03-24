@@ -2233,18 +2233,21 @@ exports.getSupplierPerformance = [
   async function (req, res) {
     try {
       const orgType = req.query.supplierType;
-      const keyString = "GSP" + orgType;
+      const location = req.query.location ? req.query.location : "";
+      const keyString = "GSP" + orgType + location;
       var bool = false;
-      client.get(keyString, (err, data) => {
-        if (!err && data != null) {
-          bool = true;
-          return apiResponse.successResponseWithData(
-            res,
-            "HIT Cache",
-            JSON.parse(data)
-          );
-        }
-      });
+      // DISABLED TEMPORARILY
+      // client.get(keyString, (err, data) => {
+      //   if (!err && data != null) {
+      //     console.log(data);
+      //     bool = true;
+      //     return apiResponse.successResponseWithData(
+      //       res,
+      //       "HIT Cache",
+      //       JSON.parse(data)
+      //     );
+      //   }
+      // });
 
       let matchCondition = {};
       // let matchQuery = {
@@ -2328,18 +2331,17 @@ exports.getSupplierPerformance = [
           dirtyBottles: supplier.dirtyBottles,
           breakage: supplier.breakage,
         };
-        // console.log({ district : supplier.postalAddress?.split(',')[1].trim() , vendorType : supplier.type })
+
         let ratingSchema = await ConfigModel.find({ vendorId: supplier.id }).sort({createdAt: -1}).limit(1);
         if (!ratingSchema.length) {
           ratingSchema = await ConfigModel.find({
             district: supplier.postalAddress?.split(",")[1].trim(),
-            vendorType: supplier.type,
+            vendorType: { $in: [supplier.type, "All"] },
           }).sort({createdAt: -1}).limit(1);
         }
           
         if(ratingSchema.length) ratingSchema = ratingSchema[0];
         else ratingSchema = null;
-        console.log("Rating schema - ", ratingSchema);
 
         supplier.rating = await getSupplierRatings(
           supplierDetails,

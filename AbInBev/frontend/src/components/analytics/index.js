@@ -711,7 +711,7 @@ const Analytics = (props) => {
                           name="view"
                           id="overall"
                           value="SPM_OVERALL"
-                          onClick={(e)=>setSortByValue('returnRating')}
+                          onClick={(e)=>setSortByValue('returnRate')}
                           defaultChecked={
                             selectedViewCode == 'SPM_DASHBOARD'
                           }
@@ -725,7 +725,7 @@ const Analytics = (props) => {
                           name="view"
                           id="returnRate"
                           value="SPM_RETURN_RATE"
-                          onClick={(e)=>setSortByValue('returnRating')}
+                          onClick={(e)=>setSortByValue('returnRate')}
                         />{' '}
                         Return Rate
                       </label>
@@ -736,7 +736,7 @@ const Analytics = (props) => {
                           name="view"
                           id="leadTime"
                           value="SPM_LEAD_TIME"
-                          onClick={(e)=>setSortByValue('leadRating')}
+                          onClick={(e)=>setSortByValue('leadTime')}
                         />{' '}
                         Lead Time
                       </label>
@@ -747,7 +747,7 @@ const Analytics = (props) => {
                           name="view"
                           id="breakageBottle"
                           value="SPM_"
-                          onClick={(e)=>setSortByValue('breakageRating')}
+                          onClick={(e)=>setSortByValue('breakage')}
                         />{' '}
                         Breakage Bottle %
                       </label>
@@ -758,7 +758,7 @@ const Analytics = (props) => {
                           name="view"
                           id="dirtyBottles"
                           value="SPM_DIRTY_BOTTLES"
-                          onClick={(e)=>setSortByValue('dirtyBottlesRating')}
+                          onClick={(e)=>setSortByValue('dirtyBottles')}
                         />{' '}
                         Dirty Bottles
                       </label>
@@ -769,7 +769,7 @@ const Analytics = (props) => {
                           name="view"
                           id="storeAgeCapacity"
                           value="SPM_STOREAGE_CAPACITY"
-                          onClick={(e)=>setSortByValue('storageCapacityRating')}
+                          onClick={(e)=>setSortByValue('storageCapacity')}
                         />{' '}
                         Storage Capacity
                       </label>
