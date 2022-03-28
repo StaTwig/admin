@@ -153,6 +153,8 @@ const SpmDashboard = (props) => {
       return a[`${props.sortByValue}`] - b[`${props.sortByValue}`];
     } else if(props.sortByValue === "storageCapacity") {
       return b.storageCapacity.bottleCapacity - a.storageCapacity.bottleCapacity;
+    } else {
+      return b.rating?.Overall - a.rating?.Overall
     }
     return 0;
   }
@@ -260,7 +262,7 @@ const SpmDashboard = (props) => {
                     {perf.postalAddress}
                   </td>
                   {/* <td>{perf.returnRate ? perf.returnRate : 0}</td> */}
-                  <td style={{ verticalAlign: "unset" }}>{0}</td>
+                  <td style={{ verticalAlign: "unset" }}>{perf.rating?.Overall}</td>
                   <td style={{ position: "relative", verticalAlign: "unset" }}>
                     {/* {selectedRatingIndex !== index ? ( */}
                     <div

@@ -711,7 +711,7 @@ const Analytics = (props) => {
                           name="view"
                           id="overall"
                           value="SPM_OVERALL"
-                          onClick={(e)=>setSortByValue('returnRate')}
+                          onClick={(e)=>setSortByValue('overall')}
                           defaultChecked={
                             selectedViewCode == 'SPM_DASHBOARD'
                           }
