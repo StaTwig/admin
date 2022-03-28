@@ -2081,10 +2081,23 @@ exports.fetchGMRShipments = [
   auth,
   async (req, res) => {
     try {
+      let filter = {};
       const skip = req.query.skip || 0;
-      const limit = req.query.skip || 30;
-      const count = await ShipmentModel.count({ isCustom: true });
-      const shipments = await ShipmentModel.find({ isCustom: true })
+      const limit = req.query.limit || 30;
+      if (req.query.status) {
+        filter = { ...filter, status: req.query.status };
+      }
+      if (req.query.fromDate && req.query.toDate) {
+        filter = {
+          ...filter,
+          shippingDate: {
+            $gte: req.query.fromDate,
+            $lte: req.query.toDate,
+          },
+        };
+      }
+      const count = await ShipmentModel.count({ ...filter, isCustom: true });
+      const shipments = await ShipmentModel.find({ ...filter, isCustom: true })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });
