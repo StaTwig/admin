@@ -57,7 +57,7 @@ export default function DateFilter({ t, onSelectionDateFilter }) {
             onSelectionDateFilter(new Array("", ""));
           }}
         >
-          {t("Clear")}
+          {t("clear")}
         </button>
       </div>
     </>
