@@ -852,10 +852,25 @@ async function getSupplierRatings(supplierDetails, ratingSchema) {
         ratingSchema?.breakageBottle
       ),
     };
+    rating["Overall"] = await getOverallRating(rating);
   } else {
-    rating = {};
+    rating = {
+      Overall: 0.00
+    };
   }
   return rating;
+}
+
+async function getOverallRating(rating) {
+  let overallRating = 0;
+  if(rating) {
+    overallRating += rating.returnRating ? (rating.returnRating * 0.2) : 0;
+    overallRating += rating.leadRating ? (rating.leadRating * 0.2) : 0;
+    overallRating += rating.bottleCapacityRating ? (rating.bottleCapacityRating * 0.2) : 0;
+    overallRating += rating.dirtyBottlesRating ? (rating.dirtyBottlesRating * 0.2) : 0;
+    overallRating += rating.breakageRating ? (rating.breakageRating * 0.2) : 0;
+  }
+  return overallRating.toFixed(2);
 }
 
 async function calculateRating(value, schema) {
@@ -1019,7 +1034,7 @@ exports.getAllBrands = [
 // 					$replaceRoot: {
 // 						newRoot: {
 // 							$mergeObjects: ['$prodDetails', '$$ROOT']
-// 						}
+// 						}    return 0;
 // 					}
 // 				},
 // 				{
@@ -2328,13 +2343,30 @@ exports.getSupplierPerformance = [
         };
 
         // Put an aggregate with $or as we need the latest update either for vendorId or district
-        let ratingSchema = await ConfigModel.find({ vendorId: supplier.id }).sort({createdAt: -1}).limit(1);
-        if (!ratingSchema.length) {
-          ratingSchema = await ConfigModel.find({
-            district: supplier.postalAddress?.split(",")[1].trim(),
-            vendorType: { $in: [supplier.type, "All"] },
-          }).sort({createdAt: -1}).limit(1);
-        }
+        let ratingSchema = await ConfigModel.aggregate([
+          { 
+            $match: { $or: [
+              { vendorId: supplier.id }, 
+              { 
+                district: supplier.postalAddress?.split(",")[1].trim(),
+                vendorType: { $in: [supplier.type, "All"] } 
+              }
+            ]}
+          },
+          {
+            $sort: { createdAt: -1 }
+          },
+          {
+            $limit: 1
+          }
+        ]);
+        // let ratingSchema = await ConfigModel.find({ vendorId: supplier.id }).sort({createdAt: -1}).limit(1);
+        // if (!ratingSchema.length) {
+        //   ratingSchema = await ConfigModel.find({
+        //     district: supplier.postalAddress?.split(",")[1].trim(),
+        //     vendorType: { $in: [supplier.type, "All"] },
+        //   }).sort({createdAt: -1}).limit(1);
+        // }
           
         if(ratingSchema.length) ratingSchema = ratingSchema[0];
         else ratingSchema = null;
