@@ -89,11 +89,23 @@ export const getSupplierAndReceiverList = async () => {
   }
 };
 
-export const getGMRShipments = async (skip, limit) => {
+export const getGMRShipments = async (
+  skip,
+  limit,
+  fromDate,
+  toDate,
+  status
+) => {
   try {
-    const result = await axios.get(
-      `${config().fetchGMRShipmentsUrl}?skip=${skip}&limit=${limit}`
-    );
+    const result = await axios.get(config().fetchGMRShipmentsUrl, {
+      params: {
+        skip,
+        limit,
+        fromDate,
+        toDate,
+        status,
+      },
+    });
     return result.data;
   } catch (e) {
     return [];

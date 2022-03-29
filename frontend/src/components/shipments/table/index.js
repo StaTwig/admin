@@ -360,7 +360,7 @@ function Table(props) {
             showFirstButton
             showLastButton
             color='primary'
-            count={Math.ceil(props.count / 10)}
+            count={Math.ceil(props.count / props.limit)}
             onChange={handlePageChange}
           />
           <span
