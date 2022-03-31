@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:16-bullseye-slim
 
 WORKDIR /src
 

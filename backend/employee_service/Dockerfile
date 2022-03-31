@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:16-bullseye-slim
 
 ENV NODE_ENV=production
 
@@ -12,7 +12,7 @@ WORKDIR /src/backend/service
 
 COPY /backend/employee_service/package.json .
 
-RUN npm install --platform=linux --arch=arm64 --arm-version=8 sharp
+# RUN npm install --platform=linux --arch=arm64 --arm-version=8 sharp
 
 RUN yarn --production
 
