@@ -12,6 +12,8 @@ WORKDIR /src/backend/service
 
 COPY /backend/employee_service/package.json .
 
+RUN npm install --platform=linux --arch=arm64 --arm-version=8 sharp
+
 RUN yarn --production
 
 COPY /backend/employee_service/ .
