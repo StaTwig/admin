@@ -1,7 +1,6 @@
 version: "3.7"
 services:
   traefik:
-    platform: "linux/amd64/v8"
     image: "traefik"
     container_name: "traefik"
     restart: unless-stopped
