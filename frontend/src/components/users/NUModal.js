@@ -5,7 +5,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
-
+import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
 
 const NUModal = (props) => {
@@ -248,24 +248,22 @@ const NUModal = (props) => {
                 />
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
-                <PhoneInput
-                  className={`form-group mobile-number
-                  ${phoneNumberTaken ? "border-danger" : ""}
-                    `}
-                  country={"cr"}
-                  preferredCountries={["cr"]}
-                  placeholder={t("enter_phone_number")}
-                  style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
-                  value={phoneNumber}
-                  onChange={(phone) => {
-                    setUserAlreadyExits('');
-                    setPhoneNumberTaken('');
-                    verifyPhoneNumber(phone);
-                    setPhoneNumber(phone);
-                    setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
-                  }}
-                />
-              </div>
+                  <PhoneInput
+                    className={`form-group mobile-number ${errors.email ? "border-danger" : ""
+                      }`}
+                    country={"cr"}
+                    preferredCountries={["cr", "in"]}
+                    placeholder={t("enter_phone_number")}
+                    inputStyle={{ maxWidth: "95%" }}
+                    style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
+                    value={phoneNumber}
+                    onChange={(phone) => {
+                      setPhoneNumber(phone);
+                      setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
+                      setUserAlreadyExits(false);
+                    }}
+                  />
+                </div>
 
               {userAlreadyExits && (
                 <div style={{ position: "absolute", top: "9.6rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
