@@ -41,8 +41,10 @@ const NewAddress = (props) => {
 
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region, setregion] = useState("Americas");
-  const [country, setcountry] = useState("Costa Rica");
+
+  const [region, setregion] = useState("");
+  const [country, setcountry] = useState("");
+
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
@@ -56,10 +58,10 @@ const NewAddress = (props) => {
     let res = await fetchCountriesByRegion(id);
     setallCountries(res.data);
   };
-  // async function fetchAllState1(){
-  //   let res = await fetchStateByCountry(53);
-  //   setallState(res.data);
-  // };
+  async function fetchAllState1(id) {
+    let res = await fetchStateByCountry(id);
+    setallState(res.data);
+  };
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
     setallCity(res.data);
@@ -72,12 +74,12 @@ const NewAddress = (props) => {
   useEffect(() => {
     dispatch(getWareHouses());
 
-    async function fetchAllState1() {
-      let res = await fetchStateByCountry(53);
-      setallState(res.data);
-    };
+    // async function fetchAllState1(){
+    //   let res = await fetchStateByCountry(53);
+    //   setallState(res.data);
+    // };
 
-    fetchAllState1();
+    // fetchAllState1();
   }, []);
 
   const getGeoLocation = async () => {
@@ -268,47 +270,50 @@ const NewAddress = (props) => {
                         <span className="error-msg text-dangerS">{errors.title}</span>
                         )}  */}
 
-                    {/* <Autocomplete
-                          value={values.region}
-                          onBlur={handleBlur}
-                          onChange={(event, newValue) => {
-                            setFieldValue("region",newValue);
-                            fetchAllCountries1(newValue);
-                            setregion(newValue);
-                            setcountry("");
-                            setState("");
-                            setCity("");
-                          }}
-                          id="controllable-states-demo"               
-                          options={allregions}
-                          style={{ width: 300 }}
-                          renderInput={(params) => <TextField style={{
-                            width:"425px"
-                        }}{...params} className="mb-3" label={t("Select Region")}  />}
-                        /> */}
+                    <Autocomplete
+                      value={values.region}
+                      onBlur={handleBlur}
+                      onChange={(event, newValue) => {
+                        setFieldValue("region", newValue);
+                        fetchAllCountries1(newValue);
+                        setregion(newValue);
+                        setcountry("");
+                        setState("");
+                        setCity("");
+                      }}
+                      id="controllable-states-demo"
+                      autoComplete="off"
+                      options={allregions}
+                      style={{ width: 300 }}
+                      renderInput={(params) => <TextField style={{
+                        width: "425px"
+                      }}{...params} className="mb-3" label={t("Select Region")} />}
+                    />
 
                     {/* {errors.region && touched.region && (
                           <span className="error-msg text-danger-ANL">
                             {errors.region}
                           </span>
                         )} */}
-                    {/* <Autocomplete
-                          value={values.country}
-                          onChange={(event, newValue) => {
-                            setFieldValue("country",newValue);
-                            let v = search(newValue,allCountries);
-                            fetchAllState1(v);
-                            setcountry(newValue);
-                            setState("");
-                            setCity("");
-                          }}
-                          id="controllable-states-demo"
-                          options={allCountries.map((option)=>option.name)}
-                          style={{ width: 300 }}
-                          renderInput={(params) => <TextField style={{
-                            width:"425px"
-                        }} {...params} className="mb-3"  label={t("Select Country")}  />}
-                        /> */}
+                    <Autocomplete
+                      value={values.country}
+                      onChange={(event, newValue) => {
+                        setFieldValue("country", newValue);
+                        let v = search(newValue, allCountries);
+                        fetchAllState1(v);
+                        setcountry(newValue);
+                        setState("");
+                        setCity("");
+                      }}
+                      disabled={!region}
+                      autoComplete="off"
+                      id="controllable-states-demo"
+                      options={allCountries.map((option) => option.name)}
+                      style={{ width: 300 }}
+                      renderInput={(params) => <TextField style={{
+                        width: "425px"
+                      }} {...params} className="mb-3" label={t("Select Country")} />}
+                    />
                     <Autocomplete
                       onBlur={handleBlur}
                       value={values.state}
@@ -319,7 +324,9 @@ const NewAddress = (props) => {
                         setState(newValue);
                         setCity("");
                       }}
+                      disabled={!country}
                       id="controllable-states-demo"
+                      autoComplete="off"
                       options={allState.map((option) => option.name)}
                       style={{ width: 300 }}
                       renderInput={(params) => < TextField style={{
@@ -338,6 +345,8 @@ const NewAddress = (props) => {
                         setFieldValue("town", newValue);
                         setCity(newValue);
                       }}
+                      autoComplete="off"
+                      disabled={!state}
                       id="controllable-states-demo"
                       options={allCity.map((Option) => Option.name)}
                       style={{ width: 300 }}

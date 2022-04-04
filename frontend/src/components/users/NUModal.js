@@ -5,7 +5,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
-
+import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
 
 const NUModal = (props) => {
@@ -59,7 +59,11 @@ const NUModal = (props) => {
       if (!data?.phoneNumber) {
         flag = true;
       } else {
-        flag = false;
+        if (!(/^\d{7,}$/).test(data?.phoneNumber.replace(/[\s()+\-\.]|ext/gi, ''))) {
+          flag = true
+        } else {
+          flag = false;
+        }
       }
     }
     // Role should exist
@@ -91,17 +95,32 @@ const NUModal = (props) => {
 
   const verifyEmailIds = (event) => {
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(event.target.value)) {
-      setUserAlreadyExits(false)
+      setUserAlreadyExits('')
     }
     else {
-      setUserAlreadyExits(false)
+      setUserAlreadyExits('')
       usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
-          setUserAlreadyExits(true)
+          setUserAlreadyExits('email_has_already_been_taken')
         }
       })
     }
   }
+
+  const [phoneNumberTaken, setPhoneNumberTaken] = useState('');
+  const verifyPhoneNumber = (phone) => {
+
+    if (!(/^\d{7,}$/).test(phone.replace(/[\s()+\-\.]|ext/gi, ''))) {
+      setPhoneNumberTaken('');
+    } else {
+      usersList.forEach((user, index) => {
+        if (user.phoneNumber === `+${phone}`) {
+          setPhoneNumberTaken('phoneNumber_has_already_been_taken');
+        }
+      })
+    }
+  }
+
 
   const getSelectedAddress = (value) => {
     // debugger
@@ -225,11 +244,6 @@ const NUModal = (props) => {
                   value={values.email}
                   disabled={changeComponent === "address" && disableButton ? true : false}
                 />
-                {userAlreadyExits && (
-                  <div style={{ position: "absolute", top: "4.8rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
-                    <span>{t('Email_ID_Already_registered')}</span>
-                  </div>
-                )}
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <PhoneInput
@@ -248,10 +262,15 @@ const NUModal = (props) => {
                   }}
                 />
               </div>
-
               {userAlreadyExits && (
-                <div style={{ position: "absolute", top: "4.8rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
-                  <span>{t('email_has_already_been_taken')}</span>
+                <div style={{ position: "absolute", top: "9.6rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
+                  <span>{t(userAlreadyExits)}</span>
+                </div>
+              )}
+              
+              {phoneNumberTaken && (
+                <div style={{ position: "absolute", top: "9.6rem", left: "20rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
+                  <span>{t(phoneNumberTaken)}</span>
                 </div>
               )}
               <button
@@ -330,8 +349,9 @@ const NUModal = (props) => {
             <div className="d-flex flex-row-reverse p-3">
               {changeComponent === "role" ?
                 (
-                  <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0 }}
-                    disabled={disableButton || userAlreadyExits}>
+
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
+                    disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
                     </button>
                   ) : (
