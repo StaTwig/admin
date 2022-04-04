@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import "../login/style.scss";
 import { Formik } from "formik";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const FormVerifyPage = (props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
   const [otpArray, setOtpArray] = useState(["", "", "", ""]);
   const firstInputRef = useRef(null);
@@ -56,27 +56,27 @@ const FormVerifyPage = (props) => {
           <div className='col-sm-6 col-lg-6'>
             <div className='form-content'>
               <img className='logo' src={logo} alt='VaccineLedger' />
-              <h1>{t('welcome')}</h1>
+              <h1>{t("welcome")}</h1>
             </div>
           </div>
           <div className='col-sm-6 col-lg-5'>
             <div className='card'>
               <div className='card-body'>
                 <div className='login-form'>
-                  <div className='card-title mb-5'>{t('enter_otp')}</div>
+                  <div className='card-title mb-5'>{t("enter_otp")}</div>
                   <Formik
                     innerRef={formRef}
                     initialValues={{ otp0: "", otp1: "", otp2: "", otp3: "" }}
                     validate={(values) => {
                       const errors = {};
                       if (!values.otp0) {
-                        errors.otp0 = t('required');
+                        errors.otp0 = t("required");
                       } else if (!values.otp1) {
-                        errors.otp1 = t('required');
+                        errors.otp1 = t("required");
                       } else if (!values.otp2) {
-                        errors.otp2 = t('required');
+                        errors.otp2 = t("required");
                       } else if (!values.otp3) {
-                        errors.otp3 = t('required');
+                        errors.otp3 = t("required");
                       }
                       return errors;
                     }}
@@ -113,7 +113,9 @@ const FormVerifyPage = (props) => {
                                 borderRadius: 0,
                               }}
                               className={`form-control text-center mr-5 ${
-                                errors.otp0 && touched.otp0
+                                (errors[`otp${index}`] &&
+                                  touched[`otp${index}`]) ||
+                                (errors.otp0 && touched.otp0)
                                   ? "border-danger"
                                   : ""
                               }`}
@@ -151,18 +153,18 @@ const FormVerifyPage = (props) => {
                               errorMessage ? "border-red" : ""
                             }`}
                           >
-                            {t('otp_doesnt_match')}
+                            {t("otp_doesnt_match")}
                           </span>
                         )}
                         <div className='font-weight-bold text-center'>
-                          {t('didnt_receive_the_otp')}?
+                          {t("didnt_receive_the_otp")}?
                         </div>
                         <div
                           className='text-center mt-2 mb-5 text-primary resend'
                           style={{ cursor: "pointer" }}
                           onClick={onResendOtp}
                         >
-                          {t('resend_code')}
+                          {t("resend_code")}
                         </div>
 
                         {/* {errorMessage && (
@@ -173,7 +175,7 @@ const FormVerifyPage = (props) => {
                             type='submit'
                             className=' buttonS btn btn-primary'
                           >
-                            {t('verify')}
+                            {t("verify")}
                           </button>
                         </div>
                       </form>

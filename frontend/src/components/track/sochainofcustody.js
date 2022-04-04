@@ -20,11 +20,11 @@ const SoChainOfCustody = (props) => {
     setV,
     len,
     parentIndex,
+    t
   } = props;
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  if (update.isOrder) console.log(data);
 
   return (
     <>
@@ -64,12 +64,12 @@ const SoChainOfCustody = (props) => {
               <div className='col-12 row justify-content-between'>
                 <div className={`${visible && v ? `col` : `col-10`}`}>
                   <span className='font-weight-bold'>
-                    {isShipment ? update.status : update.poStatus}
+                    {isShipment ? t(update.status.toLowerCase()) :  t(update.poStatus.toLowerCase())}
                   </span>
                   {(!visible || !v) && (
                     <div className='text-primary mt-2'>
                       <span className=' '>
-                        {isShipment ? "Shipment" : "Order"} ID:{" "}
+                        {isShipment ? t('shipment_id') : t('order_id')}:{" "}
                       </span>
                       <span className=' font-weight-bold'>{data.id}</span>
                     </div>
@@ -78,17 +78,17 @@ const SoChainOfCustody = (props) => {
                 {visible && v && (
                   <div className='col-6 text-primary'>
                     <span className=' '>
-                      {isShipment ? "Shipment" : "Order"} ID:{" "}
+                      {isShipment ? t('shipment_id') : t('order_id')}:{" "}
                     </span>
                     <span className=' font-weight-bold'>{data.id}</span>
                   </div>
                 )}
                 <div className='text-primary col-2'>
                   <div className='text-muted'>
-                    {update.updatedOn.split(" ")[0]}
+                    {new Date(update.updatedOn).toDateString()}
                   </div>
                   <div className='text-muted'>
-                    {formatTimeAMPM(update.updatedOn.split(" ")[1])}
+                    {formatTimeAMPM(new Date(update.updatedOn).toString().split(" ")[4])}
                   </div>
                 </div>
               </div>
@@ -127,7 +127,7 @@ const SoChainOfCustody = (props) => {
                       }
                     >
                       <button className='btn btn-orange fontSize20 font-bold'>
-                        View {isShipment ? "Shipment" : "Order"}
+                        {t('view')}
                       </button>
                     </Link>
                   </div>

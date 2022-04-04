@@ -6,115 +6,38 @@ import EditTable from "./table/editTable";
 import "./style.scss";
 import { newShipment } from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
-import {
-  getShippingOrderById,
-  getWarehouseByOrgId,
-  getAllOrganisations,
-  getProductsByInventoryId,
-} from "../../actions/shippingOrderAction";
-import { getOrder, getOpenOrderIds } from "../../actions/poActions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getOrganizationsTypewithauth } from "../../actions/userActions";
-import { getProducts, searchProduct } from "../../actions/poActions";
-import { getProductList } from "../../actions/productActions";
-import { config } from "../../config";
-import axios from "axios";
+import { getProducts } from "../../actions/poActions";
 
 const CreateShipment = (props) => {
-  const [OrderIds, setOrderIds] = useState([]);
+  const { t } = props;
   const [senderOrganisation, setSenderOrganisation] = useState([]);
-  const [allOrganisations, setAllOrganisations] = useState([]);
-  const [senderWarehouses, setSenderWarehouses] = useState([]);
-  const [receiverWarehouses, setReceiverWarehouses] = useState([]);
-  const [pofetchdisabled] = useState(false);
-  const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
-  const [OrderId, setOrderId] = useState("Select Order ID");
-  const [senderOrgId, setSenderOrgId] = useState("null");
-  const [orderIdSelected, setOrderIdSelected] = useState(false);
-  const [validShipmentID, setValidShipmentID] = useState(false);
+  const [OrderId] = useState("Select Order ID");
+  const [senderOrgId] = useState("null");
+  const [orderIdSelected] = useState(false);
   const user = useSelector((state) => state.user);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [OrderDetails, setOrderDetails] = useState({});
   const [productQuantity] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
   const [modalProps, setModalProps] = useState({});
-  const [orgTypes, setOrgTypes] = useState([]);
-  const [productsList, setProductsList] = useState([]);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
-  const customStyles = {
-    // placeholder: (provided, state) => ({
-    //   color: state.isDisabled ? "black" : "grey",
-    // }),
-    option: (provided, state) => ({
-      ...provided,
-      borderBottom: "1px solid #d6d6d6",
-    }),
-    control: () => ({
-      display: "flex",
-    }),
-    indicatorSeparator: () => ({
-      display: "none",
-    }),
-    singleValue: (provided, state) => {
-      const opacity = state.isDisabled ? 0.5 : 1;
-      const transition = "opacity 300ms";
-      return { ...provided, opacity, transition };
-    },
-  };
-
-  const handleSOChange = async (item) => {
-    setOrderId(item);
-    dispatch(turnOn());
-    const result = await getShippingOrderById(item);
-    setOrderDetails(result);
-    dispatch(turnOff());
-  };
 
   useEffect(() => {
     async function fetchData() {
-      const result111 = await getProductList();
-
-      setProductsList(result111.message);
-      console.log(result111);
-      const { search } = props.location;
-      console.log(search);
-      const result = await getOpenOrderIds();
-
-      const ids = result.map((item) => {
-        return {
-          value: item.id,
-          label: item.id,
-        };
-      });
-      setOrderIds(ids);
-      const orgs = await getAllOrganisations();
-      console.log(user.organisation);
       const orgSplit = user.organisation?.split("/");
       if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
-
-      const organisations = orgs.data;
-      setAllOrganisations(
-        organisations.map((item) => {
-          return {
-            ...item,
-            value: item.id,
-            label: item.name,
-          };
-        })
-      );
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
       setCategory(
@@ -127,40 +50,6 @@ const CreateShipment = (props) => {
             };
           })
       );
-
-      const warehouses = await getWarehouseByOrgId(orgSplit[1]);
-      setSenderWarehouses(
-        warehouses.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
-              : v?.title + "/" + v.postalAddress,
-          };
-        })
-      );
-
-      const orgType = await getOrganizationsTypewithauth("CONF000");
-      setOrgTypes(
-        orgType.data.length > 0
-          ? orgType.data[0].organisationTypes.map((item) => {
-              return {
-                value: item.id,
-                label: item.name,
-              };
-            })
-          : []
-      );
-
-      // if (search) {
-      //   const shippingId = search.split("=")[1];
-      //   handleSOChange(shippingId);
-      // }
     }
 
     fetchData();
@@ -173,62 +62,6 @@ const CreateShipment = (props) => {
 
   const closeModalFail = () => {
     setOpenShipmentFail(false);
-  };
-
-  const onOrgChange = async (value) => {
-    try {
-      const warehouse = await getWarehouseByOrgId(value);
-      setReceiverWarehouses(
-        warehouse.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.title +
-                "/" +
-                v?.warehouseAddress?.firstLine +
-                ", " +
-                v?.warehouseAddress?.city
-              : v?.title + "/" + v.postalAddress,
-          };
-        })
-      );
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  };
-
-  const onWarehouseChange = async (value) => {
-    try {
-      const prods = await getProductsByInventoryId(value);
-      if (prods.data.length === 0) {
-        alert("No products availabe in this warehouse");
-        setErrorMessage("err");
-        return false;
-      }
-      setProducts(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-      setProductsList(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-      return true;
-    } catch (err) {
-      setErrorMessage(err);
-      return false;
-    }
   };
 
   const onAssign = async (values) => {
@@ -309,7 +142,6 @@ const CreateShipment = (props) => {
         }
       }
       if (check === 1) {
-        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       } else if (check === 2) {
@@ -320,7 +152,6 @@ const CreateShipment = (props) => {
         const result = await newShipment(data);
         dispatch(turnOff());
         if (result?.id) {
-          setMessage("Created Shipment Success");
           setOpenCreatedInventory(true);
           setModalProps({
             message: "Created Successfully!",
@@ -330,7 +161,6 @@ const CreateShipment = (props) => {
         } else {
           setShipmentError(result.data.message);
           setOpenShipmentFail(true);
-          setErrorMessage("Create Shipment Failed");
         }
       }
     } else {
@@ -339,69 +169,11 @@ const CreateShipment = (props) => {
     }
   };
 
-  const handleQuantityChange = (value, i) => {
-    const soDetailsClone = { ...OrderDetails };
-    if (
-      parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)
-    ) {
-      soDetailsClone.products[i].productQuantity =
-        soDetailsClone.products[i].orderedQuantity;
-      setOrderDetails(soDetailsClone);
-      alert("Quantity cannot be more than ordered quantity");
-      return;
-    }
-    soDetailsClone.products[i].productQuantity = value;
-    setOrderDetails(soDetailsClone);
-  };
-
-  const handleBatchChange = (value, i) => {
-    const soDetailsClone = { ...OrderDetails };
-    soDetailsClone.products[i].batchNumber = value;
-    setOrderDetails(soDetailsClone);
-  };
-
   const handleLabelIdChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = (index, value, setFieldValue) => {
-    try {
-      let newArr = [...addProducts];
-      newArr[index]["type"] = value;
-      newArr[index] = {
-        productId: "",
-        batchNumber: "",
-        id: "",
-        productQuantity: "",
-        name: "",
-        type: value,
-        manufacturer: "",
-        unitofMeasure: "",
-      };
-      newArr[index]["quantity"] = "";
-      setAddProducts((prod) => [...newArr]);
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  };
-
-  const onRemoveRow = (index) => {
-    const inventoryStateClone = JSON.parse(
-      JSON.stringify(OrderDetails?.products)
-    );
-    inventoryStateClone.splice(index, 1);
-    const cloneOrder = OrderDetails;
-    cloneOrder.products = inventoryStateClone;
-    setOrderDetails(cloneOrder);
-  };
-
-  function onSearchChange(e) {
-    axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) => {
-      const value = resp.data.data.length > 0 ? true : false;
-      setValidShipmentID(value);
-    });
-  }
 
   return (
     <div className='NewShipment'>
@@ -449,6 +221,9 @@ const CreateShipment = (props) => {
           if (!values.shipmentDate) {
             errors.shipmentDate = "Required";
           }
+          if (!values.estimateDeliveryDate) {
+            errors.estimateDeliveryDate = "Required";
+          }
           if (!orderIdSelected && values.products.length === 0) {
             errors.products = "Required";
           }
@@ -474,13 +249,13 @@ const CreateShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  From
+                  {t("from")}
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                        Organisation Name*
+                        {t("organisation_name")}*
                       </label>
                       <input
                         className={`input refship ${
@@ -502,7 +277,7 @@ const CreateShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='orgLocation'>
-                        Organisation Location*
+                        {t("organisation_location")}*
                       </label>
                       <input
                         className={`input refship ${
@@ -527,13 +302,13 @@ const CreateShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  To
+                  {t("to")}
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='organizationName'>
-                        Organisation Name*
+                        {t("organisation_name")}*
                       </label>
                       <input
                         className={`input refship ${
@@ -555,7 +330,7 @@ const CreateShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        Delivery Location*
+                        {t("delivery_location")}*
                       </label>
                       <input
                         className={`input refship ${
@@ -580,12 +355,12 @@ const CreateShipment = (props) => {
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
-                  Delivery Details:
+                  {t("delivery_details")}:
                 </label>
                 <div className='row'>
                   <div className='col-md-6 com-sm-12 mt-2'>
                     <label className='name' htmlFor='organizationName'>
-                      Transit Number*
+                      {t("transit_no")}*
                     </label>
                     <input
                       className={`input refship ${
@@ -601,17 +376,12 @@ const CreateShipment = (props) => {
                       placeholder='Enter Transit Number'
                       onChange={handleChange}
                     />
-                    {/* {errors.airWayBillNo && touched.airWayBillNo && (
-                        <span className="error-msg text-danger-AB">
-                          {errors.airWayBillNo}
-                        </span>
-                      )} */}
                   </div>
 
                   <div className='col-md-6 com-sm-12 mt-3'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
-                        Shipment Date*
+                        {t("shipment_date")}*
                       </label>
                       <div
                         className={`input refship ${
@@ -631,7 +401,7 @@ const CreateShipment = (props) => {
                           onKeyDown={(e) =>
                             e.keyCode !== 8 && e.preventDefault()
                           }
-                          minDate={new Date()}
+                          // minDate={new Date()}
                           placeholderText='Enter Shipment Date'
                           onChange={(date) => {
                             setFieldValue("shipmentDate", date);
@@ -654,7 +424,7 @@ const CreateShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <label className='name' htmlFor='organizationName'>
-                      Label Code*
+                      {t("label_code")}*
                     </label>
                     <input
                       className={`input refship ${
@@ -680,7 +450,7 @@ const CreateShipment = (props) => {
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='shipmentId '>
-                        Estimate Delivery Date
+                        {t("estimated_delivery_date")}*
                       </label>
                       <div
                         className={`input refship ${
@@ -696,7 +466,6 @@ const CreateShipment = (props) => {
                           placeholderText='Enter Delivery Date'
                           onChange={(date) => {
                             setFieldValue("estimateDeliveryDate", date);
-                            // setEstimateDeliveryDate(date);
                           }}
                           selected={
                             values.estimateDeliveryDate
@@ -705,7 +474,7 @@ const CreateShipment = (props) => {
                                 )
                               : values.estimateDeliveryDate
                           }
-                          minDate={new Date()}
+                          // minDate={new Date()}
                           onKeyDown={(e) =>
                             e.keyCode !== 8 && e.preventDefault()
                           }
@@ -736,7 +505,7 @@ const CreateShipment = (props) => {
 
             <div className='row mb-3'>
               <label htmlFor='productDetails' className='headsup'>
-                Product Details
+                {t("product_details")}
               </label>
               <EditTable
                 check='0'
@@ -745,8 +514,6 @@ const CreateShipment = (props) => {
                 products={products}
                 category={category}
                 handleQuantityChange={(v, i) => {
-                  console.log(v, "v");
-
                   let newArr = [...addProducts];
                   newArr[i].productQuantity = v;
                   setFieldValue(
@@ -816,7 +583,6 @@ const CreateShipment = (props) => {
                       "products",
                       newArr.map((row) => ({
                         productCategory: row.type,
-                        // productID: row.id,
                         productQuantity: row.productQuantity,
                         batchNumber: row.batchNumber,
                         productName: row.name,
@@ -830,13 +596,10 @@ const CreateShipment = (props) => {
                 handleProductChange={(i, v) => {
                   let newArr = [...addProducts];
                   newArr[i]["name"] = v;
-                  console.log(newArr);
                   setFieldValue(
                     "products",
                     newArr.map((row) => ({
-                      // productId: row.id,
                       batchNumber: row.batchNumber,
-                      // id: row.id,
                       productQuantity: "",
                       quantity: "",
                       name: row.name,
@@ -849,14 +612,12 @@ const CreateShipment = (props) => {
                 }}
                 handleLabelIdChange={handleLabelIdChange}
                 handleCategoryChange={(i, v) => {
-                  console.log("in product type", v);
                   let newArr = [...addProducts];
                   newArr[i]["type"] = v;
                   setFieldValue(
                     "products",
                     newArr.map((row) => ({
                       productCategory: row.type,
-                      // productID: row.id,
                       productQuantity: row.productQuantity,
                       batchNumber: row.batchNumber,
                       productName: row.name,
@@ -883,7 +644,7 @@ const CreateShipment = (props) => {
                     setAddProducts((prod) => [...prod, newArr]);
                   }}
                 >
-                  +<span> Add Another Product</span>
+                  +<span>{t("add_another_product")}</span>
                 </button>
               </div>
 
@@ -913,7 +674,7 @@ const CreateShipment = (props) => {
                   className='btn btn-outline-primary font-bold mr-2'
                   onClick={() => props.history.push("/shipments")}
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
 
                 <button className='btn btn-orange fontSize20 font-bold'>
@@ -924,7 +685,7 @@ const CreateShipment = (props) => {
                     className='mr-2 mb-1'
                     alt=''
                   />
-                  <span>Create Shipment</span>
+                  <span>{t("create_shipment")}</span>
                 </button>
               </div>
             </div>
@@ -932,26 +693,18 @@ const CreateShipment = (props) => {
         )}
       </Formik>
       {openCreatedInventory && (
-        <Modal
-          close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <ShipmentPopUp
-            onHide={closeModal} //FailurePopUp
-            {...modalProps}
-          />
+        <Modal close={() => closeModal()} size='modal-sm'>
+          <ShipmentPopUp onHide={closeModal} {...modalProps} t={t} />
         </Modal>
       )}
 
       {openShipmentFail && (
-        <Modal
-          close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-        >
+        <Modal close={() => closeModalFail()} size='modal-sm'>
           <ShipmentFailPopUp
-            onHide={closeModalFail} //FailurePopUp
+            onHide={closeModalFail}
             {...modalProps}
             shipmentError={shipmentError}
+            t={t}
           />
         </Modal>
       )}

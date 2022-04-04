@@ -63,7 +63,6 @@ exports.deleteEventById = [
   param("eventID", "eventId must not be empty.").isLength({ min: 1 }).trim(),
   async function (req, res) {
     try {
-      console.log(req.params);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
@@ -82,7 +81,7 @@ exports.deleteEventById = [
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -92,7 +91,8 @@ exports.getAllEventsWithFilter = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) || 20;
       const organisationId = req.user.organisationId;
       let currentDate = new Date();
       let fromDateFilter = 0;
@@ -105,9 +105,16 @@ exports.getAllEventsWithFilter = [
         ? req.query.productManufacturer
         : undefined;
       let status = req.query.status ? req.query.status : undefined;
-      let date = req.query.date ? req.query.date : undefined;
-      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
-      let toDate = req.query.toDate ? req.query.toDate : undefined;
+      let date =
+        req.query.date && req.query.date !== "" ? req.query.date : undefined;
+      let fromDate =
+        req.query.fromDate && req.query.fromDate !== ""
+          ? req.query.fromDate
+          : undefined;
+      let toDate =
+        req.query.toDate && req.query.toDate !== ""
+          ? req.query.toDate
+          : undefined;
 
       switch (req.query.dateFilter) {
         case "today":
@@ -153,7 +160,6 @@ exports.getAllEventsWithFilter = [
         default:
           fromDateFilter = 0;
       }
-
       let elementMatchQuery = {};
       elementMatchQuery[`$or`] = [
         { eventTypeDesc: "SHIPMENT" },
@@ -162,7 +168,6 @@ exports.getAllEventsWithFilter = [
       if (date) {
         var givenDate = new Date(date);
         var abc = givenDate;
-        // givenDate = givenDate.toISOString();
         var nextDate = abc.setDate(abc.getDate() + 1);
         nextDate = new Date(nextDate);
         // nextDate = nextDate.split('T')[0];
@@ -174,6 +179,8 @@ exports.getAllEventsWithFilter = [
       if (fromDate && toDate) {
         var firstDate = new Date(fromDate);
         var nextDate = new Date(toDate);
+        nextDate = nextDate.setDate(nextDate.getDate() + 1);
+        nextDate = new Date(nextDate);
         elementMatchQuery[`createdAt`] = { $gte: firstDate, $lte: nextDate };
       }
       if (productName) {
@@ -290,7 +297,6 @@ exports.getAllEventsWithFilter = [
           let inventoryRecords = [];
           await Promise.all(
             eventRecords.map(async function (event) {
-              console.log(event);
               let eventRecord = JSON.parse(JSON.stringify(event));
               let payloadRecord = event.payloadData;
               eventRecord[`inventoryQuantity`] =
@@ -308,7 +314,8 @@ exports.getAllEventsWithFilter = [
               }
               eventRecord[`payloadData`] = payloadRecord;
               if (
-                eventRecord["eventTypePrimary"] !== "ADD" &&
+                eventRecord["eventTypePrimary"] !== "BUY" &&
+                // eventRecord["eventTypePrimary"] !== "ADD" &&
                 eventRecord[`shipmentDetails`] === null
               )
                 console.log("deleted entry");

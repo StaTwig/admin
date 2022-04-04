@@ -12,17 +12,17 @@ import CloseIcon from "../../assets/icons/cross.svg";
 import "./style.scss";
 import { TextField } from "@material-ui/core";
 const SearchWareHouse = (props) => {
-  const [region, setRegion] = useState("Select Region");
+  const { t } = props;
+  const [region, setRegion] = useState(t("Select_Region"));
   const [regions, setRegions] = useState([]);
-  const [country, setCountry] = useState("Select Country");
+  const [country, setCountry] = useState(t("Select_Country"));
   const [countries, setCountries] = useState([]);
-  const [warehouseId, setWareHouseId] = useState("Select Location");
+  const [warehouseId, setWareHouseId] = useState(t("Select_Location"));
   const [warehouses, setWareHouses] = useState([]);
   const [warehouseIds, setWareHouseIds] = useState([]);
   useEffect(() => {
     async function fetchAllRegions1() {
       let arr = await fetchAllRegions();
-      console.log(arr);
       setRegions(arr.data);
     }
     fetchAllRegions1();
@@ -36,14 +36,12 @@ const SearchWareHouse = (props) => {
   // }
   async function fetchAllCountries1(id) {
     let res = await fetchCountriesByRegion(id);
-    console.log("res", res);
     setCountries((x) => res.data);
-    console.log("countries", countries);
   }
 
   const onRegionChange = async (item) => {
     const warehousesResult = await getWareHousesByRegion(item);
-    if (warehousesResult.status === 1) {
+    if (warehousesResult.success === true) {
       setWareHouses(warehousesResult.data);
       props.setWarehouseArr(warehousesResult.data);
       const warehouseList = warehousesResult.data.map((w) => w.id);
@@ -64,7 +62,7 @@ const SearchWareHouse = (props) => {
 
   const onWarehouses = async (item) => {
     const warehousesResult = await getWareHousesByCountry(item);
-    if (warehousesResult.status === 1) {
+    if (warehousesResult.success === true) {
       setWareHouses(warehousesResult.data);
       props.setWarehouseArr(warehousesResult.data);
       const warehouseList = warehousesResult.data.map((w) => w.id);
@@ -97,7 +95,7 @@ const SearchWareHouse = (props) => {
       <div className='d-flex flex-column mb-2 region'>
         <div className='form-group row mr-1 mt-2'>
           <label htmlFor='shipmentId' className='mt-2 mr-3 col-3 text-left'>
-            Region
+            {t("region")}
           </label>
           <div className='form-control col'>
             <Autocomplete
@@ -116,7 +114,7 @@ const SearchWareHouse = (props) => {
         </div>
         <div className='form-group row mr-1'>
           <label htmlFor='shipmentId' className='mt-2 mr-3 col-3 text-left'>
-            Country
+            {t("country")}
           </label>
           <div className='form-control col'>
             <Autocomplete
@@ -126,14 +124,16 @@ const SearchWareHouse = (props) => {
                 onWarehouses(newValue);
                 setWareHouseId("");
               }}
-              options={countries.map((option) => option.name)}
+              options={countries.map(
+                (option) => option.spanishName || option.name
+              )}
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
         </div>
         <div className='form-group mb-4 row mr-1'>
           <label htmlFor='shipmentId' className='mt-2 mr-3 col-3 text-left'>
-            Location
+            {t("location")}
           </label>
           <div className='form-control col'>
             <Autocomplete
@@ -158,10 +158,10 @@ const SearchWareHouse = (props) => {
             >
               <div className='d-flex flex-row '>
                 <ul className='mr-3'>
-                  <li className='mb-2 text-secondary'>Country ID</li>
-                  <li className='mb-2 text-secondary'>Country</li>
-                  <li className='mb-2 text-secondary'>Location</li>
-                  <li className='mb-1 text-secondary'>Location Name</li>
+                  <li className='mb-2 text-secondary'>{t("country_id")}</li>
+                  <li className='mb-2 text-secondary'>{t("country")}</li>
+                  <li className='mb-2 text-secondary'>{t("location")}</li>
+                  <li className='mb-1 text-secondary'>{t("location_name")}</li>
                 </ul>
                 <ul>
                   <li className='mb-2'>

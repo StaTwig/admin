@@ -50,7 +50,7 @@
           box-shadow: 0px 1px 3px #00000065;
           border-radius: 8px;
         }
-        p{
+        p {
           line-height: normal;
         }
       }
@@ -63,4 +63,33 @@
       }
     }
   }
+}
+.css-nnbavb {
+  display: none !important;
+}
+.network-search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+}
+.flex-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+.left-flex {
+  display: flex;
+  align-items: center;
+}
+.right-flex {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.btn-warehouse {
+  padding: 13px 20px !important;
+}
+.css-hdw1oc {
+  display: none !important;
 }

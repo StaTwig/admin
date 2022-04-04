@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { turnOff, turnOn } from './spinnerActions';
-import { config } from '../config';
+import axios from "axios";
+import { turnOff, turnOn } from "./spinnerActions";
+import { config } from "../config";
 
 export const getAnalyticsAllStats = (param) => {
   return async (dispatch) => {
@@ -20,7 +20,7 @@ export const getOrgTypeStats = (param) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getOrganisationTypeStatsurl + param,
+        config().getOrganisationTypeStatsurl + param
       );
       dispatch(turnOff());
       return result.data;
@@ -31,20 +31,24 @@ export const getOrgTypeStats = (param) => {
 };
 
 export const getSupplierPerformanceByOrgType = (data) => {
-  let queryParam = '';
-  if (data && data.orgType && data.orgType?.length && data.orgType !== '') {
-    queryParam = queryParam + '?supplierType=' + data.orgType;
-  } 
-  console.log(queryParam)
-
-  if (data && data.location && data.location?.length && data.location !== '') {
-    queryParam = queryParam + ((data.orgType && data.orgType?.length && data.orgType !== '') ? '&' : '?') +'location=' + data.location;
+  let queryParam = "";
+  if (data && data.orgType && data.orgType?.length && data.orgType !== "") {
+    queryParam = queryParam + "?supplierType=" + data.orgType;
+  }
+  if (data && data.location && data.location?.length && data.location !== "") {
+    queryParam =
+      queryParam +
+      (data.orgType && data.orgType?.length && data.orgType !== ""
+        ? "&"
+        : "?") +
+      "location=" +
+      data.location;
   }
   return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getSupplierPerfomance + queryParam,
+        config().getSupplierPerfomance + queryParam
       );
       dispatch(turnOff());
       return result.data;
@@ -80,8 +84,7 @@ export const getAllTargets = () => {
   };
 };
 
-
-export const getAnalyticsByBrand = (cond = '') => {
+export const getAnalyticsByBrand = (cond = "") => {
   return async (dispatch) => {
     try {
       dispatch(turnOn());
@@ -111,7 +114,10 @@ export const getNewConfig = (data) => {
   return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(config().getNewConfig + `?district=${data.district}&vendorType=${data.vendorType}`); //BELGAUM S1
+      const result = await axios.get(
+        config().getNewConfig +
+          `?district=${data.district}&vendorType=${data.vendorType}`
+      ); //BELGAUM S1
       dispatch(turnOff());
       return result.data;
     } catch (e) {
@@ -127,7 +133,7 @@ export const setNewConfig = async (data) => {
     return e.response;
   }
 };
-export const getAllOrganisationStats = (param = '') => {
+export const getAllOrganisationStats = (param = "") => {
   return async (dispatch) => {
     try {
       dispatch(turnOn());
@@ -149,8 +155,7 @@ export const updateTargets = async (data) => {
   }
 };
 
-
-export const getAllOrganisationTypeStats = (param = '') => {
+export const getAllOrganisationTypeStats = (param = "") => {
   return async (dispatch) => {
     try {
       dispatch(turnOn());

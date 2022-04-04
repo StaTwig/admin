@@ -8,8 +8,9 @@ import { useDispatch } from "react-redux";
 import Modal from "../../shared/modal";
 import OrganisationPopUp from "../../components/signUp/organisationPopUp";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 const SignupContainer = (props) => {
+  const { i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -49,15 +50,15 @@ const SignupContainer = (props) => {
     }
 
     dispatch(turnOn());
-    const result = await registerUser(data);
+    const result = await registerUser(data, i18n.language);
     if (result.status === 200) {
       setShowModal(false);
       setAdminAwaiting(true);
     } else if (result.status === 500) {
       setErrorMessage(result.data.message);
     } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
+      const err = result.data;
+      setErrorMessage(err.message);
       setShowModal(false);
     }
     dispatch(turnOff());
@@ -85,7 +86,7 @@ const SignupContainer = (props) => {
 
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
-      checkNcontinue();
+      // checkNcontinue();
     }
   };
 
@@ -94,21 +95,21 @@ const SignupContainer = (props) => {
   };
 
   return (
-    <div className='container-fluid p-0' tabIndex='-1' onKeyDown={onkeydown}>
+    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
       {showModal && (
         <Modal
           isMandatory={true}
           close={() => closeModal()}
-          size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <OrganisationPopUp onHide={closeModal} onSignup={onSignup} />
         </Modal>
       )}
       <MobileHeader {...props} />
       {innerWidth > 1024 && (
-        <nav className='navbar sticky-top navbar-expand-lg'>
-          <Link className='navbar-brand' to='/'>
-            <img src={logo} width='230' height='30' alt='logo' />
+        <nav className="navbar sticky-top navbar-expand-lg">
+          <Link className="navbar-brand" to="/">
+            <img src={logo} width="230" height="30" alt="logo" />
           </Link>
         </nav>
       )}
@@ -118,6 +119,7 @@ const SignupContainer = (props) => {
         lastName={lastName}
         phone={phone}
         onSignup={checkNcontinue}
+        onKeyDown={checkNcontinue}
         adminAwaiting={adminAwaiting}
         onfirstNameChange={(e) => setFirstName(e.target.value)}
         errorMessage={errorMessage}

@@ -11,10 +11,10 @@ import {
   fetchStateByCountry,
   fetchCitiesByState,
 } from "../../actions/productActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const OrganisationPopUp = (props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [message, setMessage] = useState(
@@ -22,12 +22,7 @@ const OrganisationPopUp = (props) => {
   );
 
   const closeModal = () => setShowModal(false);
-  const orgTypeArr = [
-    { id: "SUPPLIER", name: t('supplier') },
-    { id: "CUSTOMER", name: t('customer') },
-    { id: "CUSTOMER_SUPPLIER", name: t('both') },
-    { id: "CENTRAL_AUTHORITY", name: t('central')+" "+t('authority') },
-  ];
+
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
   const [pincode, setPincode] = useState("");
@@ -47,14 +42,16 @@ const OrganisationPopUp = (props) => {
     }
     fetchAllRegions1();
   }, []);
-  async function fetchAllCountries1(id) {
-    let res = await fetchCountriesByRegion(id);
-    setallCountries(res.data);
-  }
   async function fetchAllState1(id) {
     let res = await fetchStateByCountry(id);
     setallState(res.data);
   }
+  // fetchAllState1();
+  async function fetchAllCountries1(id) {
+    let res = await fetchCountriesByRegion(id);
+    setallCountries(res.data);
+  }
+
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
     console.log(res, "All City");
@@ -102,9 +99,12 @@ const OrganisationPopUp = (props) => {
       )}
       <div className='d-flex flex-row justify-content-between'>
         <div className='flex-column'>
-          <div className='alert mt-3 p-0 pl-3'>{t('almost')} {t('there')}!</div>
+          <div className='alert mt-3 p-0 pl-3'>
+            {t("almost")} {t("there")}!
+          </div>
           <div className='text-info pl-3'>
-            {t('add')} {t('organisation').toLocaleLowerCase()} {t('details')} {t('to')} {t('continue').toLocaleLowerCase()}
+            {t("add")} {t("organisation").toLocaleLowerCase()} {t("details")}{" "}
+            {t("to")} {t("continue").toLocaleLowerCase()}
           </div>
         </div>
         <div>
@@ -148,25 +148,25 @@ const OrganisationPopUp = (props) => {
                 //     errors.type = "Required";
                 //   }
                 if (!values.name) {
-                  errors.name = t('required');
+                  errors.name = t("required");
                 }
                 if (!values.pincode) {
-                  errors.pincode = t('required');
+                  errors.pincode = t("required");
                 }
                 if (!values.region) {
-                  errors.region = t('required');
+                  errors.region = t("required");
                 }
                 if (!values.line1) {
-                  errors.line1 = t('required');
+                  errors.line1 = t("required");
                 }
                 if (!values.city) {
-                  errors.city = t('required');
+                  errors.city = t("required");
                 }
                 if (!values.state) {
-                  errors.state = t('required');
+                  errors.state = t("required");
                 }
                 if (!values.country) {
-                  errors.country = t('required');
+                  errors.country = t("required");
                 }
                 return errors;
               }}
@@ -197,7 +197,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('organisation')+" "+t('name')}
+                          label={t("organisation") + " " + t("name")}
                           className='form-control2'
                           name='name'
                           value={values.name}
@@ -220,7 +220,6 @@ const OrganisationPopUp = (props) => {
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
-                        {/* <label className="required-field col-sm-6" htmlFor="region">Region</label> */}
                         <Autocomplete
                           value={region}
                           onChange={(event, newValue) => {
@@ -231,14 +230,13 @@ const OrganisationPopUp = (props) => {
                             setCity("");
                           }}
                           id='controllable-states-demo'
-                          // inputValue={inputValue1}
-                          // onInputChange={(event, newInputValue) => {
-                          //   setInputValue1(newInputValue);
-                          // }}
                           options={allregions}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('region')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("region")}
+                            />
                           )}
                         />
                         {errors.region && touched.region && (
@@ -271,7 +269,6 @@ const OrganisationPopUp = (props) => {
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
-                        {/* <label className="required-field col-sm-6" htmlFor="country">Country</label> */}
                         <Autocomplete
                           value={country}
                           onChange={(event, newValue) => {
@@ -285,7 +282,10 @@ const OrganisationPopUp = (props) => {
                           options={allCountries.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('country')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("country")}
+                            />
                           )}
                         />
                         {errors.country && touched.country && (
@@ -312,7 +312,10 @@ const OrganisationPopUp = (props) => {
                           options={allState.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('state')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("state")}
+                            />
                           )}
                         />
                         {errors.state && touched.state && (
@@ -337,7 +340,10 @@ const OrganisationPopUp = (props) => {
                           options={allCity.map((Option) => Option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('city')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("city")}
+                            />
                           )}
                         />
                         {errors.city && touched.city && (
@@ -365,7 +371,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('address')+" "+t('line')}
+                          label={t("address") + " " + t("line")}
                           className='form-controll'
                           name='line1'
                           value={values.line1}
@@ -404,7 +410,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('pincode')}
+                          label={t("pincode")}
                           type='number'
                           className='form-control2'
                           name='pincode'
@@ -441,7 +447,7 @@ const OrganisationPopUp = (props) => {
                       type='submit'
                       className='btn btn-primary '
                     >
-                      {t('done')}
+                      {t("done")}
                     </button>
                   </div>
                 </form>

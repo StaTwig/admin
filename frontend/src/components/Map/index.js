@@ -1,13 +1,15 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import mapboxgl from "mapbox-gl";
+import carboxyl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
 
-mapboxgl.accessToken =
+carboxyl.accessToken =
   "pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q";
 
 const Map = (props) => {
+  const { t, lang } = props;
   const mapContainerRef = useRef(null);
   const [lng, setLng] = useState(5);
   const [lat, setLat] = useState(34);
@@ -51,7 +53,7 @@ const Map = (props) => {
 
   // Initialize map when component mounts
   useEffect(() => {
-    let map = new mapboxgl.Map({
+    let map = new carboxyl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/light-v10",
       center: [lng, lat],
@@ -59,7 +61,7 @@ const Map = (props) => {
     });
 
     if (warehouseLocation?.latitude) {
-      map = new mapboxgl.Map({
+      map = new carboxyl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/light-v10",
         center: [
@@ -74,7 +76,7 @@ const Map = (props) => {
         parseFloat(warehouseLocation.longitude),
         parseFloat(warehouseLocation.latitude),
       ];
-      newMarker = new mapboxgl.Marker().setLngLat(coords).addTo(map);
+      newMarker = new carboxyl.Marker().setLngLat(coords).addTo(map);
       markers.push(newMarker);
     }
 
@@ -82,7 +84,7 @@ const Map = (props) => {
       warehouseArr.forEach((w, i) => {
         if (w.location?.latitude) {
           if (i === 0) {
-            map = new mapboxgl.Map({
+            map = new carboxyl.Map({
               container: mapContainerRef.current,
               style: "mapbox://styles/mapbox/light-v10",
               center: [
@@ -111,7 +113,7 @@ const Map = (props) => {
             }
           }
 
-          newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
+          newMarker = new carboxyl.Marker(options).setLngLat(coords).addTo(map);
           markers.push(newMarker);
         }
       });
@@ -166,14 +168,14 @@ const Map = (props) => {
         });
       });
 
-      newMarker = new mapboxgl.Marker()
+      newMarker = new carboxyl.Marker()
         .setLngLat([
           parseFloat(shipment?.receiver?.warehouse?.location?.longitude),
           parseFloat(shipment?.receiver?.warehouse?.location?.latitude),
         ])
         .addTo(map);
       markers.push(newMarker);
-      newMarker = new mapboxgl.Marker()
+      newMarker = new carboxyl.Marker()
         .setLngLat([
           parseFloat(shipment?.supplier?.warehouse?.location?.longitude),
           parseFloat(shipment?.supplier?.warehouse?.location?.latitude),
@@ -189,7 +191,7 @@ const Map = (props) => {
       );
       setLng(popL.long);
       setLat(popL.lat);
-      new mapboxgl.Popup({
+      new carboxyl.Popup({
         offset: 25,
         className: "popUp",
         closeOnClick: false,
@@ -197,22 +199,36 @@ const Map = (props) => {
         .setLngLat([popL.long, popL.lat])
         .setHTML(
           `<div class="pt-1 text-white pb-1 pl-2 pr-2">
-              <div class="row"><span class="col-5 disabled">Shipment ID:</span> <span class=" col-3 font-weight-bold">${shipment.id}</span></div>
-              <div class="row"> <span class="col-5 disabled text-decoration-underline"> ${user?.walletAddress}</span> </div>
+              <div class="row"><span class="col-7 disabled">${t(
+                "shipment_id"
+              )}:</span> <span class=" col-3 font-weight-bold">${
+            shipment.id
+          }</span></div>
+              <div class="row"> <span class="col-5 disabled text-decoration-underline"> ${
+                user?.walletAddress
+              }</span> </div>
               <div class="row pt-1 pb-1">
                 <div class="col-1"> </div> 
-                <div class="col-2 disabled">From</div> 
+                <div class="col-2 disabled">${t("from")}:</div> 
                 <div class="col">
-                  <div class="font-weight-bold">${shipment.supplier.org.name} </div>
-                  <div class="disabled">${shipment.supplier?.warehouse?.warehouseAddress?.city}</div>
+                  <div class="font-weight-bold">${
+                    shipment.supplier.org.name
+                  } </div>
+                  <div class="disabled">${
+                    shipment.supplier?.warehouse?.warehouseAddress?.city
+                  }</div>
                 </div>
               </div>
               <div class="row pt-1 pb-1">
                 <div class="col-1"> </div>
-                <div class="col-2 disabled">To</div>
+                <div class="col-2 disabled">${t("to")}:</div>
                 <div class="col">
-                  <div class="font-weight-bold">${shipment.receiver.org.name}</div>
-                  <div class="disabled">${shipment.receiver?.warehouse?.warehouseAddress?.city}</div>
+                  <div class="font-weight-bold">${
+                    shipment.receiver.org.name
+                  }</div>
+                  <div class="disabled">${
+                    shipment.receiver?.warehouse?.warehouseAddress?.city
+                  }</div>
                 </div>
               </div>
             </div>`
@@ -220,22 +236,17 @@ const Map = (props) => {
         .addTo(map);
     }
 
-    // var fg = new mapboxgl.featureGroup(markers);
-    // map.fitBounds(fg.getBounds());
-    // console.log(fg.getBounds());
-
-    // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.addControl(new carboxyl.NavigationControl(), "top-right");
 
     map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
     });
-
-    // Clean up on unmount
+    const language = new MapboxLanguage({ defaultLanguage: lang });
+    map.addControl(language);
     return () => map.remove();
-  }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props]);
 
   return (
     <div>

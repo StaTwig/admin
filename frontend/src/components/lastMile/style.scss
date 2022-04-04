@@ -1,12 +1,11 @@
-@import '../../assets/styles/global.scss';
-.lastmile{
-  position:relative;
-  margin-left:70px;
+@import "../../assets/styles/global.scss";
+.lastmile {
+  position: relative;
+  margin-left: 70px;
   padding-right: 2rem;
 }
-.breadcrumb{
+.breadcrumb {
   margin-left: 20px;
-  
 }
 .filter {
   .filter-item {
@@ -28,9 +27,8 @@
     }
   }
 
-
-  .text{
-    color:white;
+  .text {
+    color: white;
   }
 
   .divider {
@@ -48,7 +46,12 @@
     align-items: center;
   }
 }
-.tab
-{
-    border-radius: 20px;
+.tab {
+  border-radius: 20px;
+}
+.wrap {
+  flex-wrap: nowrap !important;
+}
+.border-none {
+  border: none !important;
 }

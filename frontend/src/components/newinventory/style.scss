@@ -5,7 +5,6 @@
   top: -22px;
   padding-right: 45px;
   padding-left: 55px;
-  //overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
@@ -104,6 +103,17 @@
     font: 25px/0.1px $roboto;
     color: #000000;
   }
+}
+.import-disable-button {
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+.file-name {
+  position: absolute;
+  bottom: 16%;
+  width: 100%;
+  text-align: center;
 }
 
 .btn-custom-dropdown {

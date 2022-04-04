@@ -8,8 +8,10 @@ import Verify from "../../components/verify";
 import { sendOtp, setCurrentUser, verifyOtp } from "../../actions/userActions";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import setAuthToken from "../../utils/setAuthToken";
+import { useTranslation } from "react-i18next";
 
 const VerifyContainer = (props) => {
+  const { i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,7 +23,7 @@ const VerifyContainer = (props) => {
     if (params.length > 1) {
       const emailId = params[1];
       const data = { emailId, otp };
-      const result = await verifyOtp(data);
+      const result = await verifyOtp(data, i18n.language);
       if (result.status === 200) {
         // Set auth token auth
         const token = result.data.data.token;
@@ -32,7 +34,9 @@ const VerifyContainer = (props) => {
         localStorage.setItem("theLedgerToken", token);
         localStorage.setItem("bkp", result.data.data.permissions.permissions);
         dispatch(setCurrentUser(decoded));
-        props.history.push(emailId.toLowerCase() === 'gmr@statledger.io' ? `/shipments` : `/overview`);
+        props.history.push(
+          result.data.data.isCustom ? `/shipments` : `/overview`
+        );
       } else {
         const err = result.data.message;
         setErrorMessage(err);

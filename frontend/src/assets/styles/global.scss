@@ -32,10 +32,14 @@ body {
 .btn {
   padding: 5px 20px;
   height: 45px;
+  text-transform: capitalize !important;
+  text-decoration: none;
 }
 
 .btn-white {
   color: $primaryBlue;
+  text-transform: capitalize !important;
+  text-decoration: none;
 }
 
 .btn-primary {
@@ -46,6 +50,8 @@ body {
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
+  text-transform: capitalize !important;
+  text-decoration: none;
 }
 
 .btn-main-blue {
@@ -54,6 +60,8 @@ body {
   border-width: 0;
   border-color: transparent;
   color: $white;
+  text-transform: capitalize !important;
+  text-decoration: none;
 
   &:hover {
     color: $white;
@@ -65,6 +73,8 @@ body {
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
+  text-transform: capitalize !important;
+  text-decoration: none;
 }
 
 .btn-orange {
@@ -74,9 +84,12 @@ body {
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
+  transition: 0.2s ease-in-out;
+  text-transform: capitalize !important;
+  text-decoration: none;
 }
 .btn-orange:hover {
-  border: 0.5px solid #fa7923;
+  background-color: #fc9551;
   color: #fff;
 }
 
@@ -87,17 +100,22 @@ body {
   border-radius: 10px;
   border-width: 0;
   text-transform: capitalize;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
 
+  &:hover {
+    background-color: #fcb842;
+    color: $white;
+  }
   a {
     color: $white;
   }
 }
 
 .btn-outline-primary {
-  //color: $primaryBlue !important;
-  //border-color:#229aca !important;
   border-width: 1px !important;
   border-radius: 10px !important;
+  text-transform: capitalize !important;
 }
 
 .custom-card {

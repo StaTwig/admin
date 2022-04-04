@@ -225,3 +225,57 @@
   width: 15px;
   height: 31px;
 }
+.icon-container {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
+  .icon-gmr {
+    width: 3rem;
+    color: #707070;
+  }
+  &:hover {
+    background: #eee;
+  }
+}
+.icon-container-alt {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
+  .icon-gmr {
+    width: 3rem;
+    color: #707070;
+  }
+  &:hover {
+    background: #eee;
+  }
+}
+.p-relative {
+  position: relative;
+}
+.left-arrow {
+  cursor: pointer;
+  position: absolute;
+  left: 1.5rem;
+  bottom: -2rem;
+}
+.right-arrow {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  bottom: -2rem;
+}
+
+.time-filter {
+  margin-top: 1rem;
+  justify-content: space-evenly;
+  color: #fa7923;
+}

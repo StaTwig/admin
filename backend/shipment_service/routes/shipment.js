@@ -12,14 +12,19 @@ const Storage = multer.diskStorage({
 const upload = multer({ storage: Storage });
 const router = express.Router();
 
-router.post("/createShipment", ShipmentController.createShipment); // /createShipment => POST data of Shipment
-router.post("/newShipment", ShipmentController.newShipment); // /newShipment => POST data of Shipment
-router.post("/receiveShipment", ShipmentController.receiveShipment); // /receiveShipment => Shipment ID
+router.post("/createShipment", ShipmentController.createShipment);
+router.post("/newShipment", ShipmentController.newShipment);
+router.post(
+  "/receiveShipment",
+  upload.single("photo"),
+  ShipmentController.receiveShipment
+);
+router.get("/customReceiveShipment", ShipmentController.customReceiveShipment);
 router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments => Takes warehouseId from req.user header
 router.get(
   "/fetchAllWarehouseShipments",
   ShipmentController.fetchAllWarehouseShipments
-); // fetchAllWarehouseShipments => fetch shipments from all warehouses
+);
 router.get("/viewShipment", ShipmentController.viewShipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
 router.get("/viewShipmentGmr", ShipmentController.viewShipmentGmr); // /viewShipmentGmr?ShipmentId=SH7TUC_VZIKD
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
@@ -29,7 +34,11 @@ router.get(
   "/getProductsByInventory",
   ShipmentController.getProductsByInventory
 );
-router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
+router.post(
+  "/UpdateTrackingStatus",
+  upload.single("photo"),
+  ShipmentController.updateTrackingStatus
+);
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
 router.get("/trackJourney", ShipmentController.trackJourney);
 
@@ -80,5 +89,8 @@ router.get(
   "/trackJourneyOnBlockchain",
   ShipmentController.trackJourneyOnBlockchain
 );
+
+router.get("/sensorHistory", ShipmentController.sensorHistory);
+router.get("/driverHistory", ShipmentController.tripDetails);
 
 module.exports = router;

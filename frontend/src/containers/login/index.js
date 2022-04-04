@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import Login from "../../components/login";
 import { sendOtp } from "../../actions/userActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { useTranslation } from "react-i18next";
 
 const LoginContainer = (props) => {
+  const { i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,20 +26,32 @@ const LoginContainer = (props) => {
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
     const data = { emailId: email !== "" ? email : phone };
-    const result = await sendOtp(data);
-    if (result.status === 200) {
-      props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
-    } else if (result.status === 500) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else if (result.status === 401) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
+    // console.log("phone:", phone.length);
+    console.log("email:", email);
+    if(email===""&&phone.length<13){
+      setErrorMessage("Provide Valid Phone Number");
+      dispatch(turnOff());  
     }
-    dispatch(turnOff());
+    else{
+      const result = await sendOtp(data, i18n.language);
+      if (result?.status === 200) {
+        props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
+      } else if (result?.status === 500) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else if (result?.status === 404) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else if (result?.status === 401) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else {
+        const err = result.data.data.emailId;
+        setErrorMessage(err);
+      }
+      dispatch(turnOff());      
+    }
+
   });
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
@@ -66,8 +80,11 @@ const LoginContainer = (props) => {
           }}
           onPhoneChange={(value) => {
             setPhone(value);
-            let temp_phone = value.slice(2, value.length);
+            if(value){
+              let temp_phone = value.slice(2, value.length);
             if (temp_phone !== "") setemailFieldDisable(true);
+            else setemailFieldDisable(false);
+            }
             else setemailFieldDisable(false);
           }}
           email={email}

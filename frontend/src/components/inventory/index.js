@@ -5,10 +5,6 @@ import Table from "../../shared/table";
 import TableFilter from "../../shared/advanceTableFilter";
 import { getInventoryAnalytics } from "../../actions/analyticsAction";
 import { getProductList } from "../../actions/productActions";
-import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
-import currentinventory from "../../assets/icons/CurrentInventory.svg";
-import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
-import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from "../../assets/icons/add.svg";
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
@@ -17,14 +13,22 @@ import Product from "../../assets/icons/Producttype.png";
 import { useDispatch } from "react-redux";
 import { getInventories } from "../../actions/inventoryActions";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const Inventory = (props) => {
+  const { t } = props;
   const headers = {
     coloumn1: "Product Name",
     coloumn2: "Product Category",
     coloumn3: "Date",
     coloumn4: "Quantity",
     coloumn5: "Status",
+
+    displayColoumn1: t("product_name"),
+    displayColoumn2: t("product_category"),
+    displayColoumn3: t("date"),
+    displayColoumn4: t("quantity"),
+    displayColoumn5: t("status"),
 
     img1: <img src={Product} width='16' height='16' alt='Product' />,
     img2: <img src={Quantity} width='24' height='16' alt='Quantity' />,
@@ -35,9 +39,9 @@ const Inventory = (props) => {
 
   if (!isAuthenticated("viewInventory")) props.history.push(`/profile`);
   const tableHeaders = {
-    coloumn1: "Product Name",
-    coloumn2: "Product Category",
-    coloumn3: "Quantity",
+    coloumn1: t("product_name"),
+    coloumn2: t("product_category"),
+    coloumn3: t("quantity"),
   };
   const MAX_LENGTH = 20;
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState("");
@@ -45,6 +49,8 @@ const Inventory = (props) => {
   const [inventoriesCount, setInventoriesCount] = useState("");
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState("");
   const [productsList, setProductsList] = useState([]);
+  const [fromFilterDate, setFromFilterDate] = useState();
+  const [toFilterDate, setToFilterDate] = useState();
   const dispatch = useDispatch();
   const colors = [
     "#D8E5FB",
@@ -158,9 +164,34 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
+  };
+
+  const onSelectionDateFilter = async (value) => {
+    const fromDate =
+      value[0] === "" ? "" : new Date(new Date(value[0]).toDateString());
+    setFromFilterDate(fromDate);
+    if (value.length > 1) {
+      const toDate =
+        value[0] === "" ? "" : new Date(new Date(value[1]).toDateString());
+      setToFilterDate(toDate);
+      dispatch(
+        getInventories(
+          0,
+          limit,
+          dateFilter,
+          productNameFilter,
+          productCategoryFilter,
+          statusFilter,
+          fromDate ? fromDate?.toISOString() : null,
+          toDate ? toDate?.toISOString() : null
+        )
+      );
+    }
   };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
@@ -173,16 +204,14 @@ const Inventory = (props) => {
         dateFilterSelected,
         productNameFilter,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
 
   const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
-    console.log(
-      "setInventoryStatusFilterOnSelect =========>",
-      statusFilterSelected
-    );
     setStatusFilter(statusFilterSelected);
     // setSkip(0);
     dispatch(
@@ -192,7 +221,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         productCategoryFilter,
-        statusFilterSelected
+        statusFilterSelected,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -200,10 +231,6 @@ const Inventory = (props) => {
   const setInventoryProductNameFilterOnSelect = async (
     productNameFilterSelected
   ) => {
-    console.log(
-      "setInventoryProductNameFilterOnSelect =========>",
-      productNameFilterSelected
-    );
     setProductNameFilter(productNameFilterSelected);
     // setSkip(0);
     dispatch(
@@ -213,7 +240,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilterSelected,
         productCategoryFilter,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
@@ -221,10 +250,6 @@ const Inventory = (props) => {
   const setInventoryManufacturerFilterOnSelect = async (
     manufacturerFilterSelected
   ) => {
-    console.log(
-      "setInventoryManufacturerFilterOnSelect =========>",
-      manufacturerFilterSelected
-    );
     // setManufacturerFilter(manufacturerFilterSelected);
     // setSkip(0);
     dispatch(
@@ -234,7 +259,9 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         manufacturerFilterSelected,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productManufacturer, status)
   };
@@ -242,10 +269,6 @@ const Inventory = (props) => {
   const setInventoryProductCategoryFilterOnSelect = async (
     categoryFilterSelected
   ) => {
-    console.log(
-      "setInventoryProductCategoryFilterOnSelect =========>",
-      categoryFilterSelected
-    );
     setProductCategoryFilter(categoryFilterSelected);
     // setSkip(0);
     dispatch(
@@ -255,21 +278,23 @@ const Inventory = (props) => {
         dateFilter,
         productNameFilter,
         categoryFilterSelected,
-        statusFilter
+        statusFilter,
+        fromFilterDate ? fromFilterDate?.toISOString() : null,
+        toFilterDate ? toFilterDate?.toISOString() : null
       )
     ); //(skip, limit, dateFilter, productName, productCategory, status)
   };
   return (
     <div className='inventory'>
       <div className='d-flex justify-content-between'>
-        <h2 className='breadcrumb'>INVENTORY </h2>
+        <h2 className='breadcrumb'>{t("inventory")}</h2>
         <div className='d-flex'>
           {isAuthenticated("addInventory") && (
             <Link to='/newinventory'>
               <button className='btn btn-yellow mt-2'>
                 <img src={Add} width='13' height='13' className='mr-2' alt='' />
                 <span>
-                  <b>Add Inventory</b>
+                  <b>{t("add_inventory")}</b>
                 </span>
               </button>
             </Link>
@@ -277,193 +302,16 @@ const Inventory = (props) => {
         </div>
       </div>
       {isAuthenticated("inventoryAnalytics") && (
-        <div className='row mb-4'>
-          <div className='col'>
-            <Link to='/productcategory'>
-              <div className='panel'>
-                <div className='picture truck-bg'>
-                  <img src={TotalInventoryAdded} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title truck-text font-weight-bold'>
-                    Total Product Category
-                  </div>
-
-                  <div className='count truck-text'>
-                    {inventoriesCount}{" "}
-                    {inventoryAnalytics?.totalProductCategory}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className='col'>
-            <Link to='/productoutofstock'>
-              <div className='panel'>
-                <div className='picture sent-bg'>
-                  <img src={currentinventory} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title sent-text font-weight-bold'>
-                    Product Out Of Stock
-                  </div>
-                  <div className='sent-text count'>
-                    {currentInventoriesCount}
-                    {inventoryAnalytics?.stockOut}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div className='col'>
-            <Link to='/batchnearexpiry/product'>
-              <div className='panel'>
-                <div className='picture recived-bg'>
-                  <img src={Expiration} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title recived-text font-weight-bold'>
-                    Batch near Expiration
-                  </div>
-                  {/* <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInThreeMonths
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                      )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringThisMonth
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringInSixMonths
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryNearExpiration(
-                      inventoryAnalytics.batchExpiringThisWeek
-                    )
-                  }
-                >
-              </div>
-              </div> */}
-                  <div className='recived-text count'>
-                    {inventoryNearExpiration}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className='col'>
-            <Link to='/batchexpired'>
-              <div className='panel'>
-                <div className='picture transit-bg'>
-                  <img src={TotalVaccineExpired} alt='truck' />
-                </div>
-                <div className='d-flex flex-column'>
-                  <div className='title transit-text font-weight-bold'>
-                    Batch Expired
-                  </div>
-                  {/* <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastMonth
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastWeek
-                    )
-                  }
-                >
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredLastYear
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoryExpired(
-                      inventoryAnalytics.batchExpiredToday
-                    )
-                  }
-                >
-                </div>
-              </div> */}
-                  <div className='transit-text count'>{inventoryExpired}</div>
-                </div>
-              </div>
-            </Link>
-          </div>
+        <div className='mb-4'>
+          <Cards
+            inventoriesCount={inventoriesCount}
+            inventoryAnalytics={inventoryAnalytics}
+            currentInventoriesCount={currentInventoriesCount}
+            inventoryNearExpiration={inventoryNearExpiration}
+            inventoryExpired={inventoryExpired}
+            // setData={props.setData}
+            t={t}
+          />
         </div>
       )}
       <div className='full-width-ribben'>
@@ -472,9 +320,11 @@ const Inventory = (props) => {
           isReportDisabled={true}
           data={headers}
           inventoryFilterData={props.inventoryFilterData}
+          productCategories={props.productCategories}
           setInventoryProductNameFilterOnSelect={
             setInventoryProductNameFilterOnSelect
           }
+          onSelectionDateFilter={onSelectionDateFilter}
           setInventoryManufacturerFilterOnSelect={
             setInventoryManufacturerFilterOnSelect
           }
@@ -484,7 +334,8 @@ const Inventory = (props) => {
             setInventoryProductCategoryFilterOnSelect
           }
           fb='80%'
-          filterPage="inventory"
+          t={t}
+          filterPage='inventory'
         />
       </div>
       <div className='ribben-space'>
@@ -503,11 +354,11 @@ const Inventory = (props) => {
               <div className='list-container'>
                 <div className='d-flex justify-content-between align-items-center ml-3'>
                   <h4>
-                    <b>Product List</b>
+                    <b>{t("product_list")}</b>
                   </h4>
                   <Link to='/productcategory'>
                     <button className='btn btn-link mr-1'>
-                      <b>View all</b>
+                      <b>{t("view_all")}</b>
                     </button>
                   </Link>
                 </div>
@@ -526,23 +377,23 @@ const Inventory = (props) => {
                             {product.productName.length <= MAX_LENGTH ? (
                               <div>{product.productName}</div>
                             ) : (
-                              <div>{`${product.productName.substring(
-                                0,
-                                MAX_LENGTH
-                              )}...`}</div>
-                            )}
+                                <div>{`${product.productName.substring(
+                                  0,
+                                  MAX_LENGTH
+                                )}...`}</div>
+                              )}
                           </div>
 
                           {/* <p className="product">{product.productName}</p> */}
                           <h3 className='qty'>
-                            Qty : {product.quantity}
+                            {t("quantity")} : {product.quantity}
                             <span>{"  ("}</span>
                             {product.unitofMeasure &&
-                            product.unitofMeasure.name ? (
-                              <span>{product.unitofMeasure.name}</span>
-                            ) : (
-                              ""
-                            )}
+                              product.unitofMeasure.name ? (
+                                <span>{product.unitofMeasure.name}</span>
+                              ) : (
+                                ""
+                              )}
                             <span>{")"}</span>
                           </h3>
                         </div>

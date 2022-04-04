@@ -12,7 +12,6 @@ const fontDescriptors = {
 };
 const printer = new PdfPrinter(fontDescriptors);
 const axios = require("axios");
-const uniqid = require("uniqid");
 const date = require("date-and-time");
 const moment = require("moment");
 const POModel = require("../models/POModel");
@@ -26,11 +25,13 @@ const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const apiResponse = require("../helpers/apiResponse");
+const { responses } = require("../helpers/responses");
 const auth = require("../middlewares/jwt");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const wrapper = require("../models/DBWrapper");
 const excel = require("node-excel-export");
+const { compareArrays } = require("../helpers/utility");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const po_stream_name = process.env.PO_STREAM;
@@ -143,14 +144,17 @@ exports.fetchPurchaseOrders = [
                   poDetails = data;
                 }
               );
-              await Promise.all(
-                poDetails[0]?.products.map(async (element) => {
-                  const product = await ProductModel.findOne({
-                    id: element.id,
-                  });
-                  element.unitofMeasure = product.unitofMeasure;
-                })
-              );
+              if (poDetails.length)
+                await Promise.all(
+                  poDetails[0]?.products.map(async (element) => {
+                    const product = await ProductModel.findOne({
+                      $or: [{ name: element.id }, { id: element.id }],
+                    });
+                    element.unitofMeasure = product?.unitofMeasure;
+                    element.manufacturer = product?.manufacturer;
+                    element.type = product?.type;
+                  })
+                );
             } else {
               await userPurchaseOrders(
                 "supplier",
@@ -359,20 +363,19 @@ exports.changePOStatus = [
                 else newEvent.eventTypePrimary = "REJECT";
                 newEvent.payloadData.data = req.body;
                 let event_body = new Event(newEvent);
-                let result = await event_body.save();
-                console.log(result);
+                await event_body.save();
               } catch (error) {
                 console.log(error);
               }
               return apiResponse.successResponseWithData(
                 res,
-                "PO Status",
-                "Success"
+                responses(req.user.preferredLanguage).po_status,
+                responses(req.user.preferredLanguage).success
               );
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                "You are not authorised to change the status"
+                responses(req.user.preferredLanguage).not_authorized
               );
             }
           } catch (e) {
@@ -381,7 +384,7 @@ exports.changePOStatus = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -405,8 +408,21 @@ exports.createPurchaseOrder = [
       } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       creationDate = new Date(creationDate);
+      const poId = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "productId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      );
       const purchaseOrder = new RecordModel({
-        id: uniqid("po-"),
+        id: poId.counters[5].format + poId.counters[5].value,
         externalId,
         creationDate,
         supplier,
@@ -419,7 +435,7 @@ exports.createPurchaseOrder = [
       const result = await purchaseOrder.save();
       return apiResponse.successResponseWithData(
         res,
-        "Created PO Success",
+        responses(req.user.preferredLanguage).success,
         result.id
       );
     } catch (err) {
@@ -434,17 +450,71 @@ exports.addPOsFromExcel = [
     try {
       const workbook = XLSX.readFile(req.file.path);
       const sheet_name_list = workbook.SheetNames;
+      let errorsArr = [];
+      let warningArr = [];
+      let invalidArr = [];
       const data = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
       );
+
+      // Validate incoming Excel columns
+      const expectedColNames = req.user.preferredLanguage === "EN" ? [
+        'UNICEf PO Number',
+        'PO Item#',
+        'Vendor',
+        'Vendor Name',
+        'Document Date',
+        'Your Reference',
+        'Incoterms',
+        'Incoterms (Part 2)',
+        'Material',
+        'Material Description',
+        'Plant',
+        'Country Name',
+        'Region Name',
+        'Order Quantity',
+        'Order Unit',
+        'Unit Id',
+        'IP Code',
+        'IP Name'
+      ] : [
+          'UNICEf PO Número',
+          'PO Articulo#',
+          'Vendedor',
+          'Nombre Del Vendedor',
+          'Fecha Del Documento',
+          'Tu Referencia',
+          'Incoterms',
+          'Incoterms (Part 2)',
+          'Material',
+          'Material Descripción',
+          'Planta',
+          'Nombre Del País',
+          'Nombre De La Región',
+          'Ordene La Cantidad',
+          'Unidad De Pedido',
+          'Unidad Id',
+          'IP Código',
+          'IP Nombre'
+        ];
+
+      if (!compareArrays(expectedColNames, Object.keys(data[0]))) {
+        // Invalid format logic
+        return apiResponse.validationErrorWithData(
+          res,
+          responses(req.user.preferredLanguage).invalid_excel,
+          Object.keys(data[0])
+        );
+      }
+
       const createdBy = req.user.id;
       let poDataArray = [];
       poDataArray = data.map((po) => {
         return {
           id: po.id || 0,
           externalId: po["UNICEf PO Number"],
-          creationDate: po["Document Date"],
+          creationDate: new Date().toISOString(),
           lastUpdatedOn: new Date().toISOString(),
           poStatus: req.user.id == po["Vendor"] ? "APPROVED" : "CREATED",
           supplier: {
@@ -464,8 +534,8 @@ exports.addPOsFromExcel = [
           },
           products: [
             {
-              productId: po["Material"],
-              id: po["Material"],
+              // productId: po["Material"],
+              name: po["Material"],
               productQuantity: po["Order Quantity"],
               quantity: po["Order Quantity"],
               unitofMeasure: {
@@ -478,8 +548,7 @@ exports.addPOsFromExcel = [
           lastUpdatedBy: createdBy,
         };
       });
-      console.log(poDataArray);
-      var incrementCounter = await CounterModel.update(
+      let incrementCounter = await CounterModel.updateOne(
         {
           "counters.name": "poId",
         },
@@ -494,6 +563,7 @@ exports.addPOsFromExcel = [
         { "counters.$": 1 }
       );
       let dataRows = 0;
+
       for (let i in poDataArray) {
         if (poDataArray[i].externalId != null) {
           const duplicate = await RecordModel.findOne({
@@ -501,22 +571,28 @@ exports.addPOsFromExcel = [
           });
           if (duplicate != null) {
             console.log("****** Duplicate PO");
+            errorsArr.push(poDataArray[i]);
             delete poDataArray[i];
             i--;
           } else {
             poDataArray[i].id =
               poCounter.counters[0].format + poCounter.counters[0].value++;
+            
             let productDetails = await ProductModel.findOne({
-              id: poDataArray[i].products[0].productId,
+              name: poDataArray[i].products[0].name,
             });
-            console.log("PRODUCT DETAILS", productDetails);
             if (productDetails) {
-              (poDataArray[i].products[0].name = productDetails.name || ""),
-                (poDataArray[i].products[0].type = productDetails.type || ""),
-                (poDataArray[i].products[0].manufacturer =
-                  productDetails.manufacturer || "");
-            } else console.log("PRODUCT NOT FOUND");
-            console.log(dataRows++);
+              (poDataArray[i].products[0].productId = productDetails.productId || productDetails.id || ""),
+              (poDataArray[i].products[0].id = productDetails.id || ""),
+              (poDataArray[i].products[0].type = productDetails.type || ""),
+              (poDataArray[i].products[0].manufacturer = productDetails.manufacturer || "");
+            } else {
+              console.log("Product not found -- \"" + poDataArray[i].products[0].name + "\" -- Skipping it.");
+              invalidArr.push(poDataArray[i]);
+              delete poDataArray[i];
+              i--;
+              continue;
+            }
             const organisationName =
               poDataArray[i].customer.customerOrganisation;
             const customerOrganisation = await OrganisationModel.findOne({
@@ -534,6 +610,7 @@ exports.addPOsFromExcel = [
                   poDataArray[i].customer.shippingAddress.shippingAddressId
                 )
               ) {
+                warningArr.push(`Warehouse ${poDataArray[i].customer.shippingAddress.shippingAddressId} doesn't exist in customer organisation`);
                 delete poDataArray[i];
                 continue;
               }
@@ -884,15 +961,15 @@ exports.addPOsFromExcel = [
       );
       return apiResponse.successResponseWithData(
         res,
-        "Upload Result",
-        poDataArray
+        responses(req.user.preferredLanguage || "EN").upload_result,
+        {inserted: poDataArray, unininserted: warningArr, duplicate: errorsArr, invalid: invalidArr}
       );
     } catch (err) {
       console.log(err);
       if (err.code == "11000") {
         return apiResponse.successResponseWithData(
           res,
-          "Inserted excluding Duplicate Values",
+          responses(req.user.preferredLanguage).inserted_ex_duplicates,
           err
         );
       } else {
@@ -950,7 +1027,6 @@ exports.createOrder = [
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type;
         element.unitofMeasure = product?.unitofMeasure;
-        console.log(product);
       });
       const createdBy = req.user.id;
       const purchaseOrder = new RecordModel({
@@ -964,22 +1040,25 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy: createdBy,
       });
-      console.log(purchaseOrder);
       const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.supplierOrganisation,
       });
       if (supplierOrgData == null) {
-        console.log("Supplier not defined");
-        return apiResponse.ErrorResponse(res, "Supplier  not defined");
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).supplier_not_defined
+        );
       }
 
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.customer.customerOrganisation,
       });
       if (receiverOrgData == null) {
-        console.log("customer not defined");
-        return apiResponse.ErrorResponse(res, "Receiver not defined");
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).receiver_not_defined
+        );
       }
       var datee = new Date();
       datee = datee.toISOString();
@@ -1083,9 +1162,13 @@ exports.createOrder = [
         event_data.payload.data.order_id = poId;
         event_data.transactionId = poId;
         await logEvent(event_data);
-        return apiResponse.successResponseWithData(res, "Created order", {
-          poId: poId,
-        });
+        return apiResponse.successResponseWithData(
+          res,
+          responses(req.user.preferredLanguage).created_order,
+          {
+            poId: poId,
+          }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -1324,7 +1407,7 @@ exports.fetchInboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1509,7 +1592,7 @@ exports.fetchOutboundPurchaseOrders = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "User doesn't have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1568,6 +1651,8 @@ exports.exportInboundPurchaseOrders = [
         : undefined;
       let orderId = req.query.orderId ? req.query.orderId : undefined;
       let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -1620,6 +1705,12 @@ exports.exportInboundPurchaseOrders = [
 
       if (fromDateFilter) {
         whereQuery["createdAt"] = { $gte: fromDateFilter };
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`creationDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (organisationId) {
@@ -1753,6 +1844,8 @@ exports.exportOutboundPurchaseOrders = [
         : undefined;
       let orderId = req.query.orderId ? req.query.orderId : undefined;
       let poStatus = req.query.poStatus ? req.query.poStatus : undefined;
+      let fromDate = req.query.fromDate ? req.query.fromDate : undefined;
+      let toDate = req.query.toDate ? req.query.toDate : undefined;
       switch (req.query.dateFilter) {
         case "today":
           fromDateFilter = new Date(
@@ -1805,6 +1898,12 @@ exports.exportOutboundPurchaseOrders = [
 
       if (fromDateFilter) {
         whereQuery["createdAt"] = { $gte: fromDateFilter };
+      }
+
+      if (fromDate && toDate) {
+        var firstDate = new Date(fromDate);
+        var nextDate = new Date(toDate);
+        whereQuery[`creationDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
       if (organisationId) {
@@ -1936,85 +2035,85 @@ function buildExcelReport(req, res, dataForExcel) {
 
   const specification = {
     id: {
-      displayName: "Order ID",
+      displayName: req.t("Order_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 120,
     },
     createdBy: {
-      displayName: "Order Created By",
+      displayName: req.t("Order_Created_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: "10",
     },
     supplierOrgId: {
-      displayName: "ORG ID - Creator",
+      displayName: req.t("ORG_ID_-_Creator"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiveIncharge: {
-      displayName: "Order Received By",
+      displayName: req.t("Order_Received_By"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     orderReceiverOrg: {
-      displayName: "ORG ID - Receiver",
+      displayName: req.t("ORG_ID_-_Receiver"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productCategory: {
-      displayName: "Product Category",
+      displayName: req.t("Product_Category"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productName: {
-      displayName: "Product Name",
+      displayName: req.t("Product_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productId: {
-      displayName: "Product ID",
+      displayName: req.t("Product_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     productQuantity: {
-      displayName: "Quantity",
+      displayName: req.t("Quantity"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     manufacturer: {
-      displayName: "Manufacturer",
+      displayName: req.t("Manufacturer"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgName: {
-      displayName: "Delivery Organization Name",
+      displayName: req.t("Delivery_Organization_Name"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgId: {
-      displayName: "Delivery Organization ID",
+      displayName: req.t("Delivery_Organization_ID"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     recieverOrgLocation: {
-      displayName: "Delivery Organization Location Details",
+      displayName: req.t("Delivery_Organization_Location_Details"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
     },
     status: {
-      displayName: "Status",
+      displayName: req.t("Status"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
@@ -2036,20 +2135,20 @@ function buildExcelReport(req, res, dataForExcel) {
 async function buildPdfReport(req, res, data, orderType) {
   const rows = [];
   rows.push([
-    { text: "Order Id", bold: true },
-    { text: "Order created By", bold: true },
-    { text: "Creator Org Id", bold: true },
-    { text: "Creator Org Name", bold: true },
-    { text: "ORG ID - Receiver", bold: true },
-    { text: "Product Category", bold: true },
-    { text: "Product Name", bold: true },
-    { text: "Product ID", bold: true },
-    { text: "Quantity", bold: true },
-    { text: "Manufacturer", bold: true },
-    { text: "Delivery Organization Name", bold: true },
-    { text: "Delivery Organization ID", bold: true },
-    { text: "Delivery Organization Location Details", bold: true },
-    { text: "Status", bold: true },
+    { text: req.t("Order_ID"), bold: true },
+    { text: req.t("Order_Created_By"), bold: true },
+    { text: req.t("Creator_Org_Id"), bold: true },
+    { text: req.t("Creator_Org_Name"), bold: true },
+    { text: req.t("ORG_ID_-_Receiver"), bold: true },
+    { text: req.t("Product_Category"), bold: true },
+    { text: req.t("Product_Name"), bold: true },
+    { text:  req.t("Product_ID"), bold: true },
+    { text: req.t("Quantity"), bold: true },
+    { text: req.t("Manufacturer"), bold: true },
+    { text: req.t("Delivery_Organization_Name"), bold: true },
+    { text: req.t("Delivery_Organization_ID"), bold: true },
+    { text: req.t("Delivery_Organization_Location_Details"), bold: true },
+    { text: req.t("Status"), bold: true },
   ]);
   for (let i = 0; i < data.length; i++) {
     let OrgName = await OrganisationModel.findOne({
@@ -2078,7 +2177,7 @@ async function buildPdfReport(req, res, data, orderType) {
     pageSize: "A3",
     pageOrientation: "landscape",
     content: [
-      { text: `${orderType} Purchase order`, fontSize: 34, style: "header" },
+      { text: req.t(`${orderType}_Purchase_order`), fontSize: 34, style: "header" },
       {
         table: {
           headerRows: 1,

@@ -20,15 +20,26 @@ export const getInventories = (
   dateFilter,
   productName,
   productCategory,
-  status
+  status,
+  fromDate,
+  toDate
 ) => {
   return async (dispatch) => {
     try {
+      console.log(productCategory)
       dispatch(turnOn());
+      let dateF = '';
+      if(fromDate && toDate){
+        if(fromDate !== toDate){
+          dateF = 'fromDate=' + fromDate + '&toDate=' + toDate;
+        }else{
+          dateF = 'date=' + fromDate;
+        }
+      }
       const result = await axios.get(
         `${
           config().getTransactions
-        }?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
+        }?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}&${dateF}`
       );
       dispatch(setInventories(result.data.data.inventoryRecords));
       dispatch(setInventoriesCount(result.data.data.count));
@@ -126,7 +137,6 @@ export const GetStatesFromWarehouses = async (id) => {
 export const GetCitiesFromWarehouses = async (id) => {
   try {
     const result = await axios.get(`${config().getCitiesByState}?state=${id}`);
-    console.log(result);
     return result.data;
   } catch (e) {
     return [];
@@ -138,7 +148,6 @@ export const GetWarehousesWithCity = async (id) => {
     const result = await axios.get(
       `${config().getWarehousesByCity}?city=${id}`
     );
-    console.log(result);
     return result.data;
   } catch (e) {
     return [];
@@ -265,7 +274,7 @@ export const addInventory = async (data) => {
 export const addProductsToInventory = async (data) => {
   try {
     const result = await axios.post(config().addProductsToInventory, data);
-    return result.data;
+    return result;
   } catch (e) {
     return e.response;
   }
@@ -309,9 +318,7 @@ export const getInventoryByBatchNumber = (id) => {
     return async (dispatch) => {
       const url = config().getInventoryByBatchNumber + id;
       const result = await axios.get(url);
-      console.log(result);
-      // dispatch(setInventories(result.data));
-      return result.sata;
+      return result.data;
     };
     // eslint-disable-next-line no-unreachable
   } catch (e) {

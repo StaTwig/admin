@@ -9,14 +9,24 @@ import SuccessOrderPopUp from "./SuccessOrder/SuccessOrder";
 import FailPopup from "../../../shared/PopUp/failedPopUp";
 
 const ExcelPopUp = (props) => {
-  const [excel, setExcel] = useState("");
+  const { t } = props;
+  const [excel, setExcel] = useState(null);
   const dispatch = useDispatch();
   const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
   const [openFailedPopup, setopenFailedPop] = useState(false);
   const [modalProps, setModalProps] = useState({});
 
   const setExcelFile = (evt) => {
-    setExcel(evt.target.files[0]);
+    const isXls = evt.target.files[0].type;
+    if (isXls === ('application/vnd.ms-excel') || isXls === ('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+      setopenFailedPop(false);
+      setExcel(evt.target.files[0]);
+    } else {
+      setopenFailedPop(true);
+      setModalProps({
+        message: t("you_can_only_upload_excel_formats"),
+      });
+    }
   };
   props.setMenu(false);
   const uploadExcel = async () => {
@@ -24,24 +34,36 @@ const ExcelPopUp = (props) => {
     formData.append("excel", excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
-    let arr = result.data.data;
-    let notNullValues = 0;
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] != null) {
-        notNullValues++;
-      }
-    }
+    if (result && result.status === 200) {
+      let arr = result.data.data.inserted;
+      let notNullValues = 0;
+      if (arr && arr.length > 0)
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] != null) {
+            notNullValues++;
+          }
+        }
 
-    if (result && result.status === 200 && notNullValues !== 0) {
-      console.log("success add PO");
-      setopenSuccesfulOrder(true);
-      setModalProps({
-        message: "Created Successfully!",
-        OrderLength: notNullValues,
-        type: "Success",
-      });
+      if (notNullValues !== 0) {
+        setopenSuccesfulOrder(true);
+        setModalProps({
+          message: `${t("created")}${t("successfully")}`,
+          OrderLength: notNullValues,
+          type: "Success",
+        });
+      } else {
+        setopenFailedPop(true);
+        if (result.data.data.invalid.length) {
+          setModalProps({message: t("invalid_records")});
+        } else {
+          setModalProps({
+            message: t("records_duplication"),
+          });
+        }
+      }
     } else {
       setopenFailedPop(true);
+      setModalProps({message: t("invalid_records")});
     }
     dispatch(turnOff());
   };
@@ -55,22 +77,38 @@ const ExcelPopUp = (props) => {
   };
   return (
     <div className='excelpopup col'>
-      <div className='d-flex flex-column upload mb-5 ml-5'>
+      <div className='d-flex flex-column upload mb-5 ml-5' style={excel === null ? { height: '200px' } : { height: '220px' }}>
         <img
           src={uploadBlue}
           name='photo'
           width='50'
           height='50'
-          className='mt-2'
+          className='mt-3'
           alt=''
         />
-        <div>"Drag and drop" your Excel file here</div>
-        <div>or</div>
-        <input
-          type='file'
-          className='mb-3 excelSpace'
-          onChange={setExcelFile}
-        />
+        <div>
+          "{t("drag_drop")}" {t("your_excel_file_here")}
+        </div>
+        <div>{t("or")}</div>
+        <div className='row' style={{ position: 'relative' }}
+        >
+          <label htmlFor='fileE' className='mb-3 mt-3 btn btn-primary d-center' style={{
+            display: "block",
+            margin: "0 auto"
+          }}>
+            {t("select_a_file")}
+          </label>
+
+          <input
+            type='file'
+            id='fileE'
+            accept=".xls,.xlsx,application /vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+            style={{ visibility: "hidden" }}
+            className='mb-3 excelSpace'
+            onChange={setExcelFile}
+          />
+          {excel !== null && <p className="file-name">{excel?.name}</p>}
+        </div>
       </div>
       <div className='row justify-content-between'>
         <div />
@@ -79,10 +117,10 @@ const ExcelPopUp = (props) => {
             className='btn-outline-primary btn mr-3'
             onClick={props.onHide}
           >
-            Cancel
+            {t("cancel")}
           </button>
-          <button className='btn-primary btn mr-4' onClick={uploadExcel}>
-            Import
+          <button className='btn-primary btn mr-4 import-disable-button' disabled={excel === null ? true : false} onClick={uploadExcel}>
+            {t("import")}
           </button>
           {openSuccesfulOrder && (
             <Modal
@@ -90,6 +128,7 @@ const ExcelPopUp = (props) => {
               size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <SuccessOrderPopUp
+                t={t}
                 onHide={closeModal} // onHide={closeModal} //FailurePopUp
                 {...modalProps}
               />
@@ -97,7 +136,7 @@ const ExcelPopUp = (props) => {
           )}
           {openFailedPopup && (
             <Modal close={() => closeModalFailedPopUp()} size='modal-sm'>
-              <FailPopup onHide={closeModalFailedPopUp} />
+              <FailPopup message={modalProps.message} onHide={closeModalFailedPopUp} t={t} />
             </Modal>
           )}
         </div>

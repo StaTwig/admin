@@ -2,8 +2,7 @@ const RegionsModel = require("../models/RegionsModel");
 const CountriesModel = require("../models/CountryModel");
 const StatesModel = require("../models/StateModel");
 const CitiesModel = require("../models/CityModel");
-
-const apiResponse = require('../helpers/apiResponse');
+const apiResponse = require("../helpers/apiResponse");
 
 const prepareAggregateQueryForLocation = (
   matchValue,
@@ -13,7 +12,8 @@ const prepareAggregateQueryForLocation = (
   return [
     {
       $match: {
-        [matchValue]: matchValue === "region" ? filterValue : parseInt(filterValue),
+        [matchValue]:
+          matchValue === "region" ? filterValue : parseInt(filterValue),
       },
     },
     {
@@ -23,6 +23,7 @@ const prepareAggregateQueryForLocation = (
           $push: {
             name: "$name",
             id: "$id",
+            spanishName: '$translations.es'
           },
         },
       },
@@ -31,7 +32,6 @@ const prepareAggregateQueryForLocation = (
 };
 
 const getLocationByQuery = async (filter) => {
-  //sends all of the regions
   if (filter.region === "all") {
     const data = await RegionsModel.aggregate([
       {
@@ -83,14 +83,14 @@ exports.getLocations = [
     try {
       const filters = req.query;
       const locations = await getLocationByQuery(filters);
-
       return apiResponse.successResponseWithData(
         res,
-        'Operation success',
-        locations,
+        "Get Locations Successfully",
+        locations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];

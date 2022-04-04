@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Delete from "../../assets/icons/Delete.png";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import isBefore from "date-fns/isBefore";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import qty from "../../assets/icons/TotalInventoryAdded_2.png";
@@ -11,9 +12,33 @@ import Serial from "../../assets/icons/serial.png";
 import Select from "react-select";
 
 import "./style.scss";
+const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+const locale = {
+  localize: {
+    month: (n) => months[n],
+  },
+  formatLong: {
+    date: () => "dd/yyyy",
+  },
+};
+const truncate = (str, n) => {
+  return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+};
 
 const EditRow = (props) => {
-  //console.log("propsinvinventorynitofmeasureprops", props.prods[0].unitofMeasure.name);
   const {
     manufacturer,
     productName,
@@ -32,14 +57,17 @@ const EditRow = (props) => {
     handleCategoryChange,
     productId,
     inventories,
+    t,
+    setOpenFailInventory,
+    setInventoryError,
   } = props;
-  //console.log("props in Inventory",unitofMeasure)
-
   const [addMore, setAddMore] = useState(
     manufacturingDate || expiryDate || batchNumber || serialNumber
       ? true
       : false
   );
+  const mfgLocale = t("mfg_date");
+  const expLocale = t("exp_date");
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -68,7 +96,9 @@ const EditRow = (props) => {
 
   return (
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
-      <h6 className='ml-3 text-info font-weight-bold'>Product {idx + 1}</h6>
+      <h6 className='ml-3 text-info font-weight-bold'>
+        {t("product")} {idx + 1}
+      </h6>
       <br />
       <div className='d-flex flex-column ml-5 itable'>
         <div className='row mb-2'>
@@ -81,15 +111,17 @@ const EditRow = (props) => {
               }`}
             >
               <img src={Package} width='16' height='16' alt='ProductCategory' />
-              <span className='pl-2 text-muted'>Product Category*</span>
+              <span className='pl-2 text-muted'>{t("product_category")}*</span>
             </div>
             <div
               className={` theader ${
-                addMore ? "col-3 product-add-inventory" : " col-2 Bproduct-add-inventory"
+                addMore
+                  ? "col-3 product-add-inventory"
+                  : " col-2 Bproduct-add-inventory"
               }`}
             >
               <img src={Package} width='16' height='16' alt='product' />
-              <span className='pl-2 text-muted'>Product*</span>
+              <span className='pl-2 text-muted'>{t("product")}*</span>
             </div>
             <div
               className={`col-2 theader ${
@@ -99,23 +131,23 @@ const EditRow = (props) => {
               }`}
             >
               <img src={mon} width='16' height='16' alt='manufacturer' />
-              <span className='pl-2 text-muted'>Manufacturer</span>
+              <span className='pl-2 text-muted'>{t("manufacturer")}</span>
             </div>
-            <div className={`col-2 theader ${
-              addMore
-                ? "batch-add-inventory"
-                : "Bbatch-add-inventory"
-            }`}>
-                <img src={Batch} width='16' height='16' alt='Batch' />
-                <span className='pl-2 text-muted'>Batch No</span>
-              </div>
+            <div
+              className={`col-2 theader ${
+                addMore ? "batch-add-inventory" : "Bbatch-add-inventory"
+              }`}
+            >
+              <img src={Batch} width='16' height='16' alt='Batch' />
+              <span className='pl-2 text-muted'>{t("batch_no")}</span>
+            </div>
             <div
               className={`col theader text-center ${
                 addMore ? "quantity-add-inventory" : "Bquantity-add-inventory"
               }`}
             >
               <img src={qty} width='25' height='16' alt='quantity' />
-              <span className='pl-2 text-muted'>Quantity*</span>
+              <span className='pl-2 text-muted'>{t("quantity")}*</span>
             </div>
           </div>
         </div>
@@ -133,12 +165,12 @@ const EditRow = (props) => {
                 }}
                 groups={category}
               /> */}
-              {console.log(categories)}
               <Select
+                noOptionsMessage={() => t("no_options")}
                 className='no-border'
                 placeholder={
                   <div className='select-placeholder-text-prod-category'>
-                    Select Product Category
+                    {t("select_product_category")}
                   </div>
                 }
                 value={
@@ -151,20 +183,21 @@ const EditRow = (props) => {
                 options={category}
               />
             </div>
-            <div 
-              className='col-3 align-self-center pt-1 pb-1 border-right bg-white' 
-              style = {{display:"flex",flexDirection:"row"}}
-              >
+            <div
+              className='col-3 align-self-center pt-1 pb-1 border-right bg-white'
+              style={{ display: "flex", flexDirection: "row" }}
+            >
               <div className='d-flex pt-1 flex-row justify-content-between'>
                 <div
                   className='title col-10 recived-text'
                   style={{ position: "relative", left: "-15px" }}
                 >
                   <Select
+                    noOptionsMessage={() => t("no_options")}
                     className='no-border'
                     placeholder={
                       <div className='select-placeholder-text-prod'>
-                        Select Product Name{" "}
+                        {t("select") + " " + t("product_name")}
                       </div>
                     }
                     value={
@@ -183,7 +216,7 @@ const EditRow = (props) => {
                   className='col-4 title recived-text'
                   style={{ position: "relative", top: "7px", left: "-41px" }}
                 >
-                  {productId}
+                  {truncate(productId, 6)}
                 </div>
               </div>
             </div>
@@ -199,27 +232,30 @@ const EditRow = (props) => {
                     className='select-placeholder-text-manufacturer'
                     style={{ fontSize: "14px" }}
                   >
-                    Manufacturer
+                    {t("manufacturer")}
                   </div>
                 )}
               </div>
             </div>
-             <div className='col-2 mt-1 mb-1 border-right' style={{display:"flex",alignItems:"center"}}>
-                <div className=''>
-                  <input
-                    type='text'
-                    style={{ fontSize: "14px" }}
-                    className='form-control text-center'
-                    placeholder='Enter Batch No'
-                    value={batchNumber}
-                    onChange={(e) =>
-                      handleInventoryChange(idx, "batchNumber", e.target.value)
-                    }
-                  />
-                </div>
+            <div
+              className='col-2 mt-1 mb-1 border-right'
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <div className=''>
+                <input
+                  type='text'
+                  style={{ fontSize: "14px" }}
+                  className='form-control text-center'
+                  placeholder={t("enter") + " " + t("batch_no")}
+                  value={batchNumber}
+                  onChange={(e) =>
+                    handleInventoryChange(idx, "batchNumber", e.target.value)
+                  }
+                />
               </div>
+            </div>
             <div className='col mt-1 mb-1'>
-              <div style={{position:"relative",right:"13px"}}>
+              <div style={{ position: "relative", right: "13px" }}>
                 <input
                   type='text'
                   onKeyPress={numbersOnly}
@@ -229,7 +265,7 @@ const EditRow = (props) => {
                     top: "3.5px",
                     fontSize: "14px",
                   }}
-                  placeholder='Enter Quantity'
+                  placeholder={t("enter") + " " + t("quantity")}
                   value={quantity}
                   onChange={(e) =>
                     handleInventoryChange(idx, "quantity", e.target.value)
@@ -250,7 +286,7 @@ const EditRow = (props) => {
                 <div>{unitofMeasure?.name}</div>
               ) : (
                 <div className='placeholder_name' style={{ fontSize: "14px" }}>
-                  Unit{" "}
+                  {t("unit")}{" "}
                 </div>
               )}
             </div>
@@ -285,7 +321,10 @@ const EditRow = (props) => {
                 className='btn btn-warning '
               >
                 <i className='txt-inventory' aria-hidden='true'></i>
-                <span className='txt-inventory'> + &nbsp; Add Details</span>
+                <span className='txt-inventory'>
+                  {" "}
+                  + &nbsp; {t("add_details")}
+                </span>
               </button>
             </div>
           )}
@@ -302,11 +341,11 @@ const EditRow = (props) => {
                   height='16'
                   alt='ManufacturedDate'
                 />
-                <span className='pl-2 text-muted'>Mfg Date</span>
+                <span className='pl-2 text-muted'>{t("mfg_date")}</span>
               </div>
               <div className='col theader text-center pro exp-add-inventory'>
                 <img src={sdate} width='16' height='16' alt='ExpiryDate' />
-                <span className='pl-2 text-muted'>Exp Date</span>
+                <span className='pl-2 text-muted'>{t("exp_date")}</span>
               </div>
               {/* <div className='col theader text-center pro'>
                 <img src={Batch} width='16' height='16' alt='Batch' />
@@ -314,13 +353,16 @@ const EditRow = (props) => {
               </div> */}
               <div className='col theader text-center pro'>
                 <img src={Serial} width='16' height='16' alt='Serial' />
-                <span className='pl-2 text-muted'>Serial Numbers</span>
+                <span className='pl-2 text-muted'>{t("serial_numbers")}</span>
               </div>
             </div>
             <div className='rTableRow inp-grp mb-3 row bg-white col-12 p-1'>
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
+                    locale={
+                      mfgLocale === "Fecha de fabricación" ? locale : "en"
+                    }
                     className='form-control text-center'
                     onChange={(date) =>
                       handleInventoryChange(idx, "manufacturingDate", date)
@@ -332,7 +374,7 @@ const EditRow = (props) => {
                     }
                     onKeyDown={(e) => e.keyCode !== 8 && e.preventDefault()}
                     dateFormat='MM/yyyy'
-                    placeholderText='Enter Mfg Date'
+                    placeholderText={t("enter") + " " + t("mfg_date")}
                     showMonthYearPicker
                     showFullMonthYearPicker
                   />
@@ -341,12 +383,18 @@ const EditRow = (props) => {
               <div className='col mt-1 mb-1 border-right'>
                 <div className=''>
                   <DatePicker
+                    locale={expLocale === "Fecha de caducidad" ? locale : "en"}
                     className='form-control text-center'
-                    placeholderText='Enter Exp Date'
+                    placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
-                    onChange={(date) =>
-                      handleInventoryChange(idx, "expiryDate", date)
-                    }
+                    onChange={(date) => {
+                      if (isBefore(date, new Date())) {
+                        setInventoryError(t("past_expiry"));
+                        setOpenFailInventory(true);
+                        return;
+                      }
+                      handleInventoryChange(idx, "expiryDate", date);
+                    }}
                     selected={
                       expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate
                     }
@@ -376,7 +424,7 @@ const EditRow = (props) => {
                     type='text'
                     style={{ fontSize: "14px" }}
                     className='form-control text-center'
-                    placeholder='Enter Serial Numbers'
+                    placeholder={t("enter") + " " + t("serial_numbers")}
                     value={serialNumber}
                     onChange={(e) =>
                       handleInventoryChange(idx, "serialNumber", e.target.value)

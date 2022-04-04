@@ -3,15 +3,14 @@ import { useSelector } from "react-redux";
 import infoIcon from "../../assets/icons/info.png";
 import Modal from "../../shared/modal";
 import SuccessPopUp from "./PopUp/successPopUp";
-
 import {
   createUpdateNewAlert,
   getAllManageAlerts,
 } from "../../actions/userActions";
 import "./style.scss";
-import { red } from "@material-ui/core/colors";
 
 const Settings = (props) => {
+  const { t } = props;
   const [visible, setvisible] = useState("one");
   const [emailClicked, setEmailClicked] = useState(false);
   const [smsClicked, setSmsClicked] = useState(false);
@@ -39,7 +38,6 @@ const Settings = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [mobileAlert, setMobileAlert] = useState(false);
   const [disabledQuesMark, setDisabledQuesMark] = useState(true);
-
 
   const setIndicatorValuesForTooltipPanel = (type) => {
     if (type === "orders_alerts") {
@@ -184,22 +182,14 @@ const Settings = (props) => {
     }
   };
 
-  const createNewAlert = () => {
-    createUpdateNewAlert(alertsObj)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const createNewAlert = async () => {
+    await createUpdateNewAlert(alertsObj);
   };
 
   const closeModal = () => {
     setShowModal(false);
     props.history.push("/overview");
   };
-
-  console.log("createNewAlertString: ", alertsObj);
 
   const isEmailMobileModeEnabled = () => {
     if (alertsObj.alertEmail || alertsObj.alertMobile) {
@@ -249,7 +239,7 @@ const Settings = (props) => {
   return (
     <>
       <div className='settings'>
-        <h1 className='breadcrumb'>SETTINGS</h1>
+        <h1 className='breadcrumb'>{t("settings")}</h1>
         <div className='card'>
           <div className='card-body'>
             <div className='mt-4'>
@@ -279,14 +269,14 @@ const Settings = (props) => {
                           : "nav-link text-secondary"
                       }
                     >
-                      Manage Alerts
+                      {t("manage")} {t("alerts")}
                     </div>
                   </li>
                 </ul>
               </div>
               <div className='subscription-type'>
                 <span className='subscription-alert-header-text'>
-                  {"Get alerts on mobile or Email"}
+                  {t("get_alerts_on")} {t("mobile")} {t("or")} {t("Email")}
                 </span>
                 <div className='subscription-alert-section'>
                   <input
@@ -296,10 +286,15 @@ const Settings = (props) => {
                     checked={alertsObj.alertEmail}
                     onClick={() => {
                       updateAlertsObj("email");
-                      setEmailClicked(!emailClicked)
+                      setEmailClicked(!emailClicked);
                     }}
                   />
-                  <label className='subscription-alert-label' style={{color: emailClicked ? 'black' : 'grey'}}>{"Email"}</label>
+                  <label
+                    className='subscription-alert-label'
+                    style={{ color: emailClicked ? "black" : "grey" }}
+                  >
+                    {t("Email")}
+                  </label>
                 </div>
                 <div className='subscription-alert-section'>
                   <input
@@ -316,21 +311,30 @@ const Settings = (props) => {
                   <label
                     className='subscription-alert-label'
                     style={{
-                      // color: isMobileNumberNotAvailable() 
+                      // color: isMobileNumberNotAvailable()
                       //   ? "#B4B4B4"
                       //   : "#000000",
-                        color: smsClicked ? 'black' : 'grey'
+                      color: smsClicked ? "black" : "grey",
                     }}
                   >
-                    {"Mobile SMS"} &nbsp;
-                  {disabledQuesMark && 
-                    <span onClick= {() => {setMobileAlert(true); setDisabledQuesMark(false)}} 
-                          className="ques-mark cursorP">{'(?)'} 
-                    </span>}                                 
+                    {t("mobile")} {"SMS"} &nbsp;
+                    {disabledQuesMark && (
+                      <span
+                        onClick={() => {
+                          setMobileAlert(true);
+                          setDisabledQuesMark(false);
+                        }}
+                        className='ques-mark cursorP'
+                      >
+                        {"(?)"}
+                      </span>
+                    )}
                   </label>
-                  {mobileAlert && 
-                    <p className="register-mobile-alert">( Please register Mobile Number to get alerts )</p>
-                  }
+                  {mobileAlert && (
+                    <p className='register-mobile-alert'>
+                      {t("mobile_alert_msg")}
+                    </p>
+                  )}
                   <label
                     className='subscription-alert-label'
                     style={{ color: "#D80000" }}
@@ -350,14 +354,14 @@ const Settings = (props) => {
                           : "#000000",
                       }}
                     >
-                      {"( Please register Mobile number to get alerts )"}
+                      {t("mobile_alert_msg")}
                     </p>
                   )}
                 </div>
               </div>
               <div className='alert-type'>
                 <span className='subscription-alert-header-text'>
-                  {"Select alerts Type"}
+                  {t("select")} {t("alerts")} {t("type")}
                 </span>
                 <div className='subscription-alert-section'>
                   <input
@@ -376,7 +380,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Orders Alerts"}
+                    {t("orders")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -411,7 +415,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Inventory Alerts"}
+                    {t("inventory")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -446,7 +450,7 @@ const Settings = (props) => {
                     disabled={isEmailMobileModeEnabled()}
                   />
                   <label className='subscription-alert-label'>
-                    {"Shipment Alerts"}
+                    {t("shipment")} {t("alerts")}
                   </label>
                   <div className='tooltip-ex'>
                     <img
@@ -474,7 +478,7 @@ const Settings = (props) => {
                     createNewAlert();
                   }}
                 >
-                  <span>Save</span>
+                  <span>{t("save")}</span>
                 </button>
               </div>
               {showModal && (
@@ -484,6 +488,7 @@ const Settings = (props) => {
                 >
                   <SuccessPopUp
                     onHide={closeModal} //FailurePopUp
+                    t={t}
                   />
                 </Modal>
               )}

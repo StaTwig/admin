@@ -14,6 +14,7 @@ import "./style.scss";
 import { Formik } from "formik";
 
 const AddLocation = (props) => {
+  const { t } = props;
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
@@ -21,13 +22,6 @@ const AddLocation = (props) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
-  // console.log(addressTitle,"title");
-  // console.log(pincode,"Pin");
-  // console.log(region,"region  ");
-  // console.log(country,"Country");
-  // console.log(city,"city");
-  // console.log(state,"state");
-  // console.log(addressLine,"Line");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
 
   //Newly Added
@@ -44,6 +38,7 @@ const AddLocation = (props) => {
     async function fetchAllRegions1() {
       let arr = await fetchAllRegions();
       setallregions(arr.data);
+      // fetchAllState1(53);
     }
     fetchAllRegions1();
   }, []);
@@ -66,7 +61,7 @@ const AddLocation = (props) => {
       organisationId: props.user.organisationId,
       postalAddress: props.user.postalAddress,
       region: values.region,
-      country: props.user.warehouseAddress_country,
+      country: props.user.warehouses[0].warehouseAddress.country,
       // location: {
       //   longitude: '0',
       //   latitude: '0',
@@ -78,31 +73,19 @@ const AddLocation = (props) => {
         secondLine: null,
         city: values.city,
         state: values.state,
-        country: values.country,
+        country: props.user.warehouses[0].warehouseAddress.country,
         landmark: null,
         zipCode: values.pincode,
       },
       supervisors: [],
       employeess: [],
     };
-    console.log(data, "Data");
     const result = await addWarehouse(data);
-    console.log("Result");
-    console.log(result);
-    if (result.data.status !== 0) {
-      console.log("Added Location");
-      console.log(result);
+    if (result.status === 200) {
       setAddedLocationModal(true);
-      // props.history.push('/profile');
-    } else {
-      console.log("Error in add location");
-      console.log(result);
     }
   };
 
-  // const requestadminforapproval = () => {
-  //  props.history.push('/profile');
-  // };
   function search(name, myArray) {
     for (var i = 0; i < myArray.length; i++) {
       if (myArray[i].name === name) {
@@ -112,11 +95,11 @@ const AddLocation = (props) => {
   }
   return (
     <div>
-      <div className='addproduct'>
-        <h1 className='breadcrumb'>ADD NEW LOCATION</h1>
+      <div className="addproduct">
+        <h1 className="breadcrumb">{t("ADD_NEW_LOCATION")}</h1>
 
-        <div className='card'>
-          <div className='card-body'>
+        <div className="card">
+          <div className="card-body">
             <Formik
               enableReinitialize={true}
               initialValues={{
@@ -124,39 +107,28 @@ const AddLocation = (props) => {
                 addressLine,
                 city,
                 state,
-                country,
                 pincode,
-                region,
               }}
               validate={(values) => {
                 const errors = {};
-                console.log(values, "Values");
-                if (!values.region) {
-                  errors.region = "Required";
-                }
                 if (!values.addressTitle) {
-                  errors.addressTitle = "Required";
+                  errors.addressTitle = t("Required");
                 }
                 if (!values.addressLine) {
-                  errors.addressLine = "Required";
+                  errors.addressLine = t("Required");
                 }
                 if (!values.city) {
-                  errors.city = "Required";
+                  errors.city = t("Required");
                 }
                 if (!values.state) {
-                  errors.state = "Required";
-                }
-                if (!values.country) {
-                  errors.country = "Required";
+                  errors.state = t("Required");
                 }
                 if (!values.pincode) {
-                  errors.pincode = "Required";
+                  errors.pincode = t("Required");
                 }
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                console.log("Values");
-                console.log(values);
                 setSubmitting(false);
                 updateStatus(values);
               }}
@@ -172,20 +144,20 @@ const AddLocation = (props) => {
                 setFieldValue,
                 dirty,
               }) => (
-                <form onSubmit={handleSubmit} className='mb-3'>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressTitle'>
-                          Address Title*
+                <form onSubmit={handleSubmit} className="mb-3">
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressTitle">
+                          {t("Address_Title")}*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          className='addlocP'
-                          type='text'
-                          id='referenceShipmentId'
-                          name='addressTitle'
-                          placeholder='Enter Title'
+                          className="addlocP"
+                          type="text"
+                          id="referenceShipmentId"
+                          name="addressTitle"
+                          placeholder={t("Enter_Title")}
                           value={values.addressTitle}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -204,7 +176,7 @@ const AddLocation = (props) => {
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='region'>
-                          Region*
+                          {t('Region')}*
                         </label>
                         <div className='' style={{ flexBasis: "47%" }}>
                           <Autocomplete
@@ -213,7 +185,7 @@ const AddLocation = (props) => {
                             id='demo-simple-select controllable-states-demo'
                             placeholder={
                               <div className='select-placeholder-text'>
-                                Select Region
+                                {t('Select_Region')}
                               </div>
                             }
                             onChange={(event, newValue) => {
@@ -225,7 +197,7 @@ const AddLocation = (props) => {
                             }}
                             options={allregions}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select Region' />
+                              <TextField {...params} label={t('Select_Region')} />
                             )}
                           />
                           {errors.region && touched.region && (
@@ -241,7 +213,7 @@ const AddLocation = (props) => {
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='country'>
-                          Country*
+                          {t('Country')}*
                         </label>
                         <div className='' style={{ flexBasis: "47%" }}>
                           <Autocomplete
@@ -249,7 +221,7 @@ const AddLocation = (props) => {
                             id='demo-simple-select controllable-states-demo'
                             placeholder={
                               <div className='select-placeholder-text'>
-                                Select Country
+                                {t('Select_Country')}
                               </div>
                             }
                             value={country}
@@ -260,9 +232,9 @@ const AddLocation = (props) => {
                               setState("");
                               setCity("");
                             }}
-                            options={allCountries.map((option) => option.name)}
+                            options={allCountries.map((option) => option.spanishName)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select Country' />
+                              <TextField {...params} label={t('Select_Country')} />
                             )}
                           />
 
@@ -275,19 +247,19 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='state'>
-                          State*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="state">
+                          {t("State")}*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
-                                Select State
+                              <div className="select-placeholder-text">
+                                {t("Select_State")}
                               </div>
                             }
                             value={state}
@@ -297,14 +269,16 @@ const AddLocation = (props) => {
                               setState(newValue);
                               setCity("");
                             }}
-                            id='controllable-states-demo'
                             options={allState.map((option) => option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select State' />
+                              <TextField
+                                {...params}
+                                label={t("Select_State")}
+                              />
                             )}
                           />
                           {errors.state && touched.state && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.state}
                             </span>
                           )}
@@ -313,29 +287,28 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='city'>
-                          City*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="city">
+                          {t("City")}*
                         </label>
-                        <div className='' style={{ flexBasis: "47%" }}>
+                        <div className="" style={{ flexBasis: "47%" }}>
                           <Autocomplete
-                            labelId='demo-simple-select-label'
-                            id='demo-simple-select'
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select controllable-states-demo"
                             placeholder={
-                              <div className='select-placeholder-text'>
-                                Select State
+                              <div className="select-placeholder-text">
+                                {t("Select_City")}
                               </div>
                             }
                             value={city}
                             onChange={(event, newValue) => {
                               setCity(newValue);
                             }}
-                            id='controllable-states-demo'
                             options={allCity.map((Option) => Option.name)}
                             renderInput={(params) => (
-                              <TextField {...params} label='Select City' />
+                              <TextField {...params} label={t("Select_City")} />
                             )}
                           />
                           {/* <Autocomplete
@@ -349,7 +322,7 @@ const AddLocation = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         /> */}
                           {errors.city && touched.city && (
-                            <span className='error-msg text-danger-ANL'>
+                            <span className="error-msg text-danger-ANL">
                               {errors.city}
                             </span>
                           )}
@@ -358,18 +331,18 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='addressLine'>
-                          Address Line*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="addressLine">
+                          {t("Address_Line")}*
                         </label>
                         <input
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          placeholder='Enter Address Line'
-                          className='addlocP mt-2'
-                          name='addressTitle'
+                          id="standard-basic"
+                          placeholder={t("Enter_Address_Line")}
+                          className="addlocP mt-2"
+                          name="addressTitle"
                           value={values.addressLine}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -395,19 +368,19 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6 com-sm-16'>
-                      <div className='form-group'>
-                        <label className='col-sm-6' htmlFor='Select Location'>
-                          Pincode*
+                  <div className="row">
+                    <div className="col-md-6 com-sm-16">
+                      <div className="form-group">
+                        <label className="col-sm-6" htmlFor="Select Location">
+                          {t("pincode")}*
                         </label>
                         <input
-                          type='number'
+                          type="number"
                           style={{ flexBasis: "47%" }}
-                          id='standard-basic'
-                          placeholder='Pincode'
-                          className='addlocP mt-2'
-                          name='pincode'
+                          id="standard-basic"
+                          placeholder={t("pincode")}
+                          className="addlocP mt-2"
+                          name="pincode"
                           value={values.pincode}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -437,12 +410,11 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className='d-flex flex-row-reverse'>
+                  <div className="d-flex flex-row-reverse">
                     <button
-                      className='btn btn-yellow float-right font-weight-bold'
+                      className="btn btn-yellow float-right font-weight-bold"
                       disabled={
                         !(
-                          values.country &&
                           values.addressTitle &&
                           values.city &&
                           values.state &&
@@ -450,13 +422,13 @@ const AddLocation = (props) => {
                           addressLine.length > 0
                         )
                       }
-                      type='submit'
+                      type="submit"
                     >
-                      <span>Request Admin For Approval</span>
+                      <span>{t("Request_Admin_For_Approval")}</span>
                     </button>
                     <button
-                      type='button'
-                      className='btn btn-white shadow-radius font-bold mr-3 font-weight-bold'
+                      type="button"
+                      className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold"
                       onClick={() => {
                         props.history.push({
                           pathname: "/profile",
@@ -464,7 +436,7 @@ const AddLocation = (props) => {
                         });
                       }}
                     >
-                      Cancel
+                      {t("Cancel")}
                     </button>
                   </div>
                 </form>
@@ -484,10 +456,11 @@ const AddLocation = (props) => {
         {addedLocationModal && (
           <Modal
             close={() => closeModalAddedLocation()}
-            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
           >
             <SuccessPopup
               onHide={closeModalAddedLocation} //FailurePopUp
+              t={t}
             />
           </Modal>
         )}

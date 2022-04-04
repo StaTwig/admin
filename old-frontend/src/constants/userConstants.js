@@ -1,6 +1,0 @@
-// Auth
-export const AUTH_SUCCESS = 'AUTH_SUCCESS';
-export const AUTH_ERROR = 'AUTH_ERROR';
-export const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
-export const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS';
-export const SET_USER_LOCATION = 'SET_USER_LOCATION';

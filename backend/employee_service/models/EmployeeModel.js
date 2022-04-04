@@ -4,8 +4,7 @@ const EmployeeSchema = new mongoose.Schema(
     id: { type: String, required: false, unique: true },
     emailId: {
       type: String,
-      // required: true,
-      // unique: true
+      default: null,
     },
     walletAddress: {
       type: String,
@@ -32,10 +31,10 @@ const EmployeeSchema = new mongoose.Schema(
     photoId: {
       type: String,
       required: false,
-      default:
-        "/usermanagement/api/auth/images/e835ac51d35cfbe691e485b64397f3a5",
+      default: "default.jpg",
     },
     phoneNumber: { type: String, required: false, default: "" },
+    preferredLanguage: { type: String, required: false, default: "EN" },
     jobTitle: { type: String, required: false, default: "junior Engineer" },
     department: { type: String, required: false, default: "engineering" },
     organisationId: {
@@ -43,7 +42,7 @@ const EmployeeSchema = new mongoose.Schema(
       required: true,
     },
     warehouseId: { type: Array, required: false, default: "NA" },
-    pendingWarehouseId: { type: Array, required: false, default: "NA" },
+    pendingWarehouseId: { type: Array, required: false, default: [] },
     affiliatedOrganisations: {
       type: Array,
       required: false,
@@ -53,11 +52,15 @@ const EmployeeSchema = new mongoose.Schema(
     postalAddress: {
       type: String,
       required: false,
-      default: "gachibowli, hyderabad, india, earth",
+      default: "Gachibowli, Hyderabad, India",
     },
     userDocuments: {
       type: Array,
       default: [],
+    },
+    isCustom: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

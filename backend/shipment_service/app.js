@@ -1,5 +1,4 @@
 const express = require("express");
-const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -7,7 +6,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const swaggerUi = require("swagger-ui-express");
 const openApiDocumentation = require("./openApiDocumentation");
-const { MqttConnection } = require("./helpers/mqtt");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
@@ -27,15 +25,35 @@ mongoose
     if (process.env.NODE_ENV !== "test") {
       console.log("Connected to %s", MONGODB_URL);
       console.log("Shipment Service is running ... \n");
-      (async () => {
-        await MqttConnection();
-      })();
     }
   })
   .catch((err) => {
     console.error("App starting error:", err.message);
     process.exit(1);
   });
+
+const i18next = require("i18next");
+const backend = require("i18next-fs-backend");
+const i18nextMiddleware = require("i18next-http-middleware");
+
+i18next
+  .use(backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    detection: {
+        order: ["querystring", "cookie", "header"],
+      //   lookupQuerystring: "lang",
+      //   lookupCookie: "lang",
+        lookupHeader: "accept-language",
+    },
+    preload: ['en', 'es'],
+    fallbackLng: "en",
+    backend: {
+      loadPath: "./locales/{{lng}}/translation.json",
+    },
+  });
+
+app.use(i18nextMiddleware.handle(i18next));
 
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {
@@ -64,4 +82,4 @@ app.use((err, req, res) => {
   }
 });
 
-module.exports = { app, Server };
+module.exports = app;

@@ -4,6 +4,7 @@ import "./style.scss";
 
 const EditTable = (props) => {
   const [visible, setVisible] = useState(false);
+  const { setOpenFailInventory, setInventoryError } = props;
   return (
     <div className=''>
       <div className='d-flex flex-column'>
@@ -36,6 +37,8 @@ const EditTable = (props) => {
             {...inventory}
             idx={index}
             setVisible={setVisible}
+            setOpenFailInventory={setOpenFailInventory}
+            setInventoryError={setInventoryError}
           />
         ))}
       </div>
@@ -44,7 +47,3 @@ const EditTable = (props) => {
 };
 
 export default EditTable;
-
-/*<div className="input-group-append">
-<img src={downArrow} alt="downarrow" width="9" height="9" />
-</div>*/

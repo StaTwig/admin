@@ -7,8 +7,9 @@ import "./style.scss";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
-  const { ordrs, visible } = props;
-  const orders = ordrs();
+  const { visible,outboundRecords,inboundRecords, t } = props;
+  const orders = visible === "one" ? outboundRecords : inboundRecords;
+
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };
@@ -30,6 +31,7 @@ function Table(props) {
       <AdvanceTableFilter
           visible={props.visible}
           data={props.data}
+          shouldEnable={true}
           poOrderIdList={props.poOrderIdList}
           poDeliveryLocationsList={props.poDeliveryLocationsList}
           poProductsList={props.poProductsList}
@@ -45,38 +47,45 @@ function Table(props) {
           setShowExportFilter={props.setShowExportFilter}
           exportFilterData={props.exportFilterData}
           onSelectionOfDropdownValue={props.onSelectionOfDropdownValue}
+          onSelectionDateFilter={props.onSelectionDateFilter}
           isReportDisabled={props.isReportDisabled}
+          t={t}
+          filterPage="orders"
         />
         <tbody>
           {orders.length === 0 && (
-            <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">
-              No records found
+            <div className="FullWidth rTableRow pt-2 pb-2 text-center justify-content-center ">
+              <span className="text-muted shadow-none">{t('no_records_found')}</span>
             </div>
           )}
           {orders.map((order, index) => {
             let statusStyle = "bg-primary";
             let status = order.poStatus;
-            if (order.poStatus === "CREATED") {
-              status = visible === "one" ? "Sent" : "Received";
-            } else if (order.poStatus === "ACCEPTED") {
-              statusStyle = "bg-success";
-              status = "Accepted";
-            } else if (order.poStatus === "REJECTED") {
-              statusStyle = "bg-secondary";
-              status = "Rejected";
-            } else if (order.poStatus === "TRANSIT&FULLYFULFILLED") {
-              statusStyle = "bg-info";
-              status = "Transit & Fullyfilled";
-            } else if (order.poStatus === "FULLYFULFILLED") {
-              statusStyle = "bg-info";
-              status = "Fullyfilled";
-            } else if (order.poStatus === "TRANSIT&PARTIALLYFULFILLED") {
-              statusStyle = "bg-warning";
-              status = "Transit & Partially Fulfilled";
-            } else if (order.poStatus === "PARTIALLYFULFILLED") {
-              statusStyle = "bg-warning";
-              status = "Partially Fulfilled";
-            }
+          if (order.poStatus === "CREATED") {
+            status = visible === "one" ? t('sent') : t('received');
+          } else if (order.poStatus === "ACCEPTED") {
+            statusStyle = "bg-success";
+            status = t('accepted');
+          } else if (order.poStatus === "REJECTED") {
+            statusStyle = "bg-secondary";
+            status = t('rejected');
+          } else if (order.poStatus === "TRANSIT&FULLYFULFILLED") {
+            statusStyle = "bg-info";
+            status = t('transitfullyfilled');
+          } else if (order.poStatus === "FULLYFULFILLED") {
+            statusStyle = "bg-info";
+            status = t('fullyfilled');
+          } else if (order.poStatus === "TRANSIT&PARTIALLYFULFILLED") {
+            statusStyle = "bg-warning";
+            status = t('transitpartiallyfilled');
+          } else if (order.poStatus === "PARTIALLYFULFILLED") {
+            statusStyle = "bg-warning";
+            status = t('partiallyfilled');
+          }
+          else if (order.poStatus === "CANCELLED") {
+            statusStyle = "bg-primary";
+            status = t('cancelled');
+          }
 
             const { customer, products, supplier, creatorOrganisation } = order;
             return (
@@ -90,12 +99,12 @@ function Table(props) {
                       <h5 className="mb-0 table-h5-text ">
                         {visible === "two"
                           ? creatorOrganisation?.name
-                          : supplier.organisation.name}
+                          : supplier.organisation?.name}
                       </h5>
                       <p className="mb-0 table-p-text ">
                         {visible === "two"
                           ? creatorOrganisation?.id
-                          : supplier.organisation.id}
+                          : supplier.organisation?.id}
                       </p>
                     </div>
                   </div>
@@ -117,7 +126,7 @@ function Table(props) {
                   <div className="user-info">
                     <h5 className="table-h5-text text-muted">
                       {truncate(
-                        products[0]?.name +
+                        (products[0]?.name || products[0]?.productId) +
                         (products.length > 1
                           ? " + " + (products.length - 1) + " more"
                           : ""),
@@ -140,7 +149,7 @@ function Table(props) {
                     </p>
                   </div>
                 </td>
-                <td>
+                <td className="d-flex align-items-center justify-content-center">
                   <div
                     className={`status secondary-bg ${statusStyle} py-1`}
                     style={{
@@ -156,13 +165,13 @@ function Table(props) {
                 <td>
                   <Link
                     to={`/vieworder/${order.id}`}
-                    className="button btn-view-link px-2 py-1"
+                    className="button btn-view-link px-4 py-1"
                     style={{
                       border: "1px solid #007bff",
                       borderRadius: "6px",
                     }}
                   >
-                    View
+                    {t('view')}
                   </Link>
                 </td>
               </tr>
@@ -183,7 +192,7 @@ function Table(props) {
             className="mx-5 my-1 rounded text-dark"
             style={{ fontSize: "14px" }}
           >
-            Total Records {props.count}{" "}
+            {t('total_records')} {props.count}{" "}
           </span>
         </div>
       )}

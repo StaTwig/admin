@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import searchingIcon from "../../../assets/icons/searching@2x.png";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import { Search } from "@mui/icons-material";
 import "./style.scss";
 
 const Tabs = (props) => {
@@ -7,7 +9,6 @@ const Tabs = (props) => {
     filteredWareHouses,
     visible,
     setVisible,
-    warehouseText,
     setWarehouseText,
     onWarehouseChange,
     onSearchClick,
@@ -16,98 +17,102 @@ const Tabs = (props) => {
     warehouseArr,
     setWarehouseArr,
     setDashBarData,
+    t,
   } = props;
   const [isClicked, setIsClicked] = useState(false);
 
+  console.log(filteredWareHouses);
   return (
     <div className='dashboardtabs'>
-      <ul className='nav nav-pills mb-2'>
-        <li
-          className={visible ? "nav-item" : "nav-item-active"}
-          onClick={() => {
-            if (warehouseArr.length > 0) setWarehouseArr([]);
-            setWarehouseText("");
-            setDashVisible(false);
-            setDashBarData({});
-            setVisible(false);
-          }}
-        >
-          <div className={visible ? "nav-link text-secondary" : "nav-link"}>
-            Storage Location
-          </div>
-        </li>
-        <li
-          className={visible ? "nav-item-active " : "nav-item"}
-          onClick={() => {
-            if (warehouseArr.length > 0) setWarehouseArr([]);
-            setWarehouseText("");
-            setDashVisible(false);
-            setDashBarData({});
-            setVisible(true);
-          }}
-        >
-          <div className={visible ? "nav-link" : "nav-link text-secondary"}>
-            Shipment
-          </div>
-        </li>
-        <li>
-          <div className='search-form'>
-            <input
-              type='text'
-              value={warehouseText}
-              onChange={(e) => {
-                if (isClicked) setIsClicked(false);
-                onWarehouseChange(e.target.value);
-              }}
-              placeholder={visible ? "Enter Shipment ID" : "Enter Location ID"}
-              className='form-control search-field'
-            />
-            <img
-              src={searchingIcon}
-              onClick={() => onSearchClick(warehouseText)}
-              alt='searching'
-            />
-            {warehouseText !== "" && !isClicked && (
-              <div
-                className='bg-white m-1 p-2 position-absolute rounded'
-                style={{ width: 250 }}
-              >
-                {filteredWareHouses?.map((warehouse, index) => (
-                  <p
-                    key={index}
-                    className='p-2 m-1 cursorP border-bottom'
-                    onClick={() => {
-                      setIsClicked(true);
-                      onWarehouseChange(
-                        visible ? warehouse.id : warehouse.title
-                      );
-                      onSearchClick(warehouse.id);
+      <ul className='nav nav-pills mb-2 flex-sb'>
+        <div className='left-flex'>
+          <li
+            className={visible ? "nav-item" : "nav-item-active"}
+            onClick={() => {
+              if (warehouseArr.length > 0) setWarehouseArr([]);
+              setWarehouseText("");
+              setDashVisible(false);
+              setDashBarData({});
+              setVisible(false);
+            }}
+          >
+            <div className={visible ? "nav-link text-secondary" : "nav-link"}>
+              {t("storage_location")}
+            </div>
+          </li>
+          <li
+            className={visible ? "nav-item-active " : "nav-item"}
+            onClick={() => {
+              if (warehouseArr.length > 0) setWarehouseArr([]);
+              setWarehouseText("");
+              setDashVisible(false);
+              setDashBarData({});
+              setVisible(true);
+            }}
+          >
+            <div className={visible ? "nav-link" : "nav-link text-secondary"}>
+              {t("shipment")}
+            </div>
+          </li>
+        </div>
+        <div className='right-flex'>
+          <div>
+            <div style={{ position: "relative" }}>
+              <Autocomplete
+                freeSolo
+                id='free-solo-2-demo'
+                disableClearable
+                sx={{ width: "300px", height: "3rem" }}
+                options={filteredWareHouses.map((warehouse) => warehouse)}
+                getOptionLabel={(warehouse) =>
+                  visible ? warehouse.id : warehouse.title
+                }
+                onChange={(e, key) => {
+                  onSearchClick(key.id);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    disableClearable
+                    placeholder={
+                      visible
+                        ? t("enter") + " " + t("shipment_id")
+                        : t("enter") + " " + t("location_id")
+                    }
+                    InputProps={{
+                      ...params.InputProps,
+                      type: "search",
                     }}
-                  >
-                    {visible
-                      ? warehouse.id
-                      : warehouse.title
-                      ? warehouse.title
-                      : warehouse.id}
-                  </p>
-                ))}
-              </div>
+                    onChange={(e) => {
+                      if (isClicked) setIsClicked(false);
+                      onWarehouseChange(e.target.value);
+                    }}
+                    onClick={() => onWarehouseChange("")}
+                    size='small'
+                  />
+                )}
+              />
+              <Search
+                className='network-search-icon'
+                style={{}}
+                onClick={() => onSearchClick()}
+              />
+            </div>
+          </div>
+          <div>
+            {!visible && (
+              <button
+                className=' btn-primary btn-warehouse'
+                onClick={() => {
+                  setContent(false);
+                  setDashVisible(true);
+                }}
+              >
+                {t("search") + " " + t("location")}
+              </button>
             )}
           </div>
-        </li>
-        <li>
-          {!visible && (
-            <button
-              className=' btn-primary btn warehouse'
-              onClick={() => {
-                setContent(false);
-                setDashVisible(true);
-              }}
-            >
-              Search Location
-            </button>
-          )}
-        </li>
+        </div>
       </ul>
     </div>
   );

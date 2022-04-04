@@ -5,7 +5,7 @@ import user from "../../assets/icons/brand.svg";
 import Add from "../../assets/icons/add.svg";
 
 const ProductCategory = (props) => {
-  const { products } = props;
+  const { products, t } = props;
   const categoryArray = products
     .map((product) => product.type)
     .filter((value, index, self) => self.indexOf(value) === index);
@@ -65,7 +65,7 @@ const ProductCategory = (props) => {
   return (
     <div className='productcategory'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>PRODUCT CATEGORY</h1>
+        <h1 className='breadcrumb'>{t('product_category')}</h1>
         <div
           className='d-flex mr-5'
           style={{ position: "relative", left: "-30px" }}
@@ -80,7 +80,7 @@ const ProductCategory = (props) => {
                 alt='Add'
               />
               <span>
-                <b>Add New Product</b>
+                <b>{t('add_new_product')}</b>
               </span>
             </button>
           </Link>
@@ -126,7 +126,7 @@ const ProductCategory = (props) => {
         <div className='panel m-2 bg-grey align-items-center justify-content-center'>
           <div className='flex flex-column'>
             <div className=' pt-2 pb-2 d-flex row text-light'>
-              <Link to='/addNewCategory'>+ Add New Category</Link>
+              <Link to='/addNewCategory'>+ {t('add_new_category')}</Link>
             </div>
           </div>
         </div>

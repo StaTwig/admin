@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { getOrganisations } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./style.scss";
 import User from "../../assets/icons/user.png";
@@ -17,10 +18,11 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import TextField from "@material-ui/core/TextField";
 import { verifyEmailAndPhoneNo } from "../../actions/userActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { COUNTRY_CODE } from "../../constants/countryCode";
 
 const FormPage = (props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [organisations, setOrganisations] = useState([]);
   const [organisationsType, setOrganisationsType] = useState([]);
   const [organisationsArr, setOrganisationsArr] = useState([]);
@@ -39,12 +41,16 @@ const FormPage = (props) => {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [checker, setChecker] = useState(true);
-  const other = t('other');
+  const [emailErrorMsg, setEmailErrorMsg] = useState("");
+  const [phoneErrorMsg, setPhoneErrorMsg] = useState("");
+  const [validEmailErr, setValidEmailErr] = useState("");
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-      
-      orgs.push({ id: t('other'), name: t('other') });
+
+      orgs.push({ id: t("other"), name: t("other") });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
@@ -60,7 +66,7 @@ const FormPage = (props) => {
     // check();
     fetchOrganisationType();
     fetchData();
-  }, []);
+  }, [t]);
   var orgTypeArray = [];
   organisationsType.map((data) => {
     for (var i = 0; i < data.length; i++) {
@@ -69,36 +75,49 @@ const FormPage = (props) => {
   });
   const showOrgByType = (value) => {
     let arr = organisations.filter((data) => data.type === value);
-    arr.push({ name: t('other') });
+    arr.push({ name: t("other") });
     return arr;
   };
 
-  async function verifyEmailandPhoneNo(value) {
-    let result = await verifyEmailAndPhoneNo(value);
-    return result.data;
-  }
-  const changeFn = (value_new, e) => {
-    setValue(value_new);
-    let orgs = organisationsArr.filter((org) =>
-      org.name.toLowerCase().includes(value_new.toLowerCase())
-    );
-    setOrganisations(orgs);
-    if (
-      organisationsArr.filter(
-        (org) => org.name.toLowerCase() === value_new.toLowerCase()
-      ).length &&
-      value_new !== t('other')
-    )
-      props.onOrgChange(false);
-    else {
-      props.onOrgChange(true);
-      if (e) {
-        setValue(t('other'));
+  const handleEmailVerification = () => {
+    if (props.email) {
+      if (props.email.match(emailRegex) === null) {
+        setEmailErrorMsg("emailId_is_not_valid");
+      } else {
+        setEmailErrorMsg("");
+        verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v) => {
+          // console.log("v", v);
+          if (v.data.length) {
+            setemailerror(true);
+            setsignupDisable(true);
+          } else {
+            setemailerror(false);
+            setEmailErrorMsg("");
+            //setsignupDisable(false);
+          }
+        });
       }
     }
-    props.onOrganisationChange({ id: 0, name: value_new });
   };
 
+  const handlePhoneVerification = () => {
+    if (props.phone) {
+      if (isValidPhoneNumber(props.phone) === false) {
+        setPhoneErrorMsg("invalid_phone_number");
+      } else {
+        setPhoneErrorMsg("");
+        verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v) => {
+          console.log(v);
+          if (v?.data[0]?.phoneNumber) {
+            setphoneerror(true);
+          } else {
+            setphoneerror(false);
+            setPhoneErrorMsg("");
+          }
+        });
+      }
+    }
+  };
   if (
     checker &&
     firstName?.length > 0 &&
@@ -110,6 +129,61 @@ const FormPage = (props) => {
     setsignupDisable(false);
     setChecker(false);
   }
+
+  const handleOrgName = (event, item, setFieldValue) => {
+    console.log("Entered org name");
+    if (firstName.length <= 0) {
+      setFirstNameError(true);
+    }
+    if (lastName.length <= 0) {
+      setLastNameError(true);
+    }
+    if (
+      (mobileNumber.length <= 0 || email.length <= 0) &&
+      emailErrorMsg === "" &&
+      phoneErrorMsg === "" &&
+      (emailError || !phoneNumberError) &&
+      (!emailError || phoneNumberError)
+    ) {
+      setPhoneNumberError(true);
+      setMailError(true);
+    }
+    setFieldValue("org", item);
+    props.onOrganisationChange(item);
+    if (item.name !== t("other")) {
+      setValue(item.name);
+      props.onOrgChange(false);
+    }
+    if (item.name === t("other")) {
+      props.onOrgChange(true);
+
+      if (
+        firstName.length > 0 &&
+        lastName.length > 0 &&
+        orgType.length > 0 &&
+        (email.length > 0 || mobileNumber.length > 0) &&
+        emailErrorMsg === "" &&
+        phoneErrorMsg === ""
+        // &&
+        // (emailError || !phoneNumberError) && (!emailError || phoneNumberError)
+      ) {
+        props.onOrgChange(true);
+      } else {
+        setPhoneNumberError(true);
+        setMailError(true);
+        props.onOrgChange(false);
+      }
+    }
+  };
+
+  const unWantedSubmit = (keyEvent) => {
+    if (
+      (keyEvent.charCode || keyEvent.keyCode) === 13 &&
+      keyEvent.keyCode !== 9
+    ) {
+      keyEvent.stopPropagation();
+    }
+  };
 
   return (
     <div className='login-wrapper'>
@@ -124,8 +198,10 @@ const FormPage = (props) => {
           <div className='col-m-6 col-lg-6'>
             <div className='form-content'>
               <img className='logo' src={logo} alt='Logo' />
-              <h1>{t('welcome')},</h1>
-              <p>{t('signup')} {t('to')} {t('continue').toLowerCase()}</p>
+              <h1>{t("welcome")},</h1>
+              <p>
+                {t("signup")} {t("to")} {t("continue").toLowerCase()}
+              </p>
             </div>
           </div>
           <div className='col-m-6 col-lg-6'>
@@ -140,7 +216,7 @@ const FormPage = (props) => {
                     className='align-self-center mt-5 mb-2'
                   />
                   <div className='font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve'>
-                    {t('signup_success_message')}
+                    {t("signup_success_message")}
                   </div>
                 </>
               ) : (
@@ -158,10 +234,10 @@ const FormPage = (props) => {
                     validate={(values) => {
                       const errors = {};
                       if (!values.firstName) {
-                        errors.firstName = t('required');
+                        errors.firstName = t("required");
                       }
                       if (!values.lastName) {
-                        errors.lastName = t('required');
+                        errors.lastName = t("required");
                       }
                       //if (!values.email) {
                       // errors.email = "Required";
@@ -170,7 +246,7 @@ const FormPage = (props) => {
                       //    errors.phone = "Required";
                       //  }
                       if (!values.org) {
-                        errors.org = t('required');
+                        errors.org = t("required");
                       }
                       return errors;
                     }}
@@ -190,9 +266,12 @@ const FormPage = (props) => {
                       setFieldValue,
                       dirty,
                     }) => (
-                      <form onSubmit={handleSubmit} className='mb-5'>
+                      <form
+                        onSubmit={handleSubmit}
+                        className="mb-5"
+                      >
                         <div className='login-form mt-1 pl-5 pr-5 ml-5'>
-                              <div className='card-title mr-5'>{t('signup')}</div>
+                          <div className='card-title mr-5'>{t("signup")}</div>
                           <div className='form-group flex-column '>
                             <div
                               style={{
@@ -211,7 +290,7 @@ const FormPage = (props) => {
 
                             <TextField
                               id='standard-basic'
-                              label={t('first_name')}
+                              label={t("first_name")}
                               className='form-controll ml-4'
                               name='firstName'
                               value={props.firstName}
@@ -235,7 +314,7 @@ const FormPage = (props) => {
 
                             {firstNameError && (
                               <span className='error-msg text-dangerS'>
-                                {t('first_name')} {t('is')} {t('required')}
+                                {t("first_name")} {t("is")} {t("required")}
                               </span>
                             )}
                           </div>
@@ -260,7 +339,7 @@ const FormPage = (props) => {
                             </div>
                             <TextField
                               id='standard-basic'
-                              label={t('last_name')}
+                              label={t("last_name")}
                               className=' form-controll ml-4'
                               name='lastName'
                               value={props.lastName}
@@ -284,7 +363,7 @@ const FormPage = (props) => {
 
                             {lastNameError && (
                               <span className='error-msg text-dangerS'>
-                                {t('last_name')} {t('is')} {t('required')}
+                                {t("last_name")} {t("is")} {t("required")}
                               </span>
                             )}
                           </div>
@@ -309,14 +388,17 @@ const FormPage = (props) => {
                             </div>
                             <TextField
                               id='standard-basic'
-                              label={t('email_id')}
+                              label={t("email_id")}
                               className='form-controll ml-4'
                               name='email'
+                              type='email'
                               autoCapitalize='none'
                               value={props.email.toLowerCase()}
                               onChange={(e) => {
                                 setChecker(true);
                                 if (e.target.value.length > 0) {
+                                  setEmailErrorMsg("");
+                                  setemailerror(false);
                                   setPhoneNumberError(false);
                                   setMailError(false);
                                 } else {
@@ -326,23 +408,7 @@ const FormPage = (props) => {
                                 props.onEmailChange(e);
                                 handleChange(e);
                               }}
-                              handleBlur={
-                                props.email
-                                  ? verifyEmailAndPhoneNo(
-                                      `emailId=${props.email}`
-                                    ).then((v) => {
-                                      if (v.data.length) {
-                                        setemailerror(true);
-                                        //setemailerror(true);
-                                        setsignupDisable(true);
-                                      } else {
-                                        setemailerror(false);
-                                        //setsignupDisable(false);
-                                        //setsignupDisable(false);
-                                      }
-                                    })
-                                  : null
-                              }
+                              handleBlur={handleEmailVerification()}
                             />
                             {errors.email && touched.email && (
                               <span className='error-msg text-dangerS'>
@@ -351,22 +417,31 @@ const FormPage = (props) => {
                             )}
                             {emailError && (
                               <span className='error-msg text-dangerS'>
-                                {t('email_id')} {t('already')} {t('registered')}
+                                {t("email_id")} {t("already")} {t("registered")}
                               </span>
                             )}
-                            {phoneNumberError && (
+                            {emailErrorMsg !== "" && (
                               <span className='error-msg text-dangerS'>
-                                {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
+                                {t(emailErrorMsg)}
                               </span>
                             )}
+                            {phoneNumberError &&
+                              email.length <= 0 &&
+                              mobileNumber.length <= 0 && (
+                                <span className='error-msg text-dangerS'>
+                                  {t("phone_number")} {t("or")} {t("email_id")}{" "}
+                                  {t("is")} {t("required")}
+                                </span>
+                              )}
                           </div>
 
                           <div
-                            className='form-group'
+                            className='form-group form-padding'
                             style={{
                               position: "relative",
                               left: "-15px",
                               bottom: "20px",
+                              marginBottom: "0.2rem !important",
                             }}
                           >
                             <div
@@ -385,59 +460,53 @@ const FormPage = (props) => {
                             </div>
 
                             <PhoneInput
-                              country={"in"}
-                              placeholder={t('enter_phone_number')}
-                              inputProps={{
-                                name: "phone",
-                                required: false,
-                                // defaultCountry: "IN",
-                                // enableSearch: true,
-                              }}
+                              international
+                              countryCallingCodeEditable={false}
+                              defaultCountry={COUNTRY_CODE}
+                              placeholder={t("enter_phone_number")}
+                              className='phone-Input-new'
                               value={props.phone}
                               onChange={(e) => {
+                                console.log(e);
                                 setChecker(true);
-                                if (e.length > 0) {
-                                  setPhoneNumberError(false);
-                                } else {
-                                  setsignupDisable(true);
+                                if (e) {
+                                  if (e.length > 0) {
+                                    setPhoneNumberError(false);
+                                    setMailError(false);
+                                  } else {
+                                    setsignupDisable(true);
+                                  }
+                                  setMobileNumber(e);
+                                  props.onphoneChange(e);
                                 }
-                                setMobileNumber(e);
-                                props.onphoneChange(e);
                               }}
-                              handleBlur={
-                                props.phone
-                                  ? verifyEmailAndPhoneNo(
-                                      `phoneNumber=${props.phone}`
-                                    ).then((v) => {
-                                      if (v.data[0].phoneNumber) {
-                                        setphoneerror(true);
-                                        // setsignupDisable(true);
-                                      } else {
-                                        setphoneerror(false);
-                                        //setsignupDisable(false);
-                                      }
-                                    })
-                                  : null
-                              }
+                              onKeyDown={handlePhoneVerification()}
                             />
                           </div>
                           {errors.phone && touched.phone && (
-                            <span className='error-msg text-dangerS'>
+                            <span className='error-msg text-dangerMobile'>
                               {errors.phone}
                             </span>
                           )}
                           {phoneError && (
-                            <span className='error-msg text-dangerS'>
-                              {t('phone_number')} {t('already')} {t('registered')}
+                            <span className='error-msg text-dangerMobile'>
+                              {t("phone_number")} {t("already")}{" "}
+                              {t("registered")}
                             </span>
                           )}
-                          {phoneNumberError && (
-                            <span className='error-msg text-dangerS'>
-                             {t('phone_number')} {t('or')} {t('email_id')} {t('is')} {t('required')}
+                          {phoneErrorMsg !== "" && (
+                            <span className='error-msg text-dangerMobile'>
+                              {t(phoneErrorMsg)}
                             </span>
                           )}
-
-                          <div className='pb-3'></div>
+                          {phoneNumberError &&
+                            mobileNumber.length <= 0 &&
+                            email.length <= 0 && (
+                              <span className='error-msg text-dangerMobile'>
+                                {t("phone_number")} {t("or")} {t("email_id")}{" "}
+                                {t("is")} {t("required")}
+                              </span>
+                            )}
                           <div
                             className='form-group'
                             style={{
@@ -480,10 +549,15 @@ const FormPage = (props) => {
                                     setLastNameError(true);
                                   }
                                   if (
-                                    mobileNumber.length <= 0 &&
-                                    email.length <= 0
+                                    (email.length > 0 ||
+                                      mobileNumber.length > 0) &&
+                                    emailErrorMsg === "" &&
+                                    phoneErrorMsg === "" &&
+                                    (emailError || !phoneNumberError) &&
+                                    (!emailError || phoneNumberError)
                                   ) {
                                     setPhoneNumberError(true);
+                                    setMailError(true);
                                   }
 
                                   setFieldValue("type", item);
@@ -498,7 +572,7 @@ const FormPage = (props) => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation') + " " + t('type')}
+                                    label={t("organisation_type")}
                                   />
                                 )}
                               />
@@ -590,50 +664,21 @@ const FormPage = (props) => {
                               }}
                             >
                               <Autocomplete
-                                onChange={(event, item) => {
-                                  if (firstName.length <= 0) {
-                                    setFirstNameError(true);
-                                  }
-                                  if (lastName.length <= 0) {
-                                    setLastNameError(true);
-                                  }
-                                  if (
-                                    mobileNumber.length <= 0 &&
-                                    email.length <= 0
-                                  ) {
-                                    setPhoneNumberError(true);
-                                  }
-                                  setFieldValue("org", item);
-                                  props.onOrganisationChange(item);
-                                  if (item.name !== t('other')) {
-                                    setValue(item.name);
-                                    props.onOrgChange(false);
-                                  }
-                                  if (item.name === t('other')) {
-                                    props.onOrgChange(true);
-
-                                    if (
-                                      firstName.length > 0 &&
-                                      lastName.length > 0 &&
-                                      orgType.length > 0 &&
-                                      (email.length > 0 ||
-                                        mobileNumber.length > 0)
-                                    ) {
-                                      props.onOrgChange(true);
-                                    } else {
-                                      setPhoneNumberError(true);
-                                      props.onOrgChange(false);
-                                    }
-                                  }
-                                }}
+                                onChange={(event, item) =>
+                                  handleOrgName(event, item, setFieldValue)
+                                }
                                 id='debug'
                                 debug
-                                getOptionLabel={(option) => option.name.toLocaleLowerCase()}
+                                getOptionLabel={(option) => option.name}
                                 options={showOrgByType(selectedType)}
+                                // disabled={lastNameError && firstNameError
+                                //   && phoneNumberError && emailErrorMsg
+                                //   && phoneErrorMsg && emailError
+                                //   && phoneError ? true : false}
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    label={t('organisation')+" "+t('name')}
+                                    label={t("organisation_name")}
                                   />
                                 )}
                               />
@@ -685,6 +730,9 @@ const FormPage = (props) => {
                     className="text"
                   />  */}
                             </div>
+                            <span className='Organisation-type-msg'>
+                              {t("organisation_name_info")}
+                            </span>
                             {/* <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
                   </div> */}
@@ -693,17 +741,21 @@ const FormPage = (props) => {
                                 {errors.org}
                               </span>
                             )}
+                            {validEmailErr !== "" && (
+                              <span className='error-msg text-dangerON'>
+                                {validEmailErr}
+                              </span>
+                            )}
                           </div>
                           {props.errorMessage && (
                             <div className='mt-3 mr-4'>
                               {" "}
                               <Alert variant='filled' severity='error'>
-                                <AlertTitle>{t('error')}</AlertTitle>
+                                <AlertTitle>{t("error")}</AlertTitle>
                                 {props.errorMessage}
                               </Alert>
                             </div>
                           )}
-
                           <div className='text-center'>
                             <br></br>
                             <button
@@ -711,13 +763,13 @@ const FormPage = (props) => {
                               className='buttonS btn btn-primary mr-5'
                               disabled={signupDisable}
                             >
-                              {t('signup')}
+                              {t("signup")}
                             </button>
                           </div>
                           <div className='signup-link text-center mt-3 mb-4 mr-5'>
-                                {t('already')} {t('have')} {t('an')} {t('account')}?{" "}
+                            {t("already")} {t("have")} {t("an")} {t("account")}?{" "}
                             <Link to='/login'>
-                              <b>{t('login')}</b>
+                              <b>{t("login")}</b>
                             </Link>
                           </div>
                         </div>

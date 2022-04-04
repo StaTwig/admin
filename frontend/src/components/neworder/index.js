@@ -25,6 +25,7 @@ import {
 } from "../../actions/poActions";
 
 const NewOrder = (props) => {
+  const { t } = props;
   const editPo = useSelector((state) => {
     return state?.reviewPo;
   });
@@ -33,7 +34,6 @@ const NewOrder = (props) => {
     option: (provided, state) => ({
       ...provided,
       borderBottom: "1px solid #d6d6d6",
-      // padding: 20,
     }),
     control: () => ({
       display: "flex",
@@ -94,13 +94,14 @@ const NewOrder = (props) => {
   const [shipmentError, setOrderError] = useState("");
   const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
   const [orgTypes, setOrgTypes] = useState([]);
-  const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [orgType, setOrgType] = useState("");
   const [orgDetails, setOrgDetails] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
+      // onCountryChange('Costa Rica');
+
       const orgs = await getAllOrganisations();
       setAllOrganisations(
         orgs.data.map((item) => {
@@ -164,23 +165,6 @@ const NewOrder = (props) => {
     setAddAnotherProductFailed(false);
   };
 
-  // const onOrggChange = async(v) =>
-  // {
-  //   console.log("Hi");
-  //   try{
-  //     const selOrg = orgDetails.filter((value) => {
-  //       return value.name==v.label;
-  //   });
-  //    console.log("SelOrg is :- ", selOrg);
-  //     setFieldValue('toOrgLocName',selOrg[0].postalAddress);
-  //     setFieldValue('toOrgLoc',selOrg[0].warehouses[0]);
-
-  //   }
-  //   catch(err)
-  //   {
-  //     console.log(err);
-  //   }
-  // }
   const onOrgChange = async (value) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
@@ -206,20 +190,18 @@ const NewOrder = (props) => {
 
   const onOrgTypeChange = async (value) => {
     try {
-      console.log("new order label is :- onOrgTypeChange", value);
+      console.log("Values from Organisation Type change:", value);
       const region = await getRegions(value);
-      //const check = await getOrganizations("VENDOR","India");
-      console.log("region is => ", region);
+      console.log("Regions:", region);
       const rr = region.data.map((v) => {
-        console.log(v);
         return {
           value: v,
           label: v,
         };
       });
-      // console.log("regions are :- ",rr);
+      console.log("rr");
       setReceiverWarehousesRegion(rr);
-      console.log("new order label is :- onOrgTypeChange Check", region);
+      // onCountryChange(value, 'Costa Rica');
     } catch (err) {
       setErrorMessage(err);
     }
@@ -227,11 +209,7 @@ const NewOrder = (props) => {
 
   const onRegionChange = async (id) => {
     try {
-      console.log("Region is " + id);
-      console.log("OrgType is " + orgType);
       const countries = await getCountryDetailsByRegion(id, orgType);
-      console.log("countries are :- ", countries);
-
       const cc = countries.data.map((v) => {
         return {
           value: v,
@@ -245,13 +223,11 @@ const NewOrder = (props) => {
     }
   };
 
-  const onCountryChange = async (idd) => {
+  const onCountryChange = async (type, idd) => {
     try {
-      console.log("country is " + idd);
-      console.log("org type is " + orgType);
-
-      const org = await getOrganizations(orgType, idd);
-      console.log("Organizations names are :- ", org);
+      console.log("from function:", orgType);
+      console.log("id from function:", idd);
+      const org = await getOrganizations(type, idd);
       setOrgDetails(org.data);
       const oo = org.data.map((v) => {
         return {
@@ -259,7 +235,6 @@ const NewOrder = (props) => {
           label: v.name,
         };
       });
-      console.log(oo);
       setOrgNames(oo);
     } catch (err) {
       setErrorMessage(err);
@@ -268,7 +243,6 @@ const NewOrder = (props) => {
 
   const onCategoryChange = async (index, value, setFieldValue) => {
     try {
-      // const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
       newArr[index] = {
         productId: "",
@@ -415,21 +389,21 @@ const NewOrder = (props) => {
       //   setErrorMessage("Not able to create order. Try again!");
       // }
     } else if (error) {
-      setOrderError("Check product quantity");
+      setOrderError(t("check_product_quantity"));
       setFailedPop(true);
     } else if (nameError) {
-      setOrderError("Check Product Category");
+      setOrderError(t("check_product_category"));
       setFailedPop(true);
     } else if (typeError) {
-      setOrderError("Check Product Type");
+      setOrderError(t("check_product_type"));
       setFailedPop(true);
     }
   };
 
   return (
-    <div className="NewOrder m-3">
-      <div className="d-flex justify-content-between mb-3">
-        <h1 className="breadcrumb">CREATE NEW ORDER</h1>
+    <div className='NewOrder m-3'>
+      <div className='d-flex justify-content-between mb-3'>
+        <h1 className='breadcrumb'>{t("create_new_order")}</h1>
       </div>
       <Formik
         // enableReinitialize={true}
@@ -453,29 +427,31 @@ const NewOrder = (props) => {
         validate={(values) => {
           const errors = {};
           if (!values.type) {
-            errors.type = "Required";
+            errors.type = t("required");
           }
           if (!values.rtype) {
-            errors.rtype = "Required";
+            errors.rtype = t("required");
           }
           if (!values.fromOrg) {
-            errors.fromOrg = "Required";
+            errors.fromOrg = t("required");
           }
           if (!values.toOrg) {
-            errors.toOrg = "Required";
-          }
-          if (!values.toOrgLocRegion) {
-            errors.toOrgLocRegion = "Required";
-          }
-          if (!values.toOrgLocCountry) {
-            errors.toOrgLocCountry = "Required";
+            errors.toOrg = t("required");
           }
           if (!values.toOrgLoc) {
-            errors.toOrgLoc = "Required";
+            errors.toOrgLoc = t("required");
           }
           if (values.products.length === 0) {
-            errors.products = "Required";
+            errors.products = t("required");
           }
+          if (!values.toOrgRegion) {
+            errors.toOrgRegion = t("required");
+          }
+
+          if (!values.toOrgCountry) {
+            errors.toOrgCountry = t("required");
+          }
+
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -494,10 +470,10 @@ const NewOrder = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="">
-            <div className="row mb-3">
-              <label htmlFor="productDetails" className="headsup1">
-                Product Details
+          <form onSubmit={handleSubmit} className=''>
+            <div className='row mb-3'>
+              <label htmlFor='productDetails' className='headsup1'>
+                {t("product_details")}
               </label>
               <EditTable
                 product={addProducts}
@@ -513,11 +489,12 @@ const NewOrder = (props) => {
                 handleCategoryChange={(index, item) =>
                   onCategoryChange(index, item, setFieldValue)
                 }
+                t={t}
               />
-              <div className="d-flex justify-content-between">
+              <div className='d-flex justify-content-between'>
                 <button
-                  type="button"
-                  className="btn btn-white bg-white shadow-radius font-bold mb-1"
+                  type='button'
+                  className='btn btn-white bg-white shadow-radius font-bold mb-1'
                   onClick={() => {
                     let arr = addProducts.filter(
                       (p) =>
@@ -538,18 +515,18 @@ const NewOrder = (props) => {
                       };
                       setAddProducts((prod) => [...prod, newArr]);
                     } else {
-                      setOrderError("Fill all the required Product Details");
+                      setOrderError(t("error_product_details"));
                       setAddAnotherProductFailed(true);
                     }
                   }}
                 >
                   {" "}
                   <div style={{ fontSize: "14px" }}>
-                    +<span> Add Another Product</span>
+                    +<span> {t("add_another_product")}</span>
                   </div>
                 </button>
                 {errors.products && touched.products && (
-                  <span className="error-msg text-danger1">
+                  <span className='error-msg text-danger1'>
                     {errors.products}
                   </span>
                 )}
@@ -561,16 +538,16 @@ const NewOrder = (props) => {
               </span>
             )} */}
 
-            <div className="row mb-3">
-              <div className="col bg-white formContainer low">
-                <label htmlFor="client" className="headsup">
-                  Order From
+            <div className='row mb-3'>
+              <div className='col bg-white formContainer low'>
+                <label htmlFor='client' className='headsup'>
+                  {t("order_from")}
                 </label>
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="organizationName">
-                        Organisation Type*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("organisation_type")}*
                       </label>
                       <div
                         className={`line ${
@@ -578,11 +555,11 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Organisation Type
+                            <div className='select-placeholder-text'>
+                              {t("select_organisation_type")}
                             </div>
                           }
                           onChange={(v) => {
@@ -593,6 +570,7 @@ const NewOrder = (props) => {
                           }}
                           defaultInputValue={values.typeName}
                           options={orgTypes}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.type && touched.type && (
                             <span className="error-msg text-danger">{errors.type}</span>
@@ -601,11 +579,11 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="organizationName">
-                        Organisation Name*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("organisation_name")}*
                       </label>
                       <div
                         className={`line ${
@@ -627,16 +605,16 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Organisation Name
+                            <div className='select-placeholder-text'>
+                              {t("select_organisation_name")}
                             </div>
                           }
                           value={
                             values.fromOrg === ""
-                              ? "Select Organisation Name"
+                              ? t("select_organisation_name")
                               : {
                                   value: values.fromOrg,
                                   label: values.fromOrgId,
@@ -652,6 +630,7 @@ const NewOrder = (props) => {
                           options={allOrganisations.filter(
                             (a) => a.type === values.typeName
                           )}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.fromOrg && touched.fromOrg && (
                           <span className="error-msg text-danger">{errors.fromOrg}</span>
@@ -660,29 +639,29 @@ const NewOrder = (props) => {
                     </div>
                   </div>
 
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="org" htmlFor="orgLocation">
-                        Organisation ID*
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='org' htmlFor='orgLocation'>
+                        {t("organisation_id")}*
                       </label>
-                      <div className="orgV border-0">{values.fromOrg}</div>
+                      <div className='orgV border-0'>{values.fromOrg}</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="row mb-3">
-              <div className="col bg-white formContainer low">
-                <label htmlFor="client" className="headsup">
-                  Deliver To
+            <div className='row mb-3'>
+              <div className='col bg-white formContainer low'>
+                <label htmlFor='client' className='headsup'>
+                  {t("order_to")}
                 </label>
 
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="organizationName">
-                        Organisation Type*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("organisation_type")}*
                       </label>
                       <div
                         className={`line ${
@@ -690,12 +669,12 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
                           styles={customStyles}
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Organisation Type
+                            <div className='select-placeholder-text'>
+                              {t("select_organisation_type")}
                             </div>
                           }
                           defaultInputValue={values.rtypeName}
@@ -711,129 +690,116 @@ const NewOrder = (props) => {
                             setFieldValue("toOrgLoc", "");
                             setFieldValue("toOrgLocRegion", "");
                             setFieldValue("toOrgLocCountry", "");
+                            setOrgType("");
                             setOrgType(v.label);
                             onOrgTypeChange(v.label);
+                            console.log("OrgType from dropdown:", v.label);
                           }}
                           options={orgTypes}
+                          noOptionsMessage={() => t("no_options")}
                         />
-                        {/* {errors.rtype && touched.rtype && (
-                            <span className="error-msg text-danger">{errors.rtype}</span>
-                          )} */}
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="delLocation">
-                        Region*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("region")}*
                       </label>
                       <div
                         className={`line ${
-                          errors.toOrgLocRegion && touched.toOrgLocRegion
+                          errors.toOrgRegion && touched.toOrgRegion
                             ? "border-danger"
                             : ""
                         }`}
                       >
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
+                          // styles={customStyles}
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Delivery Location
+                            <div className='select-placeholder-text'>
+                              {t("Select_Region")}
                             </div>
                           }
-                          value={
-                            values.toOrgLocRegion === ""
-                              ? "Select Delivery Location"
-                              : {
-                                  value: values.toOrgLocRegion,
-                                  label: values.toOrgRegion,
-                                }
-                          }
                           defaultInputValue={values.toOrgRegion}
+                          onBlur={handleBlur}
                           onChange={(v) => {
-                            setFieldValue("toOrgRegion", v.label);
-                            setFieldValue("toOrgLocRegion", v.value);
-                            setRegion(v.label);
-                            onRegionChange(v.label);
-                            setFieldValue("toOrg", "");
+                            console.log(v);
                             setFieldValue("toOrgName", "");
                             setFieldValue("toOrgCountry", "");
-                            // setFieldValue("toOrgRegion", "");
+                            setFieldValue("toOrgRegion", v.label);
                             setFieldValue("toOrgLoc", "");
-                            // setFieldValue("toOrgLocRegion", "");
-                            setFieldValue("toOrgLocCountry", "");
+                            // setFieldValue("toOrgLocRegion", v.label);
+                            // setFieldValue("toOrgLocCountry", "");
+                            // setOrgType("");
+                            // setOrgType(v.label);
+                            // onOrgTypeChange(v.label);
+                            onRegionChange(v.label);
+                            // console.log("OrgType from dropdown:", v.label);
                           }}
                           isDisabled={values.rtypeName === ""}
                           options={receiverWarehousesRegion}
+                          noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="delLocation">
-                        Country*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("country")}*
                       </label>
                       <div
                         className={`line ${
-                          errors.toOrgLocCountry && touched.toOrgLocCountry
+                          errors.toOrgCountry && touched.toOrgCountry
                             ? "border-danger"
                             : ""
                         }`}
                       >
                         <Select
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
+                          // styles={customStyles}
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Delivery Location
+                            <div className='select-placeholder-text'>
+                              {t("Select_Country")}
                             </div>
                           }
-                          value={
-                            values.toOrgLocCountry === ""
-                              ? "Select Delivery Location"
-                              : {
-                                  value: values.toOrgLocCountry,
-                                  label: values.toOrgCountry,
-                                }
-                          }
                           defaultInputValue={values.toOrgCountry}
+                          onBlur={handleBlur}
                           onChange={(v) => {
-                            setFieldValue("toOrgCountry", v.label);
-                            setFieldValue("toOrgLocCountry", v.value);
-                            setCountry(v.label);
-                            onCountryChange(v.label);
-                            setFieldValue("toOrg", "");
+                            console.log({ country: v });
                             setFieldValue("toOrgName", "");
-                            // setFieldValue("toOrgCountry", "");
-                            // setFieldValue("toOrgRegion", "");
-                            setFieldValue("toOrgLoc", "");
-                            // setFieldValue("toOrgLocRegion", "");
+                            setFieldValue("toOrgCountry", v.label);
+                            // setFieldValue("toOrgRegion", v.label);
+                            // setFieldValue("toOrgLoc", "");
+                            // setFieldValue("toOrgLocRegion", v.label);
                             // setFieldValue("toOrgLocCountry", "");
+                            // setOrgType("");
+                            // setOrgType(v.label);
+                            // onOrgTypeChange(v.label);
+                            setCountry(v.label);
+                            onCountryChange(orgType, v.label);
+                            // console.log("OrgType from dropdown:", v.label);
                           }}
-                          isDisabled={values.rtypeName === ""}
+                          isDisabled={values.toOrgRegion === ""}
                           options={receiverWarehousesCountry}
+                          noOptionsMessage={() => t("no_options")}
                         />
-                        {/*errors.toOrgLoc && touched.toOrgLoc && (
-                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )*/}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="organizationName">
-                        Organisation Name*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='organizationName'>
+                        {t("organisation_name")}*
                       </label>
                       <div
                         className={`line ${
@@ -855,16 +821,16 @@ const NewOrder = (props) => {
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         /> */}
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Organisation Name
+                            <div className='select-placeholder-text'>
+                              {t("select_organisation_name")}
                             </div>
                           }
                           value={
                             values.toOrg === ""
-                              ? "Select Organisation Name"
+                              ? t("select_organisation_name")
                               : { value: values.toOrg, label: values.toOrgName }
                           }
                           defaultInputValue={values.toOrgName}
@@ -875,13 +841,15 @@ const NewOrder = (props) => {
                             //   const selOrg = orgDetails.filter((value) => {
                             //     return value.name==v.label;
                             // });
+                            console.log("Organisation Name:", v);
                             setFieldValue("toOrg", v.value);
                             setFieldValue("toOrgName", v.label);
                             onOrgChange(v.value);
                             setFieldValue("toOrgLoc", "");
                           }}
-                          isDisabled={values.rtypeName === ""}
+                          isDisabled={values.toOrgCountry === ""}
                           options={orgNames}
+                          noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
@@ -890,21 +858,21 @@ const NewOrder = (props) => {
                     </div>
                   </div>
 
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="org" htmlFor="delLocation">
-                        Organisation ID*
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='org' htmlFor='delLocation'>
+                        {t("organisation_id")}*
                       </label>
-                      <div className="orgV border-0">{values.toOrg}</div>
+                      <div className='orgV border-0'>{values.toOrg}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="name form-group">
-                      <label className="" htmlFor="delLocation">
-                        Delivery Location*
+                <div className='row'>
+                  <div className='col-md-6 com-sm-12'>
+                    <div className='name form-group'>
+                      <label className='' htmlFor='delLocation'>
+                        {t("delivery_location")}*
                       </label>
                       <div
                         className={`line ${
@@ -937,16 +905,16 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select'
                           placeholder={
-                            <div className="select-placeholder-text">
-                              Select Delivery Location
+                            <div className='select-placeholder-text'>
+                              {t("select_delivery_location")}
                             </div>
                           }
                           value={
                             values.toOrgLoc === ""
-                              ? "Select Delivery Location"
+                              ? t("select_delivery_location")
                               : {
                                   value: values.toOrgLoc,
                                   label: values.toOrgLocName,
@@ -958,8 +926,9 @@ const NewOrder = (props) => {
                             setFieldValue("toOrgLocName", v.label);
                             setFieldValue("toOrgLoc", v.value);
                           }}
-                          isDisabled={values.rtypeName === ""}
+                          isDisabled={values.toOrgName === ""}
                           options={receiverWarehouses}
+                          noOptionsMessage={() => t("no_options")}
                         />
                       </div>
                     </div>
@@ -967,27 +936,29 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-            <div className="d-flex pt-4 justify-content-between mb-1">
-              <div className="value">{quantity}</div>
-              <div className="d-flex">
+            <div className='d-flex pt-4 justify-content-between mb-1'>
+              <div className='value'>{quantity}</div>
+              <div className='d-flex'>
                 <button
-                  type="button"
-                  className="btn btn-outline-primary font-bold mr-2 mt-3"
+                  className='btn btn-outline-primary font-bold mr-2 mt-3'
                   onClick={() => {
                     dispatch(resetReviewPos({}));
                     props.history.push("/orders");
                   }}
                 >
-                  <b>Cancel</b>
+                  <b>{t("cancel")}</b>
                 </button>
 
-                <button className="btn btn-orange fontSize20 font-bold mt-3">
+                <button
+                  className='btn btn-orange fontSize20 font-bold mt-3'
+                  type='submit'
+                >
                   <img
                     src={OrderIcon}
-                    width="20"
-                    height="17"
-                    className="mr-2 mb-1"
-                    alt="Order"
+                    width='20'
+                    height='17'
+                    className='mr-2 mb-1'
+                    alt='Order'
                   />
                   <span>
                     <b>Review Order</b>
@@ -1001,9 +972,10 @@ const NewOrder = (props) => {
       {openOrder && (
         <Modal
           close={() => closeModal()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
+            t={t}
             onHide={closeModal} //FailurePopUp
           />
         </Modal>
@@ -1012,9 +984,10 @@ const NewOrder = (props) => {
       {failedPop && (
         <Modal
           close={() => closeModalFail()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
+            t={t}
             onHide={closeModalFail} //FailurePopUp
             shipmentError={shipmentError}
           />
@@ -1024,9 +997,10 @@ const NewOrder = (props) => {
       {addAnotherProductFailed && (
         <Modal
           close={() => closeModalFailedAddAnotherProduct()}
-          size="modal-md"
+          size='modal-md'
         >
           <ShipmentFailPopUp
+            t={t}
             onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
             shipmentError={shipmentError}
           />
@@ -1034,20 +1008,20 @@ const NewOrder = (props) => {
       )}
 
       {message && (
-        <div className="d-flex justify-content-center mt-3">
+        <div className='d-flex justify-content-center mt-3'>
           {" "}
-          <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
+          <Alert severity='success'>
+            <AlertTitle>{t("success")}</AlertTitle>
             {message}
           </Alert>
         </div>
       )}
 
       {errorMessage && (
-        <div className="d-flex justify-content-center mt-3">
+        <div className='d-flex justify-content-center mt-3'>
           {" "}
-          <Alert severity="error">
-            <AlertTitle>Error</AlertTitle>
+          <Alert severity='error'>
+            <AlertTitle>{t("error")}</AlertTitle>
             {errorMessage}
           </Alert>
         </div>

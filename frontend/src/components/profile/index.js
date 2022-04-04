@@ -7,17 +7,18 @@ import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { getImage } from "../../actions/notificationActions";
 import SuccessPopUp from "./successPopup";
-
 import { getUserInfoUpdated, updateProfile } from "../../actions/userActions";
 import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
 import Modal from "./modal/index";
 import Modal1 from "../../shared/modal";
 import moment from "moment";
+import { COUNTRY_CODE } from "../../constants/countryCode";
 const axios = require("axios");
 
 class Profile extends React.Component {
@@ -44,15 +45,11 @@ class Profile extends React.Component {
       wareIds: [],
       signup_date: "",
       warehouseLocations: [],
-      warehouseAddress_country: "",
-      warehouseAddress_city: "",
-      warehouseAddress_firstline: "",
-      warehouseAddress_zipcode: "",
-      warehouseAddress_secondline: "",
-      warehouseAddress_state: "",
       title: "",
       warehouseLocByOrg: [],
       image: "",
+      preferredLanguage: "EN",
+      phoneNumberErrorMsg: '',
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -62,7 +59,7 @@ class Profile extends React.Component {
 
   async componentDidMount() {
     const response = await getUserInfoUpdated();
-    if (response.status === 200) {
+    if (response?.status === 200) {
       const {
         profile_picture,
         email,
@@ -75,17 +72,11 @@ class Profile extends React.Component {
         status,
         role,
         location,
-        warehouseAddress_country,
-        warehouseAddress_city,
-        warehouseAddress_firstline,
-        warehouseAddress_zipcode,
-        warehouseAddress_secondline,
-        warehouseAddress_state,
         signup_date,
         title,
+        preferredLanguage,
+        warehouses,
       } = response.data.data;
-      // console.log("User Data");
-      // console.log(response.data.data);
       this.setState({
         profile_picture,
         email,
@@ -99,30 +90,18 @@ class Profile extends React.Component {
         role,
         profileData: response.data.data,
         location,
-        warehouseAddress_country,
-        warehouseAddress_city,
-        warehouseAddress_firstline,
-        warehouseAddress_zipcode,
-        warehouseAddress_secondline,
-        warehouseAddress_state,
+        warehouseLocations: warehouses,
         signup_date,
         title,
+        preferredLanguage,
       });
-      // if((this.state.profileData.phoneNumber).includes("+")){
-      //   this.setState({phoneNumber:(this.state.profileData.phoneNumber).replace('+','')});
-      //   // this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
-      // }
-      // console.log(this.state.profileData.phoneNumber.replace('+',''),"Profile Data");
-    } else {
-      //error
     }
-
     const item = this.state.organisation.split("/")[1];
-    const wareHouseResponse = await getWarehouseByOrgId(item);
-    if (wareHouseResponse.status === 1) {
+    const wareHouseResponse = await getWarehouseByOrgId(item, true);
+    if (wareHouseResponse.status === 1 || wareHouseResponse.success) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
-      // console.log(wareHouseAddresses,"All warehouses");
+
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: response.data.data.warehouses.filter(
@@ -133,25 +112,13 @@ class Profile extends React.Component {
         ),
         warehouseLocByOrg: wareHouseAddresses,
       });
-
-      //  this.state.warehouseLocations.map((id)=>{
-      //     this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
-      //   })
     }
-
-    const that = this;
-    const r = await getImage(this.props.user.photoId);
-    const reader = new window.FileReader();
-    reader.readAsDataURL(r.data);
-    reader.onload = function () {
-      that.setState({ image: reader.result });
-    };
+    const resultImage = await getImage(this.props.user?.photoId);
+    this.setState({ image: resultImage.data });
   }
 
   closeModal() {
-    console.log("Closed Model called");
     this.setState({ openModal: false, message: "" });
-    // props.history.push("/Addlocation");
   }
   onCancel() {
     const {
@@ -198,7 +165,6 @@ class Profile extends React.Component {
     });
   }
   onChange() {
-    console.log(this.state.selectedFile, "selected");
     const formData = new FormData();
     formData.append("photo", this.state.selectedFile);
     const configs = {
@@ -222,15 +188,7 @@ class Profile extends React.Component {
           .catch((error) => {
             alert(error);
           });
-        // this.setState({ selectedFile: null });
       }
-      // else if(!(this.state.selectedFile).type.match('image.*')){
-      //   alert("Please Select only image file");
-      // };'
-
-      //  else {
-      //   alert("File not selected, Please try again");
-      //  }
     }
   }
 
@@ -250,6 +208,7 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      preferredLanguage,
     } = this.state;
     phoneNumber = phoneNumber ? phoneNumber.replaceAll("+", "") : "";
     const data = {
@@ -266,27 +225,38 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      preferredLanguage,
     };
 
     const result = await updateProfile(data);
-
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
-      // const dispatch = useDispatch();
-      // dispatch(getUserInfo());
-      // history.push("/profile");
     } else {
       this.setState({ message: "Error while updating please try again." });
     }
   }
 
+
+  handlePhoneVerification(currentPhone) {
+    const phone = currentPhone;
+    if (phone) {
+      if (isValidPhoneNumber(phone) === false) {
+        this.setState({ phoneNumberErrorMsg: "invalid_phone_number" });
+      } else {
+        this.setState({ phoneNumberErrorMsg: "" });
+      }
+    } else {
+      this.setState({ phoneNumberErrorMsg: "" });
+    }
+  }
+
+
   render() {
     const { editMode, selectedFile, firstName, lastName, image } = this.state;
-    const imgs = config().fetchProfileImage;
-
+    const { t } = this.props;
     return (
       <div className="profile">
-        <h1 className="breadcrumb">Profile</h1>
+        <h1 className="breadcrumb">{t("profile")}</h1>
         <div className="card" style={{ border: "none" }}>
           <div className="card-body">
             <div className="d-flex flex-row justify-content-between">
@@ -295,7 +265,7 @@ class Profile extends React.Component {
                   {selectedFile ? (
                     <img
                       name="photo"
-                      src={`${URL.createObjectURL(selectedFile)}`}
+                      src={image}
                       className="rounded rounded-circle"
                       alt="ProfilePhoto"
                     />
@@ -313,7 +283,7 @@ class Profile extends React.Component {
                   onChange={(e) => {
                     this.setState({ selectedFile: e.target.files[0] });
                     if (!e.target.files[0].type.match("image.*")) {
-                      alert("Please Select only image file");
+                      alert(t("image_error"));
                       this.setState({ selectedFile: null });
                     }
                   }}
@@ -327,7 +297,7 @@ class Profile extends React.Component {
                     onClick={(e) => this.upload.click()}
                     className="btn btn-outline-info"
                   >
-                    Change Photo
+                    {t("change_photo")}
                   </button>
                 ) : (
                   ""
@@ -337,14 +307,14 @@ class Profile extends React.Component {
                 {editMode ? (
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="shipmentId"> First Name</label>
+                      <label htmlFor="shipmentId">{t("first_name")}</label>
                       <input
                         style={{ flexBasis: "34%" }}
                         className="input refship "
                         type="text"
                         id="referenceShipmentId"
                         name="firstname"
-                        placeholder="Enter First Name"
+                        placeholder={t("enter") + " " + t("first_name")}
                         value={firstName}
                         onChange={(e) =>
                           this.setState({ firstName: e.target.value })
@@ -352,7 +322,7 @@ class Profile extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Last Name</label>
+                      <label htmlFor="shipmentId">{t("last_name")}</label>
                       <input
                         style={{ flexBasis: "34%" }}
                         className="input refship "
@@ -360,7 +330,7 @@ class Profile extends React.Component {
                         id="referenceShipmentId"
                         name="lastname"
                         value={lastName}
-                        placeholder="Enter Last Name"
+                        placeholder={t("enter") + " " + t("last_name")}
                         onChange={(e) =>
                           this.setState({
                             lastName: e.target.value,
@@ -369,7 +339,7 @@ class Profile extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Organisation</label>
+                      <label htmlFor="shipmentId">{t("organisation")}</label>
                       <input
                         className="form-control wallet"
                         //disabled
@@ -378,7 +348,7 @@ class Profile extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Email</label>
+                      <label htmlFor="shipmentId">{t("email_id")}</label>
                       <input
                         className="form-control wallet"
                         //disabled
@@ -389,38 +359,72 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Phone</label>
-                      <div>
-                        <PhoneInput
-                          className="form-group"
-                          country={"in"}
-                          placeholder="Enter Phone number"
-                          style={{ width: "65% !important" }}
-                          value={this.state.phoneNumber}
-                          onChange={(phone) =>
-                            this.setState({ phoneNumber: phone })
-                          }
-                        />
-                      </div>
+                    <div className="form-group2 mb-3 relative">
+                      <label htmlFor="shipmentId">{t("phone")}</label>
+                      {/* <PhoneInput
+                        international
+                        countryCallingCodeEditable={false}
+                        defaultCountry={COUNTRY_CODE}
+                        className="phone-Input-new-profile"
+                        placeholder={t("enter_phone_number")}
+                        
+                        // style={{ position: "absolute", marginLeft: "64%" }}
+                        value={this.state.phoneNumber}
+                        onChange={(phone) =>
+                          this.setState({ phoneNumber: phone })
+                        }
+                      /> */}
+                      <PhoneInput
+                        international={true}
+                        // countryCallingCodeEditable={false}
+                        defaultCountry={COUNTRY_CODE}
+                        className="phone-Input-new-profile"
+                        placeholder={t("enter_phone_number")}
+                        value={this.state.phoneNumber}
+                        onChange={(e) => {
+                          this.setState({ phoneNumber: e })
+                          this.handlePhoneVerification(e);
+                        }
+                        }
+                      />
                     </div>
-
+                    {this.state.phoneNumberErrorMsg !== '' && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
+                    {/* <div className="form-group">
+                      <label htmlFor="">{t("language")}</label>
+                      <Select
+                        noOptionsMessage={() => t("no_options")}
+                        className="my-form-width"
+                        placeholder={t("select_the_language")}
+                        style={{ fontSize: "14px" }}
+                        options={[
+                          { value: "EN", label: "English" },
+                          { value: "ES", label: "Español" },
+                        ].map((v) => v)}
+                        onChange={(language) =>
+                          this.setState({ preferredLanguage: language.value })
+                        }
+                      />
+                    </div> */}
                     <div className="col">
                       <div className="row">
                         <div className="row location">
                           <h5>
-                            <b>MY LOCATIONS</b>
+                            <b>{t("my_locations")}</b>
                           </h5>
                         </div>
                         <div className="addloc1">
                           {editMode && (
                             <button
-                              className="buttonA btn btn-orange font-bold mt-1"
+                              className="buttonA btn btn-S btn-orange font-bold mt-1"
                               onClick={() => {
                                 this.setState({ openModal: true });
                               }}
                             >
-                              <span>+ ADD </span>
+                              <span className="d-flex align-items-center">
+                                {" "}
+                                <span>+</span>
+                                {t("add")}{" "}
+                              </span>
                             </button>
                           )}
                           <div className="inventorypopup">
@@ -435,6 +439,7 @@ class Profile extends React.Component {
                                   {...this.props}
                                   closeModal={this.closeModal}
                                   wareHouses={this.state.warehouseLocByOrg}
+                                  setWareHouseLocations={(v) => this.setState({warehouseLocations: [...this.state.warehouseLocations,v] }) }
                                 />
                               </Modal>
                             )}
@@ -448,7 +453,7 @@ class Profile extends React.Component {
                     >
                       {Object.keys(this.state.warehouseLocations).map((id) => {
                         return (
-                          <div className="col location-cards p-3">
+                          <div className="col location-cards p-3" key={id}>
                             <div className="custom-card p-3">
                               <div className="card-header">
                                 <div className="d-flex align-items-center justify-content-between">
@@ -469,47 +474,41 @@ class Profile extends React.Component {
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] === "ACTIVE" && (
-                                    <Link
-                                      to={{
-                                        pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
-                                        state: {
-                                          editMode: this.state.editMode,
-                                        },
-                                      }}
-                                    >
-                                      <button
-                                        className="btn-edit fontSize20 pl-2 pr-10"
-                                        style={{
-                                          height: "35px",
-                                          width: "100px",
+                                      <Link
+                                        to={{
+                                          pathname: `/editLocation/${this.state.warehouseLocations[id]["id"]}`,
+                                          state: {
+                                            editMode: this.state.editMode,
+                                          },
                                         }}
                                       >
-                                        <img
-                                          src={Pen}
-                                          width="15"
-                                          height="15"
-                                          className="mr-2"
-                                          alt="Edit"
-                                        />
-                                        <span className="font-weight-bold edit-text">
-                                          EDIT
-                                        </span>
-                                      </button>
-                                    </Link>
-                                  )}
-                                  {/* <button
-                                className="btn-primary btn edit-button"
-                              >
-                                <img src={Pen} width="15" height="15" className="mr-2" />
-                                <span>EDIT</span>
-                              </button> */}
+                                        <button
+                                          className="btn-edit fontSize20 pl-2 pr-10"
+                                          style={{
+                                            height: "35px",
+                                            width: "100px",
+                                          }}
+                                        >
+                                          <img
+                                            src={Pen}
+                                            width="15"
+                                            height="15"
+                                            className="mr-2"
+                                            alt="Edit"
+                                          />
+                                          <span className="font-weight-bold edit-text">
+                                            {t("edit")}
+                                          </span>
+                                        </button>
+                                      </Link>
+                                    )}
                                   {this.state.warehouseLocations[id][
                                     "status"
                                   ] !== "ACTIVE" && (
-                                    <span className="font-weight-bold badge badge-danger">
-                                      Approval Pending
-                                    </span>
-                                  )}
+                                      <span className="font-weight-bold badge badge-danger">
+                                        {t("approval_pending")}
+                                      </span>
+                                    )}
                                 </div>
                               </div>
                               <div className="card-body">
@@ -524,7 +523,7 @@ class Profile extends React.Component {
                                       warehouseAddress_city: e.target.value,
                                     })
                                   }
-                                  placeholder="City"
+                                  placeholder={t("city")}
                                 />
                                 <input
                                   className="total-input"
@@ -537,7 +536,7 @@ class Profile extends React.Component {
                                       warehouseAddress_state: e.target.value,
                                     })
                                   }
-                                  placeholder="State"
+                                  placeholder={t("state")}
                                 />
                                 <input
                                   className="total-input"
@@ -550,7 +549,7 @@ class Profile extends React.Component {
                                       warehouseAddress_country: e.target.value,
                                     })
                                   }
-                                  placeholder="Country"
+                                  placeholder={t("country")}
                                 />
 
                                 <input
@@ -565,7 +564,7 @@ class Profile extends React.Component {
                                         e.target.value,
                                     })
                                   }
-                                  placeholder="Address"
+                                  placeholder={t("address")}
                                 />
                                 <input
                                   className="full-address-input"
@@ -579,7 +578,7 @@ class Profile extends React.Component {
                                         e.target.value,
                                     })
                                   }
-                                  placeholder="Address"
+                                  placeholder={t("address")}
                                 />
 
                                 <input
@@ -593,7 +592,7 @@ class Profile extends React.Component {
                                       warehouseAddress_zipcode: e.target.value,
                                     })
                                   }
-                                  placeholder="Zipcode"
+                                  placeholder={t("pincode")}
                                 />
                               </div>
                             </div>
@@ -631,14 +630,14 @@ class Profile extends React.Component {
                       <div className="row date-joined">
                         {this.state.signup_date ? (
                           <span>
-                            Joined on{" "}
+                            {t("joined_on")}{" "}
                             {moment(this.state.signup_date).format(
                               "Do MMMM YYYY"
                             ) === "Invalid date"
                               ? this.state.signup_date
                               : moment(this.state.signup_date).format(
-                                  "Do MMMM YYYY"
-                                )}
+                                "Do MMMM YYYY"
+                              )}
                           </span>
                         ) : (
                           <span>N/A</span>
@@ -690,7 +689,7 @@ class Profile extends React.Component {
                       </div>
                     </div>
                     <div className="col mt-5">
-                      <div className="row location">MY LOCATIONS</div>
+                      <div className="row location">{t("my_locations")}</div>
                     </div>
                     <div
                       className="row"
@@ -698,7 +697,7 @@ class Profile extends React.Component {
                     >
                       {Object.keys(this.state.warehouseLocations).map((id) => {
                         return (
-                          <div className="col">
+                          <div className="col" key={id}>
                             <div className="location-cards mt-1">
                               <div className="custom-card p-3">
                                 <div className="card-header">
@@ -709,7 +708,7 @@ class Profile extends React.Component {
                                     >
                                       {
                                         this.state.warehouseLocations[id][
-                                          "title"
+                                        "title"
                                         ]
                                       }
                                       <div
@@ -720,7 +719,7 @@ class Profile extends React.Component {
                                       >
                                         {
                                           this.state.warehouseLocations[id][
-                                            "id"
+                                          "id"
                                           ]
                                         }
                                       </div>
@@ -728,49 +727,48 @@ class Profile extends React.Component {
                                     {this.state.warehouseLocations[id][
                                       "status"
                                     ] !== "ACTIVE" && (
-                                      <div className="font-weight-bold badge badge-danger ml-3">
-                                        Approval Pending
-                                      </div>
-                                    )}
+                                        <div className="font-weight-bold badge badge-danger ml-3">
+                                          {t("approval_pending")}
+                                        </div>
+                                      )}
                                   </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.city && (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.city
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.city
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.state && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.state
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.state
+                                          }
+                                        </span>
+                                      )}
 
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.country && (
-                                      <span>
-                                        ,
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.country
-                                        }
-                                      </span>
-                                    )}
+                                        <span>
+                                          ,
+                                          {
+                                            this.state.warehouseLocations[id]
+                                              .warehouseAddress.country
+                                          }
+                                        </span>
+                                      )}
                                   </div>
 
                                   <div className="full-address">
-                                    {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.firstLine ? (
                                       <span>
@@ -783,20 +781,8 @@ class Profile extends React.Component {
                                       <span>N/A</span>
                                     )}
                                   </div>
-                                  {/* <div className="full-address">
-                                   
-                                    {this.state.warehouseLocations[id]
-                                      .warehouseAddress.secondLine ? (
-                                      <span>
-                                        {
-                                          this.state.warehouseLocations[id]
-                                            .warehouseAddress.secondLine
-                                        }
-                                      </span>
-                                    ) : null}
-                                  </div> */}
                                   <div className="pin-code">
-                                    Zipcode :{" "}
+                                    {t("pincode")} :{" "}
                                     {this.state.warehouseLocations[id]
                                       .warehouseAddress.zipCode ? (
                                       <span>
@@ -820,12 +806,10 @@ class Profile extends React.Component {
                 )}
               </div>
               {!editMode ? (
-                // <div>
                 <button
                   className="buttonS btn-primary btn"
                   onClick={() => {
                     this.setState({ editMode: true });
-                    // this.onOrganisation();
                   }}
                 >
                   <img
@@ -835,10 +819,9 @@ class Profile extends React.Component {
                     className="mr-2 mb-1"
                     alt="Edit"
                   />
-                  <span>EDIT</span>
+                  <span>{t("edit")}</span>
                 </button>
               ) : (
-                // </div>
                 <div
                   className="d-flex flex-row justify-content-between"
                   style={{ position: "relative", left: -100 }}
@@ -847,32 +830,27 @@ class Profile extends React.Component {
                     className="buttonS btn btn-outline-primary mr-2"
                     onClick={this.onCancel}
                   >
-                    <span>CANCEL</span>
+                    <span>{t("cancel")}</span>
                   </button>
                   <button
                     className="buttonS btn-orange btn"
                     onClick={this.onSubmit}
+                    disabled={this.state.phoneNumberErrorMsg !== ''}
                   >
-                    {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
-                    <span>SAVE</span>
+                    <span>{t("save")}</span>
                   </button>
                 </div>
               )}
               <div className="">
                 {this.state.message && (
-                  <Modal1
-                    close={() => this.closeModal()}
-                    size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-                  >
-                    <SuccessPopUp onHide={this.closeModal} />
+                  <Modal1 close={() => this.closeModal()} size="modal-sm">
+                    <SuccessPopUp onHide={this.closeModal} t={t} />
                   </Modal1>
                 )}
               </div>
             </div>
           </div>
         </div>
-        {/* {message && <div> <SuccessPopUp severity="success">{message}</SuccessPopUp></div>
-    } */}
       </div>
     );
   }

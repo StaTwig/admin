@@ -15,16 +15,10 @@ import dropdownIcon from "../../assets/icons/dropdown_selected.png";
 import Divider from "@material-ui/core/Divider";
 
 const Table = (props) => {
-  const { inventoryDetails, inventoryCount } = props;
-  // const [display, setDisplay] = useState(false);
-
+  const { inventoryDetails, inventoryCount, t } = props;
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };
-  // function getDate(n) {
-  //   return n.substring(0, 10);
-  // }
-  // console.log("inventoryDetailsTable",inventoryDetails)
   inventoryDetails.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
@@ -33,17 +27,15 @@ const Table = (props) => {
       <div className='rTable'>
         {inventoryDetails.length === 0 && (
           <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
-            No records found
+            {t("no_records_found")}
           </div>
         )}
         {inventoryDetails.map((inventory, index) => (
           <div className='' key={index}>
             <Accordion className='mb-3 p-0 table-inventory'>
               <AccordionSummary
-                // expand={display}
                 aria-controls='panel1a-content'
                 id='panel1a-header'
-                //className="rTableRow"
               >
                 {/*<div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>*/}
                 <div
@@ -85,7 +77,8 @@ const Table = (props) => {
                     fontSize: "14px",
                   }}
                 >
-                  {inventory.inventoryQuantity}
+                  {inventory.inventoryQuantity ||
+                    inventory.payloadData?.data?.quantityPurchased}
                   {inventory.productDetails.unitofMeasure ? (
                     inventory.productDetails.unitofMeasure.name ? (
                       <span>
@@ -108,13 +101,21 @@ const Table = (props) => {
                     inventory.eventTypePrimary === "RECEIVE" ? (
                       <div className='status secondary-bg bg-success'>
                         {" "}
-                        Received
+                        {t("received")}
+                      </div>
+                    ) : inventory.eventTypePrimary !== "BUY" ? (
+                      <div className='status secondary-bg bg-warning'>
+                        {t("sent")}
                       </div>
                     ) : (
-                      <div className='status secondary-bg bg-warning'>Sent</div>
+                      <div className='status secondary-bg bg-warning'>
+                        {t("sold")}
+                      </div>
                     )
                   ) : (
-                    <div className='status secondary-bg bg-primary'>Added</div>
+                    <div className='status secondary-bg bg-primary'>
+                      {t("added")}
+                    </div>
                   )}
                 </div>
                 <div
@@ -148,7 +149,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>Shipment ID</div>
+                                <div className='d-head'>{t("shipment_id")}</div>
                               </TableCell>
                               <div>
                                 <TableCell align='left'>
@@ -160,8 +161,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? "To Organisation"
-                                    : "From Organisation"}
+                                    ? t("to_organisation")
+                                    : t("from_organisation")}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -176,8 +177,8 @@ const Table = (props) => {
                               <TableCell>
                                 <div className='d-head'>
                                   {inventory.eventTypePrimary === "CREATE"
-                                    ? "To Location"
-                                    : "From Location"}
+                                    ? t("to_location")
+                                    : t("from_locations")}
                                 </div>
                               </TableCell>
                               <div className=''>
@@ -193,7 +194,7 @@ const Table = (props) => {
                           <div>
                             <TableRow>
                               <TableCell>
-                                <div className='d-head'>Mfg Date</div>
+                                <div className='d-head'>{t("mfg_date")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -206,7 +207,7 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>Exp Date</div>
+                                <div className='d-head'>{t("exp_date")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
@@ -219,14 +220,12 @@ const Table = (props) => {
                             </TableRow>
                             <TableRow>
                               <TableCell align='left'>
-                                <div className='d-head'>Batch</div>
+                                <div className='d-head'>{t("batch")}</div>
                               </TableCell>
                               <div className='ml-5'>
                                 <TableCell align='left'>
-                                  {
-                                    inventory.payloadData.data.products
-                                      .batchNumber
-                                  }
+                                  {inventory.payloadData.data.products
+                                    .batchNumber || inventory.transactionId}
                                 </TableCell>
                               </div>
                             </TableRow>
@@ -252,7 +251,7 @@ const Table = (props) => {
                                 );
                               }}
                             >
-                              View Shipment
+                              {t("view_shipment")}
                             </button>
                           ) : (
                             ""
@@ -304,7 +303,7 @@ const Table = (props) => {
               className='mx-5 my-1 rounded text-dark'
               style={{ fontWeight: "400", fontSize: "14px" }}
             >
-              Total Records {inventoryCount}{" "}
+              {t("total_records")} {inventoryCount}{" "}
             </span>
           </div>
         )}

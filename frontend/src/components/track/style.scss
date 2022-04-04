@@ -121,7 +121,6 @@
       background-color: transparent !important;
     }
   }
-
   .search-form {
     width: 35vw;
     display: flex;
@@ -138,12 +137,11 @@
       height: 40px;
       font-size: 13px;
       box-shadow: 1px 1px 5px #00000029;
-
       &::placeholder {
         color: #3d93e2;
       }
     }
-
+    
     .searchIcon {
       width: 15px;
       height: 15px;
@@ -295,4 +293,7 @@
   padding: 5px;
   background-color: #c2e6fa;
   cursor: pointer;
+}
+.border-blue {
+  border: 1px solid #3d93e2 !important;
 }

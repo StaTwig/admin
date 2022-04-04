@@ -16,19 +16,13 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilio_service_id = process.env.TWILIO_SERVICE_ID;
-const client = require("twilio")(accountSid, authToken, {
-  lazyLoading: true,
-});
 const cuid = require("cuid");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const emailRegex =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRegex = /^\d{12}$/;
+const phoneRegex = /^[\+]\d{11,12}$/;
 
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
@@ -46,36 +40,35 @@ exports.checkEmail = [
   body("firstName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified"),
+    .withMessage("firstname_validation_error"),
   body("lastName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified"),
+    .withMessage("lastname_validation_error"),
   body("organisationId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Organization must be specified"),
+    .withMessage("organization_validation_error"),
   body("emailId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Email must be specified")
-    .isEmail()
-    .withMessage("Email must be a valid email address")
+    .withMessage("email_validation_error")
     .custom(async (value) => {
       const emailId = value.toLowerCase().replace(" ", "");
       let user;
       let phone = "";
-      if (!emailId.match(phoneRegex) && !emailId.match(emailRegex))
-        return Promise.reject("E-mail/Mobile is not valid");
-
-      if (emailId.indexOf("@") > -1)
+      if (emailId.indexOf("@") > -1) {
+        if (!emailId.match(emailRegex))
+          return Promise.reject("not_valid_email");
         user = await EmployeeModel.findOne({ emailId });
-      else {
+      } else {
+        if (!emailId.match(phoneRegex))
+          return Promise.reject("not_valid_phone");
         phone = "+" + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
       if (user) {
-        return Promise.reject("Account already in use");
+        return Promise.reject("account_already_exists");
       }
     }),
   async (req, res) => {
@@ -84,27 +77,25 @@ exports.checkEmail = [
         !req.body.firstName.match("[A-Za-z0-9]") ||
         !req.body.lastName.match("[A-Za-z0-9]")
       ) {
-        return apiResponse.ErrorResponse(res, "Name should be specified");
+        return apiResponse.ErrorResponse(req, res, "not_valid_name");
       }
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
+          req,
           res,
-          "Validation Error",
+          "validation_error",
           errors.array()
         );
       }
       if (!mailer.validateEmail(req.body.emailId)) {
-        return apiResponse.ErrorResponse(
-          res,
-          "Your email id is not eligible to register"
-        );
+        return apiResponse.ErrorResponse(req, res, "not_valid_email");
       } else {
-        return apiResponse.successResponse(res, "Email is valid");
+        return apiResponse.successResponse(req, res, "valid_email_success");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -122,265 +113,307 @@ exports.register = [
   body("firstName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified"),
+    .withMessage("firstname_validation_error"),
   body("lastName")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Name must be specified"),
+    .withMessage("lastname_validation_error"),
   body("organisationId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage("Organization must be specified"),
-  body("emailId")
-    .trim()
-    .toLowerCase()
-    .custom(async (value) => {
-      if (value) {
-        const emailId = value.toLowerCase().replace("", "");
+    .withMessage("organization_validation_error"),
+  // body("emailId")
+  // .trim()
+  // .toLowerCase()
+  // .custom(async (value) => {
+  //   if (value) {
+  //     const emailId = value.toLowerCase().replace("", "");
+  //     let user;
+  //     if (!emailId.match(emailRegex))
+  //       return Promise.reject("not_valid_email");
+  //     if (emailId.indexOf("@") > -1)
+  //       user = await EmployeeModel.findOne({ emailId });
+  //     if (user) {
+  //       return Promise.reject("account_already_exists");
+  //     }
+  //   }
+  //   }),
+  // body("phoneNumber").custom(async (value) => {
+  //   if (value) {
+  // const emailId = value.toLowerCase().replace("", "");
+  // let phone = "";
+  // let user;
+  // if (!emailId.match(phoneRegex)) return Promise.reject("not_valid_phone");
+  // phone = "+" + value;
+  // user = await EmployeeModel.findOne({ phoneNumber: phone });
+  // if (user) {
+  //   return Promise.reject("account_already_exists");
+  // }
+  //   }
+  // }),
+  async (req, res) => {
+    try {
+      if (req.body.emailId == "" && req.body.phoneNumber == "") {
+        return apiResponse.ErrorResponse(
+          req,
+          res,
+          "Enter either emailId or phoneNumber"
+        );
+      } else if (req.body.emailId != "") {
+        let emailId = req.body.emailId;
+        emailId = emailId.trim();
+        emailId = emailId.toLowerCase();
+        emailId = emailId.replace("", "");
         let user;
         if (!emailId.match(emailRegex))
-          return Promise.reject("E-MailId is not valid");
+          return apiResponse.ErrorResponse(req, res, "not_valid_email");
         if (emailId.indexOf("@") > -1)
           user = await EmployeeModel.findOne({ emailId });
         if (user) {
-          return Promise.reject("E-mail already in use");
+          return apiResponse.ErrorResponse(req, res, "account_already_exists");
+        }
+      } else if (req.body.phoneNumber != "") {
+        let phoneNumber = req.body.phoneNumber;
+        phoneNumber = phoneNumber.toLowerCase().replace("", "");
+        console.log("Phone - ", phoneNumber);
+        let phone = "";
+        let user;
+        // if (!phoneNumber.match(phoneRegex))
+        //   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
+        // phone = "+" + phoneNumber;
+        user = await EmployeeModel.findOne({ phoneNumber: phoneNumber });
+        if (user) {
+          return apiResponse.ErrorResponse(req, res, "account_already_exists");
         }
       }
-    }),
-  body("phoneNumber").custom(async (value) => {
-    if (value) {
-      const emailId = value.toLowerCase().replace("", "");
-      let phone = "";
-      let user;
-      if (!emailId.match(phoneRegex))
-        return Promise.reject("Mobile number is not valid");
-      phone = "+" + value;
-      console.log(phone);
-      user = await EmployeeModel.findOne({ phoneNumber: phone });
-      if (user) {
-        return Promise.reject("Mobile already in use");
-      }
-    }
-  }),
-  async (req, res) => {
-    try {
       if (
         !req.body.firstName.match("[A-Za-z0-9]") ||
         !req.body.lastName.match("[A-Za-z0-9]")
       ) {
-        return apiResponse.ErrorResponse(res, "Name should be specified");
+        return apiResponse.ErrorResponse(req, res, "name_validation_error");
       }
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
+          req,
           res,
-          "Validation Error",
+          "validation_error",
           errors.array()
         );
       }
-      if (!mailer.validateEmail(req.body.emailId)) {
-        return apiResponse.ErrorResponse(
-          res,
-          "Your email id is not eligible to register"
-        );
-      } else {
-        let organisationId = req.body.organisationId;
-        let warehouseId = "NA";
-        const empCounter = await CounterModel.findOneAndUpdate(
-          {
-            "counters.name": "employeeId",
+      // if (!mailer.validateEmail(req.body.emailId)) {
+      //   return apiResponse.ErrorResponse(req, res, "not_valid_email");
+      // } else {
+      let organisationId = req.body.organisationId;
+      let warehouseId = "NA";
+      const empCounter = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "employeeId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
           },
-          {
-            $inc: {
-              "counters.$.value": 1,
-            },
-          },
-          { new: true }
-        );
-        const employeeId =
-          empCounter.counters[0].format + empCounter.counters[0].value;
-        const employeeStatus = "NOTAPPROVED";
-        let addr = "";
-        //create organisation if doesn't exists
-        if (req.body.organisationName) {
-          const organisationName = req.body.organisationName;
-          const organisation = await OrganisationModel.findOne({
-            name: new RegExp("^" + organisationName + "$", "i"),
-          });
-          if (organisation) {
-            organisationId = organisation.id;
-          } else {
-            const country = req.body?.address?.country
-              ? req.body.address?.country
-              : "India";
-            const region = req.body?.address?.region
-              ? req.body.address?.region
-              : "Asia";
-            const address = req.body?.address ? req.body.address : {};
-            addr =
-              address.line1 +
-              ", " +
-              address.city +
-              ", " +
-              address.state +
-              ", " +
-              address.pincode;
-            const orgCounter = await CounterModel.findOneAndUpdate(
-              { "counters.name": "orgId" },
-              {
-                $inc: {
-                  "counters.$.value": 1,
-                },
-              },
-              { new: true }
-            );
-            organisationId =
-              orgCounter.counters[0].format + orgCounter.counters[0].value;
-            const warehouseCounter = await CounterModel.findOneAndUpdate(
-              { "counters.name": "warehouseId" },
-              {
-                $inc: {
-                  "counters.$.value": 1,
-                },
-              },
-              { new: true }
-            );
-            warehouseId =
-              warehouseCounter.counters[0].format +
-              warehouseCounter.counters[0].value;
-            const org = new OrganisationModel({
-              primaryContactId: employeeId,
-              name: organisationName,
-              id: organisationId,
-              type: req.body?.type ? req.body.type : "CUSTOMER_SUPPLIER",
-              status: "NOTVERIFIED",
-              postalAddress: addr,
-              warehouses: [warehouseId],
-              warehouseEmployees: [employeeId],
-              region: {
-                regionName: region,
-              },
-              country: {
-                countryId: "001",
-                countryName: country,
-              },
-              configuration_id: "CONF000",
-              authority: req.body?.authority,
-            });
-            await org.save();
-            const invCounter = await CounterModel.findOneAndUpdate(
-              { "counters.name": "inventoryId" },
-              {
-                $inc: {
-                  "counters.$.value": 1,
-                },
-              },
-              {
-                new: true,
-              }
-            );
-            const inventoryId =
-              invCounter.counters[0].format + invCounter.counters[0].value;
-            const inventoryResult = new InventoryModel({ id: inventoryId });
-            await inventoryResult.save();
-            const loc = await getLatLongByCity(
-              address.city + "," + address.country
-            );
-            const warehouse = new WarehouseModel({
-              title: "Office",
-              id: warehouseId,
-              warehouseInventory: inventoryId,
-              organisationId: organisationId,
-              location: loc,
-              warehouseAddress: {
-                firstLine: address.line1,
-                secondLine: "",
-                region: address.region,
-                city: address.city,
-                state: address.state,
-                country: address.country,
-                landmark: "",
-                zipCode: address.pincode,
-              },
-              region: {
-                regionName: region,
-              },
-              country: {
-                countryId: "001",
-                countryName: country,
-              },
-              status: "NOTVERIFIED",
-            });
-            await warehouse.save();
-          }
-        }
-        let emailId = null;
-        if (req.body?.emailId)
-          emailId = req.body.emailId.toLowerCase().replace(" ", "");
-
-        let phoneNumber = null;
-        if (req.body?.phoneNumber) phoneNumber = "+" + req.body?.phoneNumber;
-        const user = new EmployeeModel({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          emailId: emailId,
-          phoneNumber: phoneNumber,
-          organisationId: organisationId,
-          id: employeeId,
-          postalAddress: addr,
-          accountStatus: employeeStatus,
-          warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+        },
+        { new: true }
+      );
+      const employeeId =
+        empCounter.counters[4].format + empCounter.counters[4].value;
+      const employeeStatus = "NOTAPPROVED";
+      let addr = "";
+      //create organization if doesn't exists
+      if (req.body.organisationName) {
+        const organisationName = req.body.organisationName;
+        const organisation = await OrganisationModel.findOne({
+          name: new RegExp("^" + organisationName + "$", "i"),
         });
-        await user.save();
+        if (organisation) {
+          organisationId = organisation.id;
+        } else {
+          const country = req.body?.address?.country
+            ? req.body.address?.country
+            : "India";
+          const region = req.body?.address?.region
+            ? req.body.address?.region
+            : "Asia";
+          const address = req.body?.address ? req.body.address : {};
+          addr =
+            address.line1 +
+            ", " +
+            address.city +
+            ", " +
+            address.state +
+            ", " +
+            address.pincode;
+          const orgCounter = await CounterModel.findOneAndUpdate(
+            { "counters.name": "orgId" },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            },
+            { new: true }
+          );
+          organisationId =
+            orgCounter.counters[2].format + orgCounter.counters[2].value;
+          const warehouseCounter = await CounterModel.findOneAndUpdate(
+            { "counters.name": "warehouseId" },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            },
+            { new: true }
+          );
+          warehouseId =
+            warehouseCounter.counters[3].format +
+            warehouseCounter.counters[3].value;
+          const org = new OrganisationModel({
+            primaryContactId: employeeId,
+            name: organisationName,
+            id: organisationId,
+            type: req.body?.type ? req.body.type : "CUSTOMER_SUPPLIER",
+            status: "NOTVERIFIED",
+            postalAddress: addr,
+            warehouses: [warehouseId],
+            warehouseEmployees: [employeeId],
+            region: {
+              name: region,
+            },
+            country: {
+              countryName: country,
+            },
+            configuration_id: "CONF000",
+            authority: req.body?.authority,
+          });
+          await org.save();
+          const invCounter = await CounterModel.findOneAndUpdate(
+            { "counters.name": "inventoryId" },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            },
+            {
+              new: true,
+            }
+          );
+          const inventoryId =
+            invCounter.counters[7].format + invCounter.counters[7].value;
+          const inventoryResult = new InventoryModel({ id: inventoryId });
+          await inventoryResult.save();
+          const loc = await getLatLongByCity(
+            address.city + "," + address.country
+          );
+          const warehouse = new WarehouseModel({
+            title: "Office",
+            id: warehouseId,
+            warehouseInventory: inventoryId,
+            organisationId: organisationId,
+            location: loc,
+            warehouseAddress: {
+              firstLine: address.line1,
+              secondLine: "",
+              region: address.region,
+              city: address.city,
+              state: address.state,
+              country: address.country,
+              landmark: "",
+              zipCode: address.pincode,
+            },
+            region: {
+              regionName: region,
+            },
+            country: {
+              countryId: "001",
+              countryName: country,
+            },
+            status: "NOTVERIFIED",
+          });
+          await warehouse.save();
+        }
+      }
+      let emailId = null;
+      if (req.body?.emailId)
+        emailId = req.body.emailId.toLowerCase().replace(" ", "");
 
-        const bc_data = {
+      let phoneNumber = null;
+      if (req.body?.phoneNumber) phoneNumber = req.body?.phoneNumber;
+
+      const user = new EmployeeModel({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        emailId: emailId,
+        phoneNumber: phoneNumber,
+        organisationId: organisationId,
+        id: employeeId,
+        postalAddress: addr,
+        accountStatus: employeeStatus,
+        warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+      });
+      await user.save();
+
+      let bc_data;
+
+      if (emailId != null) {
+        bc_data = {
           username: emailId,
           password: "",
           orgName: "org1MSP",
           role: "",
           email: emailId,
         };
-
-        await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
-        const event_data = {
-          eventID: cuid(),
-          eventTime: new Date().toISOString(),
-          actorWarehouseId: null,
-          eventType: {
-            primary: "CREATE",
-            description: "USER",
-          },
-          actor: {
-            actorid: null,
-            actoruserid: null,
-          },
-          stackholders: {
-            ca: {
-              id: null,
-              name: null,
-              address: null,
-            },
-            actororg: {
-              id: req.body.organisationId ? req.body.organisationId : null,
-              name: null,
-              address: null,
-            },
-            secondorg: {
-              id: null,
-              name: null,
-              address: null,
-            },
-          },
-          payload: {
-            data: req.body,
-          },
+      } else if (phoneNumber != null) {
+        bc_data = {
+          username: phoneNumber,
+          password: "",
+          orgName: "org1MSP",
+          role: "",
+          email: phoneNumber,
         };
-        await logEvent(event_data);
-        return apiResponse.successResponse(res, "User registered Success");
       }
+
+      await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+      const event_data = {
+        eventID: cuid(),
+        eventTime: new Date().toISOString(),
+        actorWarehouseId: "null",
+        transactionId: employeeId,
+        eventType: {
+          primary: "CREATE",
+          description: "USER",
+        },
+        actor: {
+          actorid: employeeId,
+          actoruserid: employeeId,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: req.body.organisationId ? req.body.organisationId : "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: req.body,
+        },
+      };
+      await logEvent(event_data);
+
+      return apiResponse.successResponse(req, res, "user_registered_success");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -397,14 +430,15 @@ exports.sendOtp = [
   body("emailId")
     .isLength({ min: 10 })
     .trim()
-    .withMessage("Email/Mobile must be specified"),
+    .withMessage("email_phone_validation_error"),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
+          req,
           res,
-          "Validation Error",
+          "validation_error",
           errors.array()
         );
       } else {
@@ -430,11 +464,6 @@ exports.sendOtp = [
                   source: process.env.SOURCE,
                 });
               }
-              return apiResponse.successResponseWithData(
-                res,
-                "OTP Generated but is NOT sent because of TEST Environment. OTP will be having default value",
-                { otp: otp.toString() }
-              );
             } else {
               if (
                 process.env.EMAIL_APPSTORE.includes(user.emailId) &&
@@ -444,47 +473,28 @@ exports.sendOtp = [
               } else {
                 otp = utility.randomNumber(4);
               }
-            }
-            await EmployeeModel.updateOne({ id: user.id }, { otp });
-
-            axios
-              .post(process.env.OTP_ENDPOINT, {
+              await EmployeeModel.updateOne({ id: user.id }, { otp });
+              await axios.post(process.env.OTP_ENDPOINT, {
                 email: user.emailId,
                 mobile: user.phoneNumber ? user.phoneNumber : "",
                 OTP: otp.toString(),
                 source: process.env.SOURCE,
-              })
-              .then(
-                (response) => {
-                  if (response.status === 200) {
-                    return apiResponse.successResponseWithData(
-                      res,
-                      "OTP Sent Success",
-                      { email: user.emailId }
-                    );
-                  } else {
-                    return apiResponse.ErrorResponse(res, response.statusText);
-                  }
-                },
-                (error) => {
-                  console.log(error);
-                }
-              );
+              });
+            }
+            return apiResponse.successResponse(req, res, "otp_sent_success");
           } else {
             return apiResponse.unauthorizedResponse(
+              req,
               res,
-              "Account is not Approved. Please contact admin"
+              "account_not_approved"
             );
           }
         } else {
-          return apiResponse.ErrorResponse(res, "User not registered");
+          return apiResponse.notFoundResponse(req, res, "account_not_found");
         }
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(
-        res,
-        err.message || "Some error occurred while login"
-      );
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -502,15 +512,16 @@ exports.verifyOtp = [
     .isLength({ min: 1 })
     .trim()
     .toLowerCase()
-    .withMessage("Email/Mobile must be specified"),
-  body("otp").isLength({ min: 4 }).trim().withMessage("OTP must be specified"),
+    .withMessage("email_phone_validation_error"),
+  body("otp").isLength({ min: 4 }).trim().withMessage("otp_validation_error"),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
+          req,
           res,
-          "Validation Error",
+          "validation_error",
           errors.array()
         );
       } else {
@@ -532,13 +543,13 @@ exports.verifyOtp = [
               `${blockchain_service_url}/createUserAddress`
             );
             address = response.data.items;
-            const userData = {
-              address,
-            };
-            await axios.post(
+            // const userData = {
+            //   address,
+            // };
+            /* await axios.post(
               `${blockchain_service_url}/grantPermission`,
               userData
-            );
+            );*/
             await EmployeeModel.updateOne(query, {
               otp: null,
               walletAddress: address,
@@ -579,6 +590,8 @@ exports.verifyOtp = [
               phoneNumber: user.phoneNumber,
               org: user.msp,
               userName: user.emailId,
+              preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           } else {
             userData = {
@@ -592,6 +605,8 @@ exports.verifyOtp = [
               phoneNumber: user.phoneNumber,
               org: user.msp,
               userName: user.emailId,
+              preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
             };
           }
           //Prepare JWT token for authentication
@@ -601,8 +616,7 @@ exports.verifyOtp = [
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
-          const { role } = user;
-          userData.permissions = await RbacModel.findOne({ role });
+          userData.permissions = await RbacModel.findOne({ role: user.role });
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
           const bc_data = {
@@ -615,20 +629,18 @@ exports.verifyOtp = [
 
           await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
           return apiResponse.successResponseWithData(
+            req,
             res,
-            "Login Success",
+            "login_success",
             userData
           );
         } else {
-          return apiResponse.ErrorResponse(res, `OTP doesn't match`);
+          return apiResponse.ErrorResponse(req, res, "otp_not_match");
         }
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(
-        res,
-        err.message || "Some error occurred"
-      );
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -715,19 +727,17 @@ exports.userInfo = [
           };
         }
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "User Profile",
+          "user_info_success",
           user_data
         );
       } else {
-        return apiResponse.notFoundResponse(res, "User not found");
+        return apiResponse.notFoundResponse(req, res, "account_not_found");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(
-        res,
-        err.message || "Some error occurred"
-      );
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -742,17 +752,19 @@ exports.updateProfile = [
       const {
         firstName,
         lastName,
-        phoneNumber = "",
+        phoneNumber = null,
         warehouseId,
         organisation,
+        preferredLanguage,
       } = req.body;
 
       const organisationId = organisation.split("/")[1];
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = phoneNumber ? "+" + phoneNumber : null;
+      employee.phoneNumber = phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
+      employee.preferredLanguage = preferredLanguage;
       await employee.save();
 
       const returnData = { isRefresh: false };
@@ -777,13 +789,14 @@ exports.updateProfile = [
         returnData.token = jwt.sign(jwtPayload, secret, jwtData);
       }
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Employee Profile Updated",
+        "user_info_success",
         returnData
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -800,13 +813,14 @@ exports.createUserAddress = [
       };
       await axios.post(`${blockchain_service_url}/grantPermission`, userData);
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "User Address Created",
+        "user_address_success",
         address
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -821,13 +835,14 @@ exports.getAllUsers = [
       );
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Users Retrieved Success",
+        "all_users_success",
         confirmedUsers
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -880,13 +895,14 @@ exports.assignProductConsumer = [
         });
       }
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Registration Success",
+        "product_consumer_success",
         userData
       );
     } catch (err) {
       console.log("err");
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -896,16 +912,24 @@ exports.getUserWarehouses = [
   async (req, res) => {
     try {
       if (!req.user.organisationId) {
-        return apiResponse.ErrorResponse(res, "User Organisation ID not found");
+        return apiResponse.ErrorResponse(
+          req,
+          res,
+          "organization_validation_error"
+        );
       }
-      const orgId = req.user.organisationId;
-      const users = await WarehouseModel.find({
-        organisationId: orgId,
+      const warehouses = await WarehouseModel.find({
+        organisationId: req.user.organisationId,
       });
-      return apiResponse.successResponseWithData(res, "User warehouses", users);
+      return apiResponse.successResponseWithData(
+        req,
+        res,
+        "user_warehouse_success",
+        warehouses
+      );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -915,7 +939,6 @@ exports.pushWarehouse = [
   async (req, res) => {
     try {
       const { warehouseId } = req.body;
-
       await EmployeeModel.updateOne(
         {
           id: req.user.id,
@@ -926,10 +949,10 @@ exports.pushWarehouse = [
           },
         }
       );
-      return apiResponse.successResponseWithData(res, "Warehouse added");
+      return apiResponse.successResponse(req, res, "add_warehouse_success");
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -938,6 +961,16 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
+      let warehouseExists = await WarehouseModel.findOne({id: req.body.id});
+      if(warehouseExists){
+          await EmployeeModel.findOneAndUpdate({id: req.user.id},  { $push: { warehouseId: req.body.id } });
+          return apiResponse.successResponseWithData(
+            req,
+            res,
+            "add_warehouse_success",
+            warehouseExists
+          );
+      }
       const invCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "inventoryId" },
         {
@@ -948,7 +981,7 @@ exports.addWarehouse = [
         { new: true }
       );
       const inventoryId =
-        invCounter.counters[0].format + invCounter.counters[0].value;
+        invCounter.counters[7].format + invCounter.counters[7].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -963,7 +996,7 @@ exports.addWarehouse = [
         bottleCapacity,
         sqft,
       } = req.body;
-      const warehouseCounter = await CounterModel.findOne(
+      const warehouseCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "warehouseId" },
         {
           $inc: {
@@ -975,8 +1008,8 @@ exports.addWarehouse = [
         }
       );
       const warehouseId =
-        warehouseCounter.counters[0].format +
-        warehouseCounter.counters[0].value;
+        warehouseCounter.counters[3].format +
+        warehouseCounter.counters[3].value;
 
       const loc = await getLatLongByCity(
         warehouseAddress.city + "," + warehouseAddress.country
@@ -997,6 +1030,7 @@ exports.addWarehouse = [
         warehouseInventory: inventoryResult.id,
         status: "NOTVERIFIED",
       });
+
       await warehouse.save();
       await OrganisationModel.findOneAndUpdate(
         {
@@ -1008,6 +1042,7 @@ exports.addWarehouse = [
           },
         }
       );
+
       await EmployeeModel.findOneAndUpdate(
         {
           id: req.user.id,
@@ -1046,7 +1081,7 @@ exports.addWarehouse = [
       };
       const token =
         req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-      await axios.post(
+      axios.post(
         `${hf_blockchain_url}/api/v1/participantapi/Warehouse/create`,
         bc_data,
         {
@@ -1055,7 +1090,6 @@ exports.addWarehouse = [
           },
         }
       );
-
       const event_data = {
         eventID: cuid(),
         eventTime: new Date().toISOString(),
@@ -1070,19 +1104,19 @@ exports.addWarehouse = [
         },
         stackholders: {
           ca: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
           actororg: {
-            id: organisationId ? organisationId : null,
-            name: null,
-            address: postalAddress ? postalAddress : null,
+            id: organisationId ? organisationId : "null",
+            name: "null",
+            address: postalAddress ? postalAddress : "null",
           },
           secondorg: {
-            id: null,
-            name: null,
-            address: null,
+            id: "null",
+            name: "null",
+            address: "null",
           },
         },
         payload: {
@@ -1091,13 +1125,14 @@ exports.addWarehouse = [
       };
       await logEvent(event_data);
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Warehouse Added Successfully",
+        "add_warehouse_success",
         warehouse
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message || "Error");
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1112,23 +1147,20 @@ exports.updateWarehouseAddress = [
       const data = req.body;
       data.location = loc;
       data.status = "PENDING";
-      await WarehouseModel.findOneAndUpdate(
+      const warehouse = await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
         data,
         { new: true }
-      )
-        .then((warehouse) => {
-          return apiResponse.successResponseWithData(
-            res,
-            "Warehouse Address Updated",
-            warehouse
-          );
-        })
-        .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
-        });
+      );
+      return apiResponse.successResponseWithData(
+        req,
+        res,
+        "update_warehouse_success",
+        warehouse
+      );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1161,8 +1193,9 @@ exports.uploadImage = [
           { new: true }
         );
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "Image Uploaded",
+          "image_upload_success",
           update
         );
       } else if (action == "STOREID") {
@@ -1182,8 +1215,9 @@ exports.uploadImage = [
           { new: true }
         );
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "StoreID Image Uploaded",
+          "image_upload_success",
           employee
         );
       } else if (action == "KYCNEW") {
@@ -1205,8 +1239,9 @@ exports.uploadImage = [
           { new: true }
         );
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "KYC Image Uploaded",
+          "image_upload_success",
           employee
         );
       } else if (action == "PROFILE") {
@@ -1215,24 +1250,22 @@ exports.uploadImage = [
             emailId: emailId,
           },
           {
-            $set: { photoId: `/usermanagement/api/auth/images/${Upload.key}` },
+            $set: { photoId: Upload.key },
           },
           { new: true }
         );
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "Profile Image Uploaded ",
+          "image_upload_success",
           employeeUpdate
         );
       } else {
-        return apiResponse.ErrorResponse(
-          res,
-          "Please check the type action you want to perform STOREID/KYCNEW/KYCUPLOAD"
-        );
+        return apiResponse.ErrorResponse(req, res, "image_upload_error");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1275,19 +1308,17 @@ exports.fetchImage = [
           resArray.push(s);
         }
       } else {
-        return apiResponse.notFoundResponse(
-          res,
-          "Matching ID number and type not found.! STOREID/Aadhar/Passport"
-        );
+        return apiResponse.notFoundResponse(req, res, "image_not_found");
       }
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Image Uploaded",
+        "image_success",
         resArray
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1365,16 +1396,17 @@ exports.getAllRegisteredUsers = [
           data: users_data,
         };
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "Sent Profile",
+          "all_users_success",
           finalData
         );
       } else {
-        return apiResponse.ErrorResponse(res, "No users found");
+        return apiResponse.notFoundResponse(req, res, "no_user_found");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1455,16 +1487,17 @@ exports.getAllUsersByWarehouse = [
           data: users_data,
         };
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "Sent Profile",
+          "all_users_success",
           finalData
         );
       } else {
-        return apiResponse.ErrorResponse(res, "No users found");
+        return apiResponse.notFoundResponse(req, res, "no_user_found");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1543,33 +1576,17 @@ exports.getAllUsersByOrganisation = [
           data: users_data,
         };
         return apiResponse.successResponseWithData(
+          req,
           res,
-          "Sent Profile",
+          "all_users_success",
           finalData
         );
       } else {
-        return apiResponse.ErrorResponse(res, "No users found");
+        return apiResponse.notFoundResponse(req, res, "no_user_found");
       }
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.createTwilioBinding = [
-  auth,
-  async (req, res) => {
-    try {
-      await client.notify.services(twilio_service_id).bindings.create({
-        identity: req.user.id,
-        bindingType: req.body.device_type == "ios" ? "apn" : "fcm",
-        address: req.body.token_id,
-      });
-      return apiResponse.successResponse(res, "Successfully Registered");
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1583,13 +1600,14 @@ exports.getOrganizationsByType = [
         "organisationTypes.id organisationTypes.name"
       );
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "List of Organisation Types",
+        "organization_types_success",
         organizations
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1645,13 +1663,14 @@ exports.getOrganizationsByTypeForAbInBev = [
         },
       ]);
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Get Organisations by Type",
+        "organization_by_type_success",
         organizations
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1666,13 +1685,14 @@ exports.getwarehouseByType = [
         "warehouseTypes.id warehouseTypes.name"
       );
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "List of Warehouse Types",
+        "warehouse_types_success",
         organizations
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1683,14 +1703,15 @@ exports.getwarehouseinfo = [
     try {
       const warehouseId = req.query.id;
       const warehouseinfo = await WarehouseModel.find({ id: warehouseId });
-
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Warehouse Info",
+        "warehouse_info_success",
         warehouseinfo
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1705,12 +1726,14 @@ exports.getOrganizationsTypewithauth = [
         "organisationTypes.id organisationTypes.name"
       );
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Organisation Types",
+        "organization_types_success",
         organizations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1721,18 +1744,23 @@ exports.emailverify = [
       const emailId = req.query.emailId;
       const phoneNumber = req.query.phoneNumber;
       const email = await EmployeeModel.find(
-        { $or: [{ phoneNumber: "+" + phoneNumber }, { emailId: emailId }] },
+        {
+          $or: [
+            { phoneNumber: "+" + phoneNumber },
+            { emailId: emailId ? emailId : "" },
+          ],
+        },
         "emailId phoneNumber"
       );
-
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Email Verification",
+        "email_verification",
         email
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];
@@ -1775,13 +1803,14 @@ exports.switchLocation = [
         returnData.token = jwt.sign(jwtPayload, secret, jwtData);
       }
       return apiResponse.successResponseWithData(
+        req,
         res,
-        "Switch Location Success",
+        "switch_location_success",
         returnData
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
 ];

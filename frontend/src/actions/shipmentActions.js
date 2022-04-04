@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { config } from "../config";
 import {
   GET_SHIPMENTS_FAILURE,
@@ -40,13 +39,15 @@ export const getInboundShipments = async (
   dateFilter,
   status,
   skip,
-  limit
+  limit,
+  fromDate,
+  toDate
 ) => {
   try {
     const result = await axios.get(
       `${
         config().fetchInboundShipmentsUrl
-      }?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&skip=${skip}&limit=${limit}`
+      }?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&fromDate=${fromDate}&toDate=${toDate}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {
@@ -61,13 +62,15 @@ export const getOutboundShipments = async (
   dateFilter,
   status,
   skip,
-  limit
+  limit,
+  fromDate,
+  toDate
 ) => {
   try {
     const result = await axios.get(
       `${
         config().fetchOutboundShipmentsUrl
-      }?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&skip=${skip}&limit=${limit}`
+      }?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&fromDate=${fromDate}&toDate=${toDate}&skip=${skip}&limit=${limit}`
     );
     return result.data;
   } catch (e) {
@@ -86,11 +89,23 @@ export const getSupplierAndReceiverList = async () => {
   }
 };
 
-export const getGMRShipments = async (skip, limit) => {
+export const getGMRShipments = async (
+  skip,
+  limit,
+  fromDate,
+  toDate,
+  status
+) => {
   try {
-    const result = await axios.get(
-      `${config().fetchGMRShipmentsUrl}?skip=${skip}&limit=${limit}`
-    );
+    const result = await axios.get(config().fetchGMRShipmentsUrl, {
+      params: {
+        skip,
+        limit,
+        fromDate,
+        toDate,
+        status,
+      },
+    });
     return result.data;
   } catch (e) {
     return [];
@@ -151,7 +166,7 @@ export const chainOfCustody = async (id) => {
     const configObject = config();
     const url = configObject.chainOfCustody + id;
     const result = await axios.get(url);
-    return result;
+    return result.data;
   } catch (e) {
     return e.response;
   }
@@ -254,15 +269,13 @@ export const getViewShipmentGmr = (id) => {
   };
 };
 
-export const getViewShipment = (id) => {
-  return async (dispatch) => {
-    try {
-      const result = await axios.get(config().viewShipmentUrl + id);
-      return result.data.data;
-    } catch (e) {
-      return e.response;
-    }
-  };
+export const getViewShipment = async (id) => {
+  try {
+    const result = await axios.get(config().viewShipmentUrl + id);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
 };
 
 const setShipments = (data) => {
@@ -367,12 +380,19 @@ export const uploadImage = async (id, formData) => {
 
 export const fetchImage = async (id) => {
   try {
-    const configObject = config();
-    const url = configObject.fetchImage + id;
-    const result = await axios.get(url);
-    return result;
+    const result = await axios.get(config().fetchImage + id);
+    return result?.data;
   } catch (e) {
-    return e.response;
+    return [];
+  }
+};
+
+export const getImage = async (id) => {
+  try {
+    const result = await axios.get(config().getImage + "/" + id);
+    return result.data;
+  } catch (e) {
+    return null;
   }
 };
 
@@ -396,6 +416,39 @@ export const chainOfCustodyTrack = async (id) => {
     const result = await axios.get(url);
     return result;
   } catch (e) {
+    return e.response;
+  }
+};
+
+export const temperatureGraph = async (shipmentId, page) => {
+  try {
+    const url = config().temperatureGraph;
+    const result = await axios.get(url, { params: { shipmentId, page } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
+    return e.response;
+  }
+};
+
+export const getDriverGraph = async (shipmentId) => {
+  try {
+    const url = config().driverGraph;
+    const result = await axios.get(url, { params: { shipmentId } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
+    return e.response;
+  }
+};
+
+export const customReceiveShipment = async (shipmentId) => {
+  try {
+    const url = config().customReceiveShipment;
+    const result = await axios.get(url, { params: { shipmentId } });
+    return result.data;
+  } catch (e) {
+    console.log(e);
     return e.response;
   }
 };

@@ -27,4 +27,12 @@ router.post("/createNewAlert", AlertController.createNewAlert);
  */
 router.delete("/deleteAlert/:alertId", AlertController.deleteAlert);
 
+/**
+ * @route get /getAllAlerts
+ * @group Alerts - get all Alerts
+ * @returns {object} 200 - An array of Alerts
+ * @returns {Error}  default - Unexpected error
+ */
+router.get("/getAllAlerts", AlertController.getAllAlerts);
+
 module.exports = router;

@@ -10,10 +10,10 @@ import ReviewOrderPopUp from "./revieworderpopup";
 import Modal from "../../shared/modal";
 import { createOrder, resetReviewPos } from "../../actions/poActions";
 const ReviewOrder = (props) => {
+  const { t } = props;
   const order = useSelector((state) => {
     return state?.reviewPo;
   });
-  console.log("order is ", order);
   const dispatch = useDispatch();
   const [failedPop, setFailedPop] = useState(false);
   const [openReviewOrder, setopenReviewOrder] = useState(false);
@@ -71,6 +71,7 @@ const ReviewOrder = (props) => {
           message: "Created Successfully!",
           OrderId: result.data.data.poId,
           type: "Success",
+          t: t,
         });
       } else {
         setFailedPop(true);
@@ -89,35 +90,32 @@ const ReviewOrder = (props) => {
   return (
     <div className='revieworder text-muted'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>REVIEW NEW ORDER</h1>
+        <h1 className='breadcrumb'>{t("review_new_order")}</h1>
       </div>
       <div className=''>
         <div className=' p-3 m-3 bg-white shadow'>
-          <span
-            className='mt-5 ml-3 font-weight-bold'
-            style={{ color: "black" }}
-          >
-            Product Details
+          <span className='mt-5 font-weight-bold' style={{ color: "black" }}>
+            {t("product_details")}
           </span>
           <div className='row mt-3'>
             {arr[0].length !== undefined ? (
               arr[0].map((element) => {
-                return <ViewTable product={element?.products} />;
+                return <ViewTable product={element?.products} t={t} />;
               })
             ) : (
-              <ViewTable product={order?.products} />
+              <ViewTable product={order?.products} t={t} />
             )}
           </div>
         </div>
         <div className='row bg-white shadow p-3 m-3'>
           <div className=' pl-1 col-12'>
             <span className='p-0 font-weight-bold' style={{ color: "black" }}>
-              Order From
+              {t("order_from")}
             </span>
             <div>
               <div className=' row p-3'>
                 <div className='col row'>
-                  <span className='col-4'>Organisation Name: </span>
+                  <span className='col-4'>{t("organisation_name")}: </span>
                   <span
                     className='col'
                     style={{ color: "black", fontSize: "14px" }}
@@ -126,7 +124,7 @@ const ReviewOrder = (props) => {
                   </span>
                 </div>
                 <div className='col row'>
-                  <span className='col-4'>Organisation ID: </span>
+                  <span className='col-4'>{t("organisation_id")}: </span>
                   <span
                     className='col'
                     style={{ color: "black", fontSize: "14px" }}
@@ -141,12 +139,12 @@ const ReviewOrder = (props) => {
         <div className='row bg-white shadow p-3 m-3'>
           <div className=' pl-1 col-12'>
             <span className='p-0  font-weight-bold' style={{ color: "black" }}>
-              Deliver To
+              {t("deliver_to")}
             </span>
             <div>
               <div className=' row p-3'>
                 <div className='col row'>
-                  <span className='col-4'>Organisation Name: </span>
+                  <span className='col-4'>{t("organisation_name")}: </span>
                   <span
                     className='col'
                     style={{ color: "black", fontSize: "14px" }}
@@ -155,7 +153,7 @@ const ReviewOrder = (props) => {
                   </span>
                 </div>
                 <div className='col row'>
-                  <span className='col-4'>Organisation ID: </span>
+                  <span className='col-4'>{t("organisation_id")}: </span>
                   <span
                     className='col'
                     style={{ color: "black", fontSize: "14px" }}
@@ -163,18 +161,18 @@ const ReviewOrder = (props) => {
                     {order.rtypeName}/{order.toOrg}
                   </span>
                 </div>
-                <div className='w-100'></div>
+                {/* <div className='w-100'></div>
                 <div className='col row mt-3'>
-                  <span className='col-4'>Region:</span>
+                  <span className='col-4'>{t("region")}:</span>
                   <span className=' col  text-dark '>{order.toOrgRegion}</span>
                 </div>
                 <div className='col row mt-3'>
-                  <span className='col-4'>Country:</span>
+                  <span className='col-4'>{t("country")}:</span>
                   <span className=' col text-dark '>{order.toOrgCountry}</span>
-                </div>
-                <div className='w-100'></div>
-                <div className='col row  mt-3'>
-                  <span className='col-4'>Organisation Location:</span>
+                </div> */}
+                <div className='w-100 mt-4'></div>
+                <div className='col row  '>
+                  <span className='col-4'>{t("organisation_location")}:</span>
                   <span
                     className='col'
                     style={{ color: "black", fontSize: "14px" }}
@@ -182,12 +180,32 @@ const ReviewOrder = (props) => {
                     {order.toOrgLocName}
                   </span>
                 </div>
-                <div className='col row  mt-5'>
-                  <span className='col-4'></span>
+                <div className='col row  '>
+                  <span className='col-4'>{t("country")}:</span>
                   <span
                     className='col ml-2 '
                     style={{ color: "black", fontSize: "14px" }}
-                  ></span>
+                  >
+                    {order.toOrgCountry}
+                  </span>
+                </div>
+                <div className='w-100 mt-4'></div>
+                <div className='col row  '>
+                  <span className='col-4'>{t("region")}:</span>
+                  <span
+                    className='col'
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                    {order.toOrgRegion}
+                  </span>
+                </div>
+                <div className='col row  '>
+                  <span className='col-4'></span>
+                  <span
+                    className='col'
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                  </span>
                 </div>
               </div>
             </div>
@@ -206,7 +224,7 @@ const ReviewOrder = (props) => {
                 className='mr-2 mb-1'
                 alt='Order'
               />
-              <span>Create New Order</span>
+              <span>{t("create_new_order")}</span>
             </button>
             <button
               className='btn-edit btn mr-3'
@@ -219,7 +237,7 @@ const ReviewOrder = (props) => {
                 className='mr-2'
                 alt='edit'
               />
-              <span className="edit-text">EDIT</span>
+              <span className='edit-text'>{t("edit")}</span>
             </button>
             {openReviewOrder && (
               <Modal
@@ -228,6 +246,7 @@ const ReviewOrder = (props) => {
               >
                 <ReviewOrderPopUp
                   onHide={closeModal} // onHide={closeModal} //FailurePopUp
+                  t={t}
                   {...modalProps}
                 />
               </Modal>

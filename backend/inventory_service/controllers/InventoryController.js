@@ -14,14 +14,13 @@ const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
+const { responses } = require("../helpers/responses");
 const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
   require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
-
+const cuid = require("cuid");
 const fs = require("fs");
-const uniqid = require("uniqid");
-// const path = require('path');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
@@ -444,7 +443,10 @@ exports.updateInventories = [
       }
 
       await InventoryModel.bulkWrite(bulkArr);
-      apiResponse.successResponse(res, "Updated Success");
+      apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).updated_success
+      );
     } catch (e) {
       console.log(e);
       apiResponse.ErrorResponse(res, e.message);
@@ -494,7 +496,6 @@ exports.insertInventories = [
       let limit = chunkSize;
       let skip = 0;
       let count = 0;
-      const start = new Date();
       async function recursiveFun() {
         skip = chunkSize * count;
         count++;
@@ -505,11 +506,6 @@ exports.insertInventories = [
           if (limit < inventories.length) {
             recursiveFun();
           } else {
-            logger.log(
-              "info",
-              `Insertion of inventories from mobile is completed. Time Taken to insert ${inventories.length} in seconds - `,
-              (new Date() - start) / 1000
-            );
             const newNotification = new NotificationModel({
               owner: address,
               message: `Your inventories are added successfully on ${new Date().toLocaleString()}`,
@@ -537,47 +533,10 @@ exports.insertInventories = [
         }
       }
       recursiveFun();
-      //   event_data = {
-      //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-      //     "eventTime": new Date().toISOString(),
-      //     "eventType": {
-      //         "primary": "CREATE",
-      //         "description": "SHIPMENT ALERTS"
-      //     },
-      //     "actor": {
-      //         "actorid": "userid1",
-      //         "actoruserid": "ashwini@statwig.com"
-      //     },
-      //     "stackholders": {
-      //         "ca": {
-      //             "id": "org001",
-      //             "name": "Statwig Pvt. Ltd.",
-      //             "address": "ca_address_object"
-      //         },
-      //         "actororg": {
-      //             "id": "org002",
-      //             "name": "Appollo Hospitals Jublihills",
-      //             "address": "actororg_address_object"
-      //         },
-      //         "secondorg": {
-      //             "id": "org003",
-      //             "name": "Med Plus Gachibowli",
-      //             "address": "secondorg_address_object"
-      //         }
-      //     },
-      //     "payload": {
-      //         "data": {
-      //             "abc": 123
-      //         }
-      //     }
-      // }
-      // async function compute(event_data) {
-      //     result = await logEvent(event_data)
-      //     return result
-      // }
-
-      // compute(event_data).then((response) => console.log(response))
-      apiResponse.successResponse(res, "Inserted Success");
+      apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).success
+      );
     } catch (e) {
       apiResponse.ErrorResponse(res, e.message);
     }
@@ -596,16 +555,15 @@ exports.addProductsToInventory = [
       const empData = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
-      const orgId = empData?.organisationId || null;
+      const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
-
+      const address = orgData?.postalAddress;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error",
+          responses(req.user.preferredLanguage).validation_error,
           errors.array()
         );
       }
@@ -630,7 +588,7 @@ exports.addProductsToInventory = [
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
-              "Employee not assigned to any organization"
+              responses(req.user.preferredLanguage).not_assigned_to_org
             );
           }
           const inventory = await InventoryModel.findOne({
@@ -639,7 +597,7 @@ exports.addProductsToInventory = [
           if (!inventory)
             return apiResponse.ErrorResponse(
               res,
-              "Cannot find inventory to this employee warehouse"
+              responses(req.user.preferredLanguage).cant_find_warehouse_inv
             );
           let atoms = [];
           products.forEach((product) => {
@@ -664,7 +622,7 @@ exports.addProductsToInventory = [
           if (dupSerialFound)
             return apiResponse.ErrorResponse(
               res,
-              "Duplicate Serial Numbers found"
+              responses(req.user.preferredLanguage).duplicated_sno
             );
           var duplicateBatch = false;
           var duplicateBatchNo = "";
@@ -717,7 +675,6 @@ exports.addProductsToInventory = [
               //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
-                  // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
                     labelId: product.label ? product?.label?.labelId : "QR_2D",
@@ -750,7 +707,7 @@ exports.addProductsToInventory = [
               }
             } else {
               const atom = {
-                id: uniqid("batch-"),
+                id: "batch-" + cuid(),
                 label: {
                   labelId: product.label ? product?.label?.labelId : "QR_2D",
                   labelType: product.label ? product?.label?.labelType : "3232", // ?? WHY ??
@@ -779,17 +736,16 @@ exports.addProductsToInventory = [
               atomsArray.push(atom);
             }
             for (let i = 0; i < atomsArray.length; i++) {
-              let res = await AtomModel.findOne({
+              let batchDup = await AtomModel.findOne({
                 batchNumbers: atomsArray[i].batchNumbers[0],
                 inventoryIds: warehouse.warehouseInventory,
               });
-              console.log(res);
-              if (!res) {
+              if (!batchDup) {
                 continue;
               }
-              if (res) {
+              if (batchDup) {
                 duplicateBatch = true;
-                duplicateBatchNo = res.batchNumbers[0];
+                duplicateBatchNo = batchDup.batchNumbers[0];
                 break;
               }
             }
@@ -799,69 +755,52 @@ exports.addProductsToInventory = [
           if (duplicateBatch) {
             return apiResponse.ErrorResponse(
               res,
-              `A batch with batch number ${duplicateBatchNo} exists in the inventory`
+              responses(req.user.preferredLanguage).batchExists(
+                duplicateBatchNo
+              )
             );
           }
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             transactionId: warehouse.warehouseInventory,
             eventType: {
               primary: "ADD",
               description: "INVENTORY",
             },
+            actorWarehouseId: req.user.warehouseId,
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id,
+              actoruserid: email,
             },
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: req.user.organisationId || "null",
-                name: "null",
-                address: "null",
+                id: orgId,
+                name: orgName,
+                address: address,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
-              data: {
-                abc: 123,
-              },
+              data: payload,
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.stackholders.actororg.id = orgId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data = payload;
           await logEvent(event_data);
           return apiResponse.successResponseWithData(
             res,
-            "Added products to the inventories"
+            responses(req.user.preferredLanguage).added_inventory_products
           );
         } else {
-          res.json("Sorry! User does not have enough Permissions");
+          res.json(responses(req.user.preferredLanguage).no_permission);
         }
       });
     } catch (err) {
@@ -887,8 +826,6 @@ exports.addInventoriesFromExcel = [
       });
       const orgId = empData.organisationId;
       const orgName = empData.name;
-      const orgData = await OrganisationModel.findOne({ id: orgId });
-      const address = orgData.postalAddress;
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
           const dir = `uploads`;
@@ -902,8 +839,34 @@ exports.addInventoriesFromExcel = [
             workbook.Sheets[sheet_name_list[0]],
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
+
+          // Validate excel format
+          // I'm not sure how to put camel case field names in spanish so only validating english
+          const expectedColNames = [
+            "productName",
+            "manufacturerName",
+            "quantity",
+            "unitOfMeasure.name",
+            "manufacturingDate",
+            "expiryDate",
+            "storageConditionsMax",
+            "batchNumber",
+            "serialNumber",
+            "storageConditionsMin",
+            "orderID",
+          ];
+          if (!utility.compareArrays(expectedColNames, Object.keys(data[0]))) {
+            // Invalid format logic
+            return apiResponse.validationErrorWithData(
+              res,
+              responses(req.user.preferredLanguage).invalid_excel,
+              Object.keys(data[0])
+            );
+          }
+
+          const resData = utility.excludeExpireProduct(data);
+
           const { address } = req.user;
-          let start = new Date();
           let count = 0;
           const chunkSize = 50;
           let limit = chunkSize;
@@ -913,7 +876,7 @@ exports.addInventoriesFromExcel = [
             skip = chunkSize * count;
             count++;
             limit = chunkSize * count;
-            const chunkedData = data.slice(skip, limit);
+            const chunkedData = resData.slice(skip, limit);
             let chunkUrls = [];
             const serialNumbers = chunkedData.map((inventory) => {
               return { id: inventory.serialNumber.trim() };
@@ -955,139 +918,81 @@ exports.addInventoriesFromExcel = [
                   const inventoryData = responses.map(
                     (response) => response.data
                   );
-                  // console.log(inventoryData);
-
-                  // InventoryModel.insertMany(inventoryData, (err, res) => {
-                  //   if (err) {
-                  //     logger.log("error", err.errmsg);
-                  //   } else
-                  //     logger.log(
-                  //       'info',
-                  //       'Number of documents inserted into mongo: ' +
-                  //       res.length,
-                  //     );
-                  // });
-
-                  if (limit < data.length) {
+                  if (limit < resData.length) {
                     recursiveFun();
-                  } else {
-                    // const newNotification = new NotificationModel({
-                    //   owner: address,
-                    //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
-                    // });
-                    // await newNotification.save();
                   }
                 })
               )
               .catch((errors) => {
-                logger.log(errors);
+                console.log(errors);
               });
           }
           recursiveFun();
-          for (const [index, prod] of data.entries()) {
+          for (const [index, prod] of resData.entries()) {
             let product = await ProductModel.findOne({
               name: prod.productName,
             });
             if (product) {
-              data[index].productId = product.id;
-              data[index].type = product.type;
+              resData[index].productId = product.id;
+              resData[index].type = product.type;
             } else {
-              console.log(product);
+              return apiResponse.ErrorResponse(
+                res,
+                // preffered Langauge in not working in correct manner.
+                // responses(req.user.preferredLanguage).product_doesnt_exist
+                "Product_Doesn't_exist_in_the_inventory"
+              );
             }
           }
 
-          var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
+          const event_data = {
+            eventID: cuid(),
+            eventTime: new Date().toISOString(),
             eventType: {
-              primary: "CREATE",
-              description: "SHIPMENT_CREATION",
+              primary: "ADD",
+              description: "INVENTORY",
             },
             actor: {
-              actorid: null,
-              actoruserid: null,
+              actorid: user_id || null,
+              actoruserid: email || null,
             },
+            actorWarehouseId: req.user.warehouseId,
             stackholders: {
               ca: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: CENTRAL_AUTHORITY_ID || null,
+                name: CENTRAL_AUTHORITY_NAME || null,
+                address: CENTRAL_AUTHORITY_ADDRESS || null,
               },
               actororg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: orgId || req.user.organisationId || null,
+                name: orgName || null,
+                address: address || null,
               },
               secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
+                id: null,
+                name: null,
+                address: null,
               },
             },
             payload: {
               data: {
-                abc: 123,
+                products: [...resData],
               },
             },
           };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.stackholders.actororg.id =
-            orgId || req.user.organisationId || "null";
-          event_data.stackholders.actororg.name = orgName || "null";
-          event_data.stackholders.actororg.address = address || "null";
-          event_data.actorWarehouseId = req.user.warehouseId || "null";
-          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-          event_data.stackholders.ca.address =
-            CENTRAL_AUTHORITY_ADDRESS || "null";
-          event_data.payload.data.products = [...data];
           logEvent(event_data);
-          return apiResponse.successResponseWithData(res, "Success", data);
+          return apiResponse.successResponseWithData(
+            res,
+            responses(req.user.preferredLanguage).success,
+            resData
+          );
         } else {
           return apiResponse.ErrorResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
-exports.trackProduct = [
-  auth,
-  async (req, res) => {
-    try {
-      const { serialNumber } = req.query;
-      InventoryModel.findOne({ serialNumber: serialNumber }).then(
-        async (user) => {
-          let txnIDs = user.transactionIds;
-          let items_array = [];
-          await utility.asyncForEach(txnIDs, async (txnId) => {
-            const response = await axios.get(
-              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`
-            );
-            const items = response.data.items;
-            items_array.push(items);
-          });
-          return apiResponse.successResponseWithData(
-            res,
-            "Success Track Product",
-            items_array
-          );
-        }
-      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -1124,13 +1029,13 @@ exports.getInventoryDetails = [
         );
         return apiResponse.successResponseWithData(
           res,
-          "Inventory Details",
+          responses(req.user.preferredLanguage).inventory_details,
           inventoryDetails
         );
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -1362,7 +1267,7 @@ exports.getGroupedInventoryDetails = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            `Sorry! User doesn't have permissions`
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1439,7 +1344,7 @@ exports.getBatchDetailsByBatchNumber = [
         } else {
           return apiResponse.forbiddenResponse(
             res,
-            "Sorry! User does not have enough Permissions"
+            responses(req.user.preferredLanguage).no_permission
           );
         }
       });
@@ -1456,12 +1361,13 @@ exports.getProductListCounts = [
     try {
       const { warehouseId } = req.user;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
-      const val = InventoryId[0].warehouseInventory;
+      const val = InventoryId[0]?.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
+      const list = productList[0].inventoryDetails;
+      const productArray = [];
+      let productObj;
       for (let j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        const productId = list[j].productId;
         const product = await ProductModel.find({ id: productId });
         if (
           product &&
@@ -1471,7 +1377,7 @@ exports.getProductListCounts = [
           product[0] &&
           product[0].name
         ) {
-          var product1 = {
+          productObj = {
             productCategory: product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
@@ -1479,13 +1385,11 @@ exports.getProductListCounts = [
             manufacturer: product && product[0] && product[0].manufacturer,
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
-        }
-
-        if (product1.quantity > 0) {
-          productArray.push(product1);
+          if (productObj?.quantity > 0) {
+            productArray.push(productObj);
+          }
         }
       }
-
       productArray.sort(function (a, b) {
         if (a.quantity > b.quantity) {
           return -1;
@@ -1557,7 +1461,7 @@ exports.getInventory = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -1980,7 +1884,6 @@ async function getFilterConditions(filters) {
     } else {
       matchCondition.orgType = filters.orgType;
     }
-    console.log(matchCondition, matchWarehouseCondition);
     const organisations = await OrganisationModel.aggregate([
       {
         $match: matchCondition,
@@ -2009,7 +1912,6 @@ async function getFilterConditions(filters) {
     ]);
 
     let orgs = [];
-    console.log(organisations);
     for (let org in organisations) {
       orgs.push(organisations[org]["id"]);
     }
@@ -2345,8 +2247,8 @@ exports.getBatchNearExpiration = [
     try {
       let warehouseId;
       req.query.warehouseId
-        ? (warehouseId = req.user.warehouseId)
-        : (warehouseId = req.query.warehouseId);
+        ? (warehouseId = req.query.warehouseId)
+        : (warehouseId = req.user.warehouseId);
 
       const today = new Date();
       const nextMonth = new Date();
@@ -2393,7 +2295,7 @@ exports.getBatchNearExpiration = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -2409,8 +2311,8 @@ exports.getBatchExpired = [
     try {
       let warehouseId;
       req.query.warehouseId
-        ? (warehouseId = req.user.warehouseId)
-        : (warehouseId = req.query.warehouseId);
+        ? (warehouseId = req.query.warehouseId)
+        : (warehouseId = req.user.warehouseId);
       const warehouse = await WarehouseModel.findOne({ id: warehouseId });
       if (warehouse) {
         const result = await AtomModel.aggregate([
@@ -2451,7 +2353,7 @@ exports.getBatchExpired = [
       } else {
         return apiResponse.ErrorResponse(
           res,
-          "Cannot find warehouse for this employee"
+          responses(req.user.preferredLanguage).warehouse_not_found
         );
       }
     } catch (err) {
@@ -2635,19 +2537,19 @@ exports.deleteProductsFromInventory = [
         },
         stackholders: {
           ca: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           actororg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
           secondorg: {
-            id: "null",
-            name: "null",
-            address: "null",
+            id: null,
+            name: null,
+            address: null,
           },
         },
         payload: {
@@ -2660,22 +2562,25 @@ exports.deleteProductsFromInventory = [
       event_data.eventTime = datee;
       event_data.eventType.primary = "DELETE";
       event_data.eventType.description = "INVENTORY";
-      event_data.actor.actorid = user_id || "null";
-      event_data.actor.actoruserid = email || "null";
-      event_data.stackholders.actororg.id = orgId || "null";
-      event_data.stackholders.actororg.name = orgName || "null";
-      event_data.stackholders.actororg.address = address || "null";
-      event_data.actorWarehouseId = req.user.warehouseId || "null";
-      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-      event_data.stackholders.secondorg.id = receiverId || "null";
-      event_data.stackholders.secondorg.name = receiverName || "null";
-      event_data.stackholders.secondorg.address = receiverAddress || "null";
+      event_data.actor.actorid = user_id || null;
+      event_data.actor.actoruserid = email || null;
+      event_data.stackholders.actororg.id = orgId || null;
+      event_data.stackholders.actororg.name = orgName || null;
+      event_data.stackholders.actororg.address = address || null;
+      event_data.actorWarehouseId = req.user.warehouseId || null;
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || null;
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || null;
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || null;
+      event_data.stackholders.secondorg.id = receiverId || null;
+      event_data.stackholders.secondorg.name = receiverName || null;
+      event_data.stackholders.secondorg.address = receiverAddress || null;
       event_data.payload.data = payload;
 
       await logEvent(event_data);
-      return apiResponse.successResponse(res, "Operation success");
+      return apiResponse.successResponse(
+        res,
+        responses(req.user.preferredLanguage).success
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2696,12 +2601,12 @@ exports.searchProduct = [
         if (permissionResult.success) {
           const { productName, productType } = req.query;
           req.query.warehouseId
-            ? (warehouseId = req.user.warehouseId)
-            : (warehouseId = req.query.warehouseId);
+            ? (warehouseId = req.query.warehouseId)
+            : (warehouseId = req.user.warehouseId);
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};
-            elementMatchQuery["id"] = warehouse.warehouseInventory;
+            // elementMatchQuery["id"] = warehouse.warehouseInventory;
             if (productName) {
               elementMatchQuery[`products.name`] = productName;
             }
@@ -2733,11 +2638,14 @@ exports.searchProduct = [
           } else {
             return apiResponse.ErrorResponse(
               res,
-              "Cannot find warehouse for this employee"
+              responses(req.user.preferredLanguage).warehouse_not_found
             );
           }
         } else {
-          return apiResponse.forbiddenResponse(res, "Access denied");
+          return apiResponse.forbiddenResponse(
+            res,
+            responses(req.user.preferredLanguage).no_permission
+          );
         }
       });
     } catch (err) {
@@ -2754,7 +2662,25 @@ exports.autoCompleteSuggestions = [
       const { searchString } = req.query;
 
       const suggestions1 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        {
+          $project: {
+            _id: 0,
+            value: "$id",
+            record_type: "order",
+            createdBy: "$createdBy",
+            org1: "$customer.customerOrganisation",
+            org2: "$supplier.supplierOrganisation",
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
+              { createdBy: req.user.id },
+            ],
+          },
+        },
         {
           $unionWith: {
             coll: "products",
@@ -2769,23 +2695,6 @@ exports.autoCompleteSuggestions = [
             ],
           },
         },
-        {
-          $match: {
-            value: { $regex: searchString ? searchString : "", $options: "i" },
-          },
-        },
-        { $limit: 5 },
-        {
-          $group: {
-            _id: "$value",
-            type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
-          },
-        },
-      ]).sort({ createdAt: -1 });
-
-      const suggestions2 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "products",
@@ -2805,23 +2714,39 @@ exports.autoCompleteSuggestions = [
             value: { $regex: searchString ? searchString : "", $options: "i" },
           },
         },
-        { $limit: 5 },
         {
           $group: {
             _id: "$value",
             type: { $first: "$record_type" },
-            airWayBillNo: { $first: "$airWayBillNo" },
+            // airWayBillNo: { $first: "$airWayBillNo" },
           },
         },
+        { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
       const suggestions3 = await RecordModel.aggregate([
-        { $project: { _id: 0, value: "$id", record_type: "order" } },
+        // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
             coll: "shipments",
             pipeline: [
-              { $project: { _id: 0, value: "$id", record_type: "shipment" } },
+              {
+                $project: {
+                  _id: 0,
+                  value: "$id",
+                  record_type: "shipment",
+                  org1: "$receiver.id",
+                  org2: "$supplier.id",
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { org1: req.user.organisationId },
+              { org2: req.user.organisationId },
             ],
           },
         },
@@ -2854,10 +2779,11 @@ exports.autoCompleteSuggestions = [
           },
         },
       ]).sort({ createdAt: -1 });
+      // console.log( [...new Set([...suggestions1, ...suggestions2, ...suggestions3])])
       return apiResponse.successResponseWithData(
         res,
         "Autocorrect Suggestions",
-        [...suggestions1, ...suggestions2, ...suggestions3]
+        [...new Set([...suggestions1, ...suggestions3])]
       );
     } catch (err) {
       console.log(err);
@@ -2876,7 +2802,7 @@ exports.fetchBatchesOfInventory = [
       const inventoryId = warehouse.warehouseInventory;
       const batches = await AtomModel.find({
         productId: productId,
-        batchNumbers: { $nin: ["", "null", null] },
+        batchNumbers: { $nin: ["", null, null] },
         inventoryIds: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
@@ -2885,6 +2811,110 @@ exports.fetchBatchesOfInventory = [
         "Batches of product",
         batches
       );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.reduceBatch = [
+  auth,
+  async (req, res) => {
+    try {
+      const email = req.user.emailId;
+      const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData?.organisationId || null;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+      const { batchNumber, quantity } = req.query;
+      const batch = await AtomModel.findOneAndUpdate(
+        {
+          batchNumbers: { $in: [batchNumber] },
+        },
+        { $inc: { quantity: -Math.abs(quantity || 0) } },
+        { new: true }
+      );
+      const warehouse = await WarehouseModel.findOne({
+        id: req.user.warehouseId,
+      });
+
+      const inventory = await InventoryModel.updateOne(
+        {
+          "inventoryDetails.productId": batch.productId,
+          id: warehouse.warehouseInventory,
+        },
+        { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
+      );
+
+      var datee = new Date();
+      datee = datee.toISOString();
+      var evid = Math.random().toString(36).slice(2);
+      let event_data = {
+        eventID: null,
+        eventTime: null,
+        transactionId: batchNumber,
+        eventType: {
+          primary: "BUY",
+          description: "INVENTORY",
+        },
+        actor: {
+          actorid: null,
+          actoruserid: null,
+        },
+        stackholders: {
+          ca: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+          actororg: {
+            id: req.user.organisationId || "null",
+            name: "null",
+            address: "null",
+          },
+          secondorg: {
+            id: "null",
+            name: "null",
+            address: "null",
+          },
+        },
+        payload: {
+          data: {
+            batch: batch,
+            quantityPurchased: quantity,
+            products: {
+              productId: batch.productId,
+              batchNumber: batchNumber,
+            },
+            sender: {
+              id: req.user.organisationId,
+            },
+          },
+        },
+      };
+      event_data.eventID = "ev0000" + evid;
+      event_data.eventTime = datee;
+      event_data.eventType.primary = "BUY";
+      event_data.eventType.description = "INVENTORY";
+      event_data.actor.actorid = user_id || "null";
+      event_data.actor.actoruserid = email || "null";
+      event_data.stackholders.actororg.id = orgId || "null";
+      event_data.stackholders.actororg.name = orgName || "null";
+      event_data.stackholders.actororg.address = address || "null";
+      event_data.actorWarehouseId = req.user.warehouseId || "null";
+      event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+      event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+      event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(res, "Subtracted Batch", {
+        batch,
+        inventory,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);

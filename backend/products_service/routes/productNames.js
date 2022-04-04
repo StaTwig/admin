@@ -1,12 +1,13 @@
 const express = require("express");
-const multer = require('multer');
+const multer = require("multer");
 //Define all the routes in the server running on multichain cluster
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, './images');
+    callback(null, "./images");
   },
   filename(req, file, callback) {
-    callback(null, `${Date.now()}`);
+    var fileExt = file.originalname.split('.').pop();
+    callback(null, `${Date.now()}.${fileExt}`);
   },
 });
 
@@ -26,13 +27,13 @@ router.get("/getproductname", ProductController.getproductname);
 
 //router.post("/addProduct", ProductController.addProduct);
 router.post(
-  '/addProduct',
-  upload.single('photo'),
-  ProductController.addProduct,
+  "/addProduct",
+  upload.single("photo"),
+  ProductController.addProduct
 );
 router.post(
-  '/addMultipleProducts',
-  upload.single('excel'),
-  ProductController.addMultipleProducts,
+  "/addMultipleProducts",
+  upload.single("excel"),
+  ProductController.addMultipleProducts
 );
 module.exports = router;

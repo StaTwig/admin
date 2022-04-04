@@ -17,12 +17,12 @@ export const getAddress = (address) => {
 };
 
 export const isType = (type, val) => {
-  if(val)
-  return !!(
-    val.constructor && val.constructor.name.toLowerCase() === type.toLowerCase()
-  );
-  else
-    return false;
+  if (val)
+    return !!(
+      val.constructor &&
+      val.constructor.name.toLowerCase() === type.toLowerCase()
+    );
+  else return false;
 };
 
 function GetState(permission) {
@@ -30,14 +30,18 @@ function GetState(permission) {
     return state.user;
   });
   let permissionArr = [];
-  if (user)
-    permissionArr = user.permissions.permissions;
-  else
-    permissionArr = localStorage.bkp.split(',');
+  if (user) permissionArr = user.permissions.permissions;
+  else permissionArr = localStorage.bkp.split(",");
   return permissionArr.indexOf(permission) > -1 ? true : false;
 }
 
 export function isAuthenticated(permission) {
   const result = GetState(permission);
   return result;
+}
+
+export async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
 }

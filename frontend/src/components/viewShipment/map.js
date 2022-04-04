@@ -75,6 +75,7 @@ export class MapContainer extends Component {
             row?.receiver?.warehouse?.location?.latitude &&
             row?.receiver?.warehouse?.location?.longitude && (
               <Marker
+                key={index}
                 title={
                   row.receiver.warehouse.title +
                   "," +
@@ -100,6 +101,7 @@ export class MapContainer extends Component {
             row?.supplier?.warehouse?.location?.latitude &&
             row?.supplier?.warehouse?.location?.longitude && (
               <Marker
+                key={index}
                 title={
                   row.supplier.warehouse.title +
                   "," +

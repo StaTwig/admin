@@ -25,37 +25,38 @@ const SpmDashboard = (props) => {
   const [district, setDistrict] = useState("");
   const [configDistrict, setConfigDistrict] = useState("");
   const [openSetRating, setOpenSetRating] = useState(false);
+  const [modalSuppliers, setModalSuppliers] = useState([]);
   //remove
   const [forNextBtn, setForNextBtn] = useState(false);
   let [config, setConfig] = useState({
     returnRate: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
     leadTime: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
     breakageBottle: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
     dirtyBottle: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
     warehouseCapacity: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
     bottleCapacity: {
-      min: { operator: null, value: null, rating: null },
-      max: { operator: null, value: null, rating: null },
+      min: { operator: "<", value: null, rating: null },
+      max: { operator: "<", value: null, rating: null },
       target: null,
     },
   });
@@ -72,36 +73,42 @@ const SpmDashboard = (props) => {
     for (var i = 0; i < 20; i++) {
       numbers.push(i * 5);
       // numbers.push(i * 5 + "%");
-
     }
     setPercentages(numbers);
     // console.log(dates)
   }, []);
 
-const saveConfig = async () => {
-  let temp = config;
-  temp[`district`] = configDistrict;
-  temp[`state`] = state;
-  temp[`vendorType`] = selectedType;
-  let res = await setNewConfig(temp);
-  if(res.status === 200){
-    setOpenSetRating(false);
-    setOpenEditTargets(false);
-    setopenSelectSuplier(false);
-  }
-}
+  const saveConfig = async () => {
+    let temp = config;
+    temp[`district`] = configDistrict;
+    temp[`state`] = state;
+    temp[`vendorType`] = selectedType;
+    let res = await setNewConfig(temp);
+    if (res.status === 200) {
+      setOpenSetRating(false);
+      setOpenEditTargets(false);
+      setopenSelectSuplier(false);
+    }
+  };
+  
   const dispatch = useDispatch();
+  
   useEffect(() => {
-    (async () =>{
-      let configs = await dispatch(getNewConfig({district: configDistrict, vendorType: selectedType}));
-      // console.log(configs.data[0]);
-      // let tmp = config;
-      // Object.assign(tmp, configs.data[0]);
-      if(configs.data.length)
-      setConfig(configs.data[0]);
-    })();
     (async () => {
-      const result = await dispatch(getSupplierPerformanceByOrgType({orgType: props.selectedType.toUpperCase(), location: props.location})); //
+      let configs = await dispatch(
+        getNewConfig({ district: configDistrict, vendorType: selectedType })
+      );
+
+      if (configs.data.length) setConfig(configs.data[0]);
+    })();
+    // Get suppliers list for page
+    (async () => {
+      const result = await dispatch(
+        getSupplierPerformanceByOrgType({
+          orgType: props.selectedType.toUpperCase(),
+          location: props.location,
+        })
+      );
       let _spm = result.data;
       if (_spm.length) {
         sortSupplierPeformances(_spm);
@@ -109,27 +116,51 @@ const saveConfig = async () => {
         sortSupplierPeformances([]);
       }
     })();
+    // Get suppliers list for modal
+    (async () => {
+      const result = await dispatch(
+        getSupplierPerformanceByOrgType({
+          orgType: selectedType.toUpperCase(),
+          location: configDistrict ? configDistrict : state ? state : "",
+        })
+      );
+      let _spm = result.data;
+      if (_spm.length) {
+        setModalSuppliers(_spm);
+      } else {
+        setModalSuppliers([]);
+      }
+    })();
   }, [configDistrict, selectedType]);
 
   const typeSelected = (type) => {
     setSelectedType(type);
   };
-  console.log(props.selectedType)
-  function compare( a, b ) {
-    if ( a.rating[`${props.sortByValue}`] < b.rating[`${props.sortByValue}`] ){
-      return 1;
-    }
-    if ( a.rating[`${props.sortByValue}`] > b.rating[`${props.sortByValue}`] ){
-      return -1;
+
+  useEffect(() => {
+    let arr = supplierPerformances;
+    sortSupplierPeformances(arr);
+    console.log("Sorted by ", props.sortByValue);
+  }, [props.sortByValue])
+
+  function compare(a, b) {
+    if(props.sortByValue === "returnRate") {
+      return b.returnRate - a.returnRate;
+    } else if(props.sortByValue === "leadTime") {
+      if(a["leadTime"] && a["leadTime"].length && b["leadTime"] && b["leadTime"].length)
+        return a.leadTime[0].avgLeadTime - b.leadTime[0].avgLeadTime;
+    } else if(props.sortByValue === "breakage" || props.sortByValue === "dirtyBottles") {
+      return a[`${props.sortByValue}`] - b[`${props.sortByValue}`];
+    } else if(props.sortByValue === "storageCapacity") {
+      return b.storageCapacity.bottleCapacity - a.storageCapacity.bottleCapacity;
+    } else {
+      return b.rating?.Overall - a.rating?.Overall
     }
     return 0;
   }
-  function sortSupplierPeformances(arr){
-    arr.sort(compare)
-    // if(props.selectedType === 'All')
+  function sortSupplierPeformances(arr) {
+    arr.sort(compare);
     setSupplierPerformances(arr);
-    // else
-    // setSupplierPerformances(arr.filter(item => item.type === props.selectedType))
   }
 
   const onStateChange = async (event) => {
@@ -139,13 +170,9 @@ const saveConfig = async () => {
     setDistricts(result.data);
   };
 
-  const onDistrictChange = (event) => {
-    const selectedDistrict = event.target.value;
-    setDistrict(selectedDistrict);
-  };
   return (
     <div>
-      {showSuccessPopup && <SuccessPopUp message={"config set succesfully"}/>}
+      {showSuccessPopup && <SuccessPopUp message={"config set succesfully"} />}
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
@@ -235,7 +262,7 @@ const saveConfig = async () => {
                     {perf.postalAddress}
                   </td>
                   {/* <td>{perf.returnRate ? perf.returnRate : 0}</td> */}
-                  <td style={{ verticalAlign: "unset" }}>{0}</td>
+                  <td style={{ verticalAlign: "unset" }}>{perf.rating?.Overall}</td>
                   <td style={{ position: "relative", verticalAlign: "unset" }}>
                     {/* {selectedRatingIndex !== index ? ( */}
                     <div
@@ -315,10 +342,8 @@ const saveConfig = async () => {
                                 Return Rate
                               </td>
                               <td>{perf.returnRate ? perf.returnRate : 0}</td>
-                              <td>
-                                {""}
-                              </td>
-                              <td>{config?.returnRate?.target}</td>
+                              <td>20%</td>
+                              <td>{perf?.targets?.returnRateTarget}</td>
                             </tr>
                             <tr>
                               <td scope="row" style={{ color: "#A20134" }}>
@@ -340,40 +365,46 @@ const saveConfig = async () => {
                                       ) + " M"
                                   : 0}
                               </td>
-                              <td></td>
-                              <td>{config?.leadTime?.target}</td>
+                              <td>20%</td>
+                              <td>
+                                {
+                                  perf.targets?.leadTimeTarget != "N/A"
+                                    ? perf.targets?.leadTimeTarget + " D"
+                                    : "N/A"
+                                }
+                              </td>
                             </tr>
                             <tr>
                               <td scope="row" style={{ color: "#A20134" }}>
                                 Storage Capacity
-                                <br />
-                                <span className="subTitle">Sqft</span>
+                                {/* <br />
+                                <span className='subTitle'>Sqft</span> */}
                               </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
-                                <br />
-                                <span className="subTitle">
+                                {/* <br />
+                                <span className='subTitle'>
                                   {perf.storageCapacity.sqft}
-                                </span>
+                                </span> */}
                               </td>
-                              <td></td>
-                              <td>{config?.storageCapacity?.target || 0}</td>
+                              <td>20%</td>
+                              <td>{perf?.targets?.storageCapacityTarget || 0}</td>
                             </tr>
                             <tr>
                               <td scope="row" style={{ color: "#A20134" }}>
                                 Dirty Bottles
                               </td>
                               <td>{perf.dirtyBottles}%</td>
-                              <td></td>
-                              <td>{config?.dirtyBottle?.target}</td>
+                              <td>20%</td>
+                              <td>{perf?.targets?.dirtyBottlesTarget}</td>
                             </tr>
                             <tr>
                               <td scope="row" style={{ color: "#A20134" }}>
                                 Breakage
                               </td>
                               <td>{perf.breakage}%</td>
-                              <td></td>
-                              <td>{config?.breakageBottle?.target}</td>
+                              <td>20%</td>
+                              <td>{perf?.targets?.breakageTarget}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -479,7 +510,7 @@ const saveConfig = async () => {
                         setConfig(temp);
                         setTemp(e.target.value);
                         // debugger
-                        console.log(config)
+                        console.log(config);
                       }}
                     >
                       <option value="">Select</option>
@@ -616,11 +647,9 @@ const saveConfig = async () => {
                   style={{ width: "100%" }}
                   onChange={(e) => setConfigDistrict(e.target.value)}
                 >
-                  <option>Select District</option>
+                  <option value="">Select District</option>
                   {districts?.map((district, index) => (
-                    <option key={index}>
-                      {district}
-                    </option>
+                    <option key={index}>{district}</option>
                   ))}
                 </select>
               </div>
@@ -646,7 +675,7 @@ const saveConfig = async () => {
             </div>
             {true && (
               <div className="dealer_container">
-                {supplierPerformances?.map((supplier, index) => (
+                {modalSuppliers?.map((supplier, index) => (
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
                       <div
@@ -656,7 +685,7 @@ const saveConfig = async () => {
                           marginBottom: "25px",
                         }}
                       >
-                        <span className="index">{index}</span>
+                        <span className="index">{index + 1}</span>
                         <div className="supplierName">
                           <div
                             style={{ display: "flex", alignItems: "center" }}
@@ -695,6 +724,7 @@ const saveConfig = async () => {
               </button>
               <button
                 className="saveBtn"
+                disabled={!configDistrict}
                 onClick={() => {
                   setopenSelectSuplier(false);
                   setOpenEditTargets(true);
@@ -796,7 +826,7 @@ const saveConfig = async () => {
                               let temp = config;
                               temp.returnRate.target = e.target.value;
                               setConfig(temp);
-                        setTemp(e.target.value);
+                              setTemp(e.target.value);
                             }}
                           >
                             {item}
@@ -806,17 +836,15 @@ const saveConfig = async () => {
                     </td>
                     <td className="middleTextField" style={{ display: "flex" }}>
                       <select
-                        className="filterSelect-1 mt-2"
-                        style={{ width: "30%" }}
+                        className="filterSelect-2 mt-2"
                         value={config.returnRate.min.operator}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -824,21 +852,18 @@ const saveConfig = async () => {
                         ))}
                       </select>
                       <select
-                        className="filterSelect-1 mt-2"
+                        className="filterSelect-2 mt-2"
                         value={config.returnRate.min.value}
                         style={{
-                          width: "30%",
-                          position: "relative",
-                          left: "15px",
+                          marginLeft: "30px",
                         }}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -849,18 +874,17 @@ const saveConfig = async () => {
                         className="filterSelect-1 mt-2"
                         value={config.returnRate.min.rating}
                         style={{
-                          width: "30%",
                           position: "relative",
                           left: "28px",
+                          width: "30%",
                         }}
                         onChange={(e) => {
                           let temp = config;
                           temp.returnRate.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -876,10 +900,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.returnRate.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -894,10 +917,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.returnRate.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -912,10 +934,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.returnRate.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -936,7 +957,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option value="">Select</option>
@@ -955,10 +976,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -973,10 +993,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -995,10 +1014,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1014,10 +1032,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1032,10 +1049,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1050,10 +1066,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.leadTime.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1074,7 +1089,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                         style={{ boxShadow: "0px 4px 8px #54265e26" }}
                       >
@@ -1094,10 +1109,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1112,10 +1126,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1129,7 +1142,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                         style={{
                           width: "30%",
@@ -1137,7 +1150,6 @@ const saveConfig = async () => {
                           left: "28px",
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1153,10 +1165,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1171,10 +1182,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1189,10 +1199,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.breakageBottle.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1213,7 +1222,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
                         <option value="">Select</option>
@@ -1232,10 +1241,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1250,10 +1258,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1272,10 +1279,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1292,10 +1298,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1310,10 +1315,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1328,10 +1332,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.dirtyBottle.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1359,7 +1362,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       />
                     </td>
@@ -1371,10 +1374,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1389,10 +1391,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1411,10 +1412,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1430,10 +1430,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1448,10 +1447,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1466,10 +1464,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.warehouseCapacity.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1491,7 +1488,7 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.target = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       />
                     </td>
@@ -1503,10 +1500,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.min.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1521,10 +1517,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.min.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1543,10 +1538,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.min.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {[1, 2, 3, 4, 5].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1562,10 +1556,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.max.operator = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["<", ">", "<=", ">=", "="].map((item, index) => (
                           <option key={index} value={item}>
                             {item}
@@ -1580,10 +1573,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.max.value = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {persentages.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -1598,10 +1590,9 @@ const saveConfig = async () => {
                           let temp = config;
                           temp.bottleCapacity.max.rating = e.target.value;
                           setConfig(temp);
-                        setTemp(e.target.value);
+                          setTemp(e.target.value);
                         }}
                       >
-                        <option>{"<"}</option>
                         {["1", "2", "3", "4", "5"].map((item, index) => (
                           <option value={item} key={index}>
                             {item}

@@ -28,6 +28,12 @@
   .btn {
     border-radius: 15px;
   }
+  .btn-S {
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }
 
   .form-group-2{
     display: flex;
@@ -72,6 +78,28 @@
     }
   }
 
+  .form-group2{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      // flex-basis: 35%;
+      // flex-grow: inherit;
+      font-size: 16px;
+      width:195% !important;
+    }
+  }
   .form-group,
   .input-group {
     display: grid;
@@ -313,8 +341,6 @@
   color: #707070;
   font-size: 18px;
   font-weight: bold;
-  padding-top: 3vh;
-  padding-bottom: 2vh;
 }
 
 .addLocationText {
@@ -343,6 +369,7 @@
   position: relative;
   left: -10px;
   top: 30px;
+  white-space: nowrap;
 }
 .addLocModalImg {
   position: relative;
@@ -350,6 +377,7 @@
   top: 29px;
   height: 30px;
   width: 16px;
+  margin-right: 18px;
 }
 .buttonA {
   width: 120px;
@@ -369,4 +397,32 @@
 }
 .btn-edit:hover {
   border: 1.4px solid #006dac;
+}
+.btn-space{
+  white-space: nowrap !important;
+}
+.center-display{
+  display: block;
+  margin: 0 auto !important;
+  text-decoration: none !important;
+}
+.css-2613qy-menu{
+  width:20rem !important;
+}
+.my-form-width{
+  flex-basis: 34% !important;
+  width: 65% !important;
+  white-space: nowrap !important;
+  border-bottom: 2px solid #d6d6d6;
+}
+.phone-Input-new-profile{
+  width: 64% !important;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #707070 !important;
+  padding-bottom: 0.6rem;
+}
+.phone-Input-new-profile > input{
+  border: none;
+  outline: none;
 }

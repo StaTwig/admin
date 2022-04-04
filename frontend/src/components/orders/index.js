@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "./tabs";
-import Tiles from "./tiles";
 import OrderIcon from "../../assets/icons/order.svg";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import Package from "../../assets/icons/package.svg";
 import calender from "../../assets/icons/calendar.svg";
@@ -14,7 +12,9 @@ import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import ExportIcon from "../../assets/icons/Export.svg";
 import dropdownIcon from "../../assets/icons/drop-down.svg";
 import ExcelPopUp from "./ExcelPopup";
+import Cards from "./cards/cards";
 import Modal from "../../shared/modal";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
 import Status from "../../assets/icons/Status.svg";
 import {
   getSentPOs,
@@ -24,12 +24,10 @@ import {
   getExportFile,
 } from "../../actions/poActions";
 import { config } from "../../config";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
-
+import { useDispatch } from "react-redux";
 const Orders = (props) => {
-
-
+  const { t, i18n } = props;
   const [menu, setMenu] = useState(false);
   const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
@@ -37,7 +35,7 @@ const Orders = (props) => {
   const [skip, setSkip] = useState(0);
   const [limit] = useState(10);
   const [alerts, setAlerts] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [outboundRecords, setOutboundRecords] = useState([]);
   const [inboundRecords, setInboundRecords] = useState([]);
   const [dateFilter, setDateFilter] = useState("");
@@ -54,14 +52,67 @@ const Orders = (props) => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
+  const [fromFilterDate, setFromFilterDate] = useState("");
+  const [toFilterDate, setToFilterDate] = useState("");
   if (
     !isAuthenticated("viewInboundOrders") &&
     !isAuthenticated("viewOutboundOrders")
   )
     props.history.push(`/profile`);
+
+  // const sendData = () => {
+  //   let rtnArr = visible === "one" ? outboundRecords : inboundRecords;
+  //   const status = visible === "one" ? "REJECTED" :  "CREATED";
+  //   if (alerts) {
+  //     rtnArr = rtnArr.filter((row) => row.poStatus === status);
+  //     setStatusFilterOnSelect(status);
+  //   }
+  //   return rtnArr ? rtnArr : [];
+  // };
+
+  const setStatusFilterOnSelect = async (statusFilterSelected) => {
+    setStatusFilter(statusFilterSelected);
+    setSkip(0);
+    if (visible === "one") {
+      dispatch(turnOn());
+      const outboundRes = await getSentPOs(
+        toFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilter,
+        dateFilter,
+        statusFilterSelected,
+        0,
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count);
+      dispatch(turnOff());
+    } else {
+      dispatch(turnOn());
+      const inboundRes = await getReceivedPOs(
+        fromFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilter,
+        dateFilter,
+        statusFilterSelected,
+        0,
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count);
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
-      if (visible === "one") {
+      if (visible === "one" && alerts === false) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -69,10 +120,43 @@ const Orders = (props) => {
         setOrderIdFilter("");
         setStatusFilter("");
         setLocationFilter("");
-        const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        dispatch(turnOn());
+        const outboundRes = await getSentPOs(
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          0,
+          limit,
+          "",
+          ""
+        ); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
+        dispatch(turnOff());
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
-      } else {
+      } else if (visible === "one" && alerts === true) {
+        const statusFilterSelected = "REJECTED";
+        setStatusFilter(statusFilterSelected);
+        setSkip(0);
+        dispatch(turnOn());
+        const outboundRes = await getSentPOs(
+          toFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count);
+        dispatch(turnOff());
+      } else if (visible === "two" && alerts === false) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -80,6 +164,7 @@ const Orders = (props) => {
         setOrderIdFilter("");
         setStatusFilter("");
         setLocationFilter("");
+        dispatch(turnOn());
         const inboundRes = await getReceivedPOs(
           "",
           "",
@@ -88,8 +173,30 @@ const Orders = (props) => {
           "",
           "",
           0,
-          limit
+          limit,
+          "",
+          ""
         ); //from, orderId, productName, deliveryLocation, date,status, skip, limit
+        dispatch(turnOff());
+
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count);
+      } else if (visible === "two" && alerts === true) {
+        dispatch(turnOn());
+        const statusFilterSelected = "CREATED";
+        const inboundRes = await getReceivedPOs(
+          fromFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); //from, orderId, productName, deliveryLocation, date, skip, limit
+        dispatch(turnOff());
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count);
       }
@@ -98,7 +205,6 @@ const Orders = (props) => {
 
       const productsLocationsOrganisationsRes =
         await getProductIdDeliveryLocationsOrganisations();
-      // console.log('products location', productsLocationsOrganisationsRes);
       setPoDeliveryLocationsList(
         productsLocationsOrganisationsRes.deliveryLocations
       );
@@ -107,7 +213,20 @@ const Orders = (props) => {
       setSkip(0);
     }
     fetchData();
-  }, [limit, visible]);
+  }, [
+    limit,
+    visible,
+    alerts,
+    dispatch,
+    toFilter,
+    orderIdFilter,
+    productNameFilter,
+    locationFilter,
+    dateFilter,
+    fromFilterDate,
+    toFilterDate,
+    fromFilter,
+  ]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
@@ -121,7 +240,9 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         recordSkip,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
@@ -134,9 +255,10 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         recordSkip,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -150,6 +272,14 @@ const Orders = (props) => {
     coloumn4: "Product",
     coloumn5: "Delivery Location",
     coloumn6: "Status",
+
+    displayColoumn1:
+      visible === "one" ? t("order_sent_to") : t("order_created_by"),
+    displayColoumn2: t("order_date"),
+    displayColoumn3: t("order_id"),
+    displayColoumn4: t("product"),
+    displayColoumn5: t("delivery_location"),
+    displayColoumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='' />,
     img2: <img src={calender} width='16' height='16' alt='' />,
@@ -174,7 +304,9 @@ const Orders = (props) => {
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     setDateFilter(dateFilterSelected);
     setSkip(0);
+    console.log("hi");
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -183,11 +315,15 @@ const Orders = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -196,8 +332,11 @@ const Orders = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -207,6 +346,7 @@ const Orders = (props) => {
     setLocationFilter(locationFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -215,11 +355,15 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit;
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -228,8 +372,11 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -239,6 +386,7 @@ const Orders = (props) => {
     setProductNameFilter(productNameFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -247,11 +395,15 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilter,
@@ -260,8 +412,11 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -271,6 +426,7 @@ const Orders = (props) => {
     setOrderIdFilter(orderIdFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilterSelected,
@@ -279,11 +435,15 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromFilter,
         orderIdFilterSelected,
@@ -292,43 +452,11 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data.inboundPOs);
-      setCount(inboundRes.data.count);
-    }
-  };
-
-  const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    console.log(statusFilterSelected);
-    setStatusFilter(statusFilterSelected);
-    setSkip(0);
-    if (visible === "one") {
-      const outboundRes = await getSentPOs(
-        toFilter,
-        orderIdFilter,
-        productNameFilter,
-        locationFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit
-      ); //to, orderId, productName, deliveryLocation, date,status, skip, limit
-      console.log(outboundRes.data.outboundPOs);
-      setOutboundRecords(outboundRes.data.outboundPOs);
-      setCount(outboundRes.data.count);
-    } else {
-      const inboundRes = await getReceivedPOs(
-        fromFilter,
-        orderIdFilter,
-        productNameFilter,
-        locationFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit
-      ); //from, orderId, productName, deliveryLocation, date, skip, limit
-      console.log(inboundRes.data.inboundPOs);
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
@@ -339,6 +467,7 @@ const Orders = (props) => {
     setToFilter(fromToFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const outboundRes = await getSentPOs(
         fromToFilterSelected,
         orderIdFilter,
@@ -347,11 +476,15 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const inboundRes = await getReceivedPOs(
         fromToFilterSelected,
         orderIdFilter,
@@ -360,28 +493,71 @@ const Orders = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
+        limit,
+        fromFilterDate,
+        toFilterDate
       ); //from, orderId, productName, deliveryLocation, date, skip, limit
+      dispatch(turnOff());
       setInboundRecords(inboundRes.data.inboundPOs);
       setCount(inboundRes.data.count);
     }
   };
 
-  const sendData = () => {
-    let rtnArr = visible === "one" ? outboundRecords : inboundRecords;
-    if (alerts)
-      rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    return rtnArr ? rtnArr : [];
-  };
-
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: "Excel", checked: false },
-      { key: "pdf", value: "PDF", checked: false },
-      { key: "email", value: "Mail", checked: false },
+      { key: "excel", value: "excel", label: t("excel"), checked: false },
+      { key: "pdf", value: "pdf", label: t("pdf"), checked: false },
+      // { key: "email", value: "mail", label: t("mail"), checked: false },
       // { key: "print", value: "Print", checked: false },
     ]);
-  }, []);
+  }, [t]);
+
+  const onSelectionDateFilter = async (value) => {
+    const fromDate =
+      value[0] === "" ? "" : new Date(new Date(value[0]).toDateString());
+    setFromFilterDate(fromDate);
+    if (value.length > 1) {
+      const toDate =
+        value[0] === "" ? "" : new Date(new Date(value[1]).toDateString());
+      if (toDate) toDate.setDate(toDate.getDate() + 1);
+      setToFilterDate(toDate);
+      if (visible === "one") {
+        dispatch(turnOn());
+        const outboundRes = await getSentPOs(
+          toFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); //to, orderId, productName, deliveryLocation, date, skip, limit
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count);
+        dispatch(turnOff());
+      } else {
+        dispatch(turnOn());
+        const inboundRes = await getReceivedPOs(
+          fromFilter,
+          orderIdFilter,
+          productNameFilter,
+          locationFilter,
+          dateFilter,
+          statusFilter,
+          0,
+          limit,
+          fromDate,
+          toDate
+        ); //from, orderId, productName, deliveryLocation, date, skip, limit
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count);
+        dispatch(turnOff());
+      }
+    }
+  };
 
   const onSelectionOfDropdownValue = (index, type, value) => {
     setShowExportFilter(false);
@@ -389,29 +565,37 @@ const Orders = (props) => {
     if (visible === "one") {
       url = `${
         config().getExportFileForOutboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&to=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
     if (visible === "two") {
       url = `${
         config().getExportFileForInboundPurchaseOrdersUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&from=${fromFilter}&orderId=${orderIdFilter}&productName=${productNameFilter}&dateFilter=${dateFilter}&deliveryLocation=${locationFilter}&poStatus=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
-
-    // console.log('visible', visible);
 
     var today = new Date();
 
     var nameOfFile;
 
-    if(visible=='one'){
-      nameOfFile = 'ordersoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
-      // console.log(name, name);
-    }
-    else if(visible=='two'){
-      nameOfFile = 'ordersinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+    if (visible === "one") {
+      nameOfFile =
+        t("ordersoutbound") +
+        today.getFullYear().toString() +
+        "/" +
+        (today.getMonth() + 1).toString() +
+        "/" +
+        today.getDate().toString();
+    } else if (visible === "two") {
+      nameOfFile =
+        t("ordersinbound") +
+        today.getFullYear() +
+        "/" +
+        (today.getMonth() + 1) +
+        "/" +
+        today.getDate();
     }
 
-    getExportFile(url).then((response) => {
+    getExportFile(url, value, i18n.language).then((response) => {
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {
@@ -424,7 +608,6 @@ const Orders = (props) => {
             value.toLowerCase() === "excel" ? "xlsx" : value.toLowerCase()
           }`
         ); //any other extension
-        console.log('Link', link);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -435,7 +618,7 @@ const Orders = (props) => {
   return (
     <div className='orders'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>YOUR ORDERS</h1>
+        <h1 className='breadcrumb'>{t("your_orders")}</h1>
         <div className='d-flex'>
           {isAuthenticated("createOrder") && (
             <Link to='/neworder'>
@@ -448,7 +631,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span style={{ color: "white" }}>
-                  <b>Create New Order</b>
+                  <b>{t("create_new_order")}</b>
                 </span>
               </button>
             </Link>
@@ -469,7 +652,7 @@ const Orders = (props) => {
                   alt=''
                 />
                 <span>
-                  <b>Import</b>
+                  <b>{t("import")}</b>
                 </span>
                 <img
                   src={dropdownIcon}
@@ -488,14 +671,14 @@ const Orders = (props) => {
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
-                Excel
+                {t("excel")}
               </button>
-              <button className=' btn btn-outline-info'> Other</button>
+              <button className=' btn btn-outline-info'> {t("other")}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
-              title='Import'
+              title={t("import")}
               close={() => closeExcelModal()}
               size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
             >
@@ -512,7 +695,8 @@ const Orders = (props) => {
         </div>
       </div>
       {isAuthenticated("orderAnalytics") && (
-        <Tiles {...props} setData={setData} />
+        // <Tiles {...props} setData={setData} t={t} />
+        <Cards {...props} setData={setData} t={t} />
       )}
       <div className='mt-4'>
         <Tabs
@@ -520,17 +704,29 @@ const Orders = (props) => {
           setvisible={setvisible}
           visible={visible}
           setShowExportFilter={setShowExportFilter}
+          t={t}
+          setFromToFilterOnSelect={setFromToFilterOnSelect}
+          setOrderIdNameFilterOnSelect={setOrderIdNameFilterOnSelect}
+          setStatusFilterOnSelect={setStatusFilterOnSelect}
+          setProductNameFilterOnSelect={setProductNameFilterOnSelect}
+          setLocationFilterOnSelect={setLocationFilterOnSelect}
+          setDateFilterOnSelect={setDateFilterOnSelect}
+          onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          onSelectionDateFilter={onSelectionDateFilter}
+          setFromFilterDate={setFromFilterDate}
+          setToFilterDate={setToFilterDate}
         />
       </div>
       <div className='ribben-space'>
         <Table
           {...props}
           skip={skip}
-          ordrs={sendData}
+          inboundRecords={inboundRecords}
+          outboundRecords={outboundRecords}
+          alerts={alerts}
           visible={visible}
           count={count}
           onPageChange={onPageChange}
-          visible={visible}
           data={headers}
           poOrderIdList={poOrderIdList}
           poDeliveryLocationsList={poDeliveryLocationsList}
@@ -547,7 +743,9 @@ const Orders = (props) => {
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          onSelectionDateFilter={onSelectionDateFilter}
           isReportDisabled={!isAuthenticated("orderExportReport")}
+          t={t}
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ import "./style.scss";
 import Checked from "../../assets/icons/checked.svg";
 
 const SuccessPopUp = (props) => {
+  const { t } = props;
   return (
     <div className='profilepopup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -13,11 +14,11 @@ const SuccessPopUp = (props) => {
           className='mb-3'
           alt='Success'
         />
-        <div className='alert'>Success!</div>
-        <div className='data'>Your Profile has been</div>
-        <div className='data mb-4'>Saved Successfully!</div>
+        <div className='alert'>{t('success')}!</div>
+        <div className='data'>{t('Your_Profile_has_been')}</div>
+        <div className='data mb-4'>{t('Saved_Successfully')}!</div>
         <button className='btn-primary btn' onClick={props.onHide}>
-          OK
+        {t("ok")}
         </button>
       </div>
     </div>

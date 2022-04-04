@@ -7,6 +7,7 @@ import "./LocationDropdown.scss";
 const LocationDropdown = (props) => {
   const [menu, setMenu] = useState(false);
   const {
+    t,
     groups,
     name,
     name2,
@@ -23,6 +24,9 @@ const LocationDropdown = (props) => {
   const ref = useOnclickOutside(() => {
     setMenu(false);
   });
+
+  console.log("Is text ", isText, name, menu);
+
   const useParse = name && name.includes("<");
   return (
     <div className='custom-dropdown' ref={ref}>
@@ -46,49 +50,49 @@ const LocationDropdown = (props) => {
           onClick={() => groups.length && setMenu(true)}
         />
       ) : (
-        // eslint-disable-next-line jsx-a11y/no-redundant-roles
-        <button
-          className={
-            name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
-          }
-          // className={`btn-custom-dropdown ${menu && 'active'}`}
-          role='button'
-          type='button'
-          // disabled={disabled}
-          onClick={() => setMenu(!menu)}
-        >
-          <div
-            className={`${name?.length > 20 && "textNeg"}`}
-            style={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              maxWidth: "300px",
-            }}
+          // eslint-disable-next-line jsx-a11y/no-redundant-roles
+          <button
+            className={
+              name === name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 `
+            }
+            // className={`btn-custom-dropdown ${menu && 'active'}`}
+            role='button'
+            type='button'
+            // disabled={disabled}
+            onClick={() => setMenu(!menu)}
           >
-            {useParse ? parse(name) : name.split("|")[0]}
-          </div>
-          <br></br>
-          <div
-            className={`location-add ${name?.length > 20 && "textNeg-title"}`}
-          >
-            {useParse ? parse(name) : name.split("|")[1]}
-          </div>
-          <img
-            src={arrowImg ? arrowImg : upDownArrow}
-            alt='downarrow'
-            className='dropdownIcon'
-          />
-        </button>
-      )}
+            <div
+              className={`${name?.length > 20 && "textNeg"}`}
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "300px",
+              }}
+            >
+              {useParse ? parse(name) : name.split("|")[0]}
+            </div>
+            <br></br>
+            <div
+              className={`location-add ${name?.length > 20 && "textNeg-title"}`}
+            >
+              {useParse ? parse(name) : name.split("|")[1]}
+            </div>
+            <img
+              src={arrowImg ? arrowImg : upDownArrow}
+              alt='downarrow'
+              className='dropdownIcon'
+            />
+          </button>
+        )}
       {menu && !disabled && (
         <div
           ref={ref}
           className={`dropdown-menu show dropdownCard ${dClass}`}
           style={{ width: "23vw" }}
         >
-          {groups &&
-            groups.map((item, index) => {
+          {(groups && groups.length) ?
+            (groups.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   <span
@@ -114,35 +118,48 @@ const LocationDropdown = (props) => {
                         <span className='regionCountry'>
                           {
                             item?.warehouseAddress?.region +
-                              ", " +
-                              item?.warehouseAddress?.country
+                            ", " +
+                            item?.warehouseAddress?.country
                             //  + " " +
                             //   item.postalAddress
                           }
                         </span>
                       </div>
                     ) : (
-                      <span>
-                        {item?.warehouseInventory
-                          ? item?.warehouseAddress
-                            ? item?.title +
+                        <span>
+                          {item?.warehouseInventory
+                            ? item?.warehouseAddress
+                              ? item?.title +
                               " " +
                               item?.warehouseAddress?.firstLine +
                               " " +
                               item?.warehouseAddress?.city
-                            : item?.title + "/" + item.postalAddress
-                          : item?.name
-                          ? item?.name
-                          : item?.productName
-                          ? item?.productName
-                          : parse(item)}
-                      </span>
-                    )}
+                              : item?.title + "/" + item.postalAddress
+                            : item?.name
+                              ? item?.name
+                              : item?.productName
+                                ? item?.productName
+                                : parse(item)}
+                        </span>
+                      )}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>
               );
-            })}
+            })
+            ) : (
+              <span
+                className='dropdown-item p-1'
+                onClick={() => {
+                  setMenu(false);
+                }}
+              >
+                <div className='locationAdress'>
+                  {t("no_locations_available")}
+                </div>
+              </span>
+            )
+          }
         </div>
       )}
     </div>

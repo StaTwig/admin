@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import Table from "./table";
 import Tabs from "../../shared/tabs";
-import Tiles from "./tiles";
 import Add from "../../assets/icons/createshipment.png";
-import TableFilter from "../../shared/advanceTableFilter";
 import mon from "../../assets/icons/brand.svg";
 import calender from "../../assets/icons/calendar.svg";
 import Status from "../../assets/icons/Status.svg";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../../actions/userActions";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getInboundShipments,
   getOutboundShipments,
@@ -23,28 +22,30 @@ import Sent from "../../assets/icons/Sent.png";
 import update from "../../assets/icons/Update_Status.png";
 import { config } from "../../config";
 import { getExportFile } from "../../actions/poActions";
-import uuid from "react-uuid";
 import { isAuthenticated } from "../../utils/commonHelper";
+import Cards from "./cards/cards";
 
 const ShipmentAnalytic = (props) => {
+  const { t, i18n } = props;
   const [visible, setvisible] = useState("one");
   const [skip, setSkip] = useState(0);
-  const [limit] = useState(10);
+  const [limit] = useState(20);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
   const [outboundShipments, setOutboundShipments] = useState([]);
   const [inboundShipments, setInboundShipments] = useState([]);
   const [supplierReceiverList, setSupplierReceiverList] = useState([]);
   const [shipmentIdList, setShipmentIdList] = useState([]);
-  const [idFilter] = useState("");
+  const [idFilter, setIdFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState(null);
   const [toFilter, setToFilter] = useState("");
   const [fromFilter, setFromFilter] = useState("");
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
-  var status;
+  const [fromFilterDate, setFromFilterDate] = useState(null);
+  const [toFilterDate, setToFilterDate] = useState(null);
 
   if (
     !isAuthenticated("inboundShipments") &&
@@ -54,12 +55,15 @@ const ShipmentAnalytic = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (props.user.emailId === "gmr@statledger.io") {
-        const inboundRes = await getGMRShipments(0, limit);
-        setOutboundShipments(inboundRes.data.data);
-        setCount(inboundRes.data.count);
+      if (props.user.isCustom) {
+        dispatch(turnOn());
+        const outboundRes = await getGMRShipments(0, limit, null, null, null);
+        setOutboundShipments(outboundRes.data.data);
+        setCount(outboundRes.data.count);
+        dispatch(turnOff());
       } else {
         if (visible === "one") {
+          dispatch(turnOn());
           const inboundRes = await getInboundShipments(
             "",
             "",
@@ -67,11 +71,15 @@ const ShipmentAnalytic = (props) => {
             "",
             "",
             0,
-            limit
-          ); // id, from, to, dateFilter, status, skip, limit
+            limit,
+            "",
+            ""
+          ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
           setInboundShipments(inboundRes.data.inboundShipments);
           setCount(inboundRes.data.count);
+          dispatch(turnOff());
         } else {
+          dispatch(turnOn());
           const outboundRes = await getOutboundShipments(
             "",
             "",
@@ -79,34 +87,43 @@ const ShipmentAnalytic = (props) => {
             "",
             "",
             0,
-            limit
-          ); // id, from, to, dateFilter, status, skip, limit
+            limit,
+            "",
+            ""
+          ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
           setOutboundShipments(outboundRes.data.outboundShipments);
           setCount(outboundRes.data.count);
+          dispatch(turnOff());
         }
       }
       const supplierReceiverListRes = await getSupplierAndReceiverList();
       setSupplierReceiverList(supplierReceiverListRes.data);
-
       const shipmentIdListRes = await getShipmentIds();
       setShipmentIdList(shipmentIdListRes.data);
       setSkip(0);
     }
     fetchData();
-    // dispatch(resetShipments());
     dispatch(getAllUsers());
-  }, [dispatch, limit, visible, props]);
+  }, [dispatch, limit, props.user.isCustom, visible]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
-
     setSkip(recordSkip);
-    if (props.user.emailId === "gmr@statledger.io") {
-      const inboundRes = await getGMRShipments(recordSkip, limit);
-      setInboundShipments(inboundRes.data.data);
-      setCount(inboundRes.data.count);
+    if (props.user.isCustom) {
+      dispatch(turnOn());
+      const filteredOutboundShipments = await getGMRShipments(
+        recordSkip,
+        limit,
+        fromFilterDate,
+        toFilterDate,
+        statusFilter
+      );
+      setOutboundShipments(filteredOutboundShipments.data.data);
+      setCount(filteredOutboundShipments.data.count);
+      dispatch(turnOff());
     } else {
       if (visible === "one") {
+        dispatch(turnOn());
         const inboundRes = await getInboundShipments(
           idFilter,
           fromFilter,
@@ -114,11 +131,15 @@ const ShipmentAnalytic = (props) => {
           dateFilter,
           statusFilter,
           recordSkip,
-          limit
-        ); // id, from, to, dateFilter, status, skip, limit
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
         setInboundShipments(inboundRes.data.inboundShipments);
         setCount(inboundRes.data.count);
+        dispatch(turnOff());
       } else {
+        dispatch(turnOn());
         const outboundRes = await getOutboundShipments(
           idFilter,
           fromFilter,
@@ -126,10 +147,13 @@ const ShipmentAnalytic = (props) => {
           dateFilter,
           statusFilter,
           recordSkip,
-          limit
-        ); // id, from, to, dateFilter, status, skip, limit
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
         setOutboundShipments(outboundRes.data.outboundShipments);
         setCount(outboundRes.data.count);
+        dispatch(turnOff());
       }
     }
     setData(visible);
@@ -137,10 +161,15 @@ const ShipmentAnalytic = (props) => {
 
   const headers = {
     coloumn1: "Shipment ID",
+    displayColoumn1: t("shipment_id"),
     coloumn2: "Shipment Date",
+    displayColoumn2: t("shipment_date"),
     coloumn3: "From",
+    displayColoumn3: t("from"),
     coloumn4: "To",
-    coloumn6: "Status ",
+    displayColoumn4: t("to"),
+    coloumn6: "ShipStatus",
+    displayColoumn6: t("status"),
 
     img1: <img src={mon} width='16' height='16' alt='Monday' />,
     img2: <img src={calender} width='16' height='16' alt='Calender' />,
@@ -158,6 +187,7 @@ const ShipmentAnalytic = (props) => {
     setDateFilter(dateFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const inboundRes = await getInboundShipments(
         idFilter,
         fromFilter,
@@ -165,11 +195,15 @@ const ShipmentAnalytic = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setInboundShipments(inboundRes.data.inboundShipments);
       setCount(inboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const outboundRes = await getOutboundShipments(
         idFilter,
         fromFilter,
@@ -177,40 +211,66 @@ const ShipmentAnalytic = (props) => {
         dateFilterSelected,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setOutboundShipments(outboundRes.data.outboundShipments);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     }
   };
 
   const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    setStatusFilter(statusFilterSelected);
-    setSkip(0);
-    if (visible === "one") {
-      const inboundRes = await getInboundShipments(
-        idFilter,
-        fromFilter,
-        toFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
-      setInboundShipments(inboundRes.data.inboundShipments);
-      setCount(inboundRes.data.count);
+    if (props.user.isCustom) {
+      dispatch(turnOn());
+      setStatusFilter(statusFilterSelected);
+      const filteredOutboundShipments = await getGMRShipments(
+        skip,
+        limit,
+        fromFilterDate,
+        toFilterDate,
+        statusFilterSelected
+      );
+      setOutboundShipments(filteredOutboundShipments.data.data);
+      setCount(filteredOutboundShipments.data.count);
+      dispatch(turnOff());
     } else {
-      const outboundRes = await getOutboundShipments(
-        idFilter,
-        fromFilter,
-        toFilter,
-        dateFilter,
-        statusFilterSelected,
-        0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
-      setOutboundShipments(outboundRes.data.outboundShipments);
-      setCount(outboundRes.data.count);
+      setStatusFilter(statusFilterSelected);
+      setSkip(0);
+      if (visible === "one") {
+        dispatch(turnOn());
+        const inboundRes = await getInboundShipments(
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        );
+        setInboundShipments(inboundRes.data.inboundShipments);
+        setCount(inboundRes.data.count);
+        dispatch(turnOff());
+      } else {
+        dispatch(turnOn());
+        const outboundRes = await getOutboundShipments(
+          idFilter,
+          fromFilter,
+          toFilter,
+          dateFilter,
+          statusFilterSelected,
+          0,
+          limit,
+          fromFilterDate,
+          toFilterDate
+        ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
+        setOutboundShipments(outboundRes.data.outboundShipments);
+        setCount(outboundRes.data.count);
+        dispatch(turnOff());
+      }
     }
   };
 
@@ -218,6 +278,7 @@ const ShipmentAnalytic = (props) => {
     setToFilter(toShipmentFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const inboundRes = await getInboundShipments(
         idFilter,
         fromFilter,
@@ -225,11 +286,15 @@ const ShipmentAnalytic = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setInboundShipments(inboundRes.data.inboundShipments);
       setCount(inboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const outboundRes = await getOutboundShipments(
         idFilter,
         fromFilter,
@@ -237,10 +302,13 @@ const ShipmentAnalytic = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setOutboundShipments(outboundRes.data.outboundShipments);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     }
   };
 
@@ -248,6 +316,7 @@ const ShipmentAnalytic = (props) => {
     setFromFilter(fromShipmentFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const inboundRes = await getInboundShipments(
         idFilter,
         fromShipmentFilterSelected,
@@ -255,11 +324,15 @@ const ShipmentAnalytic = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
       setInboundShipments(inboundRes.data.inboundShipments);
       setCount(inboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const outboundRes = await getOutboundShipments(
         idFilter,
         fromShipmentFilterSelected,
@@ -267,16 +340,21 @@ const ShipmentAnalytic = (props) => {
         dateFilter,
         statusFilter,
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
       setOutboundShipments(outboundRes.data.outboundShipments);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     }
   };
 
   const setShipmentIdFilterOnSelect = async (shipmentIdFilterSelected) => {
+    setIdFilter(shipmentIdFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      dispatch(turnOn());
       const inboundRes = await getInboundShipments(
         shipmentIdFilterSelected,
         "",
@@ -284,11 +362,15 @@ const ShipmentAnalytic = (props) => {
         "",
         "",
         0,
-        limit
-      ); //id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); //id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setInboundShipments(inboundRes.data.inboundShipments);
       setCount(inboundRes.data.count);
+      dispatch(turnOff());
     } else {
+      dispatch(turnOn());
       const outboundRes = await getOutboundShipments(
         shipmentIdFilterSelected,
         "",
@@ -296,28 +378,107 @@ const ShipmentAnalytic = (props) => {
         "",
         "",
         0,
-        limit
-      ); // id, from, to, dateFilter, status, skip, limit
+        limit,
+        fromFilterDate,
+        toFilterDate
+      ); // id, from, to, dateFilter, status, skip, limit, fromFilterDate, toFilterDate
       setOutboundShipments(outboundRes.data.outboundShipments);
       setCount(outboundRes.data.count);
+      dispatch(turnOff());
     }
   };
   const sendData = () => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    if (props.user.emailId === "gmr@statledger.io") rtnArr = outboundShipments;
+    if (props.user.isCustom) rtnArr = outboundShipments;
     return rtnArr ? rtnArr : [];
   };
 
   useEffect(() => {
     setExportFilterData([
-      { key: "excel", value: "Excel", checked: false },
-      { key: "pdf", value: "PDF", checked: false },
-      { key: "email", value: "Mail", checked: false },
-      // { key: "print", value: "Print", checked: false },
+      { key: "excel", value: "excel", label: t("excel"), checked: false },
+      { key: "pdf", value: "pdf", label: t("pdf"), checked: false },
     ]);
-  }, []);
+  }, [t]);
+
+  const onSelectionDateFilter = async (value) => {
+    if (props.user.isCustom) {
+      dispatch(turnOn());
+      if (value.length > 1) {
+        const fromDate =
+          value[0] === "" ? null : new Date(value[0]).toISOString();
+        setFromFilterDate(fromDate);
+        const toDate =
+          value[0] === "" ? null : new Date(new Date(value[1]).toDateString());
+        setToFilterDate(toDate);
+        const filteredOutboundShipments = await getGMRShipments(
+          skip,
+          limit,
+          fromDate,
+          toDate,
+          statusFilter
+        );
+        setOutboundShipments(filteredOutboundShipments.data.data);
+        setCount(filteredOutboundShipments.data.count);
+        dispatch(turnOff());
+      } else {
+        const filteredOutboundShipments = await getGMRShipments(
+          skip,
+          limit,
+          null,
+          null,
+          statusFilter
+        );
+        setOutboundShipments(filteredOutboundShipments.data.data);
+        setCount(filteredOutboundShipments.data.count);
+        dispatch(turnOff());
+      }
+    } else {
+      const fromDate =
+        value[0] === "" ? "" : new Date(new Date(value[0]).toDateString());
+      setFromFilterDate(fromDate);
+      if (value.length > 1) {
+        const toDate =
+          value[0] === "" ? "" : new Date(new Date(value[1]).toDateString());
+        if (toDate) toDate.setDate(toDate.getDate() + 1);
+        setToFilterDate(toDate);
+        if (visible === "one") {
+          dispatch(turnOn());
+          const inboundRes = await getInboundShipments(
+            idFilter,
+            fromFilter,
+            toFilter,
+            dateFilter,
+            statusFilter,
+            0,
+            limit,
+            fromDate,
+            toDate
+          ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
+          setInboundShipments(inboundRes.data.inboundShipments);
+          setCount(inboundRes.data.count);
+          dispatch(turnOff());
+        } else {
+          dispatch(turnOn());
+          const outboundRes = await getOutboundShipments(
+            idFilter,
+            fromFilter,
+            toFilter,
+            dateFilter,
+            statusFilter,
+            0,
+            limit,
+            fromDate,
+            toDate
+          ); // id, from, to, dateFilter, status, skip, limit, fromDate, toDate
+          setOutboundShipments(outboundRes.data.outboundShipments);
+          setCount(outboundRes.data.count);
+          dispatch(turnOff());
+        }
+      }
+    }
+  };
 
   const onSelectionOfDropdownValue = (index, type, value) => {
     setShowExportFilter(false);
@@ -325,27 +486,36 @@ const ShipmentAnalytic = (props) => {
     if (visible === "one") {
       url = `${
         config().getExportFileForInboundShipmentUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&shipmentId=${idFilter}&from=${fromFilter}&to=${toFilter}&dateFilter=${dateFilter}&status=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
     if (visible === "two") {
       url = `${
         config().getExportFileForOutboundShipmentUrl
-      }?type=${value.toLowerCase()}`;
+      }?type=${value.toLowerCase()}&shipmentId=${idFilter}&from=${fromFilter}&to=${toFilter}&dateFilter=${dateFilter}&status=${statusFilter}&fromDate=${fromFilterDate}&toDate=${toFilterDate}`;
     }
 
     var today = new Date();
 
     var nameOfFile;
 
-    if(visible=='one'){
-      nameOfFile = 'shipmentoutbound'+today.getFullYear().toString()+'/'+(today.getMonth()+1).toString()+'/'+today.getDate().toString();
-      // console.log(name, name);
+    if (visible === "one") {
+      nameOfFile =
+        t("shipmentinbound") +
+        today.getFullYear().toString() +
+        "/" +
+        (today.getMonth() + 1).toString() +
+        "/" +
+        today.getDate().toString();
+    } else if (visible === "two") {
+      nameOfFile =
+        t("shipmentoutbound") +
+        today.getFullYear() +
+        "/" +
+        (today.getMonth() + 1) +
+        "/" +
+        today.getDate();
     }
-    else if(visible=='two'){
-      nameOfFile = 'shipmentinbound'+today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
-    }
-    getExportFile(url, value).then((response) => {
-      console.log(response);
+    getExportFile(url, value, i18n.language).then((response) => {
       if (response.data && response.status !== 200) {
         console.log("Error while downloading file");
       } else {
@@ -368,7 +538,7 @@ const ShipmentAnalytic = (props) => {
   return (
     <div className='shipment'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>SHIPMENT</h1>
+        <h1 className='breadcrumb'>{t("shipments")}</h1>
         <div className='d-flex'>
           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
@@ -379,12 +549,9 @@ const ShipmentAnalytic = (props) => {
             <img src={Order} width="14" height="14" className="mr-2" />
             <span>Create Purchase Order</span>
           </button> */}
-          {isAuthenticated("updateShipment") && (
+          {isAuthenticated("updateShipment") && !props.user.isCustom && (
             <Link to='/enterid'>
-              <button
-                className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'
-                disabled={status === "RECEIVED"}
-              >
+              <button className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'>
                 <img
                   src={update}
                   width='20'
@@ -393,19 +560,13 @@ const ShipmentAnalytic = (props) => {
                   alt='UpdateShipment'
                 />
                 <span>
-                  <b>Update Shipment</b>
+                  <b>{t("update_shipment")}</b>
                 </span>
               </button>
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link
-              to={
-                props.user.emailId === "gmr@statledger.io"
-                  ? `/createshipment`
-                  : `/newshipment`
-              }
-            >
+            <Link to={props.user.isCustom ? `/createshipment` : `/newshipment`}>
               <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
@@ -415,18 +576,17 @@ const ShipmentAnalytic = (props) => {
                   alt='CreateShipment'
                 />
                 <span>
-                  <b>Create Shipment</b>
+                  <b>{t("create_shipment")}</b>
                 </span>
               </button>
             </Link>
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") &&
-        props.user.emailId !== "gmr@statledger.io" && (
-          <Tiles {...props} setData={setData} />
-        )}
-      {props.user.emailId !== "gmr@statledger.io" && (
+      {isAuthenticated("shipmentAnalytics") && !props.user.isCustom && (
+        <Cards {...props} setData={setData} t={t} />
+      )}
+      {!props.user.isCustom && (
         <div className='mt-4'>
           <Tabs
             {...props}
@@ -442,7 +602,7 @@ const ShipmentAnalytic = (props) => {
           data={headers}
           shipmentIdList={shipmentIdList}
           supplierReceiverList={
-            props.user.emailId === "gmr@statledger.io"
+            props.user.isCustom
               ? []
               : supplierReceiverList
           }
@@ -465,14 +625,12 @@ const ShipmentAnalytic = (props) => {
           skip={skip}
           shpmnts={sendData}
           count={count}
+          limit={limit}
           onPageChange={onPageChange}
           data={headers}
           shipmentIdList={shipmentIdList}
-          supplierReceiverList={
-            props.user.emailId === "gmr@statledger.io"
-              ? []
-              : supplierReceiverList
-          }
+          shouldEnable={props.user.isCustom ? false : true}
+          supplierReceiverList={props.user.isCustom ? [] : supplierReceiverList}
           setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
@@ -483,7 +641,9 @@ const ShipmentAnalytic = (props) => {
           setShowExportFilter={setShowExportFilter}
           exportFilterData={exportFilterData}
           onSelectionOfDropdownValue={onSelectionOfDropdownValue}
+          onSelectionDateFilter={onSelectionDateFilter}
           isReportDisabled={!isAuthenticated("shipmentExportReport")}
+          t={t}
         />
       </div>
     </div>

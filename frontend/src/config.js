@@ -12,7 +12,7 @@ export const LOCAL_SERVER_URL_TRACKANDTRACE = "http://localhost:3005";
 export const LOCAL_SERVER_URL_NOTIFICATION = "http://localhost:3006";
 export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3015";
 export const LOCAL_SERVER_URL_EOL = "http://localhost:3017";
-export const LOCAL_SERVER_URL_EVENT = "http://localhost:3014";
+export const LOCAL_SERVER_URL_EVENT = "http://localhost:3013";
 export const LOCAL_SERVER_URL_PRODUCTS = "http://localhost:3010";
 export const LOCAL_SERVER_URL_ALERTS = "http://localhost:3004";
 
@@ -54,12 +54,12 @@ export function config() {
       receiveApi: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/receiveShipment`,
       uploadImage: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/uploadImage?id=`,
       fetchImage: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchImage?id=`,
-      getImage: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment`,
+      getImage: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/images`,
       getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProducts`,
       getProductsByCategoryUrl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductsByCategory?type=`,
       getProductsByInventoryUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/getProductsByInventory?invId=`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
-      getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/productmanagement/api/products/getManufacturer`,
+      getManufacturers: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getManufacturer`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -154,7 +154,9 @@ export function config() {
       createUpdateAlertsUrl: `${LOCAL_SERVER_URL_PO}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `ws://localhost:3002`,
+      temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -183,7 +185,7 @@ export function config() {
       receiveApi: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/receiveShipment`,
       getShipmentIdsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipmentIds`,
       fetchImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchImage?id=`,
-      getImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment`,
+      getImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/images`,
       uploadImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/uploadImage?id=`,
       getManufacturers: `${TEST_SERVER_URL}/productmanagement/api/products/getManufacturer`,
       createShippingOrderUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
@@ -293,7 +295,9 @@ export function config() {
       createUpdateAlertsUrl: `${TEST_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `wss://test.vaccineledger.com`,
+      temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -320,7 +324,7 @@ export function config() {
       chainOfCustody: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=`,
       receiveApi: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/receiveShipment`,
       fetchImage: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchImage?id=`,
-      getImage: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment`,
+      getImage: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/images`,
       fetchGMRShipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchGMRShipments`,
       newShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/newShipment`,
       viewShipmentGmrUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/viewShipmentGmr?shipmentId=`,
@@ -423,7 +427,9 @@ export function config() {
       createUpdateAlertsUrl: `${PROD_SERVER_URL}/alertmanagement/api/alert/createNewAlert`,
       requestModalAlertUrl: `${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
-      temperatureSocketUrl: `wss://vaccineledger.com`,
+      temperatureGraph: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -453,7 +459,7 @@ export function config() {
       receiveApi: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/receiveShipment`,
       getShipmentIdsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipmentIds`,
       fetchImage: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchImage?id=`,
-      getImage: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment`,
+      getImage: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/images`,
       uploadImage: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/uploadImage?id=`,
       getManufacturers: `${UNICEFTEST_SERVER_URL}/productmanagement/api/products/getManufacturer`,
       createShippingOrderUrl: `${UNICEFTEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,

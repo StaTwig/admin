@@ -7,29 +7,38 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
-
 import "./style.scss";
-const SideBar = ({ match, location, user }) => {
+
+const SideBar = (props) => {
+  const { match, user, t, trackTraceData } = props;
   const { url } = match;
   const [enable, setEnable] = useState(true);
   useEffect(() => {
-    if (user?.emailId === "gmr@statledger.io") setEnable(false);
+    if (user?.isCustom) setEnable(false);
   }, [user]);
+
+  const resetTrackTracePage = () => {
+    if (trackTraceData && trackTraceData?.value !== "") {
+      trackTraceData?.setValue("");
+      trackTraceData?.resetData();
+      trackTraceData?.setIsSubmitted(false);
+    }
+  };
 
   return (
     <div className='sidebar'>
       <ul>
         {isAuthenticated("overview") && enable && (
           <li className={url === "/overview" ? "active" : "inactive"}>
-            <Link to='/overview' className='d-inline-block'>
+            <Link to='/overview' className='nav-look-link'>
               <img
                 src={url === "/overview" ? HomeIcon : HomeIcon}
                 alt='Overview'
               />
-              <span className='ml-2'>Overview</span>
+              <span>{t("overview")}</span>
             </Link>
           </li>
         )}
@@ -50,7 +59,7 @@ const SideBar = ({ match, location, user }) => {
                   }
                   alt='Orders'
                 />
-                <span className='ml-2'>Orders</span>
+                <span className='ml-2'>{t("orders")}</span>
               </Link>
             </li>
           )}
@@ -85,7 +94,7 @@ const SideBar = ({ match, location, user }) => {
                 }
                 alt='Inventory'
               />
-              <span className='ml-2'>Inventory</span>
+              <span className='ml-2'>{t("inventory")}</span>
             </Link>
           </li>
         )}
@@ -111,29 +120,34 @@ const SideBar = ({ match, location, user }) => {
                 }
                 alt='Shippment'
               />
-              <span className='ml-2'>Shipments</span>
+              <span className='ml-2'>{t("shipments")}</span>
             </Link>
           </li>
         )}
+
         {isAuthenticated("overview") && enable && (
           <li className={url === "/dashboard" ? "active" : ""}>
             <Link to='/dashboard' className='d-inline-block'>
               <img
                 src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt='Shippment'
+                alt='Shipment'
               />
-              <span className='ml-2'>Network</span>
+              <span className='ml-2'>{t("network")}</span>
             </Link>
           </li>
         )}
         {isAuthenticated("trackAndTrace") && enable && (
           <li className={url === "/track" ? "active" : ""}>
-            <Link to='/track' className='d-inline-block'>
+            <Link
+              to='/track'
+              className='nav-look-link d-inline-block'
+              onClick={resetTrackTracePage}
+            >
               <img
                 src={url === "/track" ? trackSelectedIcon : trackIcon}
-                alt='Track & Trace'
+                alt='Track &amp; Trace'
               />
-              <span className='ml-2'>Track & Trace</span>
+              <span>{t("trackntrace")}</span>
             </Link>
           </li>
         )}
@@ -145,12 +159,12 @@ const SideBar = ({ match, location, user }) => {
                 alt='lastMile'
               />
 
-              <span className='ml-2'>Last Mile</span>
+              <span className='ml-2'>{t("lastmile")}</span>
             </Link>
           </li>
         )}
       </ul>
-      <Footer />
+      <Footer t={t} />
     </div>
   );
 };
