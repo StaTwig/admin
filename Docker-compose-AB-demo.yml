@@ -294,7 +294,7 @@ services:
       - "traefik.http.routers.admin_frontend.tls.certresolver=lets-encrypt"
 
   frontend:
-    image: "registry.gitlab.com/statwig-public/theledger/abinbev_frontend:demo"
+    image: "registry.gitlab.com/statwig-public/theledger/test_abinbev_frontend:latest"
     container_name: "frontend"
     restart: always
     labels:
