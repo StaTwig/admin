@@ -18,6 +18,7 @@ import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
 import UserRoles from "../userRoles/userRoles";
 import { t } from "i18next";
+import Integrations from "../integrations/Integrations.jsx";
 
 const Configurationpart = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -288,6 +289,27 @@ const Configurationpart = (props) => {
         {
           tabIndex == 0 &&
           (<UserRoles
+            defaultRoles={defaultRoles}
+            showAddNewInputSection={showAddNewInputSection}
+            onSelectOfRole={onSelectOfRole}
+            onChangeOfAddNewInput={onChangeOfAddNewInput}
+            featurePanelValues={featurePanelValues}
+            handleOnClickOfAFeature={handleOnClickOfAFeature}
+            functionalitiesPermissionPanelData={functionalitiesPermissionPanelData}
+            handleOnPermissionsChecked={handleOnPermissionsChecked}
+            onSaveOfUpdatePermission={onSaveOfUpdatePermission}
+            errorForRoleNotFound={errorForRoleNotFound}
+            isLoading={isLoading}
+            permissions={permissions}
+            addresses={addresses}
+            acceptApproval={acceptApproval}
+            selectedFeature={selectedFeature}
+            selectedLevel={selectedLevel}
+          />)
+        }
+        {
+          tabIndex == 2 &&
+          (<Integrations
             defaultRoles={defaultRoles}
             showAddNewInputSection={showAddNewInputSection}
             onSelectOfRole={onSelectOfRole}
