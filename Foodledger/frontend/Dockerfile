@@ -1,12 +1,12 @@
 FROM node:lts as react_build 
 
+ENV NODE_ENV=production
+
 WORKDIR /app
 
 COPY . /app/
- 
-RUN yarn install
 
-RUN yarn run build 
+RUN yarn install && yarn cache clean && yarn run build
 
 FROM nginx:stable-alpine
 

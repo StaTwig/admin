@@ -2,7 +2,7 @@
 
 Vaccine Ledger
 
-# Online Links:
+# Online Links
 
 [Roadmap](https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
 
@@ -182,38 +182,39 @@ redis-cli -h <Hostname> -a StaTwig2021
 
 [ Traefik Article 📃](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/)
 
-
 ## Test Strategy for Vaccineledger
 
 Our test strategy is a guideline to be followed to achieve the test objective and execution of test types mentioned in the testing plan. It deals with risk analysis, competency plans, and test objectives.
 QA team ensures all the core functionality is tested every single day both Manually and Automation scripts.
 
-
 ## The QA team ensures that all the below points are addressed via test coverage.
+
 1. ​​ We try to eliminate any functional defects at early stages.
-2. Better business and functional scenario coverage. 
+2. Better business and functional scenario coverage.
 3. Eliminate redundant test cases from the pool.
 4. Try to discover any uncovered areas during daily brainstorming activities within the QA team.
 5. Gain superior control over various business processes and tests accordingly.
+
 ## Techniques QA team following to ensure better test coverage.
+
 1. Statement Coverage ensures that all the statements/Test cases in the source code/positive flow have been tested at least once a day. Hence It verifies what the written code is expected to do and not to do
 2. Decision/Branch coverage ​​helps in covering both the true and false conditions which the QA team overlooks during statement coverage.
 3. Path Coverage helps the QA team to reduce redundant tests and provides high test coverage since it covers all statements and branches in the code.
 4. Condition Coverage helps the QA team in testing if both the outcomes(“true” or false”) of every condition. It measures the conditions independently of each other and has better sensitivity to the control flow.
 5. Boundary Value Coverage Each and every user input field is validated with the upper and lower bounds. It helps us to avoid the scope of error due to invalid inputs and these errors occur at boundary values. During this coverage test cases are selected at the endpoints of the equivalence classes.
+
 ## Test automation approach
+
 1. Identified set of complex, medium and simple test cases for VaccineLedger.
 2. Identified regression set for automation - collaboration with business Analysts, statistical analysis of application logs for most used features
 3. Prioritized identified automation test-set based on business impact into core and functional regression test suites
 4. Prepared automation strategy and identification of Automation canonizations required.
 5. Developed reusable components, automated test cases, test data sets and parameterizations.
- 
+
 ## Automation Technology details
+
 1. Open source tools / frameworks / add-ons / and utilities which include: Selenium-RC, TestNG, Java and Cucumber BDD framework.
 2. Browser support includes: Firefox (1.5+), Internet Explorer (6.0 onwards), Edge and Google Chrome. Theoretically at least, any modern browser that supports JavaScript such as Safari (1.3+), Mozilla Suite (1.6+, 1.7+) and Opera (8) etc
 3. OS support includes: Windows,Mac & Mobile (Android & iOS)
 
 [ Software Test Plan for Vaccine Ledger 📃](https://docs.google.com/document/d/1jwXpneiggd7duiuxSUVbNvjywzQH0a7d1QBHnXM58NQ/edit#heading=h.31ne2bdq483w)
-
-
-

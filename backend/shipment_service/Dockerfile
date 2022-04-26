@@ -1,19 +1,19 @@
 FROM node:lts
 
+ENV NODE_ENV=production
+
 WORKDIR /src/utils/event_logger
 
 COPY /utils/event_logger .
 
-RUN yarn install
+RUN yarn --production
 
 WORKDIR /src/backend/service
 
 COPY /backend/shipment_service/ .
 
-RUN mkdir uploads
-
-RUN yarn install
+RUN mkdir uploads && yarn --production
 
 EXPOSE 3002
 
-CMD yarn run start
+CMD ["yarn", "start"]
