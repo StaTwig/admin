@@ -4,7 +4,7 @@ Vaccine Ledger
 
 # Online Links
 
-[Roadmap](https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
+[Roadmap](https://gitlab.com/statwig-public/theledger/-/blob/development/docs/roadmap.png)
 
 [SlackChannel](https://join.slack.com/t/statwig/shared_invite/zt-tau73hhe-o~~ill48n~5EfUs7r8OkRA)
 
