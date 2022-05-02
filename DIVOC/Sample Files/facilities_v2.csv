@@ -1,6 +1,0 @@
-serialNum,facilityCode,facilityName,contact,email,operatingHourStart,operatingHourEnd,category,type,status,addressLine1,addressLine2,district,state,pincode,geoLocationLat,geoLocationLon,websiteURL,adminName,adminMobile
-21,BOM11,Mumbai Hospital 11,4444444450,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Nagpur,Maharashtra,445300,28,77,www.awesome.com  ,Sagar6,3333333341
-22,BOM12,Mumbai Hospital 12,4444444451,mysuru2@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Nagpur,Maharashtra,445300,28,77,www.awesome.com  ,Sagar7,3333333342
-23,BOM13,Mumbai Hospital 13,4444444452,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Nagpur,Maharashtra,445300,28,77,www.awesome.com  ,Sagar8,3333333343
-24,BOM14,Mumbai Hospital 14,4444444453,mysuru2@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Nagpur,Maharashtra,445300,28,77,www.awesome.com  ,Sagar9,3333333344
-25,BOM15,Mumbai Hospital 15,4444444454,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Nagpur,Maharashtra,445300,28,77,www.awesome.com  ,Sagar10,3333333345

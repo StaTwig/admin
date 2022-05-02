@@ -22,4 +22,4 @@ RUN mkdir uploads
 
 EXPOSE 3001
 
-CMD yarn run start
+CMD ["yarn", "start"]

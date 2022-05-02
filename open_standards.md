@@ -1,7 +1,9 @@
-#### Accessibility
+# Accessibility
+
 - [WCAG 2.0/2.1 (Web Content Accessibility Guidelines)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 
-#### Security
+## Security
+
 - HTTPS
 - SSL
 - SSH
@@ -11,43 +13,53 @@
 - AES
 - ES256
 
-#### Authentication & Authorization
+## Authentication & Authorization
+
 - OAuth 2
 - JWT (JSON Web Tokens)
 
-#### Internationalization (i18n)
+## Internationalization (i18n)
+
 - UTF-8
 - ISO-8859-1
 - ASCII
 
-#### Web standards
+## Web standards
+
 - HTML
 - CSS
 - ECMAScript (ES 5/6/7)
 
-#### Software Architectural Styles
+## Software Architectural Styles
+
 - REST (Representational State Transfer)
 
-#### Application Programming Interfaces (APIs)
+## Application Programming Interfaces (APIs)
+
 - OpenAPI
 
-#### Data Exchange formats
+## Data Exchange formats
+
 - JSON (JavaScript Object Notation)
 - CSV (Comma Separated Values)
 
-#### Software Quality Assurance
+## Software Quality Assurance
+
 - IEEE
 - ISO/IEC
 
-#### Software Testing
+## Software Testing
+
 - IEEE829
 - ISO/IEC/IEEE29119
 
-#### Standard Content formats
+## Standard Content formats
+
 - PDF
 - ePub
 
- #### Multimedia
+## Multimedia
+
 - SVG (Scalable Vector Graphics)
 - PNG (Portable Network Graphics)
 - JPEG (Joint Photographic Experts Group)--
