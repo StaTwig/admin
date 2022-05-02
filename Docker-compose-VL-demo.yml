@@ -32,9 +32,8 @@ services:
     command: ["redis-server", "--requirepass", "StaTwig2021"]
 
   advancedanalytics:
-    build: "./backend/advanced_analytics_service"
-    image: "advanced_analytics_service1.0"
-    container_name: "advanced_analytics_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/advanced_analytics_service:demo-arm64"
+    container_name: "advanced_analytics_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -49,9 +48,8 @@ services:
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
 
   alert:
-    build: "./backend/alert_service"
-    image: "alert_service1.0"
-    container_name: "alert_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/alert_service:demo-arm64"
+    container_name: "alert_service"
     env_file:
       - ./env/ledger.env
     depends_on:
@@ -65,9 +63,8 @@ services:
       - "traefik.http.routers.alert.tls.certresolver=lets-encrypt"
 
   analytics:
-    build: "./backend/analytics_service"
-    image: "analytics_service1.0"
-    container_name: "analytics_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/analytics_service:demo-arm64"
+    container_name: "analytics_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -81,10 +78,7 @@ services:
       - "traefik.http.routers.analytics.tls=true"
       - "traefik.http.routers.analytics.tls.certresolver=lets-encrypt"
   employee:
-    build:
-      context: .
-      dockerfile: backend/employee_service/Dockerfile
-    image: "employee_service"
+    image: "registry.gitlab.com/statwig-public/theledger/employee_service:demo-arm64"
     container_name: "employee_service"
     restart: always
     env_file:
@@ -100,9 +94,8 @@ services:
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
   event:
-    build: "./backend/event_service"
-    image: "event_service1.0"
-    container_name: "event_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/event_service:demo-arm64"
+    container_name: "event_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -117,11 +110,8 @@ services:
       - "traefik.http.routers.event.tls.certresolver=lets-encrypt"
 
   inventory:
-    build:
-      context: .
-      dockerfile: backend/inventory_service/Dockerfile
-    image: "inventory_service1.0"
-    container_name: "inventory_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/inventory_service:demo-arm64"
+    container_name: "inventory_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -136,9 +126,8 @@ services:
       - "traefik.http.routers.inventory.tls.certresolver=lets-encrypt"
 
   lastmile:
-    build: "./backend/last_mile_service"
-    image: "last_mile_service1.0"
-    container_name: "last_mile_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/last_mile_service:demo-arm64"
+    container_name: "last_mile_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -153,9 +142,8 @@ services:
       - "traefik.http.routers.lastmile.tls.certresolver=lets-encrypt"
 
   notification:
-    build: "./backend/notification_service"
-    image: "notification_service1.0"
-    container_name: "notification_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/notification_service:demo-arm64"
+    container_name: "notification_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -170,11 +158,8 @@ services:
       - "traefik.http.routers.notification.tls.certresolver=lets-encrypt"
 
   po:
-    build:
-      context: .
-      dockerfile: backend/po_service/Dockerfile
-    image: "po_service1.0"
-    container_name: "po_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/po_service:demo-arm64"
+    container_name: "po_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -189,9 +174,8 @@ services:
       - "traefik.http.routers.po.tls.certresolver=lets-encrypt"
 
   product:
-    build: "./backend/products_service"
-    image: "products_service1.0"
-    container_name: "products_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/product_service:demo-arm64"
+    container_name: "products_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -206,9 +190,8 @@ services:
       - "traefik.http.routers.product.tls.certresolver=lets-encrypt"
 
   rbac:
-    build: "./backend/rbac_service"
-    image: "rbac_service1.0"
-    container_name: "rbac_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/rbac_service:demo-arm64"
+    container_name: "rbac_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -223,11 +206,8 @@ services:
       - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
   shipment:
-    build:
-      context: .
-      dockerfile: backend/shipment_service/Dockerfile
-    image: "shipmentmanagement1.0"
-    container_name: "shipment_service1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/shipment_service:demo-arm64"
+    container_name: "shipment_service"
     restart: always
     env_file:
       - ./env/ledger.env
@@ -241,9 +221,8 @@ services:
       - "traefik.http.routers.shipment.tls=true"
       - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
   track:
-    build: "./backend/track_trace"
-    image: "track_trace1.0"
-    container_name: "track_trace1.0"
+    image: "registry.gitlab.com/statwig-public/theledger/track_trace_service:demo-arm64"
+    container_name: "track_trace"
     restart: always
     env_file:
       - ./env/ledger.env
