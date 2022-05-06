@@ -36,7 +36,6 @@ const UserRoles = ({
   const [showSuccessModel, setShowSuccessModel] = useState(false);
   const [message, setMessage] = useState("Successfully Updated Configuration");
 
-
   const unDisableBtn = () => {
     console.log("enable save button");
     setDisable(false);
@@ -190,66 +189,6 @@ const UserRoles = ({
               })
             : ""}
         </div>
-
-        {TabName === "Shipment" && (
-          <div className="Sub-Integration-area">
-            <div className="sub-headers-area">
-              <span className={"tab-sub-header"}>{t("integration")}</span>
-            </div>
-            <div className="feature-functionality-permissions">
-              <div className="feature-functionality-permissions-headers">
-                <span className="functionality-permission-text">
-                  {t("functionality")}
-                </span>
-                <span className="functionality-permission-text">
-                  {t("permission")}
-                </span>
-              </div>
-              <div className="permission-selection-panal">
-                <div className="selection-panel">
-                  <span>Roambee</span>
-                </div>
-                <div className="selection-panel">
-                  <input
-                    onClick={unDisableBtn}
-                    type="checkbox"
-                    style={{
-                      marginRight: "50px",
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="permission-selection-panal">
-                <div className="selection-panel">
-                  <span>Mobileye</span>
-                </div>
-                <div className="selection-panel">
-                  <input
-                    onClick={unDisableBtn}
-                    type="checkbox"
-                    style={{
-                      marginRight: "50px",
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="permission-selection-panal">
-                <div className="selection-panel">
-                  <span>Vacus</span>
-                </div>
-                <div className="selection-panel">
-                  <input
-                    onClick={unDisableBtn}
-                    type="checkbox"
-                    style={{
-                      marginRight: "50px",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
