@@ -192,7 +192,27 @@ export const SHIPMENT_CONSTANTS = [
         key: 'shipmentExportReport',
         value: 'export_report_in_excel_and_pdf',
         hasPermission: false
-    }
+    },
+    {
+        key: 'shipmentReference',
+        value: 'Reference Id',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentTemperture',
+        value: 'Temperture',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentTripscore',
+        value: 'Trip Score',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentMap',
+        value: 'Maps',
+        hasPermission: false
+    },
 ]
 
 export const NETWORK_CONSTANTS = [
