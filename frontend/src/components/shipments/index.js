@@ -46,16 +46,16 @@ const ShipmentAnalytic = (props) => {
   const [showExportFilter, setShowExportFilter] = useState(false);
   const [fromFilterDate, setFromFilterDate] = useState(null);
   const [toFilterDate, setToFilterDate] = useState(null);
-
+  const gmrEnabled = isAuthenticated("shipmentTripscore") || isAuthenticated("shipmentTemperture") ? true : false;
   if (
     !isAuthenticated("inboundShipments") &&
     !isAuthenticated("outboundShipments")
   )
-    props.history.push(`/profile`);
+     props.history.push(`/profile`);
 
   useEffect(() => {
     async function fetchData() {
-      if (props.user.isCustom) {
+      if (gmrEnabled) {
         dispatch(turnOn());
         const outboundRes = await getGMRShipments(0, limit, null, null, null);
         setOutboundShipments(outboundRes.data.data);
@@ -104,12 +104,12 @@ const ShipmentAnalytic = (props) => {
     }
     fetchData();
     dispatch(getAllUsers());
-  }, [dispatch, limit, props.user.isCustom, visible]);
+  }, [dispatch, limit, gmrEnabled, visible]);
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
     setSkip(recordSkip);
-    if (props.user.isCustom) {
+    if (gmrEnabled) {
       dispatch(turnOn());
       const filteredOutboundShipments = await getGMRShipments(
         recordSkip,
@@ -222,7 +222,7 @@ const ShipmentAnalytic = (props) => {
   };
 
   const setStatusFilterOnSelect = async (statusFilterSelected) => {
-    if (props.user.isCustom) {
+    if (gmrEnabled) {
       dispatch(turnOn());
       setStatusFilter(statusFilterSelected);
       const filteredOutboundShipments = await getGMRShipments(
@@ -391,7 +391,7 @@ const ShipmentAnalytic = (props) => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter((row) => row?.shipmentAlerts?.length > 0);
-    if (props.user.isCustom) rtnArr = outboundShipments;
+    if (gmrEnabled) rtnArr = outboundShipments;
     return rtnArr ? rtnArr : [];
   };
 
@@ -403,7 +403,7 @@ const ShipmentAnalytic = (props) => {
   }, [t]);
 
   const onSelectionDateFilter = async (value) => {
-    if (props.user.isCustom) {
+    if (gmrEnabled) {
       dispatch(turnOn());
       if (value.length > 1) {
         const fromDate =
@@ -549,7 +549,7 @@ const ShipmentAnalytic = (props) => {
             <img src={Order} width="14" height="14" className="mr-2" />
             <span>Create Purchase Order</span>
           </button> */}
-          {isAuthenticated("updateShipment") && !props.user.isCustom && (
+          {isAuthenticated("updateShipment") && !gmrEnabled && (
             <Link to='/enterid'>
               <button className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'>
                 <img
@@ -566,7 +566,7 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to={props.user.isCustom ? `/createshipment` : `/newshipment`}>
+            <Link to={gmrEnabled ? `/createshipment` : `/newshipment`}>
               <button className='btn btn-yellow fontSize20 font-bold mt-2'>
                 <img
                   src={Add}
@@ -583,10 +583,10 @@ const ShipmentAnalytic = (props) => {
           )}
         </div>
       </div>
-      {isAuthenticated("shipmentAnalytics") && !props.user.isCustom && (
+      {isAuthenticated("shipmentAnalytics") && !gmrEnabled && (
         <Cards {...props} setData={setData} t={t} />
       )}
-      {!props.user.isCustom && (
+      {!gmrEnabled && (
         <div className='mt-4'>
           <Tabs
             {...props}
@@ -602,7 +602,7 @@ const ShipmentAnalytic = (props) => {
           data={headers}
           shipmentIdList={shipmentIdList}
           supplierReceiverList={
-            props.user.isCustom
+            gmrEnabled
               ? []
               : supplierReceiverList
           }
@@ -629,8 +629,8 @@ const ShipmentAnalytic = (props) => {
           onPageChange={onPageChange}
           data={headers}
           shipmentIdList={shipmentIdList}
-          shouldEnable={props.user.isCustom ? false : true}
-          supplierReceiverList={props.user.isCustom ? [] : supplierReceiverList}
+          shouldEnable={gmrEnabled ? false : true}
+          supplierReceiverList={gmrEnabled ? [] : supplierReceiverList}
           setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
