@@ -1045,8 +1045,25 @@ exports.receiveShipment = [
           });
         }
         var flag = "Y";
-        if (data.poId == "null") {
-          flag = "YS";
+        // if (data.poId == "null") {
+        //   flag = "YS";
+        // }
+
+        const confId = orgData.configuration_id;
+        const confData = await ConfigurationModel.findOne({ id: confId });
+        if (confData == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).config_not_found
+          );
+        }
+        const process = confData.process;
+        if (data.poId === null) {
+          if (process == true) {
+            flag = "YS";
+          } else {
+            flag = "N";
+          }
         }
         if (flag === "Y") {
           const po = await RecordModel.findOne({
@@ -1256,6 +1273,7 @@ exports.receiveShipment = [
               },
             }
           );
+          console.log(data.id, "data.id");
           const event_data = {
             eventID: cuid(),
             eventTime: new Date().toISOString(),
