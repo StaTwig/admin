@@ -18,7 +18,7 @@ const AddLocation = (props) => {
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
-  // const [country, setcountry] = useState("");
+  const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
@@ -38,7 +38,7 @@ const AddLocation = (props) => {
     async function fetchAllRegions1() {
       let arr = await fetchAllRegions();
       setallregions(arr.data);
-      fetchAllState1(53);
+      // fetchAllState1(53);
     }
     fetchAllRegions1();
   }, []);
@@ -172,7 +172,7 @@ const AddLocation = (props) => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className='row'>
+                  <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <label className='col-sm-6' htmlFor='region'>
@@ -246,7 +246,7 @@ const AddLocation = (props) => {
                         </div>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">

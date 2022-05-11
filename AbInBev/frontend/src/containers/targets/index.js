@@ -16,19 +16,20 @@ const Targets = (props) => {
     useEffect(() => {
         (async () => {
             const res = await dispatch(getAllTargets());
-            setDepots(res.data)
-            let abc = res.data.map((obj) => obj._id.depot)
-            setTargetDistricts(abc);
+            if (res) {
+                setDepots(res.data)
+                let abc = res.data.map((obj) => obj._id.depot)
+                setTargetDistricts(abc);
+            }
             const result = await dispatch(getAllStates());
             setStates(result.data)
-            console.log(states)
-            console.log(depots)
         })();
     }, [refresh]);
 
     const getDistricts = async (state) => {
         const res = await dispatch(getAllTargets());
-        setDepots(res.data)
+        if (res)
+            setDepots(res.data)
         const result = await dispatch(getDistrictsByState(state));
         return result;
     }

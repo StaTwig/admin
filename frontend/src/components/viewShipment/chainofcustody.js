@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./style.scss";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
-import { getImage } from "../../actions/shipmentActions";
-import { getAddress, asyncForEach } from "../../utils/commonHelper";
-
+import { getAddress } from "../../utils/commonHelper";
+import { formatDistanceToNow } from "date-fns";
 const ChainOfCustody = (props) => {
   const { t } = props;
   const [op, setOp] = useState("");
   const shipmentData = props.shipments[0];
-
-  const loadImage = (image) => {
-    let img = null;
-    getImage(image).then((res) => {
-      img = res.data;
-    });
-    return img;
-  };
 
   return Object.keys(props.shipments).length === 0 || !props.shipments ? (
     <div className='row panel justify-content-between'>N/A</div>
@@ -87,7 +78,10 @@ const ChainOfCustody = (props) => {
                   </div>
                   <div className='d-flex flex-column mr-5'>
                     <div className='emp'></div>
-                    <div>{custody.updatedOn}</div>
+                    <div>
+                      {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                        " ago"}
+                    </div>
                     <div></div>
                   </div>
                 </div>
@@ -199,7 +193,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                         <div></div>
                       </div>
                     </div>
@@ -220,7 +217,6 @@ const ChainOfCustody = (props) => {
                               src={custody.image}
                               alt='Shipment Update'
                               className='img-fluid'
-                              width={400}
                             />
                           ) : (
                             <strong>N / A</strong>
@@ -303,7 +299,10 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className='d-flex flex-column mr-5'>
                         <div className='emp'></div>
-                        <div>{custody.updatedOn}</div>
+                        <div>
+                          {formatDistanceToNow(Date.parse(custody?.updatedOn)) +
+                            " ago"}
+                        </div>
                         <div></div>
                       </div>
                     </div>
@@ -320,12 +319,13 @@ const ChainOfCustody = (props) => {
                             {t("uploaded_image")}
                           </h6>
                           {custody?.image ? (
-                            <img
-                              src={custody.image}
-                              alt='Shipment Update'
-                              className='img-fluid mx-auto'
-                              width={400}
-                            />
+                            <div className='update-image-holder'>
+                              <img
+                                src={custody.image}
+                                alt='Shipment Update'
+                                className='img-fluid mx-auto'
+                              />
+                            </div>
                           ) : (
                             <strong>N / A</strong>
                           )}

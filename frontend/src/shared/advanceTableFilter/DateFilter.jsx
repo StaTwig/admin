@@ -1,14 +1,6 @@
 import React from "react";
 import { Calendar } from "react-multi-date-picker";
 
-function CustomRangeInput({ openCalendar, value }) {
-  let from = value[0] || "";
-  let to = value[1] || "";
-
-  value = from && to ? "from " + from + ", to " + to : from;
-  return <input onFocus={openCalendar} value={value} readOnly />;
-}
-
 export default function DateFilter({ t, onSelectionDateFilter }) {
   const [fweek, setFweek] = React.useState([new Date(), new Date()]);
   const [DateType, setDateType] = React.useState(2);
@@ -65,7 +57,7 @@ export default function DateFilter({ t, onSelectionDateFilter }) {
             onSelectionDateFilter(new Array("", ""));
           }}
         >
-          {t("Clear")}
+          {t("clear")}
         </button>
       </div>
     </>

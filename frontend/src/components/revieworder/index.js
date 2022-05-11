@@ -170,8 +170,8 @@ const ReviewOrder = (props) => {
                   <span className='col-4'>{t("country")}:</span>
                   <span className=' col text-dark '>{order.toOrgCountry}</span>
                 </div> */}
-                <div className='w-100'></div>
-                <div className='col row  mt-3'>
+                <div className='w-100 mt-4'></div>
+                <div className='col row  '>
                   <span className='col-4'>{t("organisation_location")}:</span>
                   <span
                     className='col'
@@ -180,12 +180,32 @@ const ReviewOrder = (props) => {
                     {order.toOrgLocName}
                   </span>
                 </div>
-                <div className='col row  mt-5'>
-                  <span className='col-4'></span>
+                <div className='col row  '>
+                  <span className='col-4'>{t("country")}:</span>
                   <span
                     className='col ml-2 '
                     style={{ color: "black", fontSize: "14px" }}
-                  ></span>
+                  >
+                    {order.toOrgCountry}
+                  </span>
+                </div>
+                <div className='w-100 mt-4'></div>
+                <div className='col row  '>
+                  <span className='col-4'>{t("region")}:</span>
+                  <span
+                    className='col'
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                    {order.toOrgRegion}
+                  </span>
+                </div>
+                <div className='col row  '>
+                  <span className='col-4'></span>
+                  <span
+                    className='col'
+                    style={{ color: "black", fontSize: "14px" }}
+                  >
+                  </span>
                 </div>
               </div>
             </div>

@@ -736,25 +736,19 @@ exports.addProductsToInventory = [
               atomsArray.push(atom);
             }
             for (let i = 0; i < atomsArray.length; i++) {
-              let res = await AtomModel.findOne({
+              let batchDup = await AtomModel.findOne({
                 batchNumbers: atomsArray[i].batchNumbers[0],
                 inventoryIds: warehouse.warehouseInventory,
               });
-              if (!res) {
+              if (!batchDup) {
                 continue;
               }
-              if (res) {
-                duplicateBatch = true;
-                duplicateBatchNo = res.batchNumbers[0];
-                if (duplicateBatch) {
-                  return apiResponse.ErrorResponse(
-                    res,
-                    responses(req.user.preferredLanguage).batchExists(
-                      duplicateBatchNo
-                    )
-                  );
+              if(process.env.PROD!="ABINBEV") {
+                if (batchDup) {
+                  duplicateBatch = true;
+                  duplicateBatchNo = batchDup.batchNumbers[0];
+                  break;
                 }
-                break;
               }
             }
             if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -851,17 +845,17 @@ exports.addInventoriesFromExcel = [
           // Validate excel format
           // I'm not sure how to put camel case field names in spanish so only validating english
           const expectedColNames = [
-            'productName',
-            'manufacturerName',
-            'quantity',
-            'unitOfMeasure.name',
-            'manufacturingDate',
-            'expiryDate',
-            'storageConditionsMax',
-            'batchNumber',
-            'serialNumber',
-            'storageConditionsMin',
-            'orderID'
+            "productName",
+            "manufacturerName",
+            "quantity",
+            "unitOfMeasure.name",
+            "manufacturingDate",
+            "expiryDate",
+            "storageConditionsMax",
+            "batchNumber",
+            "serialNumber",
+            "storageConditionsMin",
+            "orderID",
           ];
           if (!utility.compareArrays(expectedColNames, Object.keys(data[0]))) {
             // Invalid format logic
@@ -895,8 +889,9 @@ exports.addInventoriesFromExcel = [
             if (inventoriesFound) {
               const newNotification = new NotificationModel({
                 owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                  }`,
+                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                  inventoriesFound.serialNumber
+                }`,
               });
               await newNotification.save();
               return apiResponse.ErrorResponse(
@@ -945,7 +940,9 @@ exports.addInventoriesFromExcel = [
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                responses(req.user.preferredLanguage).product_doesnt_exist
+                // preffered Langauge in not working in correct manner.
+                // responses(req.user.preferredLanguage).product_doesnt_exist
+                "Product_Doesn't_exist_in_the_inventory"
               );
             }
           }
@@ -1366,7 +1363,7 @@ exports.getProductListCounts = [
     try {
       const { warehouseId } = req.user;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
-      const val = InventoryId[0].warehouseInventory;
+      const val = InventoryId[0]?.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
       const list = productList[0].inventoryDetails;
       const productArray = [];
@@ -1390,9 +1387,9 @@ exports.getProductListCounts = [
             manufacturer: product && product[0] && product[0].manufacturer,
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
           };
-        }
-        if (productObj?.quantity > 0) {
-          productArray.push(productObj);
+          if (productObj?.quantity > 0) {
+            productArray.push(productObj);
+          }
         }
       }
       productArray.sort(function (a, b) {
@@ -2611,7 +2608,7 @@ exports.searchProduct = [
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (warehouse) {
             let elementMatchQuery = {};
-            elementMatchQuery["id"] = warehouse.warehouseInventory;
+            // elementMatchQuery["id"] = warehouse.warehouseInventory;
             if (productName) {
               elementMatchQuery[`products.name`] = productName;
             }
@@ -2839,7 +2836,7 @@ exports.reduceBatch = [
       const { batchNumber, quantity } = req.query;
       const batch = await AtomModel.findOneAndUpdate(
         {
-          batchNumbers: {$in:[batchNumber]},
+          batchNumbers: { $in: [batchNumber] },
         },
         { $inc: { quantity: -Math.abs(quantity || 0) } },
         { new: true }
@@ -2849,7 +2846,10 @@ exports.reduceBatch = [
       });
 
       const inventory = await InventoryModel.updateOne(
-        { "inventoryDetails.productId": batch.productId, id: warehouse.warehouseInventory },
+        {
+          "inventoryDetails.productId": batch.productId,
+          id: warehouse.warehouseInventory,
+        },
         { $inc: { "inventoryDetails.$.quantity": -Math.abs(quantity || 0) } }
       );
 

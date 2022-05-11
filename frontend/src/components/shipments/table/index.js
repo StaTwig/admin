@@ -217,7 +217,9 @@ function Table(props) {
             let wrLocation = shipment.receiver.warehouse?.location;
             if (wrLocation?.length) {
               supplierAddress =
-                wrLocation?.firstLine + wrLocation?.secondLine + wrLocation?.city;
+                wrLocation?.firstLine +
+                wrLocation?.secondLine +
+                wrLocation?.city;
             }
             return (
               <tr>
@@ -263,7 +265,9 @@ function Table(props) {
                         supplierAddress?.secondLine
                           ? supplierAddress?.secondLine
                           : ""
-                      } ${supplierAddress?.city ? supplierAddress?.city : ""}\n ${
+                      } ${
+                        supplierAddress?.city ? supplierAddress?.city : ""
+                      }\n ${
                         supplierAddress?.state ? supplierAddress?.state : ""
                       }\n ${
                         supplierAddress?.country ? supplierAddress?.country : ""
@@ -312,21 +316,23 @@ function Table(props) {
                 </td>
                 <td>
                   <div className='table-btns d-flex align-items-center justify-content-center'>
-                    <button
-                      className='button btn-primary text-light btn-sm mr-3'
-                      onClick={() => {
-                        const data = shipments[index];
-                        dispatch(setTracingShipments(data));
-                        props.history.push(`/tracing/${shipments[index].id}`);
-                      }}
-                    >
-                      <img
-                        style={{ padding: 1, height: 15 }}
-                        src={location}
-                        alt='Location'
-                      />
-                      <span className='pl-1 text-white'>{t("track")}</span>
-                    </button>
+                    {!shipment.isCustom ? (
+                      <button
+                        className='button btn-primary text-light btn-sm mr-3'
+                        onClick={() => {
+                          const data = shipments[index];
+                          dispatch(setTracingShipments(data));
+                          props.history.push(`/tracing/${shipments[index].id}`);
+                        }}
+                      >
+                        <img
+                          style={{ padding: 1, height: 15 }}
+                          src={location}
+                          alt='Location'
+                        />
+                        <span className='pl-1 text-white'>{t("track")}</span>
+                      </button>
+                    ) : null}
                     <Link
                       to={`/${
                         shipment.isCustom === true
@@ -354,7 +360,7 @@ function Table(props) {
             showFirstButton
             showLastButton
             color='primary'
-            count={Math.ceil(props.count / 10)}
+            count={Math.ceil(props.count / props.limit)}
             onChange={handlePageChange}
           />
           <span

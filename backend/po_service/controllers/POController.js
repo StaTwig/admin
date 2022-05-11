@@ -451,6 +451,8 @@ exports.addPOsFromExcel = [
       const workbook = XLSX.readFile(req.file.path);
       const sheet_name_list = workbook.SheetNames;
       let errorsArr = [];
+      let warningArr = [];
+      let invalidArr = [];
       const data = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheet_name_list[0]],
         { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
@@ -469,6 +471,8 @@ exports.addPOsFromExcel = [
         'Material',
         'Material Description',
         'Plant',
+        'Country Name',
+        'Region Name',
         'Order Quantity',
         'Order Unit',
         'Unit Id',
@@ -486,6 +490,8 @@ exports.addPOsFromExcel = [
           'Material',
           'Material Descripción',
           'Planta',
+          'Nombre Del País',
+          'Nombre De La Región',
           'Ordene La Cantidad',
           'Unidad De Pedido',
           'Unidad Id',
@@ -571,15 +577,21 @@ exports.addPOsFromExcel = [
           } else {
             poDataArray[i].id =
               poCounter.counters[0].format + poCounter.counters[0].value++;
+            
             let productDetails = await ProductModel.findOne({
               name: poDataArray[i].products[0].name,
             });
             if (productDetails) {
               (poDataArray[i].products[0].productId = productDetails.productId || productDetails.id || ""),
               (poDataArray[i].products[0].id = productDetails.id || ""),
-                (poDataArray[i].products[0].type = productDetails.type || ""),
-                (poDataArray[i].products[0].manufacturer =
-                  productDetails.manufacturer || "");
+              (poDataArray[i].products[0].type = productDetails.type || ""),
+              (poDataArray[i].products[0].manufacturer = productDetails.manufacturer || "");
+            } else {
+              console.log("Product not found -- \"" + poDataArray[i].products[0].name + "\" -- Skipping it.");
+              invalidArr.push(poDataArray[i]);
+              delete poDataArray[i];
+              i--;
+              continue;
             }
             const organisationName =
               poDataArray[i].customer.customerOrganisation;
@@ -598,6 +610,7 @@ exports.addPOsFromExcel = [
                   poDataArray[i].customer.shippingAddress.shippingAddressId
                 )
               ) {
+                warningArr.push(`Warehouse ${poDataArray[i].customer.shippingAddress.shippingAddressId} doesn't exist in customer organisation`);
                 delete poDataArray[i];
                 continue;
               }
@@ -949,7 +962,7 @@ exports.addPOsFromExcel = [
       return apiResponse.successResponseWithData(
         res,
         responses(req.user.preferredLanguage || "EN").upload_result,
-        poDataArray
+        {inserted: poDataArray, unininserted: warningArr, duplicate: errorsArr, invalid: invalidArr}
       );
     } catch (err) {
       console.log(err);

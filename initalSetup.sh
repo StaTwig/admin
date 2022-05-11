@@ -12,6 +12,9 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
+# sudo curl -L --fail https://raw.githubusercontent.com/linuxserver/docker-docker-compose/master/run.sh -o /usr/local/bin/docker-compose
+# sudo chmod +x /usr/local/bin/docker-compose
+
 sudo apt-get install build-essential -y
 
 sudo docker network create proxy

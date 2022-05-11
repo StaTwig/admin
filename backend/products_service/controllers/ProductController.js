@@ -23,6 +23,9 @@ const fonts = {
   },
 };
 const printer = new PdfPrinter(fonts);
+const { uploadFile } = require("../helpers/s3");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 exports.getProducts = [
   auth,
   async (req, res) => {
@@ -236,7 +239,7 @@ exports.addProduct = [
           if (permissionResult.success) {
             const productId = await CounterModel.findOneAndUpdate(
               {
-                "counters.name": "productId",
+                "counters.name": "poId",
               },
               {
                 $inc: {
@@ -247,15 +250,19 @@ exports.addProduct = [
                 new: true,
               }
             );
+
+            const Upload = await uploadFile(req.file);
+            await unlinkFile(req.file.path);
+
             const product = new ProductModel({
-              id: productId.counters[6].format + productId.counters[6].value,
+              id: productId?.counters[5].format + productId?.counters[5].value,
               externalId: req.body.externalId,
               name: req.body.name,
               shortName: req.body.shortName,
               type: req.body.type,
               manufacturer: req.body.manufacturer,
               pricing: req.body.pricing,
-              //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
+              photoId: `${Upload.key}`,
               unitofMeasure: JSON.parse(req.body.unitofMeasure),
               characteristicSet: {
                 temperature_max: req.body.characteristicSet?.temperature_max,
@@ -302,7 +309,9 @@ exports.uploadImage = [
           const { index } = req.body;
           let dir = `uploads/${username}/child${index}`;
           if (!fs.existsSync(dir)) {
-            fs.mkdir(dir, { recursive: true }, (err) => {});
+            fs.mkdir(dir, { recursive: true }, (err) => {
+              console.log(err);
+            });
           }
           await moveFile(req.files[0].path, `${dir}/photo.png`);
           return apiResponse.successResponse(res, "Success");

@@ -20,12 +20,7 @@ const Track = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(
     props.match.params.id ? true : false
   );
-  const { i18n } = useTranslation();  // langDetector.detect()
-  console.log("lang", i18n.language);
-
-  useEffect(() => {
-    props.setTrackTraceData({ setValue, value, resetData, setIsSubmitted })
-  }, [value])
+  const { i18n } = useTranslation(); // langDetector.detect()
 
   const {
     poChainOfCustodyData,
@@ -33,36 +28,30 @@ const Track = (props) => {
     searchData,
     resetData,
     lang,
-    t
+    t,
   } = props;
-  console.log(shippmentChainOfCustodyData)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const onSeach = useCallback(async (v = value) => {
-  //   if (v) {
-  //     await searchData(v);
-  //     setMsg("No data found");
-  //   } else setMsg("Required");
-  //   setIsSubmitted(true);
-  // });
 
-  useEffect(() => {
-    props.setTrackTraceData({ setValue, value, resetData, setIsSubmitted })
-  }, [value])
+  const onSeach = async (v = value) => {
+    if (v) {
+      await searchData(v);
+      setMsg("No data found");
+    } else setMsg("Required");
+    setIsSubmitted(true);
+  };
 
-
-
+  // useEffect(() => {
+  //   setTrackTraceData({ setValue, value, resetData, setIsSubmitted });
+  // }, [resetData, setTrackTraceData, value]);
   if (!isAuthenticated("trackAndTrace")) props.history.push(`/profile`);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.match.params.id && shippmentChainOfCustodyData.length === 0) {
       setValue(props.match.params.id);
       setOp(1);
       onSeach(props.match.params.id);
     }
-  }, [props, shippmentChainOfCustodyData]);
+  }, [props.match.params.id, shippmentChainOfCustodyData.length]);
 
   const onSearchChange = (e) => {
-    console.log(e.target.value);
     setValue(e.target.value);
     setIsSubmitted(false);
     setOp(1);
@@ -77,13 +66,6 @@ const Track = (props) => {
     //   setOp(-1);
     // }
   };
-  const onSeach = async (v = value) => {
-    if (v) {
-      await searchData(v);
-      setMsg("No data found");
-    } else setMsg("Required");
-    setIsSubmitted(true);
-  };
 
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
@@ -91,21 +73,22 @@ const Track = (props) => {
     }
   };
 
-
   const searchPlaceHolder = () => {
     if (i18n.language === "es") {
-      let placeHolder = t('Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.')
+      let placeHolder = t(
+        "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No."
+      );
       placeHolder = placeHolder.split(" ").splice(0, 16).join(" ");
-      return `${placeHolder}...`
+      return `${placeHolder}...`;
     } else {
-      return t('Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.')
+      return t("Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.");
     }
-  }
+  };
 
   return (
     <div className='track'>
       <div className='row justify-content-between'>
-        <h1 className='breadcrumb'>{t('trackntrace')}</h1>
+        <h1 className='breadcrumb'>{t("trackntrace")}</h1>
       </div>
       {!props.viewIotTemperatureSplineline ? (
         <div className='row'>
@@ -193,12 +176,14 @@ const Track = (props) => {
                         className='mr-2 mb-1'
                         alt='Back'
                       />
-                      <span className='fontSize20'>{t('back_to_search')}</span>
+                      <span className='fontSize20'>{t("back_to_search")}</span>
                     </button>
                   )}
                 </div>
                 <div className=' panel commonpanle  bg-light'>
-                  <h6 className=' text-primary mb-4'>{t('chain_of_custody')}</h6>
+                  <h6 className=' text-primary mb-4'>
+                    {t("chain_of_custody")}
+                  </h6>
                   <div className='row orderTxt'>
                     <div className='col-1'>
                       <div className='picture recived-bg'>
@@ -209,8 +194,8 @@ const Track = (props) => {
                       <div className=''>
                         <div className='text-muted '>
                           {!!Object.keys(poChainOfCustodyData).length
-                            ? t('order_id')
-                            : t('shipment_id')}
+                            ? t("order_id")
+                            : t("shipment_id")}
                         </div>
                         <div className='font-weight-bold '>
                           {shippmentChainOfCustodyData?.length > 0
@@ -237,9 +222,7 @@ const Track = (props) => {
                         ?.filter((s) => s.status === "RECEIVED")
                         .map((r, i) => (
                           <SoChainOfCustody
-                            len={
-                              row.length
-                            }
+                            len={row.length}
                             i={i}
                             v={visible}
                             setV={setVisible}
@@ -249,7 +232,6 @@ const Track = (props) => {
                             setOp={setOp}
                             data={row}
                             update={r}
-                            update={r}
                             index={i + 3}
                             parentIndex={
                               newArr.length && row.id !== value ? cIndex : index
@@ -258,8 +240,8 @@ const Track = (props) => {
                               shippmentChainOfCustodyData.length - 1 === index
                                 ? 1
                                 : newArr.length && row.id !== value
-                                  ? newArr.length
-                                  : 1
+                                ? newArr.length
+                                : 1
                             }
                             container={2 + i}
                             t={t}
@@ -305,9 +287,9 @@ const Track = (props) => {
                     {Object.keys(props.latestIotShipmentData).length > 0
                       ? formatTimeAMPM(
                           /**props.latestIotShipmentData.temp['UnixTimeStamp']*/ new Date()
-                          .toString()
-                          .split(" ")[4]
-                      )
+                            .toString()
+                            .split(" ")[4]
+                        )
                       : ""}{" "}
                   </div>
                 </div>

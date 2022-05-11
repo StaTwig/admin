@@ -1,6 +1,5 @@
-const apiResponse = require("../helpers/apiResponse");
-const date = require("date-and-time");
 require("dotenv").config();
+const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
@@ -21,6 +20,7 @@ const CENTRAL_AUTHORITY_ID = "null";
 const CENTRAL_AUTHORITY_NAME = "null";
 const CENTRAL_AUTHORITY_ADDRESS = "null";
 const { checkPermissions } = require("../middlewares/rbac_middleware");
+const { saveTripDetails } = require("../helpers/sensorDataCollector");
 const logEvent = require("../../../utils/event_logger");
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const axios = require("axios");
@@ -660,14 +660,11 @@ exports.createShipment = [
             }
           }
         }
-
-        const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-        const updates = {
-          updatedOn: currDateTime,
+        data.shipmentUpdates = {
+          updatedOn: new Date().toISOString(),
           status: "CREATED",
           products: products,
         };
-        data.shipmentUpdates = updates;
         const event_data = {
           eventID: cuid(),
           eventTime: new Date().toISOString(),
@@ -855,14 +852,11 @@ exports.newShipment = [
       const shipmentId =
         shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
       data.id = shipmentId;
-
-      const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
-      const updates = {
-        updatedOn: currDateTime,
+      data.shipmentUpdates = {
+        updatedOn: new Date().toISOString(),
         status: "CREATED",
         products: data.products,
       };
-      data.shipmentUpdates = updates;
       data.isCustom
         ? (data.vehicleId = data.airWayBillNo)
         : (data.vehicleId = null);
@@ -1321,6 +1315,153 @@ exports.receiveShipment = [
       } else {
         return apiResponse.forbiddenResponse(res, "Access denied");
       }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.customReceiveShipment = [
+  auth,
+  async (req, res) => {
+    try {
+      const shipmentId = req.query.shipmentId;
+      const shipmentData = await ShipmentModel.findOne({ id: shipmentId });
+      const updates = {
+        updatedOn: new Date().toISOString(),
+        imageId: null,
+        updatedBy: req.user.id,
+        updateComment: req.query.comment || null,
+        status: "RECEIVED",
+        products: shipmentData.products,
+      };
+      const updateData = await ShipmentModel.findOneAndUpdate(
+        { id: shipmentId },
+        {
+          $push: { shipmentUpdates: updates },
+          $set: {
+            status: "RECEIVED",
+            actualDeliveryDate: new Date().toISOString(),
+          },
+        },
+        { new: true }
+      );
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({
+        id: orgId,
+      });
+      const address = orgData.postalAddress;
+      let supplierName = "";
+      let supplierAddress = "";
+      let receiverName = "";
+      let receiverAddress = "";
+      const supplierID = shipmentData.supplier.id;
+      const receiverId = shipmentData.receiver.id;
+      if (supplierID) {
+        const supplierOrgData = await OrganisationModel.findOne({
+          id: supplierID,
+        });
+        supplierName = supplierOrgData?.name || null;
+        supplierAddress = supplierOrgData?.postalAddress || null;
+      }
+
+      if (receiverId) {
+        const receiverOrgData = await OrganisationModel.findOne({
+          id: receiverId,
+        });
+        receiverName = receiverOrgData?.name || null;
+        receiverAddress = receiverOrgData?.postalAddress || null;
+      }
+      const bc_data = {
+        Id: shipmentData.id,
+        CreatedOn: shipmentData.createdAt,
+        CreatedBy: "",
+        IsDelete: true,
+        ShippingOrderId: shipmentData.poId,
+        PoId: shipmentData.poId,
+        Label: JSON.stringify(shipmentData.label),
+        ExternalShipping: "",
+        Supplier: JSON.stringify(shipmentData.supplier),
+        Receiver: JSON.stringify(shipmentData.receiver),
+        ImageDetails: "",
+        TaggedShipments: "",
+        ShipmentUpdates: JSON.stringify(shipmentData.shipmentUpdates),
+        AirwayBillNo: shipmentData.airWayBillNo,
+        ShippingDate: shipmentData.shippingDate,
+        ExpectedDelDate: shipmentData.expectedDeliveryDate,
+        ActualDelDate: shipmentData.actualDeliveryDate,
+        Status: shipmentData.status,
+        TransactionIds: "",
+        RejectionRate: "",
+        Products: JSON.stringify(shipmentData.products),
+        Misc: "",
+      };
+      const token =
+        req.headers["x-access-token"] || req.headers["authorization"];
+      // await axios.put(
+      //   `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
+      //   bc_data,
+      //   {
+      //     headers: {
+      //       Authorization: token,
+      //     },
+      //   }
+      // );
+
+      const event_data = {
+        eventID: cuid(),
+        eventTime: new Date().toISOString(),
+        eventType: {
+          primary: "RECEIVE",
+          description: "SHIPMENT",
+        },
+        transactionId: shipmentData.id,
+        actor: {
+          actorid: req.user.id || null,
+          actoruserid: req.user.emailId || null,
+        },
+        actorWarehouseId: req.user.warehouseId || null,
+        stackholders: {
+          ca: {
+            id: CENTRAL_AUTHORITY_ID || null,
+            name: CENTRAL_AUTHORITY_NAME || null,
+            address: CENTRAL_AUTHORITY_ADDRESS || null,
+          },
+          actororg: {
+            id: orgId || null,
+            name: orgName || null,
+            address: address || null,
+          },
+          secondorg: {
+            id: null,
+            name: null,
+            address: null,
+          },
+        },
+        payload: {
+          data: shipmentData,
+        },
+      };
+      if (orgId === supplierID) {
+        event_data.stackholders.secondorg.id = receiverId || null;
+        event_data.stackholders.secondorg.name = receiverName || null;
+        event_data.stackholders.secondorg.address = receiverAddress || null;
+      } else {
+        event_data.stackholders.secondorg.id = supplierID || null;
+        event_data.stackholders.secondorg.name = supplierName || null;
+        event_data.stackholders.secondorg.address = supplierAddress || null;
+      }
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(
+        res,
+        responses(req.user.preferredLanguage).shipment_received,
+        updateData
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -1875,6 +2016,34 @@ exports.viewShipmentGmr = [
           const shipment = await ShipmentModel.findOne({
             id: req.query.shipmentId,
           });
+          for (let i = 0; i < shipment.shipmentUpdates.length; i++) {
+            if (
+              shipment.shipmentUpdates[i]?.imageId &&
+              shipment.shipmentUpdates[i]?.imageId.length
+            ) {
+              shipment.shipmentUpdates[i].image = await getSignedUrl(
+                shipment.shipmentUpdates[i].imageId
+              );
+            }
+          }
+          const startTime = shipment.shippingDate;
+          let endTime = shipment.actualDeliveryDate;
+          if (shipment.status === "CREATED") {
+            endTime = shipment.expectedDeliveryDate;
+          }
+          console.log(
+            "GMR API CALL ",
+            shipment.id,
+            shipment.airWayBillNo,
+            startTime,
+            endTime
+          );
+          saveTripDetails(
+            shipment.id,
+            shipment.airWayBillNo,
+            startTime,
+            endTime
+          );
           return apiResponse.successResponseWithData(
             res,
             "View Shipment Details",
@@ -1914,10 +2083,23 @@ exports.fetchGMRShipments = [
   auth,
   async (req, res) => {
     try {
+      let filter = {};
       const skip = req.query.skip || 0;
-      const limit = req.query.skip || 30;
-      const count = await ShipmentModel.count({ isCustom: true });
-      const shipments = await ShipmentModel.find({ isCustom: true })
+      const limit = req.query.limit || 30;
+      if (req.query.status) {
+        filter = { ...filter, status: req.query.status };
+      }
+      if (req.query.fromDate && req.query.toDate) {
+        filter = {
+          ...filter,
+          shippingDate: {
+            $gte: req.query.fromDate,
+            $lte: req.query.toDate,
+          },
+        };
+      }
+      const count = await ShipmentModel.count({ ...filter, isCustom: true });
+      const shipments = await ShipmentModel.find({ ...filter, isCustom: true })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });
@@ -2085,7 +2267,7 @@ exports.updateTrackingStatus = [
         updateComment: req.body.updateComment,
         orgId: req.body.orgId,
         orgLocation: req.body.orgLocation,
-        updatedAt: req.body.updateStatusLocation,
+        updatedAt: req.body.updatedAt,
         isAlertTrue: req.body.isAlertTrue,
       };
       if (req.file) {
@@ -2346,7 +2528,10 @@ exports.chainOfCustody = [
               });
               for (let i = 0; i < shipments.length; i++) {
                 for (let j = 0; j < shipments[i].shipmentUpdates.length; j++) {
-                  if (shipments[i].shipmentUpdates[j]?.imageId) {
+                  if (
+                    shipments[i].shipmentUpdates[j]?.imageId &&
+                    shipments[i].shipmentUpdates[j].imageId.length
+                  ) {
                     shipments[i].shipmentUpdates[j].image = await getSignedUrl(
                       shipments[i].shipmentUpdates[j].imageId
                     );
@@ -3181,9 +3366,9 @@ exports.trackJourney = [
                   {
                     airWayBillNo: trackingId,
                   },
-                {
-                  "products.batchNumber": trackingId,
-                },
+                  {
+                    "products.batchNumber": trackingId,
+                  },
                 ],
               },
             },
@@ -4785,6 +4970,33 @@ exports.warehousesOrgsExportToBlockchain = [
   },
 ];
 
+exports.tripDetails = [
+  auth,
+  async (req, res) => {
+    try {
+      const shipmentId = req.query.shipmentId;
+      const shipment = await ShipmentModel.findOne({
+        id: shipmentId,
+      });
+      const tripDetails = [];
+      let totalTripScore = 0;
+      for (const [i, trip] of shipment.trips.entries()) {
+        if (trip.tripScore !== "Not Available") {
+          totalTripScore += parseFloat(trip.tripScore);
+          tripDetails.push([`Trip ${i + 1}`, parseFloat(trip.tripScore)]);
+        }
+      }
+      return apiResponse.successResponseWithData(res, "Trip Details", {
+        tripDetails,
+        averageTripScore: totalTripScore / tripDetails.length,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 exports.sensorHistory = [
   auth,
   async (req, res) => {
@@ -4878,6 +5090,11 @@ exports.sensorHistory = [
         (
           Math.max(...arrayLogs.map((sensor) => sensor.temperature)) + 2
         ).toFixed(2) || 0;
+      let avg = 0;
+      for (const el of arrayLogs) {
+        avg += el.temperature;
+      }
+      avg = (avg / arrayLogs.length).toFixed(2);
       return apiResponse.successResponseWithData(res, "Sensor History", {
         page: page,
         limit: limit,
@@ -4886,6 +5103,7 @@ exports.sensorHistory = [
         metaData: {
           min,
           max,
+          avg,
         },
       });
     } catch (err) {

@@ -30,11 +30,7 @@ const ViewShipmentContainer = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result = await fetchImage(props.match.params.id);
-      if (result?.status === 200) {
-        setImagesData(result.data.data);
-      } else {
-        setImagesData([]);
-      }
+      setImagesData(result.data);
     }
     fetchData();
   }, [props.match.params.id]);

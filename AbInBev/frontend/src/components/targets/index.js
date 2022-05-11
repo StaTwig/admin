@@ -9,6 +9,7 @@ const Targets = (props) => {
   const [districts, setDistricts] = useState([]);
   const [params, setParams] = useState({});
   const [returnTarget, setReturnTarget] = useState();
+  const [retTargetEdit, setRetTargetEdit] = useState(false);
   const [checkedAllDis, setCheckedAllDis] = useState(false);
   const [displayDistricts, setDisplayDistricts] = useState([...props.depots]);
   const [district, setDistrict] = useState("");
@@ -60,9 +61,9 @@ const Targets = (props) => {
     },
   ]);
   useEffect(() => {
-    if (props.depots) setDisplayDistricts(props.depots.sort());
+    if (props.depots) setDisplayDistricts(props.depots);
   }, [props.depots]);
-  // console.log()
+
   const onStateChange = async (event) => {
     const selectedState = event.target.value;
     setState(selectedState);
@@ -70,7 +71,7 @@ const Targets = (props) => {
     filter.state = selectedState;
     const result = await props.getDistricts(selectedState);
     setDistricts(result.data);
-    setDisplayDistricts(props.depots.sort());
+    setDisplayDistricts(props.depots);
     setParams(filter);
   };
 
@@ -81,7 +82,9 @@ const Targets = (props) => {
     const values = { ...params };
     values.district = selectedDistrict;
     filter.push(selectedDistrict);
-    setDisplayDistricts(props.depots.filter(item => item._id.depot === selectedDistrict));
+    setDisplayDistricts(
+      props.depots.filter((item) => item._id.depot === selectedDistrict)
+    );
     setParams(values);
     // console.log(displayDistricts)
   };
@@ -99,7 +102,7 @@ const Targets = (props) => {
   const resetFilters = () => {
     // setState('');
     setDistrict("");
-    setDisplayDistricts(props.depots.sort());
+    setDisplayDistricts(props.depots);
   };
 
   const selectCheckBox = (event, value, index) => {
@@ -130,50 +133,55 @@ const Targets = (props) => {
     }
   };
 
-  const onSave = () => {
-    if (isChecked.length === 0 && !checkedAllDis) {
+  const onSave = async () => {
+    if (isChecked.length === 0 && !checkedAllDis && !retTargetEdit) {
       alert("Select something");
       return;
     }
-    if (checkedAllDis) {
+    if (checkedAllDis && retTargetEdit) {
       let data = [
         {
-          depot: displayDistricts.map((item) => item._id.depot),
+          depot: displayDistricts.map((item) => item.depots).flat(),
           percentage: returnTarget,
         },
       ];
-      updateTargets(data);
+      await updateTargets(data);
+    } else {
+      let arr = [];
+      console.log("In else", selectedArray);
+      selectedArray.map((element) => {
+        let depot_list = displayDistricts.find(depot => depot._id.depot === element.value);
+        depot_list = depot_list.depots;
+        arr.push({
+          depot: depot_list,
+          percentage: parseInt(displayDistricts[element.index].percentage),
+        })
+      });
+      await updateTargets(arr);
     }
-    let arr = [];
-    selectedArray.map((e) =>
-      arr.push({
-        depot: [e.value],
-        percentage: parseInt(displayDistricts[e.index].percentage),
-      })
-    );
-    updateTargets(arr);
     props.refreshPage();
     setIsChecked([]);
+    setCheckedAllDis(false);
   };
 
   return (
-    <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-md-2 d-none d-md-block padding0 greyBG'>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-2 d-none d-md-block padding0 greyBG">
           <SideBar {...props} />
         </div>
-        <div role='main' className='col-md-9 ml-sm-auto col-lg-10'>
-          <div className='row'>
+        <div role="main" className="col-md-9 ml-sm-auto col-lg-10">
+          <div className="row">
             {openTextMsg && (
               <div>
-                <div className='uploadModel'>
-                  <span className='closeBtn'>
+                <div className="uploadModel">
+                  <span className="closeBtn">
                     New Targets have been updated for the selected Districts
                   </span>
                   <div>
                     <button
-                      type='button'
-                      className='cancelButton mt-4'
+                      type="button"
+                      className="cancelButton mt-4"
                       onClick={() => setOpenTextMsg(false)}
                       style={{ border: 0 }}
                     >
@@ -183,12 +191,12 @@ const Targets = (props) => {
                 </div>
               </div>
             )}
-            <div className='col-md-9 mainContainer pt-3 px-4'>
-              <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center'>
-                <h1 className='h2'>Targets</h1>
+            <div className="col-md-9 mainContainer pt-3 px-4">
+              <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                <h1 className="h2">Targets</h1>
                 <button
-                  className={!(countChecked || checkedAllDis) ? 'saveBtnDisabled' : 'saveBtn'}
-                  disabled={!(countChecked || checkedAllDis)}
+                  className={!(countChecked || checkedAllDis) && (!returnTarget) ? 'saveBtnDisabled' : 'saveBtn'}
+                  disabled={!(countChecked || checkedAllDis) && (!returnTarget)}
                   onClick={() => {
                     onSave();
                   }}
@@ -197,108 +205,114 @@ const Targets = (props) => {
                 </button>
               </div>
 
-              <div className='titles'>
-                <div className='distric-01'>
+              <div className="titles">
+                <div className="distric-01">
                   <input
-                    type='checkbox'
-                    id='districts'
+                    type="checkbox"
+                    id="districts"
                     onChange={selectedAllDistricts}
                     style={{ marginRight: "5px" }}
+                    checked={checkedAllDis}
                   />
-                  <span className='headerNames'>District</span>
+                  <span className="headerNames">District</span>
                 </div>
                 <div>
-                  <span className='headerNames'>Return Target</span>
+                  <span className="headerNames">Return Target</span>
                 </div>
-                <div>
-                  <span className='headerNames'>Set Return Target</span>
+                <div className="text-right-align">
+                  <span className="headerNames">Set Return Target</span>
                 </div>
               </div>
               <div
-                className='totalBox'
+                className="totalBox"
                 style={{
                   padding: `${displayDistricts.length > 0 ? "2rem" : "unset"}`,
                 }}
               >
-                <div className='districtList'>
+                <div className="districtList">
                   {displayDistricts.map((district, index) => (
-                    <div style={{ marginBottom: "20px" }}>
-                      {checkedAllDis ? (
-                        <input
-                          key={index}
-                          type='checkbox'
-                          style={{ marginRight: "5px" }}
-                          checked={checkedAllDis}
-                        />
-                      ) : (
-                        <input
-                          id={"distict" + index}
-                          onChange={(e) =>
-                            selectCheckBox(e, district._id.depot, index)
-                          }
-                          type='checkbox'
-                          style={{ marginRight: "5px" }}
-                          checked={isChecked.indexOf(index) !== -1}
-                        />
-                      )}
-                      <span>{district._id.depot}</span>
-                      <div className='returTarget'>
+                    <div
+                      className="district-row"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <div className="district-name">
+                        {checkedAllDis ? (
+                          <input
+                            key={index}
+                            type="checkbox"
+                            style={{ marginRight: "5px" }}
+                            checked={checkedAllDis}
+                          />
+                        ) : (
+                          <input
+                            id={"distict" + index}
+                            onChange={(e) =>
+                              selectCheckBox(e, district._id.depot, index)
+                            }
+                            type="checkbox"
+                            style={{ marginRight: "5px" }}
+                            checked={isChecked.indexOf(index) !== -1}
+                          />
+                        )}
+                        <span>{district._id.depot}</span>
+                      </div>
+                      <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage}%
+                          {district.percentage ? district.percentage + "%" : "N/A"}
                         </span>
                       </div>
 
-                      <div className='setReturnTarget'>
-                          <select
-                            value={`${district.percentage}`}
-                            style={{ borderRadius: "10px" }}
-                            disabled={isChecked.indexOf(index) === -1}
-                            onChange={(e) => {
-                              let array = displayDistricts;
-                              array[index].percentage = e.target.value;
-                              console.log(array[index]);
-                              setDisplayDistricts([...array]);
-                              console.log(e.target.value);
-                            }}
-                          >
-                            {percentageList?.map((item, index) => (
-                              <option value={item.value}>{item.value}%</option>
-                            ))}
-                          </select>
+                      <div className="set-Return-Target">
+                        <select
+                          value={`${district.percentage}`}
+                          style={{ borderRadius: "10px" }}
+                          disabled={isChecked.indexOf(index) === -1}
+                          onChange={(e) => {
+                            let array = displayDistricts;
+                            array[index].percentage = e.target.value;
+                            console.log(array[index]);
+                            setDisplayDistricts([...array]);
+                            console.log(e.target.value);
+                          }}
+                        >
+                          {percentageList?.map((item, index) => (
+                            <option value={item.value}>{item.value}%</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            <div className='col-md-3 rightSideMenu pt-4 px-2'>
-              <div className='filterSection'>
-                <div className='filterHeader mb-3'>
-                  <img src={filterIcon} className='filterIcon' /> FILTERS
+            <div className="col-md-3 rightSideMenu pt-4 px-2">
+              <div className="filterSection">
+                <div className="filterHeader mb-3">
+                  <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
                 <div>
-                  <label className='filterSubHeading mt-3'>Select State</label>
+                  <label className="filterSubHeading mt-3">Select State</label>
                   <select
-                    className='filterSelect mt-2'
+                    className="filterSelect mt-2"
                     value={state}
                     onChange={onStateChange}
                   >
-                    <option value=''>Select State</option>
+                    <option value="">Select State</option>
                     {props.states?.map((state, index) => (
                       <option key={index} value={state}>
                         {state}
                       </option>
                     ))}
                   </select>
-                  <label className='filterSubHeading mt-3'>
+                  <label className="filterSubHeading mt-3">
                     Select District
                   </label>
                   <select
                     value={district}
-                    className='filterSelect mt-2'
+                    className="filterSelect mt-2"
                     onChange={onDistrictChange}
                   >
-                    <option value=''>Select District</option>
+                    <option value="">Select District</option>
                     {districts?.map((district, index) => (
                       <option key={index} value={district}>
                         {district}
@@ -306,7 +320,7 @@ const Targets = (props) => {
                     ))}
                   </select>
                   <label
-                    className='filterSubHeading mt-3'
+                    className="filterSubHeading mt-3"
                     style={{
                       opacity: `${!disableReturnTarget ? "unset" : "0.5"}`,
                     }}
@@ -315,13 +329,14 @@ const Targets = (props) => {
                   </label>
                   <select
                     value={returnTarget}
-                    className='filterSelect mt-2'
+                    className="filterSelect mt-2"
                     disabled={disableReturnTarget}
                     onChange={(e) => {
                       setReturnTarget(e.target.value);
+                      setRetTargetEdit(true);
                     }}
                   >
-                    <option value=''>Select Return Target</option>
+                    <option value="">Select Return Target</option>
                     {percentageList?.map((item, index) => (
                       <option key={index} value={item.value}>
                         {`${item.value}%`}
@@ -331,7 +346,7 @@ const Targets = (props) => {
                 </div>
                 {!!Object.keys(params).length && (
                   <button
-                    className='btn SearchButton mt-4'
+                    className="btn SearchButton mt-4"
                     onClick={resetFilters}
                   >
                     Clear

@@ -322,9 +322,9 @@ const ReceiveShipment = (props) => {
                     className='mt-1 modal-image'
                   />
                 </div>
-                <button type='button' className='btn btn-link float-right'>
+                {/* <button type='button' className='btn btn-link float-right'>
                   {t("view_all")}
-                </button>
+                </button> */}
               </div>
             ) : (
               <>
@@ -401,10 +401,12 @@ const ReceiveShipment = (props) => {
         </Modal>
       )}
       {message && (
-        <div className='d-flex justify-content-center mt-3'>
-          <Alert severity='success'>
+        <div className='d-flex flex-column align-items-center mt-3' style={{"position":"absolute", "top":"55vh", "right":"10vw"}}>
+          <Alert severity='success' onClick={()=>{setMessage(false)}}>
+            <div className='d-flex flex-column align-items-center'>
             <AlertTitle>{t("success")}</AlertTitle>
             {message}
+            </div>
           </Alert>
         </div>
       )}

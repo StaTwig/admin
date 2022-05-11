@@ -61,25 +61,23 @@ const EnterId = (props) => {
   const [value1, setValue1] = React.useState();
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
-  const dispatch = useDispatch();
-  async function getShipmentStatus(id) {
-    let result = await dispatch(getViewShipment(id));
-    return result;
-  }
-  if (shipmentId) {
-    var val = getShipmentStatus(shipmentId).then((data) => {
-      return data.status;
-    });
-    val.then((val) => {
-      if (val == "RECEIVED") {
-        setshipdisabled(true);
-        seterrorShipment(true);
-      } else {
-        setshipdisabled(false);
-        seterrorShipment(false);
-      }
-    });
-  }
+
+  useEffect(() => {
+    if (shipmentId) {
+      getViewShipment(shipmentId).then((result) => {
+        let val = result.data.status;
+        if (val == "RECEIVED") {
+          setshipdisabled(true);
+          seterrorShipment(true);
+        } else {
+          setshipdisabled(false);
+          seterrorShipment(false);
+        }
+      });
+    }
+  }, [shipmentId])
+
+
   const billNoCheck = (bno) => {
     let val = transitNumberArray.filter((e) => e.airWayBillNo == bno);
     setShipmentId2(val[0]?.id);
@@ -91,6 +89,26 @@ const EnterId = (props) => {
       seterrorShipment1(false);
     }
   };
+
+  const handleUpdateStatus = async () => {
+    let result = await getViewShipment(shipmentId);
+    if(result.data?.status === "RECEIVED") {
+      setshipdisabled(true);
+      seterrorShipment(true);
+    } else {
+      if (shipmentId) {
+        if (
+          shipmentArray.filter((e) => e.id === shipmentId)
+            .length > 0
+        ) {
+          props.history.push(`/updatestatus/${shipmentId}`);
+        }
+      } else {
+        props.history.push(`/updatestatus/${shipmentId2}`);
+      }
+    }
+  };
+
   return (
     <div className='updateStatus'>
       <div className='d-flex justify-content-between'>
@@ -302,18 +320,7 @@ const EnterId = (props) => {
                     <button
                       disabled={shipdisabled}
                       className='btn btn-orange fontSize20 font-bold mr-4 product'
-                      onClick={() => {
-                        if (shipmentId) {
-                          if (
-                            shipmentArray.filter((e) => e.id === shipmentId)
-                              .length > 0
-                          ) {
-                            props.history.push(`/updatestatus/${shipmentId}`);
-                          }
-                        } else {
-                          props.history.push(`/updatestatus/${shipmentId2}`);
-                        }
-                      }}
+                      onClick={handleUpdateStatus}
                     >
                       <img
                         src={update}

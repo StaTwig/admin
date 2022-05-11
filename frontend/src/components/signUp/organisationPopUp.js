@@ -11,10 +11,10 @@ import {
   fetchStateByCountry,
   fetchCitiesByState,
 } from "../../actions/productActions";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const OrganisationPopUp = (props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [message, setMessage] = useState(
@@ -22,17 +22,12 @@ const OrganisationPopUp = (props) => {
   );
 
   const closeModal = () => setShowModal(false);
-  const orgTypeArr = [
-    { id: "SUPPLIER", name: t('supplier') },
-    { id: "CUSTOMER", name: t('customer') },
-    { id: "CUSTOMER_SUPPLIER", name: t('both') },
-    { id: "CENTRAL_AUTHORITY", name: t('central')+" "+t('authority') },
-  ];
+
   const [line1, setline1] = useState("");
   const [name, setname] = useState("");
   const [pincode, setPincode] = useState("");
-  const [region, setregion] = useState("Americas");
-  const [country, setcountry] = useState("Costa Rica");
+  const [region, setregion] = useState("");
+  const [country, setcountry] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [allregions, setallregions] = useState([]);
@@ -40,23 +35,22 @@ const OrganisationPopUp = (props) => {
   const [allState, setallState] = useState([]);
   const [allCity, setallCity] = useState([]);
   useEffect(() => {
-    // async function fetchAllRegions1() {
-    //   let arr = await fetchAllRegions();
-    //   console.log(arr);
-    //   setallregions(arr.data);
-    // }
-    // fetchAllRegions1();
-
-    async function fetchAllState1() {
-      let res = await fetchStateByCountry(53);
-      setallState(res.data);
+    async function fetchAllRegions1() {
+      let arr = await fetchAllRegions();
+      console.log(arr);
+      setallregions(arr.data);
     }
-    fetchAllState1();
+    fetchAllRegions1();
   }, []);
-  // async function fetchAllCountries1(id) {
-  //   let res = await fetchCountriesByRegion(id);
-  //   setallCountries(res.data);
-  // }
+  async function fetchAllState1(id) {
+    let res = await fetchStateByCountry(id);
+    setallState(res.data);
+  }
+  // fetchAllState1();
+  async function fetchAllCountries1(id) {
+    let res = await fetchCountriesByRegion(id);
+    setallCountries(res.data);
+  }
 
   async function fetchAllCity1(id) {
     let res = await fetchCitiesByState(id);
@@ -105,9 +99,12 @@ const OrganisationPopUp = (props) => {
       )}
       <div className='d-flex flex-row justify-content-between'>
         <div className='flex-column'>
-          <div className='alert mt-3 p-0 pl-3'>{t('almost')} {t('there')}!</div>
+          <div className='alert mt-3 p-0 pl-3'>
+            {t("almost")} {t("there")}!
+          </div>
           <div className='text-info pl-3'>
-            {t('add')} {t('organisation').toLocaleLowerCase()} {t('details')} {t('to')} {t('continue').toLocaleLowerCase()}
+            {t("add")} {t("organisation").toLocaleLowerCase()} {t("details")}{" "}
+            {t("to")} {t("continue").toLocaleLowerCase()}
           </div>
         </div>
         <div>
@@ -151,25 +148,25 @@ const OrganisationPopUp = (props) => {
                 //     errors.type = "Required";
                 //   }
                 if (!values.name) {
-                  errors.name = t('required');
+                  errors.name = t("required");
                 }
                 if (!values.pincode) {
-                  errors.pincode = t('required');
+                  errors.pincode = t("required");
                 }
                 if (!values.region) {
-                  errors.region = t('required');
+                  errors.region = t("required");
                 }
                 if (!values.line1) {
-                  errors.line1 = t('required');
+                  errors.line1 = t("required");
                 }
                 if (!values.city) {
-                  errors.city = t('required');
+                  errors.city = t("required");
                 }
                 if (!values.state) {
-                  errors.state = t('required');
+                  errors.state = t("required");
                 }
                 if (!values.country) {
-                  errors.country = t('required');
+                  errors.country = t("required");
                 }
                 return errors;
               }}
@@ -200,7 +197,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('organisation')+" "+t('name')}
+                          label={t("organisation") + " " + t("name")}
                           className='form-control2'
                           name='name'
                           value={values.name}
@@ -220,7 +217,7 @@ const OrganisationPopUp = (props) => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className='row'>
+                  <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
@@ -236,7 +233,10 @@ const OrganisationPopUp = (props) => {
                           options={allregions}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('region')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("region")}
+                            />
                           )}
                         />
                         {errors.region && touched.region && (
@@ -246,7 +246,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div> */}
+                  </div>
 
                   {/* <AddressField
                       error={errors.city}
@@ -266,7 +266,7 @@ const OrganisationPopUp = (props) => {
                       handleBlur={handleBlur}
                       value={values.state}
                     /> */}
-                  {/* <div className='row'>
+                  <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
@@ -282,7 +282,10 @@ const OrganisationPopUp = (props) => {
                           options={allCountries.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('country')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("country")}
+                            />
                           )}
                         />
                         {errors.country && touched.country && (
@@ -292,7 +295,7 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                   <div className='row'>
                     <div className='col-md-6 com-sm-12'>
                       <div className='form-group'>
@@ -309,7 +312,10 @@ const OrganisationPopUp = (props) => {
                           options={allState.map((option) => option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('state')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("state")}
+                            />
                           )}
                         />
                         {errors.state && touched.state && (
@@ -334,7 +340,10 @@ const OrganisationPopUp = (props) => {
                           options={allCity.map((Option) => Option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('select')+" "+t('city')} />
+                            <TextField
+                              {...params}
+                              label={t("select") + " " + t("city")}
+                            />
                           )}
                         />
                         {errors.city && touched.city && (
@@ -362,7 +371,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('address')+" "+t('line')}
+                          label={t("address") + " " + t("line")}
                           className='form-controll'
                           name='line1'
                           value={values.line1}
@@ -401,7 +410,7 @@ const OrganisationPopUp = (props) => {
                             width: "425px",
                           }}
                           id='standard-basic'
-                          label={t('pincode')}
+                          label={t("pincode")}
                           type='number'
                           className='form-control2'
                           name='pincode'
@@ -438,7 +447,7 @@ const OrganisationPopUp = (props) => {
                       type='submit'
                       className='btn btn-primary '
                     >
-                      {t('done')}
+                      {t("done")}
                     </button>
                   </div>
                 </form>

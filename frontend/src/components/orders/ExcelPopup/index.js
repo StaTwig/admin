@@ -17,14 +17,16 @@ const ExcelPopUp = (props) => {
   const [modalProps, setModalProps] = useState({});
 
   const setExcelFile = (evt) => {
-    const isXls = evt.target.files[0].type === 'application/vnd.ms-excel';
-    if (!isXls) {
+    const isXls = evt.target.files[0].type;
+    if (isXls === ('application/vnd.ms-excel') || isXls === ('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+      setopenFailedPop(false);
+      setExcel(evt.target.files[0]);
+    } else {
       setopenFailedPop(true);
       setModalProps({
-        message: t("you_can_only_upload_XLS_file"),
+        message: t("you_can_only_upload_excel_formats"),
       });
-    } else
-      setExcel(evt.target.files[0]);
+    }
   };
   props.setMenu(false);
   const uploadExcel = async () => {
@@ -33,7 +35,7 @@ const ExcelPopUp = (props) => {
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
     if (result && result.status === 200) {
-      let arr = result.data.data;
+      let arr = result.data.data.inserted;
       let notNullValues = 0;
       if (arr && arr.length > 0)
         for (let i = 0; i < arr.length; i++) {
@@ -42,20 +44,26 @@ const ExcelPopUp = (props) => {
           }
         }
 
-      if (notNullValues !== 0
-      ) {
+      if (notNullValues !== 0) {
         setopenSuccesfulOrder(true);
         setModalProps({
           message: `${t("created")}${t("successfully")}`,
           OrderLength: notNullValues,
           type: "Success",
         });
+      } else {
+        setopenFailedPop(true);
+        if (result.data.data.invalid.length) {
+          setModalProps({message: t("invalid_records")});
+        } else {
+          setModalProps({
+            message: t("records_duplication"),
+          });
+        }
       }
     } else {
       setopenFailedPop(true);
-      setModalProps({
-        message: t("records_duplication"),
-      });
+      setModalProps({message: t("invalid_records")});
     }
     dispatch(turnOff());
   };
@@ -94,7 +102,7 @@ const ExcelPopUp = (props) => {
           <input
             type='file'
             id='fileE'
-            accept="application/vnd.ms-excel"
+            accept=".xls,.xlsx,application /vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
             style={{ visibility: "hidden" }}
             className='mb-3 excelSpace'
             onChange={setExcelFile}

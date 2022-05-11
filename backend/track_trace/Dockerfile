@@ -1,11 +1,15 @@
 FROM node:lts-alpine3.13
 
+ENV NODE_ENV=production
+
 WORKDIR /src
 
-COPY . /src
+COPY package.json .
 
-RUN yarn install
+RUN yarn --production && yarn cache clean
+
+COPY . .
 
 EXPOSE 3005
 
-CMD yarn run start
+CMD ["yarn", "start"]

@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import carboxyl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./Map.css";
 
-mapboxgl.accessToken =
+carboxyl.accessToken =
   "pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q";
 
 const Map = (props) => {
@@ -53,7 +53,7 @@ const Map = (props) => {
 
   // Initialize map when component mounts
   useEffect(() => {
-    let map = new mapboxgl.Map({
+    let map = new carboxyl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/light-v10",
       center: [lng, lat],
@@ -61,7 +61,7 @@ const Map = (props) => {
     });
 
     if (warehouseLocation?.latitude) {
-      map = new mapboxgl.Map({
+      map = new carboxyl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/light-v10",
         center: [
@@ -76,7 +76,7 @@ const Map = (props) => {
         parseFloat(warehouseLocation.longitude),
         parseFloat(warehouseLocation.latitude),
       ];
-      newMarker = new mapboxgl.Marker().setLngLat(coords).addTo(map);
+      newMarker = new carboxyl.Marker().setLngLat(coords).addTo(map);
       markers.push(newMarker);
     }
 
@@ -84,7 +84,7 @@ const Map = (props) => {
       warehouseArr.forEach((w, i) => {
         if (w.location?.latitude) {
           if (i === 0) {
-            map = new mapboxgl.Map({
+            map = new carboxyl.Map({
               container: mapContainerRef.current,
               style: "mapbox://styles/mapbox/light-v10",
               center: [
@@ -113,7 +113,7 @@ const Map = (props) => {
             }
           }
 
-          newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
+          newMarker = new carboxyl.Marker(options).setLngLat(coords).addTo(map);
           markers.push(newMarker);
         }
       });
@@ -168,14 +168,14 @@ const Map = (props) => {
         });
       });
 
-      newMarker = new mapboxgl.Marker()
+      newMarker = new carboxyl.Marker()
         .setLngLat([
           parseFloat(shipment?.receiver?.warehouse?.location?.longitude),
           parseFloat(shipment?.receiver?.warehouse?.location?.latitude),
         ])
         .addTo(map);
       markers.push(newMarker);
-      newMarker = new mapboxgl.Marker()
+      newMarker = new carboxyl.Marker()
         .setLngLat([
           parseFloat(shipment?.supplier?.warehouse?.location?.longitude),
           parseFloat(shipment?.supplier?.warehouse?.location?.latitude),
@@ -191,7 +191,7 @@ const Map = (props) => {
       );
       setLng(popL.long);
       setLat(popL.lat);
-      new mapboxgl.Popup({
+      new carboxyl.Popup({
         offset: 25,
         className: "popUp",
         closeOnClick: false,
@@ -236,7 +236,7 @@ const Map = (props) => {
         .addTo(map);
     }
 
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.addControl(new carboxyl.NavigationControl(), "top-right");
 
     map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));

@@ -59,7 +59,7 @@ export function config() {
       getProductsByCategoryUrl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductsByCategory?type=`,
       getProductsByInventoryUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/getProductsByInventory?invId=`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
-      getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/productmanagement/api/products/getManufacturer`,
+      getManufacturers: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getManufacturer`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -155,6 +155,8 @@ export function config() {
       requestModalAlertUrl: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/request/updateRequest?id=`,
       temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -294,6 +296,8 @@ export function config() {
       requestModalAlertUrl: `${TEST_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${TEST_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
       temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -424,6 +428,8 @@ export function config() {
       requestModalAlertUrl: `${PROD_SERVER_URL}/tracktracemanagement/api/request/getRequestById?id=`,
       updateStatusModalAlert: `${PROD_SERVER_URL}/tracktracemanagement/api/request/updateRequest?id=`,
       temperatureGraph: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
+      driverGraph: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
+      customReceiveShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
     },
     unicef: {
       getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,

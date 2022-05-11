@@ -26,23 +26,32 @@ const LoginContainer = (props) => {
   const onSendOtp = useCallback(async () => {
     dispatch(turnOn());
     const data = { emailId: email !== "" ? email : phone };
-    const result = await sendOtp(data, i18n.language);
-    if (result?.status === 200) {
-      props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
-    } else if (result?.status === 500) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else if (result?.status === 404) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else if (result?.status === 401) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else {
-      const err = result.data.data.emailId;
-      setErrorMessage(err);
+    // console.log("phone:", phone.length);
+    console.log("email:", email);
+    if(email===""&&phone.length<13){
+      setErrorMessage("Provide Valid Phone Number");
+      dispatch(turnOff());  
     }
-    dispatch(turnOff());
+    else{
+      const result = await sendOtp(data, i18n.language);
+      if (result?.status === 200) {
+        props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
+      } else if (result?.status === 500) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else if (result?.status === 404) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else if (result?.status === 401) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else {
+        const err = result.data.data.emailId;
+        setErrorMessage(err);
+      }
+      dispatch(turnOff());      
+    }
+
   });
   const onkeydown = (event) => {
     if (event.keyCode === 13) {

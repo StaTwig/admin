@@ -244,6 +244,7 @@
   "add_new_category": "Add new category",
   "add_new_product": "Add new product",
   "add_image": "ADD IMAGE",
+  "upload_error": "File does not support.Try with jpg, jpeg, png extensions.",
   "unit_of_measure": "Unit of Measure",
   "short_description": "Short Description",
   "select_category": "Select Category",
@@ -281,7 +282,7 @@
   "miscount": "Miscount",
   "shipment_stolen": "Shipment Stolen",
   "wrong_shipment": "Wrong Shipment",
-  "uploaded_image": "Upload Image",
+  "uploaded_image": "Uploaded Image",
   "upload": "Upload",
   "files_here": "Files here",
   "browse_files": "Browse Files",
@@ -346,9 +347,9 @@
   "organisation_name_info": "If yours is a new organization, please select “other”",
   "no_options": "No Options",
   "Your_Shipment_Status_has_been": "Your Shipment Status has been",
-  "Added_to_inventory":"Added to inventory",
+  "Added_to_inventory": "Added to inventory",
   "Validation Error": "Validation Error",
-  "you_can_only_upload_XLS_file":"You can only upload XLS file!",
+  "you_can_only_upload_excel_formats": "You can only upload EXCEL formats!",
   "something_went_wrong": "SOMETHING WENT WRONG",
   "sorry_msg": "We are very sorry for inconvenience.",
   "sorry_reason": "It looks you are trying to access a page that either has been deleted or never been existed",
@@ -389,5 +390,8 @@
   "past_expiry": "Expiry Date cannot be in the past",
   "no_locations_available": "No locations available",
   "Failure": "Failure",
-  "enter_qunatity": "Enter Quantity"
+  "enter_qunatity": "Enter Quantity",
+  "Product_Doesn't_exist_in_the_inventory": "Product Doesn't exist in the inventory.",
+  "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated",
+  "invalid_records": "Invalid Records"
 }

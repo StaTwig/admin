@@ -244,6 +244,7 @@
   "add_new_category": "Añadir nueva categoria",
   "add_new_product": "Agregar nuevo producto",
   "add_image": "AÑADIR IMAGEN",
+  "upload_error": "el archivo no es compatible.Prueba con jpg jpeg png extensiones.",
   "unit_of_measure": "Unidad de medida",
   "short_description": "Breve descripción",
   "category_name": "Nombre de la categoría",
@@ -329,7 +330,7 @@
   "batch_details": "Detalles del Lote",
   "Email/Mobile must be specified": "Email/Móvil Debe especificarse",
   "Validation Error": "Error de validacion",
-  "you_can_only_upload_XLS_file":"¡Solo puede cargar un archivo XLS!",
+  "you_can_only_upload_excel_formats": "¡Solo puedes subir formatos EXCEL!",
   "OTP Sent Success": "Éxito de envío de OTP",
   "Account is not Approved.Please contact admin": "La cuenta no está aprobada. Póngase en contacto con el administrador",
   "User not registered": "Usuario no registrado",
@@ -341,7 +342,6 @@
   "Clear": "Claro",
   "Search_Shipment": "Buscar envío",
   "Search_Supplier_Name": "Buscar nombre del proveedor",
-  "Empty_List": "Lista vacía",
   "Search_Org._Name": "Organización de búsqueda Nombre",
   "Enter_Order_ID_or_Serial_No._or_Shipment_No._or_Transit_No.": "Ingrese el ID de pedido o el número de serie para el número de envío o el número de tránsito.",
   "Enter_Shipment_ID": "Ingrese la identificación del envío",
@@ -413,8 +413,11 @@
   "ordersoutbound": "pedidos salientes",
   "ordersinbound": "pedidos entrantes",
   "upload_image": "cargar imagen",
-  "records_duplication":"Registros no agregados debido a la duplicación",
+  "records_duplication": "Registros no agregados debido a la duplicación",
   "past_expiry": "La fecha de caducidad no puede estar en el pasado",
   "no_locations_available": "No hay ubicaciones disponibles",
-  "enter_qunatity": "Ingrese la cantidad"
+  "enter_qunatity": "Ingrese la cantidad",
+  "Product_Doesn't_exist_in_the_inventory": "El producto no existe en el inventario.",
+  "delivered_shipments_cannot_be_updated": "Los envíos entregados no se pueden actualizar",
+  "invalid_records": "Registros Inválidos"
 }

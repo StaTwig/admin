@@ -1,8 +1,0 @@
-{
-    "realm": "divoc",
-    "auth-server-url": "https://divoc.vaccineledger.com/auth/",
-    "ssl-required": "external",
-    "resource": "certificate-login",
-    "public-client": true,
-    "confidential-port": 0
-}

@@ -6,6 +6,7 @@ const ProductList = (props) => {
 
   const getVisibleDate = (dateString) => {
     let date = new Date(dateString);
+    if(date.toLocaleDateString() === "Invalid Date") return "N/A";
     return date.toLocaleDateString();
   }
 

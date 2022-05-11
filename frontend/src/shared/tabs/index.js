@@ -20,7 +20,7 @@ const Tabs = (props) => {
                 props.visible === "one" ? "nav-link" : "nav-link text-secondary"
               }
             >
-              {t('inbound')}
+              {t("inbound")}
             </div>
           </li>
         )}
@@ -40,7 +40,7 @@ const Tabs = (props) => {
               }
               id='tab-content'
             >
-              {t('outbound')}
+              {t("outbound")}
             </div>
           </li>
         )}

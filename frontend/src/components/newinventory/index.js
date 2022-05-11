@@ -131,11 +131,7 @@ const NewInventory = (props) => {
       let b = todayDate.slice(-4);
       let c = `0${
         new Date(
-          Date.parse(
-            typeof validationVariable == "string"
-              ? validationVariable
-              : validationVariable.toLocaleDateString()
-          )
+          validationVariable
         ).getMonth() + 1
       }`.slice(-2);
       let d = todayDate.substring(0, 2);
