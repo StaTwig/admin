@@ -977,9 +977,9 @@ exports.receiveShipment = [
         const orgName = empData.name;
         const orgData = await OrganisationModel.findOne({ id: orgId });
         const address = orgData.postalAddress;
-        const supplierID = JSON.parse(req.body.supplier).id;
-        const receiverId = JSON.parse(req.body.receiver).id;
-        const receivedProducts = JSON.parse(data.products);
+        const supplierID = typeof req.body.supplier == 'object' ? req.body.supplier.id : JSON.parse(req.body.supplier).id;
+        const receiverId = typeof req.body.receiver == 'object' ? req.body.receiver.id :JSON.parse(req.body.receiver).id;
+        const receivedProducts = typeof data.products == 'object' ? data.products : JSON.parse(data.products);
         let supplierName = "";
         let supplierAddress = "";
         let receiverName = "";
@@ -1045,15 +1045,32 @@ exports.receiveShipment = [
           });
         }
         var flag = "Y";
-        if (data.poId == "null") {
-          flag = "YS";
+        // if (data.poId == "null") {
+        //   flag = "YS";
+        // }
+
+        const confId = orgData.configuration_id;
+        const confData = await ConfigurationModel.findOne({ id: confId });
+        if (confData == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).config_not_found
+          );
+        }
+        const process = confData.process;
+        if (data.poId === null) {
+          if (process == true) {
+            flag = "YS";
+          } else {
+            flag = "N";
+          }
         }
         if (flag === "Y") {
           const po = await RecordModel.findOne({
             id: data.poId,
           });
           let quantityMismatch = false;
-          po.products.every((product) => {
+          po?.products?.every((product) => {
             receivedProducts.every((p) => {
               if (product.id === p.productID) {
                 const po_product_quantity =
@@ -1080,21 +1097,23 @@ exports.receiveShipment = [
               }
             });
           });
-          if (quantityMismatch) {
-            po.poStatus = "PARTIALLYFULFILLED";
-            await po.save();
-          } else {
-            po.poStatus = "FULLYFULFILLED";
-            await po.save();
+          if (po) {
+            if (quantityMismatch) {
+              po.poStatus = "PARTIALLYFULFILLED";
+              await po.save();
+            } else {
+              po.poStatus = "FULLYFULFILLED";
+              await po.save();
+            }
           }
         }
         if (flag != "N") {
           const suppWarehouseDetails = await WarehouseModel.findOne({
-            id: JSON.parse(data.supplier).locationId,
+            id: typeof data.supplier == 'object' ? data.supplier.locationId : JSON.parse(data.supplier).locationId,
           });
           var suppInventoryId = suppWarehouseDetails.warehouseInventory;
           const recvWarehouseDetails = await WarehouseModel.findOne({
-            id: JSON.parse(data.receiver).locationId,
+            id: typeof data.receiver == 'object' ? data.receiver.locationId : JSON.parse(data.receiver).locationId,
           });
           var recvInventoryId = recvWarehouseDetails.warehouseInventory;
           var products = receivedProducts;
@@ -1254,6 +1273,7 @@ exports.receiveShipment = [
               },
             }
           );
+          console.log(data.id, "data.id");
           const event_data = {
             eventID: cuid(),
             eventTime: new Date().toISOString(),
@@ -1261,7 +1281,7 @@ exports.receiveShipment = [
               primary: "RECEIVE",
               description: "SHIPMENT",
             },
-            transactionId: data.id,
+            transactionId: data.id.toString(),
             actor: {
               actorid: user_id || null,
               actoruserid: email || null,
