@@ -441,7 +441,7 @@ const SpmDashboard = (props) => {
               <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                 <tr>
                   <td scope="row" style={{ color: "#A20134" }}>
-                    Return Rate
+                    Return Rate %
                   </td>
                   <td>
                     <select
@@ -521,7 +521,7 @@ const SpmDashboard = (props) => {
                 </tr>
                 <tr>
                   <td scope="row" style={{ color: "#A20134" }}>
-                    Dirty Bottle
+                    Dirty Bottle %
                   </td>
                   <td>
                     <select
