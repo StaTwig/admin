@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 3006
 
-CMD yarn run start
+CMD ["yarn", "start"]

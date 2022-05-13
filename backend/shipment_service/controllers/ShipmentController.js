@@ -918,7 +918,6 @@ exports.newShipment = [
   },
 ];
 
-
 exports.receiveShipment = [
   auth,
   async (req, res) => {
@@ -978,9 +977,18 @@ exports.receiveShipment = [
         const orgName = empData.name;
         const orgData = await OrganisationModel.findOne({ id: orgId });
         const address = orgData.postalAddress;
-        const supplierID = typeof req.body.supplier == 'object' ? req.body.supplier.id : JSON.parse(req.body.supplier).id;
-        const receiverId = typeof req.body.receiver == 'object' ? req.body.receiver.id :JSON.parse(req.body.receiver).id;
-        const receivedProducts = typeof data.products == 'object' ? data.products : JSON.parse(data.products);
+        const supplierID =
+          typeof req.body.supplier == "object"
+            ? req.body.supplier.id
+            : JSON.parse(req.body.supplier).id;
+        const receiverId =
+          typeof req.body.receiver == "object"
+            ? req.body.receiver.id
+            : JSON.parse(req.body.receiver).id;
+        const receivedProducts =
+          typeof data.products == "object"
+            ? data.products
+            : JSON.parse(data.products);
         let supplierName = "";
         let supplierAddress = "";
         let receiverName = "";
@@ -1046,7 +1054,7 @@ exports.receiveShipment = [
           });
         }
         var flag = "Y";
-	// if (data.poId == "null") {
+        // if (data.poId == "null") {
         //   flag = "YS";
         // }
 
@@ -1110,11 +1118,17 @@ exports.receiveShipment = [
         }
         if (flag != "N") {
           const suppWarehouseDetails = await WarehouseModel.findOne({
-            id: typeof data.supplier == 'object' ? data.supplier.locationId : JSON.parse(data.supplier).locationId,
+            id:
+              typeof data.supplier == "object"
+                ? data.supplier.locationId
+                : JSON.parse(data.supplier).locationId,
           });
           var suppInventoryId = suppWarehouseDetails.warehouseInventory;
           const recvWarehouseDetails = await WarehouseModel.findOne({
-            id: typeof data.receiver == 'object' ? data.receiver.locationId : JSON.parse(data.receiver).locationId,
+            id:
+              typeof data.receiver == "object"
+                ? data.receiver.locationId
+                : JSON.parse(data.receiver).locationId,
           });
           var recvInventoryId = recvWarehouseDetails.warehouseInventory;
           var products = receivedProducts;
@@ -1274,6 +1288,7 @@ exports.receiveShipment = [
               },
             }
           );
+          console.log(data.id, "data.id");
           const event_data = {
             eventID: cuid(),
             eventTime: new Date().toISOString(),

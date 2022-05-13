@@ -1817,16 +1817,8 @@ exports.getLeadTimes = [
             id: 1,
             shippingDate: 1,
             createdAt: 1,
-            actualDeliveryDate: {
-              $dateFromString: {
-                dateString: "$actualDeliveryDate",
-              },
-            },
-            shippingDate: {
-              $dateFromString: {
-                dateString: "$shippingDate",
-              },
-            },
+            actualDeliveryDate: 1,
+            shippingDate: 1,
           },
         },
         {
@@ -1946,16 +1938,8 @@ async function calculateLeadTimeByOrg(supplierOrg) {
         shippingDate: 1,
         createdAt: 1,
         updatedAt: 1,
-        actualDeliveryDate: {
-          $dateFromString: {
-            dateString: "$actualDeliveryDate",
-          },
-        },
-        shippingDate: {
-          $dateFromString: {
-            dateString: "$shippingDate",
-          },
-        },
+        actualDeliveryDate: 1,
+        shippingDate: 1,
       },
     },
     {
@@ -2397,6 +2381,7 @@ exports.getSupplierPerformance = [
         );
       }
     } catch (err) {
+      // console.log("Error in supplier performance - ", err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

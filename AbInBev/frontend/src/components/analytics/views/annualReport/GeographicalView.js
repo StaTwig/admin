@@ -206,7 +206,7 @@ const GeographicalView = (props) => {
                       </div>
                     </div>
                   </td>
-                  <td>{analytic.sales}</td>
+                  <td>{analytic?.sales}</td>
                   <td>
                     {analytic.returns
                       ? analytic.returns

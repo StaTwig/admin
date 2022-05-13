@@ -65,17 +65,14 @@ const SpmDashboard = (props) => {
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
       pushdates.push(i);
-      // pushdates.push(i + " days");
     }
     setDates(pushdates);
 
     var numbers = [];
     for (var i = 0; i < 20; i++) {
       numbers.push(i * 5);
-      // numbers.push(i * 5 + "%");
     }
     setPercentages(numbers);
-    // console.log(dates)
   }, []);
 
   const saveConfig = async () => {
@@ -264,7 +261,6 @@ const SpmDashboard = (props) => {
                   {/* <td>{perf.returnRate ? perf.returnRate : 0}</td> */}
                   <td style={{ verticalAlign: "unset" }}>{perf.rating?.Overall}</td>
                   <td style={{ position: "relative", verticalAlign: "unset" }}>
-                    {/* {selectedRatingIndex !== index ? ( */}
                     <div
                       className="round round-lg"
                       onClick={() => {
@@ -445,7 +441,7 @@ const SpmDashboard = (props) => {
               <tbody style={{ fontWeight: "bold", fontFamily: "open sans" }}>
                 <tr>
                   <td scope="row" style={{ color: "#A20134" }}>
-                    Return Rate
+                    Return Rate %
                   </td>
                   <td>
                     <select
@@ -525,7 +521,7 @@ const SpmDashboard = (props) => {
                 </tr>
                 <tr>
                   <td scope="row" style={{ color: "#A20134" }}>
-                    Dirty Bottle
+                    Dirty Bottle %
                   </td>
                   <td>
                     <select

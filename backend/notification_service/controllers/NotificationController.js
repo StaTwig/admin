@@ -159,18 +159,19 @@ exports.sendOtp = [
 exports.sendMessage = [
   async (req, res) => {
     try {
-      if (req.body.mobile) {
-        if (req.body.whatsapp && req.body.whatsapp == true)
-          sendWhatsApp(req.body.content, req.body.mobile);
-        else sendSMS(req.body.content, req.body.mobile);
+      if (req?.body?.mobile) {
+        if (req?.body?.whatsapp && req?.body?.whatsapp == true)
+          sendWhatsApp(req.body?.content, req.body.mobile);
+        sendSMS(req.body?.content, req.body.mobile);
       }
       if (req.body.email)
         sendEmail(
           req.body.subject,
           {
-            body: req.body.content,
-            source: req.body.source,
+            body: req?.body?.content,
+            source: req?.body?.source,
             isOTP: false,
+            isCustom: req.body?.isCustom || false,
           },
           req.body.email
         );
