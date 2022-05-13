@@ -743,11 +743,13 @@ exports.addProductsToInventory = [
               if (!batchDup) {
                 continue;
               }
-              if (batchDup) {
+             if(!process.env.PROD=="ABINBEV"){
+		     if (batchDup) {
                 duplicateBatch = true;
                 duplicateBatchNo = batchDup.batchNumbers[0];
                 break;
               }
+	    }
             }
             if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
             await inventory.save();

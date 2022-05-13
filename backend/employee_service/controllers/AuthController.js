@@ -457,7 +457,7 @@ exports.sendOtp = [
             if (process.env.ENVIRONMENT === "TEST") {
               otp = process.env.OTP_APPSTORE;
               await EmployeeModel.updateOne({ id: user.id }, { otp });
-              if (user.emailId.indexOf("@") > -1) {
+              if (user.emailId?.indexOf("@") > -1) {
                 await axios.post(process.env.OTP_ENDPOINT, {
                   email: user.emailId,
                   OTP: otp.toString(),
@@ -494,6 +494,7 @@ exports.sendOtp = [
         }
       }
     } catch (err) {
+	    console.log(err)
       return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
@@ -620,15 +621,15 @@ exports.verifyOtp = [
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
           const bc_data = {
-            username: user.emailId,
+            username: req.body.emailId,
             password: "",
             orgName: "org1MSP",
             role: "",
-            email: user.emailId,
+            email: req.body.emailId,
           };
-
+console.log(bc_data)
           await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
-          return apiResponse.successResponseWithData(
+		return apiResponse.successResponseWithData(
             req,
             res,
             "login_success",
