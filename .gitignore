@@ -138,4 +138,4 @@ pre-deploy*.sh
 /env
 
 acme.json
-cache-data
+cache-data/
