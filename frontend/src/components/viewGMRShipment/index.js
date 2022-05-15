@@ -138,7 +138,7 @@ const ViewGMRShipment = (props) => {
         </div>
         <div className='col-sm-8'>
           <div className='d-flex'>
-            { isAuthenticated("roambee") &&(
+            { isAuthenticated("vacus") &&(
             <div className='col-sm-7'>
               <p className='heading'>TEMPERATURE</p>
               <Chart shipmentId={id} />
