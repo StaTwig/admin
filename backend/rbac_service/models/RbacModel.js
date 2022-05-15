@@ -4,6 +4,7 @@ const RbacSchema = new mongoose.Schema(
   {
     permissions: { type: Array, required: true },
     role: { type: String, required: true, unique: true },
+    orgId : { type: String },
     overview: {
       overview: { type: Boolean, default: false },
     },
@@ -73,6 +74,11 @@ const RbacSchema = new mongoose.Schema(
       viewAffliation: { type: Boolean, default: false },
       acceptAffiliation: { type: Boolean, default: false },
       removeAffiliation: { type: Boolean, default: false },
+    },
+    iot : { 
+       roambee : { type: Boolean, default: false },
+       mobileye : { type: Boolean, default: false },
+       vacus : { type: Boolean, default: false } 
     },
   },
   { timestamps: true }
