@@ -138,13 +138,13 @@ const ViewGMRShipment = (props) => {
         </div>
         <div className='col-sm-8'>
           <div className='d-flex'>
-            { isAuthenticated("shipmentTemperture") &&(
+            { isAuthenticated("roambee") &&(
             <div className='col-sm-7'>
               <p className='heading'>TEMPERATURE</p>
               <Chart shipmentId={id} />
             </div>)
             }
-            { isAuthenticated("shipmentTripscore") &&(
+            { isAuthenticated("mobileye") &&(
             <div className='col-sm-5 ml-2'>
               <p className='heading'>DRIVER STATS</p>
               <DriverGraph shipmentId={id} />
