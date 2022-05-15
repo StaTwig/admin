@@ -230,3 +230,21 @@ export const TRACK_AND_TRACE_CONSTANTS = [
         hasPermission: false
     },
 ]
+
+export const IOT_CONSTANTS = [
+    {
+        key: 'roambee',
+        value: 'Roambee',
+        hasPermission: false
+    },
+    {
+        key: 'mobileye',
+        value: 'Mobil Eye',
+        hasPermission: false
+    },
+    {
+        key: 'vacus',
+        value: 'Vacus',
+        hasPermission: false
+    },
+]

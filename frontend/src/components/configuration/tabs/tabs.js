@@ -23,14 +23,16 @@ const Tabs = (props) => {
             {t('workflow')}
           </span>
         </li>
-        <li
-          className={tabIndex == 2 ? "nav-item-active" : "nav-item "}
-          onClick={() => setTabIndex(2)}
-        >
-          <span className={tabIndex == 2 ? "nav-link textColor " : "nav-link "}>
-            {t('integration')}
-          </span>
-        </li>
+        { props.user.organisationType == "Third Party Logistics" && (
+          <li
+            className={tabIndex == 2 ? "nav-item-active" : "nav-item "}
+            onClick={() => setTabIndex(2)}
+          >
+            <span className={tabIndex == 2 ? "nav-link textColor " : "nav-link "}>
+              {t('integration')}
+            </span>
+          </li>
+        )}
         <li
           className={tabIndex == 3 ? "nav-item-active " : "nav-item "}
           onClick={() => setTabIndex(3)}

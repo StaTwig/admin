@@ -4,5 +4,6 @@ const app = express();
 app.get("/",(req,res)=> res.status(200).json({status:"OK", Message:"RBAC Service"}));
 app.get("/getPermissions", RbacController.getPermissions);
 app.get("/getRoles", RbacController.getRoles);
+app.get("/getRolesForTPL/:orgId", RbacController.getRolesForTPL);
 app.post("/updatePermissions", RbacController.updatePermissions);
 module.exports = app;

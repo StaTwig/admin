@@ -7,13 +7,13 @@ import EditTable from "./table/editTable";
 import EditTable1 from "./table1/editTable";
 import { useSelector, useDispatch } from "react-redux";
 import { DEFAULT_USER_ROLES } from '../../constants/userRoles';
-import { DEFAULT_FEATURE_PANEL_VALUES } from '../../constants/featureConstants';
-import { INVENTORY_CONSTANTS, NETWORK_CONSTANTS, ORDERS_CONSTANTS, OVERVIEW_CONSTANTS, SEARCH_CONSTANTS, SHIPMENT_CONSTANTS, TRACK_AND_TRACE_CONSTANTS } from '../../constants/functionalitiesAndPermissionContants';
+import { DEFAULT_FEATURE_PANEL_VALUES, TPL_FEATURE_PANEL_VALUES } from '../../constants/featureConstants';
+import { INVENTORY_CONSTANTS, NETWORK_CONSTANTS, ORDERS_CONSTANTS, OVERVIEW_CONSTANTS, SEARCH_CONSTANTS, SHIPMENT_CONSTANTS, TRACK_AND_TRACE_CONSTANTS, IOT_CONSTANTS } from '../../constants/functionalitiesAndPermissionContants';
 
 //import EditTable from "./table/editTable";
 import { Formik } from "formik";
 
-import { getAllRoles, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, getWareHouses, updatePermissionsByRole } from "../../actions/organisationActions";
+import { getAllRoles, getAllRolesForTPL, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, getWareHouses, updatePermissionsByRole } from "../../actions/organisationActions";
 import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
 import UserRoles from "../userRoles/userRoles";
@@ -27,6 +27,7 @@ const Configurationpart = (props) => {
   const [defaultRoles, setDefaultRoles] = useState([]);
   const [showAddNewInputSection, setShowAddNewInputSection] = useState(false);
   const [featurePanelValues, setFeaturePanelValues] = useState([]);
+  const [tplfeaturePanelValues, setTPLFeaturePanelValues] = useState([]);
   const [showFunctionalitiesAndPermission, setShowFunctionalitiesAndPermission] = useState(false);
   const [functionalitiesPermissionPanelData, setFunctionalitiesPermissionPanelData] = useState([]);
   const [defaultOverviewPanelValues, setDefaultOverviewPanelValues] = useState([]);
@@ -117,12 +118,20 @@ const Configurationpart = (props) => {
   useEffect(() => {
     //getRoles
     async function getRoles() {
-      const roles = await getAllRoles();
+      var roles = [];
+      if(props.user.organisationType == "Third Party Logistics"){
+         setTabIndex(2);
+         setSelectedFeature('iot');
+         handleOnClickOfAFeature('iot');
+         roles = await getAllRolesForTPL(props.user.organisationId)
+      }
+      else roles = await getAllRoles();
       setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
       setSelectedLevel(roles[0]);
     }
     getRoles();
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
+    setTPLFeaturePanelValues([...TPL_FEATURE_PANEL_VALUES]);
   }, []);
 
   useEffect(() => {
@@ -132,7 +141,8 @@ const Configurationpart = (props) => {
         permissions = [...await getPermissionByRole(selectedLevel)];
         setPermissionByRoleData([...permissions]);
       }
-      setSelectedFeature('overview');
+      if(tabIndex == 2) setSelectedFeature('iot');
+      else  setSelectedFeature('overview');
       mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
     }
     getPermissions();
@@ -199,7 +209,7 @@ const Configurationpart = (props) => {
     if (!showAddNewInputSection) {
       let pr =  permissionByRoleData[0];
       pr[selectedFeature][permission.key] = permission.hasPermission;
-      setAllPermissions({overview: pr.overview, search: pr.search, inventory: pr.inventory, shipment: pr.shipment, order: pr.order, network: pr.network, track: pr.track, admin: pr.admin});
+      setAllPermissions({overview: pr.overview, search: pr.search, inventory: pr.inventory, shipment: pr.shipment, order: pr.order, network: pr.network, track: pr.track, admin: pr.admin, iot : pr.iot});
     }
     else
       setAllPermissions({});
@@ -229,7 +239,8 @@ const Configurationpart = (props) => {
           ...permissionsObj
         }
       },
-      role: selectedLevel
+      role: selectedLevel,
+      orgId: props.user.organisationId,
     }
     setUpdatePermissions(selectedPermissionObj);
   };
@@ -241,7 +252,7 @@ const Configurationpart = (props) => {
   const onSaveOfUpdatePermission = async () => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
       if (!showAddNewInputSection) {
-        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: selectedLevel}, setIsLoading);
+        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: selectedLevel, orgId :  props.user.organisationId}, setIsLoading);
       } else {
         if (updatePermissions.role) {
           await requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading);
@@ -293,6 +304,27 @@ const Configurationpart = (props) => {
             onSelectOfRole={onSelectOfRole}
             onChangeOfAddNewInput={onChangeOfAddNewInput}
             featurePanelValues={featurePanelValues}
+            handleOnClickOfAFeature={handleOnClickOfAFeature}
+            functionalitiesPermissionPanelData={functionalitiesPermissionPanelData}
+            handleOnPermissionsChecked={handleOnPermissionsChecked}
+            onSaveOfUpdatePermission={onSaveOfUpdatePermission}
+            errorForRoleNotFound={errorForRoleNotFound}
+            isLoading={isLoading}
+            permissions={permissions}
+            addresses={addresses}
+            acceptApproval={acceptApproval}
+            selectedFeature={selectedFeature}
+            selectedLevel={selectedLevel}
+          />)
+        }
+        {
+          tabIndex == 2 &&
+          (<UserRoles
+            defaultRoles={defaultRoles}
+            showAddNewInputSection={showAddNewInputSection}
+            onSelectOfRole={onSelectOfRole}
+            onChangeOfAddNewInput={onChangeOfAddNewInput}
+            featurePanelValues={tplfeaturePanelValues}
             handleOnClickOfAFeature={handleOnClickOfAFeature}
             functionalitiesPermissionPanelData={functionalitiesPermissionPanelData}
             handleOnPermissionsChecked={handleOnPermissionsChecked}
@@ -728,7 +760,7 @@ function extractItemsWithHasPermissions(item, getPermissionsValueByUpdatePermiss
 }
 
 function extractConstantsBySelectedFeature(selectedFeature) {
-  let CONSTANTS_DATA = [];
+  let CONSTANTS_DATA = [...IOT_CONSTANTS];
   if (selectedFeature === 'overview') {
     CONSTANTS_DATA = [...OVERVIEW_CONSTANTS];
   } else if (selectedFeature === 'search') {
@@ -743,6 +775,12 @@ function extractConstantsBySelectedFeature(selectedFeature) {
     CONSTANTS_DATA = [...NETWORK_CONSTANTS];
   } else if (selectedFeature === 'track') {
     CONSTANTS_DATA = [...TRACK_AND_TRACE_CONSTANTS];
+  } else if (selectedFeature === 'iot') {
+    CONSTANTS_DATA = [...IOT_CONSTANTS];
+  } else if (selectedFeature === 'erp') {
+    CONSTANTS_DATA = [];
+  } else if (selectedFeature === 'linemanagement') {
+    CONSTANTS_DATA = [];
   }
   return CONSTANTS_DATA;
 }
