@@ -83,5 +83,5 @@ const RbacSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+RbacSchema.index({ roie: 1, orgId: 1 }, { unique: true });
 module.exports = mongoose.model("permissions", RbacSchema);
