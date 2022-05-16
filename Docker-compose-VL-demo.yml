@@ -236,6 +236,88 @@ services:
       - "traefik.http.routers.track.tls=true"
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
 
+  admin_employee:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/employee_service:demo-arm64"
+    container_name: "admin_employee"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_employee.entrypoints=websecure"
+      - "traefik.http.routers.admin_employee.rule=Host(`demo.admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.admin_employee.tls=true"
+      - "traefik.http.routers.admin_employee.tls.certresolver=lets-encrypt"
+
+  admin_address:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/address_service:demo-arm64"
+    container_name: "admin_address"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_address.entrypoints=websecure"
+      - "traefik.http.routers.admin_address.rule=Host(`demo.admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.admin_address.tls=true"
+      - "traefik.http.routers.admin_address.tls.certresolver=lets-encrypt"
+
+  admin_affliate:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/affliation_service:demo-arm64"
+    container_name: "admin_affliate"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_affliate.entrypoints=websecure"
+      - "traefik.http.routers.admin_affliate.rule=Host(`demo.admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
+      - "traefik.http.routers.admin_affliate.tls=true"
+      - "traefik.http.routers.admin_affliate.tls.certresolver=lets-encrypt"
+
+  admin_rbac:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/rbac_service:demo-arm64"
+    container_name: "admin_rbac"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_rbac.entrypoints=websecure"
+      - "traefik.http.routers.admin_rbac.rule=Host(`demo.admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"
+      - "traefik.http.routers.admin_rbac.tls=true"
+      - "traefik.http.routers.admin_rbac.tls.certresolver=lets-encrypt"
+
+  admin_configuration:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/configuration_service:demo-arm64"
+    container_name: "admin_configuration"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_configuration.entrypoints=websecure"
+      - "traefik.http.routers.admin_configuration.rule=Host(`demo.admin.vaccineledger.com`) && PathPrefix(`/api/configuration_service`)"
+      - "traefik.http.routers.admin_configuration.tls=true"
+      - "traefik.http.routers.admin_configuration.tls.certresolver=lets-encrypt"
+
+  admin_frontend:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/frontend:demo-arm64"
+    container_name: "admin_frontend"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_frontend.entrypoints=websecure"
+      - "traefik.http.routers.admin_frontend.rule=Host(`demo.admin.vaccineledger.com`)"
+      - "traefik.http.routers.admin_frontend.tls=true"
+      - "traefik.http.routers.admin_frontend.tls.certresolver=lets-encrypt"
+
   frontend:
     build: "./frontend"
     image: "frontend2.0"
