@@ -87,7 +87,8 @@ const UserRoles = ({
             <CustomDropdown
               data={defaultRoles}
               selected={selectedLevel}
-              onSelectOfRole={onSelectOfRole}
+                onSelectOfRole={onSelectOfRole}
+                t={t}
             />
           </div>
           {showAddNewInputSection && (
