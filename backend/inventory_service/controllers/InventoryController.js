@@ -2174,6 +2174,15 @@ exports.uploadSalesData = [
         fs.mkdirSync(dir);
       }
       const { collectedDate, targetPercentage } = req.body;
+
+      let uploadDate = new Date(collectedDate);
+      let startOfMonth = new Date(uploadDate.getFullYear(), uploadDate.getMonth(), 1);
+      let endOfMonth = new Date(uploadDate.getFullYear(), uploadDate.getMonth() + 1, 0);
+      let recordExists = await AnalyticsModel.find({uploadDate: { $gte: startOfMonth, $lte: endOfMonth }});
+      if(recordExists && recordExists.length) {
+        throw new Error("Record for the given month already exists!");
+      }
+
       await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
