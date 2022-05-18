@@ -175,8 +175,6 @@ exports.register = [
       } else if (req.body.phoneNumber != "") {
         let phoneNumber = req.body.phoneNumber;
         phoneNumber = phoneNumber.toLowerCase().replace("", "");
-        console.log("Phone - ", phoneNumber);
-        let phone = "";
         let user;
         // if (!phoneNumber.match(phoneRegex))
         //   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
@@ -494,6 +492,7 @@ exports.sendOtp = [
         }
       }
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
@@ -626,7 +625,7 @@ exports.verifyOtp = [
             role: "",
             email: req.body.emailId,
           };
-
+          console.log(bc_data);
           await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
           return apiResponse.successResponseWithData(
             req,
@@ -901,7 +900,7 @@ exports.assignProductConsumer = [
         userData
       );
     } catch (err) {
-      console.log("err");
+      console.log(err);
       return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
@@ -961,15 +960,18 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
-      let warehouseExists = await WarehouseModel.findOne({id: req.body.id});
-      if(warehouseExists){
-          await EmployeeModel.findOneAndUpdate({id: req.user.id},  { $push: { warehouseId: req.body.id } });
-          return apiResponse.successResponseWithData(
-            req,
-            res,
-            "add_warehouse_success",
-            warehouseExists
-          );
+      let warehouseExists = await WarehouseModel.findOne({ id: req.body.id });
+      if (warehouseExists) {
+        await EmployeeModel.findOneAndUpdate(
+          { id: req.user.id },
+          { $push: { warehouseId: req.body.id } }
+        );
+        return apiResponse.successResponseWithData(
+          req,
+          res,
+          "add_warehouse_success",
+          warehouseExists
+        );
       }
       const invCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "inventoryId" },
