@@ -1,5 +1,7 @@
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const TplWarehouseModel = require("../models/TplWarehouse");
+const TplOrgModel = require("../models/tplOrg");
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const { responses } = require("../helpers/responses");
@@ -8,9 +10,11 @@ const EmployeeModel = require("../models/EmployeeModel");
 exports.getOrganisations = [
   async (req, res) => {
     try {
-      const organisations = await OrganisationModel.find({
+      let organisations
+      if(!req.query.type == "TPL") organisations = await OrganisationModel.find({
         $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
       });
+      else organisations = await TplOrgModel.find({});
       return apiResponse.successResponseWithData(
         res,
         "Organisations",
@@ -23,6 +27,19 @@ exports.getOrganisations = [
   },
 ];
 
+exports.saveNewOrg = [
+  auth,
+  async(req,res) => {
+    try {
+      let newOrg = new TplOrgModel(req.body)
+      await newOrg.save();
+      return apiResponse.successResponseWithData(res,"Added org successfully",newOrg)
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err.message)
+    }
+  }
+]
 exports.getWarehouses = [
   auth,
   async (req, res) => {

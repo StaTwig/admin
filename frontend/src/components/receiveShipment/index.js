@@ -401,7 +401,7 @@ const ReceiveShipment = (props) => {
         </Modal>
       )}
       {message && (
-        <div className='d-flex flex-column align-items-center mt-3' style={{"position":"absolute", "top":"55vh", "right":"2vw"}}>
+        <div className='d-flex flex-column align-items-center mt-3' style={{"position":"absolute", "top":"55vh", "right":"10vw"}}>
           <Alert severity='success' onClick={()=>{setMessage(false)}}>
             <div className='d-flex flex-column align-items-center'>
             <AlertTitle>{t("success")}</AlertTitle>

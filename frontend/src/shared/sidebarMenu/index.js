@@ -16,8 +16,9 @@ const SideBar = (props) => {
   const { match, user, t, trackTraceData } = props;
   const { url } = match;
   const [enable, setEnable] = useState(true);
+  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   useEffect(() => {
-    if (user?.isCustom) setEnable(false);
+    if (intelEnabled) setEnable(false);
   }, [user]);
 
   const resetTrackTracePage = () => {

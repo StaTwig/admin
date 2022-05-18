@@ -14,7 +14,8 @@ import "./style.scss";
 import { Formik } from "formik";
 
 const AddLocation = (props) => {
-  const { t } = props;
+  const { t } = props;  
+  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
@@ -424,7 +425,7 @@ const AddLocation = (props) => {
                       }
                       type="submit"
                     >
-                      <span>{t("Request_Admin_For_Approval")}</span>
+                      <span>{ !intelEnabled ? t("Request_Admin_For_Approval") : "Save"}</span>
                     </button>
                     <button
                       type="button"

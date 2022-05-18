@@ -96,6 +96,7 @@ export function config() {
       trackProduct: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProduct`,
       getOrganisations: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/getOrganisations`,
+      addWarehouseForTpl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/addWarehouseForTpl`,
       getWarehouseByOrgId: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/warehouses?id=`,
       getAllWarehouses: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/allWarehouses`,
       addMultipleProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
@@ -569,7 +570,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }

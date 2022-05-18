@@ -90,13 +90,14 @@ const ProductList = (props) => {
                   ) : (
                     <input
                       className='form-control quantity-received'
-                      value={deliveredProduct}
+                      value={deliveredProductList[index]}
                       placeholder={t("enter_qunatity")}
                       onChange={(e) => {
                         setDeliveredProduct(e.target.value);
                         if (e.target.value <= product.productQuantity) {
                           setError(false);
                           props.onQuantityChange(index, e.target.value);
+                          deliveredProductList[index]=e.target.value;
                         } else {
                           e.target.value = "";
                           setDeliveredProduct();

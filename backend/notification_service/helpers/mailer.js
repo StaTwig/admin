@@ -15,6 +15,11 @@ exports.send = function (from, to, subject, data) {
     from: from,
     to: to,
     subject: subject,
-    html: emailBodyGenerator(data.body, data.source, data.isOTP),
+    html: emailBodyGenerator(
+      data.body,
+      data.source,
+      data?.isOTP,
+      data?.isCustom
+    ),
   });
 };

@@ -26,6 +26,15 @@ export const addWarehouse = async (data) => {
   }
 };
 
+export const addWarehouseForTpl = async (data) => {
+  try {
+    const result = await axios.post(config().addWarehouseForTpl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const verifyOtp = async (data, language) => {
   try {
     if (language === undefined) {

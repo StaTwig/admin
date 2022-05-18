@@ -423,7 +423,7 @@ const Analytics = (props) => {
                         </select>
                       </>
                     )}
-                    {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                    {/* {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
                       selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (
                         <>
                           <label className="filterSubHeading mt-3">
@@ -462,7 +462,7 @@ const Analytics = (props) => {
                             </a>
                           </div>
                         </>
-                      )}
+                      )} */}
                     {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
                       selectedViewCode == 'ANNUALREPORT_DASHBOARD' ||
                       selectedViewCode == 'SKU_DETAIL_VIEW' ||

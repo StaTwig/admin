@@ -28,6 +28,8 @@ import axios from "axios";
 
 const NewShipment = (props) => {
   const { t } = props;
+  //const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  const intelEnabled = true;
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
@@ -111,8 +113,8 @@ const NewShipment = (props) => {
         };
       });
       setOrderIds(ids);
-
-      const orgs = await getAllOrganisations();
+      const userType = intelEnabled ? "TPL" : "regular"
+      const orgs = await getAllOrganisations(userType);
       const orgSplit = user.organisation?.split("/");
       if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
 
@@ -192,6 +194,29 @@ const NewShipment = (props) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(
+        warehouse.data.map((v) => {
+          return {
+            ...v,
+            value: v.id,
+            label: v?.warehouseAddress
+              ? v?.title +
+              "/" +
+              v?.warehouseAddress?.firstLine +
+              ", " +
+              v?.warehouseAddress?.city
+              : v?.title + "/" + v.postalAddress,
+          };
+        })
+      );
+    } catch (err) {
+      setErrorMessage(err);
+    }
+  };
+
+  const onSenderOrgChange = async (value) => {
+    try {
+      const warehouse = await getWarehouseByOrgId(value);
+      setSenderWarehouses(
         warehouse.data.map((v) => {
           return {
             ...v,
@@ -858,7 +883,7 @@ const NewShipment = (props) => {
                 <label htmlFor='client' className='headsup'>
                   {t("from")}
                 </label>
-                {/* <div className="row">
+                {!intelEnabled && (<div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="organizationType">Organisation Type*</label>
@@ -866,7 +891,11 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder="Select Organisation Type"
+                          placeholder={
+                            disabled
+                              ? values.rtype
+                              : t("select")
+                          }
                           onChange={(v) => {
                             setFieldValue('type', v?.value);
                             setFieldValue('typeName', v?.label);
@@ -880,7 +909,8 @@ const NewShipment = (props) => {
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
+                )}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
@@ -894,21 +924,33 @@ const NewShipment = (props) => {
                           onSelect={() => {}}
                           groups={senderOrganisation}
                         /> */}
+                        { intelEnabled && (
                         <Select
                           noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
-                          isDisabled={true}
-                          onChange={(v) => { }}
-                          placeholder={senderOrganisation[0]}
-                          defaultInputValue={senderOrganisation[0]}
-                          value={senderOrganisation[0]}
-                          options={senderOrganisation.map((v) => {
-                            return {
-                              value: v,
-                              label: v,
-                            };
-                          })}
+                          isDisabled={ intelEnabled ? disabled : true}
+                          onChange={(v) => {
+                            setFieldValue("fromOrgLoc", "");
+                            setSenderOrgId(v.label);
+                            setFieldValue("fromOrg", v.value);
+                            onSenderOrgChange(v.value);
+                          }}
+                          placeholder={
+                            disabled
+                            ? values.fromOrg.split("/")[1]
+                            : t("select") 
+                          }
+                          defaultInputValue={values.fromOrg}
+                          value={
+                            values.fromOrg === ""
+                              ? t("select") + " " + t("organisation_name")
+                              : { value: values.toOrg, label: senderOrgId }
+                          }
+                          options={allOrganisations.filter(
+                            (a) => a.type === values.typeName
+                          )}
                         />
+                        )}
                       </div>
                     </div>
                   </div>

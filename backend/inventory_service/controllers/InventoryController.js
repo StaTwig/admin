@@ -743,7 +743,7 @@ exports.addProductsToInventory = [
               if (!batchDup) {
                 continue;
               }
-              if(process.env.PROD!="ABINBEV") {
+              if (process.env.PROD != "ABINBEV") {
                 if (batchDup) {
                   duplicateBatch = true;
                   duplicateBatchNo = batchDup.batchNumbers[0];

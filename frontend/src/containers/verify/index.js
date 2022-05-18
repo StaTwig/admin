@@ -15,7 +15,8 @@ const VerifyContainer = (props) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
+  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const verifyOTP = useCallback(async () => {
     dispatch(turnOn());
@@ -35,7 +36,7 @@ const VerifyContainer = (props) => {
         localStorage.setItem("bkp", result.data.data.permissions.permissions);
         dispatch(setCurrentUser(decoded));
         props.history.push(
-          result.data.data.isCustom ? `/shipments` : `/overview`
+          intelEnabled ? `/shipments` : `/overview`
         );
       } else {
         const err = result.data.message;
