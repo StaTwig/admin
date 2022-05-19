@@ -18,10 +18,8 @@ import {
   getLocationApproval,
   modifyLocation,
 } from "../../actions/organisationActions";
-// import { useNavigate } from 'react-router'
 
 const DashBoardContainer = (props) => {
-  // const navigate = useNavigate()
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [requestsPending, setRequestsPending] = useState([]);
