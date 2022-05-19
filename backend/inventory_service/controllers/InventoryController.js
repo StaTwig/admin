@@ -1866,7 +1866,7 @@ async function getFilterConditions(filters) {
       matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
     }
   }
-  if (filters.district && filters.district.length && !filters.organization) {
+  if (filters.district && !filters.organization) {
     let matchWarehouseCondition = {};
     matchCondition.status = "ACTIVE";
     if (filters.status && filters.status !== "") {
@@ -1881,11 +1881,12 @@ async function getFilterConditions(filters) {
         new RegExp("^" + filters.district + "$", "i");
     }
 
-    if (filters.orgType === "ALL_VENDORS") {
-      matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
-    } else {
-      matchCondition.orgType = filters.orgType;
-    }
+    // REDUNDANT LOGIC
+    // if (filters.orgType === "ALL_VENDORS") {
+    //   matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+    // } else {
+    //   matchCondition.orgType = filters.orgType;
+    // }
     const organisations = await OrganisationModel.aggregate([
       {
         $match: matchCondition,
