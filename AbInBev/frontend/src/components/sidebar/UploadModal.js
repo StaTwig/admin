@@ -27,16 +27,10 @@ const UploadModal = (props) => {
     } else if (result.status === 500) {
       setErrorMessage(result.data.message);
       setShowErrorMessage(true);
-      setTimeout(() => {
-        closeModal();
-      }, 3000);
     } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
       setShowErrorMessage(true);
-      setTimeout(() => {
-        closeModal();
-      }, 3000);
     }
   };
 
