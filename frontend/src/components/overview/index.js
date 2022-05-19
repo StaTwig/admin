@@ -15,9 +15,18 @@ const DashBoard = (props) => {
   const [btnTxt, setBtnTxt] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isAddNewUser, toggleAddNewUser] = useState(false);
+  const [autoPopUp, setAutoPopUp] = props.popupUser;
+  React.useEffect(() => {
+    if (autoPopUp) {
+      setShowModal(true)
+      toggleAddNewUser(true);
+    };
+  },[autoPopUp])
+
   const closeModal = () => {
     setShowModal(false);
     toggleAddNewUser(false);
+    setAutoPopUp(false);
   }
   const {
     requestsPending,

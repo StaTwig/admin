@@ -18,14 +18,18 @@ import {
   getLocationApproval,
   modifyLocation,
 } from "../../actions/organisationActions";
+// import { useNavigate } from 'react-router'
 
 const DashBoardContainer = (props) => {
+  // const navigate = useNavigate()
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [requestsPending, setRequestsPending] = useState([]);
   const [recentRequestsSent, setRecentRequestsSent] = useState([]);
   const [locationApprovals, setLocationApprovals] = useState([]);
   const dispatch = useDispatch();
+
+  const [autoPopUp, setAutoPopUp] = useState(props.location.state?.state?.newUser || false);
 
   const addresses = useSelector((state) => {
     return state.organisation.addresses;
@@ -177,7 +181,8 @@ const DashBoardContainer = (props) => {
   };
 
   const redirectToConfigurationPage = () => {
-    props.history.push(`/configuration`);
+    // props.history.push(`/configuration`);
+    props.history.push(`/configuration`, {state: {state: true}})
   };
 
   return (
@@ -202,6 +207,7 @@ const DashBoardContainer = (props) => {
             locationApprovals={locationApprovals}
             modifyLocations={modifyLocations}
             redirectToConfigurationPage={redirectToConfigurationPage}
+            popupUser={[autoPopUp, setAutoPopUp]}
           />
         </div>
       </div>

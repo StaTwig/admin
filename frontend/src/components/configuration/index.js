@@ -23,7 +23,8 @@ const Configurationpart = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
-
+  // const location = useLocation();
+  const [newRoleForuser, setNewRoleForuser] = useState(props.location.state?.state?.state || false);
   const [defaultRoles, setDefaultRoles] = useState([]);
   const [showAddNewInputSection, setShowAddNewInputSection] = useState(false);
   const [featurePanelValues, setFeaturePanelValues] = useState([]);
@@ -62,6 +63,8 @@ const Configurationpart = (props) => {
   const dispatch = useDispatch();
 
   const [organisationsArr, setOrganisationsArr] = useState([]);
+
+  const [createNewRole, setCreateNewRole] = useState("");
 
   useEffect(() => {
     dispatch(getPermissions());
@@ -126,7 +129,7 @@ const Configurationpart = (props) => {
          roles = await getAllRolesForTPL(props.user.organisationId)
       }
       else roles = await getAllRoles();
-      setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
+      setDefaultRoles([...prepareDefaultRoleData(roles)]);
       setSelectedLevel(roles[0]);
     }
     getRoles();
@@ -137,8 +140,8 @@ const Configurationpart = (props) => {
   useEffect(() => {
     async function getPermissions() {
       let permissions = [];
-      if (!showAddNewInputSection && selectedLevel) {
-        permissions = [...await getPermissionByRole(selectedLevel)];
+      if (!showAddNewInputSection && (selectedLevel || createNewRole)) {
+        permissions = [...await getPermissionByRole(selectedLevel || createNewRole)];
         setPermissionByRoleData([...permissions]);
       }
       if(tabIndex == 2) setSelectedFeature('iot');
@@ -146,7 +149,7 @@ const Configurationpart = (props) => {
       mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
     }
     getPermissions();
-  }, [selectedLevel]);
+  }, [selectedLevel, createNewRole]);
 
   var orgTypeArray = [];
   organisationsArr.map((data) => {
@@ -175,6 +178,7 @@ const Configurationpart = (props) => {
     if (value === 'add_new_role') {
       setShowAddNewInputSection(current => current = true);
       setSelectedLevel(value);
+      setCreateNewRole(value);
     } else {
       setShowAddNewInputSection(current => current = false);
       setSelectedLevel(value);
@@ -185,7 +189,8 @@ const Configurationpart = (props) => {
   const onChangeOfAddNewInput = (event) => {
     const { value } = event?.target;
     setShowAddNewInputSection(current => current = true);
-    setSelectedLevel(value);
+    // setSelectedLevel(value);
+    setCreateNewRole(value);
   }
 
   const handleOnClickOfAFeature = (selectedFeature) => {
@@ -216,7 +221,8 @@ const Configurationpart = (props) => {
   
     // console.log(pr[selectedFeature], selectedFeature, permission, permissionByRoleData);
     setFunctionalitiesPermissionPanelData([...updatedPermissionData]);
-    prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, selectedLevel);
+    prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, createNewRole ||  selectedLevel);
+   
   }
 
   const prepareKeyValueByPermissionData = (data) => {
@@ -252,7 +258,8 @@ const Configurationpart = (props) => {
   const onSaveOfUpdatePermission = async () => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
       if (!showAddNewInputSection) {
-        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: selectedLevel, orgId :  props.user.organisationId}, setIsLoading);
+        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: createNewRole ? createNewRole : selectedLevel, orgId :  props.user.organisationId}, setIsLoading);
+        setCreateNewRole("");
       } else {
         if (updatePermissions.role) {
           await requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading);
@@ -315,6 +322,8 @@ const Configurationpart = (props) => {
             acceptApproval={acceptApproval}
             selectedFeature={selectedFeature}
             selectedLevel={selectedLevel}
+            newRoleState={[newRoleForuser, setNewRoleForuser]}
+            {...props}
           />)
         }
         {
