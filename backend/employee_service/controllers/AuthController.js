@@ -1290,7 +1290,7 @@ exports.fetchImage = [
         ],
       });
       if (findRecord != null) {
-        const imageArray = await EmployeeModel.findOne(
+        const imageArray = await EmployeeModel.find(
           {
             $and: [
               {
@@ -1302,11 +1302,12 @@ exports.fetchImage = [
             ],
           },
           {
-            "userDocuments.$.imageDetails": 1,
+            "userDocuments.imageDetails": 1,
           }
         );
         for (let i = 0; i < imageArray.length; i++) {
-          const s = "/images/" + imageArray[i];
+          let temp = imageArray[i].userDocuments[0]?.imageDetails;
+          const s = "/images/" + temp[temp.length - 1];
           resArray.push(s);
         }
       } else {
@@ -1319,7 +1320,6 @@ exports.fetchImage = [
         resArray
       );
     } catch (err) {
-      console.log(err);
       return apiResponse.ErrorResponse(req, res, "default_error");
     }
   },
