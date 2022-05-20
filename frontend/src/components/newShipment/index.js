@@ -115,19 +115,18 @@ const NewShipment = (props) => {
       setOrderIds(ids);
       const userType = intelEnabled ? "TPL" : "regular"
       const orgs = await getAllOrganisations(userType);
-      const orgSplit = user.organisation?.split("/");
-      if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
+      const orgSplit = user.organisation?.split("/");   
 
-      const organisations = orgs.data;
-      setAllOrganisations(
-        organisations.map((item) => {
-          return {
-            ...item,
-            value: item.id,
-            label: item.name,
-          };
-        })
-      );
+      const organisations = orgs.data.map((item) => {
+        return {
+          ...item,
+          value: item.id,
+          label: item.name,
+        };
+      })
+      setAllOrganisations([
+        ...organisations 
+      ]);
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
       setCategory(
@@ -192,7 +191,8 @@ const NewShipment = (props) => {
 
   const onOrgChange = async (value) => {
     try {
-      const warehouse = await getWarehouseByOrgId(value);
+      const userType = intelEnabled ? "TPL" : "regular"
+      const warehouse = await getWarehouseByOrgId(value,userType);
       setReceiverWarehouses(
         warehouse.data.map((v) => {
           return {
@@ -215,7 +215,8 @@ const NewShipment = (props) => {
 
   const onSenderOrgChange = async (value) => {
     try {
-      const warehouse = await getWarehouseByOrgId(value);
+      const userType = intelEnabled ? "TPL" : "regular"
+      const warehouse = await getWarehouseByOrgId(value,userType);
       setSenderWarehouses(
         warehouse.data.map((v) => {
           return {
@@ -238,31 +239,33 @@ const NewShipment = (props) => {
 
   const onWarehouseChange = async (value) => {
     try {
-      const prods = await getProductsByInventoryId(value);
-      if (prods.data.length === 0) {
-        alert("No products availabe in this warehouse");
-        setErrorMessage("err");
-        return false;
+      if (!intelEnabled) {
+        const prods = await getProductsByInventoryId(value);
+        if (prods.data.length === 0) {
+          alert("No products availabe in this warehouse");
+          setErrorMessage("err");
+          return false;
+        }
+        setProducts(
+          prods.data.map((item) => {
+            return {
+              value: item.name,
+              label: item.name,
+              ...item,
+            };
+          })
+        );
+        setProductsList(
+          prods.data.map((item) => {
+            return {
+              value: item.name,
+              label: item.name,
+              ...item,
+            };
+          })
+        );
+        return true;
       }
-      setProducts(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-      setProductsList(
-        prods.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        })
-      );
-      return true;
     } catch (err) {
       setErrorMessage(err);
       return false;
@@ -629,7 +632,7 @@ const NewShipment = (props) => {
                                 return w.id === supplierWarehouse[i];
                               }
                             });
-                            setFieldValue("fromOrg", senderOrganisation[0]);
+                            setFieldValue("fromOrg", "");
                             setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
@@ -937,8 +940,8 @@ const NewShipment = (props) => {
                           }}
                           placeholder={
                             disabled
-                            ? values.fromOrg.split("/")[1]
-                            : t("select") 
+                              ? values.fromOrg.split("/")[1]
+                              : t("select") + " " + t("organisation_name")
                           }
                           defaultInputValue={values.fromOrg}
                           value={
@@ -947,7 +950,7 @@ const NewShipment = (props) => {
                               : { value: values.toOrg, label: senderOrgId }
                           }
                           options={allOrganisations.filter(
-                            (a) => a.type === values.typeName
+                            (a) => a.name.length > 1
                           )}
                         />
                         )}
@@ -1057,7 +1060,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
-                      <label className='name' htmlFor='organizationType'>
+                      {/* <label className='name' htmlFor='organizationType'>
                         {t("organisation_type")}*
                       </label>
                       <div
@@ -1083,10 +1086,10 @@ const NewShipment = (props) => {
                           defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
-                        {/* {errors.rtype && touched.rtype && (
+                        {errors.rtype && touched.rtype && (
                           <span className="error-msg text-danger">{errors.rtype}</span>
-                        )} */}
-                      </div>
+                        )}
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -1136,7 +1139,7 @@ const NewShipment = (props) => {
                           }}
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(
-                            (a) => a.type === values.rtypeName
+                            (a) => a.length > 0
                           )}
                         />
                         {/* {errors.toOrg && touched.toOrg && (

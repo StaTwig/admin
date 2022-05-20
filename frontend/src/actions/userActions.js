@@ -17,9 +17,10 @@ export const updateProfile = async (data) => {
   }
 };
 
-export const addWarehouse = async (data) => {
+export const addWarehouse = async (data,userType) => {
   try {
-    const result = await axios.post(config().addWarehouse, data);
+    const url = userType=="TPL" ? config().addWarehouseForTpl : config().addWarehouse
+    const result = await axios.post(url, data);
     return result;
   } catch (e) {
     return e.response;

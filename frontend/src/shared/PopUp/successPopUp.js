@@ -4,7 +4,7 @@ import Checked from "../../assets/icons/waiting.png";
 
 const SuccessPopUp = (props) => {
   const { t } = props;
-
+  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   return (
     <div className='popup'>
       <div className='d-flex  flex-column align-items-center'>
@@ -13,7 +13,7 @@ const SuccessPopUp = (props) => {
           width='90'
           height='90'
           className='mb-3'
-          alt={t('Success')}
+          alt={ !intelEnabled ? t('Success') : "Saved!"}
         />
         <div className='alert'>{t('Success')}!</div>
         <div className='text-center'>

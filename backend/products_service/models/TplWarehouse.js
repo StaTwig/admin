@@ -49,19 +49,6 @@ var TplWarehouseSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
-    supervisors: {
-      type: Array,
-      default: []
-    },
-    employees: {
-      type: Array,
-      default: []
-    },
-    warehouseInventory: {
-      type: String,
-      required: true,
-      unique: true
-    },
   },
   { timestamps: true },
 );

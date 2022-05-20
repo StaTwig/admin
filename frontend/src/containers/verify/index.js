@@ -16,7 +16,7 @@ const VerifyContainer = (props) => {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();  
-  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const verifyOTP = useCallback(async () => {
     dispatch(turnOn());
@@ -35,6 +35,7 @@ const VerifyContainer = (props) => {
         localStorage.setItem("theLedgerToken", token);
         localStorage.setItem("bkp", result.data.data.permissions.permissions);
         dispatch(setCurrentUser(decoded));
+        const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
         props.history.push(
           intelEnabled ? `/shipments` : `/overview`
         );

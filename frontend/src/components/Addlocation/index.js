@@ -81,7 +81,8 @@ const AddLocation = (props) => {
       supervisors: [],
       employeess: [],
     };
-    const result = await addWarehouse(data);
+    let userType = intelEnabled  ? "TPL" : "regular";
+    const result = await addWarehouse(data,userType);
     if (result.status === 200) {
       setAddedLocationModal(true);
     }
@@ -462,6 +463,7 @@ const AddLocation = (props) => {
             <SuccessPopup
               onHide={closeModalAddedLocation} //FailurePopUp
               t={t}
+              user={props.user}
             />
           </Modal>
         )}
