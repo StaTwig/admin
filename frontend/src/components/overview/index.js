@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import NewRequests from "./newrequests";
 import LocationRequests from "./locationrequests";
@@ -8,6 +8,7 @@ import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
 import NoRecordsFound from "../NoRecordsFound";
 import { t } from "i18next";
+import { getAllRoles, getAllRolesForTPL } from "../../actions/organisationActions";
 
 const DashBoard = (props) => {
   const [data, setData] = useState([]);
@@ -16,12 +17,38 @@ const DashBoard = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [isAddNewUser, toggleAddNewUser] = useState(false);
   const [autoPopUp, setAutoPopUp] = props.popupUser;
+
+  const [defaultRoles, setDefaultRoles] = useState([]);
+
   React.useEffect(() => {
     if (autoPopUp) {
       setShowModal(true)
       toggleAddNewUser(true);
     };
-  },[autoPopUp])
+  }, [autoPopUp])
+  
+
+  useEffect(() => {
+    //getRoles
+    async function getRoles() {
+      var roles = [];
+      if(props.user.organisationType == "Third Party Logistics"){
+         roles = await getAllRolesForTPL(props.user.organisationId)
+      }
+      else roles = await getAllRoles();
+      let role = [];
+     for (let i = 0; i < permissions.length; i++) {
+       for (let j = 0; j < roles.length; j++) {
+         if (permissions[i].role === roles[j]) {
+           role.push(permissions[i]);
+           continue;
+        }
+       }
+      }
+      setDefaultRoles(role);
+    }
+    getRoles();
+  }, []);
 
   const closeModal = () => {
     setShowModal(false);
@@ -70,6 +97,7 @@ const DashBoard = (props) => {
 
             setData={setData}
             redirectToConfigurationPage={redirectToConfigurationPage}
+            defaultRoles={defaultRoles}
           />
         </Modal>
       )}
