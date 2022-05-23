@@ -52,7 +52,7 @@ const Analytics = (props) => {
   const [districts, setDistricts] = useState([]);
   const [prop, setProp] = useState({});
   let skuArr = [];
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState({year: new Date().getFullYear()});
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
@@ -203,7 +203,7 @@ const Analytics = (props) => {
     setSKU('');
     setProp({});
     setState('');
-    setParams({});
+    setParams({year: new Date().getFullYear()});
     setDistrict('');
     setSelectedViewCode(event.target.value);
   };
