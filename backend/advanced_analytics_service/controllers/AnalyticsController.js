@@ -2941,7 +2941,7 @@ exports.setNewConfiguration = [
     try {
       const query = req.body.district
         ? { district: req.body.district, vendorType: req.body.vendorType }
-        : { vendorId: vendorId };
+        : { vendorId: req.body.vendorId };
       const configExists = await ConfigModel.findOne(query);
       let config;
       if (!configExists) {
