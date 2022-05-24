@@ -41,8 +41,10 @@ const NewAddress = (props) => {
 
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
+
   const [region, setregion] = useState("");
   const [country, setcountry] = useState("");
+
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [addressLine, setAddressLine] = useState("");
@@ -88,7 +90,7 @@ const NewAddress = (props) => {
           dispatch(turnOn());
           const result = await getAddressByLatLong(position);
           dispatch(turnOff());
-          if (result.status === 200) {
+          if (result?.status === 200) {
             await setAddress(result);
           } else {
             setShowModal(true);
@@ -111,7 +113,7 @@ const NewAddress = (props) => {
     data.organisationId = props.user.organisationId;
     dispatch(turnOn());
     const result = await addAddress(data);
-    if (result.status == 200) {
+    if (result?.status == 200) {
       props.history.push(`/address`);
       setMessage(result.data.data.message);
     }
@@ -249,7 +251,7 @@ const NewAddress = (props) => {
                   setFieldValue,
                   dirty,
                 }) => (
-                  <form onSubmit={handleSubmit} className="mb-3"  enableReinitialize>
+                  <form onSubmit={handleSubmit} className="mb-3" enableReinitialize>
                     <TextField
                       style={{
                         width: "425px"

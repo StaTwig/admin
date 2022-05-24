@@ -147,7 +147,6 @@ const NUModal = (props) => {
             errors.email = 'Invalid email address';
           }
 
-
           if (props.isAddNewUser && !values.first_name) {
             errors.first_name = "Enter first name";
           }
@@ -225,7 +224,6 @@ const NUModal = (props) => {
                 </div>
               </div>
             }
-
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
               style={{ justifyContent: 'space-between' }}>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
@@ -299,12 +297,14 @@ const NUModal = (props) => {
                   placeholder={t("enter_phone_number")}
                   style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
                   value={phoneNumber}
+                  disabled={props.isAddNewUser ? false : true}
                   onChange={(phone) => {
                     setUserAlreadyExits('');
                     setPhoneNumberTaken('');
                     verifyPhoneNumber(phone);
                     setPhoneNumber(phone);
                     setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
+
                   }}
                 />
               </div>
@@ -319,7 +319,6 @@ const NUModal = (props) => {
                   <span>{t(phoneNumberTaken)}</span>
                 </div>
               )}
-
               <button
                 // disabled={errors}
                 style={{ visibility: buttonText === "NEXT" ? "" : "hidden" }}
@@ -392,11 +391,11 @@ const NUModal = (props) => {
                 </span>
               )}
             </div> */}
-
             <div className="d-flex w-100 divider"></div>
             <div className="d-flex flex-row-reverse p-3">
               {changeComponent === "role" ?
                 (
+
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}

@@ -231,7 +231,7 @@ const OrganisationContainer = (props) => {
           )}
           <Organisations
             {...props}
-            organisationList={organisationList}
+            organisationList={orgList}
             modifyOrg={updateOrgs}
             showModals={showModals}
             setShowModals={setShowModals}
