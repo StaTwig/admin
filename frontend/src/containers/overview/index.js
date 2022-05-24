@@ -27,6 +27,8 @@ const DashBoardContainer = (props) => {
   const [locationApprovals, setLocationApprovals] = useState([]);
   const dispatch = useDispatch();
 
+  const [autoPopUp, setAutoPopUp] = useState(props.location.state?.state?.newUser || false);
+
   const addresses = useSelector((state) => {
     return state.organisation.addresses;
   });
@@ -177,7 +179,8 @@ const DashBoardContainer = (props) => {
   };
 
   const redirectToConfigurationPage = () => {
-    props.history.push(`/configuration`);
+    // props.history.push(`/configuration`);
+    props.history.push(`/configuration`, {state: {state: true}})
   };
 
   return (
@@ -202,6 +205,7 @@ const DashBoardContainer = (props) => {
             locationApprovals={locationApprovals}
             modifyLocations={modifyLocations}
             redirectToConfigurationPage={redirectToConfigurationPage}
+            popupUser={[autoPopUp, setAutoPopUp]}
           />
         </div>
       </div>

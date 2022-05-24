@@ -25,6 +25,8 @@ const UserRoles = ({
   addresses,
   selectedFeature,
   selectedLevel,
+  newRoleState,
+  ...props
 }) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -35,6 +37,7 @@ const UserRoles = ({
   const [isDisabled, setDisable] = useState(true);
   const [showSuccessModel, setShowSuccessModel] = useState(false);
   const [message, setMessage] = useState("Successfully Updated Configuration");
+  const [newRoleForuser, setNewRoleForuser] = newRoleState;
 
   const unDisableBtn = () => {
     console.log("enable save button");
@@ -45,6 +48,7 @@ const UserRoles = ({
 
   const closeModals = () => {
     setShowSuccessModel(false);
+    if(newRoleForuser) props.history.push('/overview', {state: {newUser: true}})
   };
 
   return isLoading ? (
@@ -87,7 +91,8 @@ const UserRoles = ({
             <CustomDropdown
               data={defaultRoles}
               selected={selectedLevel}
-              onSelectOfRole={onSelectOfRole}
+                onSelectOfRole={onSelectOfRole}
+                t={t}
             />
           </div>
           {showAddNewInputSection && (

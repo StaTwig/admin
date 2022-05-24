@@ -18,7 +18,7 @@ const NUModal = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(props.data?.phoneNumber);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
-  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage, defaultRoles } = props;
 
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
@@ -289,7 +289,7 @@ const NUModal = (props) => {
             <div className="p-1" ref={scrolling} style={{ height: "auto", overflow: "scroll", minHeight: "5rem", overflowX: "hidden", maxHeight: "20rem" }}>
               {changeComponent === "role" ? (
                 <div>
-                  {permissions.map((permission, index) => (
+                  {defaultRoles.map((permission, index) => (
                     <Role
                       key={index}
                       title={permission.role}
