@@ -98,7 +98,7 @@ const NUModal = (props) => {
       setUserAlreadyExits('')
     }
     else {
-      setUserAlreadyExits('')
+      setUserAlreadyExits('');
       usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
           setUserAlreadyExits('email_has_already_been_taken')
@@ -120,8 +120,6 @@ const NUModal = (props) => {
       })
     }
   }
-
-
   const getSelectedAddress = (value) => {
     // debugger
     setAddUserBtnDisable(value)
@@ -186,7 +184,6 @@ const NUModal = (props) => {
             >
               {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
             </p>
-
             {props?.isAddNewUser &&
               <div className="pl-4 pr-4 pt-3 d-flex pb-4"
                 style={{ justifyContent: 'space-between' }}>

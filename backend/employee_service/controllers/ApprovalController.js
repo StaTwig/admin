@@ -53,7 +53,7 @@ exports.acceptApproval = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationName } = req.user;
-          const { id, role, warehouseId } = req.query;
+          const { id, role, warehouseId, phoneNumber } = req.query;
           EmployeeModel.findOne({
             $and: [{ accountStatus: "NOTAPPROVED" }, { id: id }],
           })
@@ -85,6 +85,7 @@ exports.acceptApproval = [
                             isConfirmed: true,
                             walletAddress,
                             role,
+                            phoneNumber
                           },
                           $push: { warehouseId },
                         },
