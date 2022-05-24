@@ -577,6 +577,15 @@ export const getAllRoles = async () => {
   }
 };
 
+export const getAllRolesForTPL = async (organisationId) => {
+  try {
+    const result = await axios.get(`${config().fetchTPLRoles}/${organisationId}`);
+    return result.data.data;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getPermissionByRole = async (role) => {
   try {
     const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}`);
@@ -588,7 +597,6 @@ export const getPermissionByRole = async (role) => {
 
 export const updatePermissionsByRole = async (data) => {
   try {
-    console.log('url:', config().updatePermissions);
     const result = await axios.post(
       `${config().updatePermissions}`,
       data

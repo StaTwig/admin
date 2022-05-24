@@ -406,5 +406,6 @@
     "Clear":"Claro",
     "enter_first_name": "Ingrese el nombre",
     "enter_last_name": "Introduzca el apellido",
-    "phoneNumber_has_already_been_taken": "El número de teléfono ya ha sido tomado"
+    "phoneNumber_has_already_been_taken": "El número de teléfono ya ha sido tomado",
+    "add_new_role": "Agregar nuevo rol"
 }

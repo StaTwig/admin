@@ -18,7 +18,7 @@ const NUModal = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(props.data?.phoneNumber);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
-  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage, defaultRoles } = props;
 
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
@@ -187,7 +187,7 @@ const NUModal = (props) => {
               {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
             </p>
 
-            {props.isAddNewUser &&
+            {props?.isAddNewUser &&
               <div className="pl-4 pr-4 pt-3 d-flex pb-4"
                 style={{ justifyContent: 'space-between' }}>
                 <div className="input-group" style={{ width: '49.5%', alignItems: 'center' }}>
@@ -246,9 +246,52 @@ const NUModal = (props) => {
                 />
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
-                <PhoneInput
-                  className={`form-group mobile-number ${errors.email ? "border-danger" : ""
+                  <PhoneInput
+                    className={`form-group mobile-number ${errors.email ? "border-danger" : ""
+                      }`}
+                    country={"cr"}
+                    preferredCountries={["cr", "in"]}
+                    placeholder={t("enter_phone_number")}
+                    inputStyle={{ maxWidth: "95%" }}
+                    style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
+                    value={phoneNumber}
+                    onChange={(phone) => {
+                      setPhoneNumber(phone);
+                      setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
+                      setUserAlreadyExits(false);
+                    }}
+                    onBlur={handleBlur}
+                    value={values.last_name}
+                  />
+                </div>
+              </div>
+            }
+            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
+              style={{ justifyContent: 'space-between' }}>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  className={`form-control ${errors.email && touched.email ? "border-danger" : ""
                     }`}
+                  placeholder={t('enter_email')}
+                  readOnly={data?.ref != undefined ? true : false}
+                  onChange={(e) => {
+                    verifyEmailIds(e);
+                    setEmail(e);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  disabled={changeComponent === "address" && disableButton ? true : false}
+                />
+              </div>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                <PhoneInput
+                  className={`form-group mobile-number
+                  ${phoneNumberTaken ? "border-danger" : ""}
+                    `}
                   country={"cr"}
                   preferredCountries={["cr"]}
                   placeholder={t("enter_phone_number")}
@@ -256,9 +299,12 @@ const NUModal = (props) => {
                   value={phoneNumber}
                   disabled={props.isAddNewUser ? false : true}
                   onChange={(phone) => {
+                    setUserAlreadyExits('');
+                    setPhoneNumberTaken('');
+                    verifyPhoneNumber(phone);
                     setPhoneNumber(phone);
                     setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
-                    setUserAlreadyExits(false);
+
                   }}
                 />
               </div>
@@ -353,7 +399,7 @@ const NUModal = (props) => {
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
-                    </button>
+                  </button>
                   ) : (
                     <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
                       {t(buttonText)}

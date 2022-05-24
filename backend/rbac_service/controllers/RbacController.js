@@ -47,6 +47,22 @@ exports.getRoles = [
   },
 ];
 
+exports.getRolesForTPL = [
+  auth,
+  async (req, res) => {
+    try {
+      var roles = [];
+      const results = await RbacModel.find({ orgId : req.params.orgId }, { _id: 0, role: 1});
+      results.map((element) => {
+        roles.push(element.role);
+      });
+      return apiResponse.successResponseWithData(res, "All Roles", roles);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.updatePermissions = [
   auth,
   body("permissions")
@@ -66,7 +82,7 @@ exports.updatePermissions = [
           errors.array()
         );
       }
-      const { role, permissions } = req.body;
+      const { role, permissions, orgId } = req.body;
       if (role == "powerUser") {
         return apiResponse.unauthorizedResponse(
           res,
@@ -84,8 +100,9 @@ exports.updatePermissions = [
             }
           }
         }
+        const searchObj = orgId ? { role : role , orgId : orgId } : { ...role };
         let rbac_object = await RbacModel.findOneAndUpdate(
-          { role },
+          { ...searchObj },
           { $set: permissions, permissions: permsArray },
           { new: true, upsert: true }
         );

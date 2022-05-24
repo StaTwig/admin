@@ -6,7 +6,6 @@ import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 
 const ConfigurationContainer = (props) => {
-  
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
