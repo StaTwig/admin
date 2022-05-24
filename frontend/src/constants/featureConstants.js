@@ -21,3 +21,16 @@ export const DEFAULT_FEATURE_PANEL_VALUES = [
         value: 'Track & Trace', key: 'track'
     }
 ];
+
+
+export const TPL_FEATURE_PANEL_VALUES = [
+    {
+        value: 'IOT', key: 'iot'
+    },
+    {
+        value: 'ERP', key: 'erp'
+    },
+    {
+        value: 'Line Management', key: 'linemanagement'
+    }
+];
