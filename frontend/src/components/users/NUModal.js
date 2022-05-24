@@ -188,7 +188,7 @@ const NUModal = (props) => {
               {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
             </p>
 
-            {props.isAddNewUser &&
+            {props?.isAddNewUser &&
               <div className="pl-4 pr-4 pt-3 d-flex pb-4"
                 style={{ justifyContent: 'space-between' }}>
                 <div className="input-group" style={{ width: '49.5%', alignItems: 'center' }}>
@@ -262,9 +262,52 @@ const NUModal = (props) => {
                       setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
                       setUserAlreadyExits(false);
                     }}
+                    onBlur={handleBlur}
+                    value={values.last_name}
                   />
                 </div>
-
+              </div>
+            }
+            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
+              style={{ justifyContent: 'space-between' }}>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  className={`form-control ${errors.email && touched.email ? "border-danger" : ""
+                    }`}
+                  placeholder={t('enter_email')}
+                  readOnly={data?.ref != undefined ? true : false}
+                  onChange={(e) => {
+                    verifyEmailIds(e);
+                    setEmail(e);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  disabled={changeComponent === "address" && disableButton ? true : false}
+                />
+              </div>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                <PhoneInput
+                  className={`form-group mobile-number
+                  ${phoneNumberTaken ? "border-danger" : ""}
+                    `}
+                  country={"cr"}
+                  preferredCountries={["cr"]}
+                  placeholder={t("enter_phone_number")}
+                  style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
+                  value={phoneNumber}
+                  onChange={(phone) => {
+                    setUserAlreadyExits('');
+                    setPhoneNumberTaken('');
+                    verifyPhoneNumber(phone);
+                    setPhoneNumber(phone);
+                    setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
+                  }}
+                />
+              </div>
               {userAlreadyExits && (
                 <div style={{ position: "absolute", top: "9.6rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
                   <span>{t(userAlreadyExits)}</span>
@@ -289,7 +332,7 @@ const NUModal = (props) => {
             <div className="p-1" ref={scrolling} style={{ height: "auto", overflow: "scroll", minHeight: "5rem", overflowX: "hidden", maxHeight: "20rem" }}>
               {changeComponent === "role" ? (
                 <div>
-                  {defaultRoles.map((permission, index) => (
+                  {permissions.map((permission, index) => (
                     <Role
                       key={index}
                       title={permission.role}
@@ -357,13 +400,12 @@ const NUModal = (props) => {
                   <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
-                    </button>
+                  </button>
                   ) : (
                     <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
                       {t(buttonText)}
                     </button>
                   )}
-              
               {changeComponent === "address" &&
                 <button
                   type="button"
