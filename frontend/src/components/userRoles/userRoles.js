@@ -24,28 +24,32 @@ const UserRoles = ({
   acceptApproval,
   addresses,
   selectedFeature,
-  selectedLevel
+  selectedLevel,
+  newRoleState,
+  ...props
 }) => {
-  
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
+  const [TabName, setTabName] = useState("");
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
   const [btnTxt, setBtnTxt] = useState("");
   const [isDisabled, setDisable] = useState(true);
   const [showSuccessModel, setShowSuccessModel] = useState(false);
-  const [message, setMessage] = useState("Successfully Updated Configuration")
+  const [message, setMessage] = useState("Successfully Updated Configuration");
+  const [newRoleForuser, setNewRoleForuser] = newRoleState;
 
   const unDisableBtn = () => {
     console.log("enable save button");
     setDisable(false);
-    document.getElementById('saveBtn').style.backgroundColor = '#0093e9';
-    document.getElementById('saveBtn').style.opacity = '1';
-  }
+    document.getElementById("saveBtn").style.backgroundColor = "#0093e9";
+    document.getElementById("saveBtn").style.opacity = "1";
+  };
 
   const closeModals = () => {
-    setShowSuccessModel(false)
-  }
+    setShowSuccessModel(false);
+    if(newRoleForuser) props.history.push('/overview', {state: {newUser: true}})
+  };
 
   return isLoading ? (
     <Spinner />
@@ -72,25 +76,23 @@ const UserRoles = ({
           />
         </Modal>
       )}
-        {showSuccessModel && (
-          <Modal
-            close={closeModals}
-            size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
-          >
-            <SuccessPopUp
-              onHide={closeModals} 
-              message = {message}
-            />
-          </Modal>
-        )}
+      {showSuccessModel && (
+        <Modal
+          close={closeModals}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopUp onHide={closeModals} message={message} />
+        </Modal>
+      )}
       <div className="user-role-header">
         <div className="input-section">
           <div className="role-section">
             <span className="text">{t("Role Title")}</span>
             <CustomDropdown
-                data={defaultRoles}
-                selected={selectedLevel}
+              data={defaultRoles}
+              selected={selectedLevel}
                 onSelectOfRole={onSelectOfRole}
+                t={t}
             />
           </div>
           {showAddNewInputSection && (
@@ -107,12 +109,16 @@ const UserRoles = ({
         </div>
         <div className={"btn-section"}>
           <button
-            id = "saveBtn"
+            id="saveBtn"
             className="save-button"
-            onClick={() => {onSaveOfUpdatePermission(); setDisable(true);setShowSuccessModel(true) }}
+            onClick={() => {
+              onSaveOfUpdatePermission();
+              setDisable(true);
+              setShowSuccessModel(true);
+            }}
             disabled={isDisabled}
           >
-            {t('save')}
+            {t("save")}
           </button>
           {/* <button
             className="add-user-btn"
@@ -130,14 +136,19 @@ const UserRoles = ({
         </div>
       </div>
       <div className="user-role-content">
-        <div className="card card-container p-2 mt-2" > 
+        <div className="card card-container p-2 mt-2">
           <div className="list-group list-group-flush">
             {featurePanelValues?.map((item, index) => {
               return (
                 <a
                   key={index}
-                  className={`list-group-item list-group-item-action feature-panel ${item.key === selectedFeature ? 'selectedFeature' : ''}`}
-                  onClick={() => handleOnClickOfAFeature(item.key)}
+                  className={`list-group-item list-group-item-action feature-panel ${
+                    item.key === selectedFeature ? "selectedFeature" : ""
+                  }`}
+                  onClick={() => {
+                    handleOnClickOfAFeature(item.key);
+                    setTabName(item.value);
+                  }}
                 >
                   {t(item.value)}
                   <img src={Arrow} alt="icon" width="7px" height="12px" />
@@ -149,10 +160,10 @@ const UserRoles = ({
         <div className="feature-functionality-permissions">
           <div className="feature-functionality-permissions-headers">
             <span className="functionality-permission-text">
-              {t('functionality')}
+              {t("functionality")}
             </span>
             <span className="functionality-permission-text">
-              {t('permission')}
+              {t("permission")}
             </span>
           </div>
           {functionalitiesPermissionPanelData.length > 0

@@ -5,7 +5,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import LocationAddUser from "./LocationAddUser";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
-
+import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
 
 const NUModal = (props) => {
@@ -18,7 +18,7 @@ const NUModal = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(props.data?.phoneNumber);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
-  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage, defaultRoles } = props;
 
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
@@ -98,7 +98,6 @@ const NUModal = (props) => {
       setUserAlreadyExits('')
     }
     else {
-
       setUserAlreadyExits('')
       usersList.forEach((user, index) => {
         if (user.emailId === event.target.value) {
@@ -189,7 +188,7 @@ const NUModal = (props) => {
               {t('Enter the email address of the users you\'d like to add or invite and choose the role they should have.')}
             </p>
 
-            {props.isAddNewUser &&
+            {props?.isAddNewUser &&
               <div className="pl-4 pr-4 pt-3 d-flex pb-4"
                 style={{ justifyContent: 'space-between' }}>
                 <div className="input-group" style={{ width: '49.5%', alignItems: 'center' }}>
@@ -249,6 +248,48 @@ const NUModal = (props) => {
                 />
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                  <PhoneInput
+                    className={`form-group mobile-number ${errors.email ? "border-danger" : ""
+                      }`}
+                    country={"cr"}
+                    preferredCountries={["cr", "in"]}
+                    placeholder={t("enter_phone_number")}
+                    inputStyle={{ maxWidth: "95%" }}
+                    style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
+                    value={phoneNumber}
+                    onChange={(phone) => {
+                      setPhoneNumber(phone);
+                      setData({ ...data, ...{ emailId: undefined }, ...{ phoneNumber: phone } });
+                      setUserAlreadyExits(false);
+                    }}
+                    onBlur={handleBlur}
+                    value={values.last_name}
+                  />
+                </div>
+              </div>
+            }
+            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
+              style={{ justifyContent: 'space-between' }}>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  className={`form-control ${errors.email && touched.email ? "border-danger" : ""
+                    }`}
+                  placeholder={t('enter_email')}
+                  readOnly={data?.ref != undefined ? true : false}
+                  onChange={(e) => {
+                    verifyEmailIds(e);
+                    setEmail(e);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                  value={values.email}
+                  disabled={changeComponent === "address" && disableButton ? true : false}
+                />
+              </div>
+              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <PhoneInput
                   className={`form-group mobile-number
                   ${phoneNumberTaken ? "border-danger" : ""}
@@ -267,7 +308,6 @@ const NUModal = (props) => {
                   }}
                 />
               </div>
-
               {userAlreadyExits && (
                 <div style={{ position: "absolute", top: "9.6rem", left: "2rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
                   <span>{t(userAlreadyExits)}</span>
@@ -366,7 +406,6 @@ const NUModal = (props) => {
                       {t(buttonText)}
                     </button>
                   )}
-                
               {changeComponent === "address" &&
                 <button
                   type="button"
