@@ -11,7 +11,7 @@ We love your input! We want to make contributing to this project as easy and tra
 We use gitlab to host code, to track issues and feature requests, as well as accept pull requests.
 
 ## [Git Flow](https://gitlab.com/statwig-public/theledger/-/wikis/GitFlow), So All Code Changes Happen Through Pull Requests
-Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:
+Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests :
 
 1. Fork the repo and create your branch from `development`.
 2. If you've added code that should be tested, add tests.
