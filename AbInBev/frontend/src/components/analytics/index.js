@@ -688,7 +688,6 @@ const Analytics = (props) => {
                         let enable = true;
                         if (!skuArr.includes(sku.id)) skuArr.push(sku.id);
                         else enable = false;
-
                         return enable ? (
                           <option key={index} value={sku.id}>
                             {sku.name}
@@ -822,7 +821,7 @@ const Analytics = (props) => {
                       <select
                         className="filterSelect mt-2"
                         value={state}
-                      onChange={onStateChange}
+                        onChange={onStateChange}
                       >
                         <option value="">Select State</option>
                         {props.states?.map((state, index) => (
