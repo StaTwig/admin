@@ -166,6 +166,17 @@ const Targets = (props) => {
     setCheckedAllDis(false);
   };
 
+  const roundOff = (num) => {
+    let quotient = num;
+    let remainder = quotient % 10;
+    if(remainder < 5) {
+      quotient = quotient - remainder;
+    } else {
+      quotient = quotient + (10 - remainder);
+    }
+    return quotient;
+  }
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -260,13 +271,13 @@ const Targets = (props) => {
                       </div>
                       <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage ? district.percentage + "%" : "N/A"}
+                          {district.percentage ? roundOff(district.percentage) + "%" : "N/A"}
                         </span>
                       </div>
 
                       <div className="set-Return-Target">
                         <select
-                          value={`${district.percentage}`}
+                          value={`${roundOff(district.percentage)}`}
                           style={{ borderRadius: "10px" }}
                           disabled={isChecked.indexOf(index) === -1}
                           onChange={(e) => {
