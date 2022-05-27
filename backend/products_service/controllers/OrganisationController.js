@@ -41,7 +41,7 @@ exports.saveNewOrg = [
         },
         { new: true }
       );
-      organisationId =
+      const organisationId =
         orgCounter.counters[2].format + orgCounter.counters[2].value;
       req.body.id = organisationId
       let newOrg = new TplOrgModel(req.body)
