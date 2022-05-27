@@ -3,6 +3,7 @@ import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
 import { getAllStates, updateTargets } from "../../actions/analyticsAction";
 import "./index.scss";
+import { useDispatch } from "react-redux";
 
 const Targets = (props) => {
   const [state, setState] = useState("");
@@ -63,6 +64,8 @@ const Targets = (props) => {
   useEffect(() => {
     if (props.depots) setDisplayDistricts(props.depots);
   }, [props.depots]);
+
+  const dispatch = useDispatch();
 
   const onStateChange = async (event) => {
     const selectedState = event.target.value;
@@ -145,10 +148,9 @@ const Targets = (props) => {
           percentage: returnTarget,
         },
       ];
-      await updateTargets(data);
+      await dispatch(updateTargets(data));
     } else {
       let arr = [];
-      console.log("In else", selectedArray);
       selectedArray.map((element) => {
         let depot_list = displayDistricts.find(depot => depot._id.depot === element.value);
         depot_list = depot_list.depots;
@@ -157,12 +159,23 @@ const Targets = (props) => {
           percentage: parseInt(displayDistricts[element.index].percentage),
         })
       });
-      await updateTargets(arr);
+      await dispatch(updateTargets(arr));
     }
     props.refreshPage();
     setIsChecked([]);
     setCheckedAllDis(false);
   };
+
+  const roundOff = (num) => {
+    let quotient = num;
+    let remainder = quotient % 10;
+    if(remainder < 5) {
+      quotient = quotient - remainder;
+    } else {
+      quotient = quotient + (10 - remainder);
+    }
+    return quotient;
+  }
 
   return (
     <div className="container-fluid">
@@ -258,21 +271,19 @@ const Targets = (props) => {
                       </div>
                       <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage ? district.percentage + "%" : "N/A"}
+                          {district.percentage ? roundOff(district.percentage) + "%" : "N/A"}
                         </span>
                       </div>
 
                       <div className="set-Return-Target">
                         <select
-                          value={`${district.percentage}`}
+                          value={`${roundOff(district.percentage)}`}
                           style={{ borderRadius: "10px" }}
                           disabled={isChecked.indexOf(index) === -1}
                           onChange={(e) => {
                             let array = displayDistricts;
                             array[index].percentage = e.target.value;
-                            console.log(array[index]);
                             setDisplayDistricts([...array]);
-                            console.log(e.target.value);
                           }}
                         >
                           {percentageList?.map((item, index) => (

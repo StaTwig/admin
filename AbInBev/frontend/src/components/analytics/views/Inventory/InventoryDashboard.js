@@ -10,6 +10,15 @@ const InventoryDashboard = (props) => {
     props.onViewChange('INVENTORY_GRAPHICAL', { ...sku });
   };
 
+  useEffect(() => {
+    if(props.sku) {
+      let arr = old.filter((brand) =>
+        brand.products.some((product) => product.externalId === props.sku),
+      );
+      setAnalytics([...arr]);
+    }
+  }, [props.sku])
+
   const toggleBrand = (brand) => {
     setVisible(true);
     setAnalytics(old.filter((a) => a._id == brand));

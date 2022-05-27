@@ -168,7 +168,7 @@ exports.register = [
         if (!emailId.match(emailRegex))
           return apiResponse.ErrorResponse(req, res, "not_valid_email");
         if (emailId.indexOf("@") > -1)
-          user = await EmployeeModel.findOne({ emailId });
+          user = await EmployeeModel.findOne({ emailId: emailId });
         if (user) {
           return apiResponse.ErrorResponse(req, res, "account_already_exists");
         }
