@@ -121,6 +121,8 @@ const Home = (props) => {
       authority: values.authority,
       organisationName: values.organisation,
       organisationId: 0,
+      emailId: "",
+      phoneNumber: "",
       address: {
         line1: values.line1,
         city: values.district,

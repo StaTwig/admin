@@ -57,7 +57,7 @@ async function logEvent(data) {
             return event.save();
           }
         }
-      );
+      ).clone();
     }catch(err){
       return await Event.findOne(
         { eventID: data.eventID },
