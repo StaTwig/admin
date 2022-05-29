@@ -1,0 +1,17 @@
+@import "../../assets/styles/global.scss";
+
+.txt {
+  color: #ffffff;
+}
+.font-13 {
+  width: 60%;
+  font-size: 13px;
+}
+.form-control:focus {
+  box-shadow: none;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

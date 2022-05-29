@@ -1,0 +1,30 @@
+.addressalign{
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+}
+
+.title{
+    font-weight: bold;
+    color: #0093E9;
+    font-size: 1.1rem;
+}
+
+.secondAddress{
+    font-weight: bold;
+    font-size: 1vw;
+}
+
+.selectedValue{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+}

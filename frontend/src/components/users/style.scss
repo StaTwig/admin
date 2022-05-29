@@ -1,0 +1,334 @@
+@import "../../assets/styles/global.scss";
+
+.users {
+  padding-left: 2rem;
+  padding-right: 1rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.w-15 {
+  width: 15%;
+  text-align: center;
+}
+.Popover-tipShape {
+  fill: rgb(164, 194, 194);
+}
+.dropdownLabel {
+  font-size: larger;
+}
+.w-10 {
+  align-self: center;
+  text-align: center;
+  width: 10%;
+}
+.special-label{
+  display: none;
+}
+.w-20 {
+  // align-self: center;
+  // text-align: center;
+  width: 20%;
+}
+.w-30 {
+  align-self: center;
+  text-align: center;
+  width: 30%;
+}
+.width30 {
+  width: 30%;
+}
+.txtColor {
+  color: $lightGrey;
+}
+.txtWrapu {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75%;
+  padding: 0 10px;
+  // align-self: center;
+}
+
+.txtWrapu1 {
+  white-space: nowrap;
+  overflow: unset;
+  text-overflow: ellipsis;
+  max-width: 75%;
+  padding: 0 10px;
+  // align-self: center;
+}
+
+.btn-view {
+  width: 80px;
+  height: 35px !important;
+  color: #ffffff;
+  background: #0093e9 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  opacity: 1;
+}
+
+.table-header {
+  background-color: #eaeaea;
+  height: 72px;
+  text-align: center;
+
+  .w-10 {
+    width: 220px;
+  }
+
+  .headerText {
+    color: #000000;
+    font-size: 20px;
+  }
+
+  .vl {
+    border-left: 1px solid #d6d6d6;
+    height: 38px;
+    margin-top: 15px;
+  }
+
+  .showDropDownFilter {
+    display: none;
+  }
+
+  .roleDiv:hover .showDropDownFilter {
+    display: block;
+  }
+
+  .accountStatusImage {
+    width: 10px;
+    height: 15px;
+    margin-top: -7px;
+    margin-left: 50px;
+    margin-right: -25px;
+  }
+
+  .full-width {
+    position: absolute;
+    left: -95px;
+    right: 0px;
+    background-color: #eaeaea;
+    margin-left: 118px;
+  }
+
+  .filter {
+    margin-left: 9rem;
+    margin-right: 2rem;
+  }
+
+  .box {
+    background: #eaeaea;
+    padding: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 78px;
+  }
+}
+
+.userList-container {
+  margin-top: 80px;
+}
+
+.adjustFilterBtn {
+  width: 150px;
+  height: 60px;
+  background: #36c2cf 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  text-align: center;
+  font: 20px;
+  font-weight: bold;
+  letter-spacing: 0px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: 25px;
+}
+
+.roleText {
+  width: 24% !important;
+  position: relative;
+  left: -66px;
+  // font-weight: 400;
+  font-size: small;
+  align-self: center;
+}
+
+.locationText {
+  width: 20% !important;
+  position: relative;
+  left: -60px;
+  // font-weight: 400;
+  font-size: small;
+  // align-self: center;
+}
+
+.walletText {
+  width: 18% !important;
+  position: relative;
+  left: -40px;
+}
+
+.emailText {
+  width: 24% !important;
+  position: relative;
+  right: 7px;
+  display: flex;
+  justify-content: center;
+}
+
+.accountText {
+  position: relative;
+  // left: -60px;
+}
+
+.imageFilterIcon {
+  width: 10px;
+  height: 15px;
+  margin-top: 0px;
+  margin-left: 60px;
+}
+.radio1 {
+  margin-left: -142px;
+}
+
+.txt {
+  font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.txt1 {
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+
+.txt-btn {
+  text-align: center;
+  letter-spacing: 0px;
+  color: #fa7923;
+  opacity: 1;
+  font-size: 16px;
+}
+
+.plus-icon {
+  color: #fa7923;
+  width: 20px;
+  height: 20px;
+}
+
+.redirect-button {
+  width: 210px;
+  height: 40px;
+  border: 2px solid #fa7923;
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: none;
+  cursor: pointer;
+}
+
+.btnText{
+  font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+
+.infoBtn{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.userName {
+  max-width: 13rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: relative;
+  right: 9px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 22px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #FFA83B;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #FFA83B;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.switchBar {
+  position: relative;
+  right: 4.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.us-location{
+  left: -60px;
+  @media screen and (min-width:"1286px"){
+    left: -62px;
+  }
+  @media screen and (min-width:"1486px"){
+    left: -75px;
+  }
+  @media screen and (min-width:"1586px"){
+    left: -76px;
+  }
+}
