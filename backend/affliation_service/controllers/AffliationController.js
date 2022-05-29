@@ -2,100 +2,87 @@ const apiResponse = require("../utils/apiResponse");
 const Organisation = require("../models/organisationModel");
 const EmployeeModel = require("../models/employeeModel");
 const auth = require("../middlewares/jwt");
-const { customAlphabet } = require("nanoid");
-const nanoid = customAlphabet("1234567890abcdef", 10);
-const checkToken = require("../middlewares/middleware").checkToken;
 
 exports.pendingRequests = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const { organisationId } = req.user;
-          await Organisation.aggregate([
-            {
-              $match: {
-                id: organisationId,
-                "affiliations.request_status": "PENDING",
-              },
-            },
-            { $unwind: "$affiliations" },
-            {
-              $lookup: {
-                from: "employees",
-                let: { employee: "$affiliations" },
-                pipeline: [
-                  {
-                    $match: {
-                      $expr: {
-                        $and: [
-                          { $eq: ["$id", "$$employee.employee_id"] },
-                          { $eq: ["$$employee.request_status", "PENDING"] },
-                        ],
-                      },
-                    },
-                  },
-                ],
-                as: "user",
-              },
-            },
-            {
-              $unwind: {
-                path: "$user",
-                includeArrayIndex: "arrayIndex",
-              },
-            },
-            {
-              $lookup: {
-                from: "organisations",
-                localField: "user.organisationId",
-                foreignField: "id",
-                as: "user.org",
-              },
-            },
-            {
-              $unwind: {
-                path: "$user.org",
-                includeArrayIndex: "arrayIndex",
-              },
-            },
-            {
-              $project: {
-                _id: 0,
-                affiliations: 1,
-                name: 1,
-                user: {
-                  walletAddress: 1,
-                  firstName: 1,
-                  lastName: 1,
-                  photoId: 1,
-                  emailId: 1,
-                  org: {
-                    name: 1,
+      const { organisationId } = req.user;
+      const affliations = await Organisation.aggregate([
+        {
+          $match: {
+            id: organisationId,
+            "affiliations.request_status": "PENDING",
+          },
+        },
+        { $unwind: "$affiliations" },
+        {
+          $lookup: {
+            from: "employees",
+            let: { employee: "$affiliations" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$id", "$$employee.employee_id"] },
+                      { $eq: ["$$employee.request_status", "PENDING"] },
+                    ],
                   },
                 },
               },
+            ],
+            as: "user",
+          },
+        },
+        {
+          $unwind: {
+            path: "$user",
+            includeArrayIndex: "arrayIndex",
+          },
+        },
+        {
+          $lookup: {
+            from: "organisations",
+            localField: "user.organisationId",
+            foreignField: "id",
+            as: "user.org",
+          },
+        },
+        {
+          $unwind: {
+            path: "$user.org",
+            includeArrayIndex: "arrayIndex",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            affiliations: 1,
+            name: 1,
+            user: {
+              walletAddress: 1,
+              firstName: 1,
+              lastName: 1,
+              photoId: 1,
+              emailId: 1,
+              org: {
+                name: 1,
+              },
             },
-            {
-              $sort: { "affiliations.request_date": -1 },
-            },
-          ])
-            .then((affliations) => {
-              return apiResponse.successResponseWithData(
-                res,
-                "Pending Requests",
-                affliations
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          res.status(403).json("Auth failed");
-        }
-      });
+          },
+        },
+        {
+          $sort: { "affiliations.request_date": -1 },
+        },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Pending Requests",
+        affliations
+      );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -105,70 +92,60 @@ exports.sentRequests = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const { organisationId } = req.user;
-          await Organisation.aggregate([
-            { $match: { organisationId: { $ne: organisationId } } },
-            { $unwind: "$affiliations" },
-            {
-              $lookup: {
-                from: "employees",
-                let: { employee: "$affiliations" },
-                pipeline: [
-                  {
-                    $match: {
-                      $expr: {
-                        $and: [
-                          { $eq: ["$id", "$$employee.employee_id"] },
-                          { $eq: ["$organisationId", organisationId] },
-                        ],
-                      },
-                    },
+      const { organisationId } = req.user;
+      const affliations = await Organisation.aggregate([
+        { $match: { organisationId: { $ne: organisationId } } },
+        { $unwind: "$affiliations" },
+        {
+          $lookup: {
+            from: "employees",
+            let: { employee: "$affiliations" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$id", "$$employee.employee_id"] },
+                      { $eq: ["$organisationId", organisationId] },
+                    ],
                   },
-                ],
-                as: "user",
-              },
-            },
-            {
-              $project: {
-                _id: 0,
-                affiliations: 1,
-                name: 1,
-                user: {
-                  walletAddress: 1,
-                  firstName: 1,
-                  lastName: 1,
-                  photoId: 1,
-                  emailId: 1,
                 },
               },
+            ],
+            as: "user",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            affiliations: 1,
+            name: 1,
+            user: {
+              walletAddress: 1,
+              firstName: 1,
+              lastName: 1,
+              photoId: 1,
+              emailId: 1,
             },
-            {
-              $unwind: {
-                path: "$user",
-                includeArrayIndex: "arrayIndex",
-              },
-            },
-            {
-              $sort: { "affiliations.request_date": -1 },
-            },
-          ])
-            .then((affliations) => {
-              return apiResponse.successResponseWithData(
-                res,
-                "Sent Requests",
-                affliations
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          res.status(403).json("Auth failed");
-        }
-      });
+          },
+        },
+        {
+          $unwind: {
+            path: "$user",
+            includeArrayIndex: "arrayIndex",
+          },
+        },
+        {
+          $sort: { "affiliations.request_date": -1 },
+        },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Sent Requests",
+        affliations
+      );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -179,7 +156,7 @@ exports.affiliateOrg = [
   async (req, res) => {
     try {
       const { organisationId } = req.user;
-      await Organisation.aggregate([
+      const affliations = await Organisation.aggregate([
         {
           $match: {
             id: organisationId,
@@ -253,18 +230,14 @@ exports.affiliateOrg = [
             // orgs: { $push: "$$ROOT" },
           },
         },
-      ])
-        .then((affliations) => {
-          return apiResponse.successResponseWithData(
-            res,
-            "Affliated Organisations Details",
-            affliations
-          );
-        })
-        .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
-        });
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Affliated Organisations Details",
+        affliations
+      );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -272,9 +245,9 @@ exports.affiliateOrg = [
 
 exports.allAffiliateOrgs = [
   auth,
-  async (req, res) => {
+  (req, res) => {
     try {
-      await EmployeeModel.find({ organisationId: req.user.organisationId })
+      EmployeeModel.find({ organisationId: req.user.organisationId })
         .select("affiliatedOrganisations")
         .then((orgs) => {
           var orgSet = new Set();
@@ -294,6 +267,7 @@ exports.allAffiliateOrgs = [
                 );
               })
               .catch((err) => {
+                console.log(err);
                 return apiResponse.ErrorResponse(res, err);
               });
           } else {
@@ -304,9 +278,11 @@ exports.allAffiliateOrgs = [
           }
         })
         .catch((err) => {
+          console.log(err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -316,44 +292,40 @@ exports.acceptAffiliate = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const { organisationId } = req.user;
-          const { employee_id } = req.query;
-          await Organisation.updateOne(
-            {
-              $and: [
-                { id: organisationId },
-                { "affiliations.request_status": "PENDING" },
-                { "affiliations.employee_id": employee_id },
-              ],
-            },
-            {
-              $set: {
-                "affiliations.$.request_status": "APPROVED",
-                "affiliations.$.last_updated_on": new Date(),
-              },
-            }
-          )
-            .then((resUpdate) => {
-              let res_message = "Affiliation request approved";
-              if (resUpdate.nModified == 0)
-                res_message =
-                  "Affiliation request not approved. Refresh the page and try again!!!";
-              return apiResponse.successResponseWithData(
-                res,
-                res_message,
-                resUpdate
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          res.status(403).json("Auth failed");
+      const { organisationId } = req.user;
+      const { employee_id } = req.query;
+      await Organisation.updateOne(
+        {
+          $and: [
+            { id: organisationId },
+            { "affiliations.request_status": "PENDING" },
+            { "affiliations.employee_id": employee_id },
+          ],
+        },
+        {
+          $set: {
+            "affiliations.$.request_status": "APPROVED",
+            "affiliations.$.last_updated_on": new Date(),
+          },
         }
-      });
+      )
+        .then((resUpdate) => {
+          let res_message = "Affiliation request approved";
+          if (resUpdate.nModified == 0)
+            res_message =
+              "Affiliation request not approved. Refresh the page and try again!!!";
+          return apiResponse.successResponseWithData(
+            res,
+            res_message,
+            resUpdate
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          return apiResponse.ErrorResponse(res, err);
+        });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -363,44 +335,40 @@ exports.rejectAffiliate = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const { organisationId } = req.user;
-          const { employee_id } = req.query;
-          await Organisation.updateOne(
-            {
-              $and: [
-                { id: organisationId },
-                { "affiliations.request_status": "PENDING" },
-                { "affiliations.employee_id": employee_id },
-              ],
-            },
-            {
-              $set: {
-                "affiliations.$.request_status": "REJECTED",
-                "affiliations.$.last_updated_on": new Date(),
-              },
-            }
-          )
-            .then((resUpdate) => {
-              let res_message = "Affiliation request rejected";
-              if (resUpdate.nModified == 0)
-                res_message =
-                  "Affiliation request not rejected. Refresh the page and try again!!!";
-              return apiResponse.successResponseWithData(
-                res,
-                res_message,
-                resUpdate
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          res.status(403).json("Auth failed");
+      const { organisationId } = req.user;
+      const { employee_id } = req.query;
+      await Organisation.updateOne(
+        {
+          $and: [
+            { id: organisationId },
+            { "affiliations.request_status": "PENDING" },
+            { "affiliations.employee_id": employee_id },
+          ],
+        },
+        {
+          $set: {
+            "affiliations.$.request_status": "REJECTED",
+            "affiliations.$.last_updated_on": new Date(),
+          },
         }
-      });
+      )
+        .then((resUpdate) => {
+          let res_message = "Affiliation request rejected";
+          if (resUpdate.nModified == 0)
+            res_message =
+              "Affiliation request not rejected. Refresh the page and try again!!!";
+          return apiResponse.successResponseWithData(
+            res,
+            res_message,
+            resUpdate
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          return apiResponse.ErrorResponse(res, err);
+        });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -430,9 +398,11 @@ exports.unAffiliate = [
           );
         })
         .catch((err) => {
+          console.log(err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -463,9 +433,11 @@ exports.unAffiliateOrg = [
           }
         })
         .catch((err) => {
+          console.log(err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -504,9 +476,11 @@ exports.affiliate = [
           );
         })
         .catch((err) => {
+          console.log(err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -522,10 +496,11 @@ exports.getAllOrg = [
       }).select("name id");
       return apiResponse.successResponseWithData(
         res,
-        "All organisations",
+        "All organizations",
         organisations
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },

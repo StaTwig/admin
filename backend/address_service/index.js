@@ -2,7 +2,6 @@
  * Code taken from Vaccine ledger 4.0 server.js
  */
 var app = require("./app");
-var debug = require("debug")("rest-api-nodejs-mongodb:server");
 var http = require("http");
 
 /**
@@ -73,6 +72,5 @@ function onError(error) {
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
   console.log("Listening on " + bind);
 }
