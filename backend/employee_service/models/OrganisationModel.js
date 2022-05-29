@@ -1,5 +1,5 @@
-var mongoose = require("mongoose");
-var OrganisationSchema = new mongoose.Schema(
+const mongoose = require("mongoose");
+const OrganisationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     name: { type: String },
@@ -32,9 +32,13 @@ var OrganisationSchema = new mongoose.Schema(
     },
     primaryContactId: String,
     logoId: String,
-    type: String,
     typeId: String,
-    status: String,
+    type: String,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED", "REJECTED"],
+      default: "NOTVERIFIED",
+    },
     warehouses: {
       type: Array,
       default: ["ware123", "ware234"],
@@ -47,7 +51,6 @@ var OrganisationSchema = new mongoose.Schema(
       type: String,
       default: ["em12345", "em12346", "em12347"],
     },
-    authority: String,
   },
   { timestamps: true }
 );
