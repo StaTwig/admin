@@ -85,7 +85,7 @@ exports.acceptApproval = [
                             isConfirmed: true,
                             walletAddress,
                             role,
-                            phoneNumber
+                            phoneNumber,
                           },
                           $push: { warehouseId },
                         },
@@ -224,12 +224,17 @@ exports.addUser = [
         if (result.success) {
           try {
             const { organisationId, organisationName } = req.user;
-            const email = (!req.body.emailId || req.body.emailId == "null") ? null : req.body.emailId;
+            const email =
+              !req.body.emailId || req.body.emailId == "null"
+                ? null
+                : req.body.emailId;
             const warehouse = req.body.warehouse;
             const firstName = req.body.firstName;
             const lastName = req.body.lastName;
             // const firstName = email?.split("@")[0];
-            const phoneNumber = req.body.phoneNumber ? "+" + req.body.phoneNumber : null;
+            const phoneNumber = req.body.phoneNumber
+              ? "+" + req.body.phoneNumber
+              : null;
             const incrementCounterEmployee = await CounterModel.updateOne(
               {
                 "counters.name": "employeeId",
@@ -240,7 +245,7 @@ exports.addUser = [
                 },
               }
             );
-  
+
             const employeeCounter = await CounterModel.findOne(
               { "counters.name": "employeeId" },
               { "counters.$": 1 }
@@ -248,7 +253,7 @@ exports.addUser = [
             var employeeId =
               employeeCounter.counters[0].format +
               employeeCounter.counters[0].value;
-  
+
             const user = new EmployeeModel({
               firstName: firstName,
               lastName: lastName,
@@ -266,15 +271,17 @@ exports.addUser = [
               name: firstName,
               organisation: organisationName,
             });
-            mailer.send(
-              constants.addUser.from,
-              req.body.emailId,
-              constants.addUser.subject,
-              emailBody
-            ).catch((err) => {
-              console.log("Error in mailing user!");
-            });
-          } catch(err) {
+            mailer
+              .send(
+                constants.addUser.from,
+                req.body.emailId,
+                constants.addUser.subject,
+                emailBody
+              )
+              .catch((err) => {
+                console.log("Error in mailing user!");
+              });
+          } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
           return apiResponse.successResponse(res, "User Added");

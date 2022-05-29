@@ -52,7 +52,10 @@ exports.getRolesForTPL = [
   async (req, res) => {
     try {
       var roles = [];
-      const results = await RbacModel.find({ orgId : req.params.orgId }, { _id: 0, role: 1});
+      const results = await RbacModel.find(
+        { orgId: req.params.orgId },
+        { _id: 0, role: 1 }
+      );
       results.map((element) => {
         roles.push(element.role);
       });
@@ -100,7 +103,7 @@ exports.updatePermissions = [
             }
           }
         }
-        const searchObj = orgId ? { role : role , orgId : orgId } : { ...role };
+        const searchObj = orgId ? { role: role, orgId: orgId } : { ...role };
         let rbac_object = await RbacModel.findOneAndUpdate(
           { ...searchObj },
           { $set: permissions, permissions: permsArray },
