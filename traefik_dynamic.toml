@@ -1,6 +1,6 @@
 [tls.options]
   [tls.options.default]
-    minVersion = "VersionTLS13"
+    minVersion = "VersionTLS12"
     sniStrict = true
     cipherSuites = [
       "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
