@@ -60,6 +60,7 @@ export function config() {
       getProductsByInventoryUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/getProductsByInventory?invId=`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getManufacturer`,
+      createNewOrg: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/saveOrganisations`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -96,6 +97,7 @@ export function config() {
       trackProduct: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProduct`,
       getOrganisations: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/getOrganisations`,
+      addWarehouseForTpl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/addWarehouseForTpl`,
       getWarehouseByOrgId: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/warehouses?id=`,
       getAllWarehouses: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/allWarehouses`,
       addMultipleProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
@@ -188,6 +190,7 @@ export function config() {
       getImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/images`,
       uploadImage: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/uploadImage?id=`,
       getManufacturers: `${TEST_SERVER_URL}/productmanagement/api/products/getManufacturer`,
+      createNewOrg: `${TEST_SERVER_URL}/productmanagement/api/organisation/saveOrganisations`,
       createShippingOrderUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -569,7 +572,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }

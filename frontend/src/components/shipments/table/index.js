@@ -9,7 +9,10 @@ import { formatDate } from "../../../utils/dateHelper";
 import Pagination from "@material-ui/lab/Pagination";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
+
+
 function Table(props) {
+  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   const dispatch = useDispatch();
   const { shpmnts, t, shouldEnable } = props;
   const shipments = shpmnts();
@@ -31,7 +34,7 @@ function Table(props) {
           shipmentIdList={props.shipmentIdList}
           shouldEnable={shouldEnable}
           supplierReceiverList={
-            props.user.isCustom ? [] : props.supplierReceiverList
+           intelEnabled ? [] : props.supplierReceiverList
           }
           setShipmentIdFilterOnSelect={props.setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={props.setFromShipmentFilterOnSelect}
@@ -172,7 +175,7 @@ function Table(props) {
                   style={{ position: "relative", left: "4.5%" }}
                 >
                   <Link
-                    to={`/${shipment.isCustom === true ? `viewgmrshipment`: `viewshipment`}/${shipment.id}`}
+                    to={`/${shipment.intelEnabled === true ? `viewgmrshipment`: `viewshipment`}/${shipment.id}`}
                     className='button btn-sm'
                     style={{ width: "60px" }}
                   >
@@ -203,7 +206,7 @@ function Table(props) {
               statusStyle = "bg-success";
               status = t("delivered");
             }
-            let supplierAddress = props.user.isCustom
+            let supplierAddress = intelEnabled
               ? shipment.supplier.locationId
               : shipment.supplier.warehouse?.warehouseAddress;
             let wLocation = shipment.supplier.warehouse?.location;
@@ -211,7 +214,7 @@ function Table(props) {
               supplierAddress =
                 wLocation?.firstLine + wLocation?.secondLine + wLocation?.city;
             }
-            let receiverAddress = props.user.isCustom
+            let receiverAddress = intelEnabled
               ? shipment.receiver.locationId
               : shipment.receiver.warehouse?.warehouseAddress;
             let wrLocation = shipment.receiver.warehouse?.location;
@@ -250,7 +253,7 @@ function Table(props) {
                     <h5 className='mb-0 table-h5-text'>
                       {shipment.supplier.org
                         ? shipment.supplier.org.name
-                        : props.user.isCustom
+                        : intelEnabled
                         ? shipment.supplier.id
                         : "-"}
                     </h5>
@@ -258,7 +261,7 @@ function Table(props) {
                       {`${
                         supplierAddress?.firstLine
                           ? supplierAddress?.firstLine
-                          : props.user.isCustom
+                          : intelEnabled
                           ? shipment.supplier.locationId
                           : ""
                       } ${
@@ -280,7 +283,7 @@ function Table(props) {
                     <h5 className='mb-0 table-h5-text'>
                       {shipment.receiver.org
                         ? shipment.receiver.org.name
-                        : props.user.isCustom
+                        : intelEnabled
                         ? shipment.receiver.id
                         : "-"}
                     </h5>
@@ -288,7 +291,7 @@ function Table(props) {
                       {`${
                         receiverAddress?.firstLine
                           ? receiverAddress?.firstLine
-                          : props.user.isCustom
+                          : intelEnabled
                           ? shipment.receiver.locationId
                           : ""
                       }  ${
@@ -316,7 +319,7 @@ function Table(props) {
                 </td>
                 <td>
                   <div className='table-btns d-flex align-items-center justify-content-center'>
-                    {!shipment.isCustom ? (
+                    {!shipment.intelEnabled ? (
                       <button
                         className='button btn-primary text-light btn-sm mr-3'
                         onClick={() => {
@@ -335,7 +338,7 @@ function Table(props) {
                     ) : null}
                     <Link
                       to={`/${
-                        shipment.isCustom === true
+                        intelEnabled === true
                           ? `viewgmrshipment`
                           : `viewshipment`
                       }/${shipment.id}`}
