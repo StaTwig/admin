@@ -23,7 +23,8 @@ exports.batchDelKeysByPattern = async (pattern) => {
       if(batch && batch.length) {
         cursor = batch[0];
         deletedKeysCount += batch[1].length;
-        await unlinkAsync(batch[1]);
+        if(batch[1].length)
+          await unlinkAsync(batch[1]);
       }
     } while(cursor !== '0');
     return deletedKeysCount;

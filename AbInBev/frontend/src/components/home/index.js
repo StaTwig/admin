@@ -29,6 +29,10 @@ const Home = (props) => {
   const dispatch = useDispatch();
 
   const onSendOtp = useCallback(async (email) => {
+    var mobileRegex = /^\d{10}$/;
+    if(mobileRegex.test(email)) {
+      email = `91${email}`
+    }
     setEmail(email);
     const data = { emailId: email };
 
@@ -117,6 +121,8 @@ const Home = (props) => {
       authority: values.authority,
       organisationName: values.organisation,
       organisationId: 0,
+      emailId: "",
+      phoneNumber: "",
       address: {
         line1: values.line1,
         city: values.district,
@@ -127,7 +133,7 @@ const Home = (props) => {
     };
 
     if (isEmail) data.emailId = values.mobileemail;
-    else data.phoneNumber = values.mobileemail;
+    else data.phoneNumber = `+91${values.mobileemail}`;
 
     dispatch(turnOn());
     const result = await registerUser(data);

@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import "./SpmDashBoard.scss";
 import cancelIcon from "../../../../assets/icons/cross.png";
 import SuccessPopUp from "../../../../shared/PopUp/successPopUp";
+import { turnOff, turnOn } from "../../../../actions/spinnerActions";
 
 const SpmDashboard = (props) => {
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
@@ -61,6 +62,8 @@ const SpmDashboard = (props) => {
     },
   });
 
+  console.log("SPM props - ", props);
+
   useEffect(() => {
     var pushdates = [];
     for (var i = 1; i <= 30; i++) {
@@ -91,27 +94,12 @@ const SpmDashboard = (props) => {
   const dispatch = useDispatch();
   
   useEffect(() => {
+    dispatch(turnOn());
     (async () => {
       let configs = await dispatch(
         getNewConfig({ district: configDistrict, vendorType: selectedType })
       );
-
       if (configs.data.length) setConfig(configs.data[0]);
-    })();
-    // Get suppliers list for page
-    (async () => {
-      const result = await dispatch(
-        getSupplierPerformanceByOrgType({
-          orgType: props.selectedType.toUpperCase(),
-          location: props.location,
-        })
-      );
-      let _spm = result.data;
-      if (_spm.length) {
-        sortSupplierPeformances(_spm);
-      } else {
-        sortSupplierPeformances([]);
-      }
     })();
     // Get suppliers list for modal
     (async () => {
@@ -127,8 +115,29 @@ const SpmDashboard = (props) => {
       } else {
         setModalSuppliers([]);
       }
+      dispatch(turnOff());
     })();
   }, [configDistrict, selectedType]);
+
+  useEffect(() => {
+    // Get suppliers list for page
+    dispatch(turnOn());
+    (async () => {
+      const result = await dispatch(
+        getSupplierPerformanceByOrgType({
+          orgType: props.selectedType.toUpperCase(),
+          location: props.location,
+        })
+      );
+      let _spm = result.data;
+      if (_spm.length) {
+        sortSupplierPeformances(_spm);
+      } else {
+        sortSupplierPeformances([]);
+      }
+      dispatch(turnOff());
+    })();
+  }, [props.location, props.selectedType]);
 
   const typeSelected = (type) => {
     setSelectedType(type);
@@ -137,15 +146,19 @@ const SpmDashboard = (props) => {
   useEffect(() => {
     let arr = supplierPerformances;
     sortSupplierPeformances(arr);
-    console.log("Sorted by ", props.sortByValue);
   }, [props.sortByValue])
 
   function compare(a, b) {
     if(props.sortByValue === "returnRate") {
       return b.returnRate - a.returnRate;
     } else if(props.sortByValue === "leadTime") {
-      if(a["leadTime"] && a["leadTime"].length && b["leadTime"] && b["leadTime"].length)
-        return a.leadTime[0].avgLeadTime - b.leadTime[0].avgLeadTime;
+      if(!a["leadTime"] || !a["leadTime"].length) {
+        return 1;
+      } else if(!b["leadTime"] || !b["leadTime"].length) {
+        return -1;
+      } else {
+        return a.leadTime[0].avgLeadTime < b.leadTime[0].avgLeadTime ? -1 : 1;
+      }
     } else if(props.sortByValue === "breakage" || props.sortByValue === "dirtyBottles") {
       return a[`${props.sortByValue}`] - b[`${props.sortByValue}`];
     } else if(props.sortByValue === "storageCapacity") {
@@ -153,7 +166,6 @@ const SpmDashboard = (props) => {
     } else {
       return b.rating?.Overall - a.rating?.Overall
     }
-    return 0;
   }
   function sortSupplierPeformances(arr) {
     arr.sort(compare);
@@ -359,7 +371,7 @@ const SpmDashboard = (props) => {
                                     : Math.round(
                                         perf.leadTime[0]?.avgLeadTime
                                       ) + " M"
-                                  : 0}
+                                  : "N/A"}
                               </td>
                               <td>20%</td>
                               <td>
@@ -806,7 +818,7 @@ const SpmDashboard = (props) => {
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>
-                      Return Rate
+                      Return Rate %
                     </td>
                     <td>
                       <select
@@ -992,7 +1004,7 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        {persentages.map((item, index) => (
+                        {dates.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
                           </option>
@@ -1048,7 +1060,7 @@ const SpmDashboard = (props) => {
                           setTemp(e.target.value);
                         }}
                       >
-                        {persentages.map((item, index) => (
+                        {dates.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
                           </option>
@@ -1208,7 +1220,7 @@ const SpmDashboard = (props) => {
                   </tr>
                   <tr>
                     <td scope="row" style={{ color: "#A20134" }}>
-                      Dirty Bottle
+                      Dirty Bottle %
                     </td>
                     <td>
                       <select

@@ -1193,7 +1193,7 @@ exports.getStatsByBrand = [
       warehouseIds = await _getWarehouseIdByOrgType(filters);
       for (const [index, product] of Products.entries()) {
         if (prevBrand != product._id.manufacturer) {
-          if (!!Object.keys(arr).length) {
+          if (Object.keys(arr).length) {
             Analytics.push(arr);
           }
           arr = {
@@ -2941,7 +2941,7 @@ exports.setNewConfiguration = [
     try {
       const query = req.body.district
         ? { district: req.body.district, vendorType: req.body.vendorType }
-        : { vendorId: vendorId };
+        : { vendorId: req.body.vendorId };
       const configExists = await ConfigModel.findOne(query);
       let config;
       if (!configExists) {

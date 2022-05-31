@@ -313,11 +313,12 @@ const TransactionHistory = (props) => {
 
   const getImageURL = async (imageId) => {
     const r = await getImage(imageId);
-    const reader = new window.FileReader();
-    reader.readAsDataURL(r.data);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
+    // const reader = new window.FileReader();
+    // reader.readAsDataURL(r.data);
+    // reader.onload = function () {
+    //   setImage(reader.result);
+    // };
+    setImage(r.data.data);
   };
 
   const getSumByProperty = (inputArr, key) => {
