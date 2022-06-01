@@ -35,13 +35,7 @@ const FormLoginPage = (props) => {
                       const errors = {};
                       if (!values.email) {
                         errors.email = "Required";
-                      } else if (
-                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-                          values.email
-                        )
-                      ) {
-                        errors.email = "Invalid email address";
-                      }
+                      } 
                       return errors;
                     }}
                     onSubmit={(values, { setSubmitting }) => {
@@ -69,7 +63,6 @@ const FormLoginPage = (props) => {
                           </label>
                           <input
                             id="email"
-                            type="email"
                             className={`pl-0 form-control ${
                               errors.email ? "border-danger" : ""
                             }`}
