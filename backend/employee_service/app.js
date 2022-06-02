@@ -6,7 +6,6 @@ const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const { getFileStream } = require("./helpers/s3");
 const cors = require("cors");
-const {getFileStream} = require("./helpers/s3");
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
