@@ -30,11 +30,11 @@ Docker --> Docker Compose
 
 - [x] acme.json in the root folder is used the TLS Challenge LetsEncrypt for HTTPS in Traefik. Make sure that acme.json has Read and Write Permissions.
 
-## Deployment
+- [x] Dynamic Configuration is present in the file "traefik_dynamic.toml"
 
-- Login to server
+- [x] acme.json in the root folder is used the TLS Challenge LetsEncrypt for HTTPS in Traefik. Make sure that acme.json has Read and Write Permissions.
 
-- Git clone for fresh deployment or git pull to pull latest changes --> Enter github details if prompted
+- Git clone for fresh deployment or git pull to pull latest changes --> Enter github deatils if prompted
 
 - Run Dependency installer script to download Docker Engine , Docker Compose and create Docker Network named : Proxy
 

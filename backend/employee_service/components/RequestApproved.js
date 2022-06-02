@@ -1,5 +1,5 @@
-const RequestApproved = ({ name,organisation }) => {
-    return `
+const RequestApproved = ({ name, organisation }) => {
+  return `
     <head>
     <title>StatLedger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -94,7 +94,7 @@ const RequestApproved = ({ name,organisation }) => {
                           <tbody>
                             <tr>
                               <td style="width:200px;">
-                                <img height="auto" src="https://admin.abinbev.statledger.io/ABINBEV.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;"/>
+                                <img height="auto" src="http://test.vaccineledger.com/dist/97b8f67db5b802bef872b0d34d7baf06.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;"/>
                               </td>
                             </tr>
                           </tbody>
@@ -159,7 +159,7 @@ const RequestApproved = ({ name,organisation }) => {
                     </tr>
                     <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;">
-                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;">Continue to <a href="http://abinbev.statledger.io">Login</a></div>
+                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;">Continue to <a href="http://vaccineledger.com">Login</a></div>
                     </td>
                   </tr>
                       <td align="center" style="font-size:0px;padding:10px 25px;padding-right:16px;padding-left:25px;word-break:break-word;">
@@ -192,7 +192,6 @@ const RequestApproved = ({ name,organisation }) => {
         <![endif]-->
     </div>
   </body>`;
-  };
-  
-  module.exports = RequestApproved;
-  
+};
+
+module.exports = RequestApproved;
