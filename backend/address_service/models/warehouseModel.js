@@ -67,12 +67,12 @@ var WarehouseSchema = new mongoose.Schema(
     },
     bottleCapacity: {
       type: Number,
-      default: 0
+      default: 0,
     },
     sqft: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   { timestamps: true }
 );

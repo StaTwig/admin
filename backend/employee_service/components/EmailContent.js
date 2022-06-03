@@ -1,6 +1,6 @@
-const EmailContent = ({ name, origin, otp ,email }) => {
-    const verifyLink = `${origin}/verify?emailId=${email}`;
-    return `
+const EmailContent = ({ name, origin, otp, email }) => {
+  const verifyLink = `${origin}/verify?emailId=${email}`;
+  return `
     
     <head>
     <title>StatLedger</title>
@@ -194,8 +194,7 @@ const EmailContent = ({ name, origin, otp ,email }) => {
         </table>
         <![endif]-->
     </div>
-  </body>`
-  };
-  
-  module.exports = EmailContent;
-  
+  </body>`;
+};
+
+module.exports = EmailContent;

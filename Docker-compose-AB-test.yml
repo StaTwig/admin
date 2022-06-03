@@ -89,7 +89,7 @@ services:
       - "traefik.http.routers.configuration.tls.certresolver=lets-encrypt"
 
   frontend:
-    build: "./frontend"
+    build: "./abinbev-frontend"
     image: "frontend2.0"
     container_name: "frontend"
     restart: always

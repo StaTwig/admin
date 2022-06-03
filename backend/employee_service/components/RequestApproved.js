@@ -1,5 +1,5 @@
-const RequestApproved = ({ name,organisation }) => {
-    return `
+const RequestApproved = ({ name, organisation }) => {
+  return `
     <head>
     <title>StatLedger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -192,7 +192,6 @@ const RequestApproved = ({ name,organisation }) => {
         <![endif]-->
     </div>
   </body>`;
-  };
-  
-  module.exports = RequestApproved;
-  
+};
+
+module.exports = RequestApproved;

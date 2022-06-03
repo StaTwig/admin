@@ -12,7 +12,7 @@ const {
   modifyLocation,
   getCountries,
   getStatesByCountry,
-  getCitiesByState
+  getCitiesByState,
 } = require("../controllers/AddressController");
 const Storage = multer.diskStorage({
   destination(req, file, callback) {

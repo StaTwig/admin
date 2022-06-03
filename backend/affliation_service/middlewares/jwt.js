@@ -1,11 +1,30 @@
-const dotenv = require("dotenv").config({ path: __dirname + "/../.env" });
-const jwt = require("express-jwt");
-const secret = process.env.JWT_SECRET;
+const jwt = require("jsonwebtoken");
+const apiResponse = require("../utils/apiResponse");
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const authenticate = jwt({
-  secret: secret,
-  algorithms: ["sha1", "RS256", "HS256"],
-  // secret:secret
-});
-
-module.exports = authenticate;
+module.exports = (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return apiResponse.unauthorizedResponse(
+        res,
+        "Authorization token is not found"
+      );
+    }
+    const token = authorization.replace("Bearer ", "");
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+      if (err) {
+        console.log(err);
+        if (err.name === "TokenExpiredError") {
+          return apiResponse.unauthorizedResponse(res, "Token expired");
+        }
+        return apiResponse.unauthorizedResponse(res, "Invalid token");
+      }
+      req.user = payload;
+      next();
+    });
+  } catch (err) {
+    console.log(err);
+    return apiResponse.ErrorResponse(res, "Auth Error");
+  }
+};

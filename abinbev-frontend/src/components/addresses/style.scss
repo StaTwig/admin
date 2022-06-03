@@ -1,0 +1,25 @@
+@import "../../assets/styles/global.scss";
+
+.address {
+  padding-left: 3rem;
+  padding-right: 1rem;
+}
+.r-10 {
+  right: 10px;
+}
+.dropdownLabel {
+  font-size: larger;
+}
+.d-width {
+  width: 80px;
+  span {
+    font-size: 12px;
+  }
+}
+.add-width {
+  width: 30%;
+}
+.mapC {
+  position: relative;
+  height: 75%;
+}

@@ -39,7 +39,12 @@ exports.addressesOfOrgWarehouses = [
   auth,
   async (req, res) => {
     try {
-      await Warehouse.find({$and: [{organisationId: req.user.organisationId},{status:"ACTIVE"}]})
+      await Warehouse.find({
+        $and: [
+          { organisationId: req.user.organisationId },
+          { status: "ACTIVE" },
+        ],
+      })
         .then((warehouses) => {
           return apiResponse.successResponseWithData(
             res,
@@ -57,7 +62,7 @@ exports.addressesOfOrgWarehouses = [
 ];
 
 function getConditionForLocationApprovals(type, id) {
-  let matchConditions = { };
+  let matchConditions = {};
   // let matchConditions = { status: "NOTVERIFIED" };
   matchConditions = {
     $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
@@ -88,14 +93,16 @@ exports.getLocationApprovals = [
             pipeline: [
               {
                 $match: {
-                  $expr: { $in: ["$$wid", {$ifNull: ["$pendingWarehouseId", []]}] },
+                  $expr: {
+                    $in: ["$$wid", { $ifNull: ["$pendingWarehouseId", []] }],
+                  },
                 },
               },
             ],
             as: "employee",
           },
         },
-        { $unwind: "$employee" }
+        { $unwind: "$employee" },
       ])
         .then((warehouses) => {
           return apiResponse.successResponseWithData(
@@ -105,11 +112,11 @@ exports.getLocationApprovals = [
           );
         })
         .catch((err) => {
-          console.log('error1',err);
+          console.log("error1", err);
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
-      console.log('Error2', err);
+      console.log("Error2", err);
 
       return apiResponse.ErrorResponse(res, err);
     }
@@ -221,21 +228,24 @@ exports.AddWarehouse = [
         warehouseCounter.counters[0].value;
       //const warehouseId = "war-" + nanoid();
       let employee = [];
-    if(employees != undefined && employees.length > 0){
-      employee = employees
-    }
-    else{
-      employee.push(req.user.id);
-    }
-    employee.forEach(async(emp) => {
-    const employeewarehouse = await EmployeeModel.findOneAndUpdate({
-     id: emp,
-   },{
-     $push: {warehouseId: warehouseId}
-   },{
-     new: true
-   });
-  });
+      if (employees != undefined && employees.length > 0) {
+        employee = employees;
+      } else {
+        employee.push(req.user.id);
+      }
+      employee.forEach(async (emp) => {
+        const employeewarehouse = await EmployeeModel.findOneAndUpdate(
+          {
+            id: emp,
+          },
+          {
+            $push: { warehouseId: warehouseId },
+          },
+          {
+            new: true,
+          }
+        );
+      });
       const warehouse = new Warehouse({
         id: warehouseId,
         title,
@@ -249,7 +259,7 @@ exports.AddWarehouse = [
         warehouseAddress,
         status: "ACTIVE",
         warehouseInventory: inventoryResult.id,
-        employees: req.body.employees || [req.user.id]
+        employees: req.body.employees || [req.user.id],
       });
       await warehouse.save();
       return apiResponse.successResponseWithData(
@@ -258,7 +268,7 @@ exports.AddWarehouse = [
         warehouse
       );
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -368,13 +378,10 @@ exports.addAddressesFromExcel = [
         )
           .then((res) => res.json())
           .then(async (res) => {
-          const user = await EmployeeModel.findOne({
-            $or: [
-              { emailId: address.user },
-              { phoneNumber: address.user },
-            ]
-          })
-          console.log("USERS IS ",user);
+            const user = await EmployeeModel.findOne({
+              $or: [{ emailId: address.user }, { phoneNumber: address.user }],
+            });
+            console.log("USERS IS ", user);
             const reqData = {
               id: warehouseId,
               warehouseInventory: inventoryResult.id,
@@ -472,23 +479,22 @@ exports.modifyLocation = [
                       warehouseId: [id],
                     },
                     $pull: {
-                      pendingWarehouseId: id
-                    }
+                      pendingWarehouseId: id,
+                    },
                   }
                 );
-              }
-              else if (type == 1) {
+              } else if (type == 1) {
                 await EmployeeModel.updateOne(
                   {
                     id: eid,
                   },
                   {
                     $push: {
-                      warehouseId: id
+                      warehouseId: id,
                     },
                     $pull: {
-                      pendingWarehouseId: id
-                    }
+                      pendingWarehouseId: id,
+                    },
                   }
                 );
               } else {
@@ -524,14 +530,14 @@ exports.getCountries = [
   auth,
   async (req, res) => {
     try {
-      const countries = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.region' : req.query.region}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.country",
-           }
-       }
-  ]);
+      const countries = await WarehouseModel.aggregate([
+        { $match: { "warehouseAddress.region": req.query.region } },
+        {
+          $group: {
+            _id: "$warehouseAddress.country",
+          },
+        },
+      ]);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -546,14 +552,14 @@ exports.getStatesByCountry = [
   auth,
   async (req, res) => {
     try {
-      const allStates = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.country': req.query.country}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.state",
-           }
-       }
-  ]);
+      const allStates = await WarehouseModel.aggregate([
+        { $match: { "warehouseAddress.country": req.query.country } },
+        {
+          $group: {
+            _id: "$warehouseAddress.state",
+          },
+        },
+      ]);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -568,14 +574,14 @@ exports.getCitiesByState = [
   auth,
   async (req, res) => {
     try {
-      const allCities = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.state': req.query.state}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.city",
-           }
-       }
-  ]);
+      const allCities = await WarehouseModel.aggregate([
+        { $match: { "warehouseAddress.state": req.query.state } },
+        {
+          $group: {
+            _id: "$warehouseAddress.city",
+          },
+        },
+      ]);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",

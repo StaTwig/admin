@@ -1,5 +1,5 @@
-const RejectedApproval = ({ name,organisation }) => {
-    return `
+const RejectedApproval = ({ name, organisation }) => {
+  return `
     <head>
     <title>StatLedger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -192,7 +192,6 @@ const RejectedApproval = ({ name,organisation }) => {
         <![endif]-->
     </div>
   </body>`;
-  };
-  
-  module.exports = RejectedApproval;
-  
+};
+
+module.exports = RejectedApproval;

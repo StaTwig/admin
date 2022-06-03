@@ -83,15 +83,19 @@ exports.getOrgs = [
             const employeeEmail = await EmployeeModel.findOne({
               id: users[c].primaryContactId,
             }).select("emailId phoneNumber");
-            if(employeeEmail.emailId!=null){
-              EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.emailId);
+            if (employeeEmail.emailId != null) {
+              EmployeeIdMap.set(
+                users[c].primaryContactId,
+                employeeEmail.emailId
+              );
               users[c].primaryContactId = employeeEmail.emailId;
-            }
-            else{
-              EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.phoneNumber);
+            } else {
+              EmployeeIdMap.set(
+                users[c].primaryContactId,
+                employeeEmail.phoneNumber
+              );
               users[c].primaryContactId = employeeEmail.phoneNumber;
             }
-
           } catch (err) {}
         }
       }
@@ -152,7 +156,6 @@ exports.updateOrg = [
           { $set: { status: "ACTIVE" } },
           { new: true }
         );
-        console.log(warehouse);
       }
       await EmployeeModel.findOneAndUpdate(
         { id: org.primaryContactId },

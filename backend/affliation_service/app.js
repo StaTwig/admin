@@ -22,10 +22,9 @@ const accessLogStream = fs.createWriteStream(
 
 mongoose
   .connect(process.env.MONGODB_URL, {
+    keepAlive: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
   })
   .then(() => {
     if (process.env.NODE_ENV !== "test") {

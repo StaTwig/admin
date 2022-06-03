@@ -1,5 +1,5 @@
 const AddUser = ({ name, organisation }) => {
-    return `  
+  return `  
     <head>
     <title>StatLedger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -169,7 +169,7 @@ const AddUser = ({ name, organisation }) => {
                     <tr>
                       <td align="center" style="font-size:0px;padding:10px 25px;padding-right:16px;padding-left:25px;word-break:break-word;">
                         <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;"><h2>What is VaccineLedger?</h2>
-                        <p>VaccineLedger is a Blockchain based platform, to track and trace vaccine's journey across the suplly chain.</p></div>
+                        <p>VaccineLedger is a Blockchain based platform, to track and trace vaccine's journey across the supply chain.</p></div>
                       </td>
                     </tr>
                     <tr>
@@ -197,8 +197,7 @@ const AddUser = ({ name, organisation }) => {
         </table>
         <![endif]-->
     </div>
-  </body>`
-  };
-  
-  module.exports = AddUser;
-  
+  </body>`;
+};
+
+module.exports = AddUser;
