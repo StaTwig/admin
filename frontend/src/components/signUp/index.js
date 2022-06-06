@@ -408,7 +408,7 @@ const FormPage = (props) => {
                                 props.onEmailChange(e);
                                 handleChange(e);
                               }}
-                              handleBlur={handleEmailVerification()}
+                             onBlur={() => handleEmailVerification()}
                             />
                             {errors.email && touched.email && (
                               <span className='error-msg text-dangerS'>
