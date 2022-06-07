@@ -28,7 +28,7 @@ const FormPage = (props) => {
   const [organisationsArr, setOrganisationsArr] = useState([]);
   const [value, setValue] = useState("");
   const [orgType, setorgType] = useState("");
-  const [selectedType, setselectedType] = useState();
+  const [selectedType, setselectedType] = useState('');
   const [emailError, setemailerror] = useState(false);
   const [phoneError, setphoneerror] = useState(false);
   const [signupDisable, setsignupDisable] = useState(true);
@@ -65,19 +65,63 @@ const FormPage = (props) => {
     // }
     // check();
     fetchOrganisationType();
-    fetchData();
-  }, [t]);
+    // fetchData();
+  }, []);
   var orgTypeArray = [];
-  organisationsType.map((data) => {
+  organisationsType.forEach((data) => {
     for (var i = 0; i < data.length; i++) {
       orgTypeArray.push(data[i].name);
     }
   });
-  const showOrgByType = (value) => {
-    let arr = organisations.filter((data) => data.type === value);
-    arr.push({ name: t("other") });
-    return arr;
-  };
+
+  const [orgNames, setOrgNames] = useState([])
+
+  React.useEffect(() => {
+    console.log("selected type changed", selectedType);
+    if (selectedType === '') return;
+    let arr = [];
+    async function fetchData(type) {
+      const orgs = await getOrganisations(type);
+
+      orgs.push({ id: t("other"), name: t("other") });
+      arr = [...arr, ...orgs]
+      setOrganisations(orgs);
+      setOrganisationsArr(orgs);
+      setOrgNames(arr);
+      console.log(arr);
+    }
+    if (selectedType === 'Third Party Logistics') {
+      console.log("TPL")
+      fetchData('TPL');
+    }
+    else {
+      console.log("Other");
+      fetchData('');
+    }
+    
+  },[selectedType])
+
+  // const showOrgByType = React.useCallback((value) => {
+  //   console.log('render');
+  //   let arr = [];
+  //   async function fetchData(type) {
+  //     const orgs = await getOrganisations(type);
+
+  //     orgs.push({ id: t("other"), name: t("other") });
+  //     arr = [...arr, ...orgs]
+  //     setOrganisations(orgs);
+  //     setOrganisationsArr(orgs);
+  //   }
+  //   if(value === 'Third Party Logistics')
+  //     fetchData('TPL');
+  //   else
+  //     fetchData('');
+
+  //   // let arr = organisations.filter((data) => data.type === value);
+  //   // arr.push({ name: t("other") });
+  //   // return arr;
+  //   return arr
+  // },[value]);
 
   const handleEmailVerification = () => {
     if (props.email) {
@@ -670,7 +714,7 @@ const FormPage = (props) => {
                                 id='debug'
                                 debug
                                 getOptionLabel={(option) => option.name}
-                                options={showOrgByType(selectedType)}
+                                options={orgNames}
                                 // disabled={lastNameError && firstNameError
                                 //   && phoneNumberError && emailErrorMsg
                                 //   && phoneErrorMsg && emailError

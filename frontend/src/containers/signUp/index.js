@@ -55,6 +55,7 @@ const SignupContainer = (props) => {
       setShowModal(false);
       setAdminAwaiting(true);
     } else if (result.status === 500) {
+      setShowModal(false);
       setErrorMessage(result.data.message);
     } else {
       const err = result.data;
