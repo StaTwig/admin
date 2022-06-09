@@ -110,7 +110,7 @@ export function config() {
     abinbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
-      registerUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/register`,
+      registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
       checkUserUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
@@ -185,7 +185,7 @@ export function config() {
       getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
       getNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getNewConfig`,
       setNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/setNewConfig`,
-      getAllTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getDepotTargets`,
+      getAllTargets: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/getDepotTargets`,
       updateTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/updateTargetSales`,
     },
   };

@@ -271,7 +271,7 @@ const Targets = (props) => {
                       </div>
                       <div className="retur-Target">
                         <span style={{ marginBottom: "20px" }}>
-                          {district.percentage ? roundOff(district.percentage) + "%" : "N/A"}
+                          {district.percentage != "N/A" ? roundOff(district.percentage) + "%" : "N/A"}
                         </span>
                       </div>
 
