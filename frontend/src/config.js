@@ -61,6 +61,7 @@ export function config() {
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getManufacturer`,
       createNewOrg: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/saveOrganisations`,
+      addNewOrgNWarehouse: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/addNewOrgNWarehouse`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -572,7 +573,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }

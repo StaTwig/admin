@@ -7,4 +7,5 @@ router.get("/warehouses", OrganisationController.getWarehouses);
 router.get("/allWarehouses", OrganisationController.getAllWarehouses);
 router.post("/saveOrganisations", OrganisationController.saveNewOrg);
 router.post("/addWarehouseForTpl", OrganisationController.saveNewWarehouse);
+router.post("/addNewOrgNWarehouse", OrganisationController.addNewOrgNWarehouse);
 module.exports = router;

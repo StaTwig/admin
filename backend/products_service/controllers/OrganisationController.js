@@ -12,9 +12,10 @@ exports.getOrganisations = [
   async (req, res) => {
     try {
       let organisations
-      if(req.query.type !== "TPL"){ organisations = await OrganisationModel.find({
-        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
-      });
+      if (req.query.type !== "TPL") {
+        organisations = await OrganisationModel.find({
+          $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
+        });
       }
       else {
         organisations = await TplOrgModel.find({});
@@ -33,7 +34,7 @@ exports.getOrganisations = [
 
 exports.saveNewOrg = [
   auth,
-  async(req,res) => {
+  async (req, res) => {
     try {
       const orgCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "orgId" },
@@ -49,7 +50,7 @@ exports.saveNewOrg = [
       req.body.id = organisationId
       let newOrg = new TplOrgModel(req.body)
       await newOrg.save();
-      return apiResponse.successResponseWithData(res,"Added org successfully",newOrg)
+      return apiResponse.successResponseWithData(res, "Added org successfully", newOrg)
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err.message)
@@ -57,9 +58,58 @@ exports.saveNewOrg = [
   }
 ]
 
+
+exports.addNewOrgNWarehouse = [
+  auth,
+  async (req, res) => {
+    const { org, warehouse } = req.body
+    try {
+      const orgCounter = await CounterModel.findOneAndUpdate(
+        { "counters.name": "orgId" },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        { new: true }
+      );
+      const organisationId =
+        orgCounter.counters[2].format + orgCounter.counters[2].value;
+      org.id = organisationId
+      let newOrg = new TplOrgModel(org);
+      await newOrg.save();
+
+
+      const warehouseCounter = await CounterModel.findOneAndUpdate(
+        { "counters.name": "warehouseId" },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      const warehouseId =
+        warehouseCounter.counters[3].format +
+        warehouseCounter.counters[3].value;
+      warehouse.id = warehouseId;
+      warehouse['organisationId'] = organisationId;
+      let newWarehouse = new TplWarehouseModel(warehouse);
+      await newWarehouse.save();
+      return apiResponse.successResponseWithData(res, "Added warehouse successfully", [newOrg, newWarehouse]);  
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err.message)
+    }
+  }
+]
+
+
 exports.saveNewWarehouse = [
   auth,
-  async(req,res) => {
+  async (req, res) => {
     try {
       const warehouseCounter = await CounterModel.findOneAndUpdate(
         { "counters.name": "warehouseId" },
@@ -75,10 +125,10 @@ exports.saveNewWarehouse = [
       const warehouseId =
         warehouseCounter.counters[3].format +
         warehouseCounter.counters[3].value;
-        req.body.id = warehouseId;
+      req.body.id = warehouseId;
       let newWarehouse = new TplWarehouseModel(req.body)
       await newWarehouse.save();
-      return apiResponse.successResponseWithData(res,"Added warehouse successfully",newWarehouse)
+      return apiResponse.successResponseWithData(res, "Added warehouse successfully", newWarehouse)
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err.message)
@@ -108,7 +158,7 @@ exports.getWarehouses = [
       else organisations = await TplWarehouseModel.find({
         organisationId: req.query.id,
       })
-      console.log("1",organisations)
+      console.log("1", organisations)
       return apiResponse.successResponseWithData(
         res,
         "Warehouses",
