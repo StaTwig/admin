@@ -12,7 +12,7 @@ exports.getOrganisations = [
   async (req, res) => {
     try {
       let organisations
-      if(!req.query.type == "TPL") organisations = await OrganisationModel.find({
+      if(req.query.type !== "TPL") organisations = await OrganisationModel.find({
         $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
       });
       else organisations = await TplOrgModel.find({});
