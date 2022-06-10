@@ -185,7 +185,7 @@ export function config() {
       getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
       getNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getNewConfig`,
       setNewConfig: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/setNewConfig`,
-      getAllTargets: `${LOCAL_SERVER_URL_ANALYTICS}/advancedanalytics/api/analytics/getDepotTargets`,
+      getAllTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getDepotTargets`,
       updateTargets: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/updateTargetSales`,
     },
   };
