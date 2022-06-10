@@ -569,6 +569,7 @@ exports.addProductsToInventory = [
       }
       let payload = req.body;
       let warehouseId;
+      payload.products = JSON.parse(payload.products);
       payload.products.forEach((element) => {
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;
@@ -619,11 +620,12 @@ exports.addProductsToInventory = [
           const dupSerialFound = await AtomModel.findOne({
             id: { $in: atoms },
           });
-          if (dupSerialFound)
+          if (dupSerialFound) {
             return apiResponse.ErrorResponse(
               res,
               responses(req.user.preferredLanguage).duplicated_sno
             );
+          }
           var duplicateBatch = false;
           var duplicateBatchNo = "";
           await utility.asyncForEach(products, async (product) => {
