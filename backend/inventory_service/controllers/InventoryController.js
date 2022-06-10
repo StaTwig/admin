@@ -569,7 +569,6 @@ exports.addProductsToInventory = [
       }
       let payload = req.body;
       let warehouseId;
-      payload.products = JSON.parse(payload.products);
       payload.products.forEach((element) => {
         const product = ProductModel.findOne({ id: element.productId });
         element.type = product.type;

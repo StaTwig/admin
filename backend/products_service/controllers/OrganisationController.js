@@ -9,13 +9,15 @@ const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
 
 exports.getOrganisations = [
+  auth,
   async (req, res) => {
     try {
-      let organisations
-      if(req.query.type !== "TPL") organisations = await OrganisationModel.find({
+      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
+      let organisations =  orgDetails.type=="Third Party Logistics" ? await TplOrgModel.find({}) 
+      : await OrganisationModel.find({
         $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
-      });
-      else organisations = await TplOrgModel.find({});
+      })
+
       return apiResponse.successResponseWithData(
         res,
         "Organisations",
