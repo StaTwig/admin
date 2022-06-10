@@ -140,7 +140,7 @@ const Table = (props) => {
               </AccordionSummary>
               <Divider />
               <AccordionDetails>
-                <Typography>
+                <div className="width-full">
                   <TableContainer>
                     <Tablee className='table-borderless lg acc-table'>
                       <TableBody>
@@ -232,13 +232,7 @@ const Table = (props) => {
                           </div>
                         )}
                         <div
-                          className='mt-3'
-                          style={{
-                            position: "absolute ",
-                            left: "78% ",
-                            bottom: "10% ",
-                            width: "20% ",
-                          }}
+                          className='button-space-area'
                         >
                           {inventory.eventTypePrimary === "CREATE" ||
                           inventory.eventTypePrimary === "RECEIVE" ? (
@@ -284,7 +278,7 @@ const Table = (props) => {
                       </TableBody>
                     </Tablee>
                   </TableContainer>
-                </Typography>
+                </div>
               </AccordionDetails>
             </Accordion>
           </div>
