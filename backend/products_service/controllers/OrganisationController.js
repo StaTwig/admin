@@ -9,6 +9,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
 
 exports.getOrganisations = [
+  auth,
   async (req, res) => {
     try {
       let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
