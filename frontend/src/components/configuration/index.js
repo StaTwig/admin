@@ -131,7 +131,8 @@ const Configurationpart = (props) => {
       }
       else roles = await getAllRoles();
       setDefaultRoles([...prepareDefaultRoleData(roles)]);
-      setSelectedLevel(roles[0]);
+      if(roles.length>2) setSelectedLevel(roles[0]);
+      else setSelectedLevel(roles[1]);
     }
     getRoles();
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
