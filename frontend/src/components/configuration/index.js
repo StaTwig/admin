@@ -100,6 +100,7 @@ const Configurationpart = (props) => {
   }
 
   const mapPermissionToFunctionalitiesAndPermissionByFeaturePanel = (permissionsByRoleList, selectedFeature, selectedFeatureConstants) => {
+    console.log("map ")
     const permission = permissionsByRoleList.length > 0 ? permissionsByRoleList[0][selectedFeature] : {};
 
     const constants = selectedFeatureConstants.map(item => {
@@ -130,7 +131,8 @@ const Configurationpart = (props) => {
       }
       else roles = await getAllRoles();
       setDefaultRoles([...prepareDefaultRoleData(roles)]);
-      setSelectedLevel(roles[0]);
+      if(roles.length>2) setSelectedLevel(roles[0]);
+      else setSelectedLevel(roles[1]);
     }
     getRoles();
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
@@ -141,12 +143,21 @@ const Configurationpart = (props) => {
     async function getPermissions() {
       let permissions = [];
       if (!showAddNewInputSection && (selectedLevel || createNewRole)) {
+        console.log({ selectedLevel, createNewRole });
         permissions = [...await getPermissionByRole(selectedLevel || createNewRole)];
         setPermissionByRoleData([...permissions]);
       }
-      if(tabIndex == 2) setSelectedFeature('iot');
-      else  setSelectedFeature('overview');
-      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
+      console.log({ permissions });
+      let DATA;
+      if (tabIndex == 2) {
+        setSelectedFeature('iot');
+        DATA = extractConstantsBySelectedFeature('iot');
+      }
+      else {
+        setSelectedFeature('overview')
+        DATA = OVERVIEW_CONSTANTS;
+      };
+      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions,tabIndex === 2 ? 'iot' : 'overview', DATA);
     }
     getPermissions();
   }, [selectedLevel, createNewRole]);
@@ -157,6 +168,7 @@ const Configurationpart = (props) => {
       orgTypeArray.push(data[i].name);
     }
   });
+
 
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
@@ -198,6 +210,15 @@ const Configurationpart = (props) => {
     setSelectedFeature(selectedFeature);
     mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissionByRoleData, selectedFeature, CONSTANTS_DATA);
   }
+
+
+  React.useEffect(() => {
+    if (tabIndex === 2) {
+      handleOnClickOfAFeature('iot');
+    } else if (tabIndex === 0) {
+      handleOnClickOfAFeature('overview');
+    }
+  },[tabIndex])
 
   const setPermissionOnCheckOfAnItem = (selectedFeatureConstants, permission) => {
     const updatedPermissionData = selectedFeatureConstants.map(item => {
@@ -296,6 +317,8 @@ const Configurationpart = (props) => {
     }
   };
 
+  console.log({ functionalitiesPermissionPanelData });
+
   return (
     <div>
       <div className="spacingbutton">
@@ -345,6 +368,7 @@ const Configurationpart = (props) => {
             acceptApproval={acceptApproval}
             selectedFeature={selectedFeature}
             selectedLevel={selectedLevel}
+            tabIndex={tabIndex}
           />)
         }
         {tabIndex == 6 && (
