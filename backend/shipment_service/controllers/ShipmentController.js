@@ -2521,8 +2521,8 @@ exports.fetchGMRShipments = [
           },
         };
       }
-      const count = await ShipmentModel.count({ ...filter, isCustom: true });
-      const shipments = await ShipmentModel.find({ ...filter, isCustom: true })
+      const count = await ShipmentModel.count({ ...filter, isCustom: true, $or : [{ "supplier.id" : req.user.organisationId }, { "receiver.id" : req.user.organisationId }]});
+      const shipments = await ShipmentModel.find({ ...filter, isCustom: true, $or : [{ "supplier.id" : req.user.organisationId }, { "receiver.id" : req.user.organisationId }]})
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });
