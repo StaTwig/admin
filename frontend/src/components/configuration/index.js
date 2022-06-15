@@ -130,7 +130,7 @@ const Configurationpart = (props) => {
          roles = await getAllRolesForTPL(props.user.organisationId)
       }
       else roles = await getAllRoles();
-      setDefaultRoles([...prepareDefaultRoleData(roles)]);
+      setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
       if(roles.length>2) setSelectedLevel(roles[0]);
       else setSelectedLevel(roles[1]);
     }
