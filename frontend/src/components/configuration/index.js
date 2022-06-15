@@ -119,21 +119,21 @@ const Configurationpart = (props) => {
     setFunctionalitiesPermissionPanelData([...constants]);
   };
 
+  async function getRoles() {
+    var roles = [];
+    if(props.user.organisationType == "Third Party Logistics"){
+       setTabIndex(2);
+       setSelectedFeature('iot');
+       handleOnClickOfAFeature('iot');
+       roles = await getAllRolesForTPL(props.user.organisationId)
+    }
+    else roles = await getAllRoles();
+    setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
+    if(roles.length>2) setSelectedLevel(roles[0]);
+    else setSelectedLevel(roles[1]);
+  }
   useEffect(() => {
     //getRoles
-    async function getRoles() {
-      var roles = [];
-      if(props.user.organisationType == "Third Party Logistics"){
-         setTabIndex(2);
-         setSelectedFeature('iot');
-         handleOnClickOfAFeature('iot');
-         roles = await getAllRolesForTPL(props.user.organisationId)
-      }
-      else roles = await getAllRoles();
-      setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
-      if(roles.length>2) setSelectedLevel(roles[0]);
-      else setSelectedLevel(roles[1]);
-    }
     getRoles();
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
     setTPLFeaturePanelValues([...TPL_FEATURE_PANEL_VALUES]);
@@ -279,11 +279,21 @@ const Configurationpart = (props) => {
   const onSaveOfUpdatePermission = async () => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
       if (!showAddNewInputSection) {
+        console.log("new role froom false")
         await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: createNewRole ? createNewRole : selectedLevel, orgId :  props.user.organisationId}, setIsLoading);
         setCreateNewRole("");
+        
       } else {
+        console.log("new role froom true")
         if (updatePermissions.role) {
+          console.log("new role froom true and role")
           await requestUpdatePermissionAPIAndUpdateDefaultValues(updatePermissions, setIsLoading);
+          setCreateNewRole("");
+          setShowAddNewInputSection(false);
+          getRoles();
+          setTabIndex(0);
+          setSelectedFeature('overview');
+          handleOnClickOfAFeature('overview');
         } else {
           setErrorForRoleNotFound(current => current = true);
         }
