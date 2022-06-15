@@ -39,6 +39,22 @@ const UserRoles = ({
   const [isDisabled, setDisable] = useState(true);
   const [showSuccessModel, setShowSuccessModel] = useState(false);
   const [message, setMessage] = useState("Successfully Updated Configuration");
+  const [permissionRoles, setPermissionRoles] = useState([]);
+
+  React.useEffect(() => {
+   if(props?.userRoles){ let role = [];
+    for (let i = 0; i < permissions.length; i++) {
+      for (let j = 0; j < props.userRoles.length; j++) {
+        if (permissions[i].role === props.userRoles[j]) {
+          role.push(permissions[i]);
+          continue;
+       }
+      }
+     }
+     setPermissionRoles(role);}
+  }, [])
+  
+
   // const [newRoleForuser, setNewRoleForuser] = props?.newRoleState;
 
   const unDisableBtn = () => {
@@ -76,6 +92,7 @@ const UserRoles = ({
             onHide={closeModal}
             buttonText={btnTxt}
             setData={setData}
+            defaultRoles={permissionRoles}
           />
         </Modal>
       )}

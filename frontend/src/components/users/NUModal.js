@@ -18,7 +18,7 @@ const NUModal = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(props.data?.phoneNumber);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
-  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage, defaultRoles } = props;
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
 
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
@@ -329,7 +329,7 @@ const NUModal = (props) => {
             <div className="p-1" ref={scrolling} style={{ height: "auto", overflow: "scroll", minHeight: "5rem", overflowX: "hidden", maxHeight: "20rem" }}>
               {changeComponent === "role" ? (
                 <div>
-                  {permissions.map((per, index) => {
+                  {props?.defaultRoles && props?.defaultRoles.length !== 0 ? props?.defaultRoles.map((per, index) => {
                     return (
                       <Role
                         key={index}
@@ -348,7 +348,28 @@ const NUModal = (props) => {
                       />
                       // <></>
                     )
-                  })}
+                  }) :
+                    permissions.map((per, index) => {
+                      return (
+                        <Role
+                          key={index}
+                          title={per.role}
+                          description={per.role + " " + t("Description")}
+                          selectedValue={selectedValue}
+                          setSelectedValue={setRole}
+                          i={index}
+                          value={per.role}
+                          listPermission={per.permissions}
+                          name="role"
+                          handleBlur={handleBlur}
+                          handleChange={handleChange}
+                          disableRoleBtn={setDisanleRole}
+                          per={per}
+                        />
+                        // <></>
+                      )
+                    })
+                  }
                   {errors.role && touched.role && (
                     <span className="pl-3 error-msg text-danger">
                       {errors.role}

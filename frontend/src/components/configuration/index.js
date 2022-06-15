@@ -40,6 +40,7 @@ const Configurationpart = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedLevel, setSelectedLevel] = useState('');
+  const [userRoles, setUserRoles] = useState([]);
 
   const [addOrganisation, setAddOrganisation] = useState([]);
   const [blankInventory, setBlankInventory] = useState({
@@ -119,17 +120,22 @@ const Configurationpart = (props) => {
     setFunctionalitiesPermissionPanelData([...constants]);
   };
 
+  const permissions = useSelector((state) => {
+    return state.organisation.permissions;
+  });
+
   async function getRoles() {
     var roles = [];
-    if(props.user.organisationType == "Third Party Logistics"){
-       setTabIndex(2);
-       setSelectedFeature('iot');
-       handleOnClickOfAFeature('iot');
-       roles = await getAllRolesForTPL(props.user.organisationId)
+    if (props.user.organisationType == "Third Party Logistics") {
+      setTabIndex(2);
+      setSelectedFeature('iot');
+      handleOnClickOfAFeature('iot');
+      roles = await getAllRolesForTPL(props.user.organisationId)
     }
     else roles = await getAllRoles();
+    setUserRoles([...roles]);
     setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
-    if(roles.length>2) setSelectedLevel(roles[0]);
+    if (roles.length > 2) setSelectedLevel(roles[0]);
     else setSelectedLevel(roles[1]);
   }
   useEffect(() => {
@@ -157,7 +163,7 @@ const Configurationpart = (props) => {
         setSelectedFeature('overview')
         DATA = OVERVIEW_CONSTANTS;
       };
-      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions,tabIndex === 2 ? 'iot' : 'overview', DATA);
+      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, tabIndex === 2 ? 'iot' : 'overview', DATA);
     }
     getPermissions();
   }, [selectedLevel, createNewRole]);
@@ -218,7 +224,7 @@ const Configurationpart = (props) => {
     } else if (tabIndex === 0) {
       handleOnClickOfAFeature('overview');
     }
-  },[tabIndex])
+  }, [tabIndex])
 
   const setPermissionOnCheckOfAnItem = (selectedFeatureConstants, permission) => {
     const updatedPermissionData = selectedFeatureConstants.map(item => {
@@ -233,17 +239,17 @@ const Configurationpart = (props) => {
       }
     });
     if (!showAddNewInputSection) {
-      let pr =  permissionByRoleData[0];
+      let pr = permissionByRoleData[0];
       pr[selectedFeature][permission.key] = permission.hasPermission;
-      setAllPermissions({overview: pr.overview, search: pr.search, inventory: pr.inventory, shipment: pr.shipment, order: pr.order, network: pr.network, track: pr.track, admin: pr.admin, iot : pr.iot});
+      setAllPermissions({ overview: pr.overview, search: pr.search, inventory: pr.inventory, shipment: pr.shipment, order: pr.order, network: pr.network, track: pr.track, admin: pr.admin, iot: pr.iot });
     }
     else
       setAllPermissions({});
-  
+
     // console.log(pr[selectedFeature], selectedFeature, permission, permissionByRoleData);
     setFunctionalitiesPermissionPanelData([...updatedPermissionData]);
-    prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, createNewRole ||  selectedLevel);
-   
+    prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, createNewRole || selectedLevel);
+
   }
 
   const prepareKeyValueByPermissionData = (data) => {
@@ -280,9 +286,9 @@ const Configurationpart = (props) => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
       if (!showAddNewInputSection) {
         console.log("new role froom false")
-        await requestUpdatePermissionAPIAndUpdateDefaultValues({permissions: allPermissions, role: createNewRole ? createNewRole : selectedLevel, orgId :  props.user.organisationId}, setIsLoading);
+        await requestUpdatePermissionAPIAndUpdateDefaultValues({ permissions: allPermissions, role: createNewRole ? createNewRole : selectedLevel, orgId: props.user.organisationId }, setIsLoading);
         setCreateNewRole("");
-        
+
       } else {
         console.log("new role froom true")
         if (updatePermissions.role) {
@@ -301,9 +307,9 @@ const Configurationpart = (props) => {
     }
   }
 
-  const permissions = useSelector((state) => {
-    return state.organisation.permissions;
-  });
+  
+
+  console.log("permissions ", permissions);
 
   const addresses = useSelector((state) => {
     return state.organisation.addresses;
@@ -356,6 +362,7 @@ const Configurationpart = (props) => {
             selectedFeature={selectedFeature}
             selectedLevel={selectedLevel}
             newRoleState={[newRoleForuser, setNewRoleForuser]}
+            userRoles={userRoles}
             {...props}
           />)
         }
@@ -457,43 +464,43 @@ const Configurationpart = (props) => {
                 </div>
               </div>
             ) : (
+              <div className="col">
+                <div className="row">
+                  <p className="mb-4">
+                    <b>{t('Warehouse Type')}</b>
+                  </p>
+
+                  <div style={{ position: "relative", left: "70%" }}>
+                    <button
+                      className="btn btn-yellow ml-5 btnText"
+                      onClick={() => {
+                        let newArr = { name: "" };
+                        setAddProducts1((prod) => [...prod, newArr]);
+                        setShowLeft(!showleft);
+                        // console.log(showleft,"------------------");
+                      }}
+                    >
+                      <img src={Add} width="13" height="13" className="mr-2" />
+                      <span>{t('Add New Type')}</span>
+                    </button>
+                  </div>
+                </div>
                 <div className="col">
                   <div className="row">
-                    <p className="mb-4">
-                      <b>{t('Warehouse Type')}</b>
-                    </p>
-
-                    <div style={{ position: "relative", left: "70%" }}>
-                      <button
-                        className="btn btn-yellow ml-5 btnText"
-                        onClick={() => {
-                          let newArr = { name: "" };
-                          setAddProducts1((prod) => [...prod, newArr]);
-                          setShowLeft(!showleft);
-                          // console.log(showleft,"------------------");
-                        }}
-                      >
-                        <img src={Add} width="13" height="13" className="mr-2" />
-                        <span>{t('Add New Type')}</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div className="row">
-                      <div className="col-6">
-                        <EditTable1
-                          product={addProducts1}
-                          products={products}
-                          // category={category}
-                          handleQuantityChange={(v, i) =>
-                            onQuantityChange(v, i, setFieldValue)
-                          }
-                        />
-                      </div>
+                    <div className="col-6">
+                      <EditTable1
+                        product={addProducts1}
+                        products={products}
+                        // category={category}
+                        handleQuantityChange={(v, i) =>
+                          onQuantityChange(v, i, setFieldValue)
+                        }
+                      />
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
         )}
 
