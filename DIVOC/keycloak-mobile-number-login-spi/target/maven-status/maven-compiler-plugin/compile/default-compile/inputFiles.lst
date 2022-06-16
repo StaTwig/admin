@@ -1,8 +1,0 @@
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/FacilityUserProviderFactory.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/MobileNumberAuthenticatorFactory.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/models/UserDetails.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/MobileNumberAuthenticator.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/Constants.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/models/UserGroup.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/OtpService.java
-/home/saravanan/theledger/DIVOC/keycloak-mobile-number-login-spi/src/main/java/in/divoc/api/authenticator/FacilityUserRestProvider.java
