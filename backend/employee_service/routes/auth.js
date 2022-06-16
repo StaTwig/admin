@@ -20,7 +20,6 @@ router.post("/check", AuthController.checkEmail);
 router.post("/register", AuthController.register);
 router.post("/sendOtp", AuthController.sendOtp);
 router.post("/verifyOtp", AuthController.verifyOtp);
-router.post("/verifyAuth", AuthController.verifyAuthentication);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
 router.post("/updateProfile", AuthController.updateProfile);
