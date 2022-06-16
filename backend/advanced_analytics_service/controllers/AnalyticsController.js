@@ -2427,6 +2427,18 @@ exports.getStatsBySKU = [
 							},
 							{
 								$lookup: {
+									from: "organisations",
+									localField: "organisationId",
+									foreignField: "id",
+									as: "organisation",
+								},
+							},
+							{ $unwind: { path: "$organisation" } },
+							{
+								$match: { "organisation.type": { $in: ["S1", "S2", "S3"] } },
+							},
+							{
+								$lookup: {
 									from: "inventories",
 									localField: "warehouseInventory",
 									foreignField: "id",
