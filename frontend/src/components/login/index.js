@@ -11,7 +11,12 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import { useTranslation } from "react-i18next";
 import { COUNTRY_CODE } from "../../constants/countryCode";
 
+// import { getChain } from "evm-chains";
+
+
+
 const FormLoginPage = (props) => {
+
   const { t } = useTranslation();
   const {
     email,
@@ -22,12 +27,14 @@ const FormLoginPage = (props) => {
     onPhoneChange,
     emailFieldDisable,
     phoneFieldDisable,
+    torusLogin
   } = props;
   // const onkeydown = (event) => {
   //   if (event.keyCode  === 13) {
   //       onSendOtp();
   //   }
   //  }
+
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -141,6 +148,13 @@ const FormLoginPage = (props) => {
                       onClick={onSendOtp}
                     >
                       {t("continue")}
+                    </button>
+                    <button
+                      type="button"
+                      className=" buttonS btn btn-primary"
+                      onClick={() => torusLogin()}
+                    >
+                      {t("torus login")}
                     </button>
                   </div>
                   <div className="signup-link text-center mt-4 ml-1">
