@@ -619,11 +619,12 @@ exports.addProductsToInventory = [
           const dupSerialFound = await AtomModel.findOne({
             id: { $in: atoms },
           });
-          if (dupSerialFound)
+          if (dupSerialFound) {
             return apiResponse.ErrorResponse(
               res,
               responses(req.user.preferredLanguage).duplicated_sno
             );
+          }
           var duplicateBatch = false;
           var duplicateBatchNo = "";
           await utility.asyncForEach(products, async (product) => {

@@ -47,7 +47,7 @@ export const getShippingOrderById = async (id) => {
 
 export const getWarehouseByOrgId = async (id,type) => {
   try {
-    const result = await axios.get(config().getWarehouseByOrgId + id +`&userType=${type}`);
+    const result = await axios.get(config().getWarehouseByOrgId + id);
     return result.data;
   } catch (e) {
     return [];
@@ -56,7 +56,7 @@ export const getWarehouseByOrgId = async (id,type) => {
 
 export const getAllOrganisations = async (type) => {
   try {
-    const result = await axios.get(`${config().getOrganisations}?type=${type}`);
+    const result = await axios.get(config().getOrganisations);
     return result.data;
   } catch (e) {
     return [];

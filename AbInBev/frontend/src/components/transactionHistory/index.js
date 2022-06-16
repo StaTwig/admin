@@ -882,7 +882,7 @@ const TransactionHistory = (props) => {
                         <input
                           type="date"
                           className="dateInput"
-                          value={filters.startDate}
+                          value={filters.endDate}
                           // Shiva
                           onChange={onEndDateChange}
                         />
