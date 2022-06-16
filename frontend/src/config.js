@@ -159,6 +159,7 @@ export function config() {
       temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      verifyAuth: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyAuth`
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -301,6 +302,7 @@ export function config() {
       temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      verifyAuth: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyAuth`
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
