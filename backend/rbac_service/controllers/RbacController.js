@@ -75,7 +75,7 @@ exports.getRolesForTPL = [
         roles.push(element.role);
       });
       console.log("RESULTS LENGHT IS",results.length)
-      if(results.lenght>1){
+      if(results.length >1){
         return apiResponse.successResponseWithData(res, "All Roles", roles);
       }
       else {
