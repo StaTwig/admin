@@ -32,10 +32,10 @@ function Cards(props) {
           </div>
 
           <div className='tile-content'>
-            <p className='truck-text font-weight-bold'>
+            <p className='card-text f-500 tale'>
               {t("total_product_category")}
             </p>
-            <h1 className='count truck-text'>
+            <h1 className='number-text tale'>
               {props.inventoriesCount}{" "}
               {props.inventoryAnalytics?.totalProductCategory}
             </h1>
@@ -50,10 +50,10 @@ function Cards(props) {
           </div>
 
           <div className='tile-content'>
-            <p className='recived-text-cards font-weight-bold'>
+            <p className='card-text f-500 blue'>
               {t("product_out_of_stock")}
             </p>
-            <h1 className='count recived-text-cards'>
+            <h1 className='number-text blue'>
               {props.currentInventoriesCount}
               {props.inventoryAnalytics?.stockOut}
             </h1>
@@ -68,10 +68,10 @@ function Cards(props) {
           </div>
 
           <div className='tile-content'>
-            <p className='sent-text font-weight-bold'>
+            <p className='card-text f-500 orange'>
               {t("batch_near_expiration")}
             </p>
-            <h1 className='count sent-text'>{props.inventoryNearExpiration}</h1>
+            <h1 className='number-text orange'>{props.inventoryNearExpiration}</h1>
           </div>
         </div>
       </Link>
@@ -83,10 +83,10 @@ function Cards(props) {
           </div>
 
           <div className='tile-content'>
-            <p className='inbound-text font-weight-bold'>
+            <p className='card-text f-500 darkblue'>
               {t("batch_expired")}
             </p>
-            <h1 className='count inbound-text'>{props.inventoryExpired}</h1>
+            <h1 className='number-text darkblue'>{props.inventoryExpired}</h1>
           </div>
         </div>
       </Link>

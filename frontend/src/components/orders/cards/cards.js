@@ -52,8 +52,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="card-text f-500 mi-secondary">{t("total_orders_pending")}</p>
-          <h1 className="number-text f-500 mi-secondary">
+          <p className="card-text f-500 darkblue">{t("total_orders_pending")}</p>
+          <h1 className="number-text f-500 darkblue">
             {orderAnalytics?.pendingOrders}
           </h1>
         </div>

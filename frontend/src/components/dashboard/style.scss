@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .dashboard {
-  padding-right: 3rem;
+  padding-right: 1rem !important;
   padding-left: 5rem;
 
   @media (max-width: $md) {

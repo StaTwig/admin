@@ -115,3 +115,11 @@
 .bg-blue {
   background-color: var(--blue);
 }
+
+.darkblue {
+  color: var(--darkblue);
+}
+
+.bg-darkblue {
+  background-color: var(--darkblue);
+}

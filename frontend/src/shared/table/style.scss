@@ -418,3 +418,12 @@ input:disabled {
 .width-full{
   width: 100% !important;
 }
+.button-space-area{
+  display: flex;
+  justify-content: flex-end;
+}
+.custom-status{
+  width: 4.5rem;
+  text-align: center;
+  padding: 0.4rem 0 !important;
+}

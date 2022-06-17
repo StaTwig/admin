@@ -88,7 +88,7 @@ const Track = (props) => {
   return (
     <div className='track'>
       <div className='row justify-content-between'>
-        <h1 className='breadcrumb'>{t("trackntrace")}</h1>
+      <h1 style={{paddingBottom:"10px"}} className="vl-heading-bdr black f-700">{t("trackntrace")}</h1>
       </div>
       {!props.viewIotTemperatureSplineline ? (
         <div className='row'>
@@ -99,44 +99,9 @@ const Track = (props) => {
                   <Map data={shippmentChainOfCustodyData} t={t} lang={lang} />
                 </div>
               </div>
-              {/* <div 
-                className="panel commonpanle row shadow bg-white mb-4" 
-                style={{ minHeight: '400px' }}>
-                <div className="col">
-                  <div className="temperature-graph-panel-information d-flex justify-content-between">
-                    <div className="row ml-4 mb-2">
-                      <div className="arrow mr-2">
-                        <img className="arrow-image" src={CurrentTemperature} width="20" height="20" />
-                      </div>
-
-                      <div className="d-flex flex-column">
-                        <div className="info">Current temperature</div>
-                        <div className="temp">{Object.keys(props.latestIotShipmentData).length > 0
-                          ? props.latestIotShipmentData.temp['temp'] : 0}°C</div>
-                      </div>
-                    </div>
-
-                    <div className="current-info-container">
-                      <div className="current-info">
-                        <div className="info">Last Upadated on</div>
-                        <div className="info">{Object.keys(props.latestIotShipmentData).length > 0
-                          ? formatTimeAMPM(new Date().toString().split(' ')[4]) : ''} </div>
-                      </div>
-                      <img
-                        src={zoomInIcon}
-                        className='zoom-in-icon'
-                        onClick={() => props.zoomOutTemperatureGraph()}
-                      />
-                    </div>
-                  </div>
-                  <Chart 
-                    allIotShipmentData={props.lastTenIotShipmentData} 
-                    height={'220px'} />{" "}
-                </div>
-              </div> */}
             </div>
           )}
-          <div className='col-6 ml-3'>
+          <div className='search column'>
             {shippmentChainOfCustodyData.length === 0 ? (
               <>
                 <div className='noOutline' tabIndex='-1' onKeyDown={onkeydown}>

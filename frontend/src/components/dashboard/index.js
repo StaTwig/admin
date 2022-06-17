@@ -38,8 +38,8 @@ const DashBoard = (props) => {
 
   return (
     <div className='dashboard'>
-      <div style={{ position: "relative", top: "-22px", right: "25px" }}>
-        <h1 className='breadcrumb dash'>{t('your_network')}</h1>
+      <div style={{ position: "relative", top: "-10px", right: "25px" }}>
+        <h1 style={{paddingBottom:"10px"}} className="vl-heading-bdr black f-700">{t('your_network')}</h1>
       </div>
       <div className='panel'>
         <Map
