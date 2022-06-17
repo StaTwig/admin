@@ -165,7 +165,7 @@ exports.getWarehouses = [
       }
       let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
       let organisations = orgDetails.type=="Third Party Logistics" ? 
-          organisations = await TplWarehouseModel.find({
+          await TplWarehouseModel.find({
           organisationId: req.query.id,
         })  :  await WarehouseModel.find({
           organisationId: req.query.id,
