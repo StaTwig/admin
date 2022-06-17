@@ -110,7 +110,7 @@ export function config() {
     abinbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
-      registerUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/register`,
+      registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
       checkUserUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/userInfo`,

@@ -9,17 +9,32 @@ const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
 
 exports.getOrganisations = [
+  auth,
   async (req, res) => {
     try {
-      let organisations
-      if (req.query.type !== "TPL") {
-        organisations = await OrganisationModel.find({
-          $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
-        });
-      }
-      else {
-        organisations = await TplOrgModel.find({});
-      }
+      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
+      let organisations =  orgDetails.type=="Third Party Logistics" ? await TplOrgModel.find({}) 
+      : await OrganisationModel.find({
+        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
+      })
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisations",
+        organisations
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.getOrganisationsAtSignup = [
+  async (req, res) => {
+    try {
+      let organisations = await OrganisationModel.find({
+        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
+      })
       return apiResponse.successResponseWithData(
         res,
         "Organisations",
@@ -148,17 +163,15 @@ exports.getWarehouses = [
         existingWarehouses = user.warehouseId;
         existingWarehouses = existingWarehouses.concat(user.pendingWarehouseId);
       }
-      console.log("1")
-      let organisations
-      if (!req.query.type == "TPL") organisations = await WarehouseModel.find({
-        organisationId: req.query.id,
-        status: "ACTIVE",
-        id: { $nin: existingWarehouses }
-      });
-      else organisations = await TplWarehouseModel.find({
-        organisationId: req.query.id,
-      })
-      console.log("1", organisations)
+      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
+      let organisations = orgDetails.type=="Third Party Logistics" ? 
+          organisations = await TplWarehouseModel.find({
+          organisationId: req.query.id,
+        })  :  await WarehouseModel.find({
+          organisationId: req.query.id,
+          status: "ACTIVE",
+          id: { $nin: existingWarehouses }
+        })
       return apiResponse.successResponseWithData(
         res,
         "Warehouses",

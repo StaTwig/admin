@@ -28,6 +28,15 @@ export const getOrganisations = async (type = '') => {
   }
 };
 
+export const getOrganisationsAtSignup = async () => {
+  try {
+    const result = await axios.get(config().getOrganisationsAtSignup);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getProductList = async () => {
   try {
     const result = await axios.get(config().productListUrl);

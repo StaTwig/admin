@@ -12,7 +12,7 @@ import {
   getAllOrganisations,
   getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
-import { getOrder, getOpenOrderIds, addNewProduct } from "../../actions/poActions";
+import { getOrder, getOpenOrderIds } from "../../actions/poActions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from "./shipmentPopUp";
@@ -151,22 +151,21 @@ const NewShipment = (props) => {
         };
       });
       setOrderIds(ids);
-      const userType = intelEnabled ? "TPL" : "regular"
-      const orgs = await getAllOrganisations(userType);
+
+      const orgs = await getAllOrganisations();
       const orgSplit = user.organisation?.split("/");
-      console.log("orgs ", orgs);
-      const organisations = orgs.data.map((item) => {
-        return {
-          ...item,
-          value: item.id,
-          label: item.name,
-        };
-      })
-      console.log("organisatoins ", organisations);
-      setAllOrganisations([
-        ...organisations,
-        { name: 'new org', value: 'New org', label: 'New Org' }
-      ]);
+      if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
+
+      const organisations = orgs.data;
+      setAllOrganisations(
+        organisations.map((item) => {
+          return {
+            ...item,
+            value: item.id,
+            label: item.name,
+          };
+        })
+      );
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
       setCategory(
@@ -182,21 +181,21 @@ const NewShipment = (props) => {
 
       const warehouses = await getWarehouseByOrgId(orgSplit?.length ? orgSplit[1] : "");
       if (warehouses) {
-        const ware = warehouses.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.warehouseAddress?.firstLine +
-              "/" +
-              v?.warehouseAddress?.city +
-              ", " +
-              v?.warehouseAddress?.state
-              : v?.title + "/" + v.postalAddress,
-          };
-        });
-        ware.push({ name: 'new org', value: 'New org', label: 'New Org' });
-        setSenderWarehouses(ware);
+        setSenderWarehouses(
+          warehouses.data.map((v) => {
+            return {
+              ...v,
+              value: v.id,
+              label: v?.warehouseAddress
+                ? v?.title +
+                "/" +
+                v?.warehouseAddress?.firstLine +
+                ", " +
+                v?.warehouseAddress?.city
+                : v?.title + "/" + v.postalAddress,
+            };
+          })
+        );
       }
 
       const orgType = await getOrganizationsTypewithauth("CONF000");
@@ -231,8 +230,7 @@ const NewShipment = (props) => {
 
   const onOrgChange = async (value) => {
     try {
-      const userType = intelEnabled ? "TPL" : "regular"
-      const warehouse = await getWarehouseByOrgId(value, userType);
+      const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(
         warehouse.data.map((v) => {
           return {
@@ -253,12 +251,16 @@ const NewShipment = (props) => {
     }
   };
 
-  const onSenderOrgChange = async (value) => {
+  const onWarehouseChange = async (value) => {
     try {
-      const userType = intelEnabled ? "TPL" : "regular"
-      const warehouse = await getWarehouseByOrgId(value, userType);
-      setSenderWarehouses(
-        warehouse.data.map((v) => {
+      const prods = await getProductsByInventoryId(value);
+      if (prods.data.length === 0) {
+        alert("No products availabe in this warehouse");
+        setErrorMessage("err");
+        return false;
+      }
+      setProducts(
+        prods.data.map((item) => {
           return {
             ...v,
             value: v.id,
@@ -272,40 +274,16 @@ const NewShipment = (props) => {
           };
         })
       );
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  };
-
-  const onWarehouseChange = async (value) => {
-    try {
-      if (!intelEnabled) {
-        const prods = await getProductsByInventoryId(value);
-        if (prods.data.length === 0) {
-          alert("No products availabe in this warehouse");
-          setErrorMessage("err");
-          return false;
-        }
-        setProducts(
-          prods.data.map((item) => {
-            return {
-              value: item.name,
-              label: item.name,
-              ...item,
-            };
-          })
-        );
-        setProductsList(
-          prods.data.map((item) => {
-            return {
-              value: item.name,
-              label: item.name,
-              ...item,
-            };
-          })
-        );
-        return true;
-      }
+      setProductsList(
+        prods.data.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        })
+      );
+      return true;
     } catch (err) {
       setErrorMessage(err);
       return false;
@@ -571,7 +549,6 @@ const NewShipment = (props) => {
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
-
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -716,7 +693,7 @@ const NewShipment = (props) => {
                                 return w.id === supplierWarehouse[i];
                               }
                             });
-                            setFieldValue("fromOrg", "");
+                            setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
@@ -970,7 +947,7 @@ const NewShipment = (props) => {
                 <label htmlFor='client' className='headsup'>
                   {t("from")}
                 </label>
-                {!intelEnabled && (<div className="row">
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="organizationType">Organisation Type*</label>
@@ -978,11 +955,7 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={
-                            disabled
-                              ? values.rtype
-                              : t("select")
-                          }
+                          placeholder="Select Organisation Type"
                           onChange={(v) => {
                             setFieldValue('type', v?.value);
                             setFieldValue('typeName', v?.label);
@@ -996,8 +969,7 @@ const NewShipment = (props) => {
                       </div>
                     </div>
                   </div>
-                </div>
-                )}
+                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
@@ -1125,7 +1097,6 @@ const NewShipment = (props) => {
                               batchNumber: "",
                             };
                             setAddProducts((prod) => [...prod, newArr]);
-                            console.log({ senderOrganisation: senderOrganisation[0], FromOrgLabel: v.label });
                           }}
                           value={
                             values.fromOrgLoc === ""
@@ -1163,7 +1134,6 @@ const NewShipment = (props) => {
               </div>
             </div>
 
-
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
                 <label htmlFor='client' className='headsup'>
@@ -1172,7 +1142,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
-                      {/* <label className='name' htmlFor='organizationType'>
+                      <label className='name' htmlFor='organizationType'>
                         {t("organisation_type")}*
                       </label>
                       <div
@@ -1198,10 +1168,10 @@ const NewShipment = (props) => {
                           defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
-                        {errors.rtype && touched.rtype && (
+                        {/* {errors.rtype && touched.rtype && (
                           <span className="error-msg text-danger">{errors.rtype}</span>
-                        )}
-                      </div> */}
+                        )} */}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1271,7 +1241,7 @@ const NewShipment = (props) => {
                           }}
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(
-                            (a) => a.name.length > 0
+                            (a) => a.type === values.rtypeName
                           )}
                         />
                         {/* {errors.toOrg && touched.toOrg && (
@@ -1527,12 +1497,12 @@ const NewShipment = (props) => {
               <label htmlFor='productDetails' className='headsup'>
                 {t("product_details")}
               </label>
-              {/* { OrderDetails ? (
+              {OrderDetails?.products?.length > 0 ? (
                 <EditTable
                   t={t}
                   check='1'
                   warehouseID={senderOrgId}
-                  product={OrderDetails?.products || []}
+                  product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
@@ -1571,8 +1541,7 @@ const NewShipment = (props) => {
                   }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              ) 
-              : (
+              ) : (
                 products?.length <= 0 && (
                   <div>
                     <h4
@@ -1588,10 +1557,9 @@ const NewShipment = (props) => {
                     </h4>
                   </div>
                 )
-              )
-              } */}
+              )}
 
-              {(
+              {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
                     check='0'

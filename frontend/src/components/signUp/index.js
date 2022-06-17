@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getOrganisations } from "../../actions/productActions";
+import { getOrganisations, getOrganisationsAtSignup } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
 import "react-phone-number-input/style.css";
@@ -48,7 +48,7 @@ const FormPage = (props) => {
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   useEffect(() => {
     async function fetchData() {
-      const orgs = await getOrganisations();
+      const orgs = await getOrganisationsAtSignup();
 
       orgs.push({ id: t("other"), name: t("other") });
       setOrganisations(orgs);
