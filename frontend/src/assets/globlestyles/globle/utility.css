@@ -39,7 +39,7 @@
   white-space: nowrap;
 }
 .inline-flex {
-  display: inline-flex;
+  display: inline-flex !important;
 }
 
 /* Gaps */

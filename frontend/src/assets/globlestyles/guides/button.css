@@ -100,7 +100,23 @@
   border: 1px solid var(--grey-200);
   color: var(--grey-400) !important;
 }
-
+.status-lable {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  outline: none;
+  border-radius: 0.8rem;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  border: none !important;
+  opacity: 1;
+  font-size: 0.875rem;
+  padding: 0.4rem 0.5rem;
+  text-transform: capitalize !important;
+}
 @media screen and (max-width: 586px) {
   .mi-btn-xl {
     font-size: 1rem;

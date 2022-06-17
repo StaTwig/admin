@@ -287,11 +287,11 @@ const Inventory = (props) => {
   return (
     <div className='inventory'>
       <div className='d-flex justify-content-between'>
-        <h2 className='breadcrumb'>{t("inventory")}</h2>
+      <h1 className="vl-heading-bdr black f-700">{t("inventory")}</h1>
         <div className='d-flex'>
           {isAuthenticated("addInventory") && (
             <Link to='/newinventory'>
-              <button className='btn btn-yellow mt-2'>
+              <button className='mi-btn mi-btn-md mi-btn-yellow'>
                 <img src={Add} width='13' height='13' className='mr-2' alt='' />
                 <span>
                   <b>{t("add_inventory")}</b>

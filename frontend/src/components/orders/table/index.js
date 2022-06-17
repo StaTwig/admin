@@ -7,7 +7,7 @@ import "./style.scss";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
-  const { visible,outboundRecords,inboundRecords, t } = props;
+  const { visible, outboundRecords, inboundRecords, t } = props;
   const orders = visible === "one" ? outboundRecords : inboundRecords;
 
   const handlePageChange = (event, value) => {
@@ -28,7 +28,7 @@ function Table(props) {
   return (
     <div>
       <table className="table">
-      <AdvanceTableFilter
+        <AdvanceTableFilter
           visible={props.visible}
           data={props.data}
           shouldEnable={true}
@@ -55,53 +55,54 @@ function Table(props) {
         <tbody>
           {orders.length === 0 && (
             <div className="FullWidth rTableRow pt-2 pb-2 text-center justify-content-center ">
-              <span className="text-muted shadow-none">{t('no_records_found')}</span>
+              <span className="text-muted shadow-none">
+                {t("no_records_found")}
+              </span>
             </div>
           )}
           {orders.map((order, index) => {
             let statusStyle = "bg-primary";
             let status = order.poStatus;
-          if (order.poStatus === "CREATED") {
-            status = visible === "one" ? t('sent') : t('received');
-          } else if (order.poStatus === "ACCEPTED") {
-            statusStyle = "bg-success";
-            status = t('accepted');
-          } else if (order.poStatus === "REJECTED") {
-            statusStyle = "bg-secondary";
-            status = t('rejected');
-          } else if (order.poStatus === "TRANSIT&FULLYFULFILLED") {
-            statusStyle = "bg-info";
-            status = t('transitfullyfilled');
-          } else if (order.poStatus === "FULLYFULFILLED") {
-            statusStyle = "bg-info";
-            status = t('fullyfilled');
-          } else if (order.poStatus === "TRANSIT&PARTIALLYFULFILLED") {
-            statusStyle = "bg-warning";
-            status = t('transitpartiallyfilled');
-          } else if (order.poStatus === "PARTIALLYFULFILLED") {
-            statusStyle = "bg-warning";
-            status = t('partiallyfilled');
-          }
-          else if (order.poStatus === "CANCELLED") {
-            statusStyle = "bg-primary";
-            status = t('cancelled');
-          }
+            if (order.poStatus === "CREATED") {
+              status = visible === "one" ? t("sent") : t("received");
+            } else if (order.poStatus === "ACCEPTED") {
+              statusStyle = "bg-success";
+              status = t("accepted");
+            } else if (order.poStatus === "REJECTED") {
+              statusStyle = "bg-secondary";
+              status = t("rejected");
+            } else if (order.poStatus === "TRANSIT&FULLYFULFILLED") {
+              statusStyle = "bg-info";
+              status = t("transitfullyfilled");
+            } else if (order.poStatus === "FULLYFULFILLED") {
+              statusStyle = "bg-info";
+              status = t("fullyfilled");
+            } else if (order.poStatus === "TRANSIT&PARTIALLYFULFILLED") {
+              statusStyle = "bg-warning";
+              status = t("transitpartiallyfilled");
+            } else if (order.poStatus === "PARTIALLYFULFILLED") {
+              statusStyle = "bg-warning";
+              status = t("partiallyfilled");
+            } else if (order.poStatus === "CANCELLED") {
+              statusStyle = "bg-primary";
+              status = t("cancelled");
+            }
 
             const { customer, products, supplier, creatorOrganisation } = order;
             return (
               <tr>
                 <td>
                   <div className="user-info">
-                    <div className="user-info__img">
-                      <img src={user} alt="User" />
+                    <div className="user-image-holder">
+                      <i class="bx bxs-user"></i>
                     </div>
                     <div className="user-info__basic shipmentId">
-                      <h5 className="mb-0 table-h5-text ">
+                      <h5 className="mb-0 table-data mi-primary ">
                         {visible === "two"
                           ? creatorOrganisation?.name
                           : supplier.organisation?.name}
                       </h5>
-                      <p className="mb-0 table-p-text ">
+                      <p className="mb-0 text-sm-2 mi-primary ">
                         {visible === "two"
                           ? creatorOrganisation?.id
                           : supplier.organisation?.id}
@@ -111,7 +112,7 @@ function Table(props) {
                 </td>
                 <td>
                   <div className="user-info">
-                    <h5 className="table-h5-text">
+                    <h5 className="table-data black">
                       {" "}
                       {formatDate(order.creationDate)}
                     </h5>
@@ -119,17 +120,17 @@ function Table(props) {
                 </td>
                 <td>
                   <div className="user-info">
-                    <h5 className="table-h5-text text-muted">{order.id}</h5>
+                    <h5 className="table-data black">{order.id}</h5>
                   </div>
                 </td>
                 <td>
                   <div className="user-info">
-                    <h5 className="table-h5-text text-muted">
+                    <h5 className="table-data black">
                       {truncate(
                         (products[0]?.name || products[0]?.productId) +
-                        (products.length > 1
-                          ? " + " + (products.length - 1) + " more"
-                          : ""),
+                          (products.length > 1
+                            ? " + " + (products.length - 1) + " more"
+                            : ""),
                         15
                       )}
                     </h5>
@@ -137,41 +138,31 @@ function Table(props) {
                 </td>
                 <td>
                   <div className="user-info__basic">
-                    <h5 className="mb-0 table-h5-text">
+                    <h5 className="mb-0 table-data black">
                       {customer.warehouse.title}
                     </h5>
-                    <p className="text-muted mb-0 table-p-text">
+                    <p className="mb-0 text-sm-2 grey">
                       {customer.warehouse && customer.warehouse.warehouseAddress
                         ? customer.warehouse.warehouseAddress.firstLine +
-                        " " +
-                        customer.warehouse.warehouseAddress.city
+                          " " +
+                          customer.warehouse.warehouseAddress.city
                         : null}
                     </p>
                   </div>
                 </td>
                 <td className="d-flex align-items-center justify-content-center">
-                  <div
-                    className={`status secondary-bg ${statusStyle} py-1`}
-                    style={{
-                      width: "122px",
-                      textAlign: "center",
-                      color: "#fff",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    {status}
-                  </div>
+                  <div className={`status-lable ${statusStyle}`}>{status}</div>
                 </td>
                 <td>
                   <Link
                     to={`/vieworder/${order.id}`}
-                    className="button btn-view-link px-4 py-1"
+                    className="mi-btn mi-btn-sm mi-btn-secondary-outline inline-flex"
                     style={{
                       border: "1px solid #007bff",
                       borderRadius: "6px",
                     }}
                   >
-                    {t('view')}
+                    {t("view")}
                   </Link>
                 </td>
               </tr>
@@ -192,7 +183,7 @@ function Table(props) {
             className="mx-5 my-1 rounded text-dark"
             style={{ fontSize: "14px" }}
           >
-            {t('total_records')} {props.count}{" "}
+            {t("total_records")} {props.count}{" "}
           </span>
         </div>
       )}
