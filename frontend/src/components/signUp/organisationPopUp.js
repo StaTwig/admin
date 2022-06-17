@@ -190,7 +190,7 @@ const OrganisationPopUp = (props) => {
               }) => (
                 <form onSubmit={handleSubmit} className='mb-3'>
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className={'col-sm-12'}>
                       <div className='form-group'>
                         <TextField
                           style={{
@@ -218,7 +218,7 @@ const OrganisationPopUp = (props) => {
                     </div>
                   </div>
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
                           value={region}
@@ -267,7 +267,7 @@ const OrganisationPopUp = (props) => {
                       value={values.state}
                     /> */}
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group'>
                         <Autocomplete
                           value={country}
@@ -297,7 +297,7 @@ const OrganisationPopUp = (props) => {
                     </div>
                   </div>
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group'>
                         {/* <label className="required-field col-sm-6" htmlFor="state">State</label> */}
                         <Autocomplete
@@ -328,7 +328,7 @@ const OrganisationPopUp = (props) => {
                   </div>
 
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group'>
                         {/* <label className="required-field col-sm-6" htmlFor="city">City</label> */}
                         <Autocomplete
@@ -364,7 +364,7 @@ const OrganisationPopUp = (props) => {
                       value={values.name}
                     /> */}
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group' style={{ width: "425px" }}>
                         <TextField
                           style={{
@@ -403,7 +403,7 @@ const OrganisationPopUp = (props) => {
                       value={values.line1}
                     /> */}
                   <div className='row'>
-                    <div className='col-md-6 com-sm-12'>
+                    <div className='col-sm-12'>
                       <div className='form-group'>
                         <TextField
                           style={{

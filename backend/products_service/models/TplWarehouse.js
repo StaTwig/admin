@@ -25,21 +25,37 @@ var TplWarehouseSchema = new mongoose.Schema(
         zipCode: { type: String }
       }
     },
+    // region: {
+    //   type: Object,
+    //   required: true,
+    //   default: {
+    //     regionId: 'reg123',
+    //     regionName: 'Earth Prime',
+    //   },
+    // },
     region: {
-      type: Object,
+      type: String,
       required: true,
-      default: {
-        regionId: 'reg123',
-        regionName: 'Earth Prime',
-      },
+      // default: {
+      //   regionId: 'reg123',
+      //   regionName: 'Earth Prime',
+      // },
     },
+    // country: {
+    //   type: Object,
+    //   required: true,
+    //   default: {
+    //     countryId: '001',
+    //     countryName: 'India',
+    //   },
+    // },
     country: {
-      type: Object,
+      type: String,
       required: true,
-      default: {
-        countryId: '001',
-        countryName: 'India',
-      },
+      // default: {
+      //   countryId: '001',
+      //   countryName: 'India',
+      // },
     },
     location: {
       type: Object,
