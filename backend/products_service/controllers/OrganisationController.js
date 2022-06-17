@@ -29,6 +29,24 @@ exports.getOrganisations = [
   },
 ];
 
+exports.getOrganisationsAtSignup = [
+  async (req, res) => {
+    try {
+      let organisations = await OrganisationModel.find({
+        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
+      })
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisations",
+        organisations
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 exports.saveNewOrg = [
   auth,
   async(req,res) => {
