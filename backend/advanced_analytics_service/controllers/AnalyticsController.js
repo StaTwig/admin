@@ -9,7 +9,7 @@ const ProductModel = require("../models/ProductModel");
 const ConfigModel = require("../models/ConfigurationModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const moment = require("moment");
+const moment = require("moment-timezone");
 require("dotenv").config();
 
 const BREWERY_ORG = "BREWERY";
@@ -43,72 +43,28 @@ lastYear.setDate(today.getDate() - 365);
 var timeFrame = moment().subtract(1, "months");
 
 async function getReturns(analytics, from, to, warehouseIds, filters) {
-	if (!analytics.length) {
-		return {
-			sales: 0,
-			targetSales: 0,
-			returns: 0,
-			actualReturns: 0,
-		};
-	}
-	let b_arr = [];
-	const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
-	for (let b of breweries) b_arr.push(b.id);
+	try {
+		if (!analytics.length) {
+			return {
+				sales: 0,
+				targetSales: 0,
+				returns: 0,
+				actualReturns: 0,
+			};
+		}
+		let b_arr = [];
+		const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
+		for (let b of breweries) b_arr.push(b.id);
 
-	let quantity = 0;
-	const row = analytics[0];
-	// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
-	// const Products = await ProductModel.find({ id: filters.pid });
-	// for (const prod of Products) {
-	let params = {
-		"receiver.id": { $in: b_arr },
-		"products.productID": filters.pid,
-		"supplier.locationId": { $in: warehouseIds },
-		status: "RECEIVED",
-		createdAt: {
-			$lte: new Date(to),
-			$gte: new Date(from),
-		},
-	};
-
-	const shipments = await ShipmentModel.find(params);
-	for (const Shipment of shipments) {
-		for (const product of Shipment.products)
-			if (product.productID == params["products.productID"])
-				quantity += product.productQuantityDelivered;
-	}
-	// }
-	let sales = analytics
-		.map((item) => parseInt(item.sales) || 0)
-		.reduce((prev, next) => prev + next);
-	let targetSales = analytics
-		.map((item) => parseInt(item.targetSales) || 0)
-		.reduce((prev, next) => prev + next);
-	let returns = quantity;
-	let actualReturns = 0;
-	if (returns && sales) {
-		actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
-	}
-	return {
-		sales: sales,
-		targetSales: targetSales,
-		returns: returns,
-		actualReturns: actualReturns,
-	};
-}
-
-async function getReturnsByExternalId(externalId, from, to, orgIds) {
-	let b_arr = [];
-	const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
-	for (let b of breweries) b_arr.push(b.id);
-
-	let quantity = 0;
-	const Products = await ProductModel.find({ externalId: externalId });
-	for (const prod of Products) {
+		let quantity = 0;
+		const row = analytics[0];
+		// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+		// const Products = await ProductModel.find({ id: filters.pid });
+		// for (const prod of Products) {
 		let params = {
 			"receiver.id": { $in: b_arr },
-			"products.productID": prod.id,
-			"supplier.id": { $in: orgIds },
+			"products.productID": filters.pid,
+			"supplier.locationId": { $in: warehouseIds },
 			status: "RECEIVED",
 			createdAt: {
 				$lte: new Date(to),
@@ -122,482 +78,604 @@ async function getReturnsByExternalId(externalId, from, to, orgIds) {
 				if (product.productID == params["products.productID"])
 					quantity += product.productQuantityDelivered;
 		}
+		// }
+		let sales = analytics
+			.map((item) => parseInt(item.sales) || 0)
+			.reduce((prev, next) => prev + next);
+		let targetSales = analytics
+			.map((item) => parseInt(item.targetSales) || 0)
+			.reduce((prev, next) => prev + next);
+		let returns = quantity;
+		let actualReturns = 0;
+		if (returns && sales) {
+			actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
+		}
+		return {
+			sales: sales,
+			targetSales: targetSales,
+			returns: returns,
+			actualReturns: actualReturns,
+		};
+	} catch (err) {
+		throw err;
 	}
+}
 
-	return quantity;
+async function getReturnsByExternalId(externalId, from, to, orgIds) {
+	try {
+		let b_arr = [];
+		const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
+		for (let b of breweries) b_arr.push(b.id);
+
+		let quantity = 0;
+		const Products = await ProductModel.find({ externalId: externalId });
+		for (const prod of Products) {
+			let params = {
+				"receiver.id": { $in: b_arr },
+				"products.productID": prod.id,
+				"supplier.id": { $in: orgIds },
+				status: "RECEIVED",
+				createdAt: {
+					$lte: new Date(to),
+					$gte: new Date(from),
+				},
+			};
+
+			const shipments = await ShipmentModel.find(params);
+			for (const Shipment of shipments) {
+				for (const product of Shipment.products)
+					if (product.productID == params["products.productID"])
+						quantity += product.productQuantityDelivered;
+			}
+		}
+
+		return quantity;
+	} catch (err) {
+		throw err;
+	}
 }
 
 async function getOnlyReturns(prod_id, from, to, warehouseIds) {
-	let b_arr = [];
-	const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
-	for (let b of breweries) b_arr.push(b.id);
+	try {
+		let b_arr = [];
+		const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
+		for (let b of breweries) b_arr.push(b.id);
 
-	let quantity = 0;
-	let params = {
-		"receiver.id": { $in: b_arr },
-		"products.productID": prod_id,
-		"supplier.locationId": { $in: warehouseIds },
-		status: "RECEIVED",
-		createdAt: {
-			$lte: new Date(to),
-			$gte: new Date(from),
-		},
-	};
-
-	const shipments = await ShipmentModel.find(params);
-
-	for (const Shipment of shipments) {
-		for (const product of Shipment.products)
-			if (product.productID == params["products.productID"])
-				quantity += product.productQuantityDelivered;
-	}
-	return quantity;
-}
-
-async function getReturnsOrg(org, analytics, filters, from, to) {
-	if (!analytics.length) {
-		return {
-			sales: 0,
-			targetSales: 0,
-			returns: 0,
-			actualReturns: 0,
-		};
-	}
-	let b_arr = [];
-	const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
-	for (let b of breweries) b_arr.push(b.id);
-
-	let quantity = 0;
-	if (org.type != "BREWERY") {
-		// for (const row of analytics) {
-		// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
-		// const Products = await ProductModel.find({ id: filters.pid });
-		// for (const prod of Products) {
+		let quantity = 0;
 		let params = {
 			"receiver.id": { $in: b_arr },
-			"supplier.id": org.id,
-			"products.productID": filters.pid,
+			"products.productID": prod_id,
+			"supplier.locationId": { $in: warehouseIds },
 			status: "RECEIVED",
 			createdAt: {
-				$lte: today,
-				$gte: new Date(timeFrame),
+				$lte: new Date(to),
+				$gte: new Date(from),
 			},
 		};
 
 		const shipments = await ShipmentModel.find(params);
+
 		for (const Shipment of shipments) {
 			for (const product of Shipment.products)
 				if (product.productID == params["products.productID"])
 					quantity += product.productQuantityDelivered;
 		}
-		// }
-		// }
-	} else {
-		const shipments = await ShipmentModel.find({
-			"receiver.id": org.id,
-			status: "RECEIVED",
-			createdAt: {
-				$lte: today,
-				$gte: new Date(timeFrame),
-			},
-		});
-		for (const Shipment of shipments) {
-			for (const product of Shipment.products) quantity += product.productQuantityDelivered;
+		return quantity;
+	} catch (err) {
+		throw err;
+	}
+}
+
+async function getReturnsOrg(org, analytics, filters, from, to) {
+	try {
+		if (!analytics.length) {
+			return {
+				sales: 0,
+				targetSales: 0,
+				returns: 0,
+				actualReturns: 0,
+			};
 		}
+		let b_arr = [];
+		const breweries = await OrganisationModel.find({ type: "BREWERY", status: "ACTIVE" }, "id");
+		for (let b of breweries) b_arr.push(b.id);
+
+		let quantity = 0;
+		if (org.type != "BREWERY") {
+			// for (const row of analytics) {
+			// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+			// const Products = await ProductModel.find({ id: filters.pid });
+			// for (const prod of Products) {
+			let params = {
+				"receiver.id": { $in: b_arr },
+				"supplier.id": org.id,
+				"products.productID": filters.pid,
+				status: "RECEIVED",
+				createdAt: {
+					$lte: today,
+					$gte: new Date(timeFrame),
+				},
+			};
+
+			const shipments = await ShipmentModel.find(params);
+			for (const Shipment of shipments) {
+				for (const product of Shipment.products)
+					if (product.productID == params["products.productID"])
+						quantity += product.productQuantityDelivered;
+			}
+			// }
+			// }
+		} else {
+			const shipments = await ShipmentModel.find({
+				"receiver.id": org.id,
+				status: "RECEIVED",
+				createdAt: {
+					$lte: today,
+					$gte: new Date(timeFrame),
+				},
+			});
+			for (const Shipment of shipments) {
+				for (const product of Shipment.products) quantity += product.productQuantityDelivered;
+			}
+		}
+		let sales = analytics
+			.map((item) => parseInt(item.sales) || 0)
+			.reduce((prev, next) => prev + next);
+		let targetSales = analytics
+			.map((item) => parseInt(item.targetSales) || 0)
+			.reduce((prev, next) => prev + next);
+		// let returns = analytics.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
+		let returns = quantity;
+		let actualReturns = 0;
+		if (returns && sales) {
+			actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
+		}
+		return {
+			sales: sales,
+			targetSales: targetSales,
+			returns: returns,
+			actualReturns: actualReturns,
+		};
+	} catch (err) {
+		throw err;
 	}
-	let sales = analytics
-		.map((item) => parseInt(item.sales) || 0)
-		.reduce((prev, next) => prev + next);
-	let targetSales = analytics
-		.map((item) => parseInt(item.targetSales) || 0)
-		.reduce((prev, next) => prev + next);
-	// let returns = analytics.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
-	let returns = quantity;
-	let actualReturns = 0;
-	if (returns && sales) {
-		actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
-	}
-	return {
-		sales: sales,
-		targetSales: targetSales,
-		returns: returns,
-		actualReturns: actualReturns,
-	};
 }
 
 async function calculatePrevReturnRates(filters, analytic) {
-	const lastMonthStart = moment().subtract(1, "months").startOf("month").format(DATE_FORMAT);
-	const lastMonthEnd = moment().subtract(1, "months").endOf("month").format(DATE_FORMAT);
-	let prevAnalytic = await AnalyticsModel.findOne({
-		uploadDate: {
-			$lte: lastMonthEnd,
-			$gte: lastMonthStart,
-		},
-		productName: analytic.productName,
-		productId: analytic.productId,
-	});
-	if (prevAnalytic && parseInt(prevAnalytic.sales)) {
-		return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
-	} else {
-		return 0;
+	try {
+		const lastMonthStart = moment().subtract(1, "months").startOf("month").format(DATE_FORMAT);
+		const lastMonthEnd = moment().subtract(1, "months").endOf("month").format(DATE_FORMAT);
+		let prevAnalytic = await AnalyticsModel.findOne({
+			uploadDate: {
+				$lte: lastMonthEnd,
+				$gte: lastMonthStart,
+			},
+			productName: analytic.productName,
+			productId: analytic.productId,
+		});
+		if (prevAnalytic && parseInt(prevAnalytic.sales)) {
+			return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
+		} else {
+			return 0;
+		}
+	} catch (err) {
+		throw err;
 	}
 }
 
 async function calculatePrevReturnRatesNew(filters, analytic) {
-	const lastMonthStart = moment().subtract(1, "months").startOf("month").format(DATE_FORMAT);
-	const lastMonthEnd = moment().subtract(1, "months").endOf("month").format(DATE_FORMAT);
-	let prevAnalytic = await AnalyticsModel.findOne({
-		uploadDate: {
-			$lte: lastMonthEnd,
-			$gte: lastMonthStart,
-		},
-		brand: analytic._id.manufacturer,
-		productId: analytic._id.id,
-	});
-	if (prevAnalytic && parseInt(prevAnalytic.sales)) {
-		return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
-	} else {
-		return 0;
+	try {
+		const lastMonthStart = moment().subtract(1, "months").startOf("month").format(DATE_FORMAT);
+		const lastMonthEnd = moment().subtract(1, "months").endOf("month").format(DATE_FORMAT);
+		let prevAnalytic = await AnalyticsModel.findOne({
+			uploadDate: {
+				$lte: lastMonthEnd,
+				$gte: lastMonthStart,
+			},
+			brand: analytic._id.manufacturer,
+			productId: analytic._id.id,
+		});
+		if (prevAnalytic && parseInt(prevAnalytic.sales)) {
+			return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
+		} else {
+			return 0;
+		}
+	} catch (err) {
+		throw err;
 	}
 }
 
 function getFilterConditions(filters) {
-	let matchCondition = { status: "ACTIVE" };
-	if (filters.orgType && filters.orgType !== "") {
-		if (
-			filters.orgType === "BREWERY" ||
-			filters.orgType === "S1" ||
-			filters.orgType === "S2" ||
-			filters.orgType === "S3"
-		) {
-			matchCondition.type = filters.orgType;
-		} else if (filters.orgType === "ALL_VENDORS") {
-			matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+	try {
+		let matchCondition = { status: "ACTIVE" };
+		if (filters.orgType && filters.orgType !== "") {
+			if (
+				filters.orgType === "BREWERY" ||
+				filters.orgType === "S1" ||
+				filters.orgType === "S2" ||
+				filters.orgType === "S3"
+			) {
+				matchCondition.type = filters.orgType;
+			} else if (filters.orgType === "ALL_VENDORS") {
+				matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+			}
 		}
-	}
-	// if (filters.state && filters.state.length) {
-	// 	matchCondition.state = filters.state;
-	// }
-	// if (filters.district && filters.district.length) {
-	// 	matchCondition.district = filters.district;
-	// }
-	if (filters.organization && filters.organization.length) {
-		matchCondition.id = filters.organization;
-	}
+		// if (filters.state && filters.state.length) {
+		// 	matchCondition.state = filters.state;
+		// }
+		// if (filters.district && filters.district.length) {
+		// 	matchCondition.district = filters.district;
+		// }
+		if (filters.organization && filters.organization.length) {
+			matchCondition.id = filters.organization;
+		}
 
-	return matchCondition;
+		return matchCondition;
+	} catch (err) {
+		throw err;
+	}
 }
 
 function getFilterConditionsWarehouse(filters) {
-	let matchCondition = {};
-	if (filters.orgType && filters.orgType !== "" && filters.warehouseIds) {
-		matchCondition.id = { $in: [...filters.warehouseIds] };
+	try {
+		let matchCondition = {};
+		if (filters.orgType && filters.orgType !== "" && filters.warehouseIds) {
+			matchCondition.id = { $in: [...filters.warehouseIds] };
+		}
+		if (filters.state && filters.state.length) {
+			matchCondition.state = filters.state;
+		}
+		if (filters.district && filters.district.length) {
+			matchCondition["warehouseAddress.city"] = filters.district;
+		}
+		if (filters.organization && filters.organization.length) {
+			matchCondition.id = filters.organization;
+		}
+		return matchCondition;
+	} catch (err) {
+		throw err;
 	}
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition["warehouseAddress.city"] = filters.district;
-	}
-	if (filters.organization && filters.organization.length) {
-		matchCondition.id = filters.organization;
-	}
-	return matchCondition;
 }
 
 const _getWarehouseIdsByOrg = async (org) => {
-	let matchCondition = {};
-	if (org && org.id && org.id !== "") {
-		matchCondition.organisationId = org.id;
+	try {
+		let matchCondition = {};
+		if (org && org.id && org.id !== "") {
+			matchCondition.organisationId = org.id;
+		}
+		let warehouseIds = [];
+
+		const warehouse = await WarehouseModel.findOne({ organisationId: org.id });
+
+		if (warehouse) {
+			const warehouses = await WarehouseModel.aggregate([
+				{
+					$match: { "warehouseAddress.city": warehouse?.warehouseAddress.city },
+				},
+				{
+					$group: {
+						_id: "$id",
+					},
+				},
+			]);
+			for (const wh of warehouses) warehouseIds.push(wh._id);
+		}
+
+		return warehouseIds;
+	} catch (err) {
+		throw err;
 	}
-	let warehouseIds = [];
+};
 
-	const warehouse = await WarehouseModel.findOne({ organisationId: org.id });
+const _getWarehouseIdsByOrgType = async (filters) => {
+	try {
+		const warehouses = await OrganisationModel.aggregate([
+			{
+				$match: getFilterConditions(filters),
+			},
+			{
+				$unwind: {
+					path: "$warehouses",
+				},
+			},
+			{
+				$group: {
+					_id: "$warehouseIds",
+					warehouseIds: {
+						$addToSet: "$warehouses",
+					},
+				},
+			},
+		]);
+		let warehouseIds = [];
+		if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+			warehouseIds = warehouses[0].warehouseIds;
+		}
+		return warehouseIds;
+	} catch (err) {
+		throw err;
+	}
+};
 
-	if (warehouse) {
+function getFilterConditionsSkuOrgType(filters) {
+	try {
+		let matchCondition = { status: "ACTIVE" };
+		if (filters.orgType && filters.orgType !== "") {
+			if (
+				filters.orgType === "BREWERY" ||
+				filters.orgType === "S1" ||
+				filters.orgType === "S2" ||
+				filters.orgType === "S3"
+			) {
+				matchCondition.type = filters.orgType;
+			} else if (filters.orgType === "ALL_VENDORS") {
+				matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }, { type: "BREWERY" }];
+			} else if (filters.orgType === "NOTBREWERY") {
+				matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+			}
+		}
+		return matchCondition;
+	} catch (err) {
+		throw err;
+	}
+}
+
+function getFilterConditionsOrgType(filters) {
+	try {
+		let matchCondition = { status: "ACTIVE" };
+		if (filters.orgType && filters.orgType !== "") {
+			if (
+				filters.orgType === "BREWERY" ||
+				filters.orgType === "S1" ||
+				filters.orgType === "S2" ||
+				filters.orgType === "S3"
+			) {
+				matchCondition.type = filters.orgType;
+			} else if (filters.orgType === "ALL_VENDORS") {
+				matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }, { type: "BREWERY" }];
+			}
+		}
+		if (filters.state && filters.state.length) {
+			matchCondition.state = filters.state;
+		}
+		if (filters.district && filters.district.length) {
+			matchCondition["warehouseAddress.city"] = filters.district;
+		}
+		if (filters.organization && filters.organization.length) {
+			matchCondition.id = filters.organization;
+		}
+		return matchCondition;
+	} catch (err) {
+		throw err;
+	}
+}
+
+const _getWarehousesByOrgType = async (filters) => {
+	try {
+		const warehouses = await OrganisationModel.aggregate([
+			{
+				$match: getFilterConditionsSkuOrgType(filters),
+			},
+			{
+				$unwind: {
+					path: "$warehouses",
+				},
+			},
+			{
+				$group: {
+					_id: "$warehouseIds",
+					warehouseIds: {
+						$addToSet: "$warehouses",
+					},
+				},
+			},
+		]);
+		let warehouseIds = [];
+		if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+			warehouseIds = warehouses[0].warehouseIds;
+		}
+		return warehouseIds;
+	} catch (err) {
+		throw err;
+	}
+};
+
+const _getWarehouseIds = async (filters) => {
+	try {
 		const warehouses = await WarehouseModel.aggregate([
 			{
-				$match: { "warehouseAddress.city": warehouse?.warehouseAddress.city },
+				$match: getFilterConditionsWarehouse(filters),
 			},
 			{
 				$group: {
 					_id: "$id",
+					warehouseIds: {
+						$addToSet: "$id",
+					},
 				},
 			},
 		]);
-		for (const wh of warehouses) warehouseIds.push(wh._id);
-	}
-
-	return warehouseIds;
-};
-
-const _getWarehouseIdsByOrgType = async (filters) => {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: getFilterConditions(filters),
-		},
-		{
-			$unwind: {
-				path: "$warehouses",
-			},
-		},
-		{
-			$group: {
-				_id: "$warehouseIds",
-				warehouseIds: {
-					$addToSet: "$warehouses",
-				},
-			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
-	return warehouseIds;
-};
-
-function getFilterConditionsSkuOrgType(filters) {
-	let matchCondition = { status: "ACTIVE" };
-	if (filters.orgType && filters.orgType !== "") {
-		if (
-			filters.orgType === "BREWERY" ||
-			filters.orgType === "S1" ||
-			filters.orgType === "S2" ||
-			filters.orgType === "S3"
-		) {
-			matchCondition.type = filters.orgType;
-		} else if (filters.orgType === "ALL_VENDORS") {
-			matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }, { type: "BREWERY" }];
-		} else if (filters.orgType === "NOTBREWERY") {
-			matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+		let warehouseIds = [];
+		if (warehouses.length > 0) {
+			warehouseIds = warehouses.map((a) => a._id);
 		}
+		return warehouseIds;
+	} catch (err) {
+		throw err;
 	}
-	return matchCondition;
-}
-
-function getFilterConditionsOrgType(filters) {
-	let matchCondition = { status: "ACTIVE" };
-	if (filters.orgType && filters.orgType !== "") {
-		if (
-			filters.orgType === "BREWERY" ||
-			filters.orgType === "S1" ||
-			filters.orgType === "S2" ||
-			filters.orgType === "S3"
-		) {
-			matchCondition.type = filters.orgType;
-		} else if (filters.orgType === "ALL_VENDORS") {
-			matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }, { type: "BREWERY" }];
-		}
-	}
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition["warehouseAddress.city"] = filters.district;
-	}
-	if (filters.organization && filters.organization.length) {
-		matchCondition.id = filters.organization;
-	}
-	return matchCondition;
-}
-
-const _getWarehousesByOrgType = async (filters) => {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: getFilterConditionsSkuOrgType(filters),
-		},
-		{
-			$unwind: {
-				path: "$warehouses",
-			},
-		},
-		{
-			$group: {
-				_id: "$warehouseIds",
-				warehouseIds: {
-					$addToSet: "$warehouses",
-				},
-			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
-	return warehouseIds;
-};
-
-const _getWarehouseIds = async (filters) => {
-	const warehouses = await WarehouseModel.aggregate([
-		{
-			$match: getFilterConditionsWarehouse(filters),
-		},
-		{
-			$group: {
-				_id: "$id",
-				warehouseIds: {
-					$addToSet: "$id",
-				},
-			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses.length > 0) {
-		warehouseIds = warehouses.map((a) => a._id);
-	}
-	return warehouseIds;
 };
 
 const _getWarehouseIdByOrgType = async (filters) => {
-	if (filters.orgType && filters.orgType !== "")
-		filters.warehouseIds = await _getWarehousesByOrgType(filters);
-	const warehouses = await WarehouseModel.aggregate([
-		{
-			$match: getFilterConditionsWarehouse(filters),
-		},
-		{
-			$group: {
-				_id: "$id",
-				warehouseIds: {
-					$addToSet: "$id",
+	try {
+		if (filters.orgType && filters.orgType !== "")
+			filters.warehouseIds = await _getWarehousesByOrgType(filters);
+		const warehouses = await WarehouseModel.aggregate([
+			{
+				$match: getFilterConditionsWarehouse(filters),
+			},
+			{
+				$group: {
+					_id: "$id",
+					warehouseIds: {
+						$addToSet: "$id",
+					},
 				},
 			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses.length > 0) {
-		warehouseIds = warehouses.map((a) => a._id);
+		]);
+		let warehouseIds = [];
+		if (warehouses.length > 0) {
+			warehouseIds = warehouses.map((a) => a._id);
+		}
+		return warehouseIds;
+	} catch (err) {
+		throw err;
 	}
-	return warehouseIds;
 };
 
 function getDistrictConditionsWarehouse(filters) {
-	let matchCondition = {};
-	if (filters.district && filters.district.length) {
-		matchCondition["warehouseAddress.city"] = filters.district;
+	try {
+		let matchCondition = {};
+		if (filters.district && filters.district.length) {
+			matchCondition["warehouseAddress.city"] = filters.district;
+		}
+		if (
+			filters.orgType &&
+			filters.orgType !== "" &&
+			filters.orgType !== "ALL_VENDORS" &&
+			filters.warehouseIds
+		) {
+			matchCondition.id = { $in: [...filters.warehouseIds] };
+		}
+		return matchCondition;
+	} catch (err) {
+		throw err;
 	}
-	if (
-		filters.orgType &&
-		filters.orgType !== "" &&
-		filters.orgType !== "ALL_VENDORS" &&
-		filters.warehouseIds
-	) {
-		matchCondition.id = { $in: [...filters.warehouseIds] };
-	}
-	return matchCondition;
 }
 
 const _getWarehouseIdsByDistrict = async (filters) => {
-	if (filters.orgType && filters.orgType !== "" && filters.orgType !== "ALL_VENDORS")
-		filters.warehouseIds = await _getWarehousesByOrgType(filters);
-	if (filters.inventory)
-		filters.warehouseIds = await _getWarehousesByOrgType({
-			...filters,
-			...{ orgType: "NOTBREWERY" },
-		});
+	try {
+		if (filters.orgType && filters.orgType !== "" && filters.orgType !== "ALL_VENDORS")
+			filters.warehouseIds = await _getWarehousesByOrgType(filters);
+		if (filters.inventory)
+			filters.warehouseIds = await _getWarehousesByOrgType({
+				...filters,
+				...{ orgType: "NOTBREWERY" },
+			});
 
-	const warehouses = await WarehouseModel.aggregate([
-		{
-			$match: getDistrictConditionsWarehouse(filters),
-		},
-		{
-			$group: {
-				_id: "$id",
-				warehouseIds: {
-					$addToSet: "$id",
+		const warehouses = await WarehouseModel.aggregate([
+			{
+				$match: getDistrictConditionsWarehouse(filters),
+			},
+			{
+				$group: {
+					_id: "$id",
+					warehouseIds: {
+						$addToSet: "$id",
+					},
 				},
 			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses.length > 0) {
-		warehouseIds = warehouses.map((a) => a._id);
+		]);
+		let warehouseIds = [];
+		if (warehouses.length > 0) {
+			warehouseIds = warehouses.map((a) => a._id);
+		}
+		return warehouseIds;
+	} catch (err) {
+		throw err;
 	}
-	return warehouseIds;
 };
 
 const _getOverviewStats = async () => {
-	let _filters = {
-		orgType: BREWERY_ORG,
-	};
-	const breweryWarehouseIds = await _getWarehouseIdsByOrgType(_filters);
-	const breweryStats = await AnalyticsModel.find({
-		warehouseId: { $in: breweryWarehouseIds },
-	});
-	let breweryStock = 0;
-	breweryStats.forEach((br) => {
-		breweryStock = breweryStock + parseInt(br.returns);
-	});
-	const breweryObj = {
-		stock: breweryStock,
-		n_warehouses: breweryWarehouseIds.length,
-	};
-	_filters = {
-		orgType: S1_ORG,
-	};
-	const s1WarehouseIds = await _getWarehouseIdsByOrgType(_filters);
-	const s1Stats = await AnalyticsModel.find({
-		warehouseId: { $in: s1WarehouseIds },
-	});
-	let s1Stock = 0;
-	s1Stats.forEach((s1) => {
-		s1Stock = s1Stock + parseInt(s1.returns);
-	});
-	const s1Obj = {
-		stock: s1Stock,
-		n_warehouses: s1WarehouseIds.length,
-	};
+	try {
+		let _filters = {
+			orgType: BREWERY_ORG,
+		};
+		const breweryWarehouseIds = await _getWarehouseIdsByOrgType(_filters);
+		const breweryStats = await AnalyticsModel.find({
+			warehouseId: { $in: breweryWarehouseIds },
+		});
+		let breweryStock = 0;
+		breweryStats.forEach((br) => {
+			breweryStock = breweryStock + parseInt(br.returns);
+		});
+		const breweryObj = {
+			stock: breweryStock,
+			n_warehouses: breweryWarehouseIds.length,
+		};
+		_filters = {
+			orgType: S1_ORG,
+		};
+		const s1WarehouseIds = await _getWarehouseIdsByOrgType(_filters);
+		const s1Stats = await AnalyticsModel.find({
+			warehouseId: { $in: s1WarehouseIds },
+		});
+		let s1Stock = 0;
+		s1Stats.forEach((s1) => {
+			s1Stock = s1Stock + parseInt(s1.returns);
+		});
+		const s1Obj = {
+			stock: s1Stock,
+			n_warehouses: s1WarehouseIds.length,
+		};
 
-	_filters = {
-		orgType: S2_ORG,
-	};
-	const s2WarehouseIds = await _getWarehouseIdsByOrgType(_filters);
-	const s2Stats = await AnalyticsModel.find({
-		warehouseId: { $in: s2WarehouseIds },
-	});
-	let s2Stock = 0;
-	s2Stats.forEach((s2) => {
-		s2Stock = s2Stock + parseInt(s2.returns);
-	});
-	const s2Obj = {
-		stock: s2Stock,
-		n_warehouses: s2WarehouseIds.length,
-	};
+		_filters = {
+			orgType: S2_ORG,
+		};
+		const s2WarehouseIds = await _getWarehouseIdsByOrgType(_filters);
+		const s2Stats = await AnalyticsModel.find({
+			warehouseId: { $in: s2WarehouseIds },
+		});
+		let s2Stock = 0;
+		s2Stats.forEach((s2) => {
+			s2Stock = s2Stock + parseInt(s2.returns);
+		});
+		const s2Obj = {
+			stock: s2Stock,
+			n_warehouses: s2WarehouseIds.length,
+		};
 
-	return {
-		breweryObj,
-		s1Obj,
-		s2Obj,
-	};
+		return {
+			breweryObj,
+			s1Obj,
+			s2Obj,
+		};
+	} catch (err) {
+		throw err;
+	}
 };
 
 const aggregateSalesStats = (inputArr) => {
-	if (!inputArr.length) {
+	try {
+		if (!inputArr.length) {
+			return {
+				sales: 0,
+				targetSales: 0,
+				returns: 0,
+				actualReturns: 0,
+			};
+		}
+		let sales = inputArr
+			.map((item) => parseInt(item.sales) || 0)
+			.reduce((prev, next) => prev + next);
+		let targetSales = inputArr
+			.map((item) => parseInt(item.targetSales) || 0)
+			.reduce((prev, next) => prev + next);
+		let returns = inputArr
+			.map((item) => parseInt(item.returns) || 0)
+			.reduce((prev, next) => prev + next);
+		let actualReturns = 0;
+		if (returns && sales) {
+			actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
+		}
 		return {
-			sales: 0,
-			targetSales: 0,
-			returns: 0,
-			actualReturns: 0,
+			sales: sales,
+			targetSales: targetSales,
+			returns: returns,
+			actualReturns: actualReturns,
 		};
+	} catch (err) {
+		throw err;
 	}
-	let sales = inputArr.map((item) => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
-	let targetSales = inputArr
-		.map((item) => parseInt(item.targetSales) || 0)
-		.reduce((prev, next) => prev + next);
-	let returns = inputArr
-		.map((item) => parseInt(item.returns) || 0)
-		.reduce((prev, next) => prev + next);
-	let actualReturns = 0;
-	if (returns && sales) {
-		actualReturns = parseFloat((returns / sales) * 100).toFixed(2);
-	}
-	return {
-		sales: sales,
-		targetSales: targetSales,
-		returns: returns,
-		actualReturns: actualReturns,
-	};
 };
 
 // function dateConversion(filters) {
@@ -618,244 +696,271 @@ const aggregateSalesStats = (inputArr) => {
 // }
 
 function getSKUAnalyticsFilterConditions(filters) {
-	let matchCondition = {};
+	try {
+		let matchCondition = {};
 
-	if (filters.sku && filters.sku !== "") {
-		matchCondition.productId = filters.sku;
-	}
-
-	// if (filters.district && filters.district !== '') {
-	// 	matchCondition.district = filters.district;
-	// }
-
-	if (filters.brand && filters.brand !== "") {
-		matchCondition.brand = filters.brand;
-	}
-
-	if (filters.date_filter_type && filters.date_filter_type.length) {
-		const DATE_FORMAT = "YYYY-MM-DD";
-		if (filters.date_filter_type === "by_range") {
-			let startDate = filters.start_date ? filters.start_date : new Date();
-			let endDate = filters.end_date ? filters.end_date : new Date();
-			matchCondition.uploadDate = {
-				$gte: new Date(startDate),
-				$lte: new Date(endDate),
-			};
-		} else if (filters.date_filter_type === "by_monthly") {
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear)
-				.tz("Etc/IST")
-				.add(filters.month - 1, "months")
-				.format(DATE_FORMAT);
-			let endDateOfTheMonth = moment(startDateOfTheMonth)
-				.tz("Etc/IST")
-				.endOf("month")
-				.format(DATE_FORMAT);
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheMonth),
-				$lte: new Date(endDateOfTheMonth),
-			};
-		} else if (filters.date_filter_type === "by_quarterly") {
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheQuarter = moment(startDateOfTheYear)
-				.quarter(filters.quarter)
-				.tz("Etc/IST")
-				.startOf("quarter")
-				.format(DATE_FORMAT);
-			// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
-			let endDateOfTheQuarter = moment(startDateOfTheYear)
-				.quarter(filters.quarter)
-				.tz("Etc/IST")
-				.endOf("quarter")
-				.format(DATE_FORMAT);
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheQuarter),
-				$lte: new Date(endDateOfTheQuarter),
-			};
-		} else if (filters.date_filter_type === "by_yearly") {
-			const currentDate = moment().format(DATE_FORMAT);
-			const currentYear = moment().year();
-
-			let startDateOfTheYear = moment([filters.year])
-				.tz("Etc/IST")
-				.startOf("year")
-				.format(DATE_FORMAT);
-			let endDateOfTheYear = moment([filters.year]).tz("Etc/IST").endOf("year").format(DATE_FORMAT);
-			if (filters.year === currentYear) {
-				endDateOfTheYear = currentDate;
-			}
-
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheYear),
-				$lte: new Date(endDateOfTheYear),
-			};
+		if (filters.sku && filters.sku !== "") {
+			matchCondition.productId = filters.sku;
 		}
+
+		// if (filters.district && filters.district !== '') {
+		// 	matchCondition.district = filters.district;
+		// }
+
+		if (filters.brand && filters.brand !== "") {
+			matchCondition.brand = filters.brand;
+		}
+
+		if (filters.date_filter_type && filters.date_filter_type.length) {
+			const DATE_FORMAT = "YYYY-MM-DD";
+			if (filters.date_filter_type === "by_range") {
+				let startDate = filters.start_date ? filters.start_date : new Date();
+				let endDate = filters.end_date ? filters.end_date : new Date();
+				matchCondition.uploadDate = {
+					$gte: new Date(startDate),
+					$lte: new Date(endDate),
+				};
+			} else if (filters.date_filter_type === "by_monthly") {
+				let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+				let startDateOfTheMonth = moment(startDateOfTheYear)
+					.tz("Etc/IST")
+					.add(filters.month - 1, "months")
+					.format(DATE_FORMAT);
+				let endDateOfTheMonth = moment(startDateOfTheMonth)
+					.tz("Etc/IST")
+					.endOf("month")
+					.format(DATE_FORMAT);
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheMonth),
+					$lte: new Date(endDateOfTheMonth),
+				};
+			} else if (filters.date_filter_type === "by_quarterly") {
+				let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+				let startDateOfTheQuarter = moment(startDateOfTheYear)
+					.quarter(filters.quarter)
+					.tz("Etc/IST")
+					.startOf("quarter")
+					.format(DATE_FORMAT);
+				// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
+				let endDateOfTheQuarter = moment(startDateOfTheYear)
+					.quarter(filters.quarter)
+					.tz("Etc/IST")
+					.endOf("quarter")
+					.format(DATE_FORMAT);
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheQuarter),
+					$lte: new Date(endDateOfTheQuarter),
+				};
+			} else if (filters.date_filter_type === "by_yearly") {
+				const currentDate = moment().format(DATE_FORMAT);
+				const currentYear = moment().year();
+
+				let startDateOfTheYear = moment([filters.year])
+					.tz("Etc/IST")
+					.startOf("year")
+					.format(DATE_FORMAT);
+				let endDateOfTheYear = moment([filters.year])
+					.tz("Etc/IST")
+					.endOf("year")
+					.format(DATE_FORMAT);
+				if (filters.year === currentYear) {
+					endDateOfTheYear = currentDate;
+				}
+
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheYear),
+					$lte: new Date(endDateOfTheYear),
+				};
+			}
+		}
+		return matchCondition;
+	} catch (err) {
+		throw err;
 	}
-	return matchCondition;
 }
 
 function getAnalyticsFilterConditions(filters, warehouseIds) {
-	let matchCondition = {
-		warehouseId: {
-			$in: [...warehouseIds],
-		},
-	};
+	try {
+		let matchCondition = {
+			warehouseId: {
+				$in: [...warehouseIds],
+			},
+		};
 
-	if (filters.sku && filters.sku !== "") {
-		matchCondition.productId = filters.sku;
-	}
-
-	if (filters.brand && filters.brand !== "") {
-		matchCondition.brand = filters.brand;
-	}
-
-	if (filters.date_filter_type && filters.date_filter_type.length) {
-		const DATE_FORMAT = "YYYY-MM-DD";
-		if (filters.date_filter_type === "by_range") {
-			let startDate = filters.start_date ? filters.start_date : new Date();
-			let endDate = filters.end_date ? filters.end_date : new Date();
-			matchCondition.uploadDate = {
-				$gte: new Date(startDate),
-				$lte: new Date(endDate),
-			};
-		} else if (filters.date_filter_type === "by_monthly") {
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear)
-				.add(filters.month - 1, "months")
-				.format(DATE_FORMAT);
-			let endDateOfTheMonth = moment(startDateOfTheMonth)
-				.tz("Etc/GMT")
-				.add(1, "months")
-				.endOf("month");
-
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheMonth),
-				$lte: new Date(endDateOfTheMonth),
-			};
-		} else if (filters.date_filter_type === "by_quarterly") {
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheQuarter = moment(startDateOfTheYear)
-				.quarter(filters.quarter)
-				.startOf("quarter")
-				.format(DATE_FORMAT);
-			// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
-			let endDateOfTheQuarter = moment(startDateOfTheYear)
-				.quarter(filters.quarter)
-				.tz("Etc/GMT")
-				.add(3, "months")
-				.endOf("quarter");
-
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheQuarter),
-				$lte: new Date(endDateOfTheQuarter),
-			};
-		} else if (filters.date_filter_type === "by_yearly") {
-			const currentDate = moment().format(DATE_FORMAT);
-			const currentYear = moment().year();
-
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let endDateOfTheYear = moment([filters.year]).tz("Etc/GMT").add(1, "years").endOf("year");
-
-			if (filters.year === currentYear) {
-				endDateOfTheYear = currentDate;
-			}
-
-			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheYear),
-				$lte: new Date(endDateOfTheYear),
-			};
+		if (filters.sku && filters.sku !== "") {
+			matchCondition.productId = filters.sku;
 		}
-	}
 
-	return matchCondition;
+		if (filters.brand && filters.brand !== "") {
+			matchCondition.brand = filters.brand;
+		}
+
+		if (filters.date_filter_type && filters.date_filter_type.length) {
+			const DATE_FORMAT = "YYYY-MM-DD";
+			if (filters.date_filter_type === "by_range") {
+				let startDate = filters.start_date ? filters.start_date : new Date();
+				let endDate = filters.end_date ? filters.end_date : new Date();
+				matchCondition.uploadDate = {
+					$gte: new Date(startDate),
+					$lte: new Date(endDate),
+				};
+			} else if (filters.date_filter_type === "by_monthly") {
+				let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+				let startDateOfTheMonth = moment(startDateOfTheYear)
+					.add(filters.month - 1, "months")
+					.format(DATE_FORMAT);
+				let endDateOfTheMonth = moment(startDateOfTheMonth)
+					.tz("Etc/GMT")
+					.add(1, "months")
+					.endOf("month");
+
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheMonth),
+					$lte: new Date(endDateOfTheMonth),
+				};
+			} else if (filters.date_filter_type === "by_quarterly") {
+				let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+				let startDateOfTheQuarter = moment(startDateOfTheYear)
+					.quarter(filters.quarter)
+					.startOf("quarter")
+					.format(DATE_FORMAT);
+				// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
+				let endDateOfTheQuarter = moment(startDateOfTheYear)
+					.quarter(filters.quarter)
+					.tz("Etc/GMT")
+					.add(3, "months")
+					.endOf("quarter");
+
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheQuarter),
+					$lte: new Date(endDateOfTheQuarter),
+				};
+			} else if (filters.date_filter_type === "by_yearly") {
+				const currentDate = moment().format(DATE_FORMAT);
+				const currentYear = moment().year();
+
+				let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+				let endDateOfTheYear = moment([filters.year]).tz("Etc/GMT").add(1, "years").endOf("year");
+
+				if (filters.year === currentYear) {
+					endDateOfTheYear = currentDate;
+				}
+
+				matchCondition.uploadDate = {
+					$gte: new Date(startDateOfTheYear),
+					$lte: new Date(endDateOfTheYear),
+				};
+			}
+		}
+
+		return matchCondition;
+	} catch (err) {
+		throw err;
+	}
 }
 
 async function getSupplierRatings(supplierDetails, ratingSchema) {
-	let rating;
-	if (ratingSchema != null) {
-		rating = {
-			returnRating: await calculateRating(supplierDetails.returnRate, ratingSchema?.returnRate),
-			leadRating: await calculateRating(
-				supplierDetails?.leadTime ? supplierDetails?.leadTime[0]?.avgLeadTime : null,
-				ratingSchema?.leadTime,
-			),
-			bottleCapacityRating: await calculateRating(
-				supplierDetails.storageCapacity?.bottleCapacity,
-				ratingSchema?.bottleCapacity,
-			),
-			storageCapacityRating: await calculateRating(
-				supplierDetails.storageCapacity?.sqft,
-				ratingSchema?.warehouseCapacity,
-			),
-			dirtyBottlesRating: await calculateRating(
-				supplierDetails.dirtyBottles,
-				ratingSchema?.dirtyBottle,
-			),
-			breakageRating: await calculateRating(
-				supplierDetails?.breakage,
-				ratingSchema?.breakageBottle,
-			),
-		};
-		rating["Overall"] = await getOverallRating(rating);
-	} else {
-		rating = {
-			Overall: 0.0,
-		};
+	try {
+		let rating;
+		if (ratingSchema != null) {
+			rating = {
+				returnRating: await calculateRating(supplierDetails.returnRate, ratingSchema?.returnRate),
+				leadRating: await calculateRating(
+					supplierDetails?.leadTime ? supplierDetails?.leadTime[0]?.avgLeadTime : null,
+					ratingSchema?.leadTime,
+				),
+				bottleCapacityRating: await calculateRating(
+					supplierDetails.storageCapacity?.bottleCapacity,
+					ratingSchema?.bottleCapacity,
+				),
+				storageCapacityRating: await calculateRating(
+					supplierDetails.storageCapacity?.sqft,
+					ratingSchema?.warehouseCapacity,
+				),
+				dirtyBottlesRating: await calculateRating(
+					supplierDetails.dirtyBottles,
+					ratingSchema?.dirtyBottle,
+				),
+				breakageRating: await calculateRating(
+					supplierDetails?.breakage,
+					ratingSchema?.breakageBottle,
+				),
+			};
+			rating["Overall"] = await getOverallRating(rating);
+		} else {
+			rating = {
+				Overall: 0.0,
+			};
+		}
+		return rating;
+	} catch (err) {
+		throw err;
 	}
-	return rating;
 }
 
 async function getOverallRating(rating) {
-	let overallRating = 0;
-	if (rating) {
-		overallRating += rating.returnRating ? rating.returnRating * 0.2 : 0;
-		overallRating += rating.leadRating ? rating.leadRating * 0.2 : 0;
-		overallRating += rating.bottleCapacityRating ? rating.bottleCapacityRating * 0.2 : 0;
-		overallRating += rating.dirtyBottlesRating ? rating.dirtyBottlesRating * 0.2 : 0;
-		overallRating += rating.breakageRating ? rating.breakageRating * 0.2 : 0;
+	try {
+		let overallRating = 0;
+		if (rating) {
+			overallRating += rating.returnRating ? rating.returnRating * 0.2 : 0;
+			overallRating += rating.leadRating ? rating.leadRating * 0.2 : 0;
+			overallRating += rating.bottleCapacityRating ? rating.bottleCapacityRating * 0.2 : 0;
+			overallRating += rating.dirtyBottlesRating ? rating.dirtyBottlesRating * 0.2 : 0;
+			overallRating += rating.breakageRating ? rating.breakageRating * 0.2 : 0;
+		}
+		return overallRating.toFixed(2);
+	} catch (err) {
+		throw err;
 	}
-	return overallRating.toFixed(2);
 }
 
 async function calculateRating(value, schema) {
-	if (value && schema) {
-		if (schema) {
-			let temp =
-				value / schema.target < 1
-					? (value / schema.target) * (schema.max.rating - schema.min.rating) + schema.min.rating
-					: value / schema.target / (schema.max.rating - schema.min.rating) + schema.min.rating;
-			if (schema.min.operator == "<" && value < schema.min.value) {
-				return parseInt(schema.min.rating);
-			} else if (schema.min.operator == ">" && value > schema.min.value) {
-				return parseInt(schema.min.rating);
-			} else if (schema.max.operator == ">" && value > schema.max.value) {
-				return parseInt(schema.max.rating);
-			} else if (schema.min.operator == "<" && value < schema.min.value) {
-				return parseInt(schema.max.rating);
-			} else return parseInt(temp);
+	try {
+		if (value && schema) {
+			if (schema) {
+				let temp =
+					value / schema.target < 1
+						? (value / schema.target) * (schema.max.rating - schema.min.rating) + schema.min.rating
+						: value / schema.target / (schema.max.rating - schema.min.rating) + schema.min.rating;
+				if (schema.min.operator == "<" && value < schema.min.value) {
+					return parseInt(schema.min.rating);
+				} else if (schema.min.operator == ">" && value > schema.min.value) {
+					return parseInt(schema.min.rating);
+				} else if (schema.max.operator == ">" && value > schema.max.value) {
+					return parseInt(schema.max.rating);
+				} else if (schema.min.operator == "<" && value < schema.min.value) {
+					return parseInt(schema.max.rating);
+				} else return parseInt(temp);
+			}
 		}
+		return 0;
+	} catch (err) {
+		throw err;
 	}
-	return 0;
 }
 
 async function getSupplierTargets(rating) {
-	let targets = {
-		returnRateTarget: "N/A",
-		leadTimeTarget: "N/A",
-		storageCapacityTarget: "N/A",
-		dirtyBottlesTarget: "N/A",
-		breakageTarget: "N/A",
-	};
-	if (rating) {
-		targets.returnRateTarget = rating.returnRate?.target ? rating.returnRate.target : "N/A";
-		targets.leadTimeTarget = rating.leadTime?.target ? rating.leadTime.target : "N/A";
-		targets.storageCapacityTarget = rating.bottleCapacity?.target
-			? rating.bottleCapacity.target
-			: "N/A";
-		targets.dirtyBottlesTarget = rating.dirtyBottle?.target ? rating.dirtyBottle.target : "N/A";
-		targets.breakageTarget = rating.breakageBottle?.target ? rating.breakageBottle.target : "N/A";
+	try {
+		let targets = {
+			returnRateTarget: "N/A",
+			leadTimeTarget: "N/A",
+			storageCapacityTarget: "N/A",
+			dirtyBottlesTarget: "N/A",
+			breakageTarget: "N/A",
+		};
+		if (rating) {
+			targets.returnRateTarget = rating.returnRate?.target ? rating.returnRate.target : "N/A";
+			targets.leadTimeTarget = rating.leadTime?.target ? rating.leadTime.target : "N/A";
+			targets.storageCapacityTarget = rating.bottleCapacity?.target
+				? rating.bottleCapacity.target
+				: "N/A";
+			targets.dirtyBottlesTarget = rating.dirtyBottle?.target ? rating.dirtyBottle.target : "N/A";
+			targets.breakageTarget = rating.breakageBottle?.target ? rating.breakageBottle.target : "N/A";
+		}
+		return targets;
+	} catch (err) {
+		throw err;
 	}
-	return targets;
 }
 
 /**
@@ -1300,15 +1405,19 @@ exports.getSalesStatsByBrand = [
 ];
 
 function getConditionsOrgWarehouse(filters) {
-	let matchCondition = {};
-	if (filters.state && filters.state.length) {
-		matchCondition["warehouseDetails.warehouseAddress.state"] = filters.state.toUpperCase();
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition["warehouseDetails.warehouseAddress.city"] = filters.district;
-	}
+	try {
+		let matchCondition = {};
+		if (filters.state && filters.state.length) {
+			matchCondition["warehouseDetails.warehouseAddress.state"] = filters.state.toUpperCase();
+		}
+		if (filters.district && filters.district.length) {
+			matchCondition["warehouseDetails.warehouseAddress.city"] = filters.district;
+		}
 
-	return matchCondition;
+		return matchCondition;
+	} catch (err) {
+		throw err;
+	}
 }
 
 /**
@@ -1596,30 +1705,34 @@ exports.getStatsBySKUOrgType = [
 ];
 
 function getFilterConditions(filters) {
-	let matchCondition = {};
-	if (filters.orgType && filters.orgType !== "") {
-		if (
-			filters.orgType === "BREWERY" ||
-			filters.orgType === "S1" ||
-			filters.orgType === "S2" ||
-			filters.orgType === "S3"
-		) {
-			matchCondition.type = filters.orgType;
-		} else if (filters.orgType === "ALL_VENDORS") {
-			matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+	try {
+		let matchCondition = {};
+		if (filters.orgType && filters.orgType !== "") {
+			if (
+				filters.orgType === "BREWERY" ||
+				filters.orgType === "S1" ||
+				filters.orgType === "S2" ||
+				filters.orgType === "S3"
+			) {
+				matchCondition.type = filters.orgType;
+			} else if (filters.orgType === "ALL_VENDORS") {
+				matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+			}
 		}
-	}
 
-	// if (filters.state && filters.state.length) {
-	// 	matchCondition.state = filters.state;
-	// }
-	// if (filters.district && filters.district.length) {
-	// 	matchCondition.district = filters.district;
-	// }
-	if (filters.organization && filters.organization.length) {
-		matchCondition.id = filters.organization;
+		// if (filters.state && filters.state.length) {
+		// 	matchCondition.state = filters.state;
+		// }
+		// if (filters.district && filters.district.length) {
+		// 	matchCondition.district = filters.district;
+		// }
+		if (filters.organization && filters.organization.length) {
+			matchCondition.id = filters.organization;
+		}
+		return { ...matchCondition, ...{ status: "ACTIVE" } };
+	} catch (err) {
+		throw err;
 	}
-	return { ...matchCondition, ...{ status: "ACTIVE" } };
 }
 
 /**
@@ -1723,113 +1836,117 @@ exports.getLeadTimes = [
 ];
 
 async function calculateLeadTimeByOrg(supplierOrg) {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: {
-				id: supplierOrg.id,
-			},
-		},
-		{
-			$group: {
-				_id: "warehouses",
-				warehouses: {
-					$addToSet: "$warehouses",
+	try {
+		const warehouses = await OrganisationModel.aggregate([
+			{
+				$match: {
+					id: supplierOrg.id,
 				},
 			},
-		},
-		{
-			$unwind: {
-				path: "$warehouses",
-			},
-		},
-		{
-			$unwind: {
-				path: "$warehouses",
-			},
-		},
-		{
-			$group: {
-				_id: "warehouses",
-				warehouseIds: {
-					$addToSet: "$warehouses",
+			{
+				$group: {
+					_id: "warehouses",
+					warehouses: {
+						$addToSet: "$warehouses",
+					},
 				},
 			},
-		},
-	]);
-	let warehouseIds = [];
-	if (warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
+			{
+				$unwind: {
+					path: "$warehouses",
+				},
+			},
+			{
+				$unwind: {
+					path: "$warehouses",
+				},
+			},
+			{
+				$group: {
+					_id: "warehouses",
+					warehouseIds: {
+						$addToSet: "$warehouses",
+					},
+				},
+			},
+		]);
+		let warehouseIds = [];
+		if (warehouses[0] && warehouses[0].warehouseIds) {
+			warehouseIds = warehouses[0].warehouseIds;
+		}
 
-	let shipmentLeadTimes = await ShipmentModel.aggregate([
-		{
-			$match: {
-				"supplier.locationId": { $in: warehouseIds },
-			},
-		},
-		{
-			$lookup: {
-				from: "organisations",
-				localField: "receiver.id",
-				foreignField: "id",
-				as: "receiverOrg",
-			},
-		},
-		{
-			$unwind: {
-				path: "$receiverOrg",
-			},
-		},
-		{
-			$match: {
-				"receiverOrg.type": "BREWERY",
-			},
-		},
-		{
-			$project: {
-				"supplier.id": 1,
-				id: 1,
-				shippingDate: 1,
-				createdAt: 1,
-				updatedAt: 1,
-				actualDeliveryDate: 1,
-				shippingDate: 1,
-			},
-		},
-		{
-			$project: {
-				"supplier.id": 1,
-				id: 1,
-				leadtime: {
-					$divide: [{ $subtract: ["$updatedAt", "$createdAt"] }, 60000],
+		let shipmentLeadTimes = await ShipmentModel.aggregate([
+			{
+				$match: {
+					"supplier.locationId": { $in: warehouseIds },
 				},
 			},
-		},
-		{
-			$replaceRoot: {
-				newRoot: {
-					$mergeObjects: ["$$ROOT", "$supplier"],
+			{
+				$lookup: {
+					from: "organisations",
+					localField: "receiver.id",
+					foreignField: "id",
+					as: "receiverOrg",
 				},
 			},
-		},
-		{
-			$group: {
-				_id: "$id",
-				avgLeadTime: {
-					$avg: "$leadtime",
+			{
+				$unwind: {
+					path: "$receiverOrg",
 				},
 			},
-		},
-		{
-			$lookup: {
-				from: "organisations",
-				localField: "_id",
-				foreignField: "id",
-				as: "orgDetails",
+			{
+				$match: {
+					"receiverOrg.type": "BREWERY",
+				},
 			},
-		},
-	]);
-	return shipmentLeadTimes;
+			{
+				$project: {
+					"supplier.id": 1,
+					id: 1,
+					shippingDate: 1,
+					createdAt: 1,
+					updatedAt: 1,
+					actualDeliveryDate: 1,
+					shippingDate: 1,
+				},
+			},
+			{
+				$project: {
+					"supplier.id": 1,
+					id: 1,
+					leadtime: {
+						$divide: [{ $subtract: ["$updatedAt", "$createdAt"] }, 60000],
+					},
+				},
+			},
+			{
+				$replaceRoot: {
+					newRoot: {
+						$mergeObjects: ["$$ROOT", "$supplier"],
+					},
+				},
+			},
+			{
+				$group: {
+					_id: "$id",
+					avgLeadTime: {
+						$avg: "$leadtime",
+					},
+				},
+			},
+			{
+				$lookup: {
+					from: "organisations",
+					localField: "_id",
+					foreignField: "id",
+					as: "orgDetails",
+				},
+			},
+		]);
+		return shipmentLeadTimes;
+	} catch (err) {
+		throw err;
+	}
 }
 
 async function calculateReturnRateByOrg(supplierOrg) {
@@ -1908,6 +2025,7 @@ async function calculateReturnRateByOrg(supplierOrg) {
 		return returnRate;
 	} catch (e) {
 		console.log(e);
+		throw e;
 	}
 }
 
@@ -2007,58 +2125,64 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 		};
 	} catch (err) {
 		console.log(err);
+		throw err;
 	}
 }
 
 async function calculateStorageCapacityByOrg(supplierOrg) {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: {
-				id: supplierOrg.id,
-			},
-		},
-		{
-			$unwind: {
-				path: "$warehouses",
-			},
-		},
-		{
-			$lookup: {
-				from: "warehouses",
-				localField: "warehouses",
-				foreignField: "id",
-				as: "war",
-			},
-		},
-		{
-			$unwind: {
-				path: "$war",
-			},
-		},
-		{
-			$replaceRoot: {
-				newRoot: {
-					$mergeObjects: ["$war", "$$ROOT"],
+	try {
+		const warehouses = await OrganisationModel.aggregate([
+			{
+				$match: {
+					id: supplierOrg.id,
 				},
 			},
-		},
-	]);
-	let bottleCapacity = 0;
-	let sqft = 0;
-	for (let w of warehouses) {
-		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
-		bottleCapacity = newBottleCapacity;
-		// bottleCapacity = bottleCapacity + newBottleCapacity;
-		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
-		// sqft = sqft + newSQFT;
-		sqft = newSQFT;
-	}
+			{
+				$unwind: {
+					path: "$warehouses",
+				},
+			},
+			{
+				$lookup: {
+					from: "warehouses",
+					localField: "warehouses",
+					foreignField: "id",
+					as: "war",
+				},
+			},
+			{
+				$unwind: {
+					path: "$war",
+				},
+			},
+			{
+				$replaceRoot: {
+					newRoot: {
+						$mergeObjects: ["$war", "$$ROOT"],
+					},
+				},
+			},
+		]);
+		let bottleCapacity = 0;
+		let sqft = 0;
+		for (let w of warehouses) {
+			let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
+			bottleCapacity = newBottleCapacity;
+			// bottleCapacity = bottleCapacity + newBottleCapacity;
+			let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
+			// sqft = sqft + newSQFT;
+			sqft = newSQFT;
+		}
 
-	let storageCapacity = {
-		bottleCapacity: bottleCapacity,
-		sqft: sqft,
-	};
-	return storageCapacity;
+		let storageCapacity = {
+			bottleCapacity: bottleCapacity,
+			sqft: sqft,
+		};
+		return storageCapacity;
+	} catch (err) {
+		console.log(err);
+		throw err;
+	}
 }
 
 /**
@@ -2249,77 +2373,82 @@ exports.getAllStats = [
 ];
 
 function getSKUGroupByFilters(filters) {
-	let matchCondition = [];
-	if (filters.group_by && filters.group_by !== "") {
-		if (filters.group_by === "state") {
-			if (filters.state)
+	try {
+
+		let matchCondition = [];
+		if (filters.group_by && filters.group_by !== "") {
+			if (filters.group_by === "state") {
+				if (filters.state)
+					matchCondition.push({
+						$match: {
+							state: filters.state,
+						},
+					});
+				if (filters.district && filters.district.length) {
+					matchCondition.push({
+						$match: {
+							district: filters.district,
+						},
+					});
+				}
+				matchCondition.push({
+					$group: {
+						_id: filters.district ? "$district" : "$state",
+						data: {
+							$addToSet: "$$ROOT",
+						},
+					},
+				});
+			} else if (filters.group_by === "date") {
+				if (filters.state)
+					matchCondition.push({
+						$match: {
+							state: filters.state,
+						},
+					});
+				if (filters.district && filters.district.length) {
+					matchCondition.push({
+						$match: {
+							district: filters.district,
+						},
+					});
+				}
+				matchCondition.push({
+					$group: {
+						_id: "$uploadDate",
+						data: {
+							$addToSet: "$$ROOT",
+						},
+					},
+				});
+			} else if (filters.group_by === "district") {
+				if (filters.district && filters.district.length) {
+					matchCondition.push({
+						$match: {
+							district: filters.district,
+						},
+					});
+				}
+				matchCondition.push({
+					$group: {
+						_id: "$district",
+						data: {
+							$addToSet: "$$ROOT",
+						},
+					},
+				});
+			} else {
 				matchCondition.push({
 					$match: {
 						state: filters.state,
 					},
 				});
-			if (filters.district && filters.district.length) {
-				matchCondition.push({
-					$match: {
-						district: filters.district,
-					},
-				});
 			}
-			matchCondition.push({
-				$group: {
-					_id: filters.district ? "$district" : "$state",
-					data: {
-						$addToSet: "$$ROOT",
-					},
-				},
-			});
-		} else if (filters.group_by === "date") {
-			if (filters.state)
-				matchCondition.push({
-					$match: {
-						state: filters.state,
-					},
-				});
-			if (filters.district && filters.district.length) {
-				matchCondition.push({
-					$match: {
-						district: filters.district,
-					},
-				});
-			}
-			matchCondition.push({
-				$group: {
-					_id: "$uploadDate",
-					data: {
-						$addToSet: "$$ROOT",
-					},
-				},
-			});
-		} else if (filters.group_by === "district") {
-			if (filters.district && filters.district.length) {
-				matchCondition.push({
-					$match: {
-						district: filters.district,
-					},
-				});
-			}
-			matchCondition.push({
-				$group: {
-					_id: "$district",
-					data: {
-						$addToSet: "$$ROOT",
-					},
-				},
-			});
-		} else {
-			matchCondition.push({
-				$match: {
-					state: filters.state,
-				},
-			});
 		}
+		return matchCondition;
+	} catch(err) {
+		throw err;
 	}
-	return matchCondition;
 }
 
 /**
