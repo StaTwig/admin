@@ -1,0 +1,21 @@
+:root {
+  --primary: #0b65c1;
+  --secondary: #084787;
+  --blue: #0ea5e9;
+  --blue-hover: #0284c7;
+  --btn-primary: transparent linear-gradient(109deg, #0093e9, #36c2cf) 0 0
+    no-repeat padding-box;
+  --red: #ef4444;
+  --red-hover: #b91c1c;
+  --orange: #fa7923;
+  --yellow: #fcb842;
+  --tale: #36c2cf;
+  --black: #4d4f5c;
+  --dark: #4d4f5c;
+  --light: #f8fafc;
+  --white: #fff;
+  --grey: #6c757d;
+  --grey-400: #94a3b8;
+  --grey-300: #cbd5e1;
+  --grey-200: #e5e7eb;
+}

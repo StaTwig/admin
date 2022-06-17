@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { ConnectedRouter } from "connected-react-router";
 import routes from "./routes";
 import "./app.css";
+import "./assets/globlestyles/index.css";
 import Spinner from "./containers/Spinner";
 
 const App = ({ history }) => {
