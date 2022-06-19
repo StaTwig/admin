@@ -73,7 +73,11 @@ const FormPage = (props) => {
       orgTypeArray.push(data[i].name);
     }
   });
-
+  const showOrgByType = (value) => {
+    let arr = organisations.filter((data) => data.type === value);
+    arr.push({ name: t("other") });
+    return arr;
+  };
   const [orgNames, setOrgNames] = useState([])
 
   React.useEffect(() => {
@@ -81,7 +85,7 @@ const FormPage = (props) => {
     if (selectedType === '') return;
     let arr = [];
     async function fetchData(type) {
-      const orgs = await getOrganisations(type);
+      const orgs = await getOrganisationsAtSignup(type);
 
       orgs.push({ id: t("other"), name: t("other") });
       arr = [...arr, ...orgs]
@@ -714,7 +718,7 @@ const FormPage = (props) => {
                                 id='debug'
                                 debug
                                 getOptionLabel={(option) => option.name}
-                                options={orgNames}
+                                options={showOrgByType(selectedType)}
                                 // disabled={lastNameError && firstNameError
                                 //   && phoneNumberError && emailErrorMsg
                                 //   && phoneErrorMsg && emailError

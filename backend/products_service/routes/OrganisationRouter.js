@@ -3,7 +3,7 @@ const OrganisationController = require("../controllers/OrganisationController");
 const router = express.Router();
 
 router.get("/getOrganisations", OrganisationController.getOrganisations);
-router.get("/getOrganisationsForSignup", OrganisationController.getOrganisationsAtSignup);
+router.get("/getOrganisationsAtSignup", OrganisationController.getOrganisationsAtSignup);
 router.get("/warehouses", OrganisationController.getWarehouses);
 router.get("/allWarehouses", OrganisationController.getAllWarehouses);
 router.post("/saveOrganisations", OrganisationController.saveNewOrg);
