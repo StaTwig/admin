@@ -5,7 +5,7 @@ function getQueryStringFromFilters(filters) {
   let queryStr = '';
   if (filters.inventoryType && filters.inventoryType.length) {
     if (
-      filters.inventoryType === 'VENDOR' &&
+      filters.inventoryType === 'ALL_VENDORS' &&
       filters.vendorType &&
       filters.vendorType.length
     ) {

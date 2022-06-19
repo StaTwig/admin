@@ -30,6 +30,7 @@ const InventoryContainer = (props) => {
   }, []);
 
   const applyFilters = async (_filters) => {
+    setFilters(_filters);
     await _getProductsInventory(_filters);
   };
 
