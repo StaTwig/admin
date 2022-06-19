@@ -12,7 +12,7 @@ import {
   getAllOrganisations,
   getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
-import { getOrder, getOpenOrderIds, addNewProduct } from "../../actions/poActions";
+import { getOrder, getOpenOrderIds } from "../../actions/poActions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from "./shipmentPopUp";
@@ -28,11 +28,13 @@ import axios from "axios";
 // import PopUpLocation from "../../components/profile/popuplocation";
 // import AddLocationCard from "../../components/editLocation/index";
 import { AddLocationCard } from "../../components/Addlocation/index";
+import OrganisationPopUp from "../signUp/organisationPopUp";
 
 const NewShipment = (props) => {
   const { t } = props;
   //const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   const intelEnabled = true;
+  const [senderOrganisationId, setSenderOrganistionId] = useState('');
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
@@ -49,7 +51,7 @@ const NewShipment = (props) => {
   );
 
 
-  const [fromNewOrg, setFromNewOrg] = useState('');
+  // const [fromNewOrg, setFromNewOrg] = useState('');
   const [toNewOrg, setToNewOrg] = useState('');
   const [enableFromNewOrg, setEnablFromeNewOrg] = useState(false);
   const [enableToNewOrg, setEnablToeNewOrg] = useState(false);
@@ -83,6 +85,7 @@ const NewShipment = (props) => {
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
+  const [createNewWareNOrgSuccess, setCreateNewWareNOrgSuccess] = useState('');
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const customStyles = {
@@ -115,6 +118,27 @@ const NewShipment = (props) => {
   };
 
   useEffect(() => {
+    if (createNewWareNOrgSuccess === '') return;
+    async function fetchData() {
+      const userType = intelEnabled ? "TPL" : "regular"
+      const orgs = await getAllOrganisations(userType);
+      const organisations = orgs.data.map((item) => {
+        return {
+          ...item,
+          value: item.id,
+          label: item.name,
+        };
+      })
+      // console.log("organisatoins ", organisations);
+      setAllOrganisations([
+        ...organisations,
+        { name: 'new org', value: 'New org', label: 'New Org' }
+      ]);
+    }
+    fetchData();
+  }, [createNewWareNOrgSuccess])
+
+  useEffect(() => {
     async function fetchData() {
       const result111 = await getProductList();
       setProductsList(result111.message);
@@ -127,22 +151,21 @@ const NewShipment = (props) => {
         };
       });
       setOrderIds(ids);
-      const userType = intelEnabled ? "TPL" : "regular"
-      const orgs = await getAllOrganisations(userType);
+
+      const orgs = await getAllOrganisations();
       const orgSplit = user.organisation?.split("/");
-      console.log("orgs ", orgs);
-      const organisations = orgs.data.map((item) => {
-        return {
-          ...item,
-          value: item.id,
-          label: item.name,
-        };
-      })
-      console.log("organisatoins ", organisations);
-      setAllOrganisations([
-        ...organisations,
-        { name: 'new org', value: 'New org', label: 'New Org' }
-      ]);
+      if (orgSplit?.length) setSenderOrganisation([orgSplit[0]]);
+
+      const organisations = orgs.data;
+      setAllOrganisations(
+        organisations.map((item) => {
+          return {
+            ...item,
+            value: item.id,
+            label: item.name,
+          };
+        })
+      );
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
       setCategory(
@@ -158,21 +181,21 @@ const NewShipment = (props) => {
 
       const warehouses = await getWarehouseByOrgId(orgSplit?.length ? orgSplit[1] : "");
       if (warehouses) {
-        const ware = warehouses.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.warehouseAddress?.firstLine +
-              "/" +
-              v?.warehouseAddress?.city +
-              ", " +
-              v?.warehouseAddress?.state
-              : v?.title + "/" + v.postalAddress,
-          };
-        });
-        ware.push({ name: 'new org', value: 'New org', label: 'New Org' });
-        setSenderWarehouses(ware);
+        setSenderWarehouses(
+          warehouses.data.map((v) => {
+            return {
+              ...v,
+              value: v.id,
+              label: v?.warehouseAddress
+                ? v?.title +
+                "/" +
+                v?.warehouseAddress?.firstLine +
+                ", " +
+                v?.warehouseAddress?.city
+                : v?.title + "/" + v.postalAddress,
+            };
+          })
+        );
       }
 
       const orgType = await getOrganizationsTypewithauth("CONF000");
@@ -207,44 +230,19 @@ const NewShipment = (props) => {
 
   const onOrgChange = async (value) => {
     try {
-      const userType = intelEnabled ? "TPL" : "regular"
-      const warehouse = await getWarehouseByOrgId(value, userType);
+      const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(
         warehouse.data.map((v) => {
           return {
             ...v,
             value: v.id,
             label: v?.warehouseAddress
-              ? v?.title +
-              "/" +
-              v?.warehouseAddress?.firstLine +
-              ", " +
-              v?.warehouseAddress?.city
-              : v?.title + "/" + v.postalAddress,
-          };
-        })
-      );
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  };
-
-  const onSenderOrgChange = async (value) => {
-    try {
-      const userType = intelEnabled ? "TPL" : "regular"
-      const warehouse = await getWarehouseByOrgId(value, userType);
-      setSenderWarehouses(
-        warehouse.data.map((v) => {
-          return {
-            ...v,
-            value: v.id,
-            label: v?.warehouseAddress
-              ? v?.title +
-              "/" +
-              v?.warehouseAddress?.firstLine +
-              ", " +
-              v?.warehouseAddress?.city
-              : v?.title + "/" + v.postalAddress,
+            ? v?.warehouseAddress?.firstLine +
+            "/" +
+            v?.warehouseAddress?.city +
+            ", " +
+            v?.warehouseAddress?.state
+            : v?.title + "/" + v.postalAddress,
           };
         })
       );
@@ -255,33 +253,37 @@ const NewShipment = (props) => {
 
   const onWarehouseChange = async (value) => {
     try {
-      if (!intelEnabled) {
-        const prods = await getProductsByInventoryId(value);
-        if (prods.data.length === 0) {
-          alert("No products availabe in this warehouse");
-          setErrorMessage("err");
-          return false;
-        }
-        setProducts(
-          prods.data.map((item) => {
-            return {
-              value: item.name,
-              label: item.name,
-              ...item,
-            };
-          })
-        );
-        setProductsList(
-          prods.data.map((item) => {
-            return {
-              value: item.name,
-              label: item.name,
-              ...item,
-            };
-          })
-        );
-        return true;
+      const prods = await getProductsByInventoryId(value);
+      if (prods.data.length === 0) {
+        alert("No products availabe in this warehouse");
+        setErrorMessage("err");
+        return false;
       }
+      setProducts(
+        prods.data.map((item) => {
+          return {
+            ...v,
+            value: v.id,
+            label: v?.warehouseAddress
+              ? v?.warehouseAddress?.firstLine +
+              "/" +
+              v?.warehouseAddress?.city +
+              ", " +
+              v?.warehouseAddress?.state
+              : v?.title + "/" + v.postalAddress,
+          };
+        })
+      );
+      setProductsList(
+        prods.data.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        })
+      );
+      return true;
     } catch (err) {
       setErrorMessage(err);
       return false;
@@ -501,27 +503,52 @@ const NewShipment = (props) => {
     });
   }
 
-  const saveFromNewOrg = () => {
-    if (fromNewOrg === '') return;
-    axios.post(`${config().createNewOrg}`, { name: fromNewOrg }, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => {
-      setFromNewOrgRes({ value: res.data.data.name, label: res.data.data.id });
-      console.log({ value: res.data.data.name, label: res.data.data.id })
+  const saveFromNewOrgNWaherhouse = (data) => {
+
+    const body = {
+      org: { name: data.name },
+      warehouse: {
+        country: data.country,
+        employeess: [],
+        organisationId: "",
+        postalAddress: null,
+        region: data.region,
+        supervisors: [],
+        title: "",
+        warehouseAddress: {
+          city: data.city,
+          country: data.country,
+          firstLine: data.line1,
+          landmark: null,
+          region: data.region,
+          secondLine: null,
+          state: data.state,
+          zipCode: data.pincode
+        }
+      }
+    }
+
+    // if (fromNewOrg === '') return;
+    axios.post(`${config().addNewOrgNWarehouse}`, body, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => {
+      console.log("res ", res);
+      setCreateNewWareNOrgSuccess(res.data.data[0].id);
+      setEnablFromeNewOrg(false);
 
     }).catch((err) => console.log(err));
-    setEnablFromeNewOrg(false);
+    // setEnablFromeNewOrg(false);
   }
 
-  const saveToNewOrg = () => {
-    if (toNewOrg === '') return;
-    axios.post(`${config().createNewOrg}`, { name: toNewOrg }, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => setToNewOrgRes({ value: res.data.data.name, label: res.data.data.id })).catch((err) => console.log(err));
-    setEnablToeNewOrg(false);
-  }
+  // const saveToNewOrg = () => {
+  //   if (toNewOrg === '') return;
+  //   axios.post(`${config().createNewOrg}`, { name: toNewOrg }, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => setToNewOrgRes({ value: res.data.data.name, label: res.data.data.id })).catch((err) => console.log(err));
+  //   setEnablToeNewOrg(false);
+  // }
 
+  // console.log("allOrganisations ", allOrganisations);
 
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
-
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -666,7 +693,7 @@ const NewShipment = (props) => {
                                 return w.id === supplierWarehouse[i];
                               }
                             });
-                            setFieldValue("fromOrg", "");
+                            setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
@@ -920,7 +947,7 @@ const NewShipment = (props) => {
                 <label htmlFor='client' className='headsup'>
                   {t("from")}
                 </label>
-                {!intelEnabled && (<div className="row">
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="organizationType">Organisation Type*</label>
@@ -928,11 +955,7 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={
-                            disabled
-                              ? values.rtype
-                              : t("select")
-                          }
+                          placeholder="Select Organisation Type"
                           onChange={(v) => {
                             setFieldValue('type', v?.value);
                             setFieldValue('typeName', v?.label);
@@ -946,8 +969,7 @@ const NewShipment = (props) => {
                       </div>
                     </div>
                   </div>
-                </div>
-                )}
+                </div> */}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
@@ -967,22 +989,22 @@ const NewShipment = (props) => {
                             styles={customStyles}
                             isDisabled={intelEnabled ? disabled : true}
                             onChange={(v) => {
-                              // console.log({ v });
                               if (v.label === 'New Org') {
-                                setFromNewOrg('');
+                                // setFromNewOrg('');
                                 setEnablFromeNewOrg(true);
                                 // console.log('new organisation');
                                 // console.log(intelEnabled);
                               }
                               else {
                                 setEnablFromeNewOrg(false);
-                                setFromNewOrg('')
+                                // setFromNewOrg('')
                               };
 
                               setFieldValue("fromOrgLoc", "");
                               setSenderOrgId(v.label);
                               setFieldValue("fromOrg", v.value);
                               onSenderOrgChange(v.value);
+                              setSenderOrganistionId(v.value);
                             }}
                             placeholder={
                               disabled
@@ -994,7 +1016,7 @@ const NewShipment = (props) => {
                               (
                                 values.fromOrg === ""
                                   ? t("select") + " " + t("organisation_name")
-                                  : { value: values.toOrg, label: senderOrgId }
+                                  : { value: values.fromOrg, label: senderOrgId }
                               )
                             }
                             options={allOrganisations.filter(
@@ -1051,23 +1073,22 @@ const NewShipment = (props) => {
                             t("select") + " " + t("organisation_location")
                           }
                           onChange={async (v) => {
-                            console.log({ v });
-                            if (v.label === "New Org") {
+                            if (v.label === "New Org Location") {
                               setFromAddLocation(true)
                               return;
                             };
-                            let res = await onWarehouseChange(
-                              v.warehouseInventory
-                            );
-                            if (!res) {
-                              return;
-                            }
+                            // let res = await onWarehouseChange(
+                            //   v.warehouseInventory
+                            // );
+                            // if (!res) {
+                            //   return;
+                            // }
                             setFromOrgLabel(v.label);
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
-                            setFieldValue("fromOrg", senderOrganisation[0]);
+                            // setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
-                            setSenderOrgId(v.value);
+                            // setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
                               productName: "",
@@ -1076,7 +1097,6 @@ const NewShipment = (props) => {
                               batchNumber: "",
                             };
                             setAddProducts((prod) => [...prod, newArr]);
-                            console.log({ senderOrganisation: senderOrganisation[0], FromOrgLabel: v.label });
                           }}
                           value={
                             values.fromOrgLoc === ""
@@ -1086,13 +1106,13 @@ const NewShipment = (props) => {
                                 label: FromOrgLabel,
                               }
                           }
-                          options={senderWarehouses.length ? senderWarehouses.filter(
+                          options={senderWarehouses.length ? [...senderWarehouses.filter(
                             (ele, ind) =>
                               ind ===
                               senderWarehouses.findIndex(
                                 (elem) => elem.label === ele.label
                               )
-                          ) : [{value: "New Org", label: "New Org"}]}
+                          ), { value: "New Org Location", label: "New Org Location" }] : []}
                         />
                         {/* {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
@@ -1103,17 +1123,16 @@ const NewShipment = (props) => {
                     </div>
                   </div>
                 </div>
-                {intelEnabled && enableFromNewOrg && <div className="row m-2" >
+                {/* {intelEnabled && enableFromNewOrg && <div className="row m-2" >
                   <div className='col-md-6 com-sm-12 d-flex justify-content-end'>
                     <div>
                       <input placeholder="New Organistion" className="inputOrg input refship " value={fromNewOrg} onChange={e => setFromNewOrg(e.target.value)} />
                     </div>
                     <button className="btn btn-warning font-bold" onClick={saveFromNewOrg} >Save</button>
                   </div>
-                </div>}
+                </div>} */}
               </div>
             </div>
-
 
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
@@ -1123,7 +1142,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
-                      {/* <label className='name' htmlFor='organizationType'>
+                      <label className='name' htmlFor='organizationType'>
                         {t("organisation_type")}*
                       </label>
                       <div
@@ -1149,10 +1168,10 @@ const NewShipment = (props) => {
                           defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
-                        {errors.rtype && touched.rtype && (
+                        {/* {errors.rtype && touched.rtype && (
                           <span className="error-msg text-danger">{errors.rtype}</span>
-                        )}
-                      </div> */}
+                        )} */}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1196,15 +1215,24 @@ const NewShipment = (props) => {
                           }
                           onChange={(v) => {
                             console.log({ v });
+                            // if (v.label === 'New Org') {
+                            //   setToNewOrg('');
+                            //   setEnablToeNewOrg(true);
+                            //   console.log('new organisation');
+                            //   console.log(intelEnabled);
+                            // }
+                            // else {
+                            //   setEnablToeNewOrg(false);
+                            //   setToNewOrg('')
+                            // };
                             if (v.label === 'New Org') {
-                              setToNewOrg('');
-                              setEnablToeNewOrg(true);
-                              console.log('new organisation');
-                              console.log(intelEnabled);
+                     
+                              setEnablFromeNewOrg(true);
+                      
                             }
                             else {
-                              setEnablToeNewOrg(false);
-                              setToNewOrg('')
+                              setEnablFromeNewOrg(false);
+                
                             };
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
@@ -1213,7 +1241,7 @@ const NewShipment = (props) => {
                           }}
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(
-                            (a) => a.name.length > 0
+                            (a) => a.type === values.rtypeName
                           )}
                         />
                         {/* {errors.toOrg && touched.toOrg && (
@@ -1269,17 +1297,21 @@ const NewShipment = (props) => {
                               : { value: values.toOrgLoc, label: toOrgLocLabel }
                           }
                           onChange={(v) => {
+                            if (v.label === "New Org Location") {
+                              setFromAddLocation(true)
+                              return;
+                            };
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
-                          options={receiverWarehouses.filter(
+                          options={receiverWarehouses.length ?  [...receiverWarehouses.filter(
                             (ele, ind) =>
                               ind ===
                               receiverWarehouses.findIndex(
                                 (elem) => elem.label === ele.label
                               )
-                          )}
+                          ),  { value: "New Org Location", label: "New Org Location" }]: []}
                           noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.toOrgLoc && touched.toOrgLoc && (
@@ -1291,14 +1323,14 @@ const NewShipment = (props) => {
                     </div>
                   </div>
                 </div>
-                {intelEnabled && enableToNewOrg && <div className="row m-2" >
+                {/* {intelEnabled && enableToNewOrg && <div className="row m-2" >
                   <div className='col-md-6 com-sm-12 d-flex justify-content-end'>
                     <div>
                       <input placeholder="New Organistion" className="inputOrg input refship " value={toNewOrg} onChange={e => setToNewOrg(e.target.value)} />
                     </div>
                     <button className="btn btn-warning  font-bold" onClick={saveToNewOrg} >Save</button>
                   </div>
-                </div>}
+                </div>} */}
               </div>
             </div>
 
@@ -1465,12 +1497,12 @@ const NewShipment = (props) => {
               <label htmlFor='productDetails' className='headsup'>
                 {t("product_details")}
               </label>
-              {/* { OrderDetails ? (
+              {OrderDetails?.products?.length > 0 ? (
                 <EditTable
                   t={t}
                   check='1'
                   warehouseID={senderOrgId}
-                  product={OrderDetails?.products || []}
+                  product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
@@ -1509,8 +1541,7 @@ const NewShipment = (props) => {
                   }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              ) 
-              : (
+              ) : (
                 products?.length <= 0 && (
                   <div>
                     <h4
@@ -1526,10 +1557,9 @@ const NewShipment = (props) => {
                     </h4>
                   </div>
                 )
-              )
-              } */}
+              )}
 
-              {(
+              {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
                     check='0'
@@ -1757,8 +1787,17 @@ const NewShipment = (props) => {
           className="modal-lg"
           size="modal-md"
         >
-          <AddLocationCard {...props} popup={true} close={() => setFromAddLocation(false)} />
+          <AddLocationCard {...props} popup={true} senderOrgId={senderOrganisationId} close={() => setFromAddLocation(false)} />
 
+        </Modal>
+      )}
+      {enableFromNewOrg && (
+        <Modal
+          isMandatory={true}
+          close={() => setEnablFromeNewOrg(false)}
+          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <OrganisationPopUp onHide={() => setEnablFromeNewOrg(false)} enableFromNewOrg={enableFromNewOrg} onSignup={saveFromNewOrgNWaherhouse} />
         </Modal>
       )}
     </div>
