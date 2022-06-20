@@ -31,7 +31,7 @@ const SummaryTable = (props) => {
         <div className='summaryTable mt-2'>
           <div className='rowData'>
             <div className='headline'>
-              <span style={{ position: "relative", top: "25%", left: "2px" }}>
+              <span className="table-data black" style={{ position: "relative", top: "25%", left: "2px" }}>
                 <img
                   src={shippment}
                   height='14'
