@@ -42,85 +42,95 @@ const Overview = (props) => {
   };
 
   return (
-    <div className='overview'>
-      <h2 className='breadcrumb'>{t('overview')}</h2>
-      <div className='full-width-ribben'>
-        <div className='row no-gutters'>
-          <div className='col'>
-            <div className='panel'>
-              <div className='picture truck-bg'>
-                <img src={totalshipments} alt='truck' />
+    <div className="overview">
+      <h1 className="vl-heading-bdr f-700 black">{t("overview")}</h1>
+      <div className="full-width-ribben">
+        <div className="row no-gutters">
+          <div className="col">
+            <div className="panel">
+              <div className="picture truck-bg">
+                <img src={totalshipments} alt="truck" />
               </div>
-              <div className='d-flex flex-column'>
-                <div className='title'>{t('total_outbound_shipments')}</div>
-                <div className='count1'>
+              <div className="d-flex flex-column">
+                <div className="text-sm-3 f-700 grey">
+                  {t("total_outbound_shipments")}
+                </div>
+                <div className="count1 vl-card-subtext">
                   {overviewAnalytics?.outboundShipments}
-                  <small className='dayStatus ml-1'></small>
+                  <small className="dayStatus ml-1"></small>
                 </div>
               </div>
             </div>
           </div>
-          <div className='col'>
-            <div className='panel'>
-              <div className='picture truck-bg'>
+          <div className="col">
+            <div className="panel">
+              <div className="picture truck-bg">
                 <img
-                  className='currentintransit'
+                  className="currentintransit"
                   src={currentshipment}
-                  alt='truck'
+                  alt="truck"
                 />
               </div>
 
-              <div className='d-flex flex-column'>
-                <div className='title'>{t('total_inbound_shipments')}</div>
-                <div className='count3'>
+              <div className="d-flex flex-column">
+                <div className="text-sm-3 f-700 grey">
+                  {t("total_inbound_shipments")}
+                </div>
+                <div className="count3 vl-card-subtext">
                   {overviewAnalytics?.inboundShipments}
-                  <small className='dayStatus ml-1'></small>
+                  <small className="dayStatus ml-1"></small>
                 </div>
               </div>
             </div>
           </div>
-          <div className='col'>
-            <div className='panel'>
-              <div className='time truck-bg'>
-                <img src={TotalInventoryAdded} alt='truck' width='65%' />
+          <div className="col">
+            <div className="panel">
+              <div className="time truck-bg">
+                <img src={TotalInventoryAdded} alt="truck" width="65%" />
               </div>
-              <div className='d-flex flex-column'>
-                <div className='title'>{t('total_product_category')}</div>
-                <div className='count2'>
+              <div className="d-flex flex-column">
+                <div className="text-sm-3 f-700 grey">
+                  {t("total_product_category")}
+                </div>
+                <div className="count2 vl-card-subtext">
                   {overviewAnalytics?.totalProductCategory}
-                  <small className='dayStatus ml-1'></small>
+                  <small className="dayStatus ml-1"></small>
                 </div>
               </div>
             </div>
           </div>
-          <div className='col'>
-            <div className='panel'>
-              <div className='time truck-bg'>
+          <div className="col">
+            <div className="panel">
+              <div className="time truck-bg">
                 <img
                   src={AverageOrderProcessingTime}
-                  width='30px'
-                  alt='truck'
+                  width="30px"
+                  alt="truck"
                 />
               </div>
-              <div className='d-flex flex-column'>
-                <div className='title'>{t('avg_order_processing_time')}</div>
-                <div className='count4'>
+              <div className="d-flex flex-column">
+                <div className="text-sm-3 f-700 grey">
+                  {t("avg_order_processing_time")}
+                </div>
+                <div className="count4 vl-card-subtext">
                   {overviewAnalytics?.averageOrderProcessingTime}
-                  <small className='dayStatus ml-1'></small>
+                  <small className="dayStatus ml-1"></small>
                 </div>
               </div>
             </div>
           </div>
-          <div className='col'>
-            <div className='panel border-0'>
-              <div className='picture truck-bg'>
-                <img src={shipmentsdelayed} alt='truck' />
+          <div className="col">
+            <div className="panel border-0">
+              <div className="picture truck-bg">
+                <img src={shipmentsdelayed} alt="truck" />
               </div>
-              <div className='d-flex flex-column'>
-                <div className='title'>{t('pending_orders')}</div>
-                <div className='count5'>
+              <div className="d-flex flex-column">
+                <div className="text-sm-3 f-700 grey">
+                  {t("pending_orders")}
+                </div>
+                <div className="count5 vl-card-subtext">
                   {overviewAnalytics?.pendingOrders}{" "}
-                  <small className='dayStatus'></small>
+                  <small className="dayStatus"></small>
                 </div>
               </div>
             </div>
@@ -128,35 +138,35 @@ const Overview = (props) => {
         </div>
       </div>
 
-      <div className='row ribben-space'>
-        <div className='col-sm-12 col-lg-5 col-xl-5 mb-sm-4'>
-          <div className='custom-card'>
-            <div className='card-header'>
-              <div className='d-flex align-items-center justify-content-between'>
-                <h5 className='card-title font-weight-bold mt-2'>
-                  {t('inventory_summary')}
+      <div className="row ribben-space">
+        <div className="col-sm-12 col-lg-5 col-xl-5 mb-sm-4">
+          <div className="custom-card">
+            <div className="card-header">
+              <div className="d-flex align-items-center justify-content-between">
+                <h5 className="card-title f-500 card-text mt-2">
+                  {t("inventory_summary")}
                 </h5>
                 {isAuthenticated("addInventory") && (
-                  <Link to='/newinventory'>
-                    <button className='btn-primary btn-sm btn mt-3'>
+                  <Link to="/newinventory">
+                    <button className="btn-primary btn-sm btn mt-3">
                       {" "}
-                      <b>{t('add_inventory')}</b>
+                      <b>{t("add_inventory")}</b>
                     </button>
                   </Link>
                 )}
               </div>
             </div>
-            <div className='card-body pl-1'>
-              <div id='chartjs-render-monitor'>
+            <div className="card-body pl-1">
+              <div id="chartjs-render-monitor">
                 <ChartsPage {...props} t={t} />
               </div>
             </div>
-            <div className='card-footer mb-2'>
-              <div className='d-flex align-items-center justify-content-center'>
+            <div className="card-footer mb-2">
+              <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewInventory") && (
-                  <Link to='/inventory'>
-                    <button className=' card-link btn btn-outline-primary'>
-                     {t('view_more')}
+                  <Link to="/inventory">
+                    <button className=" card-link btn btn-outline-primary">
+                      {t("view_more")}
                     </button>
                   </Link>
                 )}
@@ -164,31 +174,36 @@ const Overview = (props) => {
             </div>
           </div>
         </div>
-        <div className='col-sm-12 col-lg-7 col-xl-7 p-lg-0  mb-sm-4'>
-          <div className='custom-card ml-1'>
-            <div className='card-header'>
-              <div className='d-flex align-items-center justify-content-between'>
-                <h5 className='card-title font-weight-bold mt-2'>
-                  {t('shipment_summary')}
+        <div className="col-sm-12 col-lg-7 col-xl-7 p-lg-0  mb-sm-4">
+          <div className="custom-card ml-1">
+            <div className="card-header">
+              <div className="d-flex align-items-center justify-content-between">
+                <h5 className="card-title f-600 card-text mt-2">
+                  {t("shipment_summary")}
                 </h5>
                 {isAuthenticated("createShipment") && (
-                  <Link to='/newshipment'>
-                    <button className='btn-primary btn-sm btn mt-3'>
-                      <b> {t('create_shipment')} </b>
+                  <Link to="/newshipment">
+                    <button className="btn-primary btn-sm btn mt-3">
+                      <b> {t("create_shipment")} </b>
                     </button>
                   </Link>
                 )}
               </div>
             </div>
-            <div className='card-body' style={{ padding: 0 }}>
-              <SummaryTable {...props} t={t} setvisible={setData} visible={visible} />
+            <div className="card-body" style={{ padding: 0 }}>
+              <SummaryTable
+                {...props}
+                t={t}
+                setvisible={setData}
+                visible={visible}
+              />
             </div>
-            <div className='card-footer mb-2'>
-              <div className='d-flex align-items-center justify-content-center'>
+            <div className="card-footer mb-2">
+              <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewShipment") && (
-                  <Link to='/shipments'>
-                    <button className=' card-link btn btn-outline-primary'>
-                      {t('view_more')}
+                  <Link to="/shipments">
+                    <button className=" card-link btn btn-outline-primary">
+                      {t("view_more")}
                     </button>
                   </Link>
                 )}
