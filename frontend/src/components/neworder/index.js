@@ -401,9 +401,9 @@ const NewOrder = (props) => {
   };
 
   return (
-    <div className='NewOrder m-3'>
-      <div className='d-flex justify-content-between mb-3'>
-        <h1 className='breadcrumb'>{t("create_new_order")}</h1>
+    <div className="NewOrder m-3">
+      <div className="d-flex justify-content-between mb-3">
+        <h1 className="vl-heading-bdr f-700 black">{t("create_new_order")}</h1>
       </div>
       <Formik
         // enableReinitialize={true}
@@ -470,9 +470,12 @@ const NewOrder = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className=''>
-            <div className='row mb-3'>
-              <label htmlFor='productDetails' className='headsup1'>
+          <form onSubmit={handleSubmit} className="">
+            <div className="row mb-3 my-1">
+              <label
+                htmlFor="productDetails"
+                className=".mi-body-sm f-900 headsup1"
+              >
                 {t("product_details")}
               </label>
               <EditTable
@@ -491,10 +494,10 @@ const NewOrder = (props) => {
                 }
                 t={t}
               />
-              <div className='d-flex justify-content-between'>
+              <div className="d-flex justify-content-between">
                 <button
-                  type='button'
-                  className='btn btn-white bg-white shadow-radius font-bold mb-1'
+                  type="button"
+                  className="btn btn-white bg-white shadow-radius font-bold mb-1"
                   onClick={() => {
                     let arr = addProducts.filter(
                       (p) =>
@@ -526,7 +529,7 @@ const NewOrder = (props) => {
                   </div>
                 </button>
                 {errors.products && touched.products && (
-                  <span className='error-msg text-danger1'>
+                  <span className="error-msg text-danger1">
                     {errors.products}
                   </span>
                 )}
@@ -538,15 +541,15 @@ const NewOrder = (props) => {
               </span>
             )} */}
 
-            <div className='row mb-3'>
-              <div className='col bg-white formContainer low'>
-                <label htmlFor='client' className='headsup'>
+            <div className="row mb-3">
+              <div className="col bg-white formContainer low">
+                <label htmlFor="client" className="mi-body-sm f-500 headsup">
                   {t("order_from")}
                 </label>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("organisation_type")}*
                       </label>
                       <div
@@ -555,10 +558,10 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("select_organisation_type")}
                             </div>
                           }
@@ -579,10 +582,10 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("organisation_name")}*
                       </label>
                       <div
@@ -605,10 +608,10 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("select_organisation_name")}
                             </div>
                           }
@@ -639,28 +642,28 @@ const NewOrder = (props) => {
                     </div>
                   </div>
 
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='org' htmlFor='orgLocation'>
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="org" htmlFor="orgLocation">
                         {t("organisation_id")}*
                       </label>
-                      <div className='orgV border-0'>{values.fromOrg}</div>
+                      <div className="orgV border-0">{values.fromOrg}</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className='row mb-3'>
-              <div className='col bg-white formContainer low'>
-                <label htmlFor='client' className='headsup'>
+            <div className="row mb-3">
+              <div className="col bg-white formContainer low">
+                <label htmlFor="client" className="mi-body-sm f-500 headsup">
                   {t("order_to")}
                 </label>
 
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("organisation_type")}*
                       </label>
                       <div
@@ -669,11 +672,11 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           styles={customStyles}
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("select_organisation_type")}
                             </div>
                           }
@@ -702,10 +705,10 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("region")}*
                       </label>
                       <div
@@ -716,11 +719,11 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           // styles={customStyles}
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("Select_Region")}
                             </div>
                           }
@@ -748,10 +751,10 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("country")}*
                       </label>
                       <div
@@ -762,11 +765,11 @@ const NewOrder = (props) => {
                         }`}
                       >
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           // styles={customStyles}
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("Select_Country")}
                             </div>
                           }
@@ -795,10 +798,10 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="organizationName">
                         {t("organisation_name")}*
                       </label>
                       <div
@@ -821,10 +824,10 @@ const NewOrder = (props) => {
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         /> */}
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("select_organisation_name")}
                             </div>
                           }
@@ -858,20 +861,20 @@ const NewOrder = (props) => {
                     </div>
                   </div>
 
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='org' htmlFor='delLocation'>
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="org" htmlFor="delLocation">
                         {t("organisation_id")}*
                       </label>
-                      <div className='orgV border-0'>{values.toOrg}</div>
+                      <div className="orgV border-0">{values.toOrg}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='name form-group'>
-                      <label className='' htmlFor='delLocation'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="name form-group">
+                      <label className="text-sm-1" htmlFor="delLocation">
                         {t("delivery_location")}*
                       </label>
                       <div
@@ -905,10 +908,10 @@ const NewOrder = (props) => {
                         /> */}
 
                         <Select
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           placeholder={
-                            <div className='select-placeholder-text'>
+                            <div className="select-placeholder-text">
                               {t("select_delivery_location")}
                             </div>
                           }
@@ -936,11 +939,11 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-            <div className='d-flex pt-4 justify-content-between mb-1'>
-              <div className='value'>{quantity}</div>
-              <div className='d-flex'>
+            <div className="d-flex pt-4 justify-content-between mb-1">
+              <div className="value">{quantity}</div>
+              <div className="d-flex">
                 <button
-                  className='btn btn-outline-primary font-bold mr-2 mt-3'
+                  className="btn btn-outline-primary f-600 mr-2 mt-3"
                   onClick={() => {
                     dispatch(resetReviewPos({}));
                     props.history.push("/orders");
@@ -950,15 +953,15 @@ const NewOrder = (props) => {
                 </button>
 
                 <button
-                  className='btn btn-orange fontSize20 font-bold mt-3'
-                  type='submit'
+                  className="btn btn-orange fontSize20 f-600 mt-3"
+                  type="submit"
                 >
                   <img
                     src={OrderIcon}
-                    width='20'
-                    height='17'
-                    className='mr-2 mb-1'
-                    alt='Order'
+                    width="20"
+                    height="17"
+                    className="mr-2 mb-1"
+                    alt="Order"
                   />
                   <span>
                     <b>Review Order</b>
@@ -972,7 +975,7 @@ const NewOrder = (props) => {
       {openOrder && (
         <Modal
           close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentPopUp
             t={t}
@@ -984,7 +987,7 @@ const NewOrder = (props) => {
       {failedPop && (
         <Modal
           close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
             t={t}
@@ -997,7 +1000,7 @@ const NewOrder = (props) => {
       {addAnotherProductFailed && (
         <Modal
           close={() => closeModalFailedAddAnotherProduct()}
-          size='modal-md'
+          size="modal-md"
         >
           <ShipmentFailPopUp
             t={t}
@@ -1008,9 +1011,9 @@ const NewOrder = (props) => {
       )}
 
       {message && (
-        <div className='d-flex justify-content-center mt-3'>
+        <div className="d-flex justify-content-center mt-3">
           {" "}
-          <Alert severity='success'>
+          <Alert severity="success">
             <AlertTitle>{t("success")}</AlertTitle>
             {message}
           </Alert>
@@ -1018,9 +1021,9 @@ const NewOrder = (props) => {
       )}
 
       {errorMessage && (
-        <div className='d-flex justify-content-center mt-3'>
+        <div className="d-flex justify-content-center mt-3">
           {" "}
-          <Alert severity='error'>
+          <Alert severity="error">
             <AlertTitle>{t("error")}</AlertTitle>
             {errorMessage}
           </Alert>

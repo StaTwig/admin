@@ -12,28 +12,28 @@ const EditTable = (props) => {
       <div className='d-flex flex-column'>
         <div className='row mb-2'>
           <div
-            className='col-4 theader text-center'
+            className='col-4 mi-line-sm text-center'
             style={{ position: "relative", left: "-40px" }}
           >
             <img src={Package} width='16' height='16' alt='' />
             <span className='ml-2 text-muted'>{t('product_category')}*</span>
           </div>
           <div
-            className='col-3 theader text-center'
+            className='col-3 mi-line-sm text-center'
             style={{ position: "relative", left: "-40px" }}
           >
             <img src={Package} width='16' height='16' alt='' />
             <span className='ml-2 text-muted'>{t('product')}*</span>
           </div>
           <div
-            className='col theader text-center ml-2'
+            className='col mi-line-sm text-center ml-2'
             style={{ position: "relative", left: "10px" }}
           >
             <img src={mon} width='16' height='16' alt='' />
             <span className='ml-2 text-muted'>{t('manufacturer')}</span>
           </div>
           <div
-            className='col theader text-center mr-5'
+            className='col mi-line-sm text-center mr-5'
             style={{ position: "relative", left: "0px" }}
           >
             <img src={quantity} width='25' height='16' alt='' />

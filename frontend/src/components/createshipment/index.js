@@ -176,8 +176,8 @@ const CreateShipment = (props) => {
   };
 
   return (
-    <div className='NewShipment'>
-      <h1 className='breadcrumb'>CREATE SHIPMENT</h1>
+    <div className="NewShipment">
+      <h1 className="vl-heading-bdr breadcrumb my-2 mb-2">CREATE SHIPMENT</h1>
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -245,52 +245,58 @@ const CreateShipment = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className='mb-3'>
-            <div className='row mb-3'>
-              <div className='col bg-white formContainer low mr-3'>
-                <label htmlFor='client' className='headsup'>
+          <form onSubmit={handleSubmit} className="mb-3">
+            <div className="row mb-3">
+              <div className="col bg-white formContainer low mr-3">
+                <label htmlFor="client" className="table-heading f-700 headsup">
                   {t("from")}
                 </label>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="organizationName"
+                      >
                         {t("organisation_name")}*
                       </label>
                       <input
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.fromOrg && touched.fromOrg
                             ? "border-danger"
                             : ""
                         }`}
-                        type='text'
-                        id='organizationName'
-                        name='fromOrg'
+                        type="text"
+                        id="organizationName"
+                        name="fromOrg"
                         value={values.fromOrg}
                         onBlur={handleBlur}
-                        placeholder='Enter Organisation Name'
+                        placeholder="Enter Organisation Name"
                         onChange={handleChange}
                       />
                     </div>
                   </div>
 
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='orgLocation'>
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="orgLocation"
+                      >
                         {t("organisation_location")}*
                       </label>
                       <input
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.fromOrgLoc && touched.fromOrgLoc
                             ? "border-danger"
                             : ""
                         }`}
-                        type='text'
-                        id='orgLocation'
-                        name='fromOrgLoc'
+                        type="text"
+                        id="orgLocation"
+                        name="fromOrgLoc"
                         value={values.fromOrgLoc}
                         onBlur={handleBlur}
-                        placeholder='Enter Organisation Location'
+                        placeholder="Enter Organisation Location"
                         onChange={handleChange}
                       />
                     </div>
@@ -299,51 +305,57 @@ const CreateShipment = (props) => {
               </div>
             </div>
 
-            <div className='row mb-3'>
-              <div className='col bg-white formContainer low mr-3'>
-                <label htmlFor='client' className='headsup'>
+            <div className="row mb-3">
+              <div className="col bg-white formContainer low mr-3">
+                <label htmlFor="client" className="table-heading f-700 headsup">
                   {t("to")}
                 </label>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="organizationName"
+                      >
                         {t("organisation_name")}*
                       </label>
                       <input
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.fromOrgLoc && touched.fromOrgLoc
                             ? "border-danger"
                             : ""
                         }`}
-                        type='text'
-                        id='organizationName'
-                        name='toOrg'
+                        type="text"
+                        id="organizationName"
+                        name="toOrg"
                         value={values.toOrg}
                         onBlur={handleBlur}
-                        placeholder='Enter Organisation Name'
+                        placeholder="Enter Organisation Name"
                         onChange={handleChange}
                       />
                     </div>
                   </div>
 
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='delLocation'>
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="delLocation"
+                      >
                         {t("delivery_location")}*
                       </label>
                       <input
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.fromOrgLoc && touched.fromOrgLoc
                             ? "border-danger"
                             : ""
                         }`}
-                        type='text'
-                        id='delLocation'
-                        name='toOrgLoc'
+                        type="text"
+                        id="delLocation"
+                        name="toOrgLoc"
                         value={values.toOrgLoc}
                         onBlur={handleBlur}
-                        placeholder='Enter Organisation Location'
+                        placeholder="Enter Organisation Location"
                         onChange={handleChange}
                       />
                     </div>
@@ -352,39 +364,45 @@ const CreateShipment = (props) => {
               </div>
             </div>
 
-            <div className='row mb-3'>
-              <div className='col bg-white formContainer low mr-3'>
-                <label htmlFor='client' className='headsup'>
+            <div className="row mb-3">
+              <div className="col bg-white formContainer low mr-3">
+                <label htmlFor="client" className="table-heading f-700 headsup">
                   {t("delivery_details")}:
                 </label>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12 mt-2'>
-                    <label className='name' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12 mt-2">
+                    <label
+                      className="table-heading f-400 name"
+                      htmlFor="organizationName"
+                    >
                       {t("transit_no")}*
                     </label>
                     <input
-                      className={`input refship ${
+                      className={`input table-heading refship ${
                         errors.airWayBillNo && touched.airWayBillNo
                           ? "border-danger"
                           : ""
                       }`}
-                      type='text'
-                      id='referenceShipmentId'
-                      name='airWayBillNo'
+                      type="text"
+                      id="referenceShipmentId"
+                      name="airWayBillNo"
                       value={values.airWayBillNo}
                       onBlur={handleBlur}
-                      placeholder='Enter Transit Number'
+                      placeholder="Enter Transit Number"
                       onChange={handleChange}
                     />
                   </div>
 
-                  <div className='col-md-6 com-sm-12 mt-3'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='delLocation'>
+                  <div className="col-md-6 com-sm-12 mt-3">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="delLocation"
+                      >
                         {t("shipment_date")}*
                       </label>
                       <div
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.shipmentDate && touched.shipmentDate
                             ? "border-danger"
                             : ""
@@ -392,7 +410,7 @@ const CreateShipment = (props) => {
                       >
                         <DatePicker
                           ref={ref1}
-                          className='date'
+                          className="date"
                           selected={
                             values.shipmentDate
                               ? new Date(Date.parse(values.shipmentDate))
@@ -402,42 +420,45 @@ const CreateShipment = (props) => {
                             e.keyCode !== 8 && e.preventDefault()
                           }
                           // minDate={new Date()}
-                          placeholderText='Enter Shipment Date'
+                          placeholderText="Enter Shipment Date"
                           onChange={(date) => {
                             setFieldValue("shipmentDate", date);
                           }}
                           showYearDropdown
-                          dateFormatCalendar='MMMM'
+                          dateFormatCalendar="MMMM"
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
                         <img
                           src={CalenderIcon}
-                          alt='calenderIcon'
-                          className='Calender-icon'
+                          alt="calenderIcon"
+                          className="Calender-icon"
                           onClick={() => ref1.current.setFocus()}
                         />
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className='row'>
-                  <div className='col-md-6 com-sm-12'>
-                    <label className='name' htmlFor='organizationName'>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <label
+                      className="table-heading f-400 name"
+                      htmlFor="organizationName"
+                    >
                       {t("label_code")}*
                     </label>
                     <input
-                      className={`input refship ${
+                      className={`input table-heading refship ${
                         errors.labelCode && touched.labelCode
                           ? "border-danger"
                           : ""
                       }`}
-                      type='text'
-                      id='referenceShipmentId'
-                      name='labelCode'
+                      type="text"
+                      id="referenceShipmentId"
+                      name="labelCode"
                       value={values.labelCode}
                       onBlur={handleBlur}
-                      placeholder='Enter Label Code'
+                      placeholder="Enter Label Code"
                       onChange={handleChange}
                     />
                     {/* {errors.labelCode && touched.labelCode && (
@@ -447,13 +468,16 @@ const CreateShipment = (props) => {
                     )} */}
                   </div>
 
-                  <div className='col-md-6 com-sm-12'>
-                    <div className='form-group'>
-                      <label className='name' htmlFor='shipmentId '>
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label
+                        className="table-heading f-400 name"
+                        htmlFor="shipmentId "
+                      >
                         {t("estimated_delivery_date")}*
                       </label>
                       <div
-                        className={`input refship ${
+                        className={`input table-heading refship ${
                           errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate
                             ? "border-danger"
@@ -462,8 +486,8 @@ const CreateShipment = (props) => {
                       >
                         <DatePicker
                           ref={ref2}
-                          className='date'
-                          placeholderText='Enter Delivery Date'
+                          className="date"
+                          placeholderText="Enter Delivery Date"
                           onChange={(date) => {
                             setFieldValue("estimateDeliveryDate", date);
                           }}
@@ -479,19 +503,19 @@ const CreateShipment = (props) => {
                             e.keyCode !== 8 && e.preventDefault()
                           }
                           showYearDropdown
-                          dateFormatCalendar='MMMM'
+                          dateFormatCalendar="MMMM"
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
                         <img
                           src={CalenderIcon}
-                          alt='calenderIcon'
-                          className='Calender-icon'
+                          alt="calenderIcon"
+                          className="Calender-icon"
                           onClick={() => ref2.current.setFocus()}
                         />
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
-                            <span className='error-msg text-danger-DD'>
+                            <span className="error-msg text-danger-DD">
                               {errors.estimateDeliveryDate}
                             </span>
                           )}
@@ -503,12 +527,15 @@ const CreateShipment = (props) => {
               </div>
             </div>
 
-            <div className='row mb-3'>
-              <label htmlFor='productDetails' className='headsup'>
+            <div className="row mb-3">
+              <label
+                htmlFor="productDetails"
+                className="table-heading f-700 headsup"
+              >
                 {t("product_details")}
               </label>
               <EditTable
-                check='0'
+                check="0"
                 warehouseID={senderOrgId}
                 product={addProducts}
                 products={products}
@@ -628,10 +655,10 @@ const CreateShipment = (props) => {
                   setAddProducts((prod) => [...newArr]);
                 }}
               />
-              <div className='d-flex justify-content-between'>
+              <div className="d-flex justify-content-between">
                 <button
-                  type='button'
-                  className='btn btn-white bg-white shadow-radius mt-3 font-bold'
+                  type="button"
+                  className="btn btn-white bg-white shadow-radius mt-3 font-bold"
                   onClick={() => {
                     let newArr = {
                       productName: "",
@@ -644,7 +671,8 @@ const CreateShipment = (props) => {
                     setAddProducts((prod) => [...prod, newArr]);
                   }}
                 >
-                  +<span>{t("add_another_product")}</span>
+                  +
+                  <span className="f-600 ml-1">{t("add_another_product")}</span>
                 </button>
               </div>
 
@@ -662,28 +690,28 @@ const CreateShipment = (props) => {
               </div> */}
             </div>
             {errors.products && touched.products && (
-              <span className='error-msg text-danger-DD'>
+              <span className="error-msg text-danger-DD">
                 {errors.products}
               </span>
             )}
-            <div className='d-flex justify-content-between'>
-              <div className='value'>{productQuantity}</div>
-              <div className='d-flex'>
+            <div className="d-flex justify-content-between">
+              <div className="value">{productQuantity}</div>
+              <div className="d-flex">
                 <button
-                  type='button'
-                  className='btn btn-outline-primary font-bold mr-2'
+                  type="button"
+                  className="btn btn-outline-primary font-bold mr-2"
                   onClick={() => props.history.push("/shipments")}
                 >
                   {t("cancel")}
                 </button>
 
-                <button className='btn btn-orange fontSize20 font-bold'>
+                <button className="btn btn-orange f-600">
                   <img
                     src={Add}
-                    width='20'
-                    height='17'
-                    className='mr-2 mb-1'
-                    alt=''
+                    width="20"
+                    height="17"
+                    className="mr-2 mb-1"
+                    alt=""
                   />
                   <span>{t("create_shipment")}</span>
                 </button>
@@ -693,13 +721,13 @@ const CreateShipment = (props) => {
         )}
       </Formik>
       {openCreatedInventory && (
-        <Modal close={() => closeModal()} size='modal-sm'>
+        <Modal close={() => closeModal()} size="modal-sm">
           <ShipmentPopUp onHide={closeModal} {...modalProps} t={t} />
         </Modal>
       )}
 
       {openShipmentFail && (
-        <Modal close={() => closeModalFail()} size='modal-sm'>
+        <Modal close={() => closeModalFail()} size="modal-sm">
           <ShipmentFailPopUp
             onHide={closeModalFail}
             {...modalProps}

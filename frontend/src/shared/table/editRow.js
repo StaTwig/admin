@@ -96,7 +96,7 @@ const EditRow = (props) => {
 
   return (
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
-      <h6 className='ml-3 text-info font-weight-bold'>
+      <h6 className='ml-3 text-info f-700'>
         {t("product")} {idx + 1}
       </h6>
       <br />

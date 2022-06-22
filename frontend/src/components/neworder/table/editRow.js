@@ -47,7 +47,7 @@ const EditRow = (props) => {
     <div className='row ml-3'>
       <div className='trow row text-dark col'>
         <div className='col-3 ml-3 tcell'>
-          <div className=''>
+          <div>
             <div className='col-13 d-flex flex-column'>
               <div className='title recived-text'>
                 {/* <DropdownButton
