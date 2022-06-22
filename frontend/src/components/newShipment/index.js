@@ -102,9 +102,7 @@ const NewShipment = (props) => {
     async function fetchData() {
       const result111 = await getProductList();
       setProductsList(result111.message);
-      console.log("THE PRODUCTS ARE",result111)
       const categoryArray = result111.message.map((product) => product.productCategory);
-      console.log("CATEGORIES ARE",categoryArray)
       const result = await getOpenOrderIds();
 
       const ids = result.map((item) => {
