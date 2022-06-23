@@ -363,7 +363,7 @@ const EditRow = (props) => {
                     locale={
                       mfgLocale === "Fecha de fabricación" ? locale : "en"
                     }
-                    className='form-control text-center'
+                    className='form-control text-center manufacturingPlaceholder'
                     onChange={(date) =>
                       handleInventoryChange(idx, "manufacturingDate", date)
                     }
@@ -384,7 +384,7 @@ const EditRow = (props) => {
                 <div className=''>
                   <DatePicker
                     locale={expLocale === "Fecha de caducidad" ? locale : "en"}
-                    className='form-control text-center'
+                    className='form-control text-center manufacturingPlaceholder'
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
                     onChange={(date) => {

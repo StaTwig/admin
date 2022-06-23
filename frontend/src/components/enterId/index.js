@@ -112,7 +112,7 @@ const EnterId = (props) => {
   return (
     <div className='updateStatus'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t("update_shipment")}</h1>
+        <h1 className='breadcrumb vl-heading-bdr'>{t("update_shipment")}</h1>
       </div>
       <Formik
         enableReinitialize={true}
@@ -166,14 +166,14 @@ const EnterId = (props) => {
                 <div className=''>
                   <div
                     className='panel commonpanle'
-                    style={{ height: "60%", width: "114%" }}
+                   
                   >
                     <div
                       className={`form-group ${
                         errors.shipmentId && touched.shipmentId && ``
                       }`}
                     >
-                      <label className='text-secondary'>
+                      <label className='text-secondary mr-2'>
                         {t("shipment_id")}
                       </label>
                       <div className='mb-2' style={{ width: 300 }}>
@@ -193,7 +193,7 @@ const EnterId = (props) => {
                               : (setshipdisabled(true),
                                 seterrorShipment(false));
                           }}
-                          id='controllable-states-demo'
+                          // id='controllable-states-demo'
                           autoComplete
                           renderInput={(params) => (
                             <TextField
@@ -238,10 +238,10 @@ const EnterId = (props) => {
                       )} */}
                   </div>
                 </div>
-                <div className='col-1 ml-3 mr-4'>
+                <div className='col-1'>
                   <h6
                     className='or'
-                    style={{ position: "absolute", left: "4px", top: "25px" }}
+                    style={{ position: "absolute", left: "-45px", top: "25px" }}
                   >
                     <b>{t("or")}</b>
                   </h6>
@@ -250,10 +250,10 @@ const EnterId = (props) => {
                 <div className=''>
                   <div
                     className='panel commonpanle ml-5'
-                    style={{ height: "60%", width: "110%" }}
+                    
                   >
                     <div className='form-group'>
-                      <label className='text-secondary'>
+                      <label className='text-secondary mr-2'>
                         {t("transit_no")}
                       </label>
                       <div className='' style={{ width: 300 }}>
@@ -302,13 +302,15 @@ const EnterId = (props) => {
               /> */}
                     </div>
                   </div>
-                  <div
+                 
+                </div>
+                
+              </div>
+              </div>
+              <div
                     className='col'
-                    style={{
-                      position: "relative",
-                      left: "16.5rem",
-                      top: "300px",
-                    }}
+                    style={{position:"fixed",right:"-55rem",bottom:"2rem"}}
+                    
                   >
                     <button
                       type='button'
@@ -331,9 +333,7 @@ const EnterId = (props) => {
                       <span>{t("update_shipment")}</span>
                     </button>
                   </div>
-                </div>
-              </div>
-            </div>
+            
           </form>
         )}
       </Formik>
