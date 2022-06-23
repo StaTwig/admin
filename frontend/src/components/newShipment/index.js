@@ -102,6 +102,7 @@ const NewShipment = (props) => {
     async function fetchData() {
       const result111 = await getProductList();
       setProductsList(result111.message);
+      const categoryArray = result111.message.map((product) => product.productCategory);
       const result = await getOpenOrderIds();
 
       const ids = result.map((item) => {
@@ -127,7 +128,6 @@ const NewShipment = (props) => {
         })
       );
       const result1 = await getProducts();
-      const categoryArray = result1.map((product) => product.type);
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
