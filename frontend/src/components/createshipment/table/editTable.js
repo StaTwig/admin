@@ -1,8 +1,10 @@
 import React from "react";
 import EditRow from "./editRow";
 import "./style.scss";
+import { batch } from "react-redux";
 
 const EditTable = (props) => {
+  const { t } = props;
   return (
     <div className="table productTable mt-2">
       <div className="d-flex flex-column">
@@ -23,7 +25,7 @@ const EditTable = (props) => {
             className="col theader text-sm-1 text-center pro mr-5"
             style={{ position: "relative", left: "-60px" }}
           >
-            Batch Number
+            {t('batch_no')}*
           </div>
           {props.enableDelete && (
             <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>
@@ -31,7 +33,7 @@ const EditTable = (props) => {
         </div>
         <div>
           {props.product.map((product, index) => (
-            <EditRow key={index} prod={product} {...props} index={index} />
+            <EditRow prod={product} {...props} index={index} />
           ))}
         </div>
       </div>

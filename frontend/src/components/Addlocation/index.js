@@ -79,10 +79,10 @@ export const AddLocationCard = (props) => {
     console.log(values, {warehouse: props.user });
     const data = {
       title: values.addressTitle,
-      organisationId: props.user.organisationId,
+      organisationId: intelEnabled && props?.popup ? props?.senderOrgId : props.user.organisationId,
       postalAddress: props.user.postalAddress || null,
       region: values.region || region,
-      country: props.user.warehouses[0].warehouseAddress.country,
+      country:  intelEnabled && props?.popup ? country : props.user.warehouses[0].warehouseAddress.country,
       // location: {
       //   longitude: '0',
       //   latitude: '0',
@@ -94,7 +94,7 @@ export const AddLocationCard = (props) => {
         secondLine: null,
         city: values.city,
         state: values.state,
-        country: props.user.warehouses[0].warehouseAddress.country,
+        country: intelEnabled && props?.popup ? country : props.user.warehouses[0].warehouseAddress.country,
         landmark: null,
         zipCode: values.pincode,
       },
@@ -105,6 +105,10 @@ export const AddLocationCard = (props) => {
     console.log({ userType, data });
     const result = await addWarehouse(data, userType);
     if (result.status === 200) {
+      if (props?.popup) {
+        props.close();
+        return;
+      }
       setAddedLocationModal(true);
     }
   };
@@ -456,6 +460,10 @@ export const AddLocationCard = (props) => {
                     type="button"
                     className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold"
                     onClick={() => {
+                      if (props?.popup) {
+                        props.close();
+                        return;
+                      }
                       props.history.push({
                         pathname: "/profile",
                         state: { editMode: true },

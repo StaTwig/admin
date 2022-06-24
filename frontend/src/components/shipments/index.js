@@ -44,8 +44,8 @@ const ShipmentAnalytic = (props) => {
   const [count, setCount] = useState(0);
   const [exportFilterData, setExportFilterData] = useState([]);
   const [showExportFilter, setShowExportFilter] = useState(false);
-  const [fromFilterDate, setFromFilterDate] = useState(null);
-  const [toFilterDate, setToFilterDate] = useState(null);
+  const [fromFilterDate, setFromFilterDate] = useState(new Date(0));
+  const [toFilterDate, setToFilterDate] = useState(new Date());
   const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   if (
     !isAuthenticated("inboundShipments") &&
@@ -407,10 +407,10 @@ const ShipmentAnalytic = (props) => {
       dispatch(turnOn());
       if (value.length > 1) {
         const fromDate =
-          value[0] === "" ? null : new Date(value[0]).toISOString();
+          value[0] === "" ? new Date(0) : new Date(value[0]).toISOString();
         setFromFilterDate(fromDate);
         const toDate =
-          value[0] === "" ? null : new Date(new Date(value[1]).toDateString());
+          value[0] === "" ? new Date(Date.now()) : new Date(new Date(value[1]).toDateString());
         setToFilterDate(toDate);
         const filteredOutboundShipments = await getGMRShipments(
           skip,
