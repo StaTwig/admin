@@ -312,13 +312,12 @@ const EditRow = (props) => {
           {!addMore && (
             <div className='ml-2 mt-1 pl-3 mb-1 '>
               <button
-                style={{ width: "150px", height: "53px", borderRadius: "12px" }}
                 type='button'
                 onClick={() => {
                   setAddMore(true);
                   props.setVisible(true);
                 }}
-                className='btn btn-warning '
+                className='mi-btn mi-btn-md mi-btn-yellow'
               >
                 <i className='txt-inventory' aria-hidden='true'></i>
                 <span className='txt-inventory'>

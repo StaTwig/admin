@@ -402,8 +402,8 @@ const NewOrder = (props) => {
 
   return (
     <div className="NewOrder m-3">
-      <div className="d-flex justify-content-between mb-3">
-        <h1 className="vl-heading-bdr f-700 black">{t("create_new_order")}</h1>
+      <div className="d-flex justify-content-between  mb-4">
+        <h1 className="vl-heading-bdr f-700 black" style={{paddingBottom:"10px"}}>{t("create_new_order")}</h1>
       </div>
       <Formik
         // enableReinitialize={true}
@@ -943,7 +943,7 @@ const NewOrder = (props) => {
               <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button
-                  className="btn btn-outline-primary f-600 mr-2 mt-3"
+                  className="mi-btn  mi-btn-secondary-outline mi-btn-md mr-2 mt-3"
                   onClick={() => {
                     dispatch(resetReviewPos({}));
                     props.history.push("/orders");
@@ -953,7 +953,7 @@ const NewOrder = (props) => {
                 </button>
 
                 <button
-                  className="btn btn-orange fontSize20 f-600 mt-3"
+                  className="mi-btn mi-btn-sm mi-btn-orange mt-3"
                   type="submit"
                 >
                   <img

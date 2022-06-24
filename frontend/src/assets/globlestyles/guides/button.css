@@ -81,7 +81,21 @@
   border: 1px solid var(--light);
   color: var(--black-500) !important;
 }
-
+.mi-btn-light{
+  background-color: transparent;
+  border:1px solid var(--light);
+  color:var(--blue);
+}
+.mi-btn-blue{
+  background-color: var(--white);
+  color: var(--darkblue);
+  border:1px solid var(--darkblue);
+}
+.mi-btn-blue:hover{
+  background-color: var(--darkblue);
+  border:1px solid var(--darkblue);
+  color:var(--white);
+}
 .mi-btn-red {
   background-color: var(--btn-red);
   border: 1px solid var(--btn-red);

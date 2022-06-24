@@ -129,11 +129,7 @@ const NewInventory = (props) => {
         )
       ).getFullYear();
       let b = todayDate.slice(-4);
-      let c = `0${
-        new Date(
-          validationVariable
-        ).getMonth() + 1
-      }`.slice(-2);
+      let c = `0${new Date(validationVariable).getMonth() + 1}`.slice(-2);
       let d = todayDate.substring(0, 2);
       a = a.toString();
       console.log(validationVariable);
@@ -241,54 +237,54 @@ const NewInventory = (props) => {
   };
 
   return (
-    <div className='Newinventory'>
-      <div className='d-flex justify-content-between mb-0'>
-        <h1 className='vl-heading-bdr mt-3'>{t("add_inventory")}</h1>
-        <div className='d-flex flex-column align-items-center'>
+    <div className="Newinventory">
+      <div className="d-flex justify-content-between mb-0">
+        <h1 className="vl-heading-bdr mt-3">{t("add_inventory")}</h1>
+        <div className="d-flex flex-column align-items-center">
           {isAuthenticated("importInventory") && (
             <button
-              className='btn-primary btn mt-4'
+              className="mi-btn mi-btn-md mi-btn-primary mt-4"
               onClick={() => setMenu(!menu)}
               style={{ position: "relative", left: "20px" }}
             >
-              <div className='d-flex  align-items-center'>
+              <div className="d-flex  align-items-center">
                 <img
                   src={ExportIcon}
-                  width='16'
-                  height='16'
-                  className='mr-3'
-                  alt='Export'
+                  width="16"
+                  height="16"
+                  className="mr-3"
+                  alt="Export"
                 />
                 <span>
                   <b>{t("import")}</b>
                 </span>
                 <img
                   src={dropdownIcon}
-                  width='16'
-                  height='16'
-                  className='ml-3'
-                  alt=''
+                  width="16"
+                  height="16"
+                  className="ml-3"
+                  alt=""
                 />
               </div>
             </button>
           )}
           {menu ? (
-            <div className='menu'>
+            <div className="menu">
               <button
-                className=' btn btn-outline-info mb-2 '
+                className=" btn btn-outline-info mb-2 "
                 onClick={() => setOpenExcel(true)}
               >
                 {" "}
                 {t("excel")}
               </button>
-              <button className=' btn btn-outline-info'> {t("other")}</button>
+              <button className=" btn btn-outline-info"> {t("other")}</button>
             </div>
           ) : null}
           {openExcel && (
             <Modal
               title={t("import")}
               close={() => closeExcelModal()}
-              size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
+              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <ExcelPopUp
                 {...props}
@@ -316,9 +312,9 @@ const NewInventory = (props) => {
         setInventoryError={setInventoryError}
       />
 
-      <div className='d-flex justify-content-between'>
+      <div className="d-flex justify-content-between">
         <button
-          className='btn btn-white bg-white shadow-radius mt-0 font-bold ml-3'
+          className="mi-btn mi-btn-light mi-btn-md shadow-radius mt-0 font-bold ml-3"
           onClick={onAddAnotherProduct}
         >
           <div style={{ fontSize: "14px" }}>
@@ -331,18 +327,18 @@ const NewInventory = (props) => {
       </div>
       <hr />
 
-      <div className='d-flex flex-row-reverse'>
+      <div className="d-flex flex-row-reverse">
         {/* <div className="total">Grand Total</div>
       <span className="value">{grandTotal}</span> */}
-        <button className='btn-orange btn' onClick={onProceedToReview}>
-          <img src={review} width='20' className='' alt='' />
-          <span className='ml-1'>
+        <button className="btn-orange btn" onClick={onProceedToReview}>
+          <img src={review} width="20" className="" alt="" />
+          <span className="ml-1">
             <b>{t("review_product")}</b>
           </span>
         </button>
         <button
-          type='button'
-          className='btn btn-outline-primary font-bold mr-3'
+          type="button"
+          className="mi-btn mi-btn-md mi-btn-blue mr-3"
           onClick={() => {
             dispatch(resetReviewInventories([]));
             props.history.push("/inventory");
@@ -354,7 +350,7 @@ const NewInventory = (props) => {
       {openCreatedInventory && (
         <Modal
           close={() => closeModal()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <InventoryPopUp
             t={t}
@@ -366,7 +362,7 @@ const NewInventory = (props) => {
       {openFailInventory && (
         <Modal
           close={() => closeModalFail()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <FailurePopUp
             t={t}
@@ -378,7 +374,7 @@ const NewInventory = (props) => {
       {openQuantityFailInventory && (
         <Modal
           close={() => closeModalFail1()}
-          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <ShipmentFailPopUp
             t={t}

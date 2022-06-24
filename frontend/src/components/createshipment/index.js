@@ -177,7 +177,7 @@ const CreateShipment = (props) => {
 
   return (
     <div className="NewShipment">
-      <h1 className="vl-heading-bdr breadcrumb my-2 mb-2">CREATE SHIPMENT</h1>
+      <h1 className="vl-heading-bdr my-2 mb-2" style={{paddingBottom:"10px"}}>CREATE SHIPMENT</h1>
       <Formik
         enableReinitialize={true}
         initialValues={{
@@ -245,7 +245,7 @@ const CreateShipment = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="mb-3">
+          <form onSubmit={handleSubmit} className="mb-3 mt-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
                 <label htmlFor="client" className="table-heading f-700 headsup">
@@ -658,7 +658,7 @@ const CreateShipment = (props) => {
               <div className="d-flex justify-content-between">
                 <button
                   type="button"
-                  className="btn btn-white bg-white shadow-radius mt-3 font-bold"
+                  className="mi-btn mi-btn-md mi-btn-light shadow-radius mt-3 font-bold"
                   onClick={() => {
                     let newArr = {
                       productName: "",
@@ -699,13 +699,13 @@ const CreateShipment = (props) => {
               <div className="d-flex">
                 <button
                   type="button"
-                  className="btn btn-outline-primary font-bold mr-2"
+                  className="mi-btn mi-btn-md mi-btn-blue mr-2"
                   onClick={() => props.history.push("/shipments")}
                 >
                   {t("cancel")}
                 </button>
 
-                <button className="btn btn-orange f-600">
+                <button className="mi-btn mi-btn-md mi-btn-orange">
                   <img
                     src={Add}
                     width="20"

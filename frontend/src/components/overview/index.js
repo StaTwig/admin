@@ -148,7 +148,7 @@ const Overview = (props) => {
                 </h5>
                 {isAuthenticated("addInventory") && (
                   <Link to="/newinventory">
-                    <button className="btn-primary btn-sm btn mt-3">
+                    <button className="mi-btn mi-btn-md mi-btn-primary mt-3">
                       {" "}
                       <b>{t("add_inventory")}</b>
                     </button>
@@ -165,7 +165,7 @@ const Overview = (props) => {
               <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewInventory") && (
                   <Link to="/inventory">
-                    <button className=" card-link btn btn-outline-primary">
+                    <button className="mi-btn mi-btn-md mi-btn-blue">
                       {t("view_more")}
                     </button>
                   </Link>
@@ -183,7 +183,7 @@ const Overview = (props) => {
                 </h5>
                 {isAuthenticated("createShipment") && (
                   <Link to="/newshipment">
-                    <button className="btn-primary btn-sm btn mt-3">
+                    <button className="mi-btn mi-btn-md mi-btn-primary mt-3">
                       <b> {t("create_shipment")} </b>
                     </button>
                   </Link>
@@ -202,7 +202,7 @@ const Overview = (props) => {
               <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewShipment") && (
                   <Link to="/shipments">
-                    <button className=" card-link btn btn-outline-primary">
+                    <button className="mi-btn mi-btn-md mi-btn-blue">
                       {t("view_more")}
                     </button>
                   </Link>

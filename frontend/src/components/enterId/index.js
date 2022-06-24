@@ -75,8 +75,7 @@ const EnterId = (props) => {
         }
       });
     }
-  }, [shipmentId])
-
+  }, [shipmentId]);
 
   const billNoCheck = (bno) => {
     let val = transitNumberArray.filter((e) => e.airWayBillNo == bno);
@@ -92,15 +91,12 @@ const EnterId = (props) => {
 
   const handleUpdateStatus = async () => {
     let result = await getViewShipment(shipmentId);
-    if(result.data?.status === "RECEIVED") {
+    if (result.data?.status === "RECEIVED") {
       setshipdisabled(true);
       seterrorShipment(true);
     } else {
       if (shipmentId) {
-        if (
-          shipmentArray.filter((e) => e.id === shipmentId)
-            .length > 0
-        ) {
+        if (shipmentArray.filter((e) => e.id === shipmentId).length > 0) {
           props.history.push(`/updatestatus/${shipmentId}`);
         }
       } else {
@@ -110,9 +106,11 @@ const EnterId = (props) => {
   };
 
   return (
-    <div className='updateStatus'>
-      <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb vl-heading-bdr'>{t("update_shipment")}</h1>
+    <div className="updateStatus">
+      <div className="d-flex justify-content-between">
+        <h1 className="vl-heading-bdr" style={{ paddingBottom: "10px" }}>
+          {t("update_shipment")}
+        </h1>
       </div>
       <Formik
         enableReinitialize={true}
@@ -158,28 +156,25 @@ const EnterId = (props) => {
         }) => (
           <form
             onSubmit={handleSubmit}
-            className=''
+            className=""
             style={{ height: "600px" }}
           >
-            <div className=''>
-              <div className='row'>
-                <div className=''>
-                  <div
-                    className='panel commonpanle'
-                   
-                  >
+            <div className="">
+              <div className="row">
+                <div className="">
+                  <div className="panel commonpanle">
                     <div
                       className={`form-group ${
                         errors.shipmentId && touched.shipmentId && ``
                       }`}
                     >
-                      <label className='text-secondary mr-2'>
+                      <label className="text-secondary mr-2">
                         {t("shipment_id")}
                       </label>
-                      <div className='mb-2' style={{ width: 300 }}>
+                      <div className="mb-2" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps}
-                          id='auto-complete'
+                          id="auto-complete"
                           value={value}
                           onChange={(event, newValue) => {
                             setValue(newValue);
@@ -198,16 +193,16 @@ const EnterId = (props) => {
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              name='shipmentId'
-                              margin='normal'
-                              variant='outlined'
-                              placeholder={t('Enter_Shipment_ID')}
+                              name="shipmentId"
+                              margin="normal"
+                              variant="outlined"
+                              placeholder={t("Enter_Shipment_ID")}
                             />
                           )}
                         />
                         {errorShipment && (
                           <span
-                            className='error-msg text-danger mt-3 '
+                            className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
                           >
                             {t("update_msg")}
@@ -238,28 +233,25 @@ const EnterId = (props) => {
                       )} */}
                   </div>
                 </div>
-                <div className='col-1'>
+                <div className="col-1">
                   <h6
-                    className='or'
+                    className="or"
                     style={{ position: "absolute", left: "-45px", top: "25px" }}
                   >
                     <b>{t("or")}</b>
                   </h6>
                 </div>
 
-                <div className=''>
-                  <div
-                    className='panel commonpanle ml-5'
-                    
-                  >
-                    <div className='form-group'>
-                      <label className='text-secondary mr-2'>
+                <div className="">
+                  <div className="panel commonpanle ml-5">
+                    <div className="form-group">
+                      <label className="text-secondary mr-2">
                         {t("transit_no")}
                       </label>
-                      <div className='' style={{ width: 300 }}>
+                      <div className="" style={{ width: 300 }}>
                         <Autocomplete
                           {...defaultProps1}
-                          id='billNo'
+                          id="billNo"
                           value1={value1}
                           onChange={(event, newValue) => {
                             setValue1(newValue);
@@ -275,16 +267,16 @@ const EnterId = (props) => {
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              name='billNo'
-                              margin='normal'
-                              variant='outlined'
-                              placeholder={t('Enter_Transit_No')}
+                              name="billNo"
+                              margin="normal"
+                              variant="outlined"
+                              placeholder={t("Enter_Transit_No")}
                             />
                           )}
                         />
                         {errorShipment1 && (
                           <span
-                            className='error-msg text-danger mt-3 '
+                            className="error-msg text-danger mt-3 "
                             style={{ top: "-10px", left: "0px" }}
                           >
                             {t("update_msg")}
@@ -302,38 +294,34 @@ const EnterId = (props) => {
               /> */}
                     </div>
                   </div>
-                 
                 </div>
-                
               </div>
-              </div>
-              <div
-                    className='col'
-                    style={{position:"fixed",right:"-55rem",bottom:"2rem"}}
-                    
-                  >
-                    <button
-                      type='button'
-                      className='btn btn-outline-primary mr-4 '
-                      onClick={() => props.history.push(`/shipments`)}
-                    >
-                      {t("cancel")}
-                    </button>
-                    <button
-                      disabled={shipdisabled}
-                      className='btn btn-orange fontSize20 font-bold mr-4 product'
-                      onClick={handleUpdateStatus}
-                    >
-                      <img
-                        src={update}
-                        width='20'
-                        height='17'
-                        className='mr-2 mb-1'
-                      />
-                      <span>{t("update_shipment")}</span>
-                    </button>
-                  </div>
-            
+            </div>
+            <div
+              className="col mi-flex"
+              style={{ position: "fixed", right: "-55rem", bottom: "2rem" }}
+            >
+              <button
+                type="button"
+                className="mi-btn mi-btn-md mi-btn-blue mr-2"
+                onClick={() => props.history.push(`/shipments`)}
+              >
+                {t("cancel")}
+              </button>
+              <button
+                disabled={shipdisabled}
+                className="mi-btn mi-btn-md mi-btn-orange"
+                onClick={handleUpdateStatus}
+              >
+                <img
+                  src={update}
+                  width="20"
+                  height="17"
+                  className="mr-2 mb-1"
+                />
+                <span>{t("update_shipment")}</span>
+              </button>
+            </div>
           </form>
         )}
       </Formik>
