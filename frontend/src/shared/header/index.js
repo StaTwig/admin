@@ -206,7 +206,7 @@ const Header = (props) => {
             props.history.push(`/productinventory/${searchValue}`);
           else
             alert(
-              `${t("there_no_products_type:")} "${searchValue}" ${t(
+              `${t("there_no_products_type")} "${searchValue}" ${t(
                 "in_your_inventory"
               )}`
             );
