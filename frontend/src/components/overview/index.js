@@ -43,7 +43,7 @@ const Overview = (props) => {
 
   return (
     <div className="overview">
-      <h1 className="vl-heading-bdr f-700 black">{t("overview")}</h1>
+      <h1 style={{paddingBottom:"10px", marginBottom:"1.2rem"}} className="vl-heading-bdr f-700 black">{t("overview")}</h1>
       <div className="full-width-ribben">
         <div className="row no-gutters">
           <div className="col">
