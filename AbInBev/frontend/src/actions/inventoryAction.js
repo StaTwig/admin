@@ -5,7 +5,7 @@ function getQueryStringFromFilters(filters) {
   let queryStr = '';
   if (filters.inventoryType && filters.inventoryType.length) {
     if (
-      filters.inventoryType === 'VENDOR' &&
+      filters.inventoryType === 'ALL_VENDORS' &&
       filters.vendorType &&
       filters.vendorType.length
     ) {
@@ -94,7 +94,7 @@ export const getOrganizationsByType = (filters) => {
   let queryStr = '';
   if (filters.organizationType && filters.organizationType.length) {
     if (filters.organizationType === 'VENDOR') {
-      if (filters.vendorType === 'ALL_VENDORS') {
+      if (filters.vendorType === 'ALL_VENDORS' || filters.inventoryType === "ALL_VENDORS") {
         queryStr = 'SUPPLIER';
       } else {
         queryStr = filters.vendorType;
