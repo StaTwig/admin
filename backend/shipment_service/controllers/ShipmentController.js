@@ -747,7 +747,7 @@ exports.createShipment = [
         const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        await axios.post(
+        axios.post(
           `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
           bc_data,
           {
@@ -755,7 +755,9 @@ exports.createShipment = [
               Authorization: token,
             },
           }
-        );
+        ).catch((error) => {
+          console.log(error);
+        });
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne(
             {
@@ -897,7 +899,7 @@ exports.newShipment = [
       };
       const token =
         req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-      await axios.post(
+      axios.post(
         `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
         bc_data,
         {
@@ -905,7 +907,9 @@ exports.newShipment = [
             Authorization: token,
           },
         }
-      );
+      ).catch((error) => {
+        console.log(error);
+      });;
       return apiResponse.successResponseWithData(
         res,
         responses(req.user.preferredLanguage).shipment_created,
@@ -1279,7 +1283,7 @@ exports.receiveShipment = [
           };
           const token =
             req.headers["x-access-token"] || req.headers["authorization"];
-          await axios.put(
+          axios.put(
             `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
             bc_data,
             {
@@ -1287,7 +1291,9 @@ exports.receiveShipment = [
                 Authorization: token,
               },
             }
-          );
+          ).catch((error) => {
+            console.log(error);
+          });;
           console.log(data.id, "data.id");
           const event_data = {
             eventID: cuid(),
