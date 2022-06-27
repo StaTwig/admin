@@ -550,6 +550,7 @@ const NewShipment = (props) => {
                             setOrderId(v.value);
                             dispatch(turnOn());
                             let result = await dispatch(getOrder(v.value));
+                            setSenderOrgId(result.poDetails[0].customer.warehouse.id);
                             for (
                               let i = 0;
                               i < result.poDetails[0].products.length;
@@ -741,10 +742,9 @@ const NewShipment = (props) => {
                         } else {
                           if (validShipmentID) {
                             let result = await getViewShipment(values.shipmentID);
-
+                            setSenderOrgId(result.data.supplier.locationId);
                             // This is required.
                             result = result.data;
-
                             if (result.status !== "RECEIVED") {
                               values.shipmentID = "";
                               // alert("The shipment has to be delivered first");
