@@ -1,5 +1,5 @@
 import React from "react";
-import EditRow from "../../createshipment/table/editRow";
+import EditRow from "./editRow";
 import "./style.scss";
 import { batch } from "react-redux";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getOrganisations } from "../../actions/productActions";
+import { getOrganisations, getOrganisationsAtSignup } from "../../actions/productActions";
 import { getOrganizationsByType } from "../../actions/userActions";
 import { Formik } from "formik";
 import "react-phone-number-input/style.css";
@@ -28,7 +28,7 @@ const FormPage = (props) => {
   const [organisationsArr, setOrganisationsArr] = useState([]);
   const [value, setValue] = useState("");
   const [orgType, setorgType] = useState("");
-  const [selectedType, setselectedType] = useState();
+  const [selectedType, setselectedType] = useState('');
   const [emailError, setemailerror] = useState(false);
   const [phoneError, setphoneerror] = useState(false);
   const [signupDisable, setsignupDisable] = useState(true);
@@ -48,7 +48,7 @@ const FormPage = (props) => {
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   useEffect(() => {
     async function fetchData() {
-      const orgs = await getOrganisations();
+      const orgs = await getOrganisationsAtSignup();
 
       orgs.push({ id: t("other"), name: t("other") });
       setOrganisations(orgs);
@@ -65,10 +65,10 @@ const FormPage = (props) => {
     // }
     // check();
     fetchOrganisationType();
-    fetchData();
-  }, [t]);
+    // fetchData();
+  }, []);
   var orgTypeArray = [];
-  organisationsType.map((data) => {
+  organisationsType.forEach((data) => {
     for (var i = 0; i < data.length; i++) {
       orgTypeArray.push(data[i].name);
     }
@@ -78,6 +78,54 @@ const FormPage = (props) => {
     arr.push({ name: t("other") });
     return arr;
   };
+  const [orgNames, setOrgNames] = useState([])
+
+  React.useEffect(() => {
+    console.log("selected type changed", selectedType);
+    if (selectedType === '') return;
+    let arr = [];
+    async function fetchData(type) {
+      const orgs = await getOrganisationsAtSignup(type);
+
+      orgs.push({ id: t("other"), name: t("other") });
+      arr = [...arr, ...orgs]
+      setOrganisations(orgs);
+      setOrganisationsArr(orgs);
+      setOrgNames(arr);
+      console.log(arr);
+    }
+    if (selectedType === 'Third Party Logistics') {
+      console.log("TPL")
+      fetchData('TPL');
+    }
+    else {
+      console.log("Other");
+      fetchData('');
+    }
+    
+  },[selectedType])
+
+  // const showOrgByType = React.useCallback((value) => {
+  //   console.log('render');
+  //   let arr = [];
+  //   async function fetchData(type) {
+  //     const orgs = await getOrganisations(type);
+
+  //     orgs.push({ id: t("other"), name: t("other") });
+  //     arr = [...arr, ...orgs]
+  //     setOrganisations(orgs);
+  //     setOrganisationsArr(orgs);
+  //   }
+  //   if(value === 'Third Party Logistics')
+  //     fetchData('TPL');
+  //   else
+  //     fetchData('');
+
+  //   // let arr = organisations.filter((data) => data.type === value);
+  //   // arr.push({ name: t("other") });
+  //   // return arr;
+  //   return arr
+  // },[value]);
 
   const handleEmailVerification = () => {
     if (props.email) {
@@ -408,7 +456,7 @@ const FormPage = (props) => {
                                 props.onEmailChange(e);
                                 handleChange(e);
                               }}
-                              handleBlur={handleEmailVerification()}
+                             onBlur={() => handleEmailVerification()}
                             />
                             {errors.email && touched.email && (
                               <span className='error-msg text-dangerS'>

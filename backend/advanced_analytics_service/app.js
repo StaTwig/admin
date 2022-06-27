@@ -5,9 +5,9 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
-var { aggregateData } = require("./helpers/dataAggregator");
+// var { aggregateData } = require("./helpers/dataAggregator");
 var cors = require("cors");
-var cron = require("node-cron");
+// var cron = require("node-cron");
 
 // const CALCULATE_RETURNS_CRON_TIME = `*/15 * * * *`;
 
@@ -36,7 +36,6 @@ mongoose
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-var db = mongoose.connection;
 
 var app = express();
 

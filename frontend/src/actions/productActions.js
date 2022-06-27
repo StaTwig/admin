@@ -19,9 +19,18 @@ export const generateCodes = async query => {
   }
 };
 
-export const getOrganisations = async () => {
+export const getOrganisations = async (type = '') => {
   try {
-    const result = await axios.get(config().getOrganisations);
+    const result = await axios.get(`${config().getOrganisations}?type=${type}`);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getOrganisationsAtSignup = async () => {
+  try {
+    const result = await axios.get(config().getOrganisationsAtSignup);
     return result.data.data;
   } catch (e) {
     return [];
