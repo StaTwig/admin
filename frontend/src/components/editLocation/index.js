@@ -9,6 +9,7 @@ import {
   fetchAllRegions,
   fetchStateByCountry,
   fetchCitiesByState,
+  fetchCountriesByRegion,
 } from "../../actions/productActions";
 
 import "./style.scss";
@@ -65,14 +66,19 @@ const EditLocation = (props) => {
       setCountry(warehouseInfo.warehouseAddress.country);
       setPincode(warehouseInfo.warehouseAddress.zipCode);
       setState(warehouseInfo.warehouseAddress.state);
+      fetchAllCountries1(region, warehouseInfo.warehouseAddress.country)
     }
-
-    async function fetchAllState1() {
-      let res = await fetchStateByCountry(53);
+    async function fetchAllCountries1(id, country) {
+      let res = await fetchCountriesByRegion(id);
+      // setallCountries(res.data);
+      const {id: countryId} = res.data.find((val) => val.name === country);
+      fetchAllState1(countryId);
+    }
+    async function fetchAllState1(countryId) {
+      let res = await fetchStateByCountry(countryId);
       setallState(res.data);
     }
 
-    fetchAllState1();
     fetchData();
   }, [id]);
 
