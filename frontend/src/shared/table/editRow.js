@@ -96,7 +96,7 @@ const EditRow = (props) => {
 
   return (
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
-      <h6 className='ml-3 text-info font-weight-bold'>
+      <h6 className='ml-3 text-info f-700'>
         {t("product")} {idx + 1}
       </h6>
       <br />
@@ -312,13 +312,12 @@ const EditRow = (props) => {
           {!addMore && (
             <div className='ml-2 mt-1 pl-3 mb-1 '>
               <button
-                style={{ width: "150px", height: "53px", borderRadius: "12px" }}
                 type='button'
                 onClick={() => {
                   setAddMore(true);
                   props.setVisible(true);
                 }}
-                className='btn btn-warning '
+                className='mi-btn mi-btn-md mi-btn-yellow'
               >
                 <i className='txt-inventory' aria-hidden='true'></i>
                 <span className='txt-inventory'>
@@ -363,7 +362,7 @@ const EditRow = (props) => {
                     locale={
                       mfgLocale === "Fecha de fabricación" ? locale : "en"
                     }
-                    className='form-control text-center'
+                    className='form-control text-center manufacturingPlaceholder'
                     onChange={(date) =>
                       handleInventoryChange(idx, "manufacturingDate", date)
                     }
@@ -384,7 +383,7 @@ const EditRow = (props) => {
                 <div className=''>
                   <DatePicker
                     locale={expLocale === "Fecha de caducidad" ? locale : "en"}
-                    className='form-control text-center'
+                    className='form-control text-center manufacturingPlaceholder'
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
                     onChange={(date) => {

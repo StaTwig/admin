@@ -538,20 +538,11 @@ const ShipmentAnalytic = (props) => {
   return (
     <div className='shipment'>
       <div className='d-flex justify-content-between'>
-        <h1 className='breadcrumb'>{t("shipments")}</h1>
+      <h1 className="vl-heading-bdr black f-700">{t("shipments")}</h1>
         <div className='d-flex'>
-          {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
-
-          <button
-            className="btn btn-orange fontSize20 font-bold mr-2"
-            onClick={() => setOpenPurchaseOrder(true)}
-          >
-            <img src={Order} width="14" height="14" className="mr-2" />
-            <span>Create Purchase Order</span>
-          </button> */}
           {isAuthenticated("updateShipment") && !intelEnabled && (
-            <Link to='/enterid'>
-              <button className='btn btn-orange fontSize20 font-bold mr-3 chain mt-2'>
+            <Link to='/enterid' className="text-none">
+              <button className='mi-btn mi-btn-md mi-btn-orange mr-3 '>
                 <img
                   src={update}
                   width='20'
@@ -566,8 +557,8 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to={intelEnabled ? `/createshipment` : `/newshipment`}>
-              <button className='btn btn-yellow fontSize20 font-bold mt-2'>
+            <Link to={!intelEnabled ? `/createshipment` : `/newshipment`} className="text-none">
+              <button className='mi-btn mi-btn-md mi-btn-yellow'>
                 <img
                   src={Add}
                   width='20'
@@ -597,28 +588,6 @@ const ShipmentAnalytic = (props) => {
           />
         </div>
       )}
-      {/* <div className='full-width-ribben mt-4'>
-        <TableFilter
-          data={headers}
-          shipmentIdList={shipmentIdList}
-          supplierReceiverList={
-            intelEnabled
-              ? []
-              : supplierReceiverList
-          }
-          setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect}
-          setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect}
-          setToShipmentFilterOnSelect={setToShipmentFilterOnSelect}
-          setStatusFilterOnSelect={setStatusFilterOnSelect}
-          setDateFilterOnSelect={setDateFilterOnSelect}
-          fb='80%'
-          showExportFilter={showExportFilter}
-          setShowExportFilter={setShowExportFilter}
-          exportFilterData={exportFilterData}
-          onSelectionOfDropdownValue={onSelectionOfDropdownValue}
-          isReportDisabled={!isAuthenticated("shipmentExportReport")}
-        />
-      </div> */}
       <div className='ribben-space'>
         <Table
           {...props}

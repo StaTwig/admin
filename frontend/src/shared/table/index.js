@@ -39,7 +39,7 @@ const Table = (props) => {
               >
                 {/*<div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>*/}
                 <div
-                  className='col-4 txt1 text-left'
+                  className='col-4 txt1 text-left blue'
                   style={{
                     position: "relative",
                     left: "0%",
@@ -52,7 +52,7 @@ const Table = (props) => {
                   </div>
                 </div>
                 <div
-                  className='col-2 txt1 text-left'
+                  className='col-2 txt1 dark text-left'
                   style={{ position: "relative", left: "3%", fontSize: "14px" }}
                 >
                   {inventory.productDetails.type}
@@ -70,7 +70,7 @@ const Table = (props) => {
                   {formatDate(inventory.createdAt)}
                 </div>
                 <div
-                  className='col txt1 text-right'
+                  className='col txt1 dark text-right'
                   style={{
                     position: "relative",
                     left: "13%",
@@ -81,7 +81,7 @@ const Table = (props) => {
                     inventory.payloadData?.data?.quantityPurchased}
                   {inventory.productDetails.unitofMeasure ? (
                     inventory.productDetails.unitofMeasure.name ? (
-                      <span>
+                      <span className="dark">
                         {" ("}
                         {inventory.productDetails.unitofMeasure.name}
                         {")"}
@@ -99,21 +99,21 @@ const Table = (props) => {
                 >
                   {inventory.eventTypePrimary !== "ADD" ? (
                     inventory.eventTypePrimary === "RECEIVE" ? (
-                      <div className='status secondary-bg bg-success'>
+                      <div className='custom-status secondary-bg bg-success'>
                         {" "}
                         {t("received")}
                       </div>
                     ) : inventory.eventTypePrimary !== "BUY" ? (
-                      <div className='status secondary-bg bg-warning'>
+                      <div className='custom-status secondary-bg bg-warning'>
                         {t("sent")}
                       </div>
                     ) : (
-                      <div className='status secondary-bg bg-warning'>
+                      <div className='custom-status secondary-bg bg-warning'>
                         {t("sold")}
                       </div>
                     )
                   ) : (
-                    <div className='status secondary-bg bg-primary'>
+                    <div className='custom-status secondary-bg bg-primary'>
                       {t("added")}
                     </div>
                   )}
@@ -238,7 +238,7 @@ const Table = (props) => {
                           inventory.eventTypePrimary === "RECEIVE" ? (
                             <button
                               type='button'
-                              className='bttn-blue blue-primary'
+                              className='mi-btn mi-btn-sm mi-btn-secondary-outline'
                               onClick={() => {
                                 props.history.push(
                                   `/viewshipment/${inventory.payloadData.data.id}`

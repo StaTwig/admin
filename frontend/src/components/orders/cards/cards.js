@@ -30,8 +30,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text-cards font-weight-bold"> {t("total_orders_sent")}</p>
-          <h1 className="count recived-text-cards">{orderAnalytics?.outboundPO}</h1>
+          <p className="card-text f-500 blue"> {t("total_orders_sent")}</p>
+          <h1 className="number-text f-500  blue">{orderAnalytics?.outboundPO}</h1>
         </div>
       </div>
 
@@ -41,8 +41,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="sent-text font-weight-bold">{t("total_orders_received")}</p>
-          <h1 className="count sent-text">{orderAnalytics?.inboundPO}</h1>
+          <p className="card-text f-500 orange">{t("total_orders_received")}</p>
+          <h1 className="number-text f-500 orange">{orderAnalytics?.inboundPO}</h1>
         </div>
       </div>
 
@@ -52,8 +52,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="inbound-text font-weight-bold">{t("total_orders_pending")}</p>
-          <h1 className="count inbound-text">
+          <p className="card-text f-500 darkblue">{t("total_orders_pending")}</p>
+          <h1 className="number-text f-500 darkblue">
             {orderAnalytics?.pendingOrders}
           </h1>
         </div>
@@ -65,10 +65,10 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="outbound-text font-weight-bold">
+          <p className="card-text f-500 tale">
             {t("total_orders_rejected")}
           </p>
-          <h1 className="count outbound-text">
+          <h1 className="number-text f-500 tale">
             {orderAnalytics?.rejectedOrders}
           </h1>
         </div>

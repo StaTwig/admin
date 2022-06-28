@@ -22,39 +22,53 @@ const SummaryTable = (props) => {
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
-        <div className='summaryTable justify-content-center '>
-          <div className='d-flex flex-column '>
-          <img src={t('english') === "English" ? EmptyShipment : t('english') === "Inglés" ? EmptyShipmentEs : EmptyShipment } height='200' width='200' alt='Shipment' />
+        <div className="summaryTable justify-content-center ">
+          <div className="d-flex flex-column ">
+            <img
+              src={
+                t("english") === "English"
+                  ? EmptyShipment
+                  : t("english") === "Inglés"
+                  ? EmptyShipmentEs
+                  : EmptyShipment
+              }
+              height="200"
+              width="200"
+              alt="Shipment"
+            />
           </div>
         </div>
       ) : (
-        <div className='summaryTable mt-2'>
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%", left: "2px" }}>
+        <div className="summaryTable mt-2">
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%", left: "2px" }}
+              >
                 <img
                   src={shippment}
-                  height='14'
-                  width='20'
-                  className='mr-2'
-                  alt=''
+                  height="14"
+                  width="20"
+                  className="mr-2"
+                  alt=""
                 ></img>
-                <b>{t('shipment_id')}</b>
+                <b>{t("shipment_id")}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data' key={index}>
-                  <div>{shipment.id}</div>
+                <div className="row combine-data" key={index}>
+                  <div className="text-sm-2">{shipment.id}</div>
                   {shipment?.shipmentAlerts?.length > 0 && (
                     <span
                       style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
-                      className='rounded'
+                      className="rounded"
                     >
                       <img
                         style={{ height: 15 }}
                         src={alertShip}
-                        alt='Shipments'
+                        alt="Shipments"
                       />
                     </span>
                   )}
@@ -62,23 +76,26 @@ const SummaryTable = (props) => {
               ) : null
             )}
           </div>
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%" }}>
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%" }}
+              >
                 <img
                   src={inandoutbound}
-                  height='14'
-                  width='20'
-                  className='mr-2'
-                  alt=''
+                  height="14"
+                  width="20"
+                  className="mr-2"
+                  alt=""
                 ></img>
-                <b>{t('type')}</b>
+                <b>{t("type")}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data' key={index}>
-                  <div>
+                <div className="row combine-data" key={index}>
+                  <div className="text-sm-2">
                     {profile.warehouseId === shipment.supplier.locationId
                       ? "Outbound"
                       : "Inbound"}
@@ -87,24 +104,27 @@ const SummaryTable = (props) => {
               ) : null
             )}
           </div>
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%" }}>
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%" }}
+              >
                 <img
                   src={shippmentdate}
-                  height='15'
-                  width='15'
-                  className='mr-1'
-                  alt=''
+                  height="15"
+                  width="15"
+                  className="mr-1"
+                  alt=""
                 ></img>
-                <span style={{ fontWeight: 600 }}>{t('shipping_date')}</span>
+                <span style={{ fontWeight: 600 }}>{t("shipping_date")}</span>
               </span>
             </div>
 
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data' key={index}>
-                  <div className='text-left'>
+                <div className="row combine-data" key={index}>
+                  <div className="text-left text-sm-2">
                     {shipment.shippingDate.length === 10
                       ? shipment.shippingDate
                       : formatDate(shipment.shippingDate)}
@@ -113,71 +133,84 @@ const SummaryTable = (props) => {
               ) : null
             )}
           </div>
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%" }}>
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%" }}
+              >
                 <img
                   src={received}
-                  height='15'
-                  width='15'
-                  className='mr-2'
-                  alt='Received Shipments'
+                  height="15"
+                  width="15"
+                  className="mr-2"
+                  alt="Received Shipments"
                 ></img>
-                <b>{t('from')}</b>
+                <b>{t("from")}</b>
               </span>
-            </div>
+            </div >
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data' key={index}>
-                  <div className='rTableCell text-left'>
-                    <p className='mb-0'>{shipment.supplier.org.name}</p>
+                <div className="row combine-data" key={index}>
+                  <div className="rTableCell text-left">
+                    <p className="mb-0 text-sm-2">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
               ) : null
             )}
           </div>
 
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%" }}>
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%" }}
+              >
                 <img
                   src={sent}
-                  height='15'
-                  width='20'
-                  className='mr-2'
-                  alt='Sent Shipments'
+                  height="15"
+                  width="20"
+                  className="mr-2"
+                  alt="Sent Shipments"
                 ></img>
-                <b>{t('to')}</b>
+                <b>{t("to")}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data pl-3' key={index}>
-                  <div className='rTableCell text-left'>
-                    <p className='mb-0 bold table-text'>{shipment.receiver.org.name}</p>
+                <div className="row combine-data pl-3" key={index}>
+                  <div className="rTableCell text-left">
+                    <p className="mb-0 bold table-text text-sm-2">
+                      {shipment.receiver.org.name}
+                    </p>
                   </div>
                 </div>
               ) : null
             )}
           </div>
-          <div className='rowData'>
-            <div className='headline'>
-              <span style={{ position: "relative", top: "25%" }}>
+          <div className="rowData">
+            <div className="headline">
+              <span
+                className="table-data black"
+                style={{ position: "relative", top: "25%" }}
+              >
                 <img
                   src={status}
-                  height='15'
-                  width='15'
-                  className='mr-2'
-                  alt='Status'
+                  height="15"
+                  width="15"
+                  className="mr-2"
+                  alt="Status"
                 ></img>
-                <b>{t('status')}</b>
+                <b>{t("status")}</b>
               </span>
             </div>
             {shipments?.map((shipment, index) =>
               index < 5 ? (
-                <div className='row combine-data' key={index}>
-                  <div className='status ' target={shipment.status}>
-                    {shipment.status === "CREATED" ? t('shipped') : t('delivered')}
+                <div className="row combine-data" key={index}>
+                  <div className="status text-sm-2" target={shipment.status}>
+                    {shipment.status === "CREATED"
+                      ? t("shipped")
+                      : t("delivered")}
                   </div>
                 </div>
               ) : null
@@ -185,23 +218,23 @@ const SummaryTable = (props) => {
           </div>
         </div>
       )}
-      <div className='summaryTable sm-only'>
-        <div className='row'>
+      <div className="summaryTable sm-only">
+        <div className="row">
           {shipments?.map((shipment, index) =>
             index < 5 ? (
-              <div key={index} className='col-sm-12 col-md-6 mb-3'>
-                <div className='combine-data mb-3'>
-                  <div className='rTableCell'>
-                    <p className='mb-0 bold'>{shipment.receiver.org.name}</p>
+              <div key={index} className="col-sm-12 col-md-6 mb-3">
+                <div className="combine-data mb-3">
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.receiver.org.name}</p>
                   </div>
                 </div>
-                <div className='d-flex'>
-                  <div className='mr-3'>{t('shipment_id')}</div>
-                  <div className='font-weight-bold'>{shipment.id}</div>
+                <div className="d-flex">
+                  <div className="mr-3">{t("shipment_id")}</div>
+                  <div className="font-weight-bold">{shipment.id}</div>
                 </div>
-                <div className='d-flex'>
-                  <div className='mr-3'>{t('shipping_date')}</div>
-                  <div className='font-weight-bold'>
+                <div className="d-flex">
+                  <div className="mr-3">{t("shipping_date")}</div>
+                  <div className="font-weight-bold">
                     {shipment.shippingDate.split("T")[0].split("-")[2] +
                       "/" +
                       shipment.shippingDate.split("T")[0].split("-")[1] +
@@ -209,20 +242,20 @@ const SummaryTable = (props) => {
                       shipment.shippingDate.split("T")[0].split("-")[0]}
                   </div>
                 </div>
-                <div className='d-flex'>
-                  <div className='mr-3'>{t('from')}</div>
-                  <div className='rTableCell'>
-                    <p className='mb-0 bold'>{shipment.supplier.org.name}</p>
+                <div className="d-flex">
+                  <div className="mr-3">{t("from")}</div>
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
-                <div className='d-flex'>
-                  <div className='mr-3'>{t('type')}</div>
-                  <div className='font-weight-bold'>Inbound</div>
+                <div className="d-flex">
+                  <div className="mr-3">{t("type")}</div>
+                  <div className="font-weight-bold">Inbound</div>
                 </div>
-                <div className='d-flex'>
-                  <div className='mr-3'>{t('status')}</div>
-                  <div className='font-weight-bold'>
-                    <div className='status' target={shipment.status}>
+                <div className="d-flex">
+                  <div className="mr-3">{t("status")}</div>
+                  <div className="font-weight-bold">
+                    <div className="status" target={shipment.status}>
                       {shipment.status === "CREATED" ? "Shipped" : "Delivered"}
                     </div>
                   </div>

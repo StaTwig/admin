@@ -130,9 +130,7 @@
       @media (min-width: $xl) {
         font-size: 14px;
       }
-      @media (min-width: $sm,$md,$lg) {
-        font-size: 12px;
-      }
+  
     }
 
     .count {
@@ -169,4 +167,9 @@
       color: $deepBlue;
     }
   }
+}
+
+.nft-owner-names{
+  width: 100% !important;
+  max-width: 70% !important;
 }
