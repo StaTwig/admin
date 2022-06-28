@@ -85,7 +85,7 @@ const EditRow = (props) => {
     fetchData();
   }, []);
 
-  const new_products = [];
+  let new_products = [];
 
   if (typeof products != "undefined" && typeof productsList != "undefined") {
     for (var i = 0; i < products.length; i++) {
@@ -100,6 +100,10 @@ const EditRow = (props) => {
         new_products.push(products[i]);
       }
     }
+    let uniqueObjArray = [
+      ...new Map(new_products.map((item) => [item["label"], item])).values(),
+    ];
+    new_products = [...uniqueObjArray];
   }
 
   const updateQuantity = () => {
@@ -185,7 +189,7 @@ const EditRow = (props) => {
     setBatches(buffer);
     setQuantity(value);
   };
-
+  
   return (
     <div className="row ml-3 mr-1">
       <div className="trow row mr-1 col">
@@ -210,7 +214,7 @@ const EditRow = (props) => {
                       </div>
                     }
                     value={
-                      prod.type === undefined || prod.id === undefined
+                      (prod.type === undefined && prod.productCategory === undefined) || prod.id === undefined
                         ? null
                         : {
                           value: prod.id, label: prod.type
@@ -224,7 +228,7 @@ const EditRow = (props) => {
                     options={category}
                   />
                 ) : (
-                  prod.type
+                  prod.type ?? prod.productCategory
                 )}
               </div>
             </div>

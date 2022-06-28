@@ -25,6 +25,13 @@ const SoChainOfCustody = (props) => {
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
+   const dateArr = update.updatedOn.split("")
+  const updatedDate = () => {
+    const dateArr = update.updatedOn.split("/");
+    const date = dateArr[1] + "/" + dateArr[0] + "/" + dateArr[2];
+    return date
+  }
+  console.log("props ", props);
 
   return (
     <>
@@ -88,7 +95,7 @@ const SoChainOfCustody = (props) => {
                     {new Date(update.updatedOn).toDateString()}
                   </div>
                   <div className='text-muted'>
-                    {formatTimeAMPM(new Date(update.updatedOn).toString().split(" ")[4])}
+                    {[...dateArr].includes("/") ? formatTimeAMPM(new Date(updatedDate()).toString().split(" ")[4]) : formatTimeAMPM(new Date(update.updatedOn).toString().split(" ")[4])}
                   </div>
                 </div>
               </div>
