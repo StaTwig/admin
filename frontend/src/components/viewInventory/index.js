@@ -202,10 +202,10 @@ const ViewInventory = (props) => {
                           {exp.batchNumbers[0]}
                         </div>
                         <div className="col ml-4 txt1 ">
-                          {formatDate(exp.attributeSet?.mfgDate)}
+                          {formatDate(exp.attributeSet?.mfgDate).substring(3)}
                         </div>
                         <div className="col ml-4 txt1 ">
-                          {formatDate(exp.attributeSet?.expDate)}
+                          {formatDate(exp.attributeSet?.expDate).substring(3)}
                         </div>
                       </div>
                     ))}
