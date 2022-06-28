@@ -557,7 +557,7 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to={!intelEnabled ? `/createshipment` : `/newshipment`} className="text-none">
+            <Link to={intelEnabled ? `/createshipment` : `/newshipment`} className="text-none">
               <button className='mi-btn mi-btn-md mi-btn-yellow'>
                 <img
                   src={Add}
