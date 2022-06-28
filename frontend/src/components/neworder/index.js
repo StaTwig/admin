@@ -4,11 +4,11 @@ import OrderIcon from "../../assets/icons/order.svg";
 import EditTable from "./table/editTable";
 import "./style.scss";
 import {
-	getWarehouseByOrgId,
-	getAllOrganisations,
-	getRegions,
-	getCountryDetailsByRegion,
-	getOrganizations,
+  getWarehouseByOrgId,
+  getAllOrganisations,
+  getRegions,
+  getCountryDetailsByRegion,
+  getOrganizations,
 } from "../../actions/shippingOrderAction";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
@@ -18,262 +18,140 @@ import Modal from "../../shared/modal";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 import {
-	getProducts,
-	setReviewPos,
-	resetReviewPos,
-	getOrganizationsByTypes,
+  getProducts,
+  setReviewPos,
+  resetReviewPos,
+  getOrganizationsByTypes,
 } from "../../actions/poActions";
 
 const NewOrder = (props) => {
-	const { t } = props;
-	const editPo = useSelector((state) => {
-		return state?.reviewPo;
-	});
+  const { t } = props;
+  const editPo = useSelector((state) => {
+    return state?.reviewPo;
+  });
 
-	const customStyles = {
-		option: (provided, state) => ({
-			...provided,
-			borderBottom: "1px solid #d6d6d6",
-		}),
-		control: () => ({
-			display: "flex",
-		}),
-		indicatorSeparator: () => ({
-			display: "none",
-		}),
-		singleValue: (provided, state) => {
-			const opacity = state.isDisabled ? 0.5 : 1;
-			const transition = "opacity 300ms";
-			return { ...provided, opacity, transition };
-		},
-	};
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: "1px solid #d6d6d6",
+    }),
+    control: () => ({
+      display: "flex",
+    }),
+    indicatorSeparator: () => ({
+      display: "none",
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = "opacity 300ms";
+      return { ...provided, opacity, transition };
+    },
+  };
 
-	const closeModal = () => {};
+  const closeModal = () => {};
 
-	const [allOrganisations, setAllOrganisations] = useState([]);
-	const [receiverWarehouses, setReceiverWarehouses] = useState([]);
-	const [receiverWarehousesCountry, setReceiverWarehousesCountry] = useState([]);
-	const [receiverWarehousesRegion, setReceiverWarehousesRegion] = useState([]);
-	const [orgNames, setOrgNames] = useState([]);
-	const [products, setProducts] = useState([]);
-	const [category, setCategory] = useState([]);
-	const [addProducts, setAddProducts] = useState(
-		editPo !== null
-			? editPo.products
-			: [
-					{
-						productId: "",
-						id: "",
-						productQuantity: "",
-						name: "",
-						manufacturer: " ",
-						type: "",
-					},
-			  ],
-	);
-	const dispatch = useDispatch();
-	// const [senderOrgId, setSenderOrgId] = useState(
-	//   editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
-	// );
-	// const [senderOrgType, setSenderOrgType] = useState(
-	//   editPo !== null ? editPo.typeName : ""
-	// );
-	// const [receiverOrgId, setReceiverOrgId] = useState(
-	//   editPo !== null ? editPo.toOrgName : "Select Organisation Name"
-	// );
-	// const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-	//   editPo !== null ? editPo.toOrgLocName : "Select Delivery Location"
-	// );
-	const [message] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
-	const [quantity] = useState("");
-	const [openOrder] = useState(false);
-	const [failedPop, setFailedPop] = useState(false);
-	const [shipmentError, setOrderError] = useState("");
-	const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
-	const [orgTypes, setOrgTypes] = useState([]);
-	const [country, setCountry] = useState("");
-	const [orgType, setOrgType] = useState("");
+  const [allOrganisations, setAllOrganisations] = useState([]);
+  const [receiverWarehouses, setReceiverWarehouses] = useState([]);
+  const [receiverWarehousesCountry, setReceiverWarehousesCountry] = useState(
+    []
+  );
+  const [receiverWarehousesRegion, setReceiverWarehousesRegion] = useState([]);
+  const [orgNames, setOrgNames] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [addProducts, setAddProducts] = useState(
+    editPo !== null
+      ? editPo.products
+      : [
+          {
+            productId: "",
+            id: "",
+            productQuantity: "",
+            name: "",
+            manufacturer: " ",
+            type: "",
+          },
+        ]
+  );
+  const dispatch = useDispatch();
+  // const [senderOrgId, setSenderOrgId] = useState(
+  //   editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
+  // );
+  // const [senderOrgType, setSenderOrgType] = useState(
+  //   editPo !== null ? editPo.typeName : ""
+  // );
+  // const [receiverOrgId, setReceiverOrgId] = useState(
+  //   editPo !== null ? editPo.toOrgName : "Select Organisation Name"
+  // );
+  // const [receiverOrgLoc, setReceiverOrgLoc] = useState(
+  //   editPo !== null ? editPo.toOrgLocName : "Select Delivery Location"
+  // );
+  const [message] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [quantity] = useState("");
+  const [openOrder] = useState(false);
+  const [failedPop, setFailedPop] = useState(false);
+  const [shipmentError, setOrderError] = useState("");
+  const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
+  const [orgTypes, setOrgTypes] = useState([]);
+  const [country, setCountry] = useState("");
+  const [orgType, setOrgType] = useState("");
   const [orgDetails, setOrgDetails] = useState([]);
-  const [blinkRow, setBlinkRow] = useState();
 
-	useEffect(() => {
-		async function fetchData() {
-			// onCountryChange('Costa Rica');
+  useEffect(() => {
+    async function fetchData() {
+      // onCountryChange('Costa Rica');
 
-			const orgs = await getAllOrganisations();
-			setAllOrganisations(
-				orgs.data.map((item) => {
-					return {
-						value: item.id,
-						label: item.name,
-						type: item.type,
-					};
-				}),
-			);
-			const orgType = await getOrganizationsByTypes("CONF000");
-			setOrgTypes(
-				orgType.data.length > 0
-					? orgType.data[0].organisationTypes.map((item) => {
-							return {
-								value: item.id,
-								label: item.name,
-							};
-					  })
-					: [],
-			);
-			// if (orgSplit?.length > 0) {
-			//   const organisations = orgs.data.filter((org) => org.id != user.organisationId);
-			// }
+      const orgs = await getAllOrganisations();
+      setAllOrganisations(
+        orgs.data.map((item) => {
+          return {
+            value: item.id,
+            label: item.name,
+            type: item.type,
+          };
+        })
+      );
+      const orgType = await getOrganizationsByTypes("CONF000");
+      setOrgTypes(
+        orgType.data.length > 0
+          ? orgType.data[0].organisationTypes.map((item) => {
+              return {
+                value: item.id,
+                label: item.name,
+              };
+            })
+          : []
+      );
+      // if (orgSplit?.length > 0) {
+      //   const organisations = orgs.data.filter((org) => org.id != user.organisationId);
+      // }
 
-			// const warehouses = await getWarehouseByOrgId(orgSplit[1]);
-			// setSenderWarehouses(warehouses.data);
+      // const warehouses = await getWarehouseByOrgId(orgSplit[1]);
+      // setSenderWarehouses(warehouses.data);
 
-			const result = await getProducts();
-			let res = result.filter((item) => item.name !== "category");
-			setProducts(
-				res.map((item) => {
-					return {
-						value: item.name,
-						label: item.name,
-						...item,
-					};
-				}),
-			);
-			const categoryArray = result.map((product) => product.type);
-			setCategory(
-				categoryArray
-					.filter((value, index, self) => self.indexOf(value) === index)
-					.map((item) => {
-						return {
-							value: item,
-							label: item,
-						};
-					}),
-			);
-		}
-		fetchData();
-		dispatch(resetReviewPos({}));
-	}, [dispatch]);
-
-	const closeModalFail = () => {
-		setFailedPop(false);
-	};
-
-	const closeModalFailedAddAnotherProduct = () => {
-		setAddAnotherProductFailed(false);
-	};
-
-	const onOrgChange = async (value) => {
-		try {
-			const warehouse = await getWarehouseByOrgId(value);
-			setReceiverWarehouses(
-				warehouse.data.map((v) => {
-					return {
-						...v,
-						value: v.id,
-						label: v?.warehouseAddress
-							? v?.title + "/" + v?.warehouseAddress?.firstLine + ", " + v?.warehouseAddress?.city
-							: v?.title + "/" + v.postalAddress,
-					};
-				}),
-			);
-		} catch (err) {
-			setErrorMessage(err);
-		}
-	};
-
-	const onOrgTypeChange = async (value) => {
-		try {
-			console.log("Values from Organisation Type change:", value);
-			const region = await getRegions(value);
-			console.log("Regions:", region);
-			const rr = region.data.map((v) => {
-				return {
-					value: v,
-					label: v,
-				};
-			});
-			console.log("rr");
-			setReceiverWarehousesRegion(rr);
-			// onCountryChange(value, 'Costa Rica');
-		} catch (err) {
-			setErrorMessage(err);
-		}
-	};
-
-	const onRegionChange = async (id) => {
-		try {
-			const countries = await getCountryDetailsByRegion(id, orgType);
-			const cc = countries.data.map((v) => {
-				return {
-					value: v,
-					label: v,
-				};
-			});
-
-			setReceiverWarehousesCountry(cc);
-		} catch (err) {
-			setErrorMessage(err);
-		}
-	};
-
-	const onCountryChange = async (type, idd) => {
-		try {
-			console.log("from function:", orgType);
-			console.log("id from function:", idd);
-			const org = await getOrganizations(type, idd);
-			setOrgDetails(org.data);
-			const oo = org.data.map((v) => {
-				return {
-					value: v.id,
-					label: v.name,
-				};
-			});
-			setOrgNames(oo);
-		} catch (err) {
-			setErrorMessage(err);
-		}
-	};
-
-	const onCategoryChange = async (index, value, setFieldValue) => {
-		try {
-			let newArr = [...addProducts];
-			newArr[index] = {
-				productId: "",
-				id: "",
-				productQuantity: "",
-				name: "",
-				type: value,
-				manufacturer: "",
-				unitofMeasure: "",
-			};
-			newArr[index]["quantity"] = "";
-			setAddProducts((prod) => [...newArr]);
-			setFieldValue(
-				"products",
-				newArr.map((row) => ({
-					productId: row.id,
-					id: row.id,
-					productQuantity: row?.productQuantity ? row?.productQuantity : 0,
-					name: row.name,
-					type: row.type,
-					manufacturer: row.manufacturer,
-					unitofMeasure: row.unitofMeasure,
-				})),
-			);
-		} catch (err) {
-			setErrorMessage(err);
-		}
-	};
-
-	const onProductChange = (index, item, setFieldValue) => {
-    // Check whether product already added
-    let temp = [...addProducts];
-    let duplicateIndex = temp.findIndex((product) => product._id === item._id);
-    if(duplicateIndex !== -1) {
-      setBlinkRow(duplicateIndex);
-      return;
+      const result = await getProducts();
+      let res = result.filter((item) => item.name !== "category");
+      setProducts(
+        res.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        })
+      );
+      const categoryArray = result.map((product) => product.type);
+      setCategory(
+        categoryArray
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map((item) => {
+            return {
+              value: item,
+              label: item,
+            };
+          })
+      );
     }
     fetchData();
     dispatch(resetReviewPos({}));

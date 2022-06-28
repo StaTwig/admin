@@ -147,7 +147,7 @@ const Overview = (props) => {
                   {t("inventory_summary")}
                 </h5>
                 {isAuthenticated("addInventory") && (
-                  <Link to="/newinventory">
+                  <Link to="/newinventory" className="text-none">
                     <button className="mi-btn mi-btn-md mi-btn-primary mt-3">
                       {" "}
                       <b>{t("add_inventory")}</b>
@@ -164,7 +164,7 @@ const Overview = (props) => {
             <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewInventory") && (
-                  <Link to="/inventory">
+                  <Link to="/inventory" className="text-none">
                     <button className="mi-btn mi-btn-md mi-btn-blue">
                       {t("view_more")}
                     </button>
@@ -182,7 +182,7 @@ const Overview = (props) => {
                   {t("shipment_summary")}
                 </h5>
                 {isAuthenticated("createShipment") && (
-                  <Link to="/newshipment">
+                  <Link to="/newshipment" className="text-none">
                     <button className="mi-btn mi-btn-md mi-btn-primary mt-3">
                       <b> {t("create_shipment")} </b>
                     </button>
@@ -201,7 +201,7 @@ const Overview = (props) => {
             <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 {isAuthenticated("viewShipment") && (
-                  <Link to="/shipments">
+                  <Link to="/shipments" className="text-none">
                     <button className="mi-btn mi-btn-md mi-btn-blue">
                       {t("view_more")}
                     </button>
