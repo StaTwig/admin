@@ -11,7 +11,7 @@ const ProfileContainer = (props) => {
       <Header {...props} t={t} />
       <div className='d-flex'>
         <Sidebar {...props} t={t} />
-        <div className='content'>
+        <div className='profile-content'>
           <Profile {...props} t={t} />
         </div>
       </div>

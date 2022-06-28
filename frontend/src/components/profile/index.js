@@ -824,7 +824,7 @@ class Profile extends React.Component {
               ) : (
                 <div
                   className="d-flex flex-row justify-content-between"
-                  style={{ position: "relative", left: -100 }}
+                  style={{ position: "relative", right: "10rem" }}
                 >
                   <button
                     className="buttonS btn btn-outline-primary mr-2"
