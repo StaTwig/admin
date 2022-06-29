@@ -8,7 +8,6 @@ import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { getImage } from "../../actions/notificationActions";
 import SuccessPopUp from "./successPopup";
@@ -18,7 +17,8 @@ import PopUpLocation from "./popuplocation";
 import Modal from "./modal/index";
 import Modal1 from "../../shared/modal";
 import moment from "moment";
-import { COUNTRY_CODE } from "../../constants/countryCode";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 const axios = require("axios");
 
 class Profile extends React.Component {
@@ -376,8 +376,10 @@ class Profile extends React.Component {
                       /> */}
                       <PhoneInput
                         international={true}
-                        // countryCallingCodeEditable={false}
-                        defaultCountry={COUNTRY_CODE}
+                      //  countryCallingCodeEditable={false}
+                        defaultCountry="United States"
+                        country="United States"
+
                         className="phone-Input-new-profile"
                         placeholder={t("enter_phone_number")}
                         value={this.state.phoneNumber}
