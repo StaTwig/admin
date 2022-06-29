@@ -38,37 +38,37 @@ const EditRow = (props) => {
 		}
 	}, [props.blinkRow]);
 
-  const numbersOnly = (e) => {
-    // Handle paste
-    if (e.type === "paste") {
-      key = e.clipboardData.getData("text/plain");
-    } else {
-      // Handle key press
-      var key = e.keyCode || e.which;
-      key = String.fromCharCode(key);
-    }
-    if (!e.target.value && key === 0) {
-      e.stopPropagation();
-      e.preventDefault();
-      e.returnValue = false;
-      e.cancelBubble = true;
-      return false;
-    } else {
-      var regex = /^\d*[0-9]\d*$/;
-      if (!regex.test(key)) {
-        e.returnValue = false;
-        if (e.preventDefault) e.preventDefault();
-      }
-    }
-  };
-  return (
-    <div className='row ml-3'>
-      <div className='trow row text-dark col'>
-        <div className='col-3 ml-3 tcell'>
-          <div>
-            <div className='col-13 d-flex flex-column'>
-              <div className='title recived-text'>
-                {/* <DropdownButton
+	const numbersOnly = (e) => {
+		// Handle paste
+		if (e.type === "paste") {
+			key = e.clipboardData.getData("text/plain");
+		} else {
+			// Handle key press
+			var key = e.keyCode || e.which;
+			key = String.fromCharCode(key);
+		}
+		if (!e.target.value && key === 0) {
+			e.stopPropagation();
+			e.preventDefault();
+			e.returnValue = false;
+			e.cancelBubble = true;
+			return false;
+		} else {
+			var regex = /^\d*[0-9]\d*$/;
+			if (!regex.test(key)) {
+				e.returnValue = false;
+				if (e.preventDefault) e.preventDefault();
+			}
+		}
+	};
+	return (
+		<div className="row ml-3">
+			<div ref={rowRef} className="trow row text-dark col">
+				<div className="col-3 ml-3 tcell">
+					<div className="">
+						<div className="col-13 d-flex flex-column">
+							<div className="title recived-text">
+								{/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
