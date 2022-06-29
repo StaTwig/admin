@@ -68,7 +68,7 @@ const UserRoles = ({
     setShowSuccessModel(false);
     if (props?.newRoleState && props?.newRoleState[0]) props.history.push('/overview', { state: { newUser: true } })
   };
-  console.log({ featurePanelValues });
+  // console.log({ featurePanelValues });
 
   return isLoading ? (
     <Spinner />
@@ -155,8 +155,8 @@ const UserRoles = ({
             className="add-user-btn"
             style={{ outline: "none" }}
             onClick={() => {
-              setTitle("ADD NEW USER");
-              setBtnTxt("ADD USER");
+              setTitle("ADD NEW USER ROLE");
+              setBtnTxt("ADD USER ROLE");
               setData([]);
               setShowModal(true);
             }}
