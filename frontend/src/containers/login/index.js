@@ -46,8 +46,9 @@ const LoginContainer = (props) => {
         const err = result.data.message;
         setErrorMessage(err);
       } else {
-        const err = result.data.data.emailId;
-        setErrorMessage(err);
+        // const err = result.data.data.emailId;
+        console.log("result ", result);
+        setErrorMessage(result);
       }
       dispatch(turnOff());      
     }
