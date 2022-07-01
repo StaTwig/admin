@@ -393,5 +393,7 @@
   "enter_qunatity": "Enter Quantity",
   "Product_Doesn't_exist_in_the_inventory": "Product Doesn't exist in the inventory.",
   "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated",
-  "invalid_records": "Invalid Records"
+  "invalid_records": "Invalid Records",
+  "Your_Profile_has_been": "Your Profile has been",
+  "Saved_Successfully": "Saved Successfully"
 }
