@@ -14,10 +14,16 @@ const ExcelPopUp = (props) => {
   const dispatch = useDispatch();
 
   const setExcelFile = (evt) => {
+    const extension = evt.target.files[0].name.split(".").pop()
+    if(["xlsx","xls"].includes(extension)){
     setExcel(evt.target.files[0]);
+    }else{
+      props.importError("Invalid file");
+    }
   };
 
   const uploadExcel = async () => {
+
     let formData = new FormData();
     formData.append("excel", excel);
     dispatch(turnOn());

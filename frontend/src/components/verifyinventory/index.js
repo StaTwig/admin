@@ -43,7 +43,8 @@ const VerifyInventory = (props) => {
         unitOfMeasure: inventory?.unitofMeasure?.name,
       };
     });
-
+    console.log(postData);
+     debugger
     const result = await addProductsToInventory({
       products: postData,
     });
