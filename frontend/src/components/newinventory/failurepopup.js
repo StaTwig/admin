@@ -9,7 +9,7 @@ const FailurePopUp = (props) => {
       <div className='d-flex  flex-column align-items-center'>
         <img src={Checked} width='60' height='60' className='mb-3' alt='' />
         <div className='alert'>{t("fail")}!</div>
-        <div className='font-weight-bolder error'>
+        <div className='font-weight-bolder error text-center'>
           ' {t(props.inventoryError)} '
         </div>
         <div className='data'>

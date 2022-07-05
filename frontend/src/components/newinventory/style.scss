@@ -97,6 +97,7 @@
   .error {
     font: 22px/36px $roboto;
     color: #707070;
+
   }
 
   .alert {
@@ -123,7 +124,9 @@
     // opacity: 0.5;
   }
 }
-
+.text-center{
+  text-align: center;
+}
 .excelpopup {
   .upload {
     height: 200px;
