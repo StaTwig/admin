@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
@@ -23,7 +24,7 @@ sudo docker network create proxy
 #Installing build essentials
 sudo apt-get install build-essential -y
 
-cd theledger
+cd theledger || exit 1
 
 touch acme.json
 
