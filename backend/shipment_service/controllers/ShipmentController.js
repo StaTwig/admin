@@ -819,6 +819,192 @@ exports.createShipment = [
     }
   },
 ];
+exports.createShipmentForTpl = [
+  auth,
+  async (req, res) => {
+    try {
+      let data = req.body;
+      data.originalReceiver = data.receiver;
+      if (req.body.shippingDate.includes("/")) {
+        var shipmentData = req.body.shippingDate.split("/");
+        const shippingDate =
+          shipmentData[2] +
+          "-" +
+          shipmentData[1] +
+          "-" +
+          shipmentData[0] +
+          "T00:00:00.000Z";
+        data.shippingDate = shippingDate;
+      }
+      data.shippingDate = new Date(data.shippingDate);
+      const shipmentCounter = await CounterModel.findOneAndUpdate(
+        {
+          "counters.name": "shipmentId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        },
+        {
+          new: true,
+        }
+      ).select({ counters: { $elemMatch: { name: "shipmentId" } } });
+      const shipmentId =
+        shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
+      data.id = shipmentId;
+      const email = req.user.emailId;
+      const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      if (empData == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).email_not_found
+        );
+      }
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      if (orgData == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).orgdata_not_found
+        );
+      }
+      const address = orgData.postalAddress;
+      const confId = orgData.configuration_id;
+      const confData = await ConfigurationModel.findOne({ id: confId });
+      if (confData == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).config_not_found
+        );
+      }
+      const process = confData.process;
+      const supplierID = req.body.supplier.id;
+      const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.id,
+      });
+      if (supplierOrgData == null) {
+        console.log("Supplier not defined");
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).supplier_not_defined
+        );
+      }
+
+      const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.receiver.id,
+      });
+      if (receiverOrgData == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).receiver_not_defined
+        );
+      }
+
+      const supplierName = supplierOrgData.name;
+      const supplierAddress = supplierOrgData.postalAddress;
+      const receiverId = req.body.receiver.id;
+      const receiverName = receiverOrgData.name;
+      const receiverAddress = receiverOrgData.postalAddress;
+      if (flag != "N") {
+        const suppWarehouseDetails = await WarehouseModel.findOne({
+          id: data.supplier.locationId,
+        });
+        if (suppWarehouseDetails == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).supplier_not_found
+          );
+        }
+        var suppInventoryId = suppWarehouseDetails.warehouseInventory;
+        const suppInventoryDetails = await InventoryModel.findOne({
+          id: suppInventoryId,
+        });
+        if (suppInventoryDetails == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            "suppInventoryDetails" +
+              responses(req.user.preferredLanguage).not_found
+          );
+        }
+        const recvWarehouseDetails = await WarehouseModel.findOne({
+          id: data.receiver.locationId,
+        });
+        if (recvWarehouseDetails == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            "recvWarehouseDetails" +
+              responses(req.user.preferredLanguage).not_found
+          );
+        }
+        const event_data = {
+          eventID: cuid(),
+          eventTime: new Date().toISOString(),
+          eventType: {
+            primary: "CREATE",
+            description: "SHIPMENT",
+          },
+          transactionId: data.id,
+          actor: {
+            actorid: user_id,
+            actoruserid: email,
+          },
+          actorWarehouseId: req.user.warehouseId || null,
+          stackholders: {
+            ca: {
+              id: CENTRAL_AUTHORITY_ID || null,
+              name: CENTRAL_AUTHORITY_NAME || null,
+              address: CENTRAL_AUTHORITY_NAME || null,
+            },
+            actororg: {
+              id: orgId || null,
+              name: orgName || null,
+              address: address || null,
+            },
+            secondorg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+          },
+          payload: {
+            data: data,
+          },
+        };
+        if (orgId === supplierID) {
+          event_data.stackholders.secondorg.id = receiverId || null;
+          event_data.stackholders.secondorg.name = receiverName || null;
+          event_data.stackholders.secondorg.address = receiverAddress || null;
+        } else {
+          event_data.stackholders.secondorg.id = supplierID || null;
+          event_data.stackholders.secondorg.name = supplierName || null;
+          event_data.stackholders.secondorg.address = supplierAddress || null;
+        }
+        const shipment = new ShipmentModel(data);
+        const result = await shipment.save();
+        if (result == null) {
+          return apiResponse.ErrorResponse(
+            res,
+            responses(req.user.preferredLanguage).shipment_not_saved
+          );
+        }
+        await logEvent(event_data);
+        return apiResponse.successResponseWithData(
+          res,
+          responses(req.user.preferredLanguage).shipment_created,
+          result
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
 
 exports.newShipment = [
   auth,

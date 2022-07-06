@@ -249,6 +249,15 @@ export const createShipment = async (data) => {
   }
 };
 
+export const createShipmentForTpl = async (data) => {
+  try {
+    const result = await axios.post(config().createShipmentForTpl, data);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const newShipment = async (data) => {
   try {
     const result = await axios.post(config().newShipmentUrl, data);

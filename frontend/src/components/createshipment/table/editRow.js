@@ -137,7 +137,7 @@ const EditRow = (props) => {
               placeholder='Manufacturer'
               value={prod.manufacturer}
               onChange={(e) => {
-                handleManufacturerChange(index, e.target.value);
+                handleManufacturerChange(e.target.value,index );
               }}
             />
           ) : (

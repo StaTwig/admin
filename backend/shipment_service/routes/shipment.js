@@ -13,6 +13,7 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 router.post("/createShipment", ShipmentController.createShipment);
+router.post("/createShipmentForTpl", ShipmentController.createShipmentForTpl);
 router.post("/newShipment", ShipmentController.newShipment);
 router.post(
   "/receiveShipment",
