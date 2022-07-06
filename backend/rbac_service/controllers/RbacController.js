@@ -18,8 +18,6 @@ exports.getPermissions = [
           permissions
         );
       } else {
-        
-        console.log(req.params)
         const permissions = req.params.orgId ? await RbacModel.find({ orgId : req.params.orgId }) : await RbacModel.find({})
         return apiResponse.successResponseWithData(
           res,
