@@ -21,7 +21,7 @@ mongoose
 
 async function logEvent(data) {
   if (validate(data)) {
-    try{
+    try {
       return await Event.findOne(
         { eventID: data.eventID },
         async function (err, foundEvent) {
@@ -58,7 +58,7 @@ async function logEvent(data) {
           }
         }
       ).clone();
-    }catch(err){
+    } catch (err) {
       return await Event.findOne(
         { eventID: data.eventID },
         async function (err, foundEvent) {
@@ -94,7 +94,7 @@ async function logEvent(data) {
             return event.save();
           }
         }
-      )
+      );
     }
   } else {
     const err = {
