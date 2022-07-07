@@ -12,6 +12,8 @@ const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
 const ProductModel = require("../models/ProductModel");
 const AtomModel = require("../models/AtomModel");
+const TplOrgModel = require("../models/tplOrg");
+const TplWarehouseModel = require("../models/TplWarehouse");
 const Event = require("../models/EventModal");
 const Record = require("../models/RecordModel");
 const Sensor = require("../models/SensorModel");
@@ -825,6 +827,8 @@ exports.createShipmentForTpl = [
     try {
       let data = req.body;
       data.originalReceiver = data.receiver;
+      data.tplOrgId = req.user.organisationId;
+      data.isCustom = true;
       if (req.body.shippingDate.includes("/")) {
         var shipmentData = req.body.shippingDate.split("/");
         const shippingDate =
@@ -884,7 +888,7 @@ exports.createShipmentForTpl = [
       }
       const process = confData.process;
       const supplierID = req.body.supplier.id;
-      const supplierOrgData = await OrganisationModel.findOne({
+      const supplierOrgData = await TplOrgModel.findOne({
         id: req.body.supplier.id,
       });
       if (supplierOrgData == null) {
@@ -895,7 +899,7 @@ exports.createShipmentForTpl = [
         );
       }
 
-      const receiverOrgData = await OrganisationModel.findOne({
+      const receiverOrgData = await TplOrgModel.findOne({
         id: req.body.receiver.id,
       });
       if (receiverOrgData == null) {
@@ -910,8 +914,7 @@ exports.createShipmentForTpl = [
       const receiverId = req.body.receiver.id;
       const receiverName = receiverOrgData.name;
       const receiverAddress = receiverOrgData.postalAddress;
-      if (flag != "N") {
-        const suppWarehouseDetails = await WarehouseModel.findOne({
+        const suppWarehouseDetails = await TplWarehouseModel.findOne({
           id: data.supplier.locationId,
         });
         if (suppWarehouseDetails == null) {
@@ -920,18 +923,7 @@ exports.createShipmentForTpl = [
             responses(req.user.preferredLanguage).supplier_not_found
           );
         }
-        var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-        const suppInventoryDetails = await InventoryModel.findOne({
-          id: suppInventoryId,
-        });
-        if (suppInventoryDetails == null) {
-          return apiResponse.ErrorResponse(
-            res,
-            "suppInventoryDetails" +
-              responses(req.user.preferredLanguage).not_found
-          );
-        }
-        const recvWarehouseDetails = await WarehouseModel.findOne({
+        const recvWarehouseDetails = await TplWarehouseModel.findOne({
           id: data.receiver.locationId,
         });
         if (recvWarehouseDetails == null) {
@@ -998,7 +990,6 @@ exports.createShipmentForTpl = [
           responses(req.user.preferredLanguage).shipment_created,
           result
         );
-      }
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -2713,8 +2704,9 @@ exports.fetchGMRShipments = [
           },
         };
       }
-      const count = await ShipmentModel.count({ ...filter, isCustom: true, $or : [{ "supplier.id" : req.user.organisationId }, { "receiver.id" : req.user.organisationId }]});
-      const shipments = await ShipmentModel.find({ ...filter, isCustom: true, $or : [{ "supplier.id" : req.user.organisationId }, { "receiver.id" : req.user.organisationId }]})
+      console.log(req.user.organisationId)
+      const count = await ShipmentModel.count({ ...filter, isCustom: true,  tplOrgId : req.user.organisationId });
+      const shipments = await ShipmentModel.find({ ...filter, isCustom: true,  tplOrgId : req.user.organisationId })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });

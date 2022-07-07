@@ -154,7 +154,6 @@ const CreateShipment = (props) => {
       const userType = intelEnabled ? "TPL" : "regular"
       const orgs = await getAllOrganisations(userType);
       const orgSplit = user.organisation?.split("/");
-      console.log("orgs ", orgs);
       const organisations = orgs.data.map((item) => {
         return {
           ...item,
@@ -162,7 +161,6 @@ const CreateShipment = (props) => {
           label: item.name,
         };
       })
-      console.log("organisatoins ", organisations);
       setAllOrganisations([
         ...organisations,
         { name: 'new org', value: 'New org', label: 'New Org' }
@@ -437,12 +435,6 @@ const CreateShipment = (props) => {
     setOrderDetails(soDetailsClone);
   };
 
-  const handleBatchChange = (value, i) => {
-    console.log("Batch:", value, i);
-    const soDetailsClone = { ...OrderDetails };
-    soDetailsClone.products[i].batchNumber = value;
-    setOrderDetails(soDetailsClone);
-  };
 
 
   const handleLabelIdChange = (value, i) => {
@@ -450,28 +442,6 @@ const CreateShipment = (props) => {
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = async (index, value, setFieldValue) => {
-    try {
-      let newArr = [...addProducts];
-      newArr[index]["type"] = value;
-      setAddProducts(newArr)
-      setAddProducts((prod) => [...newArr]);
-
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  };
-
-  const onManufacturerChange = async (index, value, setFieldValue) => {
-    try {
-      let newArr = [...addProducts];
-      newArr[index]["manufacturer"] = value;
-      setAddProducts(newArr)
-      setAddProducts((prod) => [...newArr]);
-    } catch (err) {
-      setErrorMessage(err);
-    }
-  }
 
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(
@@ -558,7 +528,6 @@ const CreateShipment = (props) => {
           reset: OrderId,
         }}
         validate={(values) => {
-          console.log("VALUES ARE",values);
           const errors = {};
           if (!values.fromOrg) {
             errors.fromOrg = "Required";
@@ -591,7 +560,6 @@ const CreateShipment = (props) => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(values)
           setSubmitting(false);
           onAssign(values);
         }}
@@ -606,7 +574,6 @@ const CreateShipment = (props) => {
           isSubmitting,
           setFieldValue,
           dirty,
-          handleManufacturerChange,
         }) => (
           <form onSubmit={handleSubmit} className='mb-3'>
             <div className='row mb-3'>
@@ -685,8 +652,6 @@ const CreateShipment = (props) => {
                                 return w.id === supplierWarehouse[i];
                               }
                             });
-                            setFieldValue("fromOrg", "");
-                            setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
                               result.poDetails[0].customer.organisation.id +
@@ -1085,7 +1050,6 @@ const CreateShipment = (props) => {
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             // setFieldValue("fromOrg", senderOrganisation[0]);
-                            setFieldValue("fromOrgLoc", v.value);
                             // setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
@@ -1095,7 +1059,6 @@ const CreateShipment = (props) => {
                               batchNumber: "",
                             };
                             setAddProducts((prod) => [...prod, newArr]);
-                            console.log({ senderOrganisation: senderOrganisation[0], FromOrgLabel: v.label });
                           }}
                           value={
                             values.fromOrgLoc === ""
@@ -1214,7 +1177,6 @@ const CreateShipment = (props) => {
                               : { value: values.toOrg, label: receiverOrgId }
                           }
                           onChange={(v) => {
-                            console.log({ v });
                             // if (v.label === 'New Org') {
                             //   setToNewOrg('');
                             //   setEnablToeNewOrg(true);
@@ -1568,9 +1530,9 @@ const CreateShipment = (props) => {
                     warehouseID={senderOrgId}
                     product={addProducts}
                     t={t}
-                    products={products}
+                    products={addProducts}
                     category={category}
-                    handleManufacturerChange={(v, i) => {
+                    handleCategoryChange = {(v,i) => {
                       let buffer = addProducts.map(product => ({
                         productName: product.productName ? product.productName : product,
                         productCategory: product.type,
@@ -1581,9 +1543,7 @@ const CreateShipment = (props) => {
                             quantity: product.quantity,
                       }))                      
                       let newArr = [...buffer];
-                      console.log("VASLUE IS",i)
-                      newArr[i].manufacturer = v;                      
-                      console.log(newArr)
+                      newArr[i].productCategory = v;   
                       setAddProducts(newArr)
                         setFieldValue(
                           "products",
@@ -1597,13 +1557,55 @@ const CreateShipment = (props) => {
                             quantity: row.quantity,
                           }))
                         );
-                        setAddProducts((prod) => [...newArr]);
+                        setFieldValue("products", addProducts);
+                        //setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleProductChange={(i,v)  => {
+                      let newArr = [...addProducts];
+                      newArr[i].productName = v;  
+                      setFieldValue(
+                        "products",
+                        newArr.map((product) => ({
+                          productCategory: product.type,
+                            productQuantity: product.productQuantity,
+                            batchNumber: product.batchNumber,
+                            productName: product.name,
+                            manufacturer: product.manufacturer,
+                            quantity: product.quantity,
+                        }))
+                      );                     
+                      
+                      setFieldValue("products", addProducts);
+                      setAddProducts(newArr);
+                      // setProducts(prod => [...newArray]);
+                    }}
+                    handleManufacturerChange={(v, i) => {               
+                      let newArr = [...addProducts];
+                      setAddProducts(newArr)
+                      newArr[i].manufacturer = v;                      
+                      
+                      setAddProducts(newArr)
+                        setFieldValue(
+                          "products",
+                          newArr.map((row) => ({
+                            productCategory: row.type,
+                            productID: row.id,
+                            productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
+                            productName: row.name,
+                            manufacturer: row.manufacturer,
+                            quantity: row.quantity,
+                          }))
+                        );
+                        setFieldValue("products", addProducts);
+                        //setAddProducts((prod) => [...newArr]);
                     }}
                     handleQuantityChange={(v, i) => {                     
                       let newArr = [...addProducts];
                       setAddProducts(newArr)
-                      console.log(newArr)
+                      
                       newArr[i].productQuantity = v;
+                      
                       setFieldValue(
                         "products",
                         newArr.map((row) => ({                          
@@ -1614,14 +1616,14 @@ const CreateShipment = (props) => {
                           manufacturer: row.manufacturer,
                           additionalData: row
                         }))         
-                      );                  
-                      setAddProducts((prod) => [...newArr]);
+                      );          
+                      setFieldValue("products", addProducts);        
+                      //setAddProducts((prod) => [...newArr]);
                     }}
                     handleBatchChange={(v, i, batch) => {
                       let newArr = [...addProducts];
-                      console.log("VASLUE IS",v)
                       newArr[i].batchNumber = v;                      
-                      console.log(newArr)
+                      
                       setAddProducts(newArr)
                         setFieldValue(
                           "products",
@@ -1635,7 +1637,8 @@ const CreateShipment = (props) => {
                             quantity: row.quantity,
                           }))
                         );
-                        setAddProducts((prod) => [...newArr]);
+                        setFieldValue("products", addProducts);
+                        //setAddProducts((prod) => [...newArr]);
                     }}
                     enableDelete={true}
                     onRemoveRow={(index) => {
@@ -1667,37 +1670,8 @@ const CreateShipment = (props) => {
                       else setFieldValue("products", []);
                       setAddProducts((prod) => [...newArr]);
                     }}
-                    handleProductChange={(index, item) => {
-                      addProducts.splice(index, 1, item);
-                      let newArr = [...addProducts];
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productId: row.id,
-                          batchNumber: row.batchNumber,
-                          id: row.id,
-                          productQuantity: "",
-                          quantity: "",
-                          name: row.name,
-                          type: row.type,
-                          manufacturer: row.manufacturer,
-                          unitofMeasure: row.unitofMeasure,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-
-                      const prodIndex = products.findIndex(
-                        (p) => p.id === item.id
-                      );
-                      let newArray = [...products];
-                      newArray[prodIndex] = {
-                        ...newArray[prodIndex],
-                        isSelected: true,
-                      };
-                      // setProducts(prod => [...newArray]);
-                    }}
+                    
                     handleLabelIdChange={handleLabelIdChange}
-                    handleCategoryChange={onCategoryChange}
                   />
                   <div className='d-flex justify-content-between'>
                     <button
