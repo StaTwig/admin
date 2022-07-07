@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
+import { getOrgUsers } from "../../actions/organisationActions";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
@@ -19,7 +20,7 @@ const NUModal = (props) => {
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
   const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
-
+  const dispatch = useDispatch();
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
     return state.organisation.users;
@@ -46,6 +47,10 @@ const NUModal = (props) => {
     setWH(name);
     setData({ ...data, ...{ warehouse: id } });
   };
+
+  useEffect(() => {
+    dispatch(getOrgUsers());
+  }, [])
 
   // Enabling next button on validation
   useEffect(() => {
@@ -276,11 +281,13 @@ const NUModal = (props) => {
                   placeholder={t('enter_email')}
                   readOnly={data?.ref != undefined ? true : false}
                   onChange={(e) => {
-                    verifyEmailIds(e);
                     setEmail(e);
                     handleChange(e);
                   }}
-                  onBlur={handleBlur}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    verifyEmailIds(e);
+                  }}
                   value={values.email}
                   disabled={changeComponent === "address" && disableButton ? true : false}
                 />
