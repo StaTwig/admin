@@ -74,6 +74,16 @@ const Orders = (props) => {
     setStatusFilter(statusFilterSelected);
     setSkip(0);
     if (visible === "one") {
+      console.log({   toFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilter,
+        dateFilter,
+        statusFilterSelected,
+        skip: 0,
+        limit,
+        fromFilterDate,
+        toFilterDate})
       dispatch(turnOn());
       const outboundRes = await getSentPOs(
         toFilter,
@@ -112,7 +122,8 @@ const Orders = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (visible === "one" && alerts === false) {
+      const updatedFilter = Boolean(dateFilter || productNameFilter || toFilter || fromFilter || orderIdFilter || statusFilter || locationFilter); 
+      if (visible === "one" && alerts === false && !updatedFilter) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -156,7 +167,7 @@ const Orders = (props) => {
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count);
         dispatch(turnOff());
-      } else if (visible === "two" && alerts === false) {
+      } else if (visible === "two" && alerts === false && !updatedFilter) {
         setDateFilter("");
         setProductNameFilter("");
         setToFilter("");
@@ -227,6 +238,7 @@ const Orders = (props) => {
     toFilterDate,
     fromFilter,
   ]);
+  console.log("outboundRecords ", outboundRecords)
 
   const onPageChange = async (pageNum) => {
     const recordSkip = (pageNum - 1) * limit;
@@ -347,6 +359,18 @@ const Orders = (props) => {
     setSkip(0);
     if (visible === "one") {
       dispatch(turnOn());
+      console.log({
+        toFilter,
+        orderIdFilter,
+        productNameFilter,
+        locationFilterSelected,
+        dateFilter,
+        statusFilter,
+        skip: 0,
+        limit,
+        fromFilterDate,
+        toFilterDate
+      })
       const outboundRes = await getSentPOs(
         toFilter,
         orderIdFilter,
@@ -360,6 +384,7 @@ const Orders = (props) => {
         toFilterDate
       ); //to, orderId, productName, deliveryLocation, date, skip, limit;
       dispatch(turnOff());
+      console.log("data ", outboundRes.data.outboundPOs )
       setOutboundRecords(outboundRes.data.outboundPOs);
       setCount(outboundRes.data.count);
     } else {
