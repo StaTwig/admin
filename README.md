@@ -2,7 +2,7 @@
 
 Vaccine Ledger
 
-# Online Links
+## Online Links
 
 [Roadmap](https://gitlab.com/statwig-public/theledger/-/blob/development/docs/roadmap.png)
 
@@ -12,11 +12,11 @@ Vaccine Ledger
 
 [Issues](https://gitlab.com/statwig-public/theledger/-/issues)
 
-# GitFlow
+## GitFlow
 
 Branch out from `development` , Merge requests shall be to development, no direct commits to `development` or `master`
 
-# Ports for different services:
+## Ports for different services
 
 |        Services        | Docker Port |
 | :--------------------: | :---------: |
@@ -34,24 +34,24 @@ Branch out from `development` , Merge requests shall be to development, no direc
 |   AdvancedAnalytics    |    3015     |
 |   lastmilemanagement   |    3016     |
 
-# Flow
+## Flow
 
 **Browser** / **Client** ---> **traefik** ---> **Services**
 
-Frontends also is a service , a docker container of nginx serving the files
+Frontend also is a service , a docker container of nginx serving the files
 
 Images are Served from S3 private bucket
 
-# Dependencies:
+## Dependencies
 
 1. Docker
 2. Docker-Compose
 
 Dependencies can be installed by running `dependencyinstaller.sh`
 
-## Deployment Strategy:
+## Deployment Strategy
 
-**Docker with Docker Compose**
+Docker with Docker Compose\*\*
 
 - [x] Every Service has a Dockerfile in its root folder, which reflects in building that Docker Image.
 - [x] Docker-compose.yml file present in root of Repository has all the docker service configuration , Traefik routing rules and Loadbalancing.
@@ -59,7 +59,7 @@ Dependencies can be installed by running `dependencyinstaller.sh`
 - [x] All static configuration of Traefik is present in "traefik.toml" file
 - [x] Dynamic Configuration is present in the file "traefik_dynamic.toml" . Security Configuration is also included
 
-* Important
+### Important
 
 - [x] acme.json in the root folder is used the TLS Challenge LetsEncrypt for HTTPS in Traefik. Make sure that acme.json has Read and Write Permissions.
 
@@ -68,22 +68,22 @@ Dependencies can be installed by running `dependencyinstaller.sh`
 - [x] Create a file, by `touch acme.json`
 - [x] Permission to file , `sudo chmod 600 acme.json`
 
-## Deployment Steps:
+## Deployment Steps
 
 1. Login to server
 2. Git clone for fresh deployment or git pull to pull latest changes
 3. Run Dependency installer script to download Docker Engine , Docker Compose and create Docker Network named : Proxy
 4. Create a folder `env`
 
-```
+```bash
 mkdir env
 ```
 
-Add a file `ledger.env` with the environment varibles
+Add a file `ledger.env` with the environment variables
 
 5. Build the images
 
-```
+```bash
 docker-compose -f Docker-compose.yml build
 ```
 
@@ -91,43 +91,43 @@ Builds all the docker containers as images and docker can caches the old ones
 
 All new built images are tagged with `latest` tag
 
-```
-docker-compse -f Docker-compose.yml up -d
+```bash
+docker-compose -f Docker-compose.yml up -d
 ```
 
 Running all services in as a daemon process
 
 6. If wanted to see the logs(console) / Run process in Foreground
 
-```
-docker-compse -f Docker-compose.yml up
+```bash
+docker-compose -f Docker-compose.yml up
 ```
 
 to exit `Ctrl + c` will exit all running docker images.
 
-- Important - Make sure to run before starting the services up again, for preventing any un-ordinary behaviour
+- Important - Make sure to run before starting the services up again, for preventing any un-ordinary behavior
 
-```
-docker-compse -f Docker-compose.yml down
+```bash
+docker-compose -f Docker-compose.yml down
 ```
 
-7. To properlly stop all services
+7. To properly stop all services
 
-```
-docker-compse -f Docker-compose.yml down
+```bash
+docker-compose -f Docker-compose.yml down
 ```
 
 **Note:**
 
 1. To remove Previous Build images
 
-```
+```bash
 docker image prune -a
 ```
 
 2. To clear build cache
 
-```
+```bash
 docker builder prune -a
 ```
 
@@ -135,23 +135,23 @@ docker builder prune -a
 
 1. Add the docker group if it doesn’t already exist
 
-```
-$ sudo groupadd docker
+```bash
+sudo groupadd docker
 ```
 
 2. Add the connected user $USER to the docker group. Optionally change the username to match your preferred user.
 
-```
-$ sudo gpasswd -a $USER docker
+```bash
+sudo gpasswd -a $USER docker
 ```
 
 **IMPORTANT**: Log out and log back in so that your group membership is re-evaluated. 3. Restart the `docker` daemon
 
-```
-$ sudo service docker restart
+```bash
+sudo service docker restart
 ```
 
-## Notice :
+## Notice
 
 - Don't store any data that needs to be persistent in the services, as docker containers are volatile and data can be lost , for every docker image restart / New start
 - We are not binding an Volume to docker containers
@@ -168,7 +168,7 @@ redis-cli -h <Hostname> -a StaTwig2021
 
 - Docker & Docker compose :
 
-[Docker Offical Documentation 📄](https://docs.docker.com)
+[Docker Official Documentation 📄](https://docs.docker.com)
 
 [Digital Ocean - Docker Article 📃](https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes)
 
@@ -180,14 +180,14 @@ redis-cli -h <Hostname> -a StaTwig2021
 
 [Digital Ocean Docker Traefik HTTPS Setup ✅](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04)
 
-[ Traefik Article 📃](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/)
+[Traefik Article 📃](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/)
 
 ## Test Strategy for Vaccineledger
 
 Our test strategy is a guideline to be followed to achieve the test objective and execution of test types mentioned in the testing plan. It deals with risk analysis, competency plans, and test objectives.
 QA team ensures all the core functionality is tested every single day both Manually and Automation scripts.
 
-## The QA team ensures that all the below points are addressed via test coverage.
+## The QA team ensures that all the below points are addressed via test coverage
 
 1. ​​ We try to eliminate any functional defects at early stages.
 2. Better business and functional scenario coverage.
@@ -195,7 +195,7 @@ QA team ensures all the core functionality is tested every single day both Manua
 4. Try to discover any uncovered areas during daily brainstorming activities within the QA team.
 5. Gain superior control over various business processes and tests accordingly.
 
-## Techniques QA team following to ensure better test coverage.
+## Techniques QA team following to ensure better test coverage
 
 1. Statement Coverage ensures that all the statements/Test cases in the source code/positive flow have been tested at least once a day. Hence It verifies what the written code is expected to do and not to do
 2. Decision/Branch coverage ​​helps in covering both the true and false conditions which the QA team overlooks during statement coverage.
@@ -209,7 +209,7 @@ QA team ensures all the core functionality is tested every single day both Manua
 2. Identified regression set for automation - collaboration with business Analysts, statistical analysis of application logs for most used features
 3. Prioritized identified automation test-set based on business impact into core and functional regression test suites
 4. Prepared automation strategy and identification of Automation canonizations required.
-5. Developed reusable components, automated test cases, test data sets and parameterizations.
+5. Developed reusable components, automated test cases, test data sets and parameterization.
 
 ## Automation Technology details
 
@@ -217,4 +217,4 @@ QA team ensures all the core functionality is tested every single day both Manua
 2. Browser support includes: Firefox (1.5+), Internet Explorer (6.0 onwards), Edge and Google Chrome. Theoretically at least, any modern browser that supports JavaScript such as Safari (1.3+), Mozilla Suite (1.6+, 1.7+) and Opera (8) etc
 3. OS support includes: Windows,Mac & Mobile (Android & iOS)
 
-[ Software Test Plan for Vaccine Ledger 📃](https://docs.google.com/document/d/1jwXpneiggd7duiuxSUVbNvjywzQH0a7d1QBHnXM58NQ/edit#heading=h.31ne2bdq483w)
+[Software Test Plan for Vaccine Ledger 📃](https://docs.google.com/document/d/1jwXpneiggd7duiuxSUVbNvjywzQH0a7d1QBHnXM58NQ/edit#heading=h.31ne2bdq483w)

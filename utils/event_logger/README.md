@@ -6,7 +6,7 @@ This is a utility helper which can be imported into any method and called with t
 
 1. Update the Mongo URL in the Config FILE | config.js or set "MONGODB_URL" as an env variable
    `let config = {`
-   ` MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
+   `MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
    `}`
 
 **--------------------------------------------------------------------------------**
