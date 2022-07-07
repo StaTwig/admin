@@ -3,7 +3,6 @@ import "./style.scss";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import Typography from "@material-ui/core/Typography";
 import Tablee from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -81,7 +80,7 @@ const Table = (props) => {
                     inventory.payloadData?.data?.quantityPurchased}
                   {inventory.productDetails.unitofMeasure ? (
                     inventory.productDetails.unitofMeasure.name ? (
-                      <span className="dark">
+                      <span className='dark'>
                         {" ("}
                         {inventory.productDetails.unitofMeasure.name}
                         {")"}
@@ -140,7 +139,7 @@ const Table = (props) => {
               </AccordionSummary>
               <Divider />
               <AccordionDetails>
-                <div className="width-full">
+                <div className='width-full'>
                   <TableContainer>
                     <Tablee className='table-borderless lg acc-table'>
                       <TableBody>
@@ -231,9 +230,7 @@ const Table = (props) => {
                             </TableRow>
                           </div>
                         )}
-                        <div
-                          className='button-space-area'
-                        >
+                        <div className='button-space-area'>
                           {inventory.eventTypePrimary === "CREATE" ||
                           inventory.eventTypePrimary === "RECEIVE" ? (
                             <button
