@@ -99,7 +99,7 @@ const EditRow = (props) => {
                     placeholder='Product Category'
                     value={prod.type}
                     onChange={(e) =>
-                      handleCategoryChange(index, e.target.value)
+                      handleCategoryChange( e.target.value, index)
                     }
                   />
                 ) : (
@@ -137,7 +137,7 @@ const EditRow = (props) => {
               placeholder='Manufacturer'
               value={prod.manufacturer}
               onChange={(e) => {
-                handleManufacturerChange(index, e.target.value);
+                handleManufacturerChange(e.target.value,index );
               }}
             />
           ) : (
