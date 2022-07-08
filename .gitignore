@@ -139,3 +139,5 @@ pre-deploy*.sh
 
 acme.json
 cache-data/
+
+.vscode/
