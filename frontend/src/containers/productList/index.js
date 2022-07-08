@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 const ProductListContainer = (props) => {
   const { t } = useTranslation();
   const [skip, setSkip] = useState(5);
-  const [limit, setLimit] = useState(5);
+  const [limit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
 
   const dispatch = useDispatch();

@@ -9,10 +9,9 @@ import { formatDate } from "../../../utils/dateHelper";
 import Pagination from "@material-ui/lab/Pagination";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
-
-
 function Table(props) {
-  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  const intelEnabled =
+    props.user.type === "Third Party Logistics" ? true : false;
   const dispatch = useDispatch();
   const { shpmnts, t, shouldEnable } = props;
   const shipments = shpmnts();
@@ -33,9 +32,7 @@ function Table(props) {
           data={props.data}
           shipmentIdList={props.shipmentIdList}
           shouldEnable={shouldEnable}
-          supplierReceiverList={
-           intelEnabled ? [] : props.supplierReceiverList
-          }
+          supplierReceiverList={intelEnabled ? [] : props.supplierReceiverList}
           setShipmentIdFilterOnSelect={props.setShipmentIdFilterOnSelect}
           setFromShipmentFilterOnSelect={props.setFromShipmentFilterOnSelect}
           setToShipmentFilterOnSelect={props.setToShipmentFilterOnSelect}
@@ -51,7 +48,6 @@ function Table(props) {
           t={t}
         />
         <tbody>
-
           {shipments.length === 0 && (
             <div className='rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none'>
               {t("no_records_found")}
