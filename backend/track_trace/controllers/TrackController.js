@@ -14,7 +14,7 @@ const checkPermissions =
 exports.fetchGoodsByID = [
   (req, res) => {
     try {
-      goodsObject = [
+      const goodsObject = [
         {
           Product: "OPV",
           Quantity: "20000",
@@ -48,7 +48,7 @@ exports.fetchGoodsByID = [
 exports.fetchTracking = [
   (req, res) => {
     try {
-      trackingObject = [
+      const trackingObject = [
         {
           user: req.user.email,
           Location: "Hyderabad, India",
@@ -309,7 +309,7 @@ exports.track = [
         } else {
           return apiResponse.ErrorResponse(
             res,
-            `Access Denied, User with Role ${req.user.role} doesn't have Permision to Track & Trace`
+            `Access Denied, User with Role ${req.user.role} doesn't have Permission to Track & Trace`
           );
         }
       });
