@@ -7,7 +7,6 @@ const POModel = require("../models/POModel");
 const ShippingOrderModel = require("../models/ShippingOrderModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const OrganisationModel = require("../models/OrganisationModel");
-//this helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 
