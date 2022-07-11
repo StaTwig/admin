@@ -55,7 +55,7 @@ const DashBoardContainer = (props) => {
 
   useEffect(() => {
     dispatch(getRequestsPending());
-    dispatch(getPermissions());
+    props.user.organisationType == "Third Party Logistics" ? dispatch(getPermissions(props.user.organisationId)): dispatch(getPermissions());
     dispatch(getRecentReqSent());
     dispatch(getAllOrganisations());
     dispatch(getOrgActiveUsers());
