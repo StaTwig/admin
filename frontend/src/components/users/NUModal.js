@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { t } from "i18next";
+import { getOrgUsers } from "../../actions/organisationActions";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
@@ -18,8 +19,8 @@ const NUModal = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(props.data?.phoneNumber);
   const [userAlreadyExits, setUserAlreadyExits] = useState(false);
   const [addUserBtnDisable, setAddUserBtnDisable] = useState(true);
-  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage, defaultRoles } = props;
-
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
+  const dispatch = useDispatch();
   const usersList = useSelector((state) => {
     // setUsersData(state.organisation.users);
     return state.organisation.users;
@@ -47,6 +48,10 @@ const NUModal = (props) => {
     setData({ ...data, ...{ warehouse: id } });
   };
 
+  useEffect(() => {
+    dispatch(getOrgUsers());
+  }, [])
+
   // Enabling next button on validation
   useEffect(() => {
     var flag = false;
@@ -70,7 +75,7 @@ const NUModal = (props) => {
     if (!data?.role) {
       flag = true;
     }
-    
+
     setDisableBtn(flag);
   })
 
@@ -221,9 +226,9 @@ const NUModal = (props) => {
                 </div>
               </div>
             }
-            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
-              style={{ justifyContent: 'space-between' }}>
-              <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
+            {/* <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
+              style={{ justifyContent: 'space-between' }}> */}
+            {/* <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <input
                   type="text"
                   name="email"
@@ -261,8 +266,9 @@ const NUModal = (props) => {
                     value={values.last_name}
                   />
                 </div>
-              </div>
-            }
+              </div> */}
+            {/* } */}
+
             <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow"
               style={{ justifyContent: 'space-between' }}>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
@@ -275,23 +281,25 @@ const NUModal = (props) => {
                   placeholder={t('enter_email')}
                   readOnly={data?.ref != undefined ? true : false}
                   onChange={(e) => {
-                    verifyEmailIds(e);
                     setEmail(e);
                     handleChange(e);
                   }}
-                  onBlur={handleBlur}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    verifyEmailIds(e);
+                  }}
                   value={values.email}
                   disabled={changeComponent === "address" && disableButton ? true : false}
                 />
               </div>
               <div className="input-group" style={{ width: '45%', alignItems: 'center' }}>
                 <PhoneInput
-                  className={`form-group mobile-number
-                  ${phoneNumberTaken ? "border-danger" : ""}
-                    `}
+                  className={`form-group mobile-number ${errors.email ? "border-danger" : ""
+                    }`}
                   country={"cr"}
-                  preferredCountries={["cr"]}
+                  preferredCountries={["cr", "in"]}
                   placeholder={t("enter_phone_number")}
+                  inputStyle={{ maxWidth: "95%" }}
                   style={{ position: "absolute", marginLeft: "2%", marginBottom: "0.5%" }}
                   value={phoneNumber}
                   disabled={props.isAddNewUser ? false : true}
@@ -310,7 +318,7 @@ const NUModal = (props) => {
                   <span>{t(userAlreadyExits)}</span>
                 </div>
               )}
-              
+
               {phoneNumberTaken && (
                 <div style={{ position: "absolute", top: "9.6rem", left: "20rem", zIndex: "5", color: "rgb(244, 33, 46)" }}>
                   <span>{t(phoneNumberTaken)}</span>
@@ -328,22 +336,47 @@ const NUModal = (props) => {
             <div className="p-1" ref={scrolling} style={{ height: "auto", overflow: "scroll", minHeight: "5rem", overflowX: "hidden", maxHeight: "20rem" }}>
               {changeComponent === "role" ? (
                 <div>
-                  {permissions.map((permission, index) => (
-                    <Role
-                      key={index}
-                      title={permission.role}
-                      description={permission.role + " " + t("Description")}
-                      selectedValue={selectedValue}
-                      setSelectedValue={setRole}
-                      i={index}
-                      value={permission.role}
-                      listPermission={permission.permissions}
-                      name="role"
-                      handleBlur={handleBlur}
-                      handleChange={handleChange}
-                      disableRoleBtn={setDisanleRole}
-                    />
-                  ))}
+                  {props?.defaultRoles && props?.defaultRoles.length !== 0 ? props?.defaultRoles.map((per, index) => {
+                    return (
+                      <Role
+                        key={index}
+                        title={per.role}
+                        description={per.role + " " + t("Description")}
+                        selectedValue={selectedValue}
+                        setSelectedValue={setRole}
+                        i={index}
+                        value={per.role}
+                        listPermission={per.permissions}
+                        name="role"
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        disableRoleBtn={setDisanleRole}
+                        per={per}
+                      />
+                      // <></>
+                    )
+                  }) :
+                    permissions.map((per, index) => {
+                      return (
+                        <Role
+                          key={index}
+                          title={per.role}
+                          description={per.role + " " + t("Description")}
+                          selectedValue={selectedValue}
+                          setSelectedValue={setRole}
+                          i={index}
+                          value={per.role}
+                          listPermission={per.permissions}
+                          name="role"
+                          handleBlur={handleBlur}
+                          handleChange={handleChange}
+                          disableRoleBtn={setDisanleRole}
+                          per={per}
+                        />
+                        // <></>
+                      )
+                    })
+                  }
                   {errors.role && touched.role && (
                     <span className="pl-3 error-msg text-danger">
                       {errors.role}
@@ -393,15 +426,15 @@ const NUModal = (props) => {
               {changeComponent === "role" ?
                 (
 
-                  <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0}}
+                  <button type="button" className="ml-3 btn btn-orange" onClick={() => { setChangeComponent('address'); setButtonText('ADD USER'); scrolling.current.scrollTop = 0 }}
                     disabled={disableButton || userAlreadyExits || phoneNumberTaken}>
                     {t(buttonText)}
                   </button>
-                  ) : (
-                    <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
-                      {t(buttonText)}
-                    </button>
-                  )}
+                ) : (
+                  <button type="button" onClick={() => { formikRef.current.submitForm() }} className="ml-3 btn btn-orange" disabled={addUserBtnDisable || userAlreadyExits}>
+                    {t(buttonText)}
+                  </button>
+                )}
               {changeComponent === "address" &&
                 <button
                   type="button"

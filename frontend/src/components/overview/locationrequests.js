@@ -5,6 +5,7 @@ import { formatDate } from "../../utils/dateHelper";
 import { getAddress } from "../../utils/commonHelper";
 import { config } from "../../config";
 import { t } from "i18next";
+import defaultIcon from "../../assets/icons/user.png";
 
 const LocationRequests = (props) => {
   const {
@@ -18,13 +19,15 @@ const LocationRequests = (props) => {
     modifyLocations,
   } = props;
   const imgDomain = config().imgDomainUrl;
+  const img = imgDomain + "/" + row?.employee.photoId;
+
   return (
     <div className="card flex-row justify-content-between rounded border border-white shadow bg-white mt-3 ml-2 p-3">
       <div className="d-flex flex-row w-50">
         <div className="userPic rounded">
           <img
-            src={imgDomain + row?.employee.photoId}
-            alt="User"
+            src={defaultIcon}
+            alt="Location"
             className="rounded"
           />
         </div>
@@ -72,7 +75,7 @@ const LocationRequests = (props) => {
               });
             }}
           >
-            {t('approve')}
+            {t('Approve')}
           </button>
           <button
             type="button"
@@ -87,7 +90,7 @@ const LocationRequests = (props) => {
               });
             }}
           >
-            {t('reject')}
+            {t('Reject')}
           </button>
         </div>
       </div>

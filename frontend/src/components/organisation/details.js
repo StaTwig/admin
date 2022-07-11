@@ -77,7 +77,6 @@ const Details = (props) => {
     }
 
     const clickOnType = (value) => {
-      debugger
       org.type = value
       modifyOrg({
         org
@@ -140,7 +139,7 @@ const Details = (props) => {
                   marginRight: `${org?.type === 'CUSTOMER_SUPPLIER' || 'IMPLEMENTATION PARTNER' ? `` : `3rem`}`,
                   display:"flex",
                   flexDirection:"row",
-                  whiteSpace:"nowrap",
+                  // whiteSpace:"nowrap",
                   overflow:"hidden",
                   textOverflow:"ellipsis",
                   maxWidth:"90%"}}>
