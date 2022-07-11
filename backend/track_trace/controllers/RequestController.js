@@ -22,7 +22,7 @@ exports.getRequests = [
       });
       return apiResponse.successResponseWithData(
         res,
-        `All Requests for Organisation Id : ${organisationId}`,
+        `All Requests for Organization Id : ${organisationId}`,
         requests
       );
     } catch (err) {
