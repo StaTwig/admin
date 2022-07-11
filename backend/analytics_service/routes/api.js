@@ -1,5 +1,5 @@
 const express = require("express");
-const authRouter = require("./auth");
+const authRouter = require("./analytics");
 const app = express();
 
 app.use("/analytics/", authRouter);
