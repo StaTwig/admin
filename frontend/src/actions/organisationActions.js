@@ -74,11 +74,11 @@ export const getRequestsPending = (skip = 0, limit = 5) => {
   }
 };
 
-export const getPermissions = () => {
+export const getPermissions = (org) => {
   try {
     return async (dispatch) => {
       dispatch(turnOn());
-      const result = await axios.get(config().getPermissionsUrl);
+      const result = org ? await axios.get(`${config().getPermissionsUrl}?orgId=${org}`) : await axios.get(config().getPermissionsUrl);
       dispatch({
         type: SET_PERMISSIONS,
         payload: result.data,

@@ -24,16 +24,16 @@ exports.getPermissions = [
   auth,
   async (req, res) => {
     try {
-      const { role } = req.query;
+      const { role, orgId } = req.query;
       if (role) {
-        const permissions = await RbacModel.find({ role });
+        const permissions = orgId ? await RbacModel.find({ role, orgId }) : await RbacModel.find({ role });
         return apiResponse.successResponseWithData(
           res,
           `Permissions of ${role}`,
           permissions
         );
       } else {
-        const permissions = await RbacModel.find({});
+        const permissions = orgId ? await RbacModel.find({ orgId }) : await RbacModel.find({});
         return apiResponse.successResponseWithData(
           res,
           "All Permissions",
