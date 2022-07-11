@@ -94,7 +94,6 @@ const DashBoard = (props) => {
               closeModal();
             }}
             onHide={closeModal}
-
             setData={setData}
             redirectToConfigurationPage={redirectToConfigurationPage}
             defaultRoles={defaultRoles}

@@ -4,7 +4,7 @@ const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const { default: axios } = require("axios");
 const dotenv = require("dotenv").config();
-const permissionsList = require("../helpers/utility")
+const utility = require("../helpers/utility")
 
 function getAllPermissions(permissions){
   var permsArray = [];
@@ -18,13 +18,13 @@ function getAllPermissions(permissions){
       }
     }
   }
-  
+  return permsArray;
 }
 exports.getPermissions = [
   auth,
   async (req, res) => {
     try {
-      const { role } = req.query;
+      const { role, orgId } = req.query;
       if (role) {
         const permissions = await RbacModel.find({ role }) ;
         return apiResponse.successResponseWithData(
@@ -75,25 +75,20 @@ exports.getRolesForTPL = [
         roles.push(element.role);
       });
       console.log("RESULTS LENGHT IS",results.length)
-      if(results.length >1){
+      if(results.length>0){
         return apiResponse.successResponseWithData(res, "All Roles", roles);
       }
       else {
-        console.log("NO ROLES AVAILABLE")
         console.log(req.user)
         const searchObj =  { role: "OrgAdmin", orgId: req.user.organisationId } 
+        console.log(getAllPermissions(utility.allPermissionsList))
+
         let rbac_object = await RbacModel.findOneAndUpdate(
           { ...searchObj },
-          { $set: permissionsList, permissions: getAllPermissions(permissionsList) },
+          { $set: utility.allPermissionsList, permissions: getAllPermissions(utility.allPermissionsList) },
           { new: true, upsert: true }
         );
-        const result = await axios.get(
-          process.env.LEDGER + "/rbacmanagement/api/rbacCache"
-        );
-        if (result.data == undefined) {
-          return apiResponse.errorResponse(res, result.data);
-        }
-        roles.push(permissionsList.role)
+        roles.push("OrgAdmin")
         return apiResponse.successResponseWithData(res, "All Roles", roles);
       }
     }
