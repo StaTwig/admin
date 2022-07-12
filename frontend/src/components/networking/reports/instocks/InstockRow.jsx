@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import BatchDetails from "./batchDetails/BatchDetails";
+import NetworkGraph from "../../networkGraphs/NetworkGraph";
 
 export default function InstockRow() {
   const [open, setOpen] = React.useState(false);
@@ -17,6 +18,17 @@ export default function InstockRow() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [openGraph, setOpenGraph] = React.useState(false);
+
+  const handleGraphOpen = () => {
+    setOpenGraph(true);
+  };
+
+  const handleGraphClose = () => {
+    setOpenGraph(false);
+  };
+
   return (
     <>
       <TableRow
@@ -66,7 +78,10 @@ export default function InstockRow() {
             <i class="fa-solid fa-chart-pie"></i>
             <span>Batch</span>
           </button>
-          <button className="nt-btn nt-btn-xs nt-btn-blue-alt">
+          <button
+            className="nt-btn nt-btn-xs nt-btn-blue-alt"
+            onClick={handleGraphOpen}
+          >
             <i class="fa-solid fa-chart-pie"></i>
             <span>View</span>
           </button>
@@ -99,6 +114,16 @@ export default function InstockRow() {
               </button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={openGraph}
+        onClose={handleGraphClose}
+        className="mi-custom-dialog"
+      >
+        <DialogContent className="mi-custom-dialog-content">
+          <NetworkGraph onClose={handleGraphClose} graph={"bar"} />
         </DialogContent>
       </Dialog>
     </>

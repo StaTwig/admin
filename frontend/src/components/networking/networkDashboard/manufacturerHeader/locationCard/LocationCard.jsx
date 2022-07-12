@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./LocationCard.scss";
 
 export default function LocationCard() {
+  const [MylocationFilter, setMylocationFilter] = useState(false);
+  const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
   return (
     <div className="location-card-container">
-      <div className="location-card my-card">
+      <div
+        className={`location-card my-card ${MylocationFilter && "active"}`}
+        onClick={() => {
+          setMylocationFilter(!MylocationFilter);
+        }}
+      >
         <div className="location-card-top">
           <div className="location-icon-space">
             <i className="fa-solid fa-location-crosshairs"></i>
@@ -17,8 +24,14 @@ export default function LocationCard() {
           {/* <p className="mi-body-sm f-500 mi-reset">ABC Manufacturer</p> */}
         </div>
       </div>
-
-      <div className="location-card partner-card">
+      <div
+        className={`location-card partner-card ${
+          PartnerlocationFilter && "active"
+        }`}
+        onClick={() => {
+          setPartnerlocationFilter(!PartnerlocationFilter);
+        }}
+      >
         <div className="location-card-top">
           <div className="location-icon-space">
             <i class="fa-solid fa-map-location-dot"></i>

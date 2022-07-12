@@ -26,14 +26,14 @@ export default function Networking() {
                   <i class="fa-solid fa-map-location-dot"></i>
                 </div>
               </div>
-              <div className="location-filter-btn filter-hide-sm">
+              {/* <div className="location-filter-btn filter-hide-sm">
                 <Checkbox {...label} />
                 <p className="mi-body-md f-500  mi-reset">My Location</p>
               </div>
               <div className="location-filter-btn filter-hide-sm">
                 <Checkbox {...label} />
                 <p className="mi-body-md f-500  mi-reset">Partner Location</p>
-              </div>
+              </div> */}
             </div>
             <NetworkMap />
           </div>
