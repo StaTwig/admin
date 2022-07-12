@@ -95,3 +95,12 @@ export const getOrganisationsProfile = async () => {
     return [];
   }
 };
+
+export const fetchUnregisteredOrganisations = async () => {
+  try {
+    const result = await axios.get(config().getUnregisteredOrganisations)
+    return result.data;
+  } catch(err) {
+    return [];
+  }
+}

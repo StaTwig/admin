@@ -103,7 +103,7 @@ const SignupContainer = (props) => {
           close={() => closeModal()}
           size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <OrganisationPopUp onHide={closeModal} onSignup={onSignup} />
+          <OrganisationPopUp onHide={closeModal} onSignup={onSignup} register={true} />
         </Modal>
       )}
       <MobileHeader {...props} />

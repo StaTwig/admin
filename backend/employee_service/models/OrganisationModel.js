@@ -21,6 +21,10 @@ const OrganisationSchema = new mongoose.Schema(
         name: "India",
       },
     },
+    isRegistered: {
+      type: Boolean,
+      default: true
+    },
     location: {
       type: Object,
       required: false,
