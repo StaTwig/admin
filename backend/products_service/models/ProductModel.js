@@ -29,6 +29,10 @@ const ProductSchema = new mongoose.Schema(
       required: false,
       default: "organization_id 1",
     },
+    manufacturerId: {
+      type: String,
+      required: true
+    },
     unitofMeasure: {
       type: Object,
       items: {

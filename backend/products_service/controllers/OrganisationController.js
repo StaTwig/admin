@@ -47,6 +47,26 @@ exports.getOrganisationsAtSignup = [
   },
 ];
 
+exports.getUnregisteredOrganisations = [
+  async (req, res) => {
+    try {
+      let organisations = await OrganisationModel.find({
+        isRegistered: false,
+        type: "VENDOR"
+      })
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisations",
+        organisations
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
 exports.saveNewOrg = [
   auth,
   async (req, res) => {
@@ -72,7 +92,6 @@ exports.saveNewOrg = [
     }
   }
 ]
-
 
 exports.addNewOrgNWarehouse = [
   auth,
@@ -120,7 +139,6 @@ exports.addNewOrgNWarehouse = [
     }
   }
 ]
-
 
 exports.saveNewWarehouse = [
   auth,

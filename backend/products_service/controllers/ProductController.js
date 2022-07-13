@@ -227,15 +227,37 @@ exports.addProduct = [
         };
 
         checkPermissions(permission_request, async (permissionResult) => {
-          const manufacturerCheck = OrganisationModel.exists({
+          let manufacturerRef;
+          
+          const manufacturerExists = await OrganisationModel.findOne({
             name: req.body.manufacturer,
           });
-          if (manufacturerCheck == false) {
-            const otherManufacturer = new OrganisationModel({
+          manufacturerRef = manufacturerExists;
+          if (!manufacturerExists) {
+            const orgCounter = await CounterModel.findOneAndUpdate(
+              { "counters.name": "orgId" },
+              {
+                $inc: {
+                  "counters.$.value": 1,
+                },
+              },
+              { new: true }
+            );
+            const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
+            const newManufacturer = new OrganisationModel({
+              id: organisationId,
               name: req.body.manufacturer,
+              type: "VENDOR",
+              isRegistered: false
             });
-            await otherManufacturer.save();
+            await newManufacturer.save();
+
+            manufacturerRef = newManufacturer;
           }
+          if(!manufacturerRef) {
+            throw new Error("Could not find/create a new manufacturer!");
+          }
+
           if (permissionResult.success) {
             const productId = await CounterModel.findOneAndUpdate(
               {
@@ -261,6 +283,7 @@ exports.addProduct = [
               shortName: req.body.shortName,
               type: req.body.type,
               manufacturer: req.body.manufacturer,
+              manufacturerId: manufacturerRef.id,
               pricing: req.body.pricing,
               photoId: `${Upload.key}`,
               unitofMeasure: JSON.parse(req.body.unitofMeasure),
@@ -488,3 +511,68 @@ exports.getproductname = [
     }
   },
 ];
+
+/* exports.syncOrganisationsWithProducts = [
+  async (req, res) => {
+    try {
+      const manufacturers = await ProductModel.aggregate([
+				{
+					$group: {
+						_id: "$manufacturer",
+						products: { $addToSet: "$id" },
+					},
+				},
+      ]);
+      
+      for(ind in manufacturers) {
+        console.log("Manufacturer - ", manufacturers[ind]._id);
+        let manufacturer;
+        const manufacturerExists = await OrganisationModel.findOne({ name: manufacturers[ind]._id });
+        if(!manufacturerExists) {
+          const orgCounter = await CounterModel.findOneAndUpdate(
+            { "counters.name": "orgId" },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            },
+            { new: true }
+          );
+          const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
+          const temp = new OrganisationModel({
+            id: organisationId,
+            name: manufacturers[ind]._id,
+            type: "VENDOR",
+            isRegistered: false
+          });
+          await temp.save();
+          manufacturer = temp;
+        } else {
+          manufacturer = manufacturerExists;
+        }
+
+        let products = manufacturers[ind].products;
+
+        console.log("Found - ", products.length);
+
+        const res = await ProductModel.updateMany(
+					{ id: { $in: products } },
+          { $set: { manufacturerId: manufacturer.id } }
+        );
+        
+        if(res.acknowledged) {
+          console.log("Modified - ", res.modifiedCount);
+        } else {
+          console.log("Error in modification - ", res);
+        }
+        console.log("---------------------------------------------------------------------");
+      }
+
+      return apiResponse.successResponse(res, "API execution complete. Check logs for results");
+
+    } catch(err) {
+      console.log("Error in sync - ", err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+] */

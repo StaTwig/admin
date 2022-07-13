@@ -72,16 +72,16 @@
   font-size: 1.6rem;
 }
 .mi-body-xl {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 .mi-body-md {
-  font-size: 1.125rem;
-}
-.mi-body-sm {
   font-size: 1rem;
 }
+.mi-body-sm {
+  font-size: 0.9rem;
+}
 .mi-body-xs {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 /* Body */
