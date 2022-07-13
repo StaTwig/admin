@@ -38,12 +38,12 @@ const EditRow = (props) => {
     coloumn5: t("exp_date"),
     coloumn6: t("quantity"),
 
-    img1: <img src={Product} width="15" height="15" alt="" />,
-    img2: <img src={user} width="15" height="15" alt="" />,
-    img3: <img src={Batch} width="15" height="15" alt="" />,
-    img4: <img src={date} width="15" height="15" alt="" />,
-    img5: <img src={date} width="15" height="15" alt="" />,
-    img6: <img src={Quantity} width="20" height="15" alt="" />,
+    img1: <img src={Product} width='15' height='15' alt='' />,
+    img2: <img src={user} width='15' height='15' alt='' />,
+    img3: <img src={Batch} width='15' height='15' alt='' />,
+    img4: <img src={date} width='15' height='15' alt='' />,
+    img5: <img src={date} width='15' height='15' alt='' />,
+    img6: <img src={Quantity} width='20' height='15' alt='' />,
   };
   const [editButtonStatus, setEditButtonStatus] = useState(false);
   const [changebtn, setbtn] = useState(false);
@@ -112,9 +112,9 @@ const EditRow = (props) => {
   if (
     check === "0" &&
     quantityChecker === 1 &&
-    typeof prod !== undefined &&
-    typeof (prod.name !== undefined) &&
-    typeof productsList != undefined
+    typeof prod !== "undefined" &&
+    typeof prod.name !== "undefined" &&
+    typeof productsList != "undefined"
   ) {
     let qty;
     for (var i = 0; i < productsList?.length; i++) {
@@ -139,7 +139,8 @@ const EditRow = (props) => {
     setSelectedIndex(index);
     setModelProduct(prod);
     let res = await axios.get(
-      `${config().fetchBatchesOfInventory}?productId=${prod.id
+      `${config().fetchBatchesOfInventory}?productId=${
+        prod.id
       }&wareId=${warehouseID}`
     );
     let buffer = res.data.data;
@@ -157,11 +158,12 @@ const EditRow = (props) => {
   }
   const numbersOnly = (e) => {
     // Handle paste
+    let key;
     if (e.type === "paste") {
-      var key = e.clipboardData.getData("text/plain");
+      key = e.clipboardData.getData("text/plain");
     } else {
       // Handle key press
-      var key = e.keyCode || e.which;
+      key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
     var regex = /[0-9]/;
@@ -189,16 +191,16 @@ const EditRow = (props) => {
     setBatches(buffer);
     setQuantity(value);
   };
-  
+
   return (
-    <div className="row ml-3 mr-1">
-      <div className="trow row mr-1 col">
-        <div className="col pl-4 tcell">
-          <div className=" p-0">
+    <div className='row ml-3 mr-1'>
+      <div className='trow row mr-1 col'>
+        <div className='col pl-4 tcell'>
+          <div className=' p-0'>
             {/* <div className="profileIconRound recived-bg">OPV</div> */}
 
-            <div className="d-flex flex-column">
-              <div className="title recived-text">
+            <div className='d-flex flex-column'>
+              <div className='title recived-text'>
                 {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
@@ -207,18 +209,21 @@ const EditRow = (props) => {
                 {enableDelete ? (
                   <Select
                     noOptionsMessage={() => t("no_options")}
-                    className="no-border"
+                    className='no-border'
                     placeholder={
-                      <div className="select-placeholder-text">
+                      <div className='select-placeholder-text'>
                         {t("select_product_category")}
                       </div>
                     }
                     value={
-                      (prod.type === undefined && prod.productCategory === undefined) || prod.id === undefined
+                      (prod.type === undefined &&
+                        prod.productCategory === undefined) ||
+                      prod.id === undefined
                         ? null
                         : {
-                          value: prod.id, label: prod.type
-                        }
+                            value: prod.id,
+                            label: prod.type,
+                          }
                     }
                     defaultInputValue={prod.type}
                     onChange={(v) => {
@@ -234,11 +239,11 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className="Divider1"></div>
-        <div className="col tcell">
-          <div className=" p-0">
-            <div className="col tcell text-center justify-content-center pl-0">
-              <div className="title recived-text">
+        <div className='Divider1'></div>
+        <div className='col tcell'>
+          <div className=' p-0'>
+            <div className='col tcell text-center justify-content-center pl-0'>
+              <div className='title recived-text'>
                 {/* {enableDelete ?
                 <DropdownButton
                   //name={prod.name == '' ? "Select product" : prod.name}
@@ -251,17 +256,17 @@ const EditRow = (props) => {
                 {enableDelete ? (
                   <Select
                     noOptionsMessage={() => t("no_options")}
-                    className="no-border"
+                    className='no-border'
                     placeholder={
-                      <div className="select-placeholder-text">
+                      <div className='select-placeholder-text'>
                         {" "}
                         {t("product_name")}
                       </div>
                     }
                     value={
                       prod.id === undefined ||
-                        prod.name === undefined ||
-                        prod.name === ""
+                      prod.name === undefined ||
+                      prod.name === ""
                         ? null
                         : { value: prod.id, label: prod.name }
                     }
@@ -280,24 +285,27 @@ const EditRow = (props) => {
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">
+        <div className='col tcell text-center justify-content-center p-2'>
           {prod.manufacturer ? (
             prod.manufacturer
           ) : (
-            <div className="select-placeholder-text">{t("manufacturer")}</div>
+            <div className='select-placeholder-text'>{t("manufacturer")}</div>
           )}
         </div>
 
-        <div className="col tcell text-center justify-content-center p-2">
-          <div className="">
+        <div className='col tcell text-center justify-content-center p-2'>
+          <div className=''>
             <input
-              className="form-control text-center"
-              id="checker"
+              className='form-control text-center'
+              id='checker'
               placeholder={t("quantity")}
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
               onChange={(e) => {
-                if (Object.keys(selectedBatch).length === 0 || selectedBatch.quant > e.target.value) {
+                if (
+                  Object.keys(selectedBatch).length === 0 ||
+                  selectedBatch.quant > e.target.value
+                ) {
                   handleQuantityChange(e.target.value, index);
                 }
               }}
@@ -305,21 +313,21 @@ const EditRow = (props) => {
           </div>
         </div>
         <div
-          className="title recived-text align-self-center"
+          className='title recived-text align-self-center'
           style={{ position: "relative", right: "40px" }}
         >
           {prod.unitofMeasure && prod.unitofMeasure.name ? (
             <div>{prod.unitofMeasure.name}</div>
           ) : (
-            <div className="placeholder_id">{t("unit")}</div>
+            <div className='placeholder_id'>{t("unit")}</div>
           )}
         </div>
 
-        <div className="col tcell text-center justify-content-center p-2">
-          <div className="">
+        <div className='col tcell text-center justify-content-center p-2'>
+          <div className=''>
             <input
-              className="form-control text-center"
-              id="checker"
+              className='form-control text-center'
+              id='checker'
               placeholder={t("batch_no")}
               disabled={true}
               value={prod.batchNumber}
@@ -330,10 +338,10 @@ const EditRow = (props) => {
             />
           </div>
         </div>
-        <div className="d-flex">
+        <div className='d-flex'>
           <button
-            type="button"
-            className="btn btn-outline-primary mr-2 ml-2"
+            type='button'
+            className='btn btn-outline-primary mr-2 ml-2'
             style={{ height: "30px", width: "70px" }}
             onClick={() => {
               setShowModal(true);
@@ -346,7 +354,7 @@ const EditRow = (props) => {
               {t("fetch") === "Fetch" ? "Fetch" : "obtener"}
             </div>
           </button>
-          <div className="">
+          <div className=''>
             {showModal && (
               <div>
                 <Modal
@@ -356,29 +364,31 @@ const EditRow = (props) => {
                     " " +
                     t("batch_details")
                   }
-                  size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+                  size='modal-xl' //for other size's use `modal-lg, modal-md, modal-sm`
                 >
-                  <div className="">
-                    <TableFilter data={headers} fb="140%" />
+                  <div className=''>
+                    <TableFilter data={headers} fb='140%' />
                   </div>
-                  <div className="overflow">
+                  <div className='overflow'>
                     {batches.length === 0 ? (
                       <div>
-                        <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">
+                        <div className='rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none'>
                           {t("no_records_found")}
                         </div>
-                        <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">
-                          {expired ? `${expired} ` + t("expired_records_found") : ""}
+                        <div className='rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none'>
+                          {expired
+                            ? `${expired} ` + t("expired_records_found")
+                            : ""}
                         </div>
                       </div>
                     ) : (
                       batches.map((product, index) => (
-                        <div className="rTable pt-1">
+                        <div className='rTable pt-1'>
                           <div>
-                            <div className="rTableRow mb-1">
+                            <div className='rTableRow mb-1'>
                               <input
-                                className="txt2 ml-3"
-                                type="checkbox"
+                                className='txt2 ml-3'
+                                type='checkbox'
                                 id={index}
                                 onChange={(e) => {
                                   handleChange({
@@ -395,55 +405,56 @@ const EditRow = (props) => {
                               ></input>
                               {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
                               <div
-                                className="col txt"
+                                className='col txt'
                                 style={{ position: "relative", left: "0%" }}
                               >
                                 {ModelProd?.name}
                               </div>
                               <div
-                                className="col txt1"
+                                className='col txt1'
                                 style={{ position: "relative", left: "6%" }}
                               >
                                 {ModelProd?.manufacturer}
                               </div>
                               <div
-                                className="col txt1"
+                                className='col txt1'
                                 style={{ position: "relative", left: "8%" }}
                               >
                                 {product.batchNumbers[0]}
                               </div>
                               <div
-                                className="col txt1"
+                                className='col txt1'
                                 style={{ position: "relative", left: "8%" }}
                               >
-                                {product.attributeSet.mfgDate && product.attributeSet.mfgDate.length > 0
+                                {product.attributeSet.mfgDate &&
+                                product.attributeSet.mfgDate.length > 0
                                   ? formatDate(
-                                    product.attributeSet.mfgDate,
-                                    "mmyyyy"
-                                  )
+                                      product.attributeSet.mfgDate,
+                                      "mmyyyy"
+                                    )
                                   : "-"}
                               </div>
                               <div
-                                className="col txt1"
+                                className='col txt1'
                                 style={{ position: "relative", left: "8%" }}
                               >
-                                {product.attributeSet.expDate && product.attributeSet.expDate.length > 0
+                                {product.attributeSet.expDate &&
+                                product.attributeSet.expDate.length > 0
                                   ? formatDate(
-                                    product.attributeSet.expDate,
-                                    "mmyyyy"
-                                  )
-
+                                      product.attributeSet.expDate,
+                                      "mmyyyy"
+                                    )
                                   : "-"}
                               </div>
                               <div
-                                className="col txt1"
+                                className='col txt1'
                                 style={{ position: "relative", left: "4%" }}
                               >
-                                <div className="txt1">
+                                <div className='txt1'>
                                   <input
-                                    className="form-control text-center input1"
-                                    id="checker"
-                                    placeholder="Quantity"
+                                    className='form-control text-center input1'
+                                    id='checker'
+                                    placeholder='Quantity'
                                     onKeyPress={numbersOnly}
                                     value={product.quantity}
                                     disabled={!product.editable}
@@ -454,41 +465,41 @@ const EditRow = (props) => {
                                 </div>
                               </div>
                               <div
-                                className="txt1 title recived-text align-self-left mr-4"
+                                className='txt1 title recived-text align-self-left mr-4'
                                 style={{ left: "-10px" }}
                               >
                                 {prod.unitofMeasure.name}
                               </div>
 
-                              <div className="txt1 mr-3">
+                              <div className='txt1 mr-3'>
                                 <div>
                                   {editButtonStatus ? (
                                     <div>
                                       {addnew ? (
                                         <button
-                                          type="submit"
-                                          className="btn-sm btn-yellow d-width"
+                                          type='submit'
+                                          className='btn-sm btn-yellow d-width'
                                           onClick={onSaveClick}
                                         >
-                                          <i className="fa fa-pencil text-center"></i>
-                                          <span className="">
+                                          <i className='fa fa-pencil text-center'></i>
+                                          <span className=''>
                                             {changebtn ? "" : ""}
                                           </span>
                                         </button>
                                       ) : (
                                         <button
-                                          className="btn-sm btn-yellow d-width"
+                                          className='btn-sm btn-yellow d-width'
                                           onClick={onEditClick}
                                         >
-                                          <i className="fa fa-pencil text-center"></i>
+                                          <i className='fa fa-pencil text-center'></i>
                                           {/* <span className="ml-1"></span> */}
                                         </button>
                                       )}
                                     </div>
                                   ) : (
                                     <button
-                                      type="button"
-                                      className="btn-sm btn-yellow d-width"
+                                      type='button'
+                                      className='btn-sm btn-yellow d-width'
                                       disabled={!batches[index].selected}
                                       onClick={(e) =>
                                         editBatchSelected(
@@ -498,7 +509,7 @@ const EditRow = (props) => {
                                         )
                                       }
                                     >
-                                      <i className="fa fa-pencil text-center"></i>
+                                      <i className='fa fa-pencil text-center'></i>
                                       {/* <span className="ml-1"></span> */}
                                     </button>
                                   )}
@@ -516,10 +527,10 @@ const EditRow = (props) => {
                       ))
                     )}
                   </div>
-                  <div className="d-flex flex-row-reverse p-3">
+                  <div className='d-flex flex-row-reverse p-3'>
                     <button
-                      type="button"
-                      className="ml-3 btn btn-orange"
+                      type='button'
+                      className='ml-3 btn btn-orange'
                       onClick={() => {
                         changeBatch(selectedBatch, selectedIndex);
                         closeModal();
@@ -528,13 +539,13 @@ const EditRow = (props) => {
                       {t("next")}
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => {
                         closeModal();
                         setBatchSelected(false);
                         setDisabled(true);
                       }}
-                      className="btn btn-outline-dark"
+                      className='btn btn-outline-dark'
                     >
                       {t("cancel")}
                     </button>
@@ -554,18 +565,18 @@ const EditRow = (props) => {
 
       {props.product.length > 1 && (
         <div
-          className="m-2 pl-3 pt-1"
+          className='m-2 pl-3 pt-1'
           style={{ position: "relative", left: "10px" }}
         >
           <span
-            className="del-pad shadow border-none rounded-circle mr-1"
+            className='del-pad shadow border-none rounded-circle mr-1'
             onClick={() => props.onRemoveRow(index)}
           >
             <img
-              className="cursorP p-1"
-              height="30"
+              className='cursorP p-1'
+              height='30'
               src={Delete}
-              alt="Delete"
+              alt='Delete'
             />
           </span>
         </div>
