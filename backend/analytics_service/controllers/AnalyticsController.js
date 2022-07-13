@@ -865,20 +865,6 @@ exports.bestSellers = [
           },
         },
         {
-          $lookup: {
-            localField: "inventory.productId",
-            from: "products",
-            foreignField: "id",
-            as: "product",
-          },
-        },
-        {
-          $unwind: {
-            path: "$inventory.productId",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
           $project: {
             _id: 0,
             bestSellers: {
@@ -888,6 +874,20 @@ exports.bestSellers = [
               },
               $slice: ["$inventory.inventoryDetails", limit],
             },
+          },
+        },
+        {
+          $lookup: {
+            localField: "inventory.inventoryDetails.productId",
+            from: "products",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+            preserveNullAndEmptyArrays: true,
           },
         },
       ]);
