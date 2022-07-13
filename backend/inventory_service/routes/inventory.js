@@ -101,6 +101,15 @@ router.get(
   WarehouseController.getProductDetailsByWarehouseId
 );
 router.get(
+  "/getManufacturerWarehouses",
+  WarehouseController.getManufacturerWarehouses
+);
+router.get(
+  "/getManufacturerFilterOptions",
+  WarehouseController.getManufacturerFilterOptions
+);
+
+router.get(
   "/getOrganizationWarehouses",
   WarehouseController.getOrganizationWarehouses
 );
