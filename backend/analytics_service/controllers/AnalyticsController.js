@@ -837,3 +837,68 @@ exports.getOrderAnalytics = [
     }
   },
 ];
+
+exports.bestSellers = [
+  auth,
+  async function (req, res) {
+    try {
+      const limit = req.query?.limit || 5;
+      const warehouse = req.query?.warehouse || req.user.warehouseId;
+      const bestSellers = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            localField: "inventory.productId",
+            from: "products",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory.productId",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            bestSellers: {
+              $sortArray: {
+                input: "$inventory.inventoryDetails",
+                sortBy: "totalSales",
+              },
+              $slice: ["$inventory.inventoryDetails", limit],
+            },
+          },
+        },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Best Sellers",
+        bestSellers?.bestSellers || []
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
