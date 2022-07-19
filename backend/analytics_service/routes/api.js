@@ -1,7 +1,9 @@
 const express = require("express");
-const authRouter = require("./analytics");
+const analyticsRouter = require("./analytics");
+const networkRouter = require("./network");
 const app = express();
 
-app.use("/analytics/", authRouter);
+app.use("/analytics/", analyticsRouter);
+app.use("/network/", networkRouter);
 
 module.exports = app;

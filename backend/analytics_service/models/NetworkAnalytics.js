@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const NetworkAnalytics = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
     orgId: { type: String, required: true },
     warehouseId: { type: String, required: true },
     date: { type: Date, required: true },

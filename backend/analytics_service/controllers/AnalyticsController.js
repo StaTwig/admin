@@ -2,6 +2,7 @@ const RecordModel = require("../models/RecordModel");
 const AtomModel = require("../models/AtomModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const InventoryModel = require("../models/InventoryModel");
+const NetworkAnalytics = require("../models/NetworkAnalytics");
 const ProductModel = require("../models/ProductModel");
 const POModel = require("../models/POModel");
 const ShippingOrderModel = require("../models/ShippingOrderModel");
@@ -9,6 +10,7 @@ const WarehouseModel = require("../models/WarehouseModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
+const { startOfMonth } = require("date-fns");
 
 exports.getAnalytics = [
   auth,
@@ -865,15 +867,102 @@ exports.bestSellers = [
           },
         },
         {
-          $project: {
-            _id: 0,
-            bestSellers: {
-              $sortArray: {
-                input: "$inventory.inventoryDetails",
-                sortBy: "totalSales",
-              },
-              $slice: ["$inventory.inventoryDetails", limit],
-            },
+          $addFields: {
+            inventoryProducts: "$inventory.inventoryDetails",
+          },
+        },
+        // {
+        //   $replaceWith: {
+        //     $mergeObjects: ["$$ROOT", "$inventory"],
+        //   },
+        // },
+        {
+          $lookup: {
+            localField: "inventory.inventoryDetails.productId",
+            from: "products",
+            foreignField: "id",
+            as: "products",
+          },
+        },
+        // {
+        //   $replaceRoot: {
+        //     newRoot: {
+        //       $mergeObjects: [
+        //         { $arrayElemAt: ["$inventoryDetails.products", 0] },
+        //         "$inventoryDetails",
+        //       ],
+        //     },
+        //   },
+        // },
+        // { $project: { "inventory.inventoryDetails.products": 0 } },
+        // {
+        //   $project: {
+        //     _id: 0,
+        //     bestSellers: {
+        //       $sortArray: {
+        //         input: "$inventory.inventoryDetails",
+        //         sortBy: "totalSales",
+        //       },
+        //       $slice: ["$inventory.inventoryDetails", limit],
+        //     },
+        //   },
+        // },
+      ]);
+      let sortedProducts = new Array();
+      for (const e of bestSellers) {
+        for (let i = 0; i < e.products.length; i++) {
+          sortedProducts.push({
+            ...e.products[i],
+            ...e.inventoryProducts.find(
+              (itmInner) => itmInner.productId === e.products[i].id
+            ),
+          });
+        }
+        sortedProducts = sortedProducts.sort((a, b) => {
+          return a?.totalSales - b?.totalSales;
+        });
+        sortedProducts = sortedProducts.slice(0, limit);
+      }
+      return apiResponse.successResponseWithData(res, "Best Sellers", {
+        limit,
+        warehouseId: warehouse,
+        bestSellers: sortedProducts,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.manufacturerInStockReport = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const date = req.query?.date || startOfMonth(new Date()).toISOString();
+      const closingBalance = await NetworkAnalytics.findOne({
+        warehouseId: warehouse,
+        date: date,
+      });
+      const inventoryRecords = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
           },
         },
         {
@@ -881,24 +970,109 @@ exports.bestSellers = [
             localField: "inventory.inventoryDetails.productId",
             from: "products",
             foreignField: "id",
-            as: "product",
-          },
-        },
-        {
-          $unwind: {
-            path: "$product",
-            preserveNullAndEmptyArrays: true,
+            as: "products",
           },
         },
       ]);
+      let reportArray = new Array();
+      let reportArraywithClosingBalance = new Array();
+      for (const e of inventoryRecords) {
+        for (let i = 0; i < e.products?.length; i++) {
+          reportArray.push({
+            ...e.products[i],
+            ...e.inventory.inventoryDetails.find(
+              (itemInner) => itemInner.productId === e.products[i].id
+            ),
+          });
+        }
+        for (let j = 0; j < closingBalance?.inventory?.length; j++) {
+          reportArraywithClosingBalance.push({
+            ...closingBalance.inventory[j],
+            ...reportArray.find(
+              (itemInner) =>
+                itemInner.productId === closingBalance?.inventory[j].productId
+            ),
+          });
+        }
+      }
+
       return apiResponse.successResponseWithData(
         res,
-        "Best Sellers",
-        bestSellers?.bestSellers || []
+        "Manufacturer In-Stock Reports",
+        inventoryRecords
       );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.manufacturerOutStockReport = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const date = req.query?.date || startOfMonth(new Date()).toISOString();
+      const outofStock = await NetworkAnalytics.findOne({
+        warehouseId: warehouse,
+        date: date,
+      });
+      const inventoryRecords = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            localField: "inventory.inventoryDetails.productId",
+            from: "products",
+            foreignField: "id",
+            as: "inventory.inventoryDetails",
+          },
+        },
+      ]);
+      let reportArray = new Array();
+      for (const e of inventoryRecords) {
+        for (let i = 0; i < e.inventory.inventoryDetails.length; i++) {
+          reportArray.push({
+            ...e.inventory.inventoryDetails[i],
+            ...outofStock.inventory.find(
+              (itemInner) =>
+                itemInner.productId ===
+                e.inventory.inventoryDetails[i].productId
+            ),
+            outOfStock: outofStock.inventory.find(
+              (itemInner) =>
+                itemInner.productId ===
+                e.inventory.inventoryDetails[i].productId
+            ).updatedAt,
+          });
+        }
+      }
+      return apiResponse.successResponseWithData(res, "Analytics", {
+        warehouseId: warehouse,
+        date,
+        outOfStock: reportArray,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.errorResponse(res, err.message);
     }
   },
 ];
