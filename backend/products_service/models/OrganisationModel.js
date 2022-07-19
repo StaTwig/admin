@@ -21,8 +21,12 @@ const OrganisationSchema = new mongoose.Schema(
         name: "India",
       },
     },
+    isRegistered: {
+      type: Boolean,
+      default: true
+    },
     location: {
-      type: String,
+      type: Object,
       required: false,
       default: {
         longitude: 12.12323453534,
@@ -43,7 +47,7 @@ const OrganisationSchema = new mongoose.Schema(
       default: ["user_id 1", "user_id 2"],
     },
     warehouseEmployees: {
-      type: String,
+      type: Array,
       default: ["em12345", "em12346", "em12347"],
     },
   },

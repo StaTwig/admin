@@ -13,27 +13,23 @@ import {
 import "./style.scss";
 import { Formik } from "formik";
 
-
 export const AddLocation = (props) => {
   const { t } = props;
 
   return (
     <div>
-      <div className="addproduct">
-        <h1 className="breadcrumb">{t("ADD_NEW_LOCATION")}</h1>
+      <div className='addproduct'>
+        <h1 className='breadcrumb'>{t("ADD_NEW_LOCATION")}</h1>
         <AddLocationCard {...props} />
       </div>
     </div>
-  )
-
-
-}
-
-
+  );
+};
 
 export const AddLocationCard = (props) => {
   const { t } = props;
-  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  const intelEnabled =
+    props.user.type === "Third Party Logistics" ? true : false;
   const [addressTitle, setAddressTitle] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
@@ -51,7 +47,8 @@ export const AddLocationCard = (props) => {
 
   const closeModalAddedLocation = () => {
     setAddedLocationModal(false);
-    !props.popup && props.history.push({ pathname: "/profile", state: { editMode: true } });
+    !props.popup &&
+      props.history.push({ pathname: "/profile", state: { editMode: true } });
     props.popup && props.close();
   };
   useEffect(() => {
@@ -76,13 +73,18 @@ export const AddLocationCard = (props) => {
     setallCity(res.data);
   }
   const updateStatus = async (values) => {
-    console.log(values, {warehouse: props.user });
     const data = {
       title: values.addressTitle,
-      organisationId: intelEnabled && props?.popup ? props?.senderOrgId : props.user.organisationId,
+      organisationId:
+        intelEnabled && props?.popup
+          ? props?.senderOrgId
+          : props.user.organisationId,
       postalAddress: props.user.postalAddress || null,
       region: values.region || region,
-      country:  intelEnabled && props?.popup ? country : props.user.warehouses[0].warehouseAddress.country,
+      country:
+        intelEnabled && props?.popup
+          ? country
+          : props.user.warehouses[0].warehouseAddress.country,
       // location: {
       //   longitude: '0',
       //   latitude: '0',
@@ -94,7 +96,10 @@ export const AddLocationCard = (props) => {
         secondLine: null,
         city: values.city,
         state: values.state,
-        country: intelEnabled && props?.popup ? country : props.user.warehouses[0].warehouseAddress.country,
+        country:
+          intelEnabled && props?.popup
+            ? country
+            : props.user.warehouses[0].warehouseAddress.country,
         landmark: null,
         zipCode: values.pincode,
       },
@@ -102,7 +107,6 @@ export const AddLocationCard = (props) => {
       employeess: [],
     };
     let userType = intelEnabled ? "TPL" : "regular";
-    console.log({ userType, data });
     const result = await addWarehouse(data, userType);
     if (result.status === 200) {
       if (props?.popup) {
@@ -123,9 +127,8 @@ export const AddLocationCard = (props) => {
 
   return (
     <>
-
-      <div className="card">
-        <div className="card-body">
+      <div className='card'>
+        <div className='card-body'>
           <Formik
             enableReinitialize={true}
             initialValues={{
@@ -174,19 +177,23 @@ export const AddLocationCard = (props) => {
               setFieldValue,
               dirty,
             }) => (
-              <form onSubmit={handleSubmit} className="mb-3">
-                <div className="row">
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12` }>
-                    <div className="form-group">
-                      <label className="col-sm-6" htmlFor="addressTitle">
+              <form onSubmit={handleSubmit} className='mb-3'>
+                <div className='row'>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
+                    <div className='form-group'>
+                      <label className='col-sm-6' htmlFor='addressTitle'>
                         {t("Address_Title")}*
                       </label>
                       <input
                         style={{ flexBasis: "47%" }}
-                        className="addlocP"
-                        type="text"
-                        id="referenceShipmentId"
-                        name="addressTitle"
+                        className='addlocP'
+                        type='text'
+                        id='referenceShipmentId'
+                        name='addressTitle'
                         placeholder={t("Enter_Title")}
                         value={values.addressTitle}
                         onBlur={handleBlur}
@@ -203,10 +210,14 @@ export const AddLocationCard = (props) => {
                   </div>
                 </div>
                 <div className='row'>
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`}>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
                     <div className='form-group'>
                       <label className='col-sm-6' htmlFor='region'>
-                        {t('Region')}*
+                        {t("Region")}*
                       </label>
                       <div className='' style={{ flexBasis: "47%" }}>
                         <Autocomplete
@@ -215,7 +226,7 @@ export const AddLocationCard = (props) => {
                           id='demo-simple-select controllable-states-demo'
                           placeholder={
                             <div className='select-placeholder-text'>
-                              {t('Select_Region')}
+                              {t("Select_Region")}
                             </div>
                           }
                           onChange={(event, newValue) => {
@@ -227,7 +238,7 @@ export const AddLocationCard = (props) => {
                           }}
                           options={allregions}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('Select_Region')} />
+                            <TextField {...params} label={t("Select_Region")} />
                           )}
                         />
                         {errors.region && touched.region && (
@@ -240,10 +251,14 @@ export const AddLocationCard = (props) => {
                   </div>
                 </div>
                 <div className='row'>
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`}>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
                     <div className='form-group'>
                       <label className='col-sm-6' htmlFor='country'>
-                        {t('Country')}*
+                        {t("Country")}*
                       </label>
                       <div className='' style={{ flexBasis: "47%" }}>
                         <Autocomplete
@@ -251,7 +266,7 @@ export const AddLocationCard = (props) => {
                           id='demo-simple-select controllable-states-demo'
                           placeholder={
                             <div className='select-placeholder-text'>
-                              {t('Select_Country')}
+                              {t("Select_Country")}
                             </div>
                           }
                           value={country}
@@ -262,9 +277,14 @@ export const AddLocationCard = (props) => {
                             setState("");
                             setCity("");
                           }}
-                          options={allCountries.map((option) => option.spanishName)}
+                          options={allCountries.map(
+                            (option) => option.spanishName
+                          )}
                           renderInput={(params) => (
-                            <TextField {...params} label={t('Select_Country')} />
+                            <TextField
+                              {...params}
+                              label={t("Select_Country")}
+                            />
                           )}
                         />
 
@@ -277,18 +297,22 @@ export const AddLocationCard = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`}>
-                    <div className="form-group">
-                      <label className="col-sm-6" htmlFor="state">
+                <div className='row'>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
+                    <div className='form-group'>
+                      <label className='col-sm-6' htmlFor='state'>
                         {t("State")}*
                       </label>
-                      <div className="" style={{ flexBasis: "47%" }}>
+                      <div className='' style={{ flexBasis: "47%" }}>
                         <Autocomplete
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select controllable-states-demo"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select controllable-states-demo'
                           placeholder={
-                            <div className="select-placeholder-text">
+                            <div className='select-placeholder-text'>
                               {t("Select_State")}
                             </div>
                           }
@@ -301,14 +325,11 @@ export const AddLocationCard = (props) => {
                           }}
                           options={allState.map((option) => option.name)}
                           renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label={t("Select_State")}
-                            />
+                            <TextField {...params} label={t("Select_State")} />
                           )}
                         />
                         {errors.state && touched.state && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.state}
                           </span>
                         )}
@@ -317,18 +338,22 @@ export const AddLocationCard = (props) => {
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`}>
-                    <div className="form-group">
-                      <label className="col-sm-6" htmlFor="city">
+                <div className='row'>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
+                    <div className='form-group'>
+                      <label className='col-sm-6' htmlFor='city'>
                         {t("City")}*
                       </label>
-                      <div className="" style={{ flexBasis: "47%" }}>
+                      <div className='' style={{ flexBasis: "47%" }}>
                         <Autocomplete
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select controllable-states-demo"
+                          labelId='demo-simple-select-label'
+                          id='demo-simple-select controllable-states-demo'
                           placeholder={
-                            <div className="select-placeholder-text">
+                            <div className='select-placeholder-text'>
                               {t("Select_City")}
                             </div>
                           }
@@ -352,7 +377,7 @@ export const AddLocationCard = (props) => {
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         /> */}
                         {errors.city && touched.city && (
-                          <span className="error-msg text-danger-ANL">
+                          <span className='error-msg text-danger-ANL'>
                             {errors.city}
                           </span>
                         )}
@@ -361,18 +386,22 @@ export const AddLocationCard = (props) => {
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className={props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`}>
-                    <div className="form-group">
-                      <label className="col-sm-6" htmlFor="addressLine">
+                <div className='row'>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-12` : `col-md-6 com-sm-12`
+                    }
+                  >
+                    <div className='form-group'>
+                      <label className='col-sm-6' htmlFor='addressLine'>
                         {t("Address_Line")}*
                       </label>
                       <input
                         style={{ flexBasis: "47%" }}
-                        id="standard-basic"
+                        id='standard-basic'
                         placeholder={t("Enter_Address_Line")}
-                        className="addlocP mt-2"
-                        name="addressTitle"
+                        className='addlocP mt-2'
+                        name='addressTitle'
                         value={values.addressLine}
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -398,19 +427,23 @@ export const AddLocationCard = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className={props.popup ? `col-md-12 com-sm-16` : `col-md-6 com-sm-16`}>
-                    <div className="form-group">
-                      <label className="col-sm-6" htmlFor="Select Location">
+                <div className='row'>
+                  <div
+                    className={
+                      props.popup ? `col-md-12 com-sm-16` : `col-md-6 com-sm-16`
+                    }
+                  >
+                    <div className='form-group'>
+                      <label className='col-sm-6' htmlFor='Select Location'>
                         {t("pincode")}*
                       </label>
                       <input
-                        type="number"
+                        type='number'
                         style={{ flexBasis: "47%" }}
-                        id="standard-basic"
+                        id='standard-basic'
                         placeholder={t("pincode")}
-                        className="addlocP mt-2"
-                        name="pincode"
+                        className='addlocP mt-2'
+                        name='pincode'
                         value={values.pincode}
                         onBlur={handleBlur}
                         onChange={(e) => {
@@ -440,9 +473,9 @@ export const AddLocationCard = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="d-flex flex-row-reverse">
+                <div className='d-flex flex-row-reverse'>
                   <button
-                    className="btn btn-yellow float-right font-weight-bold"
+                    className='btn btn-yellow float-right font-weight-bold'
                     disabled={
                       !(
                         values.addressTitle &&
@@ -452,13 +485,15 @@ export const AddLocationCard = (props) => {
                         addressLine.length > 0
                       )
                     }
-                    type="submit"
+                    type='submit'
                   >
-                    <span>{!intelEnabled ? t("Request_Admin_For_Approval") : "Save"}</span>
+                    <span>
+                      {!intelEnabled ? t("Request_Admin_For_Approval") : "Save"}
+                    </span>
                   </button>
                   <button
-                    type="button"
-                    className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold"
+                    type='button'
+                    className='btn btn-white shadow-radius font-bold mr-3 font-weight-bold'
                     onClick={() => {
                       if (props?.popup) {
                         props.close();
@@ -490,7 +525,7 @@ export const AddLocationCard = (props) => {
       {addedLocationModal && (
         <Modal
           close={() => closeModalAddedLocation()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-sm' //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <SuccessPopup
             onHide={closeModalAddedLocation} //FailurePopUp

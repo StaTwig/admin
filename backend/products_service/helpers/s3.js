@@ -15,27 +15,31 @@ const s3 = new S3({
 
 // uploads a file to s3
 exports.uploadFile = async (file) => {
-  if (file.mimetype == "image/png") {
-    const image = await sharp(file.path)
-      .rotate()
-      .jpeg({ quality: 60, force: true })
-      .toBuffer();
-    const uploadParams = {
-      Bucket: bucketName,
-      Body: image,
-      Key: file.filename,
-    };
-    return s3.upload(uploadParams).promise();
-  } else {
-    const image = await sharp(file.path)
-      .jpeg({ quality: 60, force: true })
-      .toBuffer();
-    const uploadParams = {
-      Bucket: bucketName,
-      Body: image,
-      Key: file.filename,
-    };
-    return s3.upload(uploadParams).promise();
+  try {
+    if (file.mimetype == "image/png") {
+      const image = await sharp(file.path)
+        .rotate()
+        .jpeg({ quality: 60, force: true })
+        .toBuffer();
+      const uploadParams = {
+        Bucket: bucketName,
+        Body: image,
+        Key: file.filename,
+      };
+      return s3.upload(uploadParams).promise();
+    } else {
+      const image = await sharp(file.path)
+        .jpeg({ quality: 60, force: true })
+        .toBuffer();
+      const uploadParams = {
+        Bucket: bucketName,
+        Body: image,
+        Key: file.filename,
+      };
+      return s3.upload(uploadParams).promise();
+    }
+  } catch(err) {
+    throw err;
   }
 };
 

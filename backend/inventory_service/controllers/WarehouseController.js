@@ -171,3 +171,97 @@ exports.getProductDetailsByWarehouseId = [
     }
   },
 ];
+
+exports.getManufacturerWarehouses = [
+  auth,
+  async (req, res) => {
+    try {
+      const { organisationId } = req.user;
+      const { warehouseOrg, countryName } = req.query;
+      const queryObj = {}
+      if(warehouseOrg)
+        queryObj[`organisationId`] = warehouseOrg;
+      if(countryName)
+        queryObj[`country.countryName`] = countryName;
+
+      const warehouses = await WarehouseModel.aggregate([
+        {'$match': queryObj},
+        {
+        '$lookup': {
+            'from': 'inventories',
+            'localField': 'warehouseInventory',
+            'foreignField': 'id',
+            'as': 'InventoryData'
+        }   
+       }, {'$unwind': '$InventoryData'},
+       {'$unwind': '$InventoryData.inventoryDetails'},
+       {
+            '$lookup': {
+            'from': 'products',
+            'localField': 'InventoryData.inventoryDetails.productId',
+            'foreignField': 'id',
+            'as': 'productData'
+        }
+           },
+           {'$unwind': '$productData'},
+           {'$match': {'productData.manufacturerId': organisationId}},
+          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
+           {$group: {_id: null, warehouses: {$addToSet: {warehouseId: "$id", location: '$location', region: '$region', country: '$country'}}}}
+
+       ])
+
+
+      return apiResponse.successResponseWithData(res, "List of warehouses :", warehouses);
+
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+]
+
+exports.getManufacturerFilterOptions = [
+  auth,
+  async (req, res) => {
+    try {
+      const { organisationId } = req.user;
+      const { type } = req.query;
+      const matchQuery = {};
+      if(type === 'country')
+          matchQuery[`country`] = '$country.countryName';
+      else if(type === 'orgs')
+          matchQuery[`orgId`] = '$organisationId';
+      const orgs = await WarehouseModel.aggregate([
+        {
+        '$lookup': {
+            'from': 'inventories',
+            'localField': 'warehouseInventory',
+            'foreignField': 'id',
+            'as': 'InventoryData'
+        }   
+       }, {'$unwind': '$InventoryData'},
+       {'$unwind': '$InventoryData.inventoryDetails'},
+       {
+            '$lookup': {
+            'from': 'products',
+            'localField': 'InventoryData.inventoryDetails.productId',
+            'foreignField': 'id',
+            'as': 'productData'
+        }
+           },
+           {'$unwind': '$productData'},
+           {'$match': {'productData.manufacturerId': organisationId}},
+          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
+           {$group: {_id: null, warehouses: {$addToSet: matchQuery}}}
+
+       ])
+
+
+      return apiResponse.successResponseWithData(res, "List of warehouses :", orgs);
+
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+]

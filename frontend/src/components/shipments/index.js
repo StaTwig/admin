@@ -46,12 +46,13 @@ const ShipmentAnalytic = (props) => {
   const [showExportFilter, setShowExportFilter] = useState(false);
   const [fromFilterDate, setFromFilterDate] = useState(new Date(0));
   const [toFilterDate, setToFilterDate] = useState(new Date());
-  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  const intelEnabled =
+    props.user.type === "Third Party Logistics" ? true : false;
   if (
     !isAuthenticated("inboundShipments") &&
     !isAuthenticated("outboundShipments")
   )
-     props.history.push(`/profile`);
+    props.history.push(`/profile`);
 
   useEffect(() => {
     async function fetchData() {
@@ -410,7 +411,9 @@ const ShipmentAnalytic = (props) => {
           value[0] === "" ? new Date(0) : new Date(value[0]).toISOString();
         setFromFilterDate(fromDate);
         const toDate =
-          value[0] === "" ? new Date(Date.now()) : new Date(new Date(value[1]).toDateString());
+          value[0] === ""
+            ? new Date(Date.now())
+            : new Date(new Date(value[1]).toDateString());
         setToFilterDate(toDate);
         const filteredOutboundShipments = await getGMRShipments(
           skip,
@@ -538,10 +541,10 @@ const ShipmentAnalytic = (props) => {
   return (
     <div className='shipment'>
       <div className='d-flex justify-content-between'>
-      <h1 className="vl-heading-bdr black f-700">{t("shipments")}</h1>
+        <h1 className='vl-heading-bdr black f-700'>{t("shipments")}</h1>
         <div className='d-flex'>
           {isAuthenticated("updateShipment") && !intelEnabled && (
-            <Link to='/enterid' className="text-none">
+            <Link to='/enterid' className='text-none'>
               <button className='mi-btn mi-btn-md mi-btn-orange mr-3 '>
                 <img
                   src={update}
@@ -557,7 +560,10 @@ const ShipmentAnalytic = (props) => {
             </Link>
           )}
           {isAuthenticated("createShipment") && (
-            <Link to={intelEnabled ? `/createshipment` : `/newshipment`} className="text-none">
+            <Link
+              to={intelEnabled ? `/createshipment` : `/newshipment`}
+              className='text-none'
+            >
               <button className='mi-btn mi-btn-md mi-btn-yellow'>
                 <img
                   src={Add}

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Decimal128 } = mongoose.Schema.Types;
 const ProductSchema = new mongoose.Schema(
   {
-    id: { type: String, unique: false},
+    id: { type: String, unique: false },
     externalId: {
       type: String,
       required: true,
@@ -28,6 +28,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: false,
       default: "organization_id 1",
+    },
+    manufacturerId: {
+      type: String,
+      required: true
     },
     unitofMeasure: {
       type: Object,

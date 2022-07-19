@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
-const InventorySchema = new mongoose.Schema(
+const NetworkAnalytics = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
-    inventoryDetails: [
+    orgId: { type: String, required: true },
+    warehouseId: { type: String, required: true },
+    date: { type: Date, required: true },
+    inventory: [
       {
         type: new mongoose.Schema(
           {
@@ -21,4 +23,4 @@ const InventorySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Inventory", InventorySchema);
+module.exports = mongoose.model("network_analytics", NetworkAnalytics);

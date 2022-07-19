@@ -14,7 +14,7 @@ const checkPermissions =
 exports.fetchGoodsByID = [
   (req, res) => {
     try {
-      goodsObject = [
+      const goodsObject = [
         {
           Product: "OPV",
           Quantity: "20000",
@@ -48,7 +48,7 @@ exports.fetchGoodsByID = [
 exports.fetchTracking = [
   (req, res) => {
     try {
-      trackingObject = [
+      const trackingObject = [
         {
           user: req.user.email,
           Location: "Hyderabad, India",
@@ -137,12 +137,10 @@ exports.track = [
         if (permissionResult.success) {
           const { trackingNumber } = req.query;
           if (trackingNumber.includes("po") || trackingNumber.includes("PO")) {
-            var type = "poNumber";
             var shipment_array = [];
             RecordModel.findOne({
               id: trackingNumber,
             }).then(async (user) => {
-              var arr = JSON.parse(JSON.stringify(user)).shipments.length;
               var val = JSON.parse(JSON.stringify(user)).shipments;
               shipment_array.push(val);
               var poDetails = {
@@ -163,23 +161,11 @@ exports.track = [
             trackingNumber.includes("zp")
           ) {
             var shippingOrderDetails,
-              shippingOrderDetails,
               poDetails,
               poCustodyDetails,
-              soCustodayDetails,
-              supplierOrgId,
-              supplierOrgName,
-              supplierOrgCountry,
-              customerOrgId,
-              customerOrgName,
-              customerOrgCountry = "";
+              soCustodayDetails = "";
 
-            var poDetails,
-              shipmentDetails,
-              shippingOrderDetails,
-              shippingOrderId;
-            var poCustodyDetails = [];
-            var soCustodayDetails = [];
+            var shipmentDetails;
             var shipmentCustodyDetails = [];
 
             ShipmentModel.find({
@@ -192,7 +178,7 @@ exports.track = [
               var quantity = JSON.parse(JSON.stringify(shipmentDetails[0]))
                 .products.productQuantity;
               var productArray = [];
-              for (j = 0; j < products.length; j++) {
+              for (let j = 0; j < products.length; j++) {
                 const product = await ProductModel.find({
                   name: products[j].productName,
                 });
@@ -276,8 +262,6 @@ exports.track = [
               });
             });
           } else {
-            var type = "serialNumber";
-            var shipment_array = [];
             AtomModel.findOne({
               id: trackingNumber,
             }).then(async (user) => {
@@ -294,7 +278,7 @@ exports.track = [
                   createdBy: user[0].createdBy,
                   status: user[0].poStatus,
                 };
-                for (i = 0; i < arr; i++) {
+                for (let i = 0; i < arr; i++) {
                   var val = JSON.parse(JSON.stringify(user))[i].shipments;
                   shipment_array.push(val);
                 }
@@ -309,7 +293,7 @@ exports.track = [
         } else {
           return apiResponse.ErrorResponse(
             res,
-            `Access Denied, User with Role ${req.user.role} doesn't have Permision to Track & Trace`
+            `Access Denied, User with Role ${req.user.role} doesn't have Permission to Track & Trace`
           );
         }
       });
@@ -423,7 +407,7 @@ exports.fetchDataByQRCode = [
               data
             );
           } else {
-            data.message = `Access Denied, User with Role ${req.user.role} doesn't have Permision to View Product`;
+            data.message = `Access Denied, User with Role ${req.user.role} doesn't have Permission to View Product`;
             data.type = "Product";
             return apiResponse.forbiddenResponse(res, data);
           }

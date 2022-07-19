@@ -749,17 +749,19 @@ exports.createShipment = [
         const token =
           req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
 
-        axios.post(
-          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
-          bc_data,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        ).catch((error) => {
-          console.log(error);
-        });
+        axios
+          .post(
+            `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+            bc_data,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .catch((error) => {
+            console.log(error);
+          });
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne(
             {
@@ -914,82 +916,82 @@ exports.createShipmentForTpl = [
       const receiverId = req.body.receiver.id;
       const receiverName = receiverOrgData.name;
       const receiverAddress = receiverOrgData.postalAddress;
-        const suppWarehouseDetails = await TplWarehouseModel.findOne({
-          id: data.supplier.locationId,
-        });
-        if (suppWarehouseDetails == null) {
-          return apiResponse.ErrorResponse(
-            res,
-            responses(req.user.preferredLanguage).supplier_not_found
-          );
-        }
-        const recvWarehouseDetails = await TplWarehouseModel.findOne({
-          id: data.receiver.locationId,
-        });
-        if (recvWarehouseDetails == null) {
-          return apiResponse.ErrorResponse(
-            res,
-            "recvWarehouseDetails" +
-              responses(req.user.preferredLanguage).not_found
-          );
-        }
-        const event_data = {
-          eventID: cuid(),
-          eventTime: new Date().toISOString(),
-          eventType: {
-            primary: "CREATE",
-            description: "SHIPMENT",
-          },
-          transactionId: data.id,
-          actor: {
-            actorid: user_id,
-            actoruserid: email,
-          },
-          actorWarehouseId: req.user.warehouseId || null,
-          stackholders: {
-            ca: {
-              id: CENTRAL_AUTHORITY_ID || null,
-              name: CENTRAL_AUTHORITY_NAME || null,
-              address: CENTRAL_AUTHORITY_NAME || null,
-            },
-            actororg: {
-              id: orgId || null,
-              name: orgName || null,
-              address: address || null,
-            },
-            secondorg: {
-              id: null,
-              name: null,
-              address: null,
-            },
-          },
-          payload: {
-            data: data,
-          },
-        };
-        if (orgId === supplierID) {
-          event_data.stackholders.secondorg.id = receiverId || null;
-          event_data.stackholders.secondorg.name = receiverName || null;
-          event_data.stackholders.secondorg.address = receiverAddress || null;
-        } else {
-          event_data.stackholders.secondorg.id = supplierID || null;
-          event_data.stackholders.secondorg.name = supplierName || null;
-          event_data.stackholders.secondorg.address = supplierAddress || null;
-        }
-        const shipment = new ShipmentModel(data);
-        const result = await shipment.save();
-        if (result == null) {
-          return apiResponse.ErrorResponse(
-            res,
-            responses(req.user.preferredLanguage).shipment_not_saved
-          );
-        }
-        await logEvent(event_data);
-        return apiResponse.successResponseWithData(
+      const suppWarehouseDetails = await TplWarehouseModel.findOne({
+        id: data.supplier.locationId,
+      });
+      if (suppWarehouseDetails == null) {
+        return apiResponse.ErrorResponse(
           res,
-          responses(req.user.preferredLanguage).shipment_created,
-          result
+          responses(req.user.preferredLanguage).supplier_not_found
         );
+      }
+      const recvWarehouseDetails = await TplWarehouseModel.findOne({
+        id: data.receiver.locationId,
+      });
+      if (recvWarehouseDetails == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          "recvWarehouseDetails" +
+            responses(req.user.preferredLanguage).not_found
+        );
+      }
+      const event_data = {
+        eventID: cuid(),
+        eventTime: new Date().toISOString(),
+        eventType: {
+          primary: "CREATE",
+          description: "SHIPMENT",
+        },
+        transactionId: data.id,
+        actor: {
+          actorid: user_id,
+          actoruserid: email,
+        },
+        actorWarehouseId: req.user.warehouseId || null,
+        stackholders: {
+          ca: {
+            id: CENTRAL_AUTHORITY_ID || null,
+            name: CENTRAL_AUTHORITY_NAME || null,
+            address: CENTRAL_AUTHORITY_NAME || null,
+          },
+          actororg: {
+            id: orgId || null,
+            name: orgName || null,
+            address: address || null,
+          },
+          secondorg: {
+            id: null,
+            name: null,
+            address: null,
+          },
+        },
+        payload: {
+          data: data,
+        },
+      };
+      if (orgId === supplierID) {
+        event_data.stackholders.secondorg.id = receiverId || null;
+        event_data.stackholders.secondorg.name = receiverName || null;
+        event_data.stackholders.secondorg.address = receiverAddress || null;
+      } else {
+        event_data.stackholders.secondorg.id = supplierID || null;
+        event_data.stackholders.secondorg.name = supplierName || null;
+        event_data.stackholders.secondorg.address = supplierAddress || null;
+      }
+      const shipment = new ShipmentModel(data);
+      const result = await shipment.save();
+      if (result == null) {
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).shipment_not_saved
+        );
+      }
+      await logEvent(event_data);
+      return apiResponse.successResponseWithData(
+        res,
+        responses(req.user.preferredLanguage).shipment_created,
+        result
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
@@ -1076,17 +1078,19 @@ exports.newShipment = [
       };
       const token =
         req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-      axios.post(
-        `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
-        bc_data,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      ).catch((error) => {
-        console.log(error);
-      });;
+      axios
+        .post(
+          `${hf_blockchain_url}/api/v1/transactionapi/shipment/create`,
+          bc_data,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .catch((error) => {
+          console.log(error);
+        });
       return apiResponse.successResponseWithData(
         res,
         responses(req.user.preferredLanguage).shipment_created,
@@ -1460,17 +1464,19 @@ exports.receiveShipment = [
           };
           const token =
             req.headers["x-access-token"] || req.headers["authorization"];
-          axios.put(
-            `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
-            bc_data,
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          ).catch((error) => {
-            console.log(error);
-          });;
+          axios
+            .put(
+              `${hf_blockchain_url}/api/v1/transactionapi/shipment/update`,
+              bc_data,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            )
+            .catch((error) => {
+              console.log(error);
+            });
           console.log(data.id, "data.id");
           const event_data = {
             eventID: cuid(),
@@ -2704,9 +2710,16 @@ exports.fetchGMRShipments = [
           },
         };
       }
-      console.log(req.user.organisationId)
-      const count = await ShipmentModel.count({ ...filter, isCustom: true,  tplOrgId : req.user.organisationId });
-      const shipments = await ShipmentModel.find({ ...filter, isCustom: true,  tplOrgId : req.user.organisationId })
+      const count = await ShipmentModel.count({
+        ...filter,
+        isCustom: true,
+        tplOrgId: req.user.organisationId,
+      });
+      const shipments = await ShipmentModel.find({
+        ...filter,
+        isCustom: true,
+        tplOrgId: req.user.organisationId,
+      })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .sort({ createdAt: -1 });

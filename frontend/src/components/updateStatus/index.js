@@ -24,8 +24,9 @@ const UpdateStatus = (props) => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => {
     return state.user;
-  });  
-  const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
+  });
+  const intelEnabled =
+    props.user.type === "Third Party Logistics" ? true : false;
   const { id } = props.match.params;
   const billNo = shipmentData?.airWayBillNo;
   const { quantity, weight } = useState("");
@@ -151,7 +152,7 @@ const UpdateStatus = (props) => {
   };
 
   const updateStatus = async (values) => {
-    if(shipmentData.status === "RECEIVED") {
+    if (shipmentData.status === "RECEIVED") {
       setErrorMessage("delivered_shipments_cannot_be_updated");
       setTryAgainEnabled(false);
       setOpenShipmentFail(true);
@@ -175,7 +176,7 @@ const UpdateStatus = (props) => {
     formData.append("updatedAt", updateStatusLocation);
     formData.append("isAlertTrue", true);
 
-    for(var pair of formData.entries()) {
+    for (var pair of formData.entries()) {
       console.log(pair[0] + " : ", pair[1]);
     }
 
@@ -191,14 +192,12 @@ const UpdateStatus = (props) => {
   const closeModal = () => {
     setOpenUpdatedStatus(false);
     props.history.push(
-      `/${
-      intelEnabled === true ? `viewgmrshipment` : `viewshipment`
-      }/${id}`
+      `/${intelEnabled === true ? `viewgmrshipment` : `viewshipment`}/${id}`
     );
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
-    if(shipmentData.status === "RECEIVED") props.history.push(`/shipments`);
+    if (shipmentData.status === "RECEIVED") props.history.push(`/shipments`);
   };
   return (
     <div className='updateStatus'>
@@ -842,7 +841,12 @@ const UpdateStatus = (props) => {
       )}
       {openShipmentFail && (
         <Modal close={() => closeModalFail()} size='modal-sm'>
-          <FailPopup onHide={closeModalFail} t={t} errorMessage={errorMessage} tryAgainEnabled={tryAgainEnabled} />
+          <FailPopup
+            onHide={closeModalFail}
+            t={t}
+            errorMessage={errorMessage}
+            tryAgainEnabled={tryAgainEnabled}
+          />
         </Modal>
       )}
     </div>

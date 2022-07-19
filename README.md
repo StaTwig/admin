@@ -176,7 +176,7 @@ redis-cli -h <Hostname> -a StaTwig2021
 
 - Traefik :
 
-[Offical Traefik Docs 📄](https://doc.traefik.io/traefik/)
+[Official Traefik Docs 📄](https://doc.traefik.io/traefik/)
 
 [Digital Ocean Docker Traefik HTTPS Setup ✅](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04)
 
