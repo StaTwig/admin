@@ -4,17 +4,18 @@ import "./NetworkDashboard.scss";
 import OtherLocations from "./otherLocations/OtherLocations";
 import TopSeller from "./topSeller/TopSeller";
 
-const NetworkDashboard = ({ setMobileDashboard }) => {
+const NetworkDashboard = (props) => {
+  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user, setMobileDashboard } = props;
   return (
     <div className="network-sidebar-container">
       <div className="dashboard-card">
-        <ManufacturerHeader setMobileDashboard={setMobileDashboard} />
+        <ManufacturerHeader user={user} manufacturer={manufacturer} oManufacturer={oManufacturer} setMobileDashboard={setMobileDashboard} />
       </div>
       <div className="dashboard-card">
-        <TopSeller />
+        <TopSeller bestseller={bestseller} />
       </div>
       <div className="dashboard-card">
-        <OtherLocations />
+        <OtherLocations oManufacturer={oManufacturer} user={user} />
       </div>
     </div>
   );

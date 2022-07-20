@@ -5,7 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 
-export default function BestSellerRow() {
+export default function BestSellerRow({product}) {
   const [openGraph, setOpenGraph] = React.useState(false);
 
   const handleGraphOpen = () => {
@@ -26,17 +26,17 @@ export default function BestSellerRow() {
             <div className="table-icon-space">
               <i class="fa-solid fa-prescription-bottle-medical"></i>
             </div>
-            <p className="mi-body-md black f-700 mi-reset">Tablet</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.type}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">Paracetamol</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.name}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">10000</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.quantity}</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
               ( Packs )
             </p>

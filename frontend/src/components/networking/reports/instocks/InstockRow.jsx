@@ -8,7 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import BatchDetails from "./batchDetails/BatchDetails";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 
-export default function InstockRow() {
+export default function InstockRow({product}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -40,12 +40,12 @@ export default function InstockRow() {
             <div className="table-icon-space">
               <i class="fa-solid fa-prescription-bottle-medical"></i>
             </div>
-            <p className="mi-body-md black f-700 mi-reset">Tablet</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.type}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">Paracetamol</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.name}</p>
             <Tooltip title="Product Expired" placement="top">
               <Button>
                 {" "}
@@ -56,17 +56,17 @@ export default function InstockRow() {
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">10000</p>
+            <p className="mi-body-md black f-700 mi-reset">0</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
-              ( Packs )
+              ( {product?.unitofMeasure?.name} )
             </p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">10000</p>
+            <p className="mi-body-md black f-700 mi-reset">0</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
-              ( Packs )
+              ( {product?.unitofMeasure?.name} )
             </p>
           </div>
         </TableCell>
@@ -92,8 +92,8 @@ export default function InstockRow() {
           <div className="network-modal-popup-container">
             <div className="nt-modal-header">
               <div className="modal-heading-space">
-                <h1 className="mi-body-lg mi-reset">Paracetamol</h1>
-                <p className="mi-body-md mi-reset">( Vaccine )</p>
+                <h1 className="mi-body-lg mi-reset">{product?.name}</h1>
+                <p className="mi-body-md mi-reset">( {product?.type} )</p>
               </div>
               <div className="modal-closing-space" onClick={handleClose}>
                 <i class="fa-solid fa-xmark"></i>
@@ -104,7 +104,7 @@ export default function InstockRow() {
             </div>
             <div className="nt-modal-actions">
               <div className="modal-heading-space">
-                <p className="mi-body-md f-500  mi-reset">Total - 7 Batches</p>
+                <p className="mi-body-md f-500  mi-reset">Total - 1 Batch</p>
               </div>
               <button
                 className="nt-btn nt-btn-sm nt-btn-blue"

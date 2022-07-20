@@ -3,9 +3,16 @@ import Tab from "../../reports/tabs/Tab";
 import "./OtherLocations.scss";
 import SearchCountry from "./searchCountry/SearchCountry";
 import SearchOrganization from "./searchOrganization/SearchOrganization";
+import { getManufacturerFilterOptions } from "../../../../actions/networkActions";
 
-const OtherLocations = () => {
+
+const OtherLocations = ({oManufacturer, user}) => {
   const [LocationTab, setLocationTab] = useState("ORGANIZATION");
+  const [nManufacturer, setNManufacturer] = useState(oManufacturer);
+  const toggleOrgCountry = async(param) => {
+    const filterWarehouse = await getManufacturerFilterOptions(param);
+    setNManufacturer(filterWarehouse.data);
+  }
   return (
     <div className="other-locations-container">
       <div className="other-location-header">
@@ -19,6 +26,7 @@ const OtherLocations = () => {
           layout="button"
           LocationTab={LocationTab}
           setLocationTab={setLocationTab}
+          toggleOrgCountry={toggleOrgCountry}
         />
       </div>
       <div className="location-search-bar">
@@ -31,8 +39,8 @@ const OtherLocations = () => {
           <i className="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
       </div>
-      {LocationTab === "ORGANIZATION" && <SearchOrganization />}
-      {LocationTab === "COUNTRY" && <SearchCountry />}
+      {LocationTab === "ORGANIZATION" && <SearchOrganization nManufacturer={nManufacturer} user={user} />}
+      {LocationTab === "COUNTRY" && <SearchCountry nManufacturer={nManufacturer} user={user} />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import TopSellerProduct from "./TopSellerProduct";
 
-const TopSeller = () => {
+const TopSeller = ({bestseller }) => {
   const smallBoxColorsArray = [
     "#FDCD42",
     "#FE8E68",
@@ -26,10 +26,11 @@ const TopSeller = () => {
         </button>
       </div>
       <div className="product-seller-list">
-        {bigBoxColorsArray.map((bigBoxColor, index) => (
+        {bestseller?.map((bs, index) => (
           <TopSellerProduct
-            bigBoxColor={bigBoxColor}
-            smallBoxColor={smallBoxColorsArray[index]}
+            bs={bs}
+            bigBoxColor={bigBoxColorsArray[5%index]}
+            smallBoxColor={smallBoxColorsArray[5%index]}
           />
         ))}
       </div>

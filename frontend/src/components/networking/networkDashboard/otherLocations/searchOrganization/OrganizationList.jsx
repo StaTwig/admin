@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const OrganizationList = () => {
+const OrganizationList = ({manufacture, user}) => {
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <div className="mi-accordion-container">
@@ -10,10 +10,10 @@ const OrganizationList = () => {
       >
         <div className="mi-table-data">
           <p className="mi-body-md black f-700 mi-reset noselect">
-            ABC Organization
+            {user?.organisation?.split('/')[0]}
           </p>
           <p className="mi-body-xs grey f-500 mi-reset noselect">
-            ( 4 Location )
+            ( {manufacture?.warehouse?.length} Location )
           </p>
         </div>
         {toggleButton ? (
@@ -24,30 +24,14 @@ const OrganizationList = () => {
       </div>
       {toggleButton && (
         <ul className="unordered-organization-list">
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 1 - Hyderabad</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 2 - Bhadradri Kothagudem</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 3 - Adilabad</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 4 - Mahabubabad</div>
-          </li>
+          {manufacture?.warehouse?.map((warehouse, index) => 
+            <li className="mi-flex organization-list-item">
+              <span>
+                <i className="fa-solid fa-location-dot mr-2"></i>
+              </span>
+              <div>Location {index+1} - {warehouse?.name}</div>
+            </li>
+          )}
         </ul>
       )}
     </div>

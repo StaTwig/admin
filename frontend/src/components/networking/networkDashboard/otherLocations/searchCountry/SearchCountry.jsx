@@ -1,14 +1,14 @@
 import React from "react";
 import CountryList from "./CountryList";
 
-const SearchCountry = () => {
+const SearchCountry = ({nManufacturer, user}) => {
   return (
     <div className="search-location-results">
       <p className="mi-body-md f-400 grey mi-reset">Country List</p>
       <div className="search-result-container">
-        <CountryList />
-        <CountryList />
-        <CountryList />
+        {nManufacturer?.map((manufacture, index) =>
+          <CountryList manufacture={manufacture} user={user}/>
+        )}
       </div>
     </div>
   );

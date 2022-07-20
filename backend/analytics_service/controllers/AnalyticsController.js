@@ -1052,12 +1052,12 @@ exports.manufacturerOutStockReport = [
         for (let i = 0; i < e.inventory.inventoryDetails.length; i++) {
           reportArray.push({
             ...e.inventory.inventoryDetails[i],
-            ...outofStock.inventory.find(
+            ...outofStock?.inventory.find(
               (itemInner) =>
                 itemInner.productId ===
                 e.inventory.inventoryDetails[i].productId
             ),
-            outOfStock: outofStock.inventory.find(
+            outOfStock: outofStock?.inventory.find(
               (itemInner) =>
                 itemInner.productId ===
                 e.inventory.inventoryDetails[i].productId
