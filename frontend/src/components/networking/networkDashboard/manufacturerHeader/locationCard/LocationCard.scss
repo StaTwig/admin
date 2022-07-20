@@ -11,13 +11,22 @@
     gap: 1rem;
     border-radius: 0.6rem;
     cursor: pointer;
+    outline-offset: 4px;
 }
 .my-card{
     background-color: #14b8a6;
 }
+.my-card.active{
+    outline: 2px solid #14b8a6;
+}
+
 
 .partner-card{
     background-color: #6366f1;
+}
+
+.partner-card.active{
+    outline: 2px solid #6366f1;
 }
 
 .location-icon-space{

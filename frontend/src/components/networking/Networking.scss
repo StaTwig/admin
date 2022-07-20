@@ -79,6 +79,23 @@
     display: none;
 }
 
+.nt-graph-container{
+    width: 65rem !important;
+}
+
+.center-placement{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: unset !important;
+    padding: 3rem 0 !important;
+}
+
+.date-select-ui{
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #14B8A6;
+    border-radius: 0.4rem;
+}
 
 @media screen and (max-width:1024px){
     .network-grid-container{
