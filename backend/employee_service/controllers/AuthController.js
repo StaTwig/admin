@@ -10,7 +10,7 @@ const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile, getSignedUrl } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
@@ -464,6 +464,19 @@ exports.getOrgActiveUsers = [
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.Image = [
+  auth,
+  async (req, res) => {
+    try {
+      const signedUrl = await getSignedUrl(req.params.key);
+      return apiResponse.successResponseWithData(res, "Image URL", signedUrl);
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];

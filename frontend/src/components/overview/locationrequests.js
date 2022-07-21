@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
@@ -6,6 +6,7 @@ import { getAddress } from "../../utils/commonHelper";
 import { config } from "../../config";
 import { t } from "i18next";
 import defaultIcon from "../../assets/icons/user.png";
+import { getImage } from "../../actions/userActions";
 
 const LocationRequests = (props) => {
   const {
@@ -18,15 +19,23 @@ const LocationRequests = (props) => {
     setBtnTxt,
     modifyLocations,
   } = props;
-  const imgDomain = config().imgDomainUrl;
-  const img = imgDomain + "/" + row?.employee.photoId;
+
+  const [avatar, setAvatar] = useState(defaultIcon);
+
+  useEffect(() => {
+    if(row?.employee?.photoId) {
+      getImage(row?.employee.photoId).then((res) => {
+        setAvatar(res);
+      });
+    }
+	}, []);
 
   return (
     <div className="card flex-row justify-content-between rounded border border-white shadow bg-white mt-3 ml-2 p-3">
       <div className="d-flex flex-row w-50">
         <div className="userPic rounded">
           <img
-            src={defaultIcon}
+            src={avatar}
             alt="Location"
             className="rounded"
           />

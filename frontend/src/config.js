@@ -55,6 +55,7 @@ export function config() {
       fetchTPLRoles:`${LOCAL_SERVER_URL_RBAC}/api/rbac_service/getRolesForTPL`,
       fetchPermissionsByRole :`${LOCAL_SERVER_URL_RBAC}/api/rbac_service/getPermissions`,
       updatePermissions: `${LOCAL_SERVER_URL_RBAC}/api/rbac_service/updatePermissions`,
+      getImage: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getImage`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
@@ -103,6 +104,7 @@ export function config() {
       fetchTPLRoles:`${TEST_SERVER_URL}/api/rbac_service/getRolesForTPL`,
       fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
+      getImage: `${TEST_SERVER_URL}/api/employee_service/getImage`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
@@ -151,6 +153,7 @@ export function config() {
       fetchTPLRoles:`${PROD_SERVER_URL}/api/rbac_service/getRolesForTPL`,
       fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
+      getImage: `${PROD_SERVER_URL}/api/employee_service/getImage`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,

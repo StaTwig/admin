@@ -60,14 +60,13 @@ const DashBoardContainer = (props) => {
     dispatch(getAllOrganisations());
     dispatch(getOrgActiveUsers());
     dispatch(getWareHouses());
-    async function loadData() {
 
+    async function loadData() {
       try {
         const result = await getLocationApproval();
         result.data.sort(function (a, b) {
           return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
         });
-
         console.log('GetLocationApproval', result.data);
         setLocationApprovals(result.data);
       }
@@ -75,6 +74,7 @@ const DashBoardContainer = (props) => {
         console.log('Error from Location Appoval', error);
       }
     }
+
     loadData();
   }, []);
 
