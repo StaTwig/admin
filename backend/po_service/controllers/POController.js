@@ -459,45 +459,48 @@ exports.addPOsFromExcel = [
       );
 
       // Validate incoming Excel columns
-      const expectedColNames = req.user.preferredLanguage === "EN" ? [
-        'UNICEf PO Number',
-        'PO Item#',
-        'Vendor',
-        'Vendor Name',
-        'Document Date',
-        'Your Reference',
-        'Incoterms',
-        'Incoterms (Part 2)',
-        'Material',
-        'Material Description',
-        'Plant',
-        'Country Name',
-        'Region Name',
-        'Order Quantity',
-        'Order Unit',
-        'Unit Id',
-        'IP Code',
-        'IP Name'
-      ] : [
-          'UNICEf PO Número',
-          'PO Articulo#',
-          'Vendedor',
-          'Nombre Del Vendedor',
-          'Fecha Del Documento',
-          'Tu Referencia',
-          'Incoterms',
-          'Incoterms (Part 2)',
-          'Material',
-          'Material Descripción',
-          'Planta',
-          'Nombre Del País',
-          'Nombre De La Región',
-          'Ordene La Cantidad',
-          'Unidad De Pedido',
-          'Unidad Id',
-          'IP Código',
-          'IP Nombre'
-        ];
+      const expectedColNames =
+        req.user.preferredLanguage === "EN"
+          ? [
+              "UNICEf PO Number",
+              "PO Item#",
+              "Vendor",
+              "Vendor Name",
+              "Document Date",
+              "Your Reference",
+              "Incoterms",
+              "Incoterms (Part 2)",
+              "Material",
+              "Material Description",
+              "Plant",
+              "Country Name",
+              "Region Name",
+              "Order Quantity",
+              "Order Unit",
+              "Unit Id",
+              "IP Code",
+              "IP Name",
+            ]
+          : [
+              "UNICEf PO Número",
+              "PO Articulo#",
+              "Vendedor",
+              "Nombre Del Vendedor",
+              "Fecha Del Documento",
+              "Tu Referencia",
+              "Incoterms",
+              "Incoterms (Part 2)",
+              "Material",
+              "Material Descripción",
+              "Planta",
+              "Nombre Del País",
+              "Nombre De La Región",
+              "Ordene La Cantidad",
+              "Unidad De Pedido",
+              "Unidad Id",
+              "IP Código",
+              "IP Nombre",
+            ];
 
       if (!compareArrays(expectedColNames, Object.keys(data[0]))) {
         // Invalid format logic
@@ -577,17 +580,23 @@ exports.addPOsFromExcel = [
           } else {
             poDataArray[i].id =
               poCounter.counters[0].format + poCounter.counters[0].value++;
-            
+
             let productDetails = await ProductModel.findOne({
               name: poDataArray[i].products[0].name,
             });
             if (productDetails) {
-              (poDataArray[i].products[0].productId = productDetails.productId || productDetails.id || ""),
-              (poDataArray[i].products[0].id = productDetails.id || ""),
-              (poDataArray[i].products[0].type = productDetails.type || ""),
-              (poDataArray[i].products[0].manufacturer = productDetails.manufacturer || "");
+              (poDataArray[i].products[0].productId =
+                productDetails.productId || productDetails.id || ""),
+                (poDataArray[i].products[0].id = productDetails.id || ""),
+                (poDataArray[i].products[0].type = productDetails.type || ""),
+                (poDataArray[i].products[0].manufacturer =
+                  productDetails.manufacturer || "");
             } else {
-              console.log("Product not found -- \"" + poDataArray[i].products[0].name + "\" -- Skipping it.");
+              console.log(
+                'Product not found -- "' +
+                  poDataArray[i].products[0].name +
+                  '" -- Skipping it.'
+              );
               invalidArr.push(poDataArray[i]);
               delete poDataArray[i];
               i--;
@@ -610,7 +619,9 @@ exports.addPOsFromExcel = [
                   poDataArray[i].customer.shippingAddress.shippingAddressId
                 )
               ) {
-                warningArr.push(`Warehouse ${poDataArray[i].customer.shippingAddress.shippingAddressId} doesn't exist in customer organisation`);
+                warningArr.push(
+                  `Warehouse ${poDataArray[i].customer.shippingAddress.shippingAddressId} doesn't exist in customer organisation`
+                );
                 delete poDataArray[i];
                 continue;
               }
@@ -743,7 +754,6 @@ exports.addPOsFromExcel = [
               const inventoryId =
                 invCounter.counters[0].format + invCounter.counters[0].value;
               const inventoryResult = new InventoryModel({ id: inventoryId });
-              console.log(inventoryResult);
               await inventoryResult.save();
               const warehouse = new WarehouseModel({
                 title: "Office",
@@ -916,7 +926,6 @@ exports.addPOsFromExcel = [
               const inventoryId =
                 invCounter.counters[0].format + invCounter.counters[0].value;
               const inventoryResult = new InventoryModel({ id: inventoryId });
-              console.log(inventoryResult);
               await inventoryResult.save();
               const warehouse = new WarehouseModel({
                 title: "Office",
@@ -962,7 +971,12 @@ exports.addPOsFromExcel = [
       return apiResponse.successResponseWithData(
         res,
         responses(req.user.preferredLanguage || "EN").upload_result,
-        {inserted: poDataArray, unininserted: warningArr, duplicate: errorsArr, invalid: invalidArr}
+        {
+          inserted: poDataArray,
+          unininserted: warningArr,
+          duplicate: errorsArr,
+          invalid: invalidArr,
+        }
       );
     } catch (err) {
       console.log(err);
@@ -2142,7 +2156,7 @@ async function buildPdfReport(req, res, data, orderType) {
     { text: req.t("ORG_ID_-_Receiver"), bold: true },
     { text: req.t("Product_Category"), bold: true },
     { text: req.t("Product_Name"), bold: true },
-    { text:  req.t("Product_ID"), bold: true },
+    { text: req.t("Product_ID"), bold: true },
     { text: req.t("Quantity"), bold: true },
     { text: req.t("Manufacturer"), bold: true },
     { text: req.t("Delivery_Organization_Name"), bold: true },
@@ -2177,7 +2191,11 @@ async function buildPdfReport(req, res, data, orderType) {
     pageSize: "A3",
     pageOrientation: "landscape",
     content: [
-      { text: req.t(`${orderType}_Purchase_order`), fontSize: 34, style: "header" },
+      {
+        text: req.t(`${orderType}_Purchase_order`),
+        fontSize: 34,
+        style: "header",
+      },
       {
         table: {
           headerRows: 1,

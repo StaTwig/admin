@@ -46,6 +46,7 @@ const fontDescriptors = {
   },
 };
 const printer = new PdfPrinter(fontDescriptors);
+
 async function inventoryUpdate(
   id,
   quantity,
@@ -62,26 +63,22 @@ async function inventoryUpdate(
       },
       {
         $inc: {
-          "inventoryDetails.$.quantity": -quantity,
-        },
-      }
-    );
-    await InventoryModel.updateOne(
-      {
-        id: suppId,
-        "inventoryDetails.productId": id,
-      },
-      {
-        $inc: {
+          "inventoryDetails.$.quantity": -parseInt(quantity),
           "inventoryDetails.$.quantityInTransit": parseInt(quantity),
+          "inventoryDetails.$.totalSales": parseInt(quantity),
         },
       }
     );
   }
-  const checkProduct = await InventoryModel.find({
-    $and: [{ id: recvId }, { "inventoryDetails.productId": id }],
-  });
-  if (shipmentStatus == "RECEIVED" && checkProduct != "") {
+  if (shipmentStatus == "RECEIVED") {
+    await InventoryModel.updateOne(
+      { id: recvId },
+      {
+        $addToSet: {
+          inventoryDetails: { productId: id },
+        },
+      }
+    );
     await InventoryModel.updateOne(
       {
         id: recvId,
@@ -92,22 +89,6 @@ async function inventoryUpdate(
           "inventoryDetails.$.quantity": quantity,
         },
       }
-    );
-    await InventoryModel.updateOne(
-      {
-        id: suppId,
-        "inventoryDetails.productId": id,
-      },
-      {
-        $inc: {
-          "inventoryDetails.$.quantityInTransit": -quantity,
-        },
-      }
-    );
-  } else if (shipmentStatus == "RECEIVED" && checkProduct == "") {
-    await InventoryModel.updateOne(
-      { id: recvId },
-      { $addToSet: { inventoryDetails: { productId: id, quantity: quantity } } }
     );
     await InventoryModel.updateOne(
       {
@@ -183,16 +164,6 @@ async function poUpdate(id, quantity, poId, shipmentStatus, actor) {
         {
           $inc: {
             "products.$.productQuantityShipped": -quantity,
-          },
-        }
-      );
-      await RecordModel.updateOne(
-        {
-          id: poId,
-          "products.productId": id,
-        },
-        {
-          $inc: {
             "products.$.productQuantityDelivered": quantity,
           },
         }
@@ -286,7 +257,6 @@ async function userShipments(mode, warehouseId, skip, limit) {
       createdAt: -1,
     })
     .skip(parseInt(skip))
-
     .limit(parseInt(limit));
   for (let i = 0; i < shipments.length; i++) {
     for (let j = 0; j < shipments[i].shipmentUpdates.length; j++) {
