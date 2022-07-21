@@ -15,9 +15,7 @@ exports.asyncForEach = async (array, callback) => {
   }
 }
 
-exports.allPermissionsList = async () => {
-	return {
-		"permissions": {
+exports.allPermissionsList = {
 		  "overview": {
 			"overview": true
 		  },
@@ -74,8 +72,4 @@ exports.allPermissionsList = async () => {
 		  "track": {
 			"trackAndTrace": true
 		  }
-		},
-		"role": "OrgAdmin",
-		"orgId": "ORG100240"
-	  }
 }
