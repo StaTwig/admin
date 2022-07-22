@@ -5,7 +5,7 @@ import OtherLocations from "./otherLocations/OtherLocations";
 import TopSeller from "./topSeller/TopSeller";
 
 const NetworkDashboard = (props) => {
-  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user, setMobileDashboard } = props;
+  const { bestseller, inStock, manufacturer, oManufacturer, outStock, setReportWarehouse, user, setMobileDashboard } = props;
   console.log(oManufacturer)
   return (
     <div className="network-sidebar-container">
@@ -16,7 +16,7 @@ const NetworkDashboard = (props) => {
         <TopSeller bestseller={bestseller} />
       </div>
       <div className="dashboard-card">
-        <OtherLocations oManufacturer={oManufacturer} user={user} />
+        <OtherLocations setReportWarehouse={setReportWarehouse} oManufacturer={oManufacturer} user={user} />
       </div>
     </div>
   );

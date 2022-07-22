@@ -1,10 +1,10 @@
 import axios from "axios";
 import { config } from "../config";
 
-export const getBestSellers = async () => {
+export const getBestSellers = async (reportWarehouse) => {
   try {
     const url = config().getBestSellersUrl;
-    const result = await axios.get(url);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
     return result.data;
   } catch (e) {
     console.log(e);
@@ -12,10 +12,10 @@ export const getBestSellers = async () => {
   }
 };
 
-export const getmanufacturerInStockReport = async () => {
+export const getmanufacturerInStockReport = async (reportWarehouse) => {
   try {
     const url = config().getmanufacturerInStockReportUrl;
-    const result = await axios.get(url);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
     return result.data;
   } catch (e) {
     console.log(e);
@@ -23,10 +23,10 @@ export const getmanufacturerInStockReport = async () => {
   }
 };
 
-export const getmanufacturerOutStockReport = async () => {
+export const getmanufacturerOutStockReport = async (reportWarehouse) => {
   try {
     const url = config().getmanufacturerOutStockReportUrl;
-    const result = await axios.get(url);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
     return result.data;
   } catch (e) {
     console.log(e);

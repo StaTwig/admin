@@ -6,7 +6,7 @@ import SearchOrganization from "./searchOrganization/SearchOrganization";
 import { getManufacturerFilterOptions } from "../../../../actions/networkActions";
 
 
-const OtherLocations = ({ user}) => {
+const OtherLocations = ({ user, setReportWarehouse}) => {
   const [LocationTab, setLocationTab] = useState("ORGANIZATION");
   const [LocationTab1, setLocationTab1] = useState("ORGANIZATION");
   const [nManufacturer, setNManufacturer] = useState([]);
@@ -49,7 +49,7 @@ const OtherLocations = ({ user}) => {
           <i className="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
       </div>
-      {LocationTab1 === "COUNTRY" ? <SearchCountry nManufacturer={nManufacturer} user={user} /> : <SearchOrganization nManufacturer={nManufacturer} user={user} />}
+      {LocationTab1 === "COUNTRY" ? <SearchCountry setReportWarehouse={setReportWarehouse} nManufacturer={nManufacturer} user={user} /> : <SearchOrganization setReportWarehouse={setReportWarehouse} nManufacturer={nManufacturer} user={user} />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
-const CountryList = ({country, user}) => {
+const CountryList = ({country, user, setReportWarehouse}) => {
   const [warehouses, setWarehouses] = useState([]);
   useEffect(()=>{
     (async() =>{
@@ -36,7 +36,7 @@ const CountryList = ({country, user}) => {
               <span>
                 <i className="fa-solid fa-location-dot mr-2"></i>
               </span>
-              <div>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+              <div onClick={() => setReportWarehouse(warehouse?.warehouseId)}>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
             </li>
           )}
         </ul>

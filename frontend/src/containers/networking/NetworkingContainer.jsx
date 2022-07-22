@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ const NetworkingContainer = (props) => {
   const [outStock, setOutStock] = React.useState();
   const [manufacturer, setManufacturer] = React.useState();
   const [oManufacturer, setOManufacturer] = React.useState([]);
+  const [reportWarehouse, setReportWarehouse] = useState("");
   React.useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();
@@ -24,9 +25,9 @@ const NetworkingContainer = (props) => {
       const org = organisation?.split('/');
       const bestSellers = await getBestSellers();
       setBestseller(bestSellers.data.bestSellers);
-      const inStock = await getmanufacturerInStockReport();
+      const inStock = await getmanufacturerInStockReport(reportWarehouse);
       setInStock(inStock.data);
-      const outStock = await getmanufacturerOutStockReport();
+      const outStock = await getmanufacturerOutStockReport(reportWarehouse);
       setOutStock(outStock.data.outOfStock);
       const warehouses = await getManufacturerWarehouses(org[0], "");
       console.log(warehouses, "warehouses");
@@ -48,6 +49,7 @@ const NetworkingContainer = (props) => {
             outStock={outStock}
             manufacturer={manufacturer}
             oManufacturer={oManufacturer}
+            setReportWarehouse={setReportWarehouse}
           />
         </div>
       </div>
