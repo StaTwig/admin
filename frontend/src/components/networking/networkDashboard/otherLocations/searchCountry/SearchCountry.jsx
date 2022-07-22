@@ -6,8 +6,8 @@ const SearchCountry = ({nManufacturer, user}) => {
     <div className="search-location-results">
       <p className="mi-body-md f-400 grey mi-reset">Country List</p>
       <div className="search-result-container">
-        {nManufacturer?.map((manufacture, index) =>
-          <CountryList manufacture={manufacture} user={user}/>
+      {nManufacturer.filter((c) => c.country).map((country, index) =>
+         { return <CountryList country={country.country } user={user} />}
         )}
       </div>
     </div>

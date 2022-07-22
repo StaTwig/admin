@@ -10,11 +10,12 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 export default function Networking(props) {
   const { bestseller, inStock, manufacturer, oManufacturer, outStock, user } = props;
   const [MobileDashboard, setMobileDashboard] = useState(false);
+  console.log(oManufacturer)
   return (
     <div className="network-main-layout">
       <div className="network-grid-container">
         <div className={`network-dashboard ${MobileDashboard && "active"}`}>
-          <NetworkDashboard {...props} setMobileDashboard={setMobileDashboard} />
+          <NetworkDashboard {...props} oManufacturer={oManufacturer} setMobileDashboard={setMobileDashboard} />
         </div>
         <div className="network-workspace">
           <div className="network-map-holder">

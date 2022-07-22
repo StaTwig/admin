@@ -13,7 +13,7 @@ const NetworkingContainer = (props) => {
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
   const [manufacturer, setManufacturer] = React.useState();
-  const [oManufacturer, setOManufacturer] = React.useState();
+  const [oManufacturer, setOManufacturer] = React.useState([]);
   React.useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();

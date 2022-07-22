@@ -1,7 +1,15 @@
 import React from "react";
-import { useState } from "react";
-
-const CountryList = ({manufacturer, user}) => {
+import { useState, useEffect } from "react";
+import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
+const CountryList = ({country, user}) => {
+  const [warehouses, setWarehouses] = useState([]);
+  useEffect(()=>{
+    (async() =>{
+    const warehouses = await getManufacturerWarehouses("", country);
+    console.log(warehouses);
+    setWarehouses([...warehouses.data[0].warehouses]);
+    })();
+  }, [])
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <>
@@ -12,10 +20,7 @@ const CountryList = ({manufacturer, user}) => {
         >
           <div className="mi-table-data">
             <p className="mi-body-md black f-700 mi-reset noselect">
-              {manufacturer?.warehouse?.countryName}
-            </p>
-            <p className="mi-body-xs grey f-500 mi-reset noselect">
-              ( {manufacturer?.warehouse?.length} Organization )
+              {country}
             </p>
           </div>
           {toggleButton ? (
@@ -25,17 +30,17 @@ const CountryList = ({manufacturer, user}) => {
           )}
         </div>
         {toggleButton && (
-          <ul className="unordered-organization-list">
-            {manufacturer?.warehouse?.map((country, index) =>
-              <li className="mi-flex organization-list-item">
-                <span>
-                  <i className="fa-solid fa-building mr-2"></i>
-                </span>
-                <div>{country?.name}</div>
-              </li>
-            )}
-          </ul>
-        )}
+        <ul className="unordered-organization-list">
+          {warehouses?.map((warehouse, index) => 
+            <li className="mi-flex organization-list-item">
+              <span>
+                <i className="fa-solid fa-location-dot mr-2"></i>
+              </span>
+              <div>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+            </li>
+          )}
+        </ul>
+      )}
       </div>
     </>
   );

@@ -45,10 +45,10 @@ export const getManufacturerWarehouses = async (orgId, cName) => {
   }
 };
 
-export const getManufacturerFilterOptions = async (type) => {
+export const getManufacturerFilterOptions = async (type, regExp) => {
   try {
     const url = config().getManufacturerFilterOptions;
-    const result = await axios.get(url+`?type=${type}`);
+    const result = await axios.get(url+`?type=${type}&regExp=${regExp}`);
     return result.data;
   } catch (e) {
     console.log(e);

@@ -1,6 +1,14 @@
-import React, { useState } from "react";
-
-const OrganizationList = ({manufacture, user}) => {
+import React, { useState, useEffect } from "react";
+import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
+const OrganizationList = ({orgName, user, orgId}) => {
+  const [warehouses, setWarehouses] = useState([]);
+  useEffect(()=>{
+    (async() =>{
+    const warehouses = await getManufacturerWarehouses(orgId, "");
+    console.log(warehouses);
+    setWarehouses([...warehouses.data[0].warehouses]);
+    })();
+  }, [])
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <div className="mi-accordion-container">
@@ -10,10 +18,10 @@ const OrganizationList = ({manufacture, user}) => {
       >
         <div className="mi-table-data">
           <p className="mi-body-md black f-700 mi-reset noselect">
-            {user?.organisation?.split('/')[0]}
+            {orgName}
           </p>
           <p className="mi-body-xs grey f-500 mi-reset noselect">
-            ( {manufacture?.warehouse?.length} Location )
+            ( {warehouses?.length} Location )
           </p>
         </div>
         {toggleButton ? (
@@ -24,12 +32,12 @@ const OrganizationList = ({manufacture, user}) => {
       </div>
       {toggleButton && (
         <ul className="unordered-organization-list">
-          {manufacture?.warehouse?.map((warehouse, index) => 
+          {warehouses?.map((warehouse, index) => 
             <li className="mi-flex organization-list-item">
               <span>
                 <i className="fa-solid fa-location-dot mr-2"></i>
               </span>
-              <div>Location {index+1} - {warehouse?.name}</div>
+              <div>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
             </li>
           )}
         </ul>

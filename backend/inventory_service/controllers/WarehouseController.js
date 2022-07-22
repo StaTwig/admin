@@ -206,7 +206,7 @@ exports.getManufacturerWarehouses = [
            {'$unwind': '$productData'},
            {'$match': {'productData.manufacturerId': organisationId}},
           //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
-           {$group: {_id: null, warehouses: {$addToSet: {warehouseId: "$id", location: '$location', region: '$region', country: '$country'}}}}
+           {$group: {_id: null, warehouses: {$addToSet: {warehouseId: "$id", city: "$warehouseAddress.city", title: "$title", location: '$location', region: '$region', country: '$country'}}}}
 
        ])
 
@@ -225,12 +225,17 @@ exports.getManufacturerFilterOptions = [
   async (req, res) => {
     try {
       const { organisationId } = req.user;
-      const { type } = req.query;
+      const { type, regExp } = req.query;
       const matchQuery = {};
-      if(type === 'country')
+      if(type === 'country'){
           matchQuery[`country`] = '$country.countryName';
-      else if(type === 'orgs')
-          matchQuery[`orgId`] = '$organisationId';
+          matchQuery[`name`] = '$country.countryName';
+    }
+          else if(type === 'org'){
+        matchQuery[`orgId`] = '$organisationId';
+        matchQuery[`orgName`] = '$orgData.name';        
+        matchQuery[`name`] = '$orgData.name';        
+      }
       const orgs = await WarehouseModel.aggregate([
         {
         '$lookup': {
@@ -249,13 +254,20 @@ exports.getManufacturerFilterOptions = [
             'as': 'productData'
         }
            },
+           {
+            '$lookup': {
+            'from': 'organisations',
+            'localField': 'organisationId',
+            'foreignField': 'id',
+            'as': 'orgData'
+        }
+           },
            {'$unwind': '$productData'},
-           {'$match': {'productData.manufacturerId': organisationId}},
-          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
-           {$group: {_id: null, warehouses: {$addToSet: matchQuery}}}
+           {'$match': {'productData.manufacturerId': organisationId}},  
+           {'$match': {$or: [{'orgData.name': {$regex: regExp, $options: 'i'}}, {'country.countryName': {$regex: regExp, $options: 'i'}}] }},         
+           {$group: {_id: null, filters: {$addToSet: matchQuery}}},
 
        ])
-
 
       return apiResponse.successResponseWithData(res, "List of warehouses :", orgs);
 

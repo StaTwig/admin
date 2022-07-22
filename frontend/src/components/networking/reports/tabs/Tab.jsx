@@ -9,7 +9,7 @@ export default function Tab({
   setSubTab,
   LocationTab,
   setLocationTab,
-  toggleOrgCountry
+  emptyRegex
 }) {
   return (
     <>
@@ -52,8 +52,8 @@ export default function Tab({
               LocationTab === "ORGANIZATION" && "active"
             }`}
             onClick={() => {
+              emptyRegex();
               setLocationTab("ORGANIZATION");
-              toggleOrgCountry('org');
             }}
           >
             <i className="fa-solid fa-building "></i>
@@ -64,8 +64,8 @@ export default function Tab({
               LocationTab === "COUNTRY" && "active"
             }`}
             onClick={() => {
+              emptyRegex();
               setLocationTab("COUNTRY");
-              toggleOrgCountry('country');
             }}
           >
             <i className="fa-solid fa-earth-africa"></i>
