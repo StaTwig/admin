@@ -4,7 +4,7 @@ import "./LocationCard.scss";
 export default function LocationCard({oManufacturer, manufacturer}) {
   const [MylocationFilter, setMylocationFilter] = useState(false);
   const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
-
+  console.log(oManufacturer, manufacturer)
   return (
     <div className="location-card-container">
       <div
@@ -21,7 +21,7 @@ export default function LocationCard({oManufacturer, manufacturer}) {
           <p className="mi-body-sm mi-reset">Location</p>
         </div>
         <div className="location-card-bottom">
-          <h1 className="mi-title-sm f-700 mi-reset">{manufacturer?.length}</h1>
+          <h1 className="mi-title-sm f-700 mi-reset">{manufacturer?.myLocations}</h1>
           {/* <p className="mi-body-sm f-500 mi-reset">ABC Manufacturer</p> */}
         </div>
       </div>
@@ -41,7 +41,7 @@ export default function LocationCard({oManufacturer, manufacturer}) {
           <p className="mi-body-sm  mi-reset">Location</p>
         </div>
         <div className="location-card-bottom">
-          <h1 className="mi-title-sm f-700 mi-reset">{oManufacturer?.length}</h1>
+          <h1 className="mi-title-sm f-700 mi-reset">{manufacturer?.partnerLocations}</h1>
         </div>
       </div>
     </div>

@@ -12,9 +12,29 @@ const NetworkingContainer = (props) => {
   const [bestseller, setBestseller] = React.useState();
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
-  const [manufacturer, setManufacturer] = React.useState();
+  const [manufacturer, setManufacturer] = React.useState({myLocations: 0, partnerLocations: 0});
   const [oManufacturer, setOManufacturer] = React.useState([]);
   const [reportWarehouse, setReportWarehouse] = useState("");
+  const getBestsellers = async () => {
+    const bestSellers = await getBestSellers();
+    setBestseller(bestSellers.data.bestSellers);
+  }
+  const getInstock = async () => {
+    const inStock = await getmanufacturerInStockReport(reportWarehouse);
+    setInStock(inStock.data);
+  }
+  const getOutStock = async () => {
+    const outStock = await getmanufacturerOutStockReport(reportWarehouse);
+    setOutStock(outStock.data.outOfStock);
+  }
+  const getWarehouses = async (org) => {
+    const warehouses = await getManufacturerWarehouses(org[0], "");
+    setManufacturer(warehouses.data);
+  }
+  const getManFilters = async () => {
+    const filterWarehouse = await getManufacturerFilterOptions("org");
+    setOManufacturer(filterWarehouse.data);
+  }
   React.useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();
@@ -23,19 +43,13 @@ const NetworkingContainer = (props) => {
       } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split('/');
-      const bestSellers = await getBestSellers();
-      setBestseller(bestSellers.data.bestSellers);
-      const inStock = await getmanufacturerInStockReport(reportWarehouse);
-      setInStock(inStock.data);
-      const outStock = await getmanufacturerOutStockReport(reportWarehouse);
-      setOutStock(outStock.data.outOfStock);
-      const warehouses = await getManufacturerWarehouses(org[0], "");
-      console.log(warehouses, "warehouses");
-      setManufacturer(warehouses.data);
-      const filterWarehouse = await getManufacturerFilterOptions("org");
-      setOManufacturer(filterWarehouse.data);
+      getBestsellers();
+      getInstock();
+      getOutStock();
+      getWarehouses(org);
+      getManFilters();
     })();
-  }, [reportWarehouse]);
+  }, []);
 
   return (
     <div className="container-fluid p-0">

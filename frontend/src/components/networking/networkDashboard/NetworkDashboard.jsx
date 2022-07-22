@@ -6,7 +6,7 @@ import TopSeller from "./topSeller/TopSeller";
 
 const NetworkDashboard = (props) => {
   const { bestseller, inStock, manufacturer, oManufacturer, outStock, setReportWarehouse, user, setMobileDashboard } = props;
-  console.log(setReportWarehouse)
+
   return (
     <div className="network-sidebar-container">
       <div className="dashboard-card">

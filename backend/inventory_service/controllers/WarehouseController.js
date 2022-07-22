@@ -178,47 +178,165 @@ exports.getManufacturerWarehouses = [
     try {
       const { organisationId } = req.user;
       const { warehouseOrg, countryName } = req.query;
-      const queryObj = {}
-      if(warehouseOrg)
-        queryObj[`organisationId`] = warehouseOrg;
-      if(countryName)
-        queryObj[`country.countryName`] = countryName;
+      const queryObj = {};
+      if (warehouseOrg) queryObj[`organisationId`] = warehouseOrg;
+      if (countryName) queryObj[`country.countryName`] = countryName;
 
       const warehouses = await WarehouseModel.aggregate([
-        {'$match': queryObj},
+        { $match: queryObj },
         {
-        '$lookup': {
-            'from': 'inventories',
-            'localField': 'warehouseInventory',
-            'foreignField': 'id',
-            'as': 'InventoryData'
-        }   
-       }, {'$unwind': '$InventoryData'},
-       {'$unwind': '$InventoryData.inventoryDetails'},
-       {
-            '$lookup': {
-            'from': 'products',
-            'localField': 'InventoryData.inventoryDetails.productId',
-            'foreignField': 'id',
-            'as': 'productData'
-        }
-           },
-           {'$unwind': '$productData'},
-           {'$match': {'productData.manufacturerId': organisationId}},
+          $lookup: {
+            from: "inventories",
+            localField: "warehouseInventory",
+            foreignField: "id",
+            as: "InventoryData",
+          },
+        },
+        { $unwind: "$InventoryData" },
+        { $unwind: "$InventoryData.inventoryDetails" },
+        {
+          $lookup: {
+            from: "products",
+            localField: "InventoryData.inventoryDetails.productId",
+            foreignField: "id",
+            as: "productData",
+          },
+        },
+        { $unwind: "$productData" },
+        { $match: { "productData.manufacturerId": organisationId } },
+        //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
+        {
+          $group: {
+            _id: null,
+            warehouses: {
+              $addToSet: {
+                warehouseId: "$id",
+                city: "$warehouseAddress.city",
+                title: "$title",
+                location: "$location",
+                region: "$region",
+                country: "$country",
+              },
+            },
+          },
+        },
+      ]);
+
+        const totalWarehouseCount = await WarehouseModel.aggregate([
+          {
+            $lookup: {
+              from: "inventories",
+              localField: "warehouseInventory",
+              foreignField: "id",
+              as: "InventoryData",
+            },
+          },
+          { $unwind: "$InventoryData" },
+          { $unwind: "$InventoryData.inventoryDetails" },
+          {
+            $lookup: {
+              from: "products",
+              localField: "InventoryData.inventoryDetails.productId",
+              foreignField: "id",
+              as: "productData",
+            },
+          },
+          { $unwind: "$productData" },
+          { $match: { "productData.manufacturerId": organisationId } },
           //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
-           {$group: {_id: null, warehouses: {$addToSet: {warehouseId: "$id", city: "$warehouseAddress.city", title: "$title", location: '$location', region: '$region', country: '$country'}}}}
-
-       ])
-
-
-      return apiResponse.successResponseWithData(res, "List of warehouses :", warehouses);
-
+          {
+            $group: {
+              _id: null,
+              warehouses: {
+                $addToSet: {
+                  warehouseId: "$id",
+                  city: "$warehouseAddress.city",
+                  title: "$title",
+                  location: "$location",
+                  region: "$region",
+                  country: "$country",
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              warehouseCount: {
+                $cond: {
+                  if: { $isArray: "$warehouses" },
+                  then: { $size: "$warehouses" },
+                  else: "NA",
+                },
+              },
+            },
+          },
+        ]);
+        const myWarehousesCount = await WarehouseModel.aggregate([
+          { $match: {organisationId: req.user.organisationId} },
+          {
+            $lookup: {
+              from: "inventories",
+              localField: "warehouseInventory",
+              foreignField: "id",
+              as: "InventoryData",
+            },
+          },
+          { $unwind: "$InventoryData" },
+          { $unwind: "$InventoryData.inventoryDetails" },
+          {
+            $lookup: {
+              from: "products",
+              localField: "InventoryData.inventoryDetails.productId",
+              foreignField: "id",
+              as: "productData",
+            },
+          },
+          { $unwind: "$productData" },
+          { $match: { "productData.manufacturerId": organisationId } },
+          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
+          {
+            $group: {
+              _id: null,
+              warehouses: {
+                $addToSet: {
+                  warehouseId: "$id",
+                  city: "$warehouseAddress.city",
+                  title: "$title",
+                  location: "$location",
+                  region: "$region",
+                  country: "$country",
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              warehouseCount: {
+                $cond: {
+                  if: { $isArray: "$warehouses" },
+                  then: { $size: "$warehouses" },
+                  else: "NA",
+                },
+              },
+            },
+          },
+        ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "List of warehouses :",
+        {...warehouses, 
+          partnerLocations:
+            totalWarehouseCount[0]?.warehouseCount -
+            myWarehousesCount[0]?.warehouseCount,
+          myLocations: myWarehousesCount[0]?.warehouseCount,
+        }
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
-]
+];
 
 exports.getManufacturerFilterOptions = [
   auth,
