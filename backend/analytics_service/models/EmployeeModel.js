@@ -1,61 +1,61 @@
-var mongoose = require("mongoose");
-var EmployeeSchema = new mongoose.Schema({
-  id: { type: String, required: false, unique: true },
-  emailId: {
-    type: String,
-    //required: true,
-    //unique: true
+const mongoose = require("mongoose");
+const EmployeeSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    emailId: {
+      type: String,
+      default: null,
+    },
+    walletAddress: {
+      type: String,
+      default: null,
+    },
+    accountStatus: {
+      type: String,
+      default: "NOTAPPROVED",
+    },
+    otp: {
+      type: String,
+    },
+    isConfirmed: { type: Boolean, default: false },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    photoId: {
+      type: String,
+      default: "default.jpg",
+    },
+    phoneNumber: String,
+    preferredLanguage: { type: String, default: "EN" },
+    jobTitle: { type: String, default: "Junior Engineer" },
+    department: { type: String, default: "Engineering" },
+    organisationId: {
+      type: String,
+      required: true,
+    },
+    warehouseId: { type: Array, default: [] },
+    pendingWarehouseId: { type: Array, default: [] },
+    affiliatedOrganisations: {
+      type: Array,
+      default: [],
+    },
+    role: { type: String, default: "powerUser" },
+    msp: { type: String, default: "org1MSP" },
+    postalAddress: String,
+    userDocuments: {
+      type: Array,
+      default: [],
+    },
+    isCustom: {
+      type: Boolean,
+      default: false,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  walletAddress: {
-    type: String,
-    required: false,
-    default: "wallet12345address",
-  },
-  accountStatus: {
-    type: String,
-    default: "ACTIVE",
-  },
-  confirmOTP: {
-    type: String,
-  },
-  isConfirmed: { type: Boolean, default: false },
-  firstName: {
-    type: String,
-    required: true,
-    default: "Ashwini",
-  },
-  lastName: {
-    type: String,
-    required: true,
-    default: "Ashwini",
-  },
-  photoId: {
-    type: String,
-    required: false,
-    default: "default.jpg",
-  },
-  phoneNumber: { type: String, required: false, default: 919642645543 },
-  jobTitle: { type: String, required: false, default: "junior Engineer" },
-  organisationId: {
-    type: String,
-    required: false,
-    default: "org1234",
-  },
-  warehouseId: { type: String, required: false, default: "NA" },
-  pendingWarehouseId: { type: Array, required: false, default: "NA" },
-  affiliatedOrganisations: {
-    type: String,
-    required: false,
-  },
-  role: { type: String, required: false, default: "PLEASE DEFINE ROLES" },
-  postalAddress: {
-    type: String,
-    required: false,
-    default: "gachibowli, hyderabad, india, earth",
-  },
-});
+  { timestamps: true }
+);
 module.exports = mongoose.model("Employee", EmployeeSchema);
