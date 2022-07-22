@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-ConfigurationSchema = new mongoose.Schema(
+const ConfigurationSchema = new mongoose.Schema(
   {
     id: {
       type: String,
@@ -202,9 +202,6 @@ ConfigurationSchema = new mongoose.Schema(
           type: Boolean,
         },
       },
-    },
-    iot_enabled: {
-      type: Boolean,
     },
     integrations: {
       type: Object,
