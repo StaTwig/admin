@@ -35,7 +35,8 @@ const NetworkingContainer = (props) => {
       const filterWarehouse = await getManufacturerFilterOptions("org");
       setOManufacturer(filterWarehouse.data);
     })();
-  }, []);
+  }, [reportWarehouse]);
+
   return (
     <div className="container-fluid p-0">
       <Header {...props} t={t} />
@@ -49,7 +50,7 @@ const NetworkingContainer = (props) => {
             outStock={outStock}
             manufacturer={manufacturer}
             oManufacturer={oManufacturer}
-            setReportWarehouse={setReportWarehouse}
+            setReportWarehouse={(param) => setReportWarehouse(param)}
           />
         </div>
       </div>

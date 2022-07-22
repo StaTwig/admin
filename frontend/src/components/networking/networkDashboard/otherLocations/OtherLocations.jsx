@@ -11,7 +11,7 @@ const OtherLocations = ({ user, setReportWarehouse}) => {
   const [LocationTab1, setLocationTab1] = useState("ORGANIZATION");
   const [nManufacturer, setNManufacturer] = useState([]);
   const [regExp, setRegExp] = useState("");
-
+  console.log(setReportWarehouse)
   useEffect(() =>{
    const toggleOrgCountry = async(param) => {
     console.log(param)
@@ -49,7 +49,7 @@ const OtherLocations = ({ user, setReportWarehouse}) => {
           <i className="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
       </div>
-      {LocationTab1 === "COUNTRY" ? <SearchCountry setReportWarehouse={setReportWarehouse} nManufacturer={nManufacturer} user={user} /> : <SearchOrganization setReportWarehouse={setReportWarehouse} nManufacturer={nManufacturer} user={user} />}
+      {LocationTab1 === "COUNTRY" ? <SearchCountry setReportWarehouse={(param) => setReportWarehouse(param)} nManufacturer={nManufacturer} user={user} /> : <SearchOrganization setReportWarehouse={(param) => setReportWarehouse(param)} nManufacturer={nManufacturer} user={user} />}
     </div>
   );
 };

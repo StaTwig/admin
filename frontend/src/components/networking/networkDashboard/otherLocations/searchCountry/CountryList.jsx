@@ -36,7 +36,9 @@ const CountryList = ({country, user, setReportWarehouse}) => {
               <span>
                 <i className="fa-solid fa-location-dot mr-2"></i>
               </span>
-              <div onClick={() => setReportWarehouse(warehouse?.warehouseId)}>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+              <button className="link-button" onClick={() => setReportWarehouse(warehouse?.warehouseId)}>
+              <div >Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+              </button>
             </li>
           )}
         </ul>
