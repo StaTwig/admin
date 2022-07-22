@@ -10,7 +10,7 @@ const WarehouseModel = require("../models/WarehouseModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
-const { startOfMonth } = require("date-fns");
+const { startOfMonth, format } = require("date-fns");
 
 exports.getAnalytics = [
   auth,
@@ -867,66 +867,64 @@ exports.bestSellers = [
           },
         },
         {
-          $addFields: {
-            inventoryProducts: "$inventory.inventoryDetails",
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
           },
         },
-        // {
-        //   $replaceWith: {
-        //     $mergeObjects: ["$$ROOT", "$inventory"],
-        //   },
-        // },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
         {
           $lookup: {
-            localField: "inventory.inventoryDetails.productId",
             from: "products",
+            localField: "inventoryDetails.productId",
             foreignField: "id",
             as: "products",
           },
         },
-        // {
-        //   $replaceRoot: {
-        //     newRoot: {
-        //       $mergeObjects: [
-        //         { $arrayElemAt: ["$inventoryDetails.products", 0] },
-        //         "$inventoryDetails",
-        //       ],
-        //     },
-        //   },
-        // },
-        // { $project: { "inventory.inventoryDetails.products": 0 } },
-        // {
-        //   $project: {
-        //     _id: 0,
-        //     bestSellers: {
-        //       $sortArray: {
-        //         input: "$inventory.inventoryDetails",
-        //         sortBy: "totalSales",
-        //       },
-        //       $slice: ["$inventory.inventoryDetails", limit],
-        //     },
-        //   },
-        // },
+        {
+          $unwind: {
+            path: "$products",
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$products.type",
+            },
+            productName: {
+              $first: "$products.name",
+            },
+            unitofMeasure: {
+              $first: "$products.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$products.manufacturer",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+          },
+        },
+        {
+          $sort: {
+            totalSales: -1,
+          },
+        },
+        {
+          $limit: limit,
+        },
       ]);
-      let sortedProducts = new Array();
-      for (const e of bestSellers) {
-        for (let i = 0; i < e.products.length; i++) {
-          sortedProducts.push({
-            ...e.products[i],
-            ...e.inventoryProducts.find(
-              (itmInner) => itmInner.productId === e.products[i].id
-            ),
-          });
-        }
-        sortedProducts = sortedProducts.sort((a, b) => {
-          return a?.totalSales - b?.totalSales;
-        });
-        sortedProducts = sortedProducts.slice(0, limit);
-      }
       return apiResponse.successResponseWithData(res, "Best Sellers", {
         limit,
         warehouseId: warehouse,
-        bestSellers: sortedProducts,
+        bestSellers,
       });
     } catch (err) {
       console.log(err);
@@ -940,11 +938,13 @@ exports.manufacturerInStockReport = [
   async (req, res) => {
     try {
       const warehouse = req.query?.warehouseId || req.user.warehouseId;
-      const date = req.query?.date || startOfMonth(new Date()).toISOString();
+      const date =
+        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
       const closingBalance = await NetworkAnalytics.findOne({
         warehouseId: warehouse,
         date: date,
       });
+      console.log(warehouse, date, closingBalance);
       const inventoryRecords = await WarehouseModel.aggregate([
         {
           $match: {
@@ -974,6 +974,8 @@ exports.manufacturerInStockReport = [
           },
         },
       ]);
+      console.log(inventoryRecords[0].inventory.inventoryDetails.length);
+      console.log(inventoryRecords[0].products.length);
       let reportArray = new Array();
       let reportArraywithClosingBalance = new Array();
       for (const e of inventoryRecords) {
@@ -985,6 +987,7 @@ exports.manufacturerInStockReport = [
             ),
           });
         }
+        console.log("REPORT ARRAY", reportArray.length);
         for (let j = 0; j < closingBalance?.inventory?.length; j++) {
           reportArraywithClosingBalance.push({
             ...closingBalance.inventory[j],
@@ -1013,7 +1016,8 @@ exports.manufacturerOutStockReport = [
   async (req, res) => {
     try {
       const warehouse = req.query?.warehouseId || req.user.warehouseId;
-      const date = req.query?.date || startOfMonth(new Date()).toISOString();
+      const date =
+        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
       const outofStock = await NetworkAnalytics.findOne({
         warehouseId: warehouse,
         date: date,
@@ -1065,11 +1069,15 @@ exports.manufacturerOutStockReport = [
           });
         }
       }
-      return apiResponse.successResponseWithData(res, "Analytics", {
-        warehouseId: warehouse,
-        date,
-        outOfStock: reportArray,
-      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Out of Stock Analytics",
+        {
+          warehouseId: warehouse,
+          date,
+          outOfStockReport: reportArray,
+        }
+      );
     } catch (err) {
       console.log(err);
       return apiResponse.errorResponse(res, err.message);
