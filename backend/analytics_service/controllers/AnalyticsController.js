@@ -923,6 +923,7 @@ exports.bestSellers = [
         {
           $unwind: {
             path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
           },
         },
         {
@@ -975,8 +976,8 @@ exports.bestSellerSummary = [
   auth,
   async function (req, res) {
     try {
-      const limit = req.query?.limit || 5;
-      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const limit = req.query.limit || 5;
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
       const bestSellers = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1064,19 +1065,14 @@ exports.bestSellerSummary = [
   },
 ];
 
-exports.manufacturerInStockReport = [
+exports.inStockReport = [
   auth,
   async (req, res) => {
     try {
-      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
-        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
-      const closingBalance = await InventoryAnalytics.findOne({
-        warehouseId: warehouse,
-        date: date,
-      });
-      console.log(warehouse, date, closingBalance);
-      const inventoryRecords = await WarehouseModel.aggregate([
+        req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const inStockReport = await WarehouseModel.aggregate([
         {
           $match: {
             id: warehouse,
@@ -1097,44 +1093,110 @@ exports.manufacturerInStockReport = [
           },
         },
         {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": {
+              $gt: 0,
+            },
+          },
+        },
+        {
           $lookup: {
-            localField: "inventory.inventoryDetails.productId",
             from: "products",
+            localField: "inventoryDetails.productId",
             foreignField: "id",
-            as: "products",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $sort: {
+            productQuantity: -1,
           },
         },
       ]);
-      console.log(inventoryRecords[0].inventory.inventoryDetails.length);
-      console.log(inventoryRecords[0].products.length);
-      let reportArray = new Array();
-      let reportArraywithClosingBalance = new Array();
-      for (const e of inventoryRecords) {
-        for (let i = 0; i < e.products?.length; i++) {
-          reportArray.push({
-            ...e.products[i],
-            ...e.inventory.inventoryDetails.find(
-              (itemInner) => itemInner.productId === e.products[i].id
-            ),
-          });
-        }
-        console.log("REPORT ARRAY", reportArray.length);
-        for (let j = 0; j < closingBalance?.inventory?.length; j++) {
-          reportArraywithClosingBalance.push({
-            ...closingBalance.inventory[j],
-            ...reportArray.find(
-              (itemInner) =>
-                itemInner.productId === closingBalance?.inventory[j].productId
-            ),
-          });
-        }
-      }
-
-      return apiResponse.successResponseWithData(
-        res,
-        "Manufacturer In-Stock Reports",
-        inventoryRecords
-      );
+      return apiResponse.successResponseWithData(res, "In stock Report", {
+        inStockReport,
+        warehouseId: warehouse,
+      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -1142,18 +1204,14 @@ exports.manufacturerInStockReport = [
   },
 ];
 
-exports.manufacturerOutStockReport = [
+exports.outOfStockReport = [
   auth,
   async (req, res) => {
     try {
-      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
-        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
-      const outofStock = await InventoryAnalytics.findOne({
-        warehouseId: warehouse,
-        date: date,
-      });
-      const inventoryRecords = await WarehouseModel.aggregate([
+        req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const outOfStockReport = await WarehouseModel.aggregate([
         {
           $match: {
             id: warehouse,
@@ -1174,44 +1232,111 @@ exports.manufacturerOutStockReport = [
           },
         },
         {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": 0,
+          },
+        },
+        {
           $lookup: {
-            localField: "inventory.inventoryDetails.productId",
             from: "products",
+            localField: "inventoryDetails.productId",
             foreignField: "id",
-            as: "inventory.inventoryDetails",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $sort: {
+            "inventoryAnalytics.outOfStockDays": -1,
           },
         },
       ]);
-      let reportArray = new Array();
-      for (const e of inventoryRecords) {
-        for (let i = 0; i < e.inventory.inventoryDetails.length; i++) {
-          reportArray.push({
-            ...e.inventory.inventoryDetails[i],
-            ...outofStock?.inventory.find(
-              (itemInner) =>
-                itemInner.productId ===
-                e.inventory.inventoryDetails[i].productId
-            ),
-            outOfStock: outofStock?.inventory.find(
-              (itemInner) =>
-                itemInner.productId ===
-                e.inventory.inventoryDetails[i].productId
-            ).updatedAt,
-          });
-        }
-      }
-      return apiResponse.successResponseWithData(
-        res,
-        "Out of Stock Analytics",
-        {
-          warehouseId: warehouse,
-          date,
-          outOfStockReport: reportArray,
-        }
-      );
+      return apiResponse.successResponseWithData(res, "Out of stock Report", {
+        outOfStockReport,
+        warehouseId: warehouse,
+      });
     } catch (err) {
       console.log(err);
-      return apiResponse.errorResponse(res, err.message);
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
