@@ -23,7 +23,7 @@ const OrganisationSchema = new mongoose.Schema(
     },
     isRegistered: {
       type: Boolean,
-      default: true
+      default: true,
     },
     location: {
       type: Object,
