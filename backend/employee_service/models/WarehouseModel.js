@@ -40,7 +40,11 @@ const WarehouseSchema = new mongoose.Schema(
       },
       geohash: String,
     },
-    status: String,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "NOTVERIFIED", "PENDING", "REJECTED"],
+      default: "NOTVERIFIED",
+    },
     supervisors: {
       type: Array,
       default: [],
