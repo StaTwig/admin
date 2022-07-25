@@ -6,6 +6,7 @@ const RecordModel = require("../models/RecordModel");
 const RequestModel = require("../models/RequestModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
+const InventoryAnalyticsModel = require("../models/InventoryAnalytics");
 const EmployeeModel = require("../models/EmployeeModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
 const OrganisationModel = require("../models/OrganisationModel");
@@ -36,7 +37,7 @@ const { resolve } = require("path");
 const PdfPrinter = require("pdfmake");
 const { responses } = require("../helpers/responses");
 const { asyncForEach } = require("../helpers/utility");
-const { fromUnixTime } = require("date-fns");
+const { fromUnixTime, format, startOfMonth } = require("date-fns");
 const fontDescriptors = {
   Roboto: {
     normal: resolve("./controllers/Roboto-Regular.ttf"),
@@ -56,7 +57,7 @@ async function inventoryUpdate(
   shipmentStatus
 ) {
   if (shipmentStatus == "CREATED") {
-    await InventoryModel.updateOne(
+    const updatedInventory = await InventoryModel.findOneAndUpdate(
       {
         id: suppId,
         "inventoryDetails.productId": id,
@@ -67,6 +68,34 @@ async function inventoryUpdate(
           "inventoryDetails.$.quantityInTransit": parseInt(quantity),
           "inventoryDetails.$.totalSales": parseInt(quantity),
         },
+      },
+      {
+        new: true,
+      }
+    );
+    const index = updatedInventory.inventoryDetails.findIndex((object) => {
+      return object.productId === id;
+    });
+    await InventoryAnalyticsModel.updateOne(
+      {
+        inventoryId: suppId,
+        date: format(startOfMonth(new Date()), "yyyy-MM-dd"),
+        productId: id,
+      },
+      {
+        $set: {
+          quantity: updatedInventory.inventoryDetails[index].quantity,
+          quantityInTransit:
+            updatedInventory.inventoryDetails[index].quantityInTransit,
+          sales: updatedInventory.inventoryDetails[index].quantity,
+        },
+        $setOnInsert: {
+          openingBalance:
+            quantity + updatedInventory.inventoryDetails[index].quantity,
+        },
+      },
+      {
+        upsert: true,
       }
     );
   }
@@ -79,7 +108,7 @@ async function inventoryUpdate(
         },
       }
     );
-    await InventoryModel.updateOne(
+    const updatedInventory = await InventoryModel.findOneAndUpdate(
       {
         id: recvId,
         "inventoryDetails.productId": id,
@@ -88,8 +117,34 @@ async function inventoryUpdate(
         $inc: {
           "inventoryDetails.$.quantity": quantity,
         },
+      },
+      {
+        new: true,
       }
     );
+    const index = updatedInventory.inventoryDetails.findIndex((object) => {
+      return object.productId === id;
+    });
+    await InventoryAnalyticsModel.updateOne(
+      {
+        inventoryId: recvId,
+        date: format(startOfMonth(new Date()), "yyyy-MM-dd"),
+        productId: id,
+      },
+      {
+        $set: {
+          quantity: updatedInventory.inventoryDetails[index].quantity,
+        },
+        $setOnInsert: {
+          openingBalance:
+            updatedInventory.inventoryDetails[index].quantity - quantity,
+        },
+      },
+      {
+        upsert: true,
+      }
+    );
+
     await InventoryModel.updateOne(
       {
         id: suppId,
@@ -98,6 +153,18 @@ async function inventoryUpdate(
       {
         $inc: {
           "inventoryDetails.$.quantityInTransit": -quantity,
+        },
+      }
+    );
+    await InventoryAnalyticsModel.updateOne(
+      {
+        inventoryId: suppId,
+        date: format(startOfMonth(new Date()), "yyyy-MM-dd"),
+        productId: id,
+      },
+      {
+        $inc: {
+          quantityInTransit: -quantity,
         },
       }
     );
@@ -1352,8 +1419,6 @@ exports.receiveShipment = [
                   quantity: products[count].productQuantity,
                   productId: products[count].productID,
                   inventoryIds: recvInventoryId,
-                  lastInventoryId: "",
-                  lastShipmentId: "",
                   poIds: [],
                   shipmentIds: [],
                   txIds: [],
@@ -1761,8 +1826,6 @@ exports.receiveShipment = [
                   quantity: products[count].productQuantity,
                   productId: products[count].productID,
                   inventoryIds: recvInventoryId,
-                  lastInventoryId: "",
-                  lastShipmentId: "",
                   poIds: [],
                   shipmentIds: [],
                   txIds: [],
