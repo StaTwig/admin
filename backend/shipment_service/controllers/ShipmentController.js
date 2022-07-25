@@ -1358,7 +1358,7 @@ exports.receiveShipment = [
                   shipmentIds: [],
                   txIds: [],
                   batchNumbers: products[count].batchNumber,
-                  atomStatus: "Healthy",
+                  status: "HEALTHY",
                   attributeSet: {
                     mfgDate: products[count].mfgDate,
                     expDate: products[count].batchNumber.expDate,
@@ -1767,7 +1767,7 @@ exports.receiveShipment = [
                   shipmentIds: [],
                   txIds: [],
                   batchNumbers: products[count].batchNumber,
-                  atomStatus: "Healthy",
+                  status: "HEALTHY",
                   attributeSet: {
                     mfgDate: products[count].mfgDate,
                     expDate: products[count].batchNumber.expDate,

@@ -692,7 +692,7 @@ exports.addProductsToInventory = [
                   shipmentIds: [],
                   txIds: [],
                   batchNumbers: [product.batchNumber],
-                  atomStatus: "Healthy",
+                  status: "HEALTHY",
                   attributeSet: {
                     mfgDate: product.mfgDate,
                     expDate: product.expDate,
@@ -722,7 +722,7 @@ exports.addProductsToInventory = [
                 shipmentIds: [],
                 txIds: [],
                 batchNumbers: [product.batchNumber],
-                atomStatus: "Healthy",
+                status: "HEALTHY",
                 attributeSet: {
                   mfgDate: product.mfgDate,
                   expDate: product.expDate,
