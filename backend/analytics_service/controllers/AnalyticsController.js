@@ -2,7 +2,7 @@ const RecordModel = require("../models/RecordModel");
 const AtomModel = require("../models/AtomModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const InventoryModel = require("../models/InventoryModel");
-const NetworkAnalytics = require("../models/NetworkAnalytics");
+const InventoryAnalytics = require("../models/InventoryAnalytics");
 const ProductModel = require("../models/ProductModel");
 const POModel = require("../models/POModel");
 const ShippingOrderModel = require("../models/ShippingOrderModel");
@@ -842,10 +842,141 @@ exports.getOrderAnalytics = [
 
 exports.bestSellers = [
   auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const date =
+        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const bestSellers = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $sort: {
+            "inventoryAnalytics.sales": -1,
+          },
+        },
+      ]);
+      return apiResponse.successResponseWithData(res, "Best Sellers", {
+        bestSellers,
+        warehouseId: warehouse,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.bestSellerSummary = [
+  auth,
   async function (req, res) {
     try {
       const limit = req.query?.limit || 5;
-      const warehouse = req.query?.warehouse || req.user.warehouseId;
+      const warehouse = req.query?.warehouseId || req.user.warehouseId;
       const bestSellers = await WarehouseModel.aggregate([
         {
           $match: {
@@ -921,7 +1052,7 @@ exports.bestSellers = [
           $limit: limit,
         },
       ]);
-      return apiResponse.successResponseWithData(res, "Best Sellers", {
+      return apiResponse.successResponseWithData(res, "Best Sellers Summary", {
         limit,
         warehouseId: warehouse,
         bestSellers,
@@ -940,7 +1071,7 @@ exports.manufacturerInStockReport = [
       const warehouse = req.query?.warehouseId || req.user.warehouseId;
       const date =
         req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
-      const closingBalance = await NetworkAnalytics.findOne({
+      const closingBalance = await InventoryAnalytics.findOne({
         warehouseId: warehouse,
         date: date,
       });
@@ -1018,7 +1149,7 @@ exports.manufacturerOutStockReport = [
       const warehouse = req.query?.warehouseId || req.user.warehouseId;
       const date =
         req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
-      const outofStock = await NetworkAnalytics.findOne({
+      const outofStock = await InventoryAnalytics.findOne({
         warehouseId: warehouse,
         date: date,
       });
