@@ -240,25 +240,24 @@ exports.getRegions = [
       var orgs;
       const orgSet = new Set();
       if (!orgType) {
-        orgs = await OrganisationModel.find({}).select("region.name");
+        orgs = await OrganisationModel.find({}).select("region");
       } else {
         orgs = await OrganisationModel.find({ type: orgType }).select(
-          "region.name id"
+          "region id"
         );
         try {
           const warehouseRegions = await WarehouseModel.find({
             organisationId: { $in: orgs.map((org) => org.id) },
           }).select("region");
           for (let warehouse of warehouseRegions) {
-            orgSet.add(warehouse.region.name);
-            orgSet.add(warehouse.region.regionName);
+            orgSet.add(warehouse.region);
           }
         } catch (err) {
           console.log(err);
         }
       }
       for (let org of orgs) {
-        orgSet.add(org.region.name);
+        orgSet.add(org.region);
       }
       return apiResponse.successResponseWithData(
         res,
