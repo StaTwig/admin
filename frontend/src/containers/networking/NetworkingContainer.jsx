@@ -4,12 +4,13 @@ import Sidebar from "../../shared/sidebarMenu";
 import { useTranslation } from "react-i18next";
 import Networking from "../../components/networking/Networking";
 import { getUserInfoUpdated } from "../../actions/userActions";
-import { getBestSellers, getmanufacturerInStockReport, getmanufacturerOutStockReport, getManufacturerWarehouses, getManufacturerFilterOptions } from "../../actions/networkActions";
+import { getBestSellers, getmanufacturerInStockReport, getmanufacturerOutStockReport, getManufacturerWarehouses, getManufacturerFilterOptions, getBestSellerSummary } from "../../actions/networkActions";
 
 const NetworkingContainer = (props) => {
   const { t, i18n } = useTranslation();
   const [user, setUser] = React.useState();
   const [bestseller, setBestseller] = React.useState();
+  const [TopBestseller, setTopBestseller] = React.useState();
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
   const [manufacturer, setManufacturer] = React.useState({myLocations: 0, partnerLocations: 0});
@@ -18,6 +19,11 @@ const NetworkingContainer = (props) => {
   const getBestsellers = async () => {
     const bestSellers = await getBestSellers(reportWarehouse);
     setBestseller(bestSellers.data.bestSellers);
+  }
+  const getTopBestsellers = async () => {
+    const bestSellers = await getBestSellerSummary(reportWarehouse);
+    setTopBestseller(bestSellers.data.bestSellers);
+    setReportWarehouse(bestSellers.data.warehouseId);
   }
   const getInstock = async () => {
     const inStock = await getmanufacturerInStockReport(reportWarehouse);
@@ -39,10 +45,13 @@ const NetworkingContainer = (props) => {
     setOManufacturer(filterWarehouse.data);
   }
   React.useEffect(() => {
+    getTopBestsellers();
+  }, [])
+  React.useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();
       const {
-        organisation,
+        organisation
       } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split('/');
@@ -52,7 +61,7 @@ const NetworkingContainer = (props) => {
       getWarehouses(org);
       getManFilters();
     })();
-  }, []);
+  }, [reportWarehouse]);
 
   return (
     <div className="container-fluid p-0">
@@ -63,6 +72,7 @@ const NetworkingContainer = (props) => {
           <Networking
             user={user}
             bestseller={bestseller}
+            TopBestseller={TopBestseller}
             inStock={inStock}
             outStock={outStock}
             manufacturer={manufacturer}

@@ -24,10 +24,6 @@ export default function Reports(props) {
           <Tab layout="main" MainTab={MainTab} setMainTab={setMainTab} />
         </div>
 
-        <div className="tab-area">
-          <Tab layout="sub-tab" SubTab={SubTab} setSubTab={setSubTab} />
-        </div>
-
         <div className="report-table-container">
           {MainTab === "INSTOCK" && <Instock inStock={inStock} reportWarehouse={reportWarehouse} />}
           {MainTab === "OUTSTOCK" && <Outstock outStock={outStock} reportWarehouse={reportWarehouse}/>}
