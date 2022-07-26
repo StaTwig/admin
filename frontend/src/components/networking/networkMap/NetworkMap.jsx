@@ -36,9 +36,6 @@ const options = {
 export default function NetworkMap() {
   const [MapSelected, setMapSelected] = useState(null);
 
-  console.log(MapSelected?.geometry?.coordinates[1]);
-  console.log(MapSelected?.geometry?.coordinates[0]);
-
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",

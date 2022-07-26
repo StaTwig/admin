@@ -6,7 +6,6 @@ const CountryList = ({country, user, setReportWarehouse}) => {
   useEffect(()=>{
     (async() =>{
     const warehouses = await getManufacturerWarehouses("", country);
-    console.log(warehouses);
     setWarehouses([...warehouses.data[0].warehouses]);
     })();
   }, [])

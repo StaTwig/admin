@@ -16,16 +16,19 @@ const NetworkingContainer = (props) => {
   const [oManufacturer, setOManufacturer] = React.useState([]);
   const [reportWarehouse, setReportWarehouse] = useState("");
   const getBestsellers = async () => {
-    const bestSellers = await getBestSellers();
+    const bestSellers = await getBestSellers(reportWarehouse);
     setBestseller(bestSellers.data.bestSellers);
   }
   const getInstock = async () => {
     const inStock = await getmanufacturerInStockReport(reportWarehouse);
-    setInStock(inStock.data);
+    setInStock(inStock.data.inStockReport);
+    setReportWarehouse(inStock.data.warehouseId);
   }
   const getOutStock = async () => {
     const outStock = await getmanufacturerOutStockReport(reportWarehouse);
-    setOutStock(outStock.data.outOfStock);
+    setOutStock(outStock.data.outOfStockReport);
+        setReportWarehouse(inStock.data.warehouseId);
+
   }
   const getWarehouses = async (org) => {
     const warehouses = await getManufacturerWarehouses(org[0], "");
@@ -64,6 +67,7 @@ const NetworkingContainer = (props) => {
             outStock={outStock}
             manufacturer={manufacturer}
             oManufacturer={oManufacturer}
+            reportWarehouse={reportWarehouse}
             setReportWarehouse={(param) => setReportWarehouse(param)}
           />
         </div>

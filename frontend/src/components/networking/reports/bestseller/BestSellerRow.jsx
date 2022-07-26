@@ -26,17 +26,17 @@ export default function BestSellerRow({product}) {
             <div className="table-icon-space">
               <i class="fa-solid fa-prescription-bottle-medical"></i>
             </div>
-            <p className="mi-body-md black f-700 mi-reset">{product?.type}</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.productCategory}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">{product?.name}</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.productName}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">{product?.quantity}</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.totalSales}</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
               ( Packs )
             </p>

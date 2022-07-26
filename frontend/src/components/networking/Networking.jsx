@@ -8,14 +8,14 @@ import NetworkDashboard from "./networkDashboard/NetworkDashboard";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function Networking(props) {
-  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user, setReportWarehouse } = props;
+  const { bestseller, inStock, manufacturer, reportWarehouse, oManufacturer, outStock, user, setReportWarehouse } = props;
 
   const [MobileDashboard, setMobileDashboard] = useState(false);
   return (
     <div className="network-main-layout">
       <div className="network-grid-container">
         <div className={`network-dashboard ${MobileDashboard && "active"}`}>
-          <NetworkDashboard {...props} manufacturer={manufacturer} setReportWarehouse={(param) => setReportWarehouse(param)} oManufacturer={oManufacturer} setMobileDashboard={setMobileDashboard} />
+          <NetworkDashboard reportWarehouse={reportWarehouse} {...props} manufacturer={manufacturer} setReportWarehouse={(param) => setReportWarehouse(param)} oManufacturer={oManufacturer} setMobileDashboard={setMobileDashboard} />
         </div>
         <div className="network-workspace">
           <div className="network-map-holder">
@@ -40,7 +40,7 @@ export default function Networking(props) {
             <NetworkMap {...props}/>
           </div>
           <div className="network-report-holders">
-            <Reports {...props} />
+            <Reports {...props} reportWarehouse={reportWarehouse} />
           </div>
         </div>
       </div>

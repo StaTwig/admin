@@ -11,10 +11,9 @@ const OtherLocations = ({ user, setReportWarehouse}) => {
   const [LocationTab1, setLocationTab1] = useState("ORGANIZATION");
   const [nManufacturer, setNManufacturer] = useState([]);
   const [regExp, setRegExp] = useState("");
-  console.log(setReportWarehouse)
+  
   useEffect(() =>{
    const toggleOrgCountry = async(param) => {
-    console.log(param)
     const filterWarehouse = await getManufacturerFilterOptions(param, regExp);
     setNManufacturer(filterWarehouse.data.length ? filterWarehouse.data[0].filters : []);
     setLocationTab1(LocationTab);

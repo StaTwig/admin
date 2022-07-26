@@ -33,10 +33,9 @@ export default function Outstock({outStock}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {outStock.map((rows) => (
-              rows?.products?.map((product, index) => 
+            {outStock.map((product, index) => (
               <OutstockRow product={product} key={index} />
-            )))}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

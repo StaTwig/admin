@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Table from "@mui/material/Table";
@@ -7,8 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
-
-function BatchRow() {
+import {getBatchesofWarehouse} from "../../../../../actions/inventoryActions"
+function BatchRow({row, isNearExpiry}) {
   return (
     <>
       <TableRow
@@ -17,28 +17,28 @@ function BatchRow() {
       >
         <TableCell className="mi-custom-cell mi-radius-first mi-first-cell-padding">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">PARA112</p>
-            <Tooltip title="Product Expired" placement="top">
+            <p className="mi-body-md black f-700 mi-reset">{row.batchNumbers[0]}</p>
+            {isNearExpiry(row.attributeSet?.expDate).nearExpiry && <Tooltip title={isNearExpiry(row.attributeSet?.expDate).expiry ? "Product expired" : "Product near expiry" } placement="top">
               <Button>
                 <i class="fa-solid fa-triangle-exclamation error-icon"></i>
               </Button>
-            </Tooltip>
+            </Tooltip>}
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">10000</p>
+            <p className="mi-body-md black f-700 mi-reset">{row.quantity || 0}</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">( Packs )</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">01/01/2022</p>
+            <p className="mi-body-md black f-700 mi-reset">{row.attributeSet?.mfgDate?.split('T')[0] || 'N/A'}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">01/01/2022</p>
+            <p className="mi-body-md black f-700 mi-reset">{row.attributeSet?.expDate?.split('T')[0] || 'N/A'}</p>
           </div>
         </TableCell>
       </TableRow>
@@ -46,33 +46,15 @@ function BatchRow() {
   );
 }
 
-export default function BatchDetails() {
-  const Data = [
-    {
-      id: "1",
-    },
-    {
-      id: "2",
-    },
-    {
-      id: "3",
-    },
-    {
-      id: "4",
-    },
-    {
-      id: "5",
-    },
-    {
-      id: "6",
-    },
-    {
-      id: "7",
-    },
-    {
-      id: "8",
-    },
-  ];
+export default function BatchDetails({productId, warehouseId, isNearExpiry}) {
+  const [Data, setData] = useState([]);
+  useEffect(() => {
+    async function getBatches() {
+      const result = await getBatchesofWarehouse(warehouseId, productId);
+      setData(result);
+    }
+    getBatches();
+  }, [productId, warehouseId])
   return (
     <>
       <TableContainer>
@@ -98,8 +80,8 @@ export default function BatchDetails() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Data.map((rows) => (
-              <BatchRow key={rows.id} />
+            {Data?.map((row) => (
+              <BatchRow row={row} key={row.id} isNearExpiry={isNearExpiry} />
             ))}
           </TableBody>
         </Table>
