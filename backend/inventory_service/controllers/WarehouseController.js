@@ -324,7 +324,7 @@ exports.getManufacturerWarehouses = [
       return apiResponse.successResponseWithData(
         res,
         "List of warehouses :",
-        {...warehouses,
+        {
           partnerLocations:
             totalWarehouseCount[0]?.warehouseCount -
             myWarehousesCount[0]?.warehouseCount,
