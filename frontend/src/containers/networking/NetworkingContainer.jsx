@@ -33,11 +33,11 @@ const NetworkingContainer = (props) => {
   const getOutStock = async () => {
     const outStock = await getmanufacturerOutStockReport(reportWarehouse);
     setOutStock(outStock.data.outOfStockReport);
-        setReportWarehouse(inStock.data.warehouseId);
+    setReportWarehouse(outStock.data.warehouseId);
 
   }
   const getWarehouses = async (org) => {
-    const warehouses = await getManufacturerWarehouses(org[0], "");
+    const warehouses = await getManufacturerWarehouses(org[1], "");
     setManufacturer(warehouses.data);
   }
   const getManFilters = async () => {

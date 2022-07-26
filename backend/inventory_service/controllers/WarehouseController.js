@@ -324,11 +324,12 @@ exports.getManufacturerWarehouses = [
       return apiResponse.successResponseWithData(
         res,
         "List of warehouses :",
-        {...warehouses, 
+        {...warehouses,
           partnerLocations:
             totalWarehouseCount[0]?.warehouseCount -
             myWarehousesCount[0]?.warehouseCount,
           myLocations: myWarehousesCount[0]?.warehouseCount,
+          warehouses: warehouses[0]?.warehouses, 
         }
       );
     } catch (err) {
