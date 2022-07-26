@@ -52,6 +52,7 @@ import ViewExpiry from "../containers/viewexpiry";
 import SettingsContainer from "../containers/settings";
 import AddProductContainer from "../containers/addproduct";
 import NetworkingContainer from "../containers/networking/NetworkingContainer";
+import TrackingContainer from "../containers/tracking/TrackingContainer";
 
 const routes = (
   <Switch>
@@ -131,6 +132,7 @@ const routes = (
     <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
     <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
     <Route path='/networking' component={requireAuth(NetworkingContainer)} />
+    <Route path='/tracking' component={requireAuth(TrackingContainer)} />
 
     <Route component={ErrorPageContainer} />
 

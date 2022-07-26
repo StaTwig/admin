@@ -3,7 +3,7 @@
   align-items: center;
   gap: 0.3rem;
   outline: none;
-  border-radius: 0.8rem;
+  border-radius: 0.4rem;
   font-weight: 500 !important;
   transition: all 0.3s ease 0s;
   text-decoration: none !important;
@@ -81,20 +81,20 @@
   border: 1px solid var(--light);
   color: var(--black-500) !important;
 }
-.mi-btn-light{
+.mi-btn-light {
   background-color: transparent;
-  border:1px solid var(--light);
-  color:var(--blue);
+  border: 1px solid var(--light);
+  color: var(--blue);
 }
-.mi-btn-blue{
+.mi-btn-blue {
   background-color: var(--white);
   color: var(--darkblue);
-  border:1px solid var(--darkblue);
+  border: 1px solid var(--darkblue);
 }
-.mi-btn-blue:hover{
+.mi-btn-blue:hover {
   background-color: var(--darkblue);
-  border:1px solid var(--darkblue);
-  color:var(--white);
+  border: 1px solid var(--darkblue);
+  color: var(--white);
 }
 .mi-btn-red {
   background-color: var(--btn-red);
