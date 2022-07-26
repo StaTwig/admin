@@ -7,6 +7,8 @@ async function dailyInventoryUpdate(date) {
     const allInventories = await InventoryModel.find({}).lean();
     for (const inventory of allInventories) {
       for (const product of inventory.inventoryDetails) {
+        let dayOutofStock = 0;
+        if (product.quantity <= 0) dayOutofStock = 1;
         await InventoryAnalyticsModel.updateOne(
           {
             inventoryId: inventory.id,
@@ -14,6 +16,9 @@ async function dailyInventoryUpdate(date) {
             productId: product.productId,
           },
           {
+            $inc: {
+              outOfStockDays: dayOutofStock,
+            },
             $push: {
               dailyAnalytics: {
                 date: date,

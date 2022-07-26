@@ -726,11 +726,7 @@ exports.addPOsFromExcel = [
                   countryId: "001",
                   countryName: country,
                 },
-                region: {
-                  id: "reg123",
-                  regionName: region,
-                  name: region,
-                },
+                region: region,
                 configuration_id: "CONF000",
                 authority: req.body?.authority,
                 externalId: poDataArray[i].customer.customerOrganisation,

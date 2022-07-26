@@ -2840,7 +2840,7 @@ exports.fetchBatchesOfInventory = [
       const inventoryId = warehouse.warehouseInventory;
       const batches = await AtomModel.find({
         productId: productId,
-        batchNumbers: { $nin: ["", null, null] },
+        batchNumbers: { $nin: ["", "null", null] },
         inventoryIds: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
