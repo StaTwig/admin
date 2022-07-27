@@ -6,11 +6,9 @@ const WarehouseSchema = new mongoose.Schema(
     organisationId: {
       type: String,
       required: true,
-      default: "org123",
     },
     postalAddress: {
       type: String,
-      required: false,
       default: null,
     },
     warehouseAddress: {
@@ -26,31 +24,27 @@ const WarehouseSchema = new mongoose.Schema(
         zipCode: { type: String },
       },
     },
-    region: {
-      type: Object,
-      required: true,
-      default: {
-        regionId: "reg123",
-        regionName: "Earth Prime",
-      },
-    },
+    region: { type: String, required: true },
     country: {
-      type: Object,
+      type: String,
       required: true,
-      default: {
-        countryId: "001",
-        countryName: "India",
-      },
     },
     location: {
-      type: Object,
-      default: {
-        longitude: 12.12323453534,
-        latitude: 13.123435345435,
-        geohash: "1231nejf923453",
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
       },
+      coordinates: {
+        type: [Number],
+      },
+      geohash: String,
     },
-    status: String,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "NOTVERIFIED", "PENDING", "REJECTED"],
+      default: "NOTVERIFIED",
+    },
     supervisors: {
       type: Array,
       default: [],
@@ -66,10 +60,12 @@ const WarehouseSchema = new mongoose.Schema(
     },
     bottleCapacity: {
       type: Number,
+      min: 0,
       default: 0,
     },
     sqft: {
       type: Number,
+      min: 0,
       default: 0,
     },
   },

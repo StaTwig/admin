@@ -7,33 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import BestSellerRow from "./BestSellerRow";
 
-export default function BestSeller() {
-  const Data = [
-    {
-      id: "1",
-    },
-    {
-      id: "2",
-    },
-    {
-      id: "3",
-    },
-    {
-      id: "4",
-    },
-    {
-      id: "5",
-    },
-    {
-      id: "6",
-    },
-    {
-      id: "7",
-    },
-    {
-      id: "8",
-    },
-  ];
+export default function BestSeller({bestseller}) {
   return (
     <>
       <TableContainer>
@@ -59,8 +33,8 @@ export default function BestSeller() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Data.map((rows) => (
-              <BestSellerRow key={rows.id} />
+            {bestseller.map((product, index) => (
+              <BestSellerRow product={product} key={index} />
             ))}
           </TableBody>
         </Table>

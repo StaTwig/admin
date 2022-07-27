@@ -275,7 +275,7 @@ const CreateShipment = (props) => {
       if (!intelEnabled) {
         const prods = await getProductsByInventoryId(value);
         if (prods.data.length === 0) {
-          alert("No products availabe in this warehouse");
+          alert("No products available in this warehouse");
           setErrorMessage("err");
           return false;
         }

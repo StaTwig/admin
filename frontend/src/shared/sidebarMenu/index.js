@@ -128,11 +128,11 @@ const SideBar = (props) => {
         )}
 
         {isAuthenticated("overview") && enable && (
-          <li className={url === "/dashboard" ? "active" : ""}>
-            <Link to='/dashboard' className='d-inline-block'>
+          <li className={url === "/network" ? "active" : ""}>
+            <Link to='/network' className='d-inline-block'>
               <img
-                src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt='Shipment'
+                src={url === "/network" ? NetworkIcon : NetworkIcon}
+                alt='network'
               />
               <span className='ml-2'>{t("network")}</span>
             </Link>

@@ -1,65 +1,66 @@
-var mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-var AtomSchema = new mongoose.Schema(
+const AtomSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    id: { type: String, required: true },
     label: {
       type: Object,
-      required: false,
+      required: true,
       default: {
-        id: 'uuid1234567899',
-        type: 'QR_2DBAR',
+        id: "uuid1234567899",
+        type: "QR_2DBAR",
       },
     },
     productId: { type: String, required: true },
     inventoryIds: {
       type: Array,
-      required: false,
+      required: true,
       default: [],
     },
+    currentInventory: { type: String, default: null },
     quantity: {
       type: Number,
-      required: false
+      min: 0,
+      default: 0,
     },
     poIds: {
       type: Array,
-      required: false,
+      default: [],
     },
     shipmentIds: {
       type: Array,
-      required: false,
+      default: [],
     },
+    currentShipment: { type: String, default: null },
     txIds: {
       type: Array,
-      required: false,
+      default: [],
     },
     batchNumbers: {
       type: Array,
-      required: false,
+      default: [],
     },
-    atomStatus: {
+    status: {
       type: String,
-      required: false,
+      required: true,
+      enum: ["HEALTHY", "TRANSIT", "EXPIRED", "ALERT", "CONSUMED", "LOST"],
+      default: "HEALTHY",
     },
     attributeSet: {
-      type: Object,
-      required: false,
-      default: {
-        mfgDate: '2020-12-31T18:30:00.000Z',
-        expDate: '2021-12-30T18:30:00.000Z',
-      },
+      mfgDate: { type: Date, default: Date.now },
+      expDate: Date,
     },
     eolInfo: {
-      type: Object,
-      required: false,
-      default: {
-        eolId: 'IDN29402-23423-23423',
-        eolDate: '2021-03-31T18:30:00.000Z',
-        eolBy: 'user_id',
-        eolUserInfo: 'TO_NEED_DEFINE',
-      },
+      eolId: String,
+      eolDate: { type: Date, default: Date.now },
+      eolBy: String,
+      eolUserInfo: { type: String, default: "NEED_TO_DEFINE" },
+    },
+    comments: {
+      type: Array,
+      default: [],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model('Atom', AtomSchema);
+module.exports = mongoose.model("atom", AtomSchema);

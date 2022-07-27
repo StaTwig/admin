@@ -87,7 +87,7 @@ const routes = (
     <Route path='/trackAndTrace' component={requireAuth(trackAndTrace)} />
     <Route path='/tracing/:id' component={requireAuth(Track)} />
     <Route path='/producttracing' component={requireAuth(ProductTracing)} />
-    <Route path='/network' component={requireAuth(Network)} />
+    {/* <Route path='/network' component={requireAuth(Network)} /> */}
     <Route
       path='/transactionHistory'
       component={requireAuth(TransactionHistory)}

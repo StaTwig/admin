@@ -4,7 +4,7 @@
 
 const http = require("http");
 const app = require("../app");
-const { MqttConnection } = require("../helpers/mqtt");
+// const { MqttConnection } = require("../helpers/mqtt");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -36,9 +36,9 @@ app.set("port", port);
  */
 const server = http.createServer(app);
 
-(async () => {
-  await MqttConnection();
-})();
+// (async () => {
+//   await MqttConnection();
+// })();
 
 /**
  * Event listener for HTTP server "error" event.

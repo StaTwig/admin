@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 const EmployeeSchema = new mongoose.Schema(
   {
-    id: { type: String, required: false, unique: true },
+    id: { type: String, required: true, unique: true },
     emailId: {
       type: String,
-      //required: true,
-      //unique: true
+      default: null,
     },
     walletAddress: {
       type: String,
@@ -22,36 +21,39 @@ const EmployeeSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
-      default: "Ashwini",
     },
     lastName: {
       type: String,
       required: true,
-      default: "Ashwini",
     },
     photoId: {
       type: String,
-      required: false,
       default: "default.jpg",
     },
-    phoneNumber: { type: String, required: false, default: "" },
-    jobTitle: { type: String, required: false, default: "junior Engineer" },
-    department: { type: String, required: false, default: "engineering" },
+    phoneNumber: String,
+    preferredLanguage: { type: String, default: "EN" },
+    jobTitle: { type: String, default: "Junior Engineer" },
+    department: { type: String, default: "Engineering" },
     organisationId: {
       type: String,
       required: true,
     },
-    warehouseId: { type: Array, required: false, default: "NA" },
-    pendingWarehouseId: { type: Array, required: false, default: "NA" },
+    warehouseId: { type: Array, default: [] },
+    pendingWarehouseId: { type: Array, default: [] },
     affiliatedOrganisations: {
       type: Array,
-      required: false,
+      default: [],
     },
-    role: { type: String, required: false, default: "powerUser" },
-    postalAddress: {
-      type: String,
-      required: false,
-      default: "gachibowli, hyderabad, india, earth",
+    role: { type: String, default: "powerUser" },
+    msp: { type: String, default: "org1MSP" },
+    postalAddress: String,
+    userDocuments: {
+      type: Array,
+      default: [],
+    },
+    isCustom: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

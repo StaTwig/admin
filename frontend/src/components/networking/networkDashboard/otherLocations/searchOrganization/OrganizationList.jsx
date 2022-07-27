@@ -1,6 +1,13 @@
-import React, { useState } from "react";
-
-const OrganizationList = () => {
+import React, { useState, useEffect } from "react";
+import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
+const OrganizationList = ({orgName, user, orgId, setReportWarehouse}) => {
+  const [warehouses, setWarehouses] = useState([]);
+  useEffect(()=>{
+    (async() =>{
+    const warehouses = await getManufacturerWarehouses(orgId, "");
+    setWarehouses([...warehouses.data.warehouses]);
+    })();
+  }, [])
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <div className="mi-accordion-container">
@@ -10,10 +17,10 @@ const OrganizationList = () => {
       >
         <div className="mi-table-data">
           <p className="mi-body-md black f-700 mi-reset noselect">
-            ABC Organization
+            {orgName}
           </p>
           <p className="mi-body-xs grey f-500 mi-reset noselect">
-            ( 4 Location )
+            ( {warehouses?.length} Location )
           </p>
         </div>
         {toggleButton ? (
@@ -24,30 +31,16 @@ const OrganizationList = () => {
       </div>
       {toggleButton && (
         <ul className="unordered-organization-list">
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 1 - Hyderabad</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 2 - Bhadradri Kothagudem</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 3 - Adilabad</div>
-          </li>
-          <li className="mi-flex organization-list-item">
-            <span>
-              <i className="fa-solid fa-location-dot mr-2"></i>
-            </span>
-            <div>Location 4 - Mahabubabad</div>
-          </li>
+          {warehouses?.map((warehouse, index) => 
+            <li className="mi-flex organization-list-item">
+              <span>
+                <i className="fa-solid fa-location-dot mr-2"></i>
+              </span>
+              <button className="link-button" onClick={() => setReportWarehouse(warehouse?.warehouseId)}>
+              <div>Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+              </button>
+            </li>
+          )}
         </ul>
       )}
     </div>

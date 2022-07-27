@@ -1,7 +1,7 @@
 import React from "react";
 import LocationCard from "./locationCard/LocationCard";
 
-export default function ManufacturerHeader({ setMobileDashboard }) {
+export default function ManufacturerHeader({ setMobileDashboard, oManufacturer, manufacturer, user }) {
   return (
     <div className="manufacturer-header">
       <div className="location-close">
@@ -13,10 +13,10 @@ export default function ManufacturerHeader({ setMobileDashboard }) {
         </div>
       </div>
       <div className="organization-header">
-        <h1 className="mi-subtitle-sm  f-700  mi-reset">ABC Manufacturer</h1>
-        <p className="mi-body-md f-400 grey  mi-reset">Location address</p>
+        <h1 className="mi-subtitle-sm  f-700  mi-reset">{user?.organisation?.split('/')[0]}</h1>
+        <p className="mi-body-md f-400 grey  mi-reset">{user?.location}</p>
       </div>
-      <LocationCard />
+      <LocationCard oManufacturer={oManufacturer} manufacturer={manufacturer} />
     </div>
   );
 }

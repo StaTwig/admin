@@ -2,7 +2,7 @@ const Atoms = require("../models/AtomsModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const OrderModel = require("../models/RecordModel");
 const moment = require("moment");
-const { alertListener, inventoryListener } = require("./listener");
+const { alertListener, inventoryListener } = require("../helpers/listener");
 
 async function checkProductExpiry() {
   try {

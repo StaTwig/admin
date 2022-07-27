@@ -1,13 +1,11 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 const CounterSchema = new mongoose.Schema(
   {
     counters: {
       type: Array,
-      default: [
-      ],
+      default: [],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model('Counter', CounterSchema);
+module.exports = mongoose.model("Counter", CounterSchema);

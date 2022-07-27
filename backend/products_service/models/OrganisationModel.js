@@ -1,56 +1,51 @@
 const mongoose = require("mongoose");
-const OrganisationSchema = new mongoose.Schema(
+const OrganizationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    name: { type: String },
+    name: { type: String, required: true },
     postalAddress: {
       type: String,
       default: null,
     },
-    region: {
-      type: Object,
-      default: {
-        id: "reg123",
-        name: "Earth Prime",
-      },
-    },
-    country: {
-      type: Object,
-      default: {
-        id: "001",
-        name: "India",
-      },
-    },
+    region: { type: String, required: true },
+    country: { type: String, required: true },
     isRegistered: {
       type: Boolean,
-      default: true
+      default: true,
     },
     location: {
-      type: Object,
-      required: false,
-      default: {
-        longitude: 12.12323453534,
-        latitude: 13.123435345435,
-        geohash: "1231nejf923453",
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
       },
+      coordinates: {
+        type: [Number],
+      },
+      geohash: String,
     },
-    primaryContactId: String,
-    logoId: String,
+    primaryContactId: { type: String, default: null },
+    logoId: { type: String, default: null },
     type: String,
-    status: String,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED"],
+      default: "NOTVERIFIED",
+    },
     warehouses: {
       type: Array,
-      default: ["ware123", "ware234"],
+      default: [],
     },
     supervisors: {
       type: Array,
-      default: ["user_id 1", "user_id 2"],
+      default: [],
     },
     warehouseEmployees: {
       type: Array,
-      default: ["em12345", "em12346", "em12347"],
+      default: [],
     },
+    configuration_id: String,
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Organisation", OrganisationSchema);
+module.exports = mongoose.model("Organisation", OrganizationSchema);
