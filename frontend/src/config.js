@@ -319,7 +319,7 @@ export function config() {
       getmanufacturerInStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockReport`,
       getmanufacturerOutStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outOfStockReport`,
       getManufacturerWarehouses: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerWarehouses`,
-      getManufacturerFilterOptions: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
+      getManufacturerFilterOptions: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
