@@ -943,14 +943,18 @@ exports.bestSellers = [
             productQuantity: {
               $sum: "$inventoryDetails.quantity",
             },
-            totalSales: {
-              $sum: "$inventoryDetails.totalSales",
-            },
             inventoryAnalytics: {
               $first: "$inventory_analytics",
             },
             updatedAt: {
               $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $match: {
+            "inventoryAnalytics.sales": {
+              $gt: 0,
             },
           },
         },
