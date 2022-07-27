@@ -1,7 +1,14 @@
 import React from "react";
-import { useState } from "react";
-
-const CountryList = () => {
+import { useState, useEffect } from "react";
+import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
+const CountryList = ({country, user, setReportWarehouse}) => {
+  const [warehouses, setWarehouses] = useState([]);
+  useEffect(()=>{
+    (async() =>{
+    const warehouses = await getManufacturerWarehouses("", country);
+    setWarehouses([...warehouses.data.warehouses]);
+    })();
+  }, [])
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <>
@@ -12,10 +19,7 @@ const CountryList = () => {
         >
           <div className="mi-table-data">
             <p className="mi-body-md black f-700 mi-reset noselect">
-              United State
-            </p>
-            <p className="mi-body-xs grey f-500 mi-reset noselect">
-              ( 4 Organization )
+              {country}
             </p>
           </div>
           {toggleButton ? (
@@ -25,33 +29,19 @@ const CountryList = () => {
           )}
         </div>
         {toggleButton && (
-          <ul className="unordered-organization-list">
+        <ul className="unordered-organization-list">
+          {warehouses?.map((warehouse, index) => 
             <li className="mi-flex organization-list-item">
               <span>
-                <i className="fa-solid fa-building mr-2"></i>
+                <i className="fa-solid fa-location-dot mr-2"></i>
               </span>
-              <div>ABC Organization</div>
+              <button className="link-button" onClick={() => setReportWarehouse(warehouse?.warehouseId)}>
+              <div >Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
+              </button>
             </li>
-            <li className="mi-flex organization-list-item">
-              <span>
-                <i className="fa-solid fa-building mr-2"></i>
-              </span>
-              <div>ABC Organization</div>
-            </li>
-            <li className="mi-flex organization-list-item">
-              <span>
-                <i className="fa-solid fa-building mr-2"></i>
-              </span>
-              <div>ABC Organization</div>
-            </li>
-            <li className="mi-flex organization-list-item">
-              <span>
-                <i className="fa-solid fa-building mr-2"></i>
-              </span>
-              <div>ABC Organization</div>
-            </li>
-          </ul>
-        )}
+          )}
+        </ul>
+      )}
       </div>
     </>
   );

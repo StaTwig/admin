@@ -7,7 +7,8 @@ const cron = require("node-cron");
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-const alerts = require("./helpers/alertCronJobs");
+const alerts = require("./jobs/alert");
+const inventory = require("./jobs/inventory");
 const events = require("./models/EventModal");
 const { alertListener } = require("./helpers/listener");
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -44,15 +45,21 @@ eventEmitter.on("change", (change) => {
 });
 
 const CALCULATE_EXPIRED_CRON_TIME = `00 9 * * 1-5`;
+const DAILY_INVENTORY_CRON_TIME = `55 23 * * *`;
+
+cron.schedule(DAILY_INVENTORY_CRON_TIME, () => {
+  console.log("RUNNING INVENTORY CRON JOB ==> ", new Date());
+  inventory.dailyInventoryUpdate(new Date());
+});
 
 cron.schedule(CALCULATE_EXPIRED_CRON_TIME, () => {
-  console.log("RUNNING CRON JOBS ==> ", new Date());
+  console.log("RUNNING EXPIRY CRON JOBS ==> ", new Date());
   alerts.ordersPending();
   alerts.checkProductExpiry();
   alerts.checkProductNearExpiry();
 });
 
-var app = express();
+const app = express();
 
 //don't show the log when it is test
 if (process.env.NODE_ENV !== "test") {

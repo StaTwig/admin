@@ -2,77 +2,48 @@ const mongoose = require("mongoose");
 const WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    title: { type: String, default: "WarehouseTitle" },
-    warehouseAddress: {
-      type: Object,
-      properties: {
-        firstLine: {
-          type: String,
-          default: "Fourth Floor, T-Hub",
-        },
-        secondLine: {
-          type: String,
-          default: "IIIT Campus, Gachibowli",
-        },
-        city: {
-          type: String,
-          default: "Hyderabad",
-        },
-        state: {
-          type: String,
-          default: "Telangana",
-        },
-        country: {
-          type: String,
-          default: "India",
-        },
-        region: {
-          type: String,
-          default: "Asia",
-        },
-        landmark: {
-          type: String,
-          default: "opposite to TCS",
-        },
-        zipCode: {
-          type: Number,
-          default: 500032,
-        },
-      },
-    },
+    title: { type: String, required: true, default: "Warehouse" },
     organisationId: {
       type: String,
       required: true,
-      default: "org123",
     },
     postalAddress: {
       type: String,
-      required: false,
       default: null,
     },
-    region: {
+    warehouseAddress: {
       type: Object,
       required: true,
-      default: {
-        regionId: "reg123",
-        regionName: "Earth Prime",
+      properties: {
+        firstLine: { type: String },
+        secondLine: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        landmark: { type: String },
+        zipCode: { type: String },
       },
     },
+    region: { type: String, required: true },
     country: {
-      type: Object,
+      type: String,
       required: true,
-      default: {
-        countryId: "001",
-        countryName: "India",
-      },
     },
     location: {
-      type: Object,
-      default: {
-        longitude: 12.12323453534,
-        latitude: 13.123435345435,
-        geohash: "1231nejf923453",
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
       },
+      coordinates: {
+        type: [Number],
+      },
+      geohash: String,
+    },
+    status: {
+      type: String,
+      enum: ["ACTIVE", "NOTVERIFIED", "PENDING", "REJECTED"],
+      default: "NOTVERIFIED",
     },
     supervisors: {
       type: Array,
@@ -86,6 +57,16 @@ const WarehouseSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    bottleCapacity: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    sqft: {
+      type: Number,
+      min: 0,
+      default: 0,
     },
   },
   { timestamps: true }

@@ -86,7 +86,7 @@ const routes = (
     <Route path='/trackAndTrace' component={requireAuth(trackAndTrace)} />
     <Route path='/tracing/:id' component={requireAuth(Track)} />
     <Route path='/producttracing' component={requireAuth(ProductTracing)} />
-    <Route path='/network' component={requireAuth(Network)} />
+    {/* <Route path='/network' component={requireAuth(Network)} /> */}
     <Route
       path='/transactionHistory'
       component={requireAuth(TransactionHistory)}
@@ -130,7 +130,7 @@ const routes = (
     <Route path='/viewexpiry' component={requireAuth(ViewExpiry)} />
     <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
     <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
-    <Route path='/networking' component={requireAuth(NetworkingContainer)} />
+    <Route path='/network' component={requireAuth(NetworkingContainer)} />
 
     <Route component={ErrorPageContainer} />
 

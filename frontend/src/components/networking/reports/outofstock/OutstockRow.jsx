@@ -5,7 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 
-export default function OutstockRow() {
+export default function OutstockRow({product}) {
   const [openGraph, setOpenGraph] = React.useState(false);
 
   const handleGraphOpen = () => {
@@ -26,17 +26,17 @@ export default function OutstockRow() {
             <div className="table-icon-space">
               <i class="fa-solid fa-prescription-bottle-medical"></i>
             </div>
-            <p className="mi-body-md black f-700 mi-reset">Tablet</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.productCategory}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">Paracetamol</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.productName}</p>
           </div>
         </TableCell>
         <TableCell className="mi-custom-cell">
           <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">21</p>
+            <p className="mi-body-md black f-700 mi-reset">{product?.inventoryAnalytics?.outOfStockDays || 0}</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
               ( days )
             </p>

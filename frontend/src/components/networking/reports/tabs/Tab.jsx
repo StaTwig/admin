@@ -9,6 +9,7 @@ export default function Tab({
   setSubTab,
   LocationTab,
   setLocationTab,
+  emptyRegex
 }) {
   return (
     <>
@@ -50,7 +51,10 @@ export default function Tab({
             className={`tab-button-grid tab-first-child  ${
               LocationTab === "ORGANIZATION" && "active"
             }`}
-            onClick={() => setLocationTab("ORGANIZATION")}
+            onClick={() => {
+              emptyRegex();
+              setLocationTab("ORGANIZATION");
+            }}
           >
             <i className="fa-solid fa-building "></i>
             <p className="mi-body-sm f-500 mi-reset">Organization</p>
@@ -59,7 +63,10 @@ export default function Tab({
             className={`tab-button-grid tab-last-child tab-left-border ${
               LocationTab === "COUNTRY" && "active"
             }`}
-            onClick={() => setLocationTab("COUNTRY")}
+            onClick={() => {
+              emptyRegex();
+              setLocationTab("COUNTRY");
+            }}
           >
             <i className="fa-solid fa-earth-africa"></i>
             <p className="mi-body-sm  f-500 mi-reset">Countries</p>
@@ -67,7 +74,7 @@ export default function Tab({
         </div>
       )}
 
-      {layout === "sub-tab" && (
+      {/* {layout === "sub-tab" && (
         <div className="sub-tab-group-ui">
           <div className="sub-tab">
             <div
@@ -84,7 +91,7 @@ export default function Tab({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

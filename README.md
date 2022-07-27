@@ -47,7 +47,7 @@ Images are Served from S3 private bucket
 1. Docker
 2. Docker-Compose
 
-Dependencies can be installed by running `dependencyinstaller.sh`
+Dependencies can be installed by running `intialSetup.sh`
 
 ## Deployment Strategy
 
@@ -55,7 +55,7 @@ Docker with Docker Compose\*\*
 
 - [x] Every Service has a Dockerfile in its root folder, which reflects in building that Docker Image.
 - [x] Docker-compose.yml file present in root of Repository has all the docker service configuration , Traefik routing rules and Loadbalancing.
-- [x] There are multiple versions of Docker-compose-_-_.yml for partiucular deployments
+- [x] There are multiple versions of Docker-compose-_-_.yml for particular deployments
 - [x] All static configuration of Traefik is present in "traefik.toml" file
 - [x] Dynamic Configuration is present in the file "traefik_dynamic.toml" . Security Configuration is also included
 
