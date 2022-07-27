@@ -6,7 +6,7 @@ import "./Report.scss";
 import Tab from "./tabs/Tab";
 
 export default function Reports(props) {
-  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user } = props;
+  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user, reportWarehouse } = props;
   const [MainTab, setMainTab] = useState("INSTOCK");
   const [SubTab, setSubTab] = useState("MY");
   return (
@@ -24,14 +24,10 @@ export default function Reports(props) {
           <Tab layout="main" MainTab={MainTab} setMainTab={setMainTab} />
         </div>
 
-        <div className="tab-area">
-          <Tab layout="sub-tab" SubTab={SubTab} setSubTab={setSubTab} />
-        </div>
-
         <div className="report-table-container">
-          {MainTab === "INSTOCK" && <Instock inStock={inStock} />}
-          {MainTab === "OUTSTOCK" && <Outstock outStock={outStock}/>}
-          {MainTab === "BESTSELLER" && <BestSeller bestseller={bestseller} />}
+          {MainTab === "INSTOCK" && <Instock inStock={inStock} reportWarehouse={reportWarehouse} />}
+          {MainTab === "OUTSTOCK" && <Outstock outStock={outStock} reportWarehouse={reportWarehouse}/>}
+          {MainTab === "BESTSELLER" && <BestSeller bestseller={bestseller} reportWarehouse={reportWarehouse}/>}
         </div>
       </div>
     </div>

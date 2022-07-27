@@ -74,7 +74,7 @@ export default function Tab({
         </div>
       )}
 
-      {layout === "sub-tab" && (
+      {/* {layout === "sub-tab" && (
         <div className="sub-tab-group-ui">
           <div className="sub-tab">
             <div
@@ -91,7 +91,7 @@ export default function Tab({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

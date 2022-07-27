@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useSelector} from "react-redux";
 import {
   GoogleMap,
   InfoWindow,
@@ -33,12 +34,10 @@ const options = {
   fullscreenControl: true,
 };
 
-export default function NetworkMap() {
+export default function NetworkMap({manufacturer}) {
+  const {user} = useSelector((state) => state);
+  console.log(user)
   const [MapSelected, setMapSelected] = useState(null);
-
-  console.log(MapSelected?.geometry?.coordinates[1]);
-  console.log(MapSelected?.geometry?.coordinates[0]);
-
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
@@ -48,41 +47,41 @@ export default function NetworkMap() {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={2}
       options={options}
     >
       <>
-        <Marker
+        {/* <Marker
           position={PointerDefault}
           icon={{
             url: "/markers/defaultMap.gif",
             scaledSize: new window.google.maps.Size(50, 50),
           }}
-        />
-        {ParksData?.featured?.map((park) =>
-          park?.properties?.FACILITY_T === "flat" ? (
+        /> */}
+        {manufacturer?.warehouses?.map((park) =>
+          // park?.properties?.FACILITY_T === "flat" ? (
+          //   <Marker
+          //     key={park.properties.PARK_ID}
+          //     position={{
+          //       lat: park.geometry.coordinates[1],
+          //       lng: park.geometry.coordinates[0],
+          //     }}
+          //     onClick={() => {
+          //       setMapSelected(park);
+          //     }}
+          //     icon={{
+          //       url: "/markers/loc1.png",
+          //       scaledSize: new window.google.maps.Size(30, 30),
+          //       origin: new window.google.maps.Point(0, 0),
+          //       anchor: new window.google.maps.Point(15, 15),
+          //     }}
+          //   />
+          // ) : (
             <Marker
-              key={park.properties.PARK_ID}
+              key={park.warehouseId}
               position={{
-                lat: park.geometry.coordinates[1],
-                lng: park.geometry.coordinates[0],
-              }}
-              onClick={() => {
-                setMapSelected(park);
-              }}
-              icon={{
-                url: "/markers/loc1.png",
-                scaledSize: new window.google.maps.Size(30, 30),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(15, 15),
-              }}
-            />
-          ) : (
-            <Marker
-              key={park.properties.PARK_ID}
-              position={{
-                lat: park.geometry.coordinates[1],
-                lng: park.geometry.coordinates[0],
+                lat: park.location.latitude,
+                lng: park.location.longitude,
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -94,14 +93,14 @@ export default function NetworkMap() {
                 anchor: new window.google.maps.Point(15, 15),
               }}
             />
-          )
+          // )
         )}
 
         {MapSelected ? (
           <InfoWindow
             position={{
-              lat: MapSelected.geometry.coordinates[1],
-              lng: MapSelected.geometry.coordinates[0],
+                lat: MapSelected.location.latitude,
+                lng: MapSelected.location.longitude,
             }}
             onCloseClick={() => {
               setMapSelected(null);
@@ -112,16 +111,16 @@ export default function NetworkMap() {
                 <div className="info-header-content">
                   <i class="fa-solid fa-map-location info-icon"></i>
                   <p className="mi-body-xl black f-700 mi-reset">
-                    ABC Manufacturer
+                    {user.organisation.split('/')[0]}
                   </p>
                 </div>
               </div>
               <div className="info-body">
                 <p className="mi-body-md black f-500  mi-reset">
-                  Location Name placeholder
+                {MapSelected.title}
                 </p>
                 <p className="mi-body-sm black  mi-reset">
-                  City Name placeholder
+                {MapSelected.city}
                 </p>
               </div>
             </div>

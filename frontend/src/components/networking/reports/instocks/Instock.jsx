@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import InstockRow from "./InstockRow";
 
-export default function Instock({inStock}) {
+export default function Instock({inStock, reportWarehouse}) {
   return (
     <>
       <TableContainer>
@@ -36,10 +36,9 @@ export default function Instock({inStock}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {inStock?.map((row, index) => (
-              row?.products?.map((product, idx) => 
-              <InstockRow product={product} key={idx} />
-            )))}
+            {inStock?.map((product, idx) => 
+              <InstockRow product={product} reportWarehouse={reportWarehouse} key={idx} />
+            )}
           </TableBody>
         </Table>
       </TableContainer>

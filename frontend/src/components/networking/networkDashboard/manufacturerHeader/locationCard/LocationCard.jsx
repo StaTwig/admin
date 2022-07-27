@@ -4,7 +4,6 @@ import "./LocationCard.scss";
 export default function LocationCard({oManufacturer, manufacturer}) {
   const [MylocationFilter, setMylocationFilter] = useState(false);
   const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
-  console.log(oManufacturer, manufacturer)
   return (
     <div className="location-card-container">
       <div

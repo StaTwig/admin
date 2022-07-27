@@ -1,144 +1,286 @@
 {
-  "info": {
-    "_postman_id": "bc727947-8ac3-47b4-a9fa-ffa7f7f316e8",
-    "name": "analytics_service",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "getAnalytics",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDAxMjY3NiwiZXhwIjoxNjIwMDE5ODc2fQ.vq_mJwgo0oUklJBQyUZLsKBxltGiiS12NkGsAjrHEwo",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/analyticsmanagement/api/analytics/getAnalytics",
-          "host": ["{{url}}"],
-          "path": ["analyticsmanagement", "api", "analytics", "getAnalytics"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "getOverviewAnalytics",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/analyticsmanagement/api/analytics/getOverviewAnalytics",
-          "host": ["{{url}}"],
-          "path": [
-            "analyticsmanagement",
-            "api",
-            "analytics",
-            "getOverviewAnalytics"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "getInventoryAnalytics",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/analyticsmanagement/api/analytics/getInventoryAnalytics",
-          "host": ["{{url}}"],
-          "path": [
-            "analyticsmanagement",
-            "api",
-            "analytics",
-            "getInventoryAnalytics"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "getShipmentAnalytics",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/analyticsmanagement/api/analytics/getShipmentAnalytics",
-          "host": ["{{url}}"],
-          "path": [
-            "analyticsmanagement",
-            "api",
-            "analytics",
-            "getShipmentAnalytics"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "getOrderAnalytics",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{url}}/analyticsmanagement/api/analytics/getOrderAnalytics",
-          "host": ["{{url}}"],
-          "path": [
-            "analyticsmanagement",
-            "api",
-            "analytics",
-            "getOrderAnalytics"
-          ]
-        }
-      },
-      "response": []
-    }
-  ]
+	"info": {
+		"_postman_id": "be5f2618-e511-4809-84e0-273a9e2d6327",
+		"name": "analytics_service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10266034"
+	},
+	"item": [
+		{
+			"name": "getAnalytics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDAxMjY3NiwiZXhwIjoxNjIwMDE5ODc2fQ.vq_mJwgo0oUklJBQyUZLsKBxltGiiS12NkGsAjrHEwo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/analytics/getAnalytics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"analytics",
+						"getAnalytics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "In Stock",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDEyNyIsImZpcnN0TmFtZSI6IkhlbWEiLCJlbWFpbElkIjoiaGVtYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6IldBUjEwMDUxMSIsIm9yZ2FuaXNhdGlvbklkIjoiT1JHMTAwMDA0Iiwid2FsbGV0QWRkcmVzcyI6IjFHSFZSWDRBTnhrMU5Kbk5zVHVHU3dUZlFIOUpGZTRBZlVmYjRKIiwicGhvbmVOdW1iZXIiOiIrOTcxNTAxMDkyMjY3Iiwib3JnIjoib3JnMU1TUCIsInVzZXJOYW1lIjoiaGVtYUBzdGF0d2lnLmNvbSIsInByZWZlcnJlZExhbmd1YWdlIjoiRU4iLCJpc0N1c3RvbSI6ZmFsc2UsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwiX2lkIjoiNWY0YmYyN2YwY2M2ZmIxN2ZlYzE4NTFkIiwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiIsIiJdLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOS0zMFQxMTo1MDowOC4xNDZaIiwiX192IjowfSwiaWF0IjoxNjU4NzA2MTk1LCJleHAiOjE2NTg3NDkzOTV9.wuZmrz6aF4pliNywe5bJdUIHK8W3BgIonDLhkH8LTW0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/network/inStockReport",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"network",
+						"inStockReport"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Out of Stock",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDEyNyIsImZpcnN0TmFtZSI6IkhlbWEiLCJlbWFpbElkIjoiaGVtYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6IldBUjEwMDUxMSIsIm9yZ2FuaXNhdGlvbklkIjoiT1JHMTAwMDA0Iiwid2FsbGV0QWRkcmVzcyI6IjFHSFZSWDRBTnhrMU5Kbk5zVHVHU3dUZlFIOUpGZTRBZlVmYjRKIiwicGhvbmVOdW1iZXIiOiIrOTcxNTAxMDkyMjY3Iiwib3JnIjoib3JnMU1TUCIsInVzZXJOYW1lIjoiaGVtYUBzdGF0d2lnLmNvbSIsInByZWZlcnJlZExhbmd1YWdlIjoiRU4iLCJpc0N1c3RvbSI6ZmFsc2UsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwiX2lkIjoiNWY0YmYyN2YwY2M2ZmIxN2ZlYzE4NTFkIiwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiIsIiJdLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOS0zMFQxMTo1MDowOC4xNDZaIiwiX192IjowfSwiaWF0IjoxNjU4NzA2MTk1LCJleHAiOjE2NTg3NDkzOTV9.wuZmrz6aF4pliNywe5bJdUIHK8W3BgIonDLhkH8LTW0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/network/outOfStockReport",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"network",
+						"outOfStockReport"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Best Sellers Summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDEyNyIsImZpcnN0TmFtZSI6IkhlbWEiLCJlbWFpbElkIjoiaGVtYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6IldBUjEwMDUxMSIsIm9yZ2FuaXNhdGlvbklkIjoiT1JHMTAwMDA0Iiwid2FsbGV0QWRkcmVzcyI6IjFHSFZSWDRBTnhrMU5Kbk5zVHVHU3dUZlFIOUpGZTRBZlVmYjRKIiwicGhvbmVOdW1iZXIiOiIrOTcxNTAxMDkyMjY3Iiwib3JnIjoib3JnMU1TUCIsInVzZXJOYW1lIjoiaGVtYUBzdGF0d2lnLmNvbSIsInByZWZlcnJlZExhbmd1YWdlIjoiRU4iLCJpc0N1c3RvbSI6ZmFsc2UsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwiX2lkIjoiNWY0YmYyN2YwY2M2ZmIxN2ZlYzE4NTFkIiwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiIsIiJdLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOS0zMFQxMTo1MDowOC4xNDZaIiwiX192IjowfSwiaWF0IjoxNjU4NzA2MTk1LCJleHAiOjE2NTg3NDkzOTV9.wuZmrz6aF4pliNywe5bJdUIHK8W3BgIonDLhkH8LTW0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/network/bestSellerSummary",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"network",
+						"bestSellerSummary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Best Sellers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDEyNyIsImZpcnN0TmFtZSI6IkhlbWEiLCJlbWFpbElkIjoiaGVtYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6IldBUjEwMDUxMSIsIm9yZ2FuaXNhdGlvbklkIjoiT1JHMTAwMDA0Iiwid2FsbGV0QWRkcmVzcyI6IjFHSFZSWDRBTnhrMU5Kbk5zVHVHU3dUZlFIOUpGZTRBZlVmYjRKIiwicGhvbmVOdW1iZXIiOiIrOTcxNTAxMDkyMjY3Iiwib3JnIjoib3JnMU1TUCIsInVzZXJOYW1lIjoiaGVtYUBzdGF0d2lnLmNvbSIsInByZWZlcnJlZExhbmd1YWdlIjoiRU4iLCJpc0N1c3RvbSI6ZmFsc2UsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwiX2lkIjoiNWY0YmYyN2YwY2M2ZmIxN2ZlYzE4NTFkIiwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiIsIiJdLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOS0zMFQxMTo1MDowOC4xNDZaIiwiX192IjowfSwiaWF0IjoxNjU4NzA2MTk1LCJleHAiOjE2NTg3NDkzOTV9.wuZmrz6aF4pliNywe5bJdUIHK8W3BgIonDLhkH8LTW0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/network/bestSellers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"network",
+						"bestSellers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOverviewAnalytics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/analytics/getOverviewAnalytics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"analytics",
+						"getOverviewAnalytics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getInventoryAnalytics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/analytics/getInventoryAnalytics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"analytics",
+						"getInventoryAnalytics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getShipmentAnalytics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/analytics/getShipmentAnalytics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"analytics",
+						"getShipmentAnalytics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOrderAnalytics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/analyticsmanagement/api/analytics/getOrderAnalytics",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"analyticsmanagement",
+						"api",
+						"analytics",
+						"getOrderAnalytics"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "localhost:3014"
+		}
+	]
 }
