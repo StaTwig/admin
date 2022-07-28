@@ -625,7 +625,7 @@ exports.createShipment = [
             data.poId,
             "CREATED"
           );
-          if (flag == "Y")
+          if (flag == "Y" && data.poId != null)
             await poUpdate(
               products[count].productId,
               products[count].productQuantity,
@@ -1380,7 +1380,7 @@ exports.receiveShipment = [
               data.id,
               "RECEIVED"
             );
-            if (flag == "Y")
+            if (flag == "Y" && data.poId != null)
               await poUpdate(
                 products[count].productId,
                 products[count].productQuantity,
