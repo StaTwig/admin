@@ -1075,6 +1075,61 @@ exports.inStockReport = [
       const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
         req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+        let matchQuery = {};
+        let MatchQuery1 = {};
+      let isDist = req.query.isDist;
+      if(isDist){
+        matchQuery[`totalSales`] = {
+          $gt: 0
+        }
+        if(req.user.warehouseId && req.user.warehouseId !== req.query.warehouseId){
+        let wares = await WarehouseModel.aggregate([
+          {
+            $match: {
+              id: req.user.warehouseId,
+            },
+          },
+          {
+            $lookup: {
+              localField: "warehouseInventory",
+              from: "inventories",
+              foreignField: "id",
+              as: "inventory",
+            },
+          },
+          {
+            $unwind: {
+              path: "$inventory",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $replaceWith: {
+              $mergeObjects: [null, "$inventory"],
+            },
+          },
+          {
+            $unwind: {
+              path: "$inventoryDetails",
+            },
+          },
+           {
+         $group:
+           {
+               _id: 'items',
+             distItems: { $addToSet: "$inventoryDetails.productId" }
+           }
+       }
+          ])
+          const newLocal = 0;
+          console.log(wares[newLocal].distItems);
+          if(wares[newLocal].distItems > 0){
+            MatchQuery1[`inventoryDetails.productId`] = {
+              '$in': wares[newLocal].distItems
+            }
+          }
+          }
+      }
       const inStockReport = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1104,6 +1159,9 @@ exports.inStockReport = [
           $unwind: {
             path: "$inventoryDetails",
           },
+        },
+        {
+          $match: MatchQuery1
         },
         {
           $match: {
@@ -1191,6 +1249,9 @@ exports.inStockReport = [
           },
         },
         {
+          $match: matchQuery
+        },
+        {
           $sort: {
             productQuantity: -1,
           },
@@ -1214,6 +1275,61 @@ exports.outOfStockReport = [
       const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
         req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+        let matchQuery = {};
+        let MatchQuery1 = {};
+      let isDist = req.query.isDist;
+      if(isDist){
+        matchQuery[`totalSales`] = {
+          $gt: 0
+        }
+        if(req.user.warehouseId && req.user.warehouseId !== req.query.warehouseId){
+        let wares = await WarehouseModel.aggregate([
+          {
+            $match: {
+              id: req.user.warehouseId,
+            },
+          },
+          {
+            $lookup: {
+              localField: "warehouseInventory",
+              from: "inventories",
+              foreignField: "id",
+              as: "inventory",
+            },
+          },
+          {
+            $unwind: {
+              path: "$inventory",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $replaceWith: {
+              $mergeObjects: [null, "$inventory"],
+            },
+          },
+          {
+            $unwind: {
+              path: "$inventoryDetails",
+            },
+          },
+           {
+         $group:
+           {
+               _id: 'items',
+             distItems: { $addToSet: "$inventoryDetails.productId" }
+           }
+       }
+          ])
+          const newLocal = 0;
+          console.log(wares[newLocal].distItems);
+          if(wares[newLocal].distItems > 0){
+            MatchQuery1[`inventoryDetails.productId`] = {
+              '$in': wares[newLocal].distItems
+            }
+          }
+          }
+      }
       const outOfStockReport = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1243,6 +1359,9 @@ exports.outOfStockReport = [
           $unwind: {
             path: "$inventoryDetails",
           },
+        },
+        {
+          $match: MatchQuery1
         },
         {
           $match: {
@@ -1326,6 +1445,9 @@ exports.outOfStockReport = [
               $first: "$inventoryDetails.updatedAt",
             },
           },
+        },
+        {
+          $match: matchQuery
         },
         {
           $sort: {
