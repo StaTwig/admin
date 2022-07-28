@@ -123,3 +123,13 @@
 .bg-darkblue {
   background-color: var(--darkblue);
 }
+
+.status-1 {
+  background-color: var(--status-1);
+  color: var(--white);
+}
+
+.status-2 {
+  background-color: var(--status-2);
+  color: var(--white);
+}
