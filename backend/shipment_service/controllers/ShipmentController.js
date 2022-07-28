@@ -1380,7 +1380,8 @@ exports.receiveShipment = [
               data.id,
               "RECEIVED"
             );
-            if (flag == "Y" && data.poId != null)
+            try {
+            if (flag == "Y" && data.poId != null) {
               await poUpdate(
                 products[count].productId,
                 products[count].productQuantity,
@@ -1388,7 +1389,10 @@ exports.receiveShipment = [
                 "RECEIVED",
                 req.user
               );
-
+            }
+              } catch (err){
+                console.log("Couldn't update PO ID",err)
+              }
             if (products[count].batchNumber != null) {
               const checkBatch = await AtomModel.find({
                 $and: [
