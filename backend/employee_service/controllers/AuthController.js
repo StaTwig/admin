@@ -235,12 +235,8 @@ exports.register = [
                   postalAddress: addr,
                   warehouses: [warehouseId],
                   warehouseEmployees: [employeeId],
-                  region: {
-                    name: region,
-                  },
-                  country: {
-                    countryName: country,
-                  },
+                  region: region,
+                  country: country,
                   configuration_id: "CONF000",
                   authority: req.body?.authority,
                 }
@@ -268,12 +264,8 @@ exports.register = [
               postalAddress: addr,
               warehouses: [warehouseId],
               warehouseEmployees: [employeeId],
-              region: {
-                name: region,
-              },
-              country: {
-                countryName: country,
-              },
+              region: region,
+              country: country,
               configuration_id: "CONF000",
               authority: req.body?.authority,
             });
