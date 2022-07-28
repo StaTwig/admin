@@ -7,7 +7,7 @@ import InventoryIcon from "../../assets/icons/Inventoryselected.png";
 import trackIcon from "../../assets/icons/Track_Traceselected.png";
 import NetworkIcon from "../../assets/icons/blockicon.png";
 import trackSelectedIcon from "../../assets/icons/Track_Traceselected.png";
-import OrderSelectedIcon from "../../assets/icons/OrderSelected.png";
+import OrderSelectedIcon from "../../assets/icons/orderSelected.png";
 import lastMileIcon from "../../assets/icons/lastMile.png";
 import { isAuthenticated } from "../../utils/commonHelper";
 import "./style.scss";
@@ -128,11 +128,11 @@ const SideBar = (props) => {
         )}
 
         {isAuthenticated("overview") && enable && (
-          <li className={url === "/dashboard" ? "active" : ""}>
-            <Link to='/dashboard' className='d-inline-block'>
+          <li className={url === "/network" ? "active" : ""}>
+            <Link to='/network' className='d-inline-block'>
               <img
-                src={url === "/dashboard" ? NetworkIcon : NetworkIcon}
-                alt='Shipment'
+                src={url === "/network" ? NetworkIcon : NetworkIcon}
+                alt='network'
               />
               <span className='ml-2'>{t("network")}</span>
             </Link>

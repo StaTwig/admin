@@ -3,12 +3,7 @@ const AnalyticsController = require("../controllers/AnalyticsController");
 const router = express.Router();
 
 router.get("/bestSellers", AnalyticsController.bestSellers);
-router.get(
-  "/manufacturerInStockReport",
-  AnalyticsController.manufacturerInStockReport
-);
-router.get(
-  "/manufacturerOutStockReport",
-  AnalyticsController.manufacturerOutStockReport
-);
+router.get("/bestSellerSummary", AnalyticsController.bestSellerSummary);
+router.get("/inStockReport", AnalyticsController.inStockReport);
+router.get("/outOfStockReport", AnalyticsController.outOfStockReport);
 module.exports = router;

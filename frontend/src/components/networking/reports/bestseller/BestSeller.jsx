@@ -7,60 +7,34 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import BestSellerRow from "./BestSellerRow";
 
-export default function BestSeller() {
-  const Data = [
-    {
-      id: "1",
-    },
-    {
-      id: "2",
-    },
-    {
-      id: "3",
-    },
-    {
-      id: "4",
-    },
-    {
-      id: "5",
-    },
-    {
-      id: "6",
-    },
-    {
-      id: "7",
-    },
-    {
-      id: "8",
-    },
-  ];
+export default function BestSeller({ bestseller }) {
   return (
     <>
       <TableContainer>
         <Table
           sx={{ minWidth: 665 }}
-          className="mi-custom-table"
-          aria-label="collapsible table"
+          className='mi-custom-table'
+          aria-label='collapsible table'
         >
           <TableHead>
             <TableRow>
-              <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <p className="mi-body-sm mi-reset grey-400">Product Category</p>
+              <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
+                <p className='mi-body-sm mi-reset grey-400'>Product Category</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Name</p>
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>Product Name</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>
                   No. of units sold
                 </p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead"></TableCell>
+              <TableCell className='mi-custom-tableHead'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Data.map((rows) => (
-              <BestSellerRow key={rows.id} />
+            {bestseller.map((product, index) => (
+              <BestSellerRow product={product} key={index} />
             ))}
           </TableBody>
         </Table>

@@ -10,7 +10,7 @@ export const LOCAL_SERVER_URL_INVENTORY = "http://localhost:3007";
 export const LOCAL_SERVER_URL_PO = "http://localhost:3012";
 export const LOCAL_SERVER_URL_TRACKANDTRACE = "http://localhost:3005";
 export const LOCAL_SERVER_URL_NOTIFICATION = "http://localhost:3006";
-export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3015";
+export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3014";
 export const LOCAL_SERVER_URL_EOL = "http://localhost:3017";
 export const LOCAL_SERVER_URL_EVENT = "http://localhost:3013";
 export const LOCAL_SERVER_URL_PRODUCTS = "http://localhost:3010";
@@ -163,6 +163,12 @@ export function config() {
       temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      getBestSellersUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/bestSellers`,
+      getBestSellersSummaryUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/bestSellerSummary`,
+      getmanufacturerInStockReportUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/inStockReport`,
+      getmanufacturerOutStockReportUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/outOfStockReport`,
+      getManufacturerWarehouses: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerWarehouses`,
+      getManufacturerFilterOptions: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -308,6 +314,12 @@ export function config() {
       temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      getBestSellersUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/bestSellers`,
+      getBestSellersSummaryUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/bestSellerSummary`,
+      getmanufacturerInStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockReport`,
+      getmanufacturerOutStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outOfStockReport`,
+      getManufacturerWarehouses: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerWarehouses`,
+      getManufacturerFilterOptions: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
