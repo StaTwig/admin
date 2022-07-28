@@ -177,11 +177,14 @@ exports.getManufacturerWarehouses = [
   async (req, res) => {
     try {
       const { organisationId } = req.user;
-      const { warehouseOrg, countryName } = req.query;
+      const { warehouseOrg, countryName, partnerLocation, mylocationFilter } = req.query;
       const queryObj = {};
-      if (warehouseOrg) queryObj[`organisationId`] = warehouseOrg;
+      if(partnerLocation) queryObj[`organisationId`] = { $ne: req.user.organisationId }
+      else if(mylocationFilter) queryObj[`organisationId`] = req.user.organisationId
+      else if (warehouseOrg) queryObj[`organisationId`] = warehouseOrg;
       if (countryName) queryObj[`country.countryName`] = countryName;
 
+      console.log(queryObj)
       const warehouses = await WarehouseModel.aggregate([
         { $match: queryObj },
         {
@@ -204,13 +207,22 @@ exports.getManufacturerWarehouses = [
         },
         { $unwind: "$productData" },
         { $match: { "productData.manufacturerId": organisationId } },
-        //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
+        {
+          $lookup: {
+            from: 'organisations',
+            localField: "organisationId",
+            foreignField: "id",
+            as: "orgData",
+          }
+        },
         {
           $group: {
             _id: null,
             warehouses: {
               $addToSet: {
                 warehouseId: "$id",
+                orgId: "$organisationId",
+                orgName: "$orgData.name",
                 city: "$warehouseAddress.city",
                 title: "$title",
                 location: "$location",
@@ -243,7 +255,6 @@ exports.getManufacturerWarehouses = [
           },
           { $unwind: "$productData" },
           { $match: { "productData.manufacturerId": organisationId } },
-          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
           {
             $group: {
               _id: null,
@@ -293,7 +304,6 @@ exports.getManufacturerWarehouses = [
           },
           { $unwind: "$productData" },
           { $match: { "productData.manufacturerId": organisationId } },
-          //  {'$match': {'productData.manufacturer': 'Bharath Biotech'}},
           {
             $group: {
               _id: null,

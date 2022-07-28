@@ -35,8 +35,8 @@ const options = {
 };
 
 export default function NetworkMap({manufacturer}) {
+  console.log('hey there')
   const {user} = useSelector((state) => state);
-  console.log(user)
   const [MapSelected, setMapSelected] = useState(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -59,29 +59,29 @@ export default function NetworkMap({manufacturer}) {
           }}
         /> */}
         {manufacturer?.warehouses?.map((park) =>
-          // park?.properties?.FACILITY_T === "flat" ? (
-          //   <Marker
-          //     key={park.properties.PARK_ID}
-          //     position={{
-          //       lat: park.geometry.coordinates[1],
-          //       lng: park.geometry.coordinates[0],
-          //     }}
-          //     onClick={() => {
-          //       setMapSelected(park);
-          //     }}
-          //     icon={{
-          //       url: "/markers/loc1.png",
-          //       scaledSize: new window.google.maps.Size(30, 30),
-          //       origin: new window.google.maps.Point(0, 0),
-          //       anchor: new window.google.maps.Point(15, 15),
-          //     }}
-          //   />
-          // ) : (
+          park?.orgId === user.organisation?.split("/")[1] ? (
+            <Marker
+            key={park.warehouseId}
+            position={{
+              lat: parseFloat(park.location.latitude),
+              lng: parseFloat(park.location.longitude),
+            }}
+              onClick={() => {
+                setMapSelected(park);
+              }}
+              icon={{
+                url: "/markers/loc1.png",
+                scaledSize: new window.google.maps.Size(30, 30),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+              }}
+            />
+          ) : (
             <Marker
               key={park.warehouseId}
               position={{
-                lat: park.location.latitude,
-                lng: park.location.longitude,
+                lat: parseFloat(park.location.latitude),
+                lng: parseFloat(park.location.longitude),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -93,14 +93,14 @@ export default function NetworkMap({manufacturer}) {
                 anchor: new window.google.maps.Point(15, 15),
               }}
             />
-          // )
+          )
         )}
 
         {MapSelected ? (
           <InfoWindow
             position={{
-                lat: MapSelected.location.latitude,
-                lng: MapSelected.location.longitude,
+                lat: parseFloat(MapSelected.location.latitude),
+                lng: parseFloat(MapSelected.location.longitude),
             }}
             onCloseClick={() => {
               setMapSelected(null);
@@ -111,7 +111,7 @@ export default function NetworkMap({manufacturer}) {
                 <div className="info-header-content">
                   <i class="fa-solid fa-map-location info-icon"></i>
                   <p className="mi-body-xl black f-700 mi-reset">
-                    {user.organisation.split('/')[0]}
+                    {MapSelected.orgName[0]}
                   </p>
                 </div>
               </div>

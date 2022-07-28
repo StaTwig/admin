@@ -18,6 +18,7 @@ export default function Networking(props) {
     user,
     setReportWarehouse,
     MainTab, 
+    setPartnerLocation,
     setMainTab
   } = props;
 
