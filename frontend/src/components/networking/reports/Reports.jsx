@@ -14,8 +14,9 @@ export default function Reports(props) {
     outStock,
     user,
     reportWarehouse,
+    MainTab,
+    setMainTab
   } = props;
-  const [MainTab, setMainTab] = useState("INSTOCK");
   return (
     <div className='reports-main-container'>
       <div className='reports-header'>

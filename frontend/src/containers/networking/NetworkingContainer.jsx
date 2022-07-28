@@ -20,6 +20,8 @@ const NetworkingContainer = (props) => {
   const [TopBestseller, setTopBestseller] = React.useState();
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
+  const [MainTab, setMainTab] = useState("INSTOCK");
+
   const [manufacturer, setManufacturer] = React.useState({
     myLocations: 0,
     partnerLocations: 0,
@@ -68,7 +70,7 @@ const NetworkingContainer = (props) => {
       getWarehouses(org);
       getManFilters();
     })();
-  }, [reportWarehouse]);
+  }, [reportWarehouse, MainTab]);
 
   return (
     <div className='container-fluid p-0'>
@@ -83,6 +85,8 @@ const NetworkingContainer = (props) => {
             inStock={inStock}
             outStock={outStock}
             manufacturer={manufacturer}
+            MainTab={MainTab} 
+            setMainTab={setMainTab}
             oManufacturer={oManufacturer}
             reportWarehouse={reportWarehouse}
             setReportWarehouse={(param) => setReportWarehouse(param)}

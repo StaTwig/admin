@@ -17,6 +17,8 @@ export default function Networking(props) {
     outStock,
     user,
     setReportWarehouse,
+    MainTab, 
+    setMainTab
   } = props;
 
   const [MobileDashboard, setMobileDashboard] = useState(false);
@@ -56,7 +58,8 @@ export default function Networking(props) {
             <NetworkMap {...props} />
           </div>
           <div className='network-report-holders'>
-            <Reports {...props} reportWarehouse={reportWarehouse} />
+
+            <Reports {...props} reportWarehouse={reportWarehouse} MainTab={MainTab} setMainTab={setMainTab}/>
           </div>
         </div>
       </div>
