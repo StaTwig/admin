@@ -7,29 +7,29 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import BestSellerRow from "./BestSellerRow";
 
-export default function BestSeller({bestseller}) {
+export default function BestSeller({ bestseller }) {
   return (
     <>
       <TableContainer>
         <Table
           sx={{ minWidth: 665 }}
-          className="mi-custom-table"
-          aria-label="collapsible table"
+          className='mi-custom-table'
+          aria-label='collapsible table'
         >
           <TableHead>
             <TableRow>
-              <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <p className="mi-body-sm mi-reset grey-400">Product Category</p>
+              <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
+                <p className='mi-body-sm mi-reset grey-400'>Product Category</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Name</p>
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>Product Name</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>
                   No. of units sold
                 </p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead"></TableCell>
+              <TableCell className='mi-custom-tableHead'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

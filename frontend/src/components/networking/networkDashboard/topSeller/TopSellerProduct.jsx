@@ -20,9 +20,7 @@ const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
             </p>
           </div>
           <div className="mi-table-data">
-            <p className="mi-body-sm black f-700 mi-reset">
-              {bs.productQuantity}
-            </p>
+            <p className="mi-body-sm black f-700 mi-reset">{bs.totalSales}</p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
               ( {bs?.unitofMeasure?.name} )
             </p>
