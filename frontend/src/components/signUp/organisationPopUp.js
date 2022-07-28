@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { Formik } from "formik";
 import FailedPopUp from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
@@ -13,6 +13,8 @@ import {
   fetchUnregisteredOrganisations
 } from "../../actions/productActions";
 import { useTranslation } from "react-i18next";
+
+const filter = createFilterOptions();
 
 const OrganisationPopUp = (props) => {
 	const { t } = useTranslation();
@@ -206,7 +208,20 @@ const OrganisationPopUp = (props) => {
 														//error={errors.name}
 														onChange={(event, newValue) => {
 															setname(newValue);
+															setFieldValue("name", newValue);
 														}}
+														filterOptions={(options, params) => {
+															const filtered = filter(options, params);
+
+															const { inputValue } = params;
+															const isExisting = options.some((option) => inputValue === option);
+															if(inputValue !== '' || !isExisting) {
+																filtered.push(inputValue);
+															}
+
+															return filtered;
+														}}
+														freeSolo={true}
 														options={unregisteredOrganisations}
 														renderInput={(params) => (
 															<TextField {...params} label={t("organisation") + " " + t("name")} />
