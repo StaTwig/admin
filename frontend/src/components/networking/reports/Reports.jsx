@@ -6,9 +6,21 @@ import "./Report.scss";
 import Tab from "./tabs/Tab";
 
 export default function Reports(props) {
-  const { bestseller, inStock, manufacturer, oManufacturer, outStock, user, reportWarehouse } = props;
+  const {
+    bestseller,
+    inStock,
+    manufacturer,
+    oManufacturer,
+    outStock,
+    user,
+    reportWarehouse,
+  } = props;
   const [MainTab, setMainTab] = useState("INSTOCK");
   const [SubTab, setSubTab] = useState("MY");
+
+  const [month, setMonth] = useState("2022-06");
+
+  console.log(month);
   return (
     <div className="reports-main-container">
       <div className="reports-header">
@@ -16,6 +28,12 @@ export default function Reports(props) {
           <h1 className="mi-body-lg dark f-500 mi-reset">REPORTS</h1>
         </div>
         <div className="header-actions-group">
+          <input
+            type="month"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="input-calender-form"
+          />
           <button className="nt-btn nt-btn-sm nt-btn-blue">Export</button>
         </div>
       </div>
@@ -25,9 +43,18 @@ export default function Reports(props) {
         </div>
 
         <div className="report-table-container">
-          {MainTab === "INSTOCK" && <Instock inStock={inStock} reportWarehouse={reportWarehouse} />}
-          {MainTab === "OUTSTOCK" && <Outstock outStock={outStock} reportWarehouse={reportWarehouse}/>}
-          {MainTab === "BESTSELLER" && <BestSeller bestseller={bestseller} reportWarehouse={reportWarehouse}/>}
+          {MainTab === "INSTOCK" && (
+            <Instock inStock={inStock} reportWarehouse={reportWarehouse} />
+          )}
+          {MainTab === "OUTSTOCK" && (
+            <Outstock outStock={outStock} reportWarehouse={reportWarehouse} />
+          )}
+          {MainTab === "BESTSELLER" && (
+            <BestSeller
+              bestseller={bestseller}
+              reportWarehouse={reportWarehouse}
+            />
+          )}
         </div>
       </div>
     </div>

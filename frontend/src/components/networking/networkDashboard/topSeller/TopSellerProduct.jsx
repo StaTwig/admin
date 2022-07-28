@@ -14,9 +14,15 @@ const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
           <i class="fa-solid fa-prescription-bottle-medical light"></i>
         </div>
         <div className="best-seller-content">
-          <p className="mi-body-md f-500 mi-reset">{bs.productName}</p>
+          <div className="product-text-wrapper">
+            <p className="mi-body-sm f-500 mi-reset mi-text-wrap-sm">
+              {bs.productName}
+            </p>
+          </div>
           <div className="mi-table-data">
-            <p className="mi-body-sm black f-700 mi-reset">{bs.productQuantity}</p>
+            <p className="mi-body-sm black f-700 mi-reset">
+              {bs.productQuantity}
+            </p>
             <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
               ( {bs?.unitofMeasure?.name} )
             </p>

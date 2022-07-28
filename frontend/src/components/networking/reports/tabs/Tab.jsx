@@ -9,7 +9,7 @@ export default function Tab({
   setSubTab,
   LocationTab,
   setLocationTab,
-  emptyRegex
+  emptyRegex,
 }) {
   return (
     <>
@@ -22,7 +22,7 @@ export default function Tab({
             onClick={() => setMainTab("INSTOCK")}
           >
             <i class="fa-solid fa-box-archive mi-icon-xl"></i>
-            <p className="mi-body-sm f-500 mi-reset">In - Product</p>
+            <p className="mi-body-sm f-500 mi-reset">In - Stock</p>
           </div>
           <div
             className={`tab-button tab-left-border ${
@@ -31,7 +31,7 @@ export default function Tab({
             onClick={() => setMainTab("OUTSTOCK")}
           >
             <i class="fa-solid fa-box-archive"></i>
-            <p className="mi-body-sm f-500 mi-reset">Out of Product</p>
+            <p className="mi-body-sm f-500 mi-reset">Out of Stock</p>
           </div>
           <div
             className={`tab-button tab-last-child tab-left-border ${
