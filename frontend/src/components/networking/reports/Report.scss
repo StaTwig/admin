@@ -90,7 +90,7 @@
 // Modal Dialog Styles
 .modal-heading-space{
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 1rem;
 }
 
@@ -122,7 +122,7 @@
 .nt-modal-body{
     background-color: rgb(246, 245, 245);
     padding: 0.3rem 2rem;
-    height: 30rem;
+    max-height: 30rem;
     overflow-y: auto;
 }
 
@@ -133,3 +133,24 @@
     padding: 1rem 2rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+
+.input-calender-form{
+    padding: 0.325rem 1.2rem;
+    border-radius: 0.3rem;
+    outline: none;
+    border: 1px solid #1275E6;
+    cursor: pointer;
+    color: #1275E6;
+}
+
+.header-actions-group{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    color: #1275E6;
+    
+    }

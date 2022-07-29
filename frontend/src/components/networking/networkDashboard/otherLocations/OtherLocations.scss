@@ -5,10 +5,12 @@
     padding:0.8rem 0.5rem;
     border-radius: 6px;
     position: relative;
+    outline: none;
 }
 .search-icon{
     position: absolute;
     right:40px;
+    cursor: pointer;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
