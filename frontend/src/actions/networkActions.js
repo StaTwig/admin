@@ -1,10 +1,11 @@
 import axios from "axios";
 import { config } from "../config";
-
-export const getBestSellers = async (reportWarehouse) => {
+import format from "date-fns/format";
+export const getBestSellers = async (reportWarehouse, date) => {
   try {
+    date = date ? format(date, "yyyy-MM-dd") : "";
     const url = config().getBestSellersUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
     return result.data;
   } catch (e) {
     console.log(e);
@@ -23,10 +24,11 @@ export const getBestSellerSummary = async (reportWarehouse) => {
   }
 };
 
-export const getmanufacturerInStockReport = async (reportWarehouse) => {
+export const getmanufacturerInStockReport = async (reportWarehouse, date) => {
   try {
+    date = date ? format(date, "yyyy-MM-dd") : "";
     const url = config().getmanufacturerInStockReportUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
     return result.data;
   } catch (e) {
     console.log(e);
@@ -34,10 +36,11 @@ export const getmanufacturerInStockReport = async (reportWarehouse) => {
   }
 };
 
-export const getmanufacturerOutStockReport = async (reportWarehouse) => {
+export const getmanufacturerOutStockReport = async (reportWarehouse, date) => {
   try {
+    date = date ? format(date, "yyyy-MM-dd") : "";
     const url = config().getmanufacturerOutStockReportUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}`);
+    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
     return result.data;
   } catch (e) {
     console.log(e);

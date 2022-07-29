@@ -14,13 +14,10 @@ export default function Reports(props) {
     reportWarehouse,
     myRef,
     MainTab,
-    setMainTab
+    setMainTab,
+    startDate,
+    setStartDate
   } = props;
-  const [SubTab, setSubTab] = useState("MY");
-
-  const [month, setMonth] = useState();
-  const [startDate, setStartDate] = useState(new Date("Jan 01 2022"));
-  console.log(startDate);
   return (
     <div className="reports-main-container">
       <div className="reports-header">
@@ -44,7 +41,7 @@ export default function Reports(props) {
             />
             <i class="fa-solid fa-calendar-days cal-icon"></i>
           </div>
-          <button className="nt-btn nt-btn-sm nt-btn-blue">Export</button>
+          {/* <button className="nt-btn nt-btn-sm nt-btn-blue">Export</button> */}
         </div>
       </div>
       <div className="reports-body">

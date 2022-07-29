@@ -1067,6 +1067,13 @@ exports.bestSellerSummary = [
           $match: matchQuery,
         },
         {
+          $match: {
+            totalSales: {
+              $gt: 0
+            }
+          },
+        },
+        {
           $sort: {
             totalSales: -1,
           },
@@ -1244,7 +1251,7 @@ exports.inStockReport = [
         {
           $unwind: {
             path: "$inventory_analytics",
-            preserveNullAndEmptyArrays: true,
+            // preserveNullAndEmptyArrays: true,
           },
         },
         {
@@ -1457,7 +1464,7 @@ exports.outOfStockReport = [
         {
           $unwind: {
             path: "$inventory_analytics",
-            preserveNullAndEmptyArrays: true,
+            // preserveNullAndEmptyArrays: true,
           },
         },
         {
