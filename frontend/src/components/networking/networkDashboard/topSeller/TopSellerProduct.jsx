@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
+  const {user} = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS"
   return (
     <>
       <div
@@ -25,6 +28,13 @@ const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
               ( {bs?.unitofMeasure?.name} )
             </p>
           </div>
+
+          {Distributor && (
+            <div className="manufacturer-details">
+              <p className="mi-body-sm grey f-400 mi-reset">ABC Manufacturer</p>
+            </div>
+          )}
+
         </div>
       </div>
     </>

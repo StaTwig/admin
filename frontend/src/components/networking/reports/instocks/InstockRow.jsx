@@ -7,8 +7,11 @@ import BatchDetails from "./batchDetails/BatchDetails";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 import isBefore from "date-fns/isBefore";
 import { subDays } from "date-fns";
+import { useSelector } from "react-redux";
 export default function InstockRow({ product, reportWarehouse }) {
   const [open, setOpen] = React.useState(false);
+  const {user} = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS"
   const isNearExpiry = (givenDate) => {
     try {
       if (givenDate)
@@ -55,6 +58,8 @@ export default function InstockRow({ product, reportWarehouse }) {
             </p>
           </div>
         </TableCell>
+
+
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset mi-text-wrap-sm'>
@@ -62,6 +67,15 @@ export default function InstockRow({ product, reportWarehouse }) {
             </p>
           </div>
         </TableCell>
+
+
+        {Distributor && (
+        <TableCell className="mi-custom-cell">
+          <div className="mi-table-data">
+            <p className="mi-body-md black f-700 mi-reset">{product.manufacturer}</p>
+          </div>
+        </TableCell>
+        )}
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
