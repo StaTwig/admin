@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import {
   GoogleMap,
   InfoWindow,
@@ -7,9 +7,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import "./NetworkMap.scss";
-
-import mapStyles from "./data/mapStyles";
-import ParksData from "./data/skateboard-parks.json";
+import BlueMap from "./data/BlueMap";
 
 const containerStyle = {
   width: "100%",
@@ -27,16 +25,16 @@ const PointerDefault = {
 };
 
 const options = {
-  styles: mapStyles,
+  styles: BlueMap,
   disableDefaultUI: true,
   zoomControl: true,
   rotateControl: true,
   fullscreenControl: true,
 };
 
-export default function NetworkMap({manufacturer}) {
-  console.log('hey there')
-  const {user} = useSelector((state) => state);
+export default function NetworkMap({ manufacturer }) {
+  console.log("hey there");
+  const { user } = useSelector((state) => state);
   const [MapSelected, setMapSelected] = useState(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -61,11 +59,11 @@ export default function NetworkMap({manufacturer}) {
         {manufacturer?.warehouses?.map((park) =>
           park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
-            key={park.warehouseId}
-            position={{
-              lat: parseFloat(park.location.latitude),
-              lng: parseFloat(park.location.longitude),
-            }}
+              key={park.warehouseId}
+              position={{
+                lat: parseFloat(park.location.latitude),
+                lng: parseFloat(park.location.longitude),
+              }}
               onClick={() => {
                 setMapSelected(park);
               }}
@@ -99,8 +97,8 @@ export default function NetworkMap({manufacturer}) {
         {MapSelected ? (
           <InfoWindow
             position={{
-                lat: parseFloat(MapSelected.location.latitude),
-                lng: parseFloat(MapSelected.location.longitude),
+              lat: parseFloat(MapSelected.location.latitude),
+              lng: parseFloat(MapSelected.location.longitude),
             }}
             onCloseClick={() => {
               setMapSelected(null);
@@ -117,11 +115,9 @@ export default function NetworkMap({manufacturer}) {
               </div>
               <div className="info-body">
                 <p className="mi-body-md black f-500  mi-reset">
-                {MapSelected.title}
+                  {MapSelected.title}
                 </p>
-                <p className="mi-body-sm black  mi-reset">
-                {MapSelected.city}
-                </p>
+                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>
