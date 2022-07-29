@@ -45,11 +45,19 @@ export const getmanufacturerOutStockReport = async (reportWarehouse) => {
   }
 };
 
-export const getManufacturerWarehouses = async (orgId, cName, partnerLocation, MylocationFilter) => {
+export const getManufacturerWarehouses = async (
+  orgId,
+  cName,
+  partnerLocation,
+  MylocationFilter
+) => {
   try {
     const url = config().getManufacturerWarehouses;
     const result = await axios.get(
-      url + `?warehouseOrg=${orgId}&countryName=${cName}&partnerLocation=${partnerLocation ? partnerLocation : ""}&mylocationFilter=${MylocationFilter ? MylocationFilter : ""}`
+      url +
+        `?warehouseOrg=${orgId}&countryName=${cName}&partnerLocation=${
+          partnerLocation ? partnerLocation : ""
+        }&mylocationFilter=${MylocationFilter ? MylocationFilter : ""}`
     );
     return result.data;
   } catch (e) {

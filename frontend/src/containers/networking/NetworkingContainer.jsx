@@ -50,7 +50,12 @@ const NetworkingContainer = (props) => {
     setReportWarehouse(outStock.data.warehouseId);
   };
   const getWarehouses = async (org) => {
-    const warehouses = await getManufacturerWarehouses("", "", partnerLocation, MylocationFilter);
+    const warehouses = await getManufacturerWarehouses(
+      "",
+      "",
+      partnerLocation,
+      MylocationFilter
+    );
     setManufacturer(warehouses.data);
   };
   const getManFilters = async () => {
@@ -68,13 +73,14 @@ const NetworkingContainer = (props) => {
       getManFilters();
     })();
   }, [reportWarehouse, MainTab]);
- 
+
   useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();
       const { organisation } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split("/");
+      console.log("ORGANIZATION", organisation, org);
       getWarehouses(org);
     })();
   }, [partnerLocation, MylocationFilter]);
@@ -92,7 +98,7 @@ const NetworkingContainer = (props) => {
             inStock={inStock}
             outStock={outStock}
             manufacturer={manufacturer}
-            MainTab={MainTab} 
+            MainTab={MainTab}
             setMainTab={setMainTab}
             setPartnerLocation={setPartnerLocation}
             oManufacturer={oManufacturer}
