@@ -114,15 +114,17 @@ export default function NetworkMap({ manufacturer }) {
                 <div className='info-header-content'>
                   <i class='fa-solid fa-map-location info-icon'></i>
                   <p className='mi-body-xl black f-700 mi-reset'>
-                    {MapSelected.orgName[0]}
+                    {MapSelected?.orgName}
                   </p>
                 </div>
               </div>
               <div className='info-body'>
                 <p className='mi-body-md black f-500  mi-reset'>
-                  {MapSelected.title}
+                  {MapSelected?.title}
                 </p>
-                <p className='mi-body-sm black  mi-reset'>{MapSelected.city}</p>
+                <p className='mi-body-sm black  mi-reset'>
+                  {MapSelected?.city}
+                </p>
               </div>
             </div>
           </InfoWindow>
