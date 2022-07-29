@@ -19,10 +19,6 @@ const center = {
   lng: -75.697189,
 };
 
-const PointerDefault = {
-  lat: 45.44905006153431,
-  lng: -75.89244957349965,
-};
 
 const options = {
   styles: BlueMap,
@@ -32,14 +28,21 @@ const options = {
   fullscreenControl: true,
 };
 
-export default function NetworkMap({ manufacturer }) {
+export default function NetworkMap({ manufacturer, reportWarehouse }) {
   const { user } = useSelector((state) => state);
   const [MapSelected, setMapSelected] = useState(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
   });
-
+  function getClickedWarehouse(tempWar){
+    let returnWarehouse;
+    manufacturer?.warehouses?.map((park) =>{
+        if(park.warehouseId === tempWar)
+          returnWarehouse = park;
+    })
+    return returnWarehouse;
+  }
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -48,13 +51,16 @@ export default function NetworkMap({ manufacturer }) {
       options={options}
     >
       <>
-        {/* <Marker
-          position={PointerDefault}
+       {(reportWarehouse || user.warehouseId[0]) &&  <Marker
+          position={{
+            lat: parseFloat(getClickedWarehouse(reportWarehouse || user.warehouseId[0])?.location?.latitude),
+            lng: parseFloat(getClickedWarehouse(reportWarehouse || user.warehouseId[0])?.location?.longitude),
+          }}
           icon={{
             url: "/markers/defaultMap.gif",
             scaledSize: new window.google.maps.Size(50, 50),
           }}
-        /> */}
+        />}
         {manufacturer?.warehouses?.map((park) =>
         park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
