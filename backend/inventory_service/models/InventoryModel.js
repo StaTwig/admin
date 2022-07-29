@@ -9,7 +9,7 @@ const InventorySchema = new mongoose.Schema(
           {
             productId: { type: String, required: true },
             quantity: { type: Number, min: 0, default: 0 },
-            quantityInTransit: { type: Number, min: 0, default: 0 },
+            quantityInTransit: { type: Number,  default: 0 },
             totalSales: { type: Number, min: 0, default: 0 },
           },
           {
