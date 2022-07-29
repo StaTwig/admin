@@ -3,9 +3,19 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import BatchDetails from "./batchDetails/BatchDetails";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 import isBefore from "date-fns/isBefore";
 import { subDays } from "date-fns";
@@ -39,6 +49,20 @@ export default function InstockRow({ product, reportWarehouse }) {
 
   const handleGraphClose = () => {
     setOpenGraph(false);
+  };
+
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState("md");
+
+  const handleMaxWidthChange = (event) => {
+    setMaxWidth(
+      // @ts-expect-error autofill of arbitrary value is not handled.
+      event.target.value
+    );
+  };
+
+  const handleFullWidthChange = (event) => {
+    setFullWidth(event.target.checked);
   };
 
   return (
@@ -107,7 +131,12 @@ export default function InstockRow({ product, reportWarehouse }) {
           </button>
         </TableCell>
       </TableRow>
-      <Dialog open={open} onClose={handleClose} className="mi-custom-dialog">
+      {/* <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="md"
+        className="mi-custom-dialog"
+      >
         <DialogContent className="mi-custom-dialog-content">
           <div className="network-modal-popup-container">
             <div className="nt-modal-header">
@@ -131,9 +160,54 @@ export default function InstockRow({ product, reportWarehouse }) {
               />
             </div>
             <div className="nt-modal-actions">
+              <div className="modal-heading-space">
+                <p className="mi-body-md f-500  mi-reset">Total - 1 Batch</p>
+              </div>
+              <button
+                className="nt-btn nt-btn-sm nt-btn-blue"
+                onClick={handleClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog> */}
+
+      <Dialog
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        open={open}
+        onClose={handleClose}
+        className="mi-custom-dialog"
+      >
+        <DialogContent className="mi-custom-dialog-content">
+          <div className="network-modal-popup-container">
+            <div className="nt-modal-header">
+              <div className="modal-heading-space">
+                <h1 className="mi-body-lg mi-reset mi-max-text-wrap-md">
+                  {product?.productName}
+                </h1>
+                <p className="mi-body-md mi-reset">
+                  ( {product?.productCategory} )
+                </p>
+              </div>
+              <div className="modal-closing-space" onClick={handleClose}>
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+            </div>
+            <div className="nt-modal-body">
+              <BatchDetails
+                productId={product._id}
+                isNearExpiry={isNearExpiry}
+                warehouseId={reportWarehouse}
+              />
+            </div>
+            <div className="nt-modal-actions">
               {/* <div className="modal-heading-space">
                 <p className="mi-body-md f-500  mi-reset">Total - 1 Batch</p>
               </div> */}
+              <div className="null"></div>
               <button
                 className="nt-btn nt-btn-sm nt-btn-blue"
                 onClick={handleClose}

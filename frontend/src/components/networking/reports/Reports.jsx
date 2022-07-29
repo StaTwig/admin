@@ -44,7 +44,8 @@ export default function Reports(props) {
               onChange={(date) => setStartDate(date)}
               dateFormat="MM/yyyy"
               showMonthYearPicker
-              className="input-calender-form"
+              className="date-input"
+              // className="input-calender-form"
             />
             <i class="fa-solid fa-calendar-days cal-icon"></i>
           </div>
