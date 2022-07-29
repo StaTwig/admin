@@ -649,7 +649,6 @@ exports.addProductsToInventory = [
               const new_quantity =
                 exist_quantity[0].inventoryDetails[0].quantity +
                 product.quantity;
-
               await InventoryModel.updateOne(
                 {
                   id: inventoryId,
@@ -762,7 +761,6 @@ exports.addProductsToInventory = [
                   quantity: product.quantity,
                 },
                 $setOnInsert: {
-                  quantity: product.quantity,
                   openingBalance: product.quantity,
                 },
               },
