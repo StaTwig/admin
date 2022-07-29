@@ -235,6 +235,8 @@ export default function InstockRow({ product, reportWarehouse }) {
         <DialogContent className='mi-custom-dialog-content'>
           <NetworkGraph
             onClose={handleGraphClose}
+            name={product?.productName}
+            cat={product?.productCategory}
             data={product?.inventoryAnalytics?.dailyAnalytics}
             graph={"bar"}
           />

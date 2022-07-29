@@ -21,7 +21,8 @@ const NetworkingContainer = (props) => {
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
   const [MainTab, setMainTab] = useState("INSTOCK");
-  const [startDate, setStartDate] = useState(new Date());
+  const date = new Date();
+  const [startDate, setStartDate] = useState(new Date(date.getFullYear(), date.getMonth(), 1));
   const [manufacturer, setManufacturer] = React.useState({
     myLocations: 0,
     partnerLocations: 0,

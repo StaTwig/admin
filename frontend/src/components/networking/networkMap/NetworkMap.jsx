@@ -63,7 +63,10 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             }}
             icon={{
               url: "/markers/defaultMap.gif",
-              scaledSize: new window.google.maps.Size(50, 50),
+              // scaledSize: new window.google.maps.Size(10, 10),
+              scaledSize: new window.google.maps.Size(30, 30),
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
             }}
           />
         )}
@@ -75,9 +78,9 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              // onClick={() => {
-              //   setMapSelected(park);
-              // }}
+              onClick={() => {
+                setMapSelected(park);
+              }}
               onMouseEnter={() => setMapSelected(park)}
               onMouseLeave={() => setMapSelected(null)}
               icon={{
@@ -94,9 +97,9 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              // onClick={() => {
-              //   setMapSelected(park);
-              // }}
+              onClick={() => {
+                setMapSelected(park);
+              }}
               onMouseEnter={() => setMapSelected(park)}
               onMouseLeave={() => setMapSelected(null)}
               icon={{

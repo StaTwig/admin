@@ -81,6 +81,8 @@ export default function BestSellerRow({ product }) {
           <NetworkGraph
             onClose={handleGraphClose}
             graph={"bigbar"}
+            name={product?.productName}
+            cat={product?.productCategory}
             data={product?.inventoryAnalytics?.dailyAnalytics}
           />
         </DialogContent>
