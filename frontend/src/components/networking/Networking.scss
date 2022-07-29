@@ -1,12 +1,12 @@
 .network-grid-container{
     display: grid;
-    grid-template-columns: 20rem 1fr;
+    grid-template-columns: 24rem 1fr;
     grid-template-areas: "dashboard  map";
 }
 
 .network-dashboard{
     grid-area: dashboard;
-    width: 20rem;
+    width: 24rem;
     border-right: 1px solid #ddd;
     height: calc( 100vh - 88px );
     position: fixed !important;
@@ -105,7 +105,7 @@
     }
     .network-dashboard{
         grid-area: dashboard;
-        width: 20rem;
+        width: 24rem;
         border-right: 1px solid #ddd;
         height: calc( 100vh - 88px );
         position: fixed !important;
@@ -129,7 +129,7 @@
 @media screen and (max-width:786px){
     .network-dashboard{
         grid-area: dashboard;
-        width: 20rem;
+        width: 24rem;
         border-right: 1px solid #ddd;
         height: 100vh;
         position: fixed !important;
