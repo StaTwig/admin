@@ -131,7 +131,7 @@ const routes = (
     <Route path='/viewexpiry' component={requireAuth(ViewExpiry)} />
     <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
     <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
-    <Route path='/networking' component={requireAuth(NetworkingContainer)} />
+    <Route path='/network' component={requireAuth(NetworkingContainer)} />
     <Route path='/tracking' component={requireAuth(TrackingContainer)} />
 
     <Route component={ErrorPageContainer} />

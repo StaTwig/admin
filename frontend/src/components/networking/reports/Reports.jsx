@@ -14,6 +14,8 @@ export default function Reports(props) {
     outStock,
     user,
     reportWarehouse,
+    MainTab,
+    setMainTab
   } = props;
   const [MainTab, setMainTab] = useState("INSTOCK");
   const [SubTab, setSubTab] = useState("MY");

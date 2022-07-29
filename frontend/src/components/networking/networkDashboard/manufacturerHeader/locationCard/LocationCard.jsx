@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./LocationCard.scss";
 
-export default function LocationCard({oManufacturer, manufacturer}) {
-  const [MylocationFilter, setMylocationFilter] = useState(false);
-  const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
+export default function LocationCard({oManufacturer, manufacturer, setPartnerLocation, partnerLocation, MylocationFilter, setMylocationFilter}) {
+  
+  // const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
   return (
     <div className="location-card-container">
       <div
@@ -26,10 +26,10 @@ export default function LocationCard({oManufacturer, manufacturer}) {
       </div>
       <div
         className={`location-card partner-card ${
-          PartnerlocationFilter && "active"
+          partnerLocation && "active"
         }`}
         onClick={() => {
-          setPartnerlocationFilter(!PartnerlocationFilter);
+          setPartnerLocation(!partnerLocation);
         }}
       >
         <div className="location-card-top">
