@@ -19,7 +19,6 @@ const center = {
   lng: -75.697189,
 };
 
-
 const options = {
   styles: BlueMap,
   disableDefaultUI: true,
@@ -35,12 +34,11 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
   });
-  function getClickedWarehouse(tempWar){
+  function getClickedWarehouse(tempWar) {
     let returnWarehouse;
-    manufacturer?.warehouses?.map((park) =>{
-        if(park.warehouseId === tempWar)
-          returnWarehouse = park;
-    })
+    manufacturer?.warehouses?.map((park) => {
+      if (park.warehouseId === tempWar) returnWarehouse = park;
+    });
     return returnWarehouse;
   }
   return isLoaded ? (
@@ -51,16 +49,24 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
       options={options}
     >
       <>
-       {(reportWarehouse || user.warehouseId[0]) &&  <Marker
-          position={{
-            lat: parseFloat(getClickedWarehouse(reportWarehouse || user.warehouseId[0])?.location?.latitude),
-            lng: parseFloat(getClickedWarehouse(reportWarehouse || user.warehouseId[0])?.location?.longitude),
-          }}
-          icon={{
-            url: "/markers/defaultMap.gif",
-            scaledSize: new window.google.maps.Size(50, 50),
-          }}
-        />}
+        {(reportWarehouse || user.warehouseId[0]) && (
+          <Marker
+            position={{
+              lat: parseFloat(
+                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
+                  ?.location?.latitude
+              ),
+              lng: parseFloat(
+                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
+                  ?.location?.longitude
+              ),
+            }}
+            icon={{
+              url: "/markers/defaultMap.gif",
+              scaledSize: new window.google.maps.Size(50, 50),
+            }}
+          />
+        )}
         {manufacturer?.warehouses?.map((park) =>
           park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
@@ -69,9 +75,11 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              onClick={() => {
-                setMapSelected(park);
-              }}
+              // onClick={() => {
+              //   setMapSelected(park);
+              // }}
+              onMouseEnter={() => setMapSelected(park)}
+              onMouseLeave={() => setMapSelected(null)}
               icon={{
                 url: "/markers/loc1.png",
                 scaledSize: new window.google.maps.Size(30, 30),
@@ -86,9 +94,11 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              onClick={() => {
-                setMapSelected(park);
-              }}
+              // onClick={() => {
+              //   setMapSelected(park);
+              // }}
+              onMouseEnter={() => setMapSelected(park)}
+              onMouseLeave={() => setMapSelected(null)}
               icon={{
                 url: "/markers/loc2.png",
                 scaledSize: new window.google.maps.Size(30, 30),
@@ -118,11 +128,11 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
                   </p>
                 </div>
               </div>
-              <div className="info-body">
-                <p className="mi-body-md black f-500  mi-reset">
+              <div className='info-body'>
+                <p className='mi-body-md black f-500  mi-reset'>
                   {MapSelected.title}
                 </p>
-                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
+                <p className='mi-body-sm black  mi-reset'>{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>
