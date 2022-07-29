@@ -58,11 +58,7 @@ export default function NetworkMap({ manufacturer }) {
           }}
         /> */}
         {manufacturer?.warehouses?.map((park) =>
-          console.log(
-            park?.orgId,
-            user.organisation?.split("/")[1],
-            park?.orgId === user.organisation?.split("/")[1]
-          ) && park?.orgId === user.organisation?.split("/")[1] ? (
+        park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
               key={park.warehouseId}
               position={{
