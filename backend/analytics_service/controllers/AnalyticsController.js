@@ -1064,13 +1064,16 @@ exports.bestSellerSummary = [
           },
         },
         {
-          $match: matchQuery,
+          $match: {
+            ...matchQuery,
+            totalSales: { $gt: 0 },
+          },
         },
         {
           $match: {
             totalSales: {
-              $gt: 0
-            }
+              $gt: 0,
+            },
           },
         },
         {
@@ -1099,8 +1102,9 @@ exports.inStockReport = [
   async (req, res) => {
     try {
       const warehouse = req.query.warehouseId || req.user.warehouseId;
-      const date =
-      req.query.date ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd") : format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const date = req.query.date
+        ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd")
+        : format(startOfMonth(new Date()), "yyyy-MM-dd");
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
@@ -1251,12 +1255,12 @@ exports.inStockReport = [
         {
           $unwind: {
             path: "$inventory_analytics",
-            // preserveNullAndEmptyArrays: true,
           },
         },
         {
           $group: {
             _id: "$inventoryDetails.productId",
+
             productCategory: {
               $first: "$product.type",
             },
@@ -1464,7 +1468,6 @@ exports.outOfStockReport = [
         {
           $unwind: {
             path: "$inventory_analytics",
-            // preserveNullAndEmptyArrays: true,
           },
         },
         {
