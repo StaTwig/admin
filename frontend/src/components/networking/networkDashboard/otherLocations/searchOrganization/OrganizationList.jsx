@@ -24,23 +24,22 @@ const OrganizationList = ({ orgName, user, orgId, setReportWarehouse }) => {
         {toggleButton ? (
           <i className='fa-solid fa-angle-up'></i>
         ) : (
-          <i class='fa-solid fa-angle-down'></i>
+          <i className='fa-solid fa-angle-down'></i>
         )}
       </div>
       {toggleButton && (
         <ul className='unordered-organization-list'>
           {warehouses?.map((warehouse, index) => (
-            <li className='mi-flex organization-list-item'>
+            <li className='mi-flex organization-list-item' key={index}>
               <span>
                 <i className='fa-solid fa-location-dot mr-2'></i>
               </span>
               <button
                 className='link-button'
                 onClick={() => setReportWarehouse(warehouse?.warehouseId)}
+                key={index}
               >
-                <div>
-                  Location {index + 1} - {warehouse?.title} - {warehouse?.city}
-                </div>
+                Location {index + 1} - {warehouse?.title} - {warehouse?.city}
               </button>
             </li>
           ))}
