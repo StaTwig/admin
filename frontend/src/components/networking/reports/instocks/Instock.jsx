@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import InstockRow from "./InstockRow";
 
-export default function Instock({inStock, reportWarehouse}) {
+export default function Instock({ inStock, reportWarehouse }) {
   return (
     <>
       <TableContainer>
@@ -25,7 +25,7 @@ export default function Instock({inStock, reportWarehouse}) {
                 <p className="mi-body-sm mi-reset grey-400">Product Name</p>
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Closing balance</p>
+                <p className="mi-body-sm mi-reset grey-400">Opening balance</p>
               </TableCell>
               <TableCell className="mi-custom-tableHead">
                 <p className="mi-body-sm mi-reset grey-400">
@@ -36,9 +36,13 @@ export default function Instock({inStock, reportWarehouse}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {inStock?.map((product, idx) => 
-              <InstockRow product={product} reportWarehouse={reportWarehouse} key={idx} />
-            )}
+            {inStock?.map((product, idx) => (
+              <InstockRow
+                product={product}
+                reportWarehouse={reportWarehouse}
+                key={idx}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

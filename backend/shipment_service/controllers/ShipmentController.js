@@ -641,7 +641,7 @@ exports.createShipment = [
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
-                inventoryIds: suppInventoryId,
+                currentInventory: suppInventoryId,
               },
               {
                 $inc: {
@@ -660,14 +660,15 @@ exports.createShipment = [
             if (serialNumbers.length > 1) {
               if (Array.isArray(products[count].serialNumbersRange)) {
                 for (let i = 0; i < serialNumbers.length; i++) {
-                  const updateAtoms = await AtomModel.findOneAndUpdate(
+                  const updateAtoms = await AtomModel.updateOne(
                     {
                       id: `${serialNumbers[i]}`,
-                      inventoryIds: suppInventoryId,
+                      currentInventory: suppInventoryId,
                     },
                     {
                       $set: {
-                        "inventoryIds.$": recvInventoryId,
+                        currentInventory: recvInventoryId,
+                        status: "TRANSIT",
                       },
                     }
                   );
@@ -682,14 +683,15 @@ exports.createShipment = [
                 );
                 const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
                 for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-                  const updateAtoms = await AtomModel.findOneAndUpdate(
+                  const updateAtoms = await AtomModel.updateOne(
                     {
                       id: `${serialNumberText}${i}`,
-                      inventoryIds: suppInventoryId,
+                      currentInventory: suppInventoryId,
                     },
                     {
                       $set: {
-                        "inventoryIds.$": recvInventoryId,
+                        currentInventory: recvInventoryId,
+                        status: "TRANSIT",
                       },
                     }
                   );
@@ -925,7 +927,6 @@ exports.createShipmentForTpl = [
           responses(req.user.preferredLanguage).config_not_found
         );
       }
-      const process = confData.process;
       const supplierID = req.body.supplier.id;
       const supplierOrgData = await TplOrgModel.findOne({
         id: req.body.supplier.id,
@@ -1392,20 +1393,26 @@ exports.receiveShipment = [
             if (products[count].batchNumber != null) {
               const checkBatch = await AtomModel.find({
                 $and: [
-                  { inventoryIds: recvInventoryId },
+                  { currentInventory: recvInventoryId },
                   { batchNumbers: products[count].batchNumber },
                 ],
               });
 
               if (checkBatch.length > 0) {
-                const update = await AtomModel.update(
+                await AtomModel.updateOne(
                   {
                     batchNumbers: products[count].batchNumber,
-                    inventoryIds: recvInventoryId,
+                    currentInventory: recvInventoryId,
                   },
                   {
                     $inc: {
                       quantity: parseInt(products[count].productQuantity),
+                    },
+                    $addToSet: {
+                      inventoryIds: recvInventoryId,
+                    },
+                    $set: {
+                      status: "HEALTHY",
                     },
                   }
                 );
@@ -1419,6 +1426,7 @@ exports.receiveShipment = [
                   quantity: products[count].productQuantity,
                   productId: products[count].productID,
                   inventoryIds: recvInventoryId,
+                  currentInventory: recvInventoryId,
                   poIds: [],
                   shipmentIds: [],
                   txIds: [],

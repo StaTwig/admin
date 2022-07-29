@@ -175,7 +175,7 @@ export function config() {
       getOrganizationsByTypeUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
-      registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
+      registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
       checkUserUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
@@ -597,7 +597,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }

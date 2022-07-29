@@ -20,12 +20,16 @@ const NetworkingContainer = (props) => {
   const [TopBestseller, setTopBestseller] = React.useState();
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
+  const [MainTab, setMainTab] = useState("INSTOCK");
+
   const [manufacturer, setManufacturer] = React.useState({
     myLocations: 0,
     partnerLocations: 0,
   });
   const [oManufacturer, setOManufacturer] = React.useState([]);
   const [reportWarehouse, setReportWarehouse] = useState("");
+  const [partnerLocation, setPartnerLocation] = useState(false);
+  const [MylocationFilter, setMylocationFilter] = useState(false);
   const getBestsellers = async () => {
     const bestSellers = await getBestSellers(reportWarehouse);
     setBestseller(bestSellers.data.bestSellers);
@@ -46,7 +50,7 @@ const NetworkingContainer = (props) => {
     setReportWarehouse(outStock.data.warehouseId);
   };
   const getWarehouses = async (org) => {
-    const warehouses = await getManufacturerWarehouses(org[1], "");
+    const warehouses = await getManufacturerWarehouses("", "", partnerLocation, MylocationFilter);
     setManufacturer(warehouses.data);
   };
   const getManFilters = async () => {
@@ -58,17 +62,22 @@ const NetworkingContainer = (props) => {
   }, []);
   useEffect(() => {
     (async () => {
+      getBestsellers();
+      getInstock();
+      getOutStock();
+      getManFilters();
+    })();
+  }, [reportWarehouse, MainTab]);
+ 
+  useEffect(() => {
+    (async () => {
       const response = await getUserInfoUpdated();
       const { organisation } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split("/");
-      getBestsellers();
-      getInstock();
-      getOutStock();
       getWarehouses(org);
-      getManFilters();
     })();
-  }, [reportWarehouse]);
+  }, [partnerLocation, MylocationFilter]);
 
   return (
     <div className='container-fluid p-0'>
@@ -83,9 +92,15 @@ const NetworkingContainer = (props) => {
             inStock={inStock}
             outStock={outStock}
             manufacturer={manufacturer}
+            MainTab={MainTab} 
+            setMainTab={setMainTab}
+            setPartnerLocation={setPartnerLocation}
             oManufacturer={oManufacturer}
             reportWarehouse={reportWarehouse}
             setReportWarehouse={(param) => setReportWarehouse(param)}
+            partnerLocation={partnerLocation}
+            MylocationFilter={MylocationFilter}
+            setMylocationFilter={setMylocationFilter}
           />
         </div>
       </div>
