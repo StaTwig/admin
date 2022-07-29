@@ -4,10 +4,12 @@ import TableRow from "@mui/material/TableRow";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
+import { useSelector } from "react-redux";
 
 export default function BestSellerRow({ product }) {
   const [openGraph, setOpenGraph] = React.useState(false);
-
+  const {user} = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS"
   const handleGraphOpen = () => {
     setOpenGraph(true);
   };
@@ -24,7 +26,7 @@ export default function BestSellerRow({ product }) {
         <TableCell className='mi-custom-cell mi-radius-first mi-first-cell-padding'>
           <div className='mi-table-data'>
             <div className='table-icon-space'>
-              <i class='fa-solid fa-prescription-bottle-medical'></i>
+              <i className='fa-solid fa-prescription-bottle-medical'></i>
             </div>
             <p className='mi-body-md black f-700 mi-reset'>
               {product?.productCategory}
@@ -38,6 +40,17 @@ export default function BestSellerRow({ product }) {
             </p>
           </div>
         </TableCell>
+
+        {Distributor && (
+          <TableCell className="mi-custom-cell">
+            <div className="mi-table-data">
+              <p className="mi-body-md black f-700 mi-reset">
+                {product.manufacturer}
+              </p>
+            </div>
+          </TableCell>
+        )}
+
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
@@ -53,7 +66,7 @@ export default function BestSellerRow({ product }) {
             className='nt-btn nt-btn-xs nt-btn-blue-alt'
             onClick={handleGraphOpen}
           >
-            <i class='fa-solid fa-chart-pie'></i>
+            <i className='fa-solid fa-chart-pie'></i>
             <span>View</span>
           </button>
         </TableCell>
@@ -65,7 +78,11 @@ export default function BestSellerRow({ product }) {
         className='mi-custom-dialog'
       >
         <DialogContent className='mi-custom-dialog-content'>
-          <NetworkGraph onClose={handleGraphClose} graph={"bigbar"} />
+          <NetworkGraph
+            onClose={handleGraphClose}
+            graph={"bigbar"}
+            data={product?.inventoryAnalytics?.dailyAnalytics}
+          />
         </DialogContent>
       </Dialog>
     </>

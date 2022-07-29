@@ -14,15 +14,15 @@ export default function Tab({
   return (
     <>
       {layout === "main" && (
-        <div className="tab-group-ui">
+        <div className='tab-group-ui'>
           <div
             className={`tab-button tab-first-child  ${
               MainTab === "INSTOCK" && "active"
             }`}
             onClick={() => setMainTab("INSTOCK")}
           >
-            <i class="fa-solid fa-box-archive mi-icon-xl"></i>
-            <p className="mi-body-sm f-500 mi-reset">In - Stock</p>
+            <i className='fa-solid fa-box-archive mi-icon-xl'></i>
+            <p className='mi-body-sm f-500 mi-reset'>In - Stock</p>
           </div>
           <div
             className={`tab-button tab-left-border ${
@@ -30,8 +30,8 @@ export default function Tab({
             }`}
             onClick={() => setMainTab("OUTSTOCK")}
           >
-            <i class="fa-solid fa-box-archive"></i>
-            <p className="mi-body-sm f-500 mi-reset">Out of Stock</p>
+            <i className='fa-solid fa-box-archive'></i>
+            <p className='mi-body-sm f-500 mi-reset'>Out of Stock</p>
           </div>
           <div
             className={`tab-button tab-last-child tab-left-border ${
@@ -39,14 +39,14 @@ export default function Tab({
             }`}
             onClick={() => setMainTab("BESTSELLER")}
           >
-            <i class="fa-solid fa-ranking-star"></i>
-            <p className="mi-body-sm  f-500 mi-reset">Best Seller</p>
+            <i className='fa-solid fa-ranking-star'></i>
+            <p className='mi-body-sm  f-500 mi-reset'>Best Seller</p>
           </div>
         </div>
       )}
 
       {layout === "button" && (
-        <div className="tab-group-ui-grid">
+        <div className='tab-group-ui-grid'>
           <div
             className={`tab-button-grid tab-first-child  ${
               LocationTab === "ORGANIZATION" && "active"
@@ -56,8 +56,8 @@ export default function Tab({
               setLocationTab("ORGANIZATION");
             }}
           >
-            <i className="fa-solid fa-building "></i>
-            <p className="mi-body-sm f-500 mi-reset">Organization</p>
+            <i className='fa-solid fa-building '></i>
+            <p className='mi-body-sm f-500 mi-reset'>Organization</p>
           </div>
           <div
             className={`tab-button-grid tab-last-child tab-left-border ${
@@ -68,8 +68,8 @@ export default function Tab({
               setLocationTab("COUNTRY");
             }}
           >
-            <i className="fa-solid fa-earth-africa"></i>
-            <p className="mi-body-sm  f-500 mi-reset">Countries</p>
+            <i className='fa-solid fa-earth-africa'></i>
+            <p className='mi-body-sm  f-500 mi-reset'>Countries</p>
           </div>
         </div>
       )}

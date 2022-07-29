@@ -21,7 +21,7 @@ const NetworkingContainer = (props) => {
   const [inStock, setInStock] = React.useState();
   const [outStock, setOutStock] = React.useState();
   const [MainTab, setMainTab] = useState("INSTOCK");
-
+  const [startDate, setStartDate] = useState(new Date());
   const [manufacturer, setManufacturer] = React.useState({
     myLocations: 0,
     partnerLocations: 0,
@@ -31,7 +31,7 @@ const NetworkingContainer = (props) => {
   const [partnerLocation, setPartnerLocation] = useState(false);
   const [MylocationFilter, setMylocationFilter] = useState(false);
   const getBestsellers = async () => {
-    const bestSellers = await getBestSellers(reportWarehouse);
+    const bestSellers = await getBestSellers(reportWarehouse, startDate);
     setBestseller(bestSellers.data.bestSellers);
   };
   const getTopBestsellers = async () => {
@@ -39,18 +39,23 @@ const NetworkingContainer = (props) => {
     setTopBestseller(bestSellers.data.bestSellers);
     setReportWarehouse(bestSellers.data.warehouseId);
   };
-  const getInstock = async () => {
-    const inStock = await getmanufacturerInStockReport(reportWarehouse);
+  const getInstock = async (startDate) => {
+    const inStock = await getmanufacturerInStockReport(reportWarehouse, startDate);
     setInStock(inStock.data.inStockReport);
     setReportWarehouse(inStock.data.warehouseId);
   };
   const getOutStock = async () => {
-    const outStock = await getmanufacturerOutStockReport(reportWarehouse);
+    const outStock = await getmanufacturerOutStockReport(reportWarehouse, startDate);
     setOutStock(outStock.data.outOfStockReport);
     setReportWarehouse(outStock.data.warehouseId);
   };
   const getWarehouses = async (org) => {
-    const warehouses = await getManufacturerWarehouses("", "", partnerLocation, MylocationFilter);
+    const warehouses = await getManufacturerWarehouses(
+      "",
+      "",
+      partnerLocation,
+      MylocationFilter
+    );
     setManufacturer(warehouses.data);
   };
   const getManFilters = async () => {
@@ -58,23 +63,24 @@ const NetworkingContainer = (props) => {
     setOManufacturer(filterWarehouse.data);
   };
   useEffect(() => {
+    getManFilters();
     getTopBestsellers();
   }, []);
   useEffect(() => {
     (async () => {
-      getBestsellers();
-      getInstock();
-      getOutStock();
-      getManFilters();
+      getBestsellers(startDate);
+      getInstock(startDate);
+      getOutStock(startDate);
     })();
-  }, [reportWarehouse, MainTab]);
- 
+  }, [reportWarehouse, MainTab, startDate]);
+
   useEffect(() => {
     (async () => {
       const response = await getUserInfoUpdated();
       const { organisation } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split("/");
+      console.log("ORGANIZATION", organisation, org);
       getWarehouses(org);
     })();
   }, [partnerLocation, MylocationFilter]);
@@ -92,7 +98,7 @@ const NetworkingContainer = (props) => {
             inStock={inStock}
             outStock={outStock}
             manufacturer={manufacturer}
-            MainTab={MainTab} 
+            MainTab={MainTab}
             setMainTab={setMainTab}
             setPartnerLocation={setPartnerLocation}
             oManufacturer={oManufacturer}
@@ -101,6 +107,8 @@ const NetworkingContainer = (props) => {
             partnerLocation={partnerLocation}
             MylocationFilter={MylocationFilter}
             setMylocationFilter={setMylocationFilter}
+            startDate={startDate}
+            setStartDate={setStartDate}
           />
         </div>
       </div>

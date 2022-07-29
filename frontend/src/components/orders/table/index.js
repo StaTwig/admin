@@ -27,7 +27,7 @@ function Table(props) {
 
   return (
     <div>
-      <table className="table">
+      <table className='table'>
         <AdvanceTableFilter
           visible={props.visible}
           data={props.data}
@@ -50,12 +50,12 @@ function Table(props) {
           onSelectionDateFilter={props.onSelectionDateFilter}
           isReportDisabled={props.isReportDisabled}
           t={t}
-          filterPage="orders"
+          filterPage='orders'
         />
         <tbody>
           {orders.length === 0 && (
-            <div className="FullWidth rTableRow pt-2 pb-2 text-center justify-content-center ">
-              <span className="text-muted shadow-none">
+            <div className='FullWidth rTableRow pt-2 pb-2 text-center justify-content-center '>
+              <span className='text-muted shadow-none'>
                 {t("no_records_found")}
               </span>
             </div>
@@ -92,17 +92,17 @@ function Table(props) {
             return (
               <tr>
                 <td>
-                  <div className="user-info">
-                    <div className="user-image-holder">
-                      <i class="bx bxs-user"></i>
+                  <div className='user-info'>
+                    <div className='user-image-holder'>
+                      <i className='bx bxs-user'></i>
                     </div>
-                    <div className="user-info__basic shipmentId">
-                      <h5 className="mb-0 table-data mi-primary ">
+                    <div className='user-info__basic shipmentId'>
+                      <h5 className='mb-0 table-data mi-primary '>
                         {visible === "two"
                           ? creatorOrganisation?.name
                           : supplier.organisation?.name}
                       </h5>
-                      <p className="mb-0 text-sm-2 mi-primary ">
+                      <p className='mb-0 text-sm-2 mi-primary '>
                         {visible === "two"
                           ? creatorOrganisation?.id
                           : supplier.organisation?.id}
@@ -111,21 +111,21 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div className="user-info">
-                    <h5 className="table-data black">
+                  <div className='user-info'>
+                    <h5 className='table-data black'>
                       {" "}
                       {formatDate(order.creationDate)}
                     </h5>
                   </div>
                 </td>
                 <td>
-                  <div className="user-info">
-                    <h5 className="table-data black">{order.id}</h5>
+                  <div className='user-info'>
+                    <h5 className='table-data black'>{order.id}</h5>
                   </div>
                 </td>
                 <td>
-                  <div className="user-info">
-                    <h5 className="table-data black">
+                  <div className='user-info'>
+                    <h5 className='table-data black'>
                       {truncate(
                         (products[0]?.name || products[0]?.productId) +
                           (products.length > 1
@@ -137,11 +137,11 @@ function Table(props) {
                   </div>
                 </td>
                 <td>
-                  <div className="user-info__basic">
-                    <h5 className="mb-0 table-data black">
+                  <div className='user-info__basic'>
+                    <h5 className='mb-0 table-data black'>
                       {customer.warehouse.title}
                     </h5>
-                    <p className="mb-0 text-sm-2 grey">
+                    <p className='mb-0 text-sm-2 grey'>
                       {customer.warehouse && customer.warehouse.warehouseAddress
                         ? customer.warehouse.warehouseAddress.firstLine +
                           " " +
@@ -150,13 +150,13 @@ function Table(props) {
                     </p>
                   </div>
                 </td>
-                <td className="d-flex align-items-center justify-content-center">
+                <td className='d-flex align-items-center justify-content-center'>
                   <div className={`status-lable ${statusStyle}`}>{status}</div>
                 </td>
                 <td>
                   <Link
                     to={`/vieworder/${order.id}`}
-                    className="mi-btn mi-btn-sm mi-btn-secondary-outline inline-flex"
+                    className='mi-btn mi-btn-sm mi-btn-secondary-outline inline-flex'
                     style={{
                       border: "1px solid #007bff",
                       borderRadius: "6px",
@@ -171,16 +171,16 @@ function Table(props) {
         </tbody>
       </table>
       {orders?.length > 0 && (
-        <div className="d-flex flex-row-reverse">
+        <div className='d-flex flex-row-reverse'>
           <Pagination
             showFirstButton
             showLastButton
-            color="primary"
+            color='primary'
             count={Math.ceil(props.count / 10)}
             onChange={handlePageChange}
           />
           <span
-            className="mx-5 my-1 rounded text-dark"
+            className='mx-5 my-1 rounded text-dark'
             style={{ fontSize: "14px" }}
           >
             {t("total_records")} {props.count}{" "}

@@ -17,23 +17,24 @@ const TopSeller = ({ bestseller, executeScroll }) => {
     "#02268926",
   ];
   return (
-    <div className="bestSeller-container">
-      <div className="mi-flex-sb">
-        <h1 className="mi-body-sl dark f-600  mi-reset">Best Seller</h1>
+    <div className='bestSeller-container'>
+      <div className='mi-flex-sb'>
+        <h1 className='mi-body-sl dark f-600  mi-reset'>Best Seller</h1>
         <button
-          className="nt-btn nt-btn-xs nt-btn-blue-alt"
+          className='nt-btn nt-btn-xs nt-btn-blue-alt'
           onClick={executeScroll}
         >
-          <i class="fa-solid fa-table-list"></i>
+          <i class='fa-solid fa-table-list'></i>
           <span>View Reports</span>
         </button>
       </div>
-      <div className="product-seller-list">
+      <div className='product-seller-list'>
         {bestseller?.map((bs, index) => (
           <TopSellerProduct
             bs={bs}
             bigBoxColor={bigBoxColorsArray[index]}
             smallBoxColor={smallBoxColorsArray[index]}
+            key={index}
           />
         ))}
       </div>

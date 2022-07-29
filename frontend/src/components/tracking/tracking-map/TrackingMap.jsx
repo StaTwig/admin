@@ -203,12 +203,12 @@ export default function TrackingMap() {
               setMapSelected(null);
             }}
           >
-            <div className="info-popup-container">
-              <div className="info-header">
-                <div className="info-header-content">
-                  <i class="fa-solid fa-location-dot"></i>
+            <div className='info-popup-container'>
+              <div className='info-header'>
+                <div className='info-header-content'>
+                  <i className='fa-solid fa-location-dot'></i>
 
-                  <p className="mi-body-md f-500 mi-reset location-text-color">
+                  <p className='mi-body-md f-500 mi-reset location-text-color'>
                     {MapSelected.lat === 28.70406
                       ? "Apollo Warehouse, Delhi"
                       : MapSelected.lat === 17.385044
@@ -219,14 +219,14 @@ export default function TrackingMap() {
                   </p>
                 </div>
               </div>
-              <div className="info-body">
-                <p className="mi-body-sm f-500 mi-reset header-text-color">
+              <div className='info-body'>
+                <p className='mi-body-sm f-500 mi-reset header-text-color'>
                   Product Details
                 </p>
-                <div className="product-details-list">
-                  <div className="product-list-card map-card-design">
-                    <p className="mi-body-sm f-500 mi-reset ">Paracetomal</p>
-                    <p className="mi-body-sm f-500 mi-reset">
+                <div className='product-details-list'>
+                  <div className='product-list-card map-card-design'>
+                    <p className='mi-body-sm f-500 mi-reset '>Paracetomal</p>
+                    <p className='mi-body-sm f-500 mi-reset'>
                       {MapSelected.lat === 28.70406
                         ? "1000"
                         : MapSelected.lat === 17.385044
@@ -241,24 +241,24 @@ export default function TrackingMap() {
               </div>
 
               {MapSelected.lat === 17.385044 && (
-                <div className="info-splited-location">
-                  <p className="mi-body-sm f-500 mi-reset header-text-color">
+                <div className='info-splited-location'>
+                  <p className='mi-body-sm f-500 mi-reset header-text-color'>
                     Delivery Details
                   </p>
-                  <div className="product-details-list">
-                    <div className="product-list-card">
-                      <p className="mi-body-xs f-500 mi-reset grey">
+                  <div className='product-details-list'>
+                    <div className='product-list-card'>
+                      <p className='mi-body-xs f-500 mi-reset grey'>
                         Apollo Warehouse, Mumbai
                       </p>
-                      <p className="mi-body-xs f-500 mi-reset  grey">
+                      <p className='mi-body-xs f-500 mi-reset  grey'>
                         400 ( Packs )
                       </p>
                     </div>
-                    <div className="product-list-card">
-                      <p className="mi-body-xs f-500 mi-reset grey">
+                    <div className='product-list-card'>
+                      <p className='mi-body-xs f-500 mi-reset grey'>
                         Apollo Warehouse, Dindigul
                       </p>
-                      <p className="mi-body-xs f-500 mi-reset  grey">
+                      <p className='mi-body-xs f-500 mi-reset  grey'>
                         600 ( Packs )
                       </p>
                     </div>

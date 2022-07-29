@@ -5,8 +5,14 @@ const WarehouseModel = require("../models/WarehouseModel");
 const ProductModel = require("../models/ProductModel");
 const OrganisationModel = require("../models/OrganisationModel");
 
-async function DistributorMapLocations(organisationId, matchQuery) {
-  console.log(matchQuery);
+async function DistributorMapLocations(organisationId, warehouseOrg) {
+  let matchQuery = [];
+  if (warehouseOrg)
+    matchQuery.push({
+      $match: {
+        organisationId: warehouseOrg,
+      },
+    });
   const locations = await WarehouseModel.aggregate([
     {
       $match: {
@@ -104,10 +110,22 @@ async function DistributorMapLocations(organisationId, matchQuery) {
       },
     },
     {
+      $lookup: {
+        from: "organisations",
+        localField: "organisationId",
+        foreignField: "id",
+        as: "organisation",
+      },
+    },
+    {
+      $unwind: "$organisation",
+    },
+    {
       $project: {
         warehouseId: "$id",
         organisationId: "$organisationId",
         orgId: "$organisationId",
+        orgName: "$organisation.name",
         city: "$warehouseAddress.city",
         title: "$title",
         location: "$location",
@@ -134,15 +152,141 @@ async function DistributorMapLocations(organisationId, matchQuery) {
             },
           },
         ],
-        filterLocations: [
-          {
-            $match: { matchQuery },
-          },
-        ],
+        filterLocations: matchQuery,
       },
     },
   ]);
   return locations;
+}
+
+async function DistributorFilterList(organisationId, type, regExp) {
+  const matchQuery = {};
+  if (type === "country") {
+    matchQuery[`country`] = "$country.countryName";
+    matchQuery[`name`] = "$country.countryName";
+  } else if (type === "org") {
+    matchQuery[`orgId`] = "$organisationId";
+    matchQuery[`orgName`] = "$organisation.name";
+    matchQuery[`name`] = "$organisation.name";
+  }
+  const locationList = await WarehouseModel.aggregate([
+    {
+      $match: {
+        organisationId: organisationId,
+        status: "ACTIVE",
+      },
+    },
+    {
+      $lookup: {
+        from: "atoms",
+        localField: "warehouseInventory",
+        foreignField: "inventoryIds",
+        as: "atoms",
+      },
+    },
+    {
+      $unwind: {
+        path: "$atoms",
+      },
+    },
+    {
+      $project: {
+        inventoryIds: "$atoms.inventoryIds",
+        warehouseInventory: "$warehouseInventory",
+        index: {
+          $indexOfArray: ["$atoms.inventoryIds", "$warehouseInventory"],
+        },
+        size: {
+          $cond: {
+            if: {
+              $isArray: "$atoms.inventoryIds",
+            },
+            then: {
+              $size: "$atoms.inventoryIds",
+            },
+            else: "NA",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        inventoryIds: 1,
+        index: 1,
+        size: 1,
+        slicedInventories: {
+          $slice: ["$inventoryIds", "$index", "$size"],
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: "$slicedInventories",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        inventories: {
+          $addToSet: "$slicedInventories",
+        },
+      },
+    },
+    {
+      $unwind: {
+        path: "$inventories",
+      },
+    },
+    {
+      $lookup: {
+        from: "warehouses",
+        let: {
+          inventoryId: "$inventories",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$warehouseInventory", "$$inventoryId"],
+              },
+            },
+          },
+        ],
+        as: "warehouse",
+      },
+    },
+    {
+      $unwind: {
+        path: "$warehouse",
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: "$warehouse",
+      },
+    },
+    {
+      $lookup: {
+        from: "organisations",
+        localField: "organisationId",
+        foreignField: "id",
+        as: "organisation",
+      },
+    },
+    {
+      $unwind: "$organisation",
+    },
+    {
+      $match: {
+        $or: [
+          { "organisation.name": { $regex: regExp, $options: "i" } },
+          { "country.countryName": { $regex: regExp, $options: "i" } },
+        ],
+      },
+    },
+    { $group: { _id: null, filters: { $addToSet: matchQuery } } },
+  ]);
+  return locationList;
 }
 
 exports.getWarehousesByCity = [
@@ -324,17 +468,10 @@ exports.getManufacturerWarehouses = [
         id: req.user.organisationId,
       });
       const isDist = organisation.type === "DISTRIBUTORS";
-      const queryObj = {};
-      if (partnerLocation)
-        queryObj[`organisationId`] = { $ne: req.user.organisationId };
-      else if (mylocationFilter)
-        queryObj[`organisationId`] = req.user.organisationId;
-      else if (warehouseOrg) queryObj[`organisationId`] = warehouseOrg;
-      if (countryName) queryObj[`country.countryName`] = countryName;
       if (isDist) {
         const warehouses = await DistributorMapLocations(
           organisationId,
-          queryObj
+          warehouseOrg
         );
         const response = {
           partnerLocations: warehouses[0]?.partnerLocations.length,
@@ -344,8 +481,10 @@ exports.getManufacturerWarehouses = [
           response.warehouses = warehouses[0]?.allLocations;
         } else if (partnerLocation) {
           response.warehouses = warehouses[0]?.partnerLocations;
-        } else {
+        } else if (mylocationFilter) {
           response.warehouses = warehouses[0]?.myLocations;
+        } else {
+          response.warehouses = warehouses[0]?.filterLocations;
         }
         return apiResponse.successResponseWithData(
           res,
@@ -353,6 +492,13 @@ exports.getManufacturerWarehouses = [
           response
         );
       } else {
+        const queryObj = {};
+        if (partnerLocation)
+          queryObj[`organisationId`] = { $ne: req.user.organisationId };
+        else if (mylocationFilter)
+          queryObj[`organisationId`] = req.user.organisationId;
+        else if (warehouseOrg) queryObj[`organisationId`] = warehouseOrg;
+        if (countryName) queryObj[`country.countryName`] = countryName;
         const warehouses = await WarehouseModel.aggregate([
           { $match: queryObj },
           {
@@ -382,6 +528,9 @@ exports.getManufacturerWarehouses = [
               foreignField: "id",
               as: "orgData",
             },
+          },
+          {
+            $unwind: "$orgData",
           },
           {
             $group: {
@@ -522,60 +671,70 @@ exports.getManufacturerFilterOptions = [
   auth,
   async (req, res) => {
     try {
+      let orgs;
       const { organisationId } = req.user;
       const { type, regExp } = req.query;
-      const matchQuery = {};
-      if (type === "country") {
-        matchQuery[`country`] = "$country.countryName";
-        matchQuery[`name`] = "$country.countryName";
-      } else if (type === "org") {
-        matchQuery[`orgId`] = "$organisationId";
-        matchQuery[`orgName`] = "$orgData.name";
-        matchQuery[`name`] = "$orgData.name";
+      const organisation = await OrganisationModel.findOne({
+        id: organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      if (isDist) {
+        orgs = await DistributorFilterList(organisationId, type, regExp);
+      } else {
+        const matchQuery = {};
+        if (type === "country") {
+          matchQuery[`country`] = "$country.countryName";
+          matchQuery[`name`] = "$country.countryName";
+        } else if (type === "org") {
+          matchQuery[`orgId`] = "$organisationId";
+          matchQuery[`orgName`] = "$orgData.name";
+          matchQuery[`name`] = "$orgData.name";
+        }
+        orgs = await WarehouseModel.aggregate([
+          {
+            $lookup: {
+              from: "inventories",
+              localField: "warehouseInventory",
+              foreignField: "id",
+              as: "InventoryData",
+            },
+          },
+          { $unwind: "$InventoryData" },
+          { $unwind: "$InventoryData.inventoryDetails" },
+          {
+            $lookup: {
+              from: "products",
+              localField: "InventoryData.inventoryDetails.productId",
+              foreignField: "id",
+              as: "productData",
+            },
+          },
+          {
+            $lookup: {
+              from: "organisations",
+              localField: "organisationId",
+              foreignField: "id",
+              as: "orgData",
+            },
+          },
+          { $unwind: "$orgData" },
+          { $unwind: "$productData" },
+          { $match: { "productData.manufacturerId": organisationId } },
+          {
+            $match: {
+              $or: [
+                { "orgData.name": { $regex: regExp, $options: "i" } },
+                { "country.countryName": { $regex: regExp, $options: "i" } },
+              ],
+            },
+          },
+          { $group: { _id: null, filters: { $addToSet: matchQuery } } },
+        ]);
       }
-      const orgs = await WarehouseModel.aggregate([
-        {
-          $lookup: {
-            from: "inventories",
-            localField: "warehouseInventory",
-            foreignField: "id",
-            as: "InventoryData",
-          },
-        },
-        { $unwind: "$InventoryData" },
-        { $unwind: "$InventoryData.inventoryDetails" },
-        {
-          $lookup: {
-            from: "products",
-            localField: "InventoryData.inventoryDetails.productId",
-            foreignField: "id",
-            as: "productData",
-          },
-        },
-        {
-          $lookup: {
-            from: "organisations",
-            localField: "organisationId",
-            foreignField: "id",
-            as: "orgData",
-          },
-        },
-        { $unwind: "$productData" },
-        { $match: { "productData.manufacturerId": organisationId } },
-        {
-          $match: {
-            $or: [
-              { "orgData.name": { $regex: regExp, $options: "i" } },
-              { "country.countryName": { $regex: regExp, $options: "i" } },
-            ],
-          },
-        },
-        { $group: { _id: null, filters: { $addToSet: matchQuery } } },
-      ]);
 
       return apiResponse.successResponseWithData(
         res,
-        "List of warehouses :",
+        `List of warehouses :${organisation.type}`,
         orgs
       );
     } catch (err) {

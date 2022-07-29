@@ -48,6 +48,21 @@ const fontDescriptors = {
 };
 const printer = new PdfPrinter(fontDescriptors);
 
+async function quantityOverflow(warehouseId, shipmentProducts) {
+  let overflow = false;
+  const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+  const inventory = await InventoryModel.findOne({
+    id: warehouse.warehouseInventory,
+  });
+  for (let i = 0; i < shipmentProducts.length; i++) {
+    const product = inventory.inventoryDetails.find(
+      (item) => item.productId === shipmentProducts[i].productID
+    );
+    if (shipmentProducts[i].productQuantity > product.quantity) overflow = true;
+  }
+  return overflow;
+}
+
 async function inventoryUpdate(
   id,
   quantity,
@@ -87,11 +102,14 @@ async function inventoryUpdate(
           quantity: updatedInventory.inventoryDetails[index].quantity,
           quantityInTransit:
             updatedInventory.inventoryDetails[index].quantityInTransit,
-          sales: updatedInventory.inventoryDetails[index].quantity,
+        },
+        $inc: {
+          sales: quantity,
         },
         $setOnInsert: {
           openingBalance:
-            quantity + updatedInventory.inventoryDetails[index].quantity,
+            parseInt(quantity) +
+            parseInt(updatedInventory.inventoryDetails[index].quantity),
         },
       },
       {
@@ -137,7 +155,8 @@ async function inventoryUpdate(
         },
         $setOnInsert: {
           openingBalance:
-            updatedInventory.inventoryDetails[index].quantity - quantity,
+            parseInt(updatedInventory.inventoryDetails[index].quantity) -
+            parseInt(quantity),
         },
       },
       {
@@ -369,11 +388,16 @@ exports.createShipment = [
         data.shippingDate = shippingDate;
       }
       data.shippingDate = new Date(data.shippingDate);
-      await asyncForEach(data.products, async (element) => {
-        const product = await ProductModel.findOne({ id: element.productID });
-        element.type = product.type;
-        element.unitofMeasure = product.unitofMeasure;
-      });
+      console.log(data);
+      const checkOverflow = await quantityOverflow(
+        data.supplier.locationId,
+        data.products
+      );
+      if (checkOverflow)
+        return apiResponse.ErrorResponse(
+          res,
+          responses(req.user.preferredLanguage).product_quantity_error
+        );
       const shipmentCounter = await CounterModel.findOneAndUpdate(
         {
           "counters.name": "shipmentId",
@@ -638,17 +662,58 @@ exports.createShipment = [
             products[count].batchNumber != null &&
             products[count].batchNumber != undefined
           ) {
-            await AtomModel.updateOne(
-              {
-                batchNumbers: products[count].batchNumber,
-                currentInventory: suppInventoryId,
-              },
-              {
-                $inc: {
-                  quantity: -parseInt(products[count].productQuantity),
+            const currentAtom = await AtomModel.findOne({
+              batchNumbers: products[count].batchNumber,
+              currentInventory: suppInventoryId,
+            });
+            if (currentAtom.quantity == products[count].productQuantity) {
+              await AtomModel.updateOne(
+                {
+                  batchNumbers: products[count].batchNumber,
+                  currentInventory: suppInventoryId,
                 },
-              }
-            );
+                {
+                  $set: {
+                    currentInventory: recvInventoryId,
+                    status: "TRANSIT",
+                  },
+                }
+              );
+            } else {
+              await AtomModel.updateOne(
+                {
+                  batchNumbers: products[count].batchNumber,
+                  currentInventory: suppInventoryId,
+                },
+                {
+                  $inc: {
+                    quantity: -parseInt(products[count].productQuantity),
+                  },
+                }
+              );
+
+              const newAtom = new AtomModel({
+                id: cuid(),
+                label: {
+                  labelId: "QR_2D",
+                  labelType: "3232",
+                },
+                quantity: parseInt(products[count].productQuantity),
+                productId: currentAtom.productId,
+                inventoryIds: currentAtom.inventoryIds,
+                currentInventory: recvInventoryId,
+                poIds: currentAtom.poIds.push(data?.poId),
+                shipmentIds: currentAtom.shipmentIds.push(shipmentId),
+                currentShipment: shipmentId,
+                batchNumbers: currentAtom.batchNumbers,
+                txIds: currentAtom.txIds,
+                status: "TRANSIT",
+                attributeSet: currentAtom.attributeSet,
+                eolInfo: currentAtom.eolInfo,
+                comments: currentAtom?.comments,
+              });
+              await newAtom.save();
+            }
           }
           if (products[count].serialNumbersRange != null) {
             const serialNumbers = Array.isArray(
@@ -1390,62 +1455,77 @@ exports.receiveShipment = [
                 req.user
               );
 
-            if (products[count].batchNumber != null) {
-              const checkBatch = await AtomModel.find({
-                $and: [
-                  { currentInventory: recvInventoryId },
-                  { batchNumbers: products[count].batchNumber },
-                ],
-              });
-
-              if (checkBatch.length > 0) {
-                await AtomModel.updateOne(
-                  {
-                    batchNumbers: products[count].batchNumber,
-                    currentInventory: recvInventoryId,
-                  },
-                  {
-                    $inc: {
-                      quantity: parseInt(products[count].productQuantity),
-                    },
-                    $addToSet: {
-                      inventoryIds: recvInventoryId,
-                    },
-                    $set: {
-                      status: "HEALTHY",
-                    },
-                  }
-                );
-              } else {
-                const atom = new AtomModel({
-                  id: "batch-" + cuid(),
-                  label: {
-                    labelId: "QR_2D",
-                    labelType: "3232", // ?? What is this ??
-                  },
-                  quantity: products[count].productQuantity,
-                  productId: products[count].productID,
+            await AtomModel.updateOne(
+              {
+                batchNumbers: products[count].batchNumber,
+                currentInventory: recvInventoryId,
+              },
+              {
+                $addToSet: {
                   inventoryIds: recvInventoryId,
-                  currentInventory: recvInventoryId,
-                  poIds: [],
-                  shipmentIds: [],
-                  txIds: [],
-                  batchNumbers: products[count].batchNumber,
+                },
+                $set: {
                   status: "HEALTHY",
-                  attributeSet: {
-                    mfgDate: products[count].mfgDate,
-                    expDate: products[count].batchNumber.expDate,
-                  },
-                  eolInfo: {
-                    eolId: "IDN29402-23423-23423",
-                    eolDate: "2021-03-31T18:30:00.000Z",
-                    eolBy: req.user.id,
-                    eolUserInfo: "",
-                  },
-                });
-                await atom.save();
+                },
               }
-            }
+            );
+
+            // if (products[count].batchNumber != null) {
+            // const checkBatch = await AtomModel.find({
+            //   $and: [
+            //     { currentInventory: recvInventoryId },
+            //     { batchNumbers: products[count].batchNumber },
+            //   ],
+            // });
+
+            //   if (checkBatch.length > 0) {
+            //     await AtomModel.updateOne(
+            //       {
+            //         batchNumbers: products[count].batchNumber,
+            //         currentInventory: recvInventoryId,
+            //       },
+            //       {
+            //         $inc: {
+            //           quantity: parseInt(products[count].productQuantity),
+            //         },
+            //         $addToSet: {
+            //           inventoryIds: recvInventoryId,
+            //         },
+            //         $set: {
+            //           status: "HEALTHY",
+            //         },
+            //       }
+            //     );
+            //   } else {
+            //     const atom = new AtomModel({
+            //       id: "batch-" + cuid(),
+            //       label: {
+            //         labelId: "QR_2D",
+            //         labelType: "3232", // ?? What is this ??
+            //       },
+            //       quantity: products[count].productQuantity,
+            //       productId: products[count].productID,
+            //       inventoryIds: recvInventoryId,
+            //       currentInventory: recvInventoryId,
+            //       poIds: [],
+            //       shipmentIds: [],
+            //       txIds: [],
+            //       batchNumbers: products[count].batchNumber,
+            //       status: "HEALTHY",
+            //       attributeSet: {
+            //         mfgDate: products[count].mfgDate,
+            //         expDate: products[count].batchNumber.expDate,
+            //       },
+            //       eolInfo: {
+            //         eolId: "IDN29402-23423-23423",
+            //         eolDate: "2021-03-31T18:30:00.000Z",
+            //         eolBy: req.user.id,
+            //         eolUserInfo: "",
+            //       },
+            //     });
+            //     await atom.save();
+            //   }
+            // }
           }
           let Upload = null;
           if (req.file) {

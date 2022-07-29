@@ -19,11 +19,6 @@ const center = {
   lng: -75.697189,
 };
 
-const PointerDefault = {
-  lat: 45.44905006153431,
-  lng: -75.89244957349965,
-};
-
 const options = {
   styles: BlueMap,
   disableDefaultUI: true,
@@ -32,15 +27,20 @@ const options = {
   fullscreenControl: true,
 };
 
-export default function NetworkMap({ manufacturer }) {
-  console.log("hey there");
+export default function NetworkMap({ manufacturer, reportWarehouse }) {
   const { user } = useSelector((state) => state);
   const [MapSelected, setMapSelected] = useState(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
   });
-
+  function getClickedWarehouse(tempWar) {
+    let returnWarehouse;
+    manufacturer?.warehouses?.map((park) => {
+      if (park.warehouseId === tempWar) returnWarehouse = park;
+    });
+    return returnWarehouse;
+  }
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -49,13 +49,24 @@ export default function NetworkMap({ manufacturer }) {
       options={options}
     >
       <>
-        <Marker
-          position={PointerDefault}
-          icon={{
-            url: "/markers/defaultMap.gif",
-            scaledSize: new window.google.maps.Size(50, 50),
-          }}
-        />
+        {(reportWarehouse || user.warehouseId[0]) && (
+          <Marker
+            position={{
+              lat: parseFloat(
+                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
+                  ?.location?.latitude
+              ),
+              lng: parseFloat(
+                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
+                  ?.location?.longitude
+              ),
+            }}
+            icon={{
+              url: "/markers/defaultMap.gif",
+              scaledSize: new window.google.maps.Size(50, 50),
+            }}
+          />
+        )}
         {manufacturer?.warehouses?.map((park) =>
           park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
@@ -108,20 +119,20 @@ export default function NetworkMap({ manufacturer }) {
               setMapSelected(null);
             }}
           >
-            <div className="info-popup-container">
-              <div className="info-header">
-                <div className="info-header-content">
-                  <i class="fa-solid fa-map-location info-icon"></i>
-                  <p className="mi-body-xl black f-700 mi-reset">
-                    {MapSelected.orgName[0]}
+            <div className='info-popup-container'>
+              <div className='info-header'>
+                <div className='info-header-content'>
+                  <i className='fa-solid fa-map-location info-icon'></i>
+                  <p className='mi-body-xl black f-700 mi-reset'>
+                    {MapSelected?.orgName}
                   </p>
                 </div>
               </div>
-              <div className="info-body">
-                <p className="mi-body-md black f-500  mi-reset">
+              <div className='info-body'>
+                <p className='mi-body-md black f-500  mi-reset'>
                   {MapSelected.title}
                 </p>
-                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
+                <p className='mi-body-sm black  mi-reset'>{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>
