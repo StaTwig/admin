@@ -49,13 +49,13 @@ export default function NetworkMap({ manufacturer }) {
       options={options}
     >
       <>
-        {/* <Marker
+        <Marker
           position={PointerDefault}
           icon={{
             url: "/markers/defaultMap.gif",
             scaledSize: new window.google.maps.Size(50, 50),
           }}
-        /> */}
+        />
         {manufacturer?.warehouses?.map((park) =>
           park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
@@ -64,9 +64,11 @@ export default function NetworkMap({ manufacturer }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              onClick={() => {
-                setMapSelected(park);
-              }}
+              // onClick={() => {
+              //   setMapSelected(park);
+              // }}
+              onMouseEnter={() => setMapSelected(park)}
+              onMouseLeave={() => setMapSelected(null)}
               icon={{
                 url: "/markers/loc1.png",
                 scaledSize: new window.google.maps.Size(30, 30),
@@ -81,9 +83,11 @@ export default function NetworkMap({ manufacturer }) {
                 lat: parseFloat(park.location.latitude),
                 lng: parseFloat(park.location.longitude),
               }}
-              onClick={() => {
-                setMapSelected(park);
-              }}
+              // onClick={() => {
+              //   setMapSelected(park);
+              // }}
+              onMouseEnter={() => setMapSelected(park)}
+              onMouseLeave={() => setMapSelected(null)}
               icon={{
                 url: "/markers/loc2.png",
                 scaledSize: new window.google.maps.Size(30, 30),

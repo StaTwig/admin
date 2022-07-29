@@ -1,7 +1,17 @@
 import React from "react";
 import LocationCard from "./locationCard/LocationCard";
 
-export default function ManufacturerHeader({ MylocationFilter, setMobileDashboard, setMylocationFilter, partnerLocation, oManufacturer, manufacturer, user, setPartnerLocation }) {
+export default function ManufacturerHeader({
+  MylocationFilter,
+  setMobileDashboard,
+  setMylocationFilter,
+  partnerLocation,
+  oManufacturer,
+  manufacturer,
+  user,
+  setPartnerLocation,
+}) {
+  console.log(user);
   return (
     <div className="manufacturer-header">
       <div className="location-close">
@@ -18,7 +28,14 @@ export default function ManufacturerHeader({ MylocationFilter, setMobileDashboar
         </h1>
         <p className="mi-body-sm f-400 grey  mi-reset">{user?.location}</p>
       </div>
-      <LocationCard MylocationFilter={MylocationFilter} setMylocationFilter={setMylocationFilter} partnerLocation={partnerLocation} oManufacturer={oManufacturer} manufacturer={manufacturer} setPartnerLocation={setPartnerLocation} />
+      <LocationCard
+        MylocationFilter={MylocationFilter}
+        setMylocationFilter={setMylocationFilter}
+        partnerLocation={partnerLocation}
+        oManufacturer={oManufacturer}
+        manufacturer={manufacturer}
+        setPartnerLocation={setPartnerLocation}
+      />
     </div>
   );
 }

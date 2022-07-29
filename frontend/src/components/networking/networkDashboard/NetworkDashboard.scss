@@ -69,7 +69,17 @@
 .mi-text-wrap-md{
     width: 24rem;
     display: inline-block;
+    text-transform: capitalize !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.mi-max-text-wrap-md{
+    max-width: 24rem;
+    display: inline-block;
+    white-space: nowrap !important;
+    text-transform: capitalize !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
