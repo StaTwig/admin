@@ -107,6 +107,7 @@ async function DistributorMapLocations(organisationId, matchQuery) {
       $project: {
         warehouseId: "$id",
         organisationId: "$organisationId",
+        orgId: "$organisationId",
         city: "$warehouseAddress.city",
         title: "$title",
         location: "$location",
@@ -344,7 +345,7 @@ exports.getManufacturerWarehouses = [
         } else if (partnerLocation) {
           response.warehouses = warehouses[0]?.partnerLocations;
         } else {
-          response.warehouses = warehouses[0]?.allLocations;
+          response.warehouses = warehouses[0]?.myLocations;
         }
         return apiResponse.successResponseWithData(
           res,
