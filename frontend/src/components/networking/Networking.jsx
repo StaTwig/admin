@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./Networking.scss";
 import NetworkMap from "./networkMap/NetworkMap";
 import Reports from "./reports/Reports";
@@ -17,15 +17,19 @@ export default function Networking(props) {
     outStock,
     user,
     setReportWarehouse,
-    MainTab, 
+    MainTab,
     setPartnerLocation,
-    setMainTab
+    setMainTab,
   } = props;
 
   const [MobileDashboard, setMobileDashboard] = useState(false);
+
+  const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
+  const myRef = useRef(null);
+  const executeScroll = () => scrollToRef(myRef);
   return (
-    <div className='network-main-layout'>
-      <div className='network-grid-container'>
+    <div className="network-main-layout">
+      <div className="network-grid-container">
         <div className={`network-dashboard ${MobileDashboard && "active"}`}>
           <NetworkDashboard
             reportWarehouse={reportWarehouse}
@@ -34,17 +38,18 @@ export default function Networking(props) {
             setReportWarehouse={(param) => setReportWarehouse(param)}
             oManufacturer={oManufacturer}
             setMobileDashboard={setMobileDashboard}
+            executeScroll={executeScroll}
           />
         </div>
-        <div className='network-workspace'>
-          <div className='network-map-holder'>
-            <div className='map-filter-button'>
+        <div className="network-workspace">
+          <div className="network-map-holder">
+            <div className="map-filter-button">
               <div className={`dashboard-mobile`}>
                 <div
-                  className='dashboard-mobile-btn'
+                  className="dashboard-mobile-btn"
                   onClick={() => setMobileDashboard(true)}
                 >
-                  <i class='fa-solid fa-map-location-dot'></i>
+                  <i class="fa-solid fa-map-location-dot"></i>
                 </div>
               </div>
               {/* <div className="location-filter-btn filter-hide-sm">
@@ -58,9 +63,14 @@ export default function Networking(props) {
             </div>
             <NetworkMap {...props} />
           </div>
-          <div className='network-report-holders'>
-
-            <Reports {...props} reportWarehouse={reportWarehouse} MainTab={MainTab} setMainTab={setMainTab}/>
+          <div className="network-report-holders">
+            <Reports
+              {...props}
+              reportWarehouse={reportWarehouse}
+              MainTab={MainTab}
+              setMainTab={setMainTab}
+              myRef={myRef}
+            />
           </div>
         </div>
       </div>

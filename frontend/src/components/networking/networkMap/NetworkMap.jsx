@@ -7,9 +7,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import "./NetworkMap.scss";
-
-import mapStyles from "./data/mapStyles";
-import ParksData from "./data/skateboard-parks.json";
+import BlueMap from "./data/BlueMap";
 
 const containerStyle = {
   width: "100%",
@@ -27,7 +25,7 @@ const PointerDefault = {
 };
 
 const options = {
-  styles: mapStyles,
+  styles: BlueMap,
   disableDefaultUI: true,
   zoomControl: true,
   rotateControl: true,
@@ -114,13 +112,11 @@ export default function NetworkMap({ manufacturer }) {
                   </p>
                 </div>
               </div>
-              <div className='info-body'>
-                <p className='mi-body-md black f-500  mi-reset'>
-                  {MapSelected?.title}
+              <div className="info-body">
+                <p className="mi-body-md black f-500  mi-reset">
+                  {MapSelected.title}
                 </p>
-                <p className='mi-body-sm black  mi-reset'>
-                  {MapSelected?.city}
-                </p>
+                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>

@@ -1,7 +1,7 @@
 import React from "react";
 import TopSellerProduct from "./TopSellerProduct";
 
-const TopSeller = ({ bestseller }) => {
+const TopSeller = ({ bestseller, executeScroll }) => {
   const smallBoxColorsArray = [
     "#FDCD42",
     "#FE8E68",
@@ -20,7 +20,10 @@ const TopSeller = ({ bestseller }) => {
     <div className="bestSeller-container">
       <div className="mi-flex-sb">
         <h1 className="mi-body-sl dark f-600  mi-reset">Best Seller</h1>
-        <button className="nt-btn nt-btn-xs nt-btn-blue-alt">
+        <button
+          className="nt-btn nt-btn-xs nt-btn-blue-alt"
+          onClick={executeScroll}
+        >
           <i class="fa-solid fa-table-list"></i>
           <span>View Reports</span>
         </button>

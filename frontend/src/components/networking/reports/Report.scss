@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.8rem 1rem;
+    padding: 1rem 1rem;
     background-color: #fff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -135,22 +135,27 @@
 }
 
 .input-calender-form{
-    padding: 0.325rem 1.2rem;
-    border-radius: 0.3rem;
+    width: 8rem;
     outline: none;
-    border: 1px solid #1275E6;
+   border: none;
     cursor: pointer;
     color: #1275E6;
+}
+.date-picker{
+    margin-right: 1.5rem;
+    padding: 0.425rem 1.2rem;
+    border-radius: 0.3rem;
+    border: 1px solid #1275E6;
+    display: flex;
+    align-items: center;
 }
 
 .header-actions-group{
     display: flex;
     align-items: center;
-    gap: 1.5rem;
 }
 
-input[type="month"]::-webkit-calendar-picker-indicator {
+.cal-icon{
     cursor: pointer;
     color: #1275E6;
-    
-    }
+}

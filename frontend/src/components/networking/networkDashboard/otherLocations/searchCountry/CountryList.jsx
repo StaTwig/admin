@@ -1,14 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { getManufacturerWarehouses } from "../../../../../actions/networkActions";
-const CountryList = ({country, user, setReportWarehouse}) => {
+const CountryList = ({ country, user, setReportWarehouse }) => {
   const [warehouses, setWarehouses] = useState([]);
-  useEffect(()=>{
-    (async() =>{
-    const warehouses = await getManufacturerWarehouses("", country);
-    setWarehouses([...warehouses.data.warehouses]);
+  useEffect(() => {
+    (async () => {
+      const warehouses = await getManufacturerWarehouses("", country);
+      setWarehouses([...warehouses.data.warehouses]);
     })();
-  }, [])
+  }, []);
   const [toggleButton, setToggleButton] = useState(false);
   return (
     <>
@@ -29,19 +29,25 @@ const CountryList = ({country, user, setReportWarehouse}) => {
           )}
         </div>
         {toggleButton && (
-        <ul className="unordered-organization-list">
-          {warehouses?.map((warehouse, index) => 
-            <li className="mi-flex organization-list-item">
-              <span>
-                <i className="fa-solid fa-location-dot mr-2"></i>
-              </span>
-              <button className="link-button" onClick={() => setReportWarehouse(warehouse?.warehouseId)}>
-              <div >Location {index+1} - {warehouse?.title} - {warehouse?.city}</div>
-              </button>
-            </li>
-          )}
-        </ul>
-      )}
+          <ul className="unordered-organization-list">
+            {warehouses?.map((warehouse, index) => (
+              <li className="mi-flex organization-list-item">
+                <span>
+                  <i className="fa-solid fa-location-dot mr-2"></i>
+                </span>
+                <button
+                  className="link-button mi-link-none"
+                  onClick={() => setReportWarehouse(warehouse?.warehouseId)}
+                >
+                  <div>
+                    Location {index + 1} - {warehouse?.title} -{" "}
+                    {warehouse?.city}
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );
