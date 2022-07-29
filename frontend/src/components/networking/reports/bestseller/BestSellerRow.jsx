@@ -26,7 +26,7 @@ export default function BestSellerRow({ product }) {
         <TableCell className='mi-custom-cell mi-radius-first mi-first-cell-padding'>
           <div className='mi-table-data'>
             <div className='table-icon-space'>
-              <i class='fa-solid fa-prescription-bottle-medical'></i>
+              <i className='fa-solid fa-prescription-bottle-medical'></i>
             </div>
             <p className='mi-body-md black f-700 mi-reset'>
               {product?.productCategory}
@@ -66,7 +66,7 @@ export default function BestSellerRow({ product }) {
             className='nt-btn nt-btn-xs nt-btn-blue-alt'
             onClick={handleGraphOpen}
           >
-            <i class='fa-solid fa-chart-pie'></i>
+            <i className='fa-solid fa-chart-pie'></i>
             <span>View</span>
           </button>
         </TableCell>
@@ -78,7 +78,11 @@ export default function BestSellerRow({ product }) {
         className='mi-custom-dialog'
       >
         <DialogContent className='mi-custom-dialog-content'>
-          <NetworkGraph onClose={handleGraphClose} graph={"bigbar"} />
+          <NetworkGraph
+            onClose={handleGraphClose}
+            graph={"bigbar"}
+            data={product?.inventoryAnalytics?.dailyAnalytics}
+          />
         </DialogContent>
       </Dialog>
     </>

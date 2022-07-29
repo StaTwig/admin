@@ -51,7 +51,7 @@ export default function InstockRow({ product, reportWarehouse }) {
         <TableCell className='mi-custom-cell mi-radius-first mi-first-cell-padding'>
           <div className='mi-table-data'>
             <div className='table-icon-space'>
-              <i class='fa-solid fa-prescription-bottle-medical'></i>
+              <i className='fa-solid fa-prescription-bottle-medical'></i>
             </div>
             <p className='mi-body-md black f-700 mi-reset'>
               {product?.productCategory}
@@ -79,7 +79,7 @@ export default function InstockRow({ product, reportWarehouse }) {
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {product.openingBalance || 0}
+              {product?.inventoryAnalytics?.openingBalance || 0}
             </p>
             <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
               ( {product?.unitofMeasure?.name} )
@@ -89,7 +89,7 @@ export default function InstockRow({ product, reportWarehouse }) {
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {product.productQuantity || 0}
+              {product?.productQuantity || 0}
             </p>
             <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
               ( {product?.unitofMeasure?.name} )
@@ -101,14 +101,14 @@ export default function InstockRow({ product, reportWarehouse }) {
             className='nt-btn nt-btn-xs nt-btn-orange'
             onClick={handleClickOpen}
           >
-            <i class='fa-solid fa-clipboard-list'></i>
+            <i className='fa-solid fa-clipboard-list'></i>
             <span>Batch</span>
           </button>
           <button
             className='nt-btn nt-btn-xs nt-btn-blue-alt'
             onClick={handleGraphOpen}
           >
-            <i class='fa-solid fa-chart-pie'></i>
+            <i className='fa-solid fa-chart-pie'></i>
             <span>View</span>
           </button>
         </TableCell>
@@ -126,7 +126,7 @@ export default function InstockRow({ product, reportWarehouse }) {
                 </p>
               </div>
               <div className='modal-closing-space' onClick={handleClose}>
-                <i class='fa-solid fa-xmark'></i>
+                <i className='fa-solid fa-xmark'></i>
               </div>
             </div>
             <div className='nt-modal-body'>
@@ -157,7 +157,11 @@ export default function InstockRow({ product, reportWarehouse }) {
         className='mi-custom-dialog'
       >
         <DialogContent className='mi-custom-dialog-content'>
-          <NetworkGraph onClose={handleGraphClose} graph={"bar"} />
+          <NetworkGraph
+            onClose={handleGraphClose}
+            data={product?.inventoryAnalytics?.dailyAnalytics}
+            graph={"bar"}
+          />
         </DialogContent>
       </Dialog>
     </>

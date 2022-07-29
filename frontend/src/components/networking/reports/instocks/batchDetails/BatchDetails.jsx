@@ -13,11 +13,11 @@ function BatchRow({ row, isNearExpiry }) {
     <>
       <TableRow
         sx={{ "& > *": { borderBottom: "unset !important" } }}
-        className="mi-custom-tableRow"
+        className='mi-custom-tableRow'
       >
-        <TableCell className="mi-custom-cell mi-radius-first mi-first-cell-padding">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">
+        <TableCell className='mi-custom-cell mi-radius-first mi-first-cell-padding'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
               {row.batchNumbers[0]}
             </p>
             {isNearExpiry(row.attributeSet?.expDate).nearExpiry && (
@@ -27,35 +27,35 @@ function BatchRow({ row, isNearExpiry }) {
                     ? "Product expired"
                     : "Product near expiry"
                 }
-                placement="top"
+                placement='top'
               >
                 <Button>
-                  <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+                  <i className='fa-solid fa-triangle-exclamation error-icon'></i>
                 </Button>
               </Tooltip>
             )}
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
               {row.quantity || 0}
             </p>
-            <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
+            <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
               ( Packs )
             </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
               {row.attributeSet?.mfgDate?.split("T")[0] || "N/A"}
             </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
               {row.attributeSet?.expDate?.split("T")[0] || "N/A"}
             </p>
           </div>
@@ -79,22 +79,22 @@ export default function BatchDetails({ productId, warehouseId, isNearExpiry }) {
       <TableContainer>
         <Table
           // sx={{ minWidth: 665 }}
-          className="mi-custom-table"
-          aria-label="collapsible table"
+          className='mi-custom-table'
+          aria-label='collapsible table'
         >
           <TableHead>
             <TableRow>
-              <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <p className="mi-body-sm mi-reset grey-400">Batch Number</p>
+              <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
+                <p className='mi-body-sm mi-reset grey-400'>Batch Number</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Quantity</p>
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>Quantity</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Mfg Date</p>
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>Mfg Date</p>
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Exp Date</p>
+              <TableCell className='mi-custom-tableHead'>
+                <p className='mi-body-sm mi-reset grey-400'>Exp Date</p>
               </TableCell>
             </TableRow>
           </TableHead>

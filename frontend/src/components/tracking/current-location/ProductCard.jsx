@@ -79,49 +79,49 @@ const ProductCard = () => {
 
   return (
     <>
-      <div className="product-card-location">
-        <ul className="product-details-list">
-          <li className="product-list-card">
-            <div className="mi-flex-ac gap-1">
-              <i className="fa-solid fa-prescription-bottle-medical color-green"></i>
-              <p className="mi-body-sm f-500 mi-reset grey">Paracetomal</p>
+      <div className='product-card-location'>
+        <ul className='product-details-list'>
+          <li className='product-list-card'>
+            <div className='mi-flex-ac gap-1'>
+              <i className='fa-solid fa-prescription-bottle-medical color-green'></i>
+              <p className='mi-body-sm f-500 mi-reset grey'>Paracetomal</p>
             </div>
-            <p className="mi-body-sm f-500 mi-reset color-blue">Biopolio</p>
+            <p className='mi-body-sm f-500 mi-reset color-blue'>Biopolio</p>
           </li>
-          <li className="product-list-card">
-            <div className="mi-flex-ac gap-1">
-              <i className="fa-solid fa-building color-green"></i>
-              <p className="mi-body-sm f-500 mi-reset grey">Manufacturer</p>
+          <li className='product-list-card'>
+            <div className='mi-flex-ac gap-1'>
+              <i className='fa-solid fa-building color-green'></i>
+              <p className='mi-body-sm f-500 mi-reset grey'>Manufacturer</p>
             </div>
-            <p className="mi-body-sm f-500 mi-reset color-blue">
+            <p className='mi-body-sm f-500 mi-reset color-blue'>
               Bharath Biotech
             </p>
           </li>
-          <li className="product-list-card">
-            <div className="mi-flex-ac gap-1">
-              <i className="fa-solid fa-clipboard-list color-green"></i>
-              <p className="mi-body-sm f-500 mi-reset grey">Batch</p>
+          <li className='product-list-card'>
+            <div className='mi-flex-ac gap-1'>
+              <i className='fa-solid fa-clipboard-list color-green'></i>
+              <p className='mi-body-sm f-500 mi-reset grey'>Batch</p>
             </div>
-            <p className="mi-body-sm f-500 mi-reset color-blue">BJS2456</p>
+            <p className='mi-body-sm f-500 mi-reset color-blue'>BJS2456</p>
           </li>
-          <li className="product-list-card">
-            <div className="mi-flex-ac gap-1">
-              <i className="fa-solid fa-tag color-green"></i>
-              <p className="mi-body-sm f-500 mi-reset grey">Label</p>
+          <li className='product-list-card'>
+            <div className='mi-flex-ac gap-1'>
+              <i className='fa-solid fa-tag color-green'></i>
+              <p className='mi-body-sm f-500 mi-reset grey'>Label</p>
             </div>
-            <p className="mi-body-sm f-500 mi-reset color-blue">LB124</p>
+            <p className='mi-body-sm f-500 mi-reset color-blue'>LB124</p>
           </li>
         </ul>
-        <div className="product-quantity-details">
+        <div className='product-quantity-details'>
           <div>
             <Chart
               options={radialBarOptions.options}
               series={radialBarOptions.series}
-              type="radialBar"
-              width="160"
+              type='radialBar'
+              width='160'
             />
-            <div className="mi-flex-jc mi-input-xs">
-              <i className="fa-solid fa-truck-moving mr-1 color-green"></i>
+            <div className='mi-flex-jc mi-input-xs'>
+              <i className='fa-solid fa-truck-moving mr-1 color-green'></i>
               Quantity Sent
             </div>
           </div>
@@ -129,29 +129,29 @@ const ProductCard = () => {
             <Chart
               options={radialBarOptions.options}
               series={radialBarOptions.series}
-              type="radialBar"
-              width="160"
+              type='radialBar'
+              width='160'
             />
-            <div className="mi-flex-jc mi-input-xs">
-              <i className="fa-solid fa-truck-moving mr-1 color-green"></i>
+            <div className='mi-flex-jc mi-input-xs'>
+              <i className='fa-solid fa-truck-moving mr-1 color-green'></i>
               Quantity Received
             </div>
           </div>
         </div>
-        <div className="product-date-details">
-          <div className="date-container">
-            <div className="date-header mi-flex-ac gap-1">
-              <i class="fa-solid fa-calendar-days calender-icon white"></i>
-              <p className="mi-body-xs f-500 mi-reset white ">Mfg Date</p>
+        <div className='product-date-details'>
+          <div className='date-container'>
+            <div className='date-header mi-flex-ac gap-1'>
+              <i className='fa-solid fa-calendar-days calender-icon white'></i>
+              <p className='mi-body-xs f-500 mi-reset white '>Mfg Date</p>
             </div>
-            <p className="mi-body-xs f-500 mi-reset white">12/08/2018</p>
+            <p className='mi-body-xs f-500 mi-reset white'>12/08/2018</p>
           </div>
-          <div className="date-container">
-            <div className="date-header mi-flex-ac gap-1">
-              <i class="fa-solid fa-calendar-days calender-icon white"></i>
-              <p className="mi-body-xs f-500 mi-reset white ">Exp Date</p>
+          <div className='date-container'>
+            <div className='date-header mi-flex-ac gap-1'>
+              <i className='fa-solid fa-calendar-days calender-icon white'></i>
+              <p className='mi-body-xs f-500 mi-reset white '>Exp Date</p>
             </div>
-            <p className="mi-body-xs f-500 mi-reset white">12/08/2018</p>
+            <p className='mi-body-xs f-500 mi-reset white'>12/08/2018</p>
           </div>
         </div>
       </div>

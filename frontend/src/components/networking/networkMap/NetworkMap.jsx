@@ -62,7 +62,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
           }}
         />}
         {manufacturer?.warehouses?.map((park) =>
-        park?.orgId === user.organisation?.split("/")[1] ? (
+          park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
               key={park.warehouseId}
               position={{
@@ -112,7 +112,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <div className='info-popup-container'>
               <div className='info-header'>
                 <div className='info-header-content'>
-                  <i class='fa-solid fa-map-location info-icon'></i>
+                  <i className='fa-solid fa-map-location info-icon'></i>
                   <p className='mi-body-xl black f-700 mi-reset'>
                     {MapSelected?.orgName}
                   </p>
