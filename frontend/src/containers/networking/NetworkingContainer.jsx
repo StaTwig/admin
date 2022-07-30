@@ -90,7 +90,6 @@ const NetworkingContainer = (props) => {
       const { organisation } = response.data.data;
       setUser(response?.data?.data);
       const org = organisation?.split("/");
-      console.log("ORGANIZATION", organisation, org);
       getWarehouses(org);
     })();
   }, [partnerLocation, MylocationFilter]);

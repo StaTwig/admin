@@ -35,10 +35,9 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
   });
   function getClickedWarehouse(tempWar) {
-    let returnWarehouse;
-    manufacturer?.warehouses?.map((park) => {
-      if (park.warehouseId === tempWar) returnWarehouse = park;
-    });
+    const returnWarehouse = manufacturer?.warehouses?.find(
+      (item) => item.warehouseId === tempWar
+    );
     return returnWarehouse;
   }
   return isLoaded ? (
@@ -54,19 +53,19 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             position={{
               lat: parseFloat(
                 getClickedWarehouse(reportWarehouse || user.warehouseId[0])
-                  ?.location?.latitude
+                  ?.location?.coordinates[0]
               ),
               lng: parseFloat(
                 getClickedWarehouse(reportWarehouse || user.warehouseId[0])
-                  ?.location?.longitude
+                  ?.location?.coordinates[1]
               ),
             }}
             icon={{
-              url: "/markers/defaultMap.gif",
+              url: "/markers/loc3.png",
               // scaledSize: new window.google.maps.Size(10, 10),
               scaledSize: new window.google.maps.Size(30, 30),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(15, 15),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
             }}
           />
         )}
@@ -75,8 +74,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(park.location.latitude),
-                lng: parseFloat(park.location.longitude),
+                lat: parseFloat(park?.location?.coordinates[0]),
+                lng: parseFloat(park?.location?.coordinates[1]),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -94,8 +93,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(park.location.latitude),
-                lng: parseFloat(park.location.longitude),
+                lat: parseFloat(park?.location?.coordinates[0]),
+                lng: parseFloat(park?.location?.coordinates[1]),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -115,8 +114,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
         {MapSelected ? (
           <InfoWindow
             position={{
-              lat: parseFloat(MapSelected.location.latitude),
-              lng: parseFloat(MapSelected.location.longitude),
+              lat: parseFloat(MapSelected?.location?.coordinates[0]),
+              lng: parseFloat(MapSelected?.location?.coordinates[1]),
             }}
             onCloseClick={() => {
               setMapSelected(null);
