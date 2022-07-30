@@ -1065,16 +1065,13 @@ exports.bestSellerSummary = [
         },
         {
           $match: {
-            ...matchQuery,
-            totalSales: { $gt: 0 },
-          },
-        },
-        {
-          $match: {
             totalSales: {
               $gt: 0,
             },
           },
+        },
+        {
+          $match: matchQuery,
         },
         {
           $sort: {
