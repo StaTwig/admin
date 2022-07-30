@@ -57,7 +57,7 @@ export default function BestSellerRow({ product }) {
               {product?.inventoryAnalytics?.sales || 0}
             </p>
             <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
-              ( Packs )
+              ( {product?.unitofMeasure?.name} )
             </p>
           </div>
         </TableCell>

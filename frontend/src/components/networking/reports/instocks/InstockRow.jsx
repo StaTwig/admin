@@ -209,6 +209,7 @@ export default function InstockRow({ product, reportWarehouse }) {
                 productId={product._id}
                 isNearExpiry={isNearExpiry}
                 warehouseId={reportWarehouse}
+                uom={product?.unitofMeasure?.name}
               />
             </div>
             <div className='nt-modal-actions'>

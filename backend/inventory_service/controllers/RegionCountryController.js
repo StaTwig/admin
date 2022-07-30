@@ -387,12 +387,12 @@ exports.getOrganizations = [
         orgs = await OrganisationModel.find({
           $and: [
             { type: orgType },
-            { "country.countryName": country },
+            {$or: [{ "country.countryName": country }, { country: country }]},
             { status: "ACTIVE" },
           ],
         });
       } else if (country) {
-        orgs = await OrganisationModel.find({ "country.countryName": country });
+        orgs = await OrganisationModel.find({$or: [{ "country.countryName": country }, { country: country }]});
       } else {
         return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
       }
