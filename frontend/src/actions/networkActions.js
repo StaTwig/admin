@@ -1,15 +1,17 @@
 import axios from "axios";
 import { config } from "../config";
-import format from "date-fns/format";
+import { startOfMonth, format } from "date-fns";
 export const getBestSellers = async (reportWarehouse, date) => {
   try {
-    date = date ? format(date, "yyyy-MM-dd") : "";
+    date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
     const url = config().getBestSellersUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
+    const result = await axios.get(
+      url + `?warehouseId=${reportWarehouse}&date=${date}`
+    );
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -20,31 +22,35 @@ export const getBestSellerSummary = async (reportWarehouse) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
 export const getmanufacturerInStockReport = async (reportWarehouse, date) => {
   try {
-    date = date ? format(date, "yyyy-MM-dd") : "";
+    date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
     const url = config().getmanufacturerInStockReportUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
+    const result = await axios.get(
+      url + `?warehouseId=${reportWarehouse}&date=${date}`
+    );
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
 export const getmanufacturerOutStockReport = async (reportWarehouse, date) => {
   try {
-    date = date ? format(date, "yyyy-MM-dd") : "";
+    date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
     const url = config().getmanufacturerOutStockReportUrl;
-    const result = await axios.get(url + `?warehouseId=${reportWarehouse}&date=${date}`);
+    const result = await axios.get(
+      url + `?warehouseId=${reportWarehouse}&date=${date}`
+    );
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -65,7 +71,7 @@ export const getManufacturerWarehouses = async (
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -76,6 +82,6 @@ export const getManufacturerFilterOptions = async (type, regExp) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };

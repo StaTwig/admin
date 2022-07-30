@@ -80,6 +80,8 @@ export default function OutstockRow({ product }) {
           <NetworkGraph
             onClose={handleGraphClose}
             graph={"area"}
+            name={product?.productName}
+            cat={product?.productCategory}
             data={product?.inventoryAnalytics?.dailyAnalytics}
           />
         </DialogContent>

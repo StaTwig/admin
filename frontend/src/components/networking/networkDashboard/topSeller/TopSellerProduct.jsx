@@ -31,7 +31,7 @@ const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
 
           {Distributor && (
             <div className="manufacturer-details">
-              <p className="mi-body-sm grey f-400 mi-reset">ABC Manufacturer</p>
+              <p className="mi-body-sm grey f-400 mi-reset">{bs.manufacturer}</p>
             </div>
           )}
 
