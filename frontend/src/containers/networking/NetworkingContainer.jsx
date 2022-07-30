@@ -22,7 +22,9 @@ const NetworkingContainer = (props) => {
   const [outStock, setOutStock] = React.useState();
   const [MainTab, setMainTab] = useState("INSTOCK");
   const date = new Date();
-  const [startDate, setStartDate] = useState(new Date(date.getFullYear(), date.getMonth(), 1));
+  const [startDate, setStartDate] = useState(
+    new Date(date.getFullYear(), date.getMonth(), 1)
+  );
   const [manufacturer, setManufacturer] = React.useState({
     myLocations: 0,
     partnerLocations: 0,
@@ -31,24 +33,31 @@ const NetworkingContainer = (props) => {
   const [reportWarehouse, setReportWarehouse] = useState("");
   const [partnerLocation, setPartnerLocation] = useState(false);
   const [MylocationFilter, setMylocationFilter] = useState(false);
+
   const getBestsellers = async () => {
     const bestSellers = await getBestSellers(reportWarehouse, startDate);
-    setBestseller(bestSellers.data.bestSellers);
+    if (bestSellers) setBestseller(bestSellers.data.bestSellers);
   };
   const getTopBestsellers = async () => {
     const bestSellers = await getBestSellerSummary(reportWarehouse);
-    setTopBestseller(bestSellers.data.bestSellers);
-    setReportWarehouse(bestSellers.data.warehouseId);
+    if (bestSellers) setTopBestseller(bestSellers.data.bestSellers);
+    if (bestSellers) setReportWarehouse(bestSellers.data.warehouseId);
   };
   const getInstock = async (startDate) => {
-    const inStock = await getmanufacturerInStockReport(reportWarehouse, startDate);
-    setInStock(inStock.data.inStockReport);
-    setReportWarehouse(inStock.data.warehouseId);
+    const inStock = await getmanufacturerInStockReport(
+      reportWarehouse,
+      startDate
+    );
+    if (inStock) setInStock(inStock.data.inStockReport);
+    if (inStock) setReportWarehouse(inStock.data.warehouseId);
   };
   const getOutStock = async () => {
-    const outStock = await getmanufacturerOutStockReport(reportWarehouse, startDate);
-    setOutStock(outStock.data.outOfStockReport);
-    setReportWarehouse(outStock.data.warehouseId);
+    const outStock = await getmanufacturerOutStockReport(
+      reportWarehouse,
+      startDate
+    );
+    if (outStock) setOutStock(outStock.data.outOfStockReport);
+    if (outStock) setReportWarehouse(outStock.data.warehouseId);
   };
   const getWarehouses = async (org) => {
     const warehouses = await getManufacturerWarehouses(
