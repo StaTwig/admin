@@ -11,7 +11,7 @@ export const getBestSellers = async (reportWarehouse, date) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -22,7 +22,7 @@ export const getBestSellerSummary = async (reportWarehouse) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -36,7 +36,7 @@ export const getmanufacturerInStockReport = async (reportWarehouse, date) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -50,7 +50,7 @@ export const getmanufacturerOutStockReport = async (reportWarehouse, date) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -71,7 +71,7 @@ export const getManufacturerWarehouses = async (
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
 
@@ -82,6 +82,6 @@ export const getManufacturerFilterOptions = async (type, regExp) => {
     return result.data;
   } catch (e) {
     console.log(e);
-    return e.response;
+    return false;
   }
 };
