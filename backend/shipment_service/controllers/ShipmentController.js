@@ -58,7 +58,10 @@ async function quantityOverflow(warehouseId, shipmentProducts) {
     const product = inventory.inventoryDetails.find(
       (item) => item.productId === shipmentProducts[i].productID
     );
-    if (shipmentProducts[i].productQuantity > product.quantity) overflow = true;
+    if (
+      parseInt(shipmentProducts[i].productQuantity) > parseInt(product.quantity)
+    )
+      overflow = true;
   }
   return overflow;
 }
@@ -91,6 +94,7 @@ async function inventoryUpdate(
     const index = updatedInventory.inventoryDetails.findIndex((object) => {
       return object.productId === id;
     });
+    console.log(updatedInventory.inventoryDetails[index]);
     await InventoryAnalyticsModel.updateOne(
       {
         inventoryId: suppId,
@@ -107,9 +111,10 @@ async function inventoryUpdate(
           sales: quantity,
         },
         $setOnInsert: {
-          openingBalance:
-            parseInt(quantity) +
-            parseInt(updatedInventory.inventoryDetails[index].quantity),
+          openingBalance: parseInt(
+            updatedInventory.inventoryDetails[index].quantity +
+              parseInt(quantity)
+          ),
         },
       },
       {
@@ -388,7 +393,7 @@ exports.createShipment = [
         data.shippingDate = shippingDate;
       }
       data.shippingDate = new Date(data.shippingDate);
-      console.log(data);
+      console.log("**** Create Shipment ==> ", data);
       const checkOverflow = await quantityOverflow(
         data.supplier.locationId,
         data.products
