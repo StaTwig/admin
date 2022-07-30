@@ -27,7 +27,7 @@ export default function LocationCard({
         </div>
         <div className='location-card-bottom'>
           <h1 className='mi-title-sm f-700 mi-reset'>
-            {manufacturer?.myLocations}
+            {manufacturer?.myLocations ? manufacturer?.myLocations : 0}
           </h1>
           {/* <p className="mi-body-sm f-500 mi-reset">ABC Manufacturer</p> */}
         </div>
@@ -47,7 +47,7 @@ export default function LocationCard({
         </div>
         <div className='location-card-bottom'>
           <h1 className='mi-title-sm f-700 mi-reset'>
-            {manufacturer?.partnerLocations}
+            {manufacturer?.partnerLocations ? manufacturer?.partnerLocations : 0 }
           </h1>
         </div>
       </div>

@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import { getBatchesofWarehouse } from "../../../../../actions/inventoryActions";
-function BatchRow({ row, isNearExpiry }) {
+function BatchRow({ row, isNearExpiry, uom }) {
   return (
     <>
       <TableRow
@@ -42,7 +42,7 @@ function BatchRow({ row, isNearExpiry }) {
               {row.quantity || 0}
             </p>
             <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
-              ( Packs )
+              ( {uom || ''} )
             </p>
           </div>
         </TableCell>
@@ -65,7 +65,7 @@ function BatchRow({ row, isNearExpiry }) {
   );
 }
 
-export default function BatchDetails({ productId, warehouseId, isNearExpiry }) {
+export default function BatchDetails({ productId, warehouseId, isNearExpiry, uom }) {
   const [Data, setData] = useState([]);
   useEffect(() => {
     async function getBatches() {
@@ -100,7 +100,7 @@ export default function BatchDetails({ productId, warehouseId, isNearExpiry }) {
           </TableHead>
           <TableBody>
             {Data?.map((row) => (
-              <BatchRow row={row} key={row.id} isNearExpiry={isNearExpiry} />
+              <BatchRow row={row} key={row.id} uom={uom} isNearExpiry={isNearExpiry} />
             ))}
           </TableBody>
         </Table>
