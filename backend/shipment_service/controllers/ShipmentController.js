@@ -776,6 +776,9 @@ exports.createShipment = [
           status: "CREATED",
           products: products,
         };
+        data.products = JSON.parse(data.products);
+        data.supplier = JSON.parse(data.supplier);
+        data.receiver = JSON.parse(data.receiver);
         const event_data = {
           eventID: cuid(),
           eventTime: new Date().toISOString(),
