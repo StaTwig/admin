@@ -38,7 +38,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
     const returnWarehouse = manufacturer?.warehouses?.find(
       (item) => item.warehouseId === tempWar
     );
-    return returnWarehouse;
+    return returnWarehouse ? returnWarehouse : [];
   }
   return isLoaded ? (
     <GoogleMap
@@ -74,8 +74,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(park?.location?.coordinates[0]),
-                lng: parseFloat(park?.location?.coordinates[1]),
+                lat: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[0] : park?.location?.latitude),
+                lng: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[1] : park?.location?.longitude),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -93,8 +93,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(park?.location?.coordinates[0]),
-                lng: parseFloat(park?.location?.coordinates[1]),
+                lat: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[0] : park?.location?.latitude),
+                lng: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[1] : park?.location?.longitude),
               }}
               onClick={() => {
                 setMapSelected(park);
