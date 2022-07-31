@@ -807,7 +807,7 @@ exports.createShipment = [
             },
           },
           payload: {
-            data: data,
+            data: JSON.parse(data),
           },
         };
         if (orgId === supplierID) {
