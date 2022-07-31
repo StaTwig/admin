@@ -1606,6 +1606,9 @@ exports.receiveShipment = [
               console.log(error);
             });
           console.log(data.id, "data.id");
+          data.products = JSON.parse(data.products);
+          data.supplier = JSON.parse(data.supplier);
+          data.receiver = JSON.parse(data.receiver);
           const event_data = {
             eventID: cuid(),
             eventTime: new Date().toISOString(),
@@ -1637,7 +1640,7 @@ exports.receiveShipment = [
               },
             },
             payload: {
-              data: JSON.parse(JSON.stringify(data)),
+              data: data,
             },
           };
           if (orgId === supplierID) {
