@@ -1637,7 +1637,7 @@ exports.receiveShipment = [
               },
             },
             payload: {
-              data: JSON.parse(data),
+              data: JSON.parse(JSON.stringify(data)),
             },
           };
           if (orgId === supplierID) {
