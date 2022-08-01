@@ -6,7 +6,7 @@ WORKDIR /src
 
 COPY package.json .
 
-RUN yarn --production
+RUN yarn
 
 COPY . .
 

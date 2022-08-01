@@ -20,10 +20,7 @@ async function dailyInventoryUpdate(date) {
               outOfStockDays: dayOutofStock,
             },
             $push: {
-              dailyAnalytics: {
-                date: date,
-                quantity: product.quantity,
-              },
+              dailyAnalytics: [date, product.quantity],
             },
             $setOnInsert: {
               quantity: product.quantity,

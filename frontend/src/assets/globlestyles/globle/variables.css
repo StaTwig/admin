@@ -4,11 +4,13 @@
   --darkblue: #0159ea;
   --darker-blue: #1753e0;
   --blue-800: #1275e6;
+  --blue-900:#2585F3;
   --blue: #0ea5e9;
   --blue-hover: #0284c7;
   --btn-primary: transparent linear-gradient(109deg, #0093e9, #36c2cf) 0 0
     no-repeat padding-box;
   --red: #ef4444;
+  --crimson-red : #F94F4F;
   --red-hover: #b91c1c;
   --orange: #fa7923;
   --yellow: #fcb842;
@@ -17,14 +19,21 @@
   --black: #4d4f5c;
   --dark-black: #333333;
   --light-grey: #8f8b8b;
+  --black-900:#4A4A4A;
+  --grey-900:#999999;
   --dark: #4d4f5c;
+  --grey-800:#9992A747;
   --light: #f8fafc;
   --white: #fff;
   --grey: #6c757d;
+  --grey-100:#E4E2E2;
   --grey-400: #94a3b8;
   --grey-300: #cbd5e1;
   --grey-200: #e5e7eb;
   --grey-100: #eeeeee;
   --white-200: #ffffff;
   --teal: #14b8a6;
+  --green:#0BC6A7;
+  --status-1: #38d2a0;
+  --status-2: #f7b546;
 }

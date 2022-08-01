@@ -10,12 +10,7 @@ const InventoryAnalytics = new mongoose.Schema(
     sales: { type: Number, min: 0, default: 0 },
     openingBalance: { type: Number, min: 0, default: 0 },
     outOfStockDays: { type: Number, min: 0, default: 0 },
-    dailyAnalytics: [
-      {
-        date: { type: Date, required: true },
-        quantity: { type: Number, min: 0, default: 0 },
-      },
-    ],
+    dailyAnalytics: [],
   },
   { timestamps: true }
 );

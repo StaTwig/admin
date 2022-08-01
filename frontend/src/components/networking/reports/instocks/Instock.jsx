@@ -6,8 +6,11 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import InstockRow from "./InstockRow";
+import { useSelector } from "react-redux";
 
-export default function Instock({inStock, reportWarehouse}) {
+export default function Instock({ inStock, reportWarehouse }) {
+  const {user} = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS"
   return (
     <>
       <TableContainer>
@@ -24,8 +27,11 @@ export default function Instock({inStock, reportWarehouse}) {
               <TableCell className="mi-custom-tableHead">
                 <p className="mi-body-sm mi-reset grey-400">Product Name</p>
               </TableCell>
+              {Distributor && <TableCell className="mi-custom-tableHead">
+                <p className="mi-body-sm mi-reset grey-400">Product Manufacturer</p>
+              </TableCell>}
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Closing balance</p>
+                <p className="mi-body-sm mi-reset grey-400">Opening balance</p>
               </TableCell>
               <TableCell className="mi-custom-tableHead">
                 <p className="mi-body-sm mi-reset grey-400">
@@ -36,9 +42,13 @@ export default function Instock({inStock, reportWarehouse}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {inStock?.map((product, idx) => 
-              <InstockRow product={product} reportWarehouse={reportWarehouse} key={idx} />
-            )}
+            {inStock?.map((product, idx) => (
+              <InstockRow
+                product={product}
+                reportWarehouse={reportWarehouse}
+                key={idx}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

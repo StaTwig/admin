@@ -273,8 +273,12 @@ exports.addProduct = [
               }
             );
 
-            const Upload = await uploadFile(req.file);
-            await unlinkFile(req.file.path);
+            let Upload;
+            if(req.file!=undefined){
+              Upload = await uploadFile(req.file);
+              await unlinkFile(req.file.path);
+            }
+
 
             const product = new ProductModel({
               id: productId?.counters[5].format + productId?.counters[5].value,
@@ -285,7 +289,7 @@ exports.addProduct = [
               manufacturer: req.body.manufacturer,
               manufacturerId: manufacturerRef.id,
               pricing: req.body.pricing,
-              photoId: `${Upload.key}`,
+              photoId: Upload!=undefined?Upload.key:"",
               unitofMeasure: JSON.parse(req.body.unitofMeasure),
               characteristicSet: {
                 temperature_max: req.body.characteristicSet?.temperature_max,

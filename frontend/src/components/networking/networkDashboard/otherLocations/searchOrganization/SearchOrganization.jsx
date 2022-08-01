@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
-import { getManufacturerFilterOptions } from "../../../../../actions/networkActions";
+import React from "react";
 import OrganizationList from "./OrganizationList";
-const SearchOrganization = ({ user, nManufacturer, setReportWarehouse}) => {
+const SearchOrganization = ({ user, nManufacturer, setReportWarehouse }) => {
   // const [nManufacturer, setNManufacturer] = useState([{filters: []}]);
   // useEffect(() =>{
   //  const getManFilters = async(param) => {
@@ -12,12 +11,19 @@ const SearchOrganization = ({ user, nManufacturer, setReportWarehouse}) => {
   // getManFilters("org");
   // }, [])
   return (
-    <div className="search-location-results">
-      <p className="mi-body-md f-400 grey mi-reset">Organization List</p>
-      <div className="search-result-container">
-        {nManufacturer.map((org, index) =>
-         { return <OrganizationList setReportWarehouse={setReportWarehouse} orgName={org?.orgName?.length ? org?.orgName[0] : '' } orgId={org?.orgId} user={user} />}
-        )}
+    <div className='search-location-results'>
+      <p className='mi-body-md f-400 grey mi-reset'>Organization List</p>
+      <div className='search-result-container'>
+        {nManufacturer.map((org, index) => {
+          return (
+            <OrganizationList
+              setReportWarehouse={setReportWarehouse}
+              orgName={org?.orgName}
+              orgId={org?.orgId}
+              user={user}
+            />
+          );
+        })}
       </div>
     </div>
   );

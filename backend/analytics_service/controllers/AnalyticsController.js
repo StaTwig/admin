@@ -11,6 +11,54 @@ const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const { startOfMonth, format } = require("date-fns");
 
+async function getDistributedProducts(matchQuery, warehouseId, fieldName) {
+  const products = await WarehouseModel.aggregate([
+    {
+      $match: {
+        id: warehouseId,
+      },
+    },
+    {
+      $lookup: {
+        localField: "warehouseInventory",
+        from: "inventories",
+        foreignField: "id",
+        as: "inventory",
+      },
+    },
+    {
+      $unwind: {
+        path: "$inventory",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $replaceWith: {
+        $mergeObjects: [null, "$inventory"],
+      },
+    },
+    {
+      $unwind: {
+        path: "$inventoryDetails",
+      },
+    },
+    {
+      $group: {
+        _id: "items",
+        distItems: { $addToSet: "$inventoryDetails.productId" },
+      },
+    },
+  ]);
+  if (products.length > 0) {
+    if (products[0].distItems.length > 0) {
+      matchQuery[`${fieldName}`] = {
+        $in: products[0].distItems,
+      };
+    }
+  }
+  return matchQuery;
+}
+
 exports.getAnalytics = [
   auth,
   async (req, res) => {
@@ -500,20 +548,13 @@ exports.getInventoryAnalytics = [
       const batchNearExpiration = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                "attributeSet.expDate": {
-                  $gte: today.toISOString(),
-                  $lt: nextMonth.toISOString(),
-                },
-              },
-              {
-                $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] },
-              },
-              { batchNumbers: { $ne: "" } },
-              { "attributeSet.mfgDate": { $ne: "" } },
-              { "attributeSet.expDate": { $ne: "" } },
-            ],
+            "attributeSet.expDate": {
+              $gte: today.toISOString(),
+              $lt: nextMonth.toISOString(),
+            },
+            currentInventory: warehouse.warehouseInventory,
+            batchNumbers: { $ne: "" },
+            "attributeSet.mfgDate": { $ne: "" },
           },
         },
         {
@@ -527,19 +568,13 @@ exports.getInventoryAnalytics = [
       const batchExpired = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                "attributeSet.expDate": {
-                  $lt: today.toISOString(),
-                },
-              },
-              {
-                $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] },
-              },
-              { batchNumbers: { $ne: "" } },
-              { "attributeSet.mfgDate": { $ne: "" } },
-              { "attributeSet.expDate": { $ne: "" } },
-            ],
+            "attributeSet.expDate": {
+              $lt: today.toISOString(),
+            },
+
+            currentInventory: warehouse.warehouseInventory,
+            batchNumbers: { $ne: "" },
+            "attributeSet.mfgDate": { $ne: "" },
           },
         },
         {
@@ -846,6 +881,26 @@ exports.bestSellers = [
       const warehouse = req.query?.warehouseId || req.user.warehouseId;
       const date =
         req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery = {};
+      if (!isDist) {
+        matchQuery[`manufacturerId`] = req.user.organisationId;
+      } else {
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery = await getDistributedProducts(
+            matchQuery,
+            req.user.warehouseId,
+            `_id`
+          );
+        }
+      }
+
       const bestSellers = await WarehouseModel.aggregate([
         {
           $match: {
@@ -937,14 +992,17 @@ exports.bestSellers = [
             unitofMeasure: {
               $first: "$product.unitofMeasure",
             },
+            totalSales: {
+              $first: "$inventoryDetails.totalSales",
+            },
             manufacturer: {
               $first: "$product.manufacturer",
             },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
             productQuantity: {
               $sum: "$inventoryDetails.quantity",
-            },
-            totalSales: {
-              $sum: "$inventoryDetails.totalSales",
             },
             inventoryAnalytics: {
               $first: "$inventory_analytics",
@@ -953,6 +1011,16 @@ exports.bestSellers = [
               $first: "$inventoryDetails.updatedAt",
             },
           },
+        },
+        {
+          $match: {
+            "inventoryAnalytics.sales": {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $match: matchQuery,
         },
         {
           $sort: {
@@ -977,6 +1045,14 @@ exports.bestSellerSummary = [
     try {
       const limit = req.query.limit || 5;
       const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      const matchQuery = {};
+      if (!isDist) {
+        matchQuery[`manufacturerId`] = req.user.organisationId;
+      }
       const bestSellers = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1035,6 +1111,9 @@ exports.bestSellerSummary = [
             manufacturer: {
               $first: "$products.manufacturer",
             },
+            manufacturerId: {
+              $first: "$products.manufacturerId",
+            },
             productQuantity: {
               $sum: "$inventoryDetails.quantity",
             },
@@ -1042,6 +1121,16 @@ exports.bestSellerSummary = [
               $sum: "$inventoryDetails.totalSales",
             },
           },
+        },
+        {
+          $match: {
+            totalSales: {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $match: matchQuery,
         },
         {
           $sort: {
@@ -1069,8 +1158,29 @@ exports.inStockReport = [
   async (req, res) => {
     try {
       const warehouse = req.query.warehouseId || req.user.warehouseId;
-      const date =
-        req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const date = req.query.date
+        ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd")
+        : format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
       const inStockReport = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1100,6 +1210,9 @@ exports.inStockReport = [
           $unwind: {
             path: "$inventoryDetails",
           },
+        },
+        {
+          $match: matchQuery1,
         },
         {
           $match: {
@@ -1172,6 +1285,9 @@ exports.inStockReport = [
             manufacturer: {
               $first: "$product.manufacturer",
             },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
             productQuantity: {
               $sum: "$inventoryDetails.quantity",
             },
@@ -1185,6 +1301,9 @@ exports.inStockReport = [
               $first: "$inventoryDetails.updatedAt",
             },
           },
+        },
+        {
+          $match: matchQuery2,
         },
         {
           $sort: {
@@ -1210,6 +1329,30 @@ exports.outOfStockReport = [
       const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
         req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery = {};
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        matchQuery[`totalSales`] = {
+          $gt: 0,
+        };
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
       const outOfStockReport = await WarehouseModel.aggregate([
         {
           $match: {
@@ -1239,6 +1382,9 @@ exports.outOfStockReport = [
           $unwind: {
             path: "$inventoryDetails",
           },
+        },
+        {
+          $match: matchQuery1,
         },
         {
           $match: {
@@ -1291,7 +1437,6 @@ exports.outOfStockReport = [
         {
           $unwind: {
             path: "$inventory_analytics",
-            preserveNullAndEmptyArrays: true,
           },
         },
         {
@@ -1309,6 +1454,9 @@ exports.outOfStockReport = [
             manufacturer: {
               $first: "$product.manufacturer",
             },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
             productQuantity: {
               $sum: "$inventoryDetails.quantity",
             },
@@ -1322,6 +1470,12 @@ exports.outOfStockReport = [
               $first: "$inventoryDetails.updatedAt",
             },
           },
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $match: matchQuery2,
         },
         {
           $sort: {
