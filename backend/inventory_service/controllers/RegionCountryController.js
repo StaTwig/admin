@@ -300,15 +300,15 @@ exports.getCountryDetailsByRegion = [
             countrySet.add(warehouse.country);
           } else {
             console.log(warehouse);
-            countrySet.add(warehouse.country.countryName);
+            countrySet.add(warehouse?.country?.countryName);
           }
         }
         for (const org of orgs) {
           if (typeof org.country === "string") {
-            countrySet.add(org.country);
+            countrySet.add(org?.country);
           } else {
-            console.log(org.country);
-            countrySet.add(org.country.countryName);
+            console.log(org);
+            countrySet.add(org?.country?.countryName);
           }
         }
         const orgArray = [...countrySet];
