@@ -6,8 +6,7 @@ import {
   useJsApiLoader,
   Polyline,
 } from "@react-google-maps/api";
-
-import mapStyles from "./data/mapStyles";
+import BlueMap from "./data/BlueMap";
 
 const containerStyle = {
   width: "100%",
@@ -16,14 +15,14 @@ const containerStyle = {
 };
 
 const options = {
-  styles: mapStyles,
+  styles: BlueMap,
   disableDefaultUI: true,
   zoomControl: true,
   rotateControl: true,
   fullscreenControl: true,
 };
 
-export default function TrackingMap() {
+export default function TrackingMap({ isTracking }) {
   const [MapSelected, setMapSelected] = useState(null);
 
   const Hyderabad = {
@@ -99,176 +98,178 @@ export default function TrackingMap() {
       zoom={5}
       options={options}
     >
-      <>
-        <Polyline
-          path={AtoB}
-          geodesic={true}
-          options={{
-            strokeColor: "#ff2527",
-            strokeOpacity: 0,
-            strokeWeight: 5,
-            icons: [
-              {
-                icon: lineSymbol,
-                offset: "0",
-                repeat: "20px",
-              },
-            ],
-          }}
-        />
-        <Polyline
-          path={BtoC}
-          geodesic={true}
-          options={{
-            strokeOpacity: 0,
-            strokeColor: "#0BC6A7",
-            icons: [
-              {
-                icon: lineSymbol,
-                offset: "0",
-                repeat: "20px",
-              },
-            ],
-          }}
-        />
-        <Polyline
-          path={BtoD}
-          geodesic={true}
-          options={{
-            strokeOpacity: 0,
-            strokeColor: "#0BC6A7",
-            icons: [
-              {
-                icon: lineSymbol,
-                offset: "0",
-                repeat: "20px",
-              },
-            ],
-          }}
-        />
-
-        <Marker
-          position={Dindigul}
-          onClick={() => {
-            setMapSelected(Dindigul);
-          }}
-          icon={{
-            url: "/markers/loc2.png",
-            scaledSize: new window.google.maps.Size(30, 30),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(15, 15),
-          }}
-        />
-        <Marker
-          position={Hyderabad}
-          onClick={() => {
-            setMapSelected(Hyderabad);
-          }}
-          icon={{
-            url: "/markers/loc1.png",
-            scaledSize: new window.google.maps.Size(30, 30),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(15, 15),
-          }}
-        />
-        <Marker
-          position={Delhi}
-          onClick={() => {
-            setMapSelected(Delhi);
-          }}
-          icon={{
-            url: "/markers/loc3.png",
-            scaledSize: new window.google.maps.Size(30, 30),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(15, 15),
-          }}
-        />
-        <Marker
-          position={mumbai}
-          onClick={() => {
-            setMapSelected(mumbai);
-          }}
-          icon={{
-            url: "/markers/loc2.png",
-            scaledSize: new window.google.maps.Size(30, 30),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(15, 15),
-          }}
-        />
-
-        {MapSelected ? (
-          <InfoWindow
-            position={MapSelected}
-            onCloseClick={() => {
-              setMapSelected(null);
+      {isTracking && (
+        <>
+          <Polyline
+            path={AtoB}
+            geodesic={true}
+            options={{
+              strokeColor: "#ff2527",
+              strokeOpacity: 0,
+              strokeWeight: 5,
+              icons: [
+                {
+                  icon: lineSymbol,
+                  offset: "0",
+                  repeat: "20px",
+                },
+              ],
             }}
-          >
-            <div className='info-popup-container'>
-              <div className='info-header'>
-                <div className='info-header-content'>
-                  <i className='fa-solid fa-location-dot'></i>
+          />
+          <Polyline
+            path={BtoC}
+            geodesic={true}
+            options={{
+              strokeOpacity: 0,
+              strokeColor: "#0BC6A7",
+              icons: [
+                {
+                  icon: lineSymbol,
+                  offset: "0",
+                  repeat: "20px",
+                },
+              ],
+            }}
+          />
+          <Polyline
+            path={BtoD}
+            geodesic={true}
+            options={{
+              strokeOpacity: 0,
+              strokeColor: "#0BC6A7",
+              icons: [
+                {
+                  icon: lineSymbol,
+                  offset: "0",
+                  repeat: "20px",
+                },
+              ],
+            }}
+          />
 
-                  <p className='mi-body-md f-500 mi-reset location-text-color'>
-                    {MapSelected.lat === 28.70406
-                      ? "Apollo Warehouse, Delhi"
-                      : MapSelected.lat === 17.385044
-                      ? "Apollo Warehouse, Hyderabad"
-                      : MapSelected.lat === 19.075983
-                      ? "Apollo Warehouse, Mumbai"
-                      : "Apollo Warehouse, Dindigul"}
-                  </p>
-                </div>
-              </div>
-              <div className='info-body'>
-                <p className='mi-body-sm f-500 mi-reset header-text-color'>
-                  Product Details
-                </p>
-                <div className='product-details-list'>
-                  <div className='product-list-card map-card-design'>
-                    <p className='mi-body-sm f-500 mi-reset '>Paracetomal</p>
-                    <p className='mi-body-sm f-500 mi-reset'>
+          <Marker
+            position={Dindigul}
+            onClick={() => {
+              setMapSelected(Dindigul);
+            }}
+            icon={{
+              url: "/markers/loc2.png",
+              scaledSize: new window.google.maps.Size(30, 30),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+            }}
+          />
+          <Marker
+            position={Hyderabad}
+            onClick={() => {
+              setMapSelected(Hyderabad);
+            }}
+            icon={{
+              url: "/markers/loc1.png",
+              scaledSize: new window.google.maps.Size(30, 30),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+            }}
+          />
+          <Marker
+            position={Delhi}
+            onClick={() => {
+              setMapSelected(Delhi);
+            }}
+            icon={{
+              url: "/markers/loc3.png",
+              scaledSize: new window.google.maps.Size(30, 30),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+            }}
+          />
+          <Marker
+            position={mumbai}
+            onClick={() => {
+              setMapSelected(mumbai);
+            }}
+            icon={{
+              url: "/markers/loc2.png",
+              scaledSize: new window.google.maps.Size(30, 30),
+              origin: new window.google.maps.Point(0, 0),
+              anchor: new window.google.maps.Point(15, 15),
+            }}
+          />
+
+          {MapSelected ? (
+            <InfoWindow
+              position={MapSelected}
+              onCloseClick={() => {
+                setMapSelected(null);
+              }}
+            >
+              <div className="info-popup-container">
+                <div className="info-header">
+                  <div className="info-header-content">
+                    <i className="fa-solid fa-location-dot"></i>
+
+                    <p className="mi-body-md f-500 mi-reset location-text-color">
                       {MapSelected.lat === 28.70406
-                        ? "1000"
+                        ? "Apollo Warehouse, Delhi"
                         : MapSelected.lat === 17.385044
-                        ? "1000"
+                        ? "Apollo Warehouse, Hyderabad"
                         : MapSelected.lat === 19.075983
-                        ? "400"
-                        : "600"}
-                      ( Packs )
+                        ? "Apollo Warehouse, Mumbai"
+                        : "Apollo Warehouse, Dindigul"}
                     </p>
                   </div>
                 </div>
-              </div>
-
-              {MapSelected.lat === 17.385044 && (
-                <div className='info-splited-location'>
-                  <p className='mi-body-sm f-500 mi-reset header-text-color'>
-                    Delivery Details
+                <div className="info-body">
+                  <p className="mi-body-sm f-500 mi-reset header-text-color">
+                    Product Details
                   </p>
-                  <div className='product-details-list'>
-                    <div className='product-list-card'>
-                      <p className='mi-body-xs f-500 mi-reset grey'>
-                        Apollo Warehouse, Mumbai
-                      </p>
-                      <p className='mi-body-xs f-500 mi-reset  grey'>
-                        400 ( Packs )
-                      </p>
-                    </div>
-                    <div className='product-list-card'>
-                      <p className='mi-body-xs f-500 mi-reset grey'>
-                        Apollo Warehouse, Dindigul
-                      </p>
-                      <p className='mi-body-xs f-500 mi-reset  grey'>
-                        600 ( Packs )
+                  <div className="product-details-list">
+                    <div className="product-list-card map-card-design">
+                      <p className="mi-body-sm f-500 mi-reset ">Paracetomal</p>
+                      <p className="mi-body-sm f-500 mi-reset">
+                        {MapSelected.lat === 28.70406
+                          ? "1000"
+                          : MapSelected.lat === 17.385044
+                          ? "1000"
+                          : MapSelected.lat === 19.075983
+                          ? "400"
+                          : "600"}
+                        ( Packs )
                       </p>
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </InfoWindow>
-        ) : null}
-      </>
+
+                {MapSelected.lat === 17.385044 && (
+                  <div className="info-splited-location">
+                    <p className="mi-body-sm f-500 mi-reset header-text-color">
+                      Delivery Details
+                    </p>
+                    <div className="product-details-list">
+                      <div className="product-list-card">
+                        <p className="mi-body-xs f-500 mi-reset grey">
+                          Apollo Warehouse, Mumbai
+                        </p>
+                        <p className="mi-body-xs f-500 mi-reset  grey">
+                          400 ( Packs )
+                        </p>
+                      </div>
+                      <div className="product-list-card">
+                        <p className="mi-body-xs f-500 mi-reset grey">
+                          Apollo Warehouse, Dindigul
+                        </p>
+                        <p className="mi-body-xs f-500 mi-reset  grey">
+                          600 ( Packs )
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </InfoWindow>
+          ) : null}
+        </>
+      )}
     </GoogleMap>
   ) : (
     <></>

@@ -3,10 +3,14 @@ import ChainofCustody from "./chain-of-custody/ChainofCustody";
 import CurrentLocation from "./current-location/CurrentLocation";
 import Tab from "./tabs/Tab";
 import TrackingMap from "./tracking-map/TrackingMap";
+import TrackIllustration from "../../assets/images/track.webp";
 import "./Tracking.scss";
 
 export default function Tracking() {
   const [LocationTab, setLocationTab] = useState("CHAIN");
+
+  const [isTracking, setIsTracking] = useState(true);
+
   return (
     <div className="tracking-main-layout">
       <div className="track-grid-container">
@@ -36,11 +40,30 @@ export default function Tracking() {
               setLocationTab={setLocationTab}
             />
           </div>
-          {LocationTab === "CHAIN" && <ChainofCustody />}
-          {LocationTab === "LOCATION" && <CurrentLocation />}
+          {isTracking ? (
+            <>
+              {LocationTab === "CHAIN" && <ChainofCustody />}
+              {LocationTab === "LOCATION" && <CurrentLocation />}
+            </>
+          ) : (
+            <>
+              <div className="tracking-home-layout">
+                <div className="tracking-illustation">
+                  <img
+                    src={TrackIllustration}
+                    alt="Track"
+                    className="Track-Image"
+                  />
+                  <p className="mi-body-md f-500">
+                    Search and Track your Product around the World!
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="tracking-map-area">
-          <TrackingMap />
+          <TrackingMap isTracking={isTracking} />
         </div>
       </div>
     </div>

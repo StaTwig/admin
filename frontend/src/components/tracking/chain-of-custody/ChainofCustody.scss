@@ -64,13 +64,11 @@
 .chain-group{
     display: grid;
     grid-template-columns: 2rem 1fr;
-    // gap: 0.5rem;
 }
 .mark-space{
     position: relative;
     display: flex;
     flex-direction: column;
-    // align-items: center;
 }
 .marker-circle{
     width: 1rem;
@@ -89,8 +87,13 @@
     width: 1.2rem;
     height: 4rem;
     border-left: 3px dashed #b0b0b0;
+}
+.line-cross{
+    position: absolute;
+    left: 0.45rem;
+    top: 5rem;
+    width: 1.2rem;
     border-bottom: 3px dashed #b0b0b0;
-    // margin-left: 0.4rem;
 }
 .line-straight.bar-none{
     position: absolute;
@@ -99,8 +102,18 @@
     width: 1.2rem;
     height: 10rem;
     border-left: 3px dashed #b0b0b0;
-    border-bottom: 3px dashed #b0b0b0;
-    // margin-left: 0.4rem;
+}
+.line-straight.bar-extra{
+    position: absolute;
+    left: 0.45rem;
+    top: -5rem;
+    width: 1.2rem;
+    height: 100%;
+    border-left: 3px dashed #b0b0b0;
+}
+.line-straight.bar-top{
+    height: calc(100% - 6.2rem);
+    border-left: 3px dashed #b0b0b0;
 }
 
 // Chain Levels

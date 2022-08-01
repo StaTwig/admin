@@ -6,6 +6,23 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 
 export default function ChainofCustody() {
+  const data = [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+      bar: true,
+    },
+    {
+      id: 3,
+      bar: true,
+    },
+    {
+      id: 4,
+      bar: true,
+    },
+  ];
   return (
     <div className="chain-of-custody-container">
       <div className="chain-level-1">
@@ -16,18 +33,19 @@ export default function ChainofCustody() {
         <div className="null-space"></div>
         <ChainGroup />
       </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup />
-      </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup bar={true} />
-      </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup bar={true} />
-      </div>
+      {/* Level 3 Groups */}
+      {data.map((row, index) => (
+        <div className="chain-level-3">
+          <div className="null-space"></div>
+          <ChainGroup
+            key={index}
+            bar={index === 0 ? false : true}
+            data={data}
+            index={index}
+            id={row.id}
+          />
+        </div>
+      ))}
     </div>
   );
 }
