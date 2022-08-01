@@ -69,6 +69,7 @@ const ReceiveShipment = (props) => {
         data.products[index].productQuantity <= parseInt(value)
           ? data.products[index].productQuantity
           : parseInt(value);
+      data.products[index].productId = data.products[index].productID;
     }
     const formData = new FormData();
     if (photo) {

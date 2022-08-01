@@ -1,23 +1,39 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
+// import Tooltip from "@mui/material/Tooltip";
+// import Button from "@mui/material/Button";
+// import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import BatchDetails from "./batchDetails/BatchDetails";
+// import DialogActions from "@mui/material/DialogActions";
+// import DialogContentText from "@mui/material/DialogContentText";
+// import DialogTitle from "@mui/material/DialogTitle";
+// import FormControl from "@mui/material/FormControl";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import InputLabel from "@mui/material/InputLabel";
+// import MenuItem from "@mui/material/MenuItem";
+// import Select from "@mui/material/Select";
+// import Switch from "@mui/material/Switch";
 import NetworkGraph from "../../networkGraphs/NetworkGraph";
 import isBefore from "date-fns/isBefore";
-import {subDays} from "date-fns"
-export default function InstockRow({product, reportWarehouse}) {
+import { subDays } from "date-fns";
+import { useSelector } from "react-redux";
+export default function InstockRow({ product, reportWarehouse }) {
   const [open, setOpen] = React.useState(false);
+  const { user } = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS";
   const isNearExpiry = (givenDate) => {
     try {
       if (givenDate)
-        return {nearExpiry: isBefore(subDays(new Date(givenDate), 90), new Date()), expiry: isBefore((new Date(givenDate)), new Date())}
-      else return {nearExpiry: false, expiry: false};
+        return {
+          nearExpiry: isBefore(subDays(new Date(givenDate), 90), new Date()),
+          expiry: isBefore(new Date(givenDate), new Date()),
+        };
+      else return { nearExpiry: false, expiry: false };
     } catch (err) {
-      return {nearExpiry: false, expiry: false};
+      return { nearExpiry: false, expiry: false };
     }
   };
   const handleClickOpen = () => {
@@ -38,85 +54,171 @@ export default function InstockRow({product, reportWarehouse}) {
     setOpenGraph(false);
   };
 
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState("md");
+
+  const handleMaxWidthChange = (event) => {
+    setMaxWidth(
+      // @ts-expect-error autofill of arbitrary value is not handled.
+      event.target.value
+    );
+  };
+
+  const handleFullWidthChange = (event) => {
+    setFullWidth(event.target.checked);
+  };
+
   return (
     <>
       <TableRow
         sx={{ "& > *": { borderBottom: "unset !important" } }}
-        className="mi-custom-tableRow"
+        className='mi-custom-tableRow'
       >
-        <TableCell className="mi-custom-cell mi-radius-first mi-first-cell-padding">
-          <div className="mi-table-data">
-            <div className="table-icon-space">
-              <i class="fa-solid fa-prescription-bottle-medical"></i>
+        <TableCell className='mi-custom-cell mi-radius-first mi-first-cell-padding'>
+          <div className='mi-table-data'>
+            <div className='table-icon-space'>
+              <i className='fa-solid fa-prescription-bottle-medical'></i>
             </div>
-            <p className="mi-body-md black f-700 mi-reset">{product?.productCategory}</p>
+            <p className='mi-body-md black f-700 mi-reset'>
+              {product?.productCategory}
+            </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">{product?.productName}</p>
-            {/* <Tooltip title="Product Expired" placement="top">
-              <Button>
-                {" "}
-                <i class="fa-solid fa-triangle-exclamation error-icon"></i>
-              </Button>
-            </Tooltip> */}
+
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset mi-text-wrap-sm'>
+              {product?.productName}
+            </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">{product.openingBalance || 0}</p>
-            <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
+
+        {Distributor && (
+          <TableCell className='mi-custom-cell'>
+            <div className='mi-table-data'>
+              <p className='mi-body-md black f-700 mi-reset'>
+                {product.manufacturer}
+              </p>
+            </div>
+          </TableCell>
+        )}
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
+              {product?.inventoryAnalytics?.openingBalance || 0}
+            </p>
+            <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
               ( {product?.unitofMeasure?.name} )
             </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell">
-          <div className="mi-table-data">
-            <p className="mi-body-md black f-700 mi-reset">{product.productQuantity || 0}</p>
-            <p className="mi-body-xs grey f-500 mi-reset mi-no-wrap">
+        <TableCell className='mi-custom-cell'>
+          <div className='mi-table-data'>
+            <p className='mi-body-md black f-700 mi-reset'>
+              {product?.productQuantity || 0}
+            </p>
+            <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
               ( {product?.unitofMeasure?.name} )
             </p>
           </div>
         </TableCell>
-        <TableCell className="mi-custom-cell table-button-space mi-radius-last">
+        <TableCell className='mi-custom-cell table-button-space mi-radius-last'>
           <button
-            className="nt-btn nt-btn-xs nt-btn-orange"
+            className='nt-btn nt-btn-xs nt-btn-orange'
             onClick={handleClickOpen}
           >
-            <i class="fa-solid fa-chart-pie"></i>
+            <i className='fa-solid fa-clipboard-list'></i>
             <span>Batch</span>
           </button>
           <button
-            className="nt-btn nt-btn-xs nt-btn-blue-alt"
+            className='nt-btn nt-btn-xs nt-btn-blue-alt'
             onClick={handleGraphOpen}
           >
-            <i class="fa-solid fa-chart-pie"></i>
+            <i className='fa-solid fa-chart-pie'></i>
             <span>View</span>
           </button>
         </TableCell>
       </TableRow>
-      <Dialog open={open} onClose={handleClose} className="mi-custom-dialog">
+      {/* <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="md"
+        className="mi-custom-dialog"
+      >
         <DialogContent className="mi-custom-dialog-content">
           <div className="network-modal-popup-container">
             <div className="nt-modal-header">
               <div className="modal-heading-space">
-                <h1 className="mi-body-lg mi-reset">{product?.productName}</h1>
-                <p className="mi-body-md mi-reset">( {product?.productCategory} )</p>
+                <h1 className="mi-body-lg mi-reset mi-text-wrap-md">
+                  {product?.productName}
+                </h1>
+                <p className='mi-body-md mi-reset'>
+                  ( {product?.productCategory} )
+                </p>
               </div>
-              <div className="modal-closing-space" onClick={handleClose}>
-                <i class="fa-solid fa-xmark"></i>
+              <div className='modal-closing-space' onClick={handleClose}>
+                <i className='fa-solid fa-xmark'></i>
               </div>
             </div>
-            <div className="nt-modal-body">
-              <BatchDetails productId={product._id} isNearExpiry={isNearExpiry} warehouseId={reportWarehouse} />
+            <div className='nt-modal-body'>
+              <BatchDetails
+                productId={product._id}
+                isNearExpiry={isNearExpiry}
+                warehouseId={reportWarehouse}
+              />
             </div>
             <div className="nt-modal-actions">
+              <div className="modal-heading-space">
+                <p className="mi-body-md f-500  mi-reset">Total - 1 Batch</p>
+              </div>
+              <button
+                className="nt-btn nt-btn-sm nt-btn-blue"
+                onClick={handleClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog> */}
+
+      <Dialog
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        open={open}
+        onClose={handleClose}
+        className='mi-custom-dialog'
+      >
+        <DialogContent className='mi-custom-dialog-content'>
+          <div className='network-modal-popup-container'>
+            <div className='nt-modal-header'>
+              <div className='modal-heading-space'>
+                <h1 className='mi-body-lg mi-reset mi-max-text-wrap-md'>
+                  {product?.productName}
+                </h1>
+                <p className='mi-body-md mi-reset'>
+                  ( {product?.productCategory} )
+                </p>
+              </div>
+              <div className='modal-closing-space' onClick={handleClose}>
+                <i class='fa-solid fa-xmark'></i>
+              </div>
+            </div>
+            <div className='nt-modal-body'>
+              <BatchDetails
+                productId={product._id}
+                isNearExpiry={isNearExpiry}
+                warehouseId={reportWarehouse}
+                uom={product?.unitofMeasure?.name}
+              />
+            </div>
+            <div className='nt-modal-actions'>
               {/* <div className="modal-heading-space">
                 <p className="mi-body-md f-500  mi-reset">Total - 1 Batch</p>
               </div> */}
+              <div className='null'></div>
               <button
-                className="nt-btn nt-btn-sm nt-btn-blue"
+                className='nt-btn nt-btn-sm nt-btn-blue'
                 onClick={handleClose}
               >
                 Close
@@ -129,10 +231,16 @@ export default function InstockRow({product, reportWarehouse}) {
       <Dialog
         open={openGraph}
         onClose={handleGraphClose}
-        className="mi-custom-dialog"
+        className='mi-custom-dialog'
       >
-        <DialogContent className="mi-custom-dialog-content">
-          <NetworkGraph onClose={handleGraphClose} graph={"bar"} />
+        <DialogContent className='mi-custom-dialog-content'>
+          <NetworkGraph
+            onClose={handleGraphClose}
+            name={product?.productName}
+            cat={product?.productCategory}
+            data={product?.inventoryAnalytics?.dailyAnalytics}
+            graph={"bar"}
+          />
         </DialogContent>
       </Dialog>
     </>

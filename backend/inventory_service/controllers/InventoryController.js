@@ -735,7 +735,7 @@ exports.addProductsToInventory = [
             for (let i = 0; i < atomsArray.length; i++) {
               let batchDup = await AtomModel.findOne({
                 batchNumbers: atomsArray[i].batchNumbers[0],
-                inventoryIds: warehouse.warehouseInventory,
+                currentInventory: warehouse.warehouseInventory,
               });
               if (!batchDup) {
                 continue;
@@ -2408,12 +2408,8 @@ exports.getBatchWarehouse = [
       const result = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                productId: productId,
-              },
-              { $expr: { $in: [inventoryId, "$inventoryIds"] } },
-            ],
+            productId: productId,
+            currentInventory: inventoryId,
           },
         },
         {
@@ -2839,7 +2835,8 @@ exports.fetchBatchesOfInventory = [
       const batches = await AtomModel.find({
         productId: productId,
         batchNumbers: { $nin: ["", "null", null] },
-        inventoryIds: inventoryId,
+        status: "HEALTHY",
+        currentInventory: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
       return apiResponse.successResponseWithData(

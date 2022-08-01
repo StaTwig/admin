@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.8rem 1rem;
+    padding: 1rem 1rem;
     background-color: #fff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -122,7 +122,7 @@
 .nt-modal-body{
     background-color: rgb(246, 245, 245);
     padding: 0.3rem 2rem;
-    height: 30rem;
+    max-height: 30rem;
     overflow-y: auto;
 }
 
@@ -132,4 +132,40 @@
     justify-content: space-between;
     padding: 1rem 2rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.input-calender-form{
+    width: 8rem;
+    outline: none;
+   border: none;
+    cursor: pointer;
+    color: #1275E6;
+}
+.date-picker{
+    margin-right: 1.5rem;
+    padding: 0.425rem 0;
+    border-radius: 0.3rem;
+    border: 1px solid #1275E6;
+    display: flex;
+    align-items: center;
+}
+
+.header-actions-group{
+    display: flex;
+    align-items: center;
+}
+
+.cal-icon{
+    cursor: pointer;
+    color: #1275E6;
+    padding-right: 1rem;
+}
+
+.date-input{
+    width: 7rem;
+    border: none;
+    outline: none;
+    padding: 0 1rem;
+    cursor: pointer;
+    color: #1275E6;
 }

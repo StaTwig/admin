@@ -24,9 +24,9 @@ const WarehouseSchema = new mongoose.Schema(
         zipCode: { type: String },
       },
     },
-    region: { type: String, required: true },
+    region: { type: Object, required: true },
     country: {
-      type: String,
+      type: Object,
       required: true,
     },
     location: {
@@ -37,6 +37,7 @@ const WarehouseSchema = new mongoose.Schema(
       },
       coordinates: {
         type: [Number],
+        default: [0, 0],
       },
       geohash: String,
     },

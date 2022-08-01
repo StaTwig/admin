@@ -140,7 +140,7 @@ const EditRow = (props) => {
     setModelProduct(prod);
     let res = await axios.get(
       `${config().fetchBatchesOfInventory}?productId=${
-        prod.id
+        prod.id ? prod.id : prod.productID
       }&wareId=${warehouseID}`
     );
     let buffer = res.data.data;

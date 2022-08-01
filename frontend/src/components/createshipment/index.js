@@ -333,7 +333,7 @@ const CreateShipment = (props) => {
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: reset && reset != "Select Order ID" ? reset : null,
+        poId: reset && reset !== "Select Order ID" ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",

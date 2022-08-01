@@ -15,7 +15,7 @@ async function checkProductExpiry() {
       productExpired(
         product.productId,
         product.quantity,
-        product.inventoryIds,
+        product.currentInventory,
         "EXPIRED"
       );
     }
@@ -38,7 +38,7 @@ async function checkProductNearExpiry() {
       productExpired(
         product.productId,
         product.quantity,
-        product.inventoryIds,
+        product.currentInventory,
         "NEAR_EXPIRY"
       );
     }

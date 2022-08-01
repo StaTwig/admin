@@ -1,7 +1,7 @@
 import React from "react";
 import TopSellerProduct from "./TopSellerProduct";
 
-const TopSeller = ({bestseller }) => {
+const TopSeller = ({ bestseller, executeScroll }) => {
   const smallBoxColorsArray = [
     "#FDCD42",
     "#FE8E68",
@@ -17,20 +17,24 @@ const TopSeller = ({bestseller }) => {
     "#02268926",
   ];
   return (
-    <div className="bestSeller-container">
-      <div className="mi-flex-sb">
-        <h1 className="mi-body-lg dark f-600  mi-reset">Best Seller</h1>
-        <button className="nt-btn nt-btn-xs nt-btn-blue-alt">
-          <i class="fa-solid fa-chart-pie"></i>
-          <span>View</span>
+    <div className='bestSeller-container'>
+      <div className='mi-flex-sb'>
+        <h1 className='mi-body-sl dark f-600  mi-reset'>Best Seller</h1>
+        <button
+          className='nt-btn nt-btn-xs nt-btn-blue-alt'
+          onClick={executeScroll}
+        >
+          <i class='fa-solid fa-table-list'></i>
+          <span>View Reports</span>
         </button>
       </div>
-      <div className="product-seller-list">
+      <div className='product-seller-list'>
         {bestseller?.map((bs, index) => (
           <TopSellerProduct
             bs={bs}
-            bigBoxColor={bigBoxColorsArray[5%index]}
-            smallBoxColor={smallBoxColorsArray[5%index]}
+            bigBoxColor={bigBoxColorsArray[index]}
+            smallBoxColor={smallBoxColorsArray[index]}
+            key={index}
           />
         ))}
       </div>
