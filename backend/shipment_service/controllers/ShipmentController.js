@@ -4093,6 +4093,10 @@ exports.trackJourney = [
               } else {
                 currentLocationData[shipment.supplier.locationId] = {
                   sent: parseInt(shipment.products[0].productQuantity),
+                  productName : shipment.products[0].productName,
+                  manufacturer : shipment.products[0].manufacturer,
+                  batchNumber : shipment.products[0].batchNumber
+
                 };
               }
               if (currentLocationData[shipment.receiver.locationId]) {
@@ -4102,6 +4106,9 @@ exports.trackJourney = [
               } else {
                 currentLocationData[shipment.receiver.locationId] = {
                   received: parseInt(shipment.products[0].productQuantity),
+                  productName : shipment.products[0].productName,
+                  manufacturer : shipment.products[0].manufacturer,
+                  batchNumber : shipment.products[0].batchNumber
                 };
               }
             });
