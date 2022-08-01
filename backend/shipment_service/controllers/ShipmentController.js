@@ -4082,7 +4082,41 @@ exports.trackJourney = [
               },
             },
           ]);
-
+          try
+          {
+            var currentLocationData = {};
+            await trackedShipment.forEach(async function (shipment) {
+              if (currentLocationData[shipment.supplier.locationId]) {
+                currentLocationData[shipment.supplier.locationId].sent += parseInt(
+                  shipment.products[0].productQuantity
+                );
+              } else {
+                currentLocationData[shipment.supplier.locationId] = {
+                  sent: parseInt(shipment.products[0].productQuantity),
+                };
+              }
+              if (currentLocationData[shipment.receiver.locationId]) {
+                currentLocationData[shipment.receiver.locationId].received += parseInt(
+                  shipment.products[0].productQuantity
+                );
+              } else {
+                currentLocationData[shipment.receiver.locationId] = {
+                  received: parseInt(shipment.products[0].productQuantity),
+                };
+              }
+            });
+            let atomsData = await AtomModel.find({ batchNumbers : trackingId })
+            for await (atom of atomsData ) {
+              warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
+              if (currentLocationData[warehouseCurrentStock.id]?.stock) currentLocationData[warehouseCurrentStock.id].stock += atom.quantity;
+              else if (currentLocationData[warehouseCurrentStock.id]) currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
+            }
+            currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].stock> 0 ).
+            reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
+        }
+        catch(err){
+          console.log("Error in calculating current location data")
+        }
           outwardShipmentsArray = await ShipmentModel.aggregate([
             {
               $match: {
@@ -4294,6 +4328,7 @@ exports.trackJourney = [
           trackedShipment: trackedShipment,
           outwardShipmentsArray: outwardShipmentsArray,
           poShipmentsArray: poShipmentsArray,
+          currentLocationData: currentLocationData,
         });
       } catch (err) {
         return apiResponse.ErrorResponse(res, err.message);
