@@ -12,6 +12,7 @@
     border-radius: 0.6rem;
     cursor: pointer;
     outline-offset: 4px;
+    position: relative;
 }
 .my-card{
     background-color: #14b8a6;
@@ -42,4 +43,14 @@
 .location-icon-space > i{
    font-size: 1.2rem;
    color: #333;
+}
+
+.check-box-icon{
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.3rem;
+}
+
+.check-box-icon > i{
+    font-size: 1.5rem;
 }

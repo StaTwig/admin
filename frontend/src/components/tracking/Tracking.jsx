@@ -9,7 +9,7 @@ import "./Tracking.scss";
 export default function Tracking() {
   const [LocationTab, setLocationTab] = useState("CHAIN");
 
-  const [isTracking, setIsTracking] = useState(true);
+  const [isTracking, setIsTracking] = useState(false);
 
   return (
     <div className="tracking-main-layout">
@@ -29,7 +29,10 @@ export default function Tracking() {
                   placeholder="Search by Tracking ID"
                   className="track-search"
                 />
-                <i className="bx bx-search search-track-icon"></i>
+                <i
+                  className="bx bx-search search-track-icon"
+                  onClick={() => setIsTracking(!isTracking)}
+                ></i>
               </div>
             </div>
           </div>
