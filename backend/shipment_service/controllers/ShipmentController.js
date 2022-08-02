@@ -1452,15 +1452,18 @@ exports.receiveShipment = [
               "RECEIVED"
             );
             try {
-            if (flag == "Y" && data.poId != null) {
-              await poUpdate(
-                products[count].productId,
-                products[count].productQuantity,
-                data.poId,
-                "RECEIVED",
-                req.user
-              );
-
+              if (flag == "Y" && data.poId != null) {
+                await poUpdate(
+                  products[count].productId,
+                  products[count].productQuantity,
+                  data.poId,
+                  "RECEIVED",
+                  req.user
+                );
+              }
+            } catch (err) {
+              console.log("Error updating Purchase Order");
+            }
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
@@ -1660,19 +1663,19 @@ exports.receiveShipment = [
             responses(req.user.preferredLanguage).shipment_received,
             updateData
           );
-        } else {
+          } else {
           return apiResponse.successResponse(
             res,
             responses(req.user.preferredLanguage).shipment_cannot_receive
           );
+          }
+        } else {
+          return apiResponse.forbiddenResponse(res, "Access denied");
         }
-      } else {
-        return apiResponse.forbiddenResponse(res, "Access denied");
+      } catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(res, err.message);
       }
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
-    }
   },
 ];
 
