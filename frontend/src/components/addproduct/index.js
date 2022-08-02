@@ -17,13 +17,13 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const AddProduct = (props) => {
   const { t } = props;
+  const [productName, setProductName] = useState("");
+  const [UOM, setUOM] = useState("");
+  const [description, setDescription] = useState("");
   const [manufacturer, setManufacturer] = useState();
   const [category, setCategory] = useState();
   const [manufacturers, setManufacturers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [productName, setProductName] = useState("");
-  const [UOM, setUOM] = useState("");
-  const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
@@ -49,11 +49,11 @@ const AddProduct = (props) => {
     }
     fetchData();
   }, []);
-  const [pdNameErr, setPdNameErr] = useState(false);
-  const [manufacturerErr, setManufacturerErr] = useState(false);
   const [categoryErr, setCategoryErr] = useState(false);
   const [UOMErr, setUOMErr] = useState(false);
   const [descErr, setDescErr] = useState(false);
+  const [pdNameErr, setPdNameErr] = useState(false);
+  const [manufacturerErr, setManufacturerErr] = useState(false);
   const validation = () => {
     console.log("Manufacturer from valid:", manufacturer);
     if (
@@ -62,11 +62,11 @@ const AddProduct = (props) => {
       category === undefined ||
       UOM === ""
     ) {
-      if (productName === "") {
-        setPdNameErr(true);
-      }
       if (manufacturer === undefined) {
         setManufacturerErr(true);
+      }
+      if (productName === "") {
+        setPdNameErr(true);
       }
       if (category === undefined) {
         setCategoryErr(true);
