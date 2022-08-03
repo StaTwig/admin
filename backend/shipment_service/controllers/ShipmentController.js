@@ -1451,15 +1451,19 @@ exports.receiveShipment = [
               data.id,
               "RECEIVED"
             );
-            if (flag == "Y" && data.poId != null)
-              await poUpdate(
-                products[count].productId,
-                products[count].productQuantity,
-                data.poId,
-                "RECEIVED",
-                req.user
-              );
-
+            try {
+              if (flag == "Y" && data.poId != null) {
+                await poUpdate(
+                  products[count].productId,
+                  products[count].productQuantity,
+                  data.poId,
+                  "RECEIVED",
+                  req.user
+                );
+              }
+            } catch (err) {
+              console.log("Error updating Purchase Order");
+            }
             await AtomModel.updateOne(
               {
                 batchNumbers: products[count].batchNumber,
@@ -1659,19 +1663,19 @@ exports.receiveShipment = [
             responses(req.user.preferredLanguage).shipment_received,
             updateData
           );
-        } else {
+          } else {
           return apiResponse.successResponse(
             res,
             responses(req.user.preferredLanguage).shipment_cannot_receive
           );
+          }
+        } else {
+          return apiResponse.forbiddenResponse(res, "Access denied");
         }
-      } else {
-        return apiResponse.forbiddenResponse(res, "Access denied");
+      } catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(res, err.message);
       }
-    } catch (err) {
-      console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
-    }
   },
 ];
 
@@ -4174,7 +4178,70 @@ exports.trackJourney = [
               },
             },
           ]);
+          try
+          {
+            var currentLocationData = {};
+            await trackedShipment.forEach(async function (shipment) {
+              if (currentLocationData[shipment.supplier.locationId]) {
+                currentLocationData[shipment.supplier.locationId].sent += parseInt(
+                  shipment.products[0].productQuantity
+                );
+              } else {
+                currentLocationData[shipment.supplier.locationId] = {
+                  sent: parseInt(shipment.products[0].productQuantity),
+                  productName : shipment.products[0].productName,
+                  manufacturer : shipment.products[0].manufacturer,
+                  batchNumber : shipment.products[0].batchNumber
 
+                };
+              }
+              if (currentLocationData[shipment.receiver.locationId]) {
+                currentLocationData[shipment.receiver.locationId].received += parseInt(
+                  shipment.products[0].productQuantity
+                );
+              } else {
+                currentLocationData[shipment.receiver.locationId] = {
+                  received: parseInt(shipment.products[0].productQuantity),
+                  productName : shipment.products[0].productName,
+                  manufacturer : shipment.products[0].manufacturer,
+                  batchNumber : shipment.products[0].batchNumber
+                };
+              }
+            });
+            let atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
+              { 
+                $lookup : {
+                  from: "products",
+                  localField: "productId",
+                  foreignField: "id",
+                  as: "productInfo",
+              }
+            }
+          ])
+             for await (atom of atomsData ) {
+              warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
+              organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
+              if (currentLocationData[warehouseCurrentStock.id]?.stock){
+               currentLocationData[warehouseCurrentStock.id].stock += atom.quantity;
+              }
+              else if (currentLocationData[warehouseCurrentStock.id]){
+               currentLocationData[warehouseCurrentStock.id].warehouse = warehouseCurrentStock
+               currentLocationData[warehouseCurrentStock.id].organisation = organisation
+               currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
+               currentLocationData[warehouseCurrentStock.id].updatdAt = atom.updatedAt;
+               currentLocationData[warehouseCurrentStock.id].label = atom.label;
+               currentLocationData[warehouseCurrentStock.id].product = atom.productInfo;
+               currentLocationData[warehouseCurrentStock.id].productAttributes = atom.attributeSet;
+              } 
+            }
+            currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].stock> 0 ).
+            reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
+            const keys = Object.keys(currentLocationData);
+        }
+        catch(err){
+          console.log(err)
+          console.log("Error in calculating current location data")
+        }
           outwardShipmentsArray = await ShipmentModel.aggregate([
             {
               $match: {
@@ -4386,6 +4453,7 @@ exports.trackJourney = [
           trackedShipment: trackedShipment,
           outwardShipmentsArray: outwardShipmentsArray,
           poShipmentsArray: poShipmentsArray,
+          currentLocationData: currentLocationData,
         });
       } catch (err) {
         return apiResponse.ErrorResponse(res, err.message);
