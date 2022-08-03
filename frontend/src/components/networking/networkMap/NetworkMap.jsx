@@ -40,6 +40,8 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
     );
     return returnWarehouse ? returnWarehouse : [];
   }
+  console.log(reportWarehouse);
+  console.log(user.warehouseId[0]);
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -74,8 +76,16 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[0] : park?.location?.latitude),
-                lng: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[1] : park?.location?.longitude),
+                lat: parseFloat(
+                  Array.isArray(park?.location?.coordinates)
+                    ? park?.location?.coordinates[0]
+                    : park?.location?.latitude
+                ),
+                lng: parseFloat(
+                  Array.isArray(park?.location?.coordinates)
+                    ? park?.location?.coordinates[1]
+                    : park?.location?.longitude
+                ),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -93,8 +103,16 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
             <Marker
               key={park.warehouseId}
               position={{
-                lat: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[0] : park?.location?.latitude),
-                lng: parseFloat(Array.isArray(park?.location?.coordinates) ? park?.location?.coordinates[1] : park?.location?.longitude),
+                lat: parseFloat(
+                  Array.isArray(park?.location?.coordinates)
+                    ? park?.location?.coordinates[0]
+                    : park?.location?.latitude
+                ),
+                lng: parseFloat(
+                  Array.isArray(park?.location?.coordinates)
+                    ? park?.location?.coordinates[1]
+                    : park?.location?.longitude
+                ),
               }}
               onClick={() => {
                 setMapSelected(park);
@@ -121,20 +139,20 @@ export default function NetworkMap({ manufacturer, reportWarehouse }) {
               setMapSelected(null);
             }}
           >
-            <div className='info-popup-container'>
-              <div className='info-header'>
-                <div className='info-header-content'>
-                  <i className='fa-solid fa-map-location info-icon'></i>
-                  <p className='mi-body-xl black f-700 mi-reset'>
+            <div className="info-popup-container">
+              <div className="info-header">
+                <div className="info-header-content">
+                  <i className="fa-solid fa-map-location info-icon"></i>
+                  <p className="mi-body-xl black f-700 mi-reset">
                     {MapSelected?.orgName}
                   </p>
                 </div>
               </div>
-              <div className='info-body'>
-                <p className='mi-body-md black f-500  mi-reset'>
+              <div className="info-body">
+                <p className="mi-body-md black f-500  mi-reset">
                   {MapSelected.title}
                 </p>
-                <p className='mi-body-sm black  mi-reset'>{MapSelected.city}</p>
+                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>

@@ -7,10 +7,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import InstockRow from "./InstockRow";
 import { useSelector } from "react-redux";
+import Filter from "../Filter/Filter";
 
 export default function Instock({ inStock, reportWarehouse }) {
-  const {user} = useSelector((state) => state);
-  const Distributor = user.type === "DISTRIBUTORS"
+  const { user } = useSelector((state) => state);
+  const Distributor = user.type === "DISTRIBUTORS";
   return (
     <>
       <TableContainer>
@@ -22,21 +23,21 @@ export default function Instock({ inStock, reportWarehouse }) {
           <TableHead>
             <TableRow>
               <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <p className="mi-body-sm mi-reset grey-400">Product Category</p>
+                <Filter title="Product Category" />
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Name</p>
+                <Filter title="Product Name" />
               </TableCell>
-              {Distributor && <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Manufacturer</p>
-              </TableCell>}
+              {Distributor && (
+                <TableCell className="mi-custom-tableHead">
+                  <Filter title="Product Manufacturer" />
+                </TableCell>
+              )}
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Opening balance</p>
+                <Filter title="Opening balance" />
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">
-                  Current In stock (Qty)
-                </p>
+                <Filter title="Opening Current In stock (Qty)" />
               </TableCell>
               <TableCell className="mi-custom-tableHead"></TableCell>
             </TableRow>

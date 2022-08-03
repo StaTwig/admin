@@ -83,3 +83,9 @@
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+
+.product-details-card{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+}
