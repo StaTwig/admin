@@ -4208,8 +4208,18 @@ exports.trackJourney = [
                 };
               }
             });
-            let atomsData = await AtomModel.find({ batchNumbers : trackingId })
-            for await (atom of atomsData ) {
+            let atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
+              { 
+                $lookup : {
+                  from: "products",
+                  localField: "productId",
+                  foreignField: "id",
+                  as: "productInfo",
+              }
+            }
+          ])
+          console.log(atomsData)
+             for await (atom of atomsData ) {
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
               organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
               if (currentLocationData[warehouseCurrentStock.id]?.stock){
@@ -4220,6 +4230,9 @@ exports.trackJourney = [
                currentLocationData[warehouseCurrentStock.id].organisation = organisation
                currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
                currentLocationData[warehouseCurrentStock.id].updatdAt = atom.updatedAt;
+               currentLocationData[warehouseCurrentStock.id].label = atom.label;
+               currentLocationData[warehouseCurrentStock.id].product = atom.productInfo;
+               currentLocationData[warehouseCurrentStock.id].productAttributes = atom.attributeSet;
               } 
             }
             currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].stock> 0 ).
@@ -4227,6 +4240,7 @@ exports.trackJourney = [
             const keys = Object.keys(currentLocationData);
         }
         catch(err){
+          console.log(err)
           console.log("Error in calculating current location data")
         }
           outwardShipmentsArray = await ShipmentModel.aggregate([
