@@ -4211,11 +4211,20 @@ exports.trackJourney = [
             let atomsData = await AtomModel.find({ batchNumbers : trackingId })
             for await (atom of atomsData ) {
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
-              if (currentLocationData[warehouseCurrentStock.id]?.stock) currentLocationData[warehouseCurrentStock.id].stock += atom.quantity;
-              else if (currentLocationData[warehouseCurrentStock.id]) currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
+              organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
+              if (currentLocationData[warehouseCurrentStock.id]?.stock){
+               currentLocationData[warehouseCurrentStock.id].stock += atom.quantity;
+              }
+              else if (currentLocationData[warehouseCurrentStock.id]){
+               currentLocationData[warehouseCurrentStock.id].warehouse = warehouseCurrentStock
+               currentLocationData[warehouseCurrentStock.id].organisation = organisation
+               currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
+               currentLocationData[warehouseCurrentStock.id].updatdAt = atom.updatedAt;
+              } 
             }
             currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].stock> 0 ).
             reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
+            const keys = Object.keys(currentLocationData);
         }
         catch(err){
           console.log("Error in calculating current location data")
