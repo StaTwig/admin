@@ -4218,7 +4218,6 @@ exports.trackJourney = [
               }
             }
           ])
-          console.log(atomsData)
              for await (atom of atomsData ) {
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
               organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
