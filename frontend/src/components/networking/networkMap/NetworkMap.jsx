@@ -38,7 +38,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse, setReportWar
   useEffect(() => {
     if(MapSelected)
       setReportWarehouse(MapSelected.warehouseId);
-  }, [MapSelected, setReportWarehouse])
+  }, [MapSelected])
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
