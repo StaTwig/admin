@@ -34,12 +34,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse, setReportWar
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78",
   });
-  function getClickedWarehouse(tempWar) {
-    const returnWarehouse = manufacturer?.warehouses?.find(
-      (item) => item.warehouseId === tempWar
-    );
-    return returnWarehouse ? returnWarehouse : [];
-  }
+
   useEffect(() => {
     if(MapSelected)
       setReportWarehouse(MapSelected.warehouseId);
@@ -52,27 +47,7 @@ export default function NetworkMap({ manufacturer, reportWarehouse, setReportWar
       options={options}
     >
       <>
-        {(reportWarehouse || user.warehouseId[0]) && (
-          <Marker
-            position={{
-              lat: parseFloat(
-                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
-                  ?.location?.coordinates[0]
-              ),
-              lng: parseFloat(
-                getClickedWarehouse(reportWarehouse || user.warehouseId[0])
-                  ?.location?.coordinates[1]
-              ),
-            }}
-            icon={{
-              url: "/markers/loc3.png",
-              // scaledSize: new window.google.maps.Size(10, 10),
-              scaledSize: new window.google.maps.Size(30, 30),
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(15, 15),
-            }}
-          />
-        )}
+
         {manufacturer?.warehouses?.map((park) =>
           park?.orgId === user.organisation?.split("/")[1] ? (
             <Marker
