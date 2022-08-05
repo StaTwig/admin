@@ -4208,7 +4208,7 @@ exports.trackJourney = [
                 };
               }
             });
-            let atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
+            var atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
               { 
                 $lookup : {
                   from: "products",
@@ -4218,6 +4218,53 @@ exports.trackJourney = [
               }
             }
           ])
+            if(!atomsData || atomsData.length<1){
+              const shipmentDetails = await ShipmentModel.findOne(
+                 {
+                   $or: [
+                     {
+                       id: trackingId,
+                     },
+                     {
+                       airWayBillNo: trackingId,
+                     },
+                     {
+                       "products.batchNumber": trackingId,
+                     },
+                     {
+                      poId : trackingId,
+                     }
+                   ],
+                 }
+               );
+             senderWarehouseAtoms = await WarehouseModel.aggregate([ 
+              { $match : { id : shipmentDetails.supplier.locationId } },
+              { $lookup : {
+                from: "atoms",
+                localField: "warehouseInventory",
+                foreignField: "currentInventory",
+                as: "atoms",
+            }}
+            ]);
+             receiverWarehouseAtoms = await WarehouseModel.aggregate([
+              { $match : { id : shipmentDetails.receiver.locationId } } ,
+              { $lookup : {
+                from: "atoms",
+                localField: "warehouseInventory",
+                foreignField: "currentInventory",
+                as: "atoms",
+            }}]);
+            for await ( warehouse of senderWarehouseAtoms ){
+              for await ( atom of warehouse.atoms){
+                atomsData.push(atom)
+              }
+            }
+            for await ( warehouse of receiverWarehouseAtoms ){
+              for await ( atom of warehouse.atoms){
+                atomsData.push(atom)
+              }
+            }
+          }
              for await (atom of atomsData ) {
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
               organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
