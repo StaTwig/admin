@@ -148,6 +148,7 @@
     border: 1px solid #1275E6;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .header-actions-group{
@@ -158,11 +159,15 @@
 .cal-icon{
     cursor: pointer;
     color: #1275E6;
-    padding-right: 1rem;
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   right: 1rem;
+   pointer-events: none;
 }
 
 .date-input{
-    width: 7rem;
+    width: 9rem;
     border: none;
     outline: none;
     padding: 0 1rem;
