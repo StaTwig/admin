@@ -419,5 +419,10 @@
   "enter_qunatity": "Ingrese la cantidad",
   "Product_Doesn't_exist_in_the_inventory": "El producto no existe en el inventario.",
   "delivered_shipments_cannot_be_updated": "Los envíos entregados no se pueden actualizar",
-  "invalid_records": "Registros Inválidos"
+  "invalid_records": "Registros Inválidos",
+  "search_shipment_id": "Buscar por ID de envío",
+  "search_transit_id": "Buscar por ID de tránsito",
+  "enter_shipment_id": "Ingrese la identificación del envío",
+  "enter_transit_id": "Ingrese la identificación de tránsito",
+  "images": "Imágenes"
 }
