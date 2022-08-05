@@ -423,5 +423,6 @@
   "search_shipment_id": "Buscar por ID de envío",
   "search_transit_id": "Buscar por ID de tránsito",
   "enter_shipment_id": "Ingrese la identificación del envío",
-  "enter_transit_id": "Ingrese la identificación de tránsito"
+  "enter_transit_id": "Ingrese la identificación de tránsito",
+  "images": "Imágenes"
 }

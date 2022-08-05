@@ -399,5 +399,6 @@
   "search_shipment_id": "Search by Shipment ID",
   "search_transit_id": "Search by Transit ID",
   "enter_shipment_id": "Enter Shipment ID",
-  "enter_transit_id": "Enter Transit ID"
+  "enter_transit_id": "Enter Transit ID",
+  "images": "Images"
 }
