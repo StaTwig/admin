@@ -1,7 +1,7 @@
 import React from "react";
 import ChainCard from "./ChainCard";
 
-export default function ChainGroup({ bar }) {
+export default function ChainGroup({ shipmentData, bar }) {
   return (
     <div className="chain-group">
       <div className="mark-space">
@@ -9,7 +9,7 @@ export default function ChainGroup({ bar }) {
         <div className={`line-straight ${bar && "bar-none"}`}></div>
         <div className="line-cross"></div>
       </div>
-      <ChainCard />
+      <ChainCard shipmentData={shipmentData} />
     </div>
   );
 }

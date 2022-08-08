@@ -5,29 +5,15 @@ import CircularProgress, {
   circularProgressClasses,
 } from "@mui/material/CircularProgress";
 
-export default function ChainofCustody() {
+export default function ChainofCustody({trackingData}) {
   return (
     <div className="chain-of-custody-container">
-      <div className="chain-level-1">
-        <div className="null-space"></div>
-        <ChainGroup />
-      </div>
-      <div className="chain-level-2">
-        <div className="null-space"></div>
-        <ChainGroup />
-      </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup />
-      </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup bar={true} />
-      </div>
-      <div className="chain-level-3">
-        <div className="null-space"></div>
-        <ChainGroup bar={true} />
-      </div>
+      {trackingData?.trackedShipment?.map((element, index) => (
+        <div key={index} className="chain-level-1" style={{"grid-template-columns": `${index*1.5}rem 1fr`}}>
+          <div className="null-space"></div>
+          <ChainGroup shipmentData={element} />
+        </div>
+      ))}
     </div>
   );
 }
