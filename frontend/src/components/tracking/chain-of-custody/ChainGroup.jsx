@@ -1,7 +1,7 @@
 import React from "react";
 import ChainCard from "./ChainCard";
 
-export default function ChainGroup({ shipmentData, bar }) {
+export default function ChainGroup({ shipmentData, bar, expanded, data, index }) {
   return (
     <div className="chain-group">
       <div className="mark-space">
@@ -10,7 +10,7 @@ export default function ChainGroup({ shipmentData, bar }) {
           className={`line-straight ${bar && "bar-none"} ${
             bar
               ? expanded === "panel1"
-                ? index === data.length - 1
+                ? index === shipmentData.length - 1
                   ? ""
                   : "bar-extra"
                 : ""
