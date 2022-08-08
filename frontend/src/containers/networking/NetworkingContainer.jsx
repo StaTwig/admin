@@ -11,6 +11,7 @@ import {
   getManufacturerWarehouses,
   getManufacturerFilterOptions,
   getBestSellerSummary,
+  getInStockFilterOptions
 } from "../../actions/networkActions";
 
 const NetworkingContainer = (props) => {
@@ -18,9 +19,12 @@ const NetworkingContainer = (props) => {
   const [user, setUser] = React.useState();
   const [bestseller, setBestseller] = React.useState();
   const [TopBestseller, setTopBestseller] = React.useState();
-  const [inStock, setInStock] = React.useState();
+  const [inStock, setInStock] = React.useState([]);
+  const [inStockFilters, setInStockFilters] = React.useState();
   const [outStock, setOutStock] = React.useState();
   const [MainTab, setMainTab] = useState("INSTOCK");
+  const [InstockType, setInstockType] = useState("");
+  const [InstockId, setInstockId] = useState("");
   const date = new Date();
   const [startDate, setStartDate] = useState(
     new Date(date.getFullYear(), date.getMonth(), 1)
@@ -51,6 +55,13 @@ const NetworkingContainer = (props) => {
     if (inStock) setInStock(inStock.data.inStockReport);
     if (inStock) setReportWarehouse(inStock.data.warehouseId);
   };
+  const getInstockFilters = async () => {
+    const inStockFilters = await getInStockFilterOptions(
+      reportWarehouse,
+      ""
+    );
+    if (inStockFilters) setInStockFilters(inStockFilters.filters);
+  };
   const getOutStock = async () => {
     const outStock = await getmanufacturerOutStockReport(
       reportWarehouse,
@@ -74,8 +85,22 @@ const NetworkingContainer = (props) => {
   };
   useEffect(() => {
     getManFilters();
+    getInstockFilters();
     getTopBestsellers();
   }, []);
+  useEffect(()=>{
+    async function filterInstockReports(){
+      const inStock = await getmanufacturerInStockReport(
+        reportWarehouse,
+        startDate
+      );
+      if(InstockType && InstockType === "productCategory")
+        setInStock(inStock.data.inStockReport.filter((item) => item.productCategory === InstockId));
+      else
+        setInStock(inStock.data.inStockReport.filter((item) => item._id === InstockId));
+    }
+    filterInstockReports();
+  }, [InstockType, InstockId])
   useEffect(() => {
     (async () => {
       getBestsellers(startDate);
@@ -118,6 +143,9 @@ const NetworkingContainer = (props) => {
             setMylocationFilter={setMylocationFilter}
             startDate={startDate}
             setStartDate={setStartDate}
+            inStockFilters={inStockFilters}
+            setInstockType={setInstockType}
+            setInstockId={setInstockId}
           />
         </div>
       </div>
