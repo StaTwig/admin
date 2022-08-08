@@ -135,7 +135,6 @@ const routes = (
     <Route path='/tracking' component={requireAuth(TrackingContainer)} />
 
     <Route component={ErrorPageContainer} />
-
   </Switch>
 );
 
