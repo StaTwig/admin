@@ -4267,12 +4267,12 @@ exports.trackJourney = [
             ]);
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
-                atomsData.push(atom)
+                if(shipmentDetails.products[0].batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
             for await ( warehouse of receiverWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
-                atomsData.push(atom)
+                if(shipmentDetails.products[0].batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
           }
