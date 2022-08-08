@@ -16,38 +16,38 @@ export default function Reports(props) {
     MainTab,
     setMainTab,
     startDate,
-    setStartDate
+    setStartDate,
   } = props;
   return (
-    <div className="reports-main-container">
-      <div className="reports-header">
-        <div className="heading-text-holder" ref={myRef}>
-          <h1 className="mi-body-lg dark f-500 mi-reset">REPORTS</h1>
+    <div className='reports-main-container'>
+      <div className='reports-header'>
+        <div className='heading-text-holder' ref={myRef}>
+          <h1 className='mi-body-lg dark f-500 mi-reset'>REPORTS</h1>
         </div>
-        <div className="header-actions-group">
+        <div className='header-actions-group'>
           {/* <input
             type="month"
             value={month}
             onChange={(e) => setMonth(e.target.value)}
             className="input-calender-form"
           /> */}
-          <div className="date-picker">
+          <div className='date-picker'>
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
-              dateFormat="MM/yyyy"
+              dateFormat='MM/yyyy'
               showMonthYearPicker
-              className="date-input"
+              className='date-input'
               // className="input-calender-form"
             />
-            <i class="fa-solid fa-calendar-days cal-icon"></i>
+            <i className='fa-solid fa-calendar-days cal-icon'></i>
           </div>
           {/* <button className="nt-btn nt-btn-sm nt-btn-blue">Export</button> */}
         </div>
       </div>
-      <div className="reports-body">
-        <div className="tab-area">
-          <Tab layout="main" MainTab={MainTab} setMainTab={setMainTab} />
+      <div className='reports-body'>
+        <div className='tab-area'>
+          <Tab layout='main' MainTab={MainTab} setMainTab={setMainTab} />
         </div>
 
         <div className='report-table-container'>

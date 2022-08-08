@@ -17,29 +17,29 @@ export default function Instock({ inStock, reportWarehouse }) {
       <TableContainer>
         <Table
           sx={{ minWidth: 665 }}
-          className="mi-custom-table"
-          aria-label="collapsible table"
+          className='mi-custom-table'
+          aria-label='collapsible table'
         >
           <TableHead>
             <TableRow>
-              <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <Filter title="Product Category" />
+              <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
+                <Filter title='Product Category' />
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <Filter title="Product Name" />
+              <TableCell className='mi-custom-tableHead'>
+                <Filter title='Product Name' />
               </TableCell>
               {Distributor && (
-                <TableCell className="mi-custom-tableHead">
-                  <Filter title="Product Manufacturer" />
+                <TableCell className='mi-custom-tableHead'>
+                  <Filter title='Product Manufacturer' />
                 </TableCell>
               )}
-              <TableCell className="mi-custom-tableHead">
-                <Filter title="Opening balance" />
+              <TableCell className='mi-custom-tableHead'>
+                <Filter title='Opening balance' />
               </TableCell>
-              <TableCell className="mi-custom-tableHead">
-                <Filter title="Opening Current In stock (Qty)" />
+              <TableCell className='mi-custom-tableHead'>
+                <Filter title='Opening Current In stock (Qty)' />
               </TableCell>
-              <TableCell className="mi-custom-tableHead"></TableCell>
+              <TableCell className='mi-custom-tableHead'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
