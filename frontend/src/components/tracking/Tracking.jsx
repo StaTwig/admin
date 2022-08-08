@@ -4,6 +4,7 @@ import ChainofCustody from "./chain-of-custody/ChainofCustody";
 import CurrentLocation from "./current-location/CurrentLocation";
 import Tab from "./tabs/Tab";
 import TrackingMap from "./tracking-map/TrackingMap";
+import TrackIllustration from "../../assets/images/track.webp";
 import "./Tracking.scss";
 
 export default function Tracking() {

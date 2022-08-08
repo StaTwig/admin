@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "./style.scss";
+import "./status.scss";
 import { Formik } from "formik";
 import update from "../../assets/icons/Update_Status.png";
 import TextField from "@material-ui/core/TextField";
@@ -106,226 +107,178 @@ const EnterId = (props) => {
   };
 
   return (
-    <div className="updateStatus">
-      <div className="d-flex justify-content-between">
-        <h1 className="vl-heading-bdr" style={{ paddingBottom: "10px" }}>
-          {t("update_shipment")}
-        </h1>
-      </div>
-      <Formik
-        enableReinitialize={true}
-        initialValues={{
-          shipmentId: shipmentId,
-          billno: billno,
-        }}
-        validate={(values) => {
-          const errors = {};
+    <>
+      <div className="update-status-layout">
+        <div className="status-page-header">
+          <h1 className="vl-heading-bdr" style={{ paddingBottom: "10px" }}>
+            {t("update_shipment")}
+          </h1>
+        </div>
+        <Formik
+          enableReinitialize={true}
+          initialValues={{
+            shipmentId: shipmentId,
+            billno: billno,
+          }}
+          validate={(values) => {
+            const errors = {};
 
-          if (!values.shipmentId) {
-            errors.shipmentId = t("Required");
-          }
-          if (!values.billno) {
-            errors.billno = t("Required");
-          }
-          if (!values.updateStatusLocation) {
-            errors.updateStatusLocation = t("Required");
-          }
-          if (!values.comments) {
-            errors.comments = t("Required");
-          }
-          if (!values.alerttrue) {
-            errors.alerttrue = t("Required");
-          }
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          setSubmitting(false);
-          // updateStatus(values);
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          dirty,
-        }) => (
-          <form
-            onSubmit={handleSubmit}
-            className=""
-            style={{ height: "600px" }}
-          >
-            <div className="">
-              <div className="row">
-                <div className="">
-                  <div className="panel commonpanle">
-                    <div
-                      className={`form-group ${
-                        errors.shipmentId && touched.shipmentId && ``
-                      }`}
-                    >
-                      <label className="text-secondary mr-2">
-                        {t("shipment_id")}
-                      </label>
-                      <div className="mb-2" style={{ width: 300 }}>
-                        <Autocomplete
-                          {...defaultProps}
-                          id="auto-complete"
-                          value={value}
-                          onChange={(event, newValue) => {
-                            setValue(newValue);
-                          }}
-                          inputValue={inputValue}
-                          onInputChange={(event, newInputValue) => {
-                            setShipmentId(newInputValue);
-                            setInputValue(newInputValue);
-                            newInputValue
-                              ? setshipdisabled(false)
-                              : (setshipdisabled(true),
-                                seterrorShipment(false));
-                          }}
-                          // id='controllable-states-demo'
-                          autoComplete
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              name="shipmentId"
-                              margin="normal"
-                              variant="outlined"
-                              placeholder={t("Enter_Shipment_ID")}
-                            />
-                          )}
-                        />
-                        {errorShipment && (
-                          <span
-                            className="error-msg text-danger mt-3 "
-                            style={{ top: "-10px", left: "0px" }}
-                          >
-                            {t("update_msg")}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* <input
-                          type="text"
-                          placeholder="Enter Shipment ID"
-                          className="form-control ml-5 "
-                          name="shipmentId"
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setShipmentId(e.target.value);
-                            if (e.target.value.length === 0)
-                              setshipdisabled(true);
-                            else setshipdisabled(false);
-                          }}
-                          value={values.shipmentId}
-                        /> */}
+            if (!values.shipmentId) {
+              errors.shipmentId = t("Required");
+            }
+            if (!values.billno) {
+              errors.billno = t("Required");
+            }
+            if (!values.updateStatusLocation) {
+              errors.updateStatusLocation = t("Required");
+            }
+            if (!values.comments) {
+              errors.comments = t("Required");
+            }
+            if (!values.alerttrue) {
+              errors.alerttrue = t("Required");
+            }
+            return errors;
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(false);
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            setFieldValue,
+            dirty,
+          }) => (
+            <form onSubmit={handleSubmit} className="status-update-main">
+              <div className="update-form-container">
+                <div className="ship-form-space">
+                  <div className="shipment-search-form">
+                    <div className="label-header">
+                      <i class="fa-solid fa-address-card"></i>
+                      <p className="mi-body-md f-500 mi-reset grey">
+                        {t("search_shipment_id")}
+                      </p>
                     </div>
 
-                    {/* {errors.shipmentId && touched.shipmentId && (
-                        <span className="error-msg text-danger row justify-content-end col-8">
-                          {errors.shipmentId}
-                        </span>
-                      )} */}
+                    <div className="search-area">
+                      <Autocomplete
+                        {...defaultProps}
+                        id="auto-complete"
+                        value={value}
+                        onChange={(event, newValue) => {
+                          setValue(newValue);
+                        }}
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                          setShipmentId(newInputValue);
+                          setInputValue(newInputValue);
+                          newInputValue
+                            ? setshipdisabled(false)
+                            : (setshipdisabled(true), seterrorShipment(false));
+                        }}
+                        autoComplete
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="shipmentId"
+                            margin="normal"
+                            variant="outlined"
+                            placeholder={t("enter_shipment_id")}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={`error-space ${errorShipment && "visible"}`}>
+                    <p className="mi-body-xs f-400 mi-reset">
+                      {t("update_msg")}
+                    </p>
                   </div>
                 </div>
-                <div className="col-1">
-                  <h6
-                    className="or"
-                    style={{ position: "absolute", left: "-45px", top: "25px" }}
-                  >
-                    <b>{t("or")}</b>
-                  </h6>
-                </div>
 
-                <div className="">
-                  <div className="panel commonpanle ml-5">
-                    <div className="form-group">
-                      <label className="text-secondary mr-2">
-                        {t("transit_no")}
-                      </label>
-                      <div className="" style={{ width: 300 }}>
-                        <Autocomplete
-                          {...defaultProps1}
-                          id="billNo"
-                          value1={value1}
-                          onChange={(event, newValue) => {
-                            setValue1(newValue);
-                          }}
-                          inputValue1={inputValue1}
-                          onInputChange={(event, newInputValue) => {
-                            setbillno(newInputValue);
-                            setInputValue1(newInputValue);
-                            billNoCheck(newInputValue);
-                            //newInputValue?setshipdisabled(false):(setshipdisabled(true),seterrorShipment(false));
-                          }}
-                          debug
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              name="billNo"
-                              margin="normal"
-                              variant="outlined"
-                              placeholder={t("Enter_Transit_No")}
-                            />
-                          )}
-                        />
-                        {errorShipment1 && (
-                          <span
-                            className="error-msg text-danger mt-3 "
-                            style={{ top: "-10px", left: "0px" }}
-                          >
-                            {t("update_msg")}
-                          </span>
-                        )}
-                      </div>
-                      {/* <label className="mb-1 text-secondary pt-2">Bill No:</label>
-              <input
-                type="text"
-                className="form-control ml-5"
-                name="billNo"
-                onChange={(e) => setBillNo(e.target.value)}
-                size="39"
-                value={billNo}
-              /> */}
+                <div className="shipment-or">
+                  <p className="mi-body-xl f-700 mi-reset">{t("or")}</p>
+                </div>
+                <div className="ship-form-space">
+                  <div className="shipment-search-form">
+                    <div className="label-header">
+                      <i class="fa-solid fa-address-card"></i>
+                      <p className="mi-body-md f-500 mi-reset grey">
+                        {t("search_transit_id")}
+                      </p>
                     </div>
+
+                    <div className="search-area">
+                      <Autocomplete
+                        {...defaultProps1}
+                        id="billNo"
+                        value1={value1}
+                        onChange={(event, newValue) => {
+                          setValue1(newValue);
+                        }}
+                        inputValue1={inputValue1}
+                        onInputChange={(event, newInputValue) => {
+                          setbillno(newInputValue);
+                          setInputValue1(newInputValue);
+                          billNoCheck(newInputValue);
+                        }}
+                        debug
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="billNo"
+                            margin="normal"
+                            variant="outlined"
+                            placeholder={t("enter_transit_id")}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={`error-space ${errorShipment1 && "visible"}`}>
+                    <p className="mi-body-xs f-400 mi-reset">
+                      {t("update_msg")}
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              className="col mi-flex"
-              style={{ position: "fixed", right: "-55rem", bottom: "2rem" }}
-            >
-              <button
-                type="button"
-                className="mi-btn mi-btn-md mi-btn-blue mr-2"
-                onClick={() => props.history.push(`/shipments`)}
-              >
-                {t("cancel")}
-              </button>
-              <button
-                disabled={shipdisabled}
-                className="mi-btn mi-btn-md mi-btn-orange"
-                onClick={handleUpdateStatus}
-              >
-                <img
-                  src={update}
-                  width="20"
-                  height="17"
-                  className="mr-2 mb-1"
-                />
-                <span>{t("update_shipment")}</span>
-              </button>
-            </div>
-          </form>
-        )}
-      </Formik>
-    </div>
+              <div className="update-btn-space">
+                <div className="btn-status-group">
+                  <button
+                    type="button"
+                    className="mi-btn mi-btn-md mi-btn-blue mr-2"
+                    onClick={() => props.history.push(`/shipments`)}
+                  >
+                    {t("cancel")}
+                  </button>
+                  <button
+                    disabled={shipdisabled}
+                    className="mi-btn mi-btn-md mi-btn-orange"
+                    onClick={handleUpdateStatus}
+                  >
+                    <img
+                      src={update}
+                      width="20"
+                      height="17"
+                      className="mr-2 mb-1"
+                    />
+                    <span>{t("update_shipment")}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 export default EnterId;

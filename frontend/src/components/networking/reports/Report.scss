@@ -148,6 +148,7 @@
     border: 1px solid #1275E6;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .header-actions-group{
@@ -158,14 +159,42 @@
 .cal-icon{
     cursor: pointer;
     color: #1275E6;
-    padding-right: 1rem;
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   right: 1rem;
+   pointer-events: none;
 }
 
 .date-input{
-    width: 7rem;
+    width: 9rem;
     border: none;
     outline: none;
     padding: 0 1rem;
     cursor: pointer;
     color: #1275E6;
+}
+
+.table-header-with-filter{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    cursor: pointer;
+}
+
+.table-header-with-filter > i{
+    color:#7D4CDC
+}
+
+.mi-custom-list-height{
+    height: 8rem;
+    overflow-y: scroll;
+}
+.form-space-area{
+    padding: 0.6rem !important;
+}
+
+.mi-custom-list-height > a{
+    white-space:unset !important;
+    padding: 0.25rem 1rem !important;
 }

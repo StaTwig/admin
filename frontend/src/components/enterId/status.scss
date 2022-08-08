@@ -1,0 +1,85 @@
+.update-status-layout{
+    width: 100%;
+    height: calc(100vh - 88px);
+    padding: 1.5rem;
+}
+
+.btn-status-group{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-update-main{
+    width: 100%;
+    height: 78vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+}
+.update-btn-space{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.update-form-container{
+    display: grid;
+    grid-template-columns: 1fr 10rem 1fr;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.shipment-search-form{
+    background-color: #fff;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+}
+
+.shipment-or{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-area{
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.error-space{
+    padding: 1rem 1.5rem;
+    color: red;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.error-space.visible{
+    opacity: 1;
+    visibility: visible;
+}
+
+.label-header{
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.label-header > i{
+    font-size: 1.3rem;
+    color: rgb(0, 115, 255);
+}
+
+@media screen and (max-width:1098px) {
+    .update-form-container{
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: center;
+        gap: 1.5rem;
+    } 
+}
