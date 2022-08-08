@@ -6,32 +6,34 @@ async function dailyInventoryUpdate(date) {
   try {
     const allInventories = await InventoryModel.find({}).lean();
     for (const inventory of allInventories) {
-      for (const product of inventory.inventoryDetails) {
-        let dayOutofStock = 0;
-        if (product.quantity <= 0) dayOutofStock = 1;
-        await InventoryAnalyticsModel.updateOne(
-          {
-            inventoryId: inventory.id,
-            date: format(startOfMonth(date), "yyyy-MM-dd"),
-            productId: product.productId,
-          },
-          {
-            $inc: {
-              outOfStockDays: dayOutofStock,
+      if (inventory?.inventoryDetails.length > 0) {
+        for (const product of inventory.inventoryDetails) {
+          let dayOutofStock = 0;
+          if (product.quantity <= 0) dayOutofStock = 1;
+          await InventoryAnalyticsModel.updateOne(
+            {
+              inventoryId: inventory.id,
+              date: format(startOfMonth(date), "yyyy-MM-dd"),
+              productId: product.productId,
             },
-            $push: {
-              dailyAnalytics: [date, product.quantity],
+            {
+              $inc: {
+                outOfStockDays: dayOutofStock,
+              },
+              $push: {
+                dailyAnalytics: [date, product.quantity],
+              },
+              $setOnInsert: {
+                quantity: product.quantity,
+                quantityInTransit: product.quantityInTransit,
+                openingBalance: product.quantity,
+              },
             },
-            $setOnInsert: {
-              quantity: product.quantity,
-              quantityInTransit: product.quantityInTransit,
-              openingBalance: product.quantity,
-            },
-          },
-          {
-            upsert: true,
-          }
-        );
+            {
+              upsert: true,
+            }
+          );
+        }
       }
     }
   } catch (err) {

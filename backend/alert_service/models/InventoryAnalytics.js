@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const InventoryAnalytics = new mongoose.Schema(
   {
     inventoryId: { type: String, required: true },
-    date: { type: Date, required: true }, // start of month, yyyy-MM-dd
+    date: { type: String, required: true }, // start of month, yyyy-MM-dd
     productId: { type: String, required: true },
     quantity: { type: Number, min: 0, default: 0 },
     quantityInTransit: { type: Number, min: 0, default: 0 },
