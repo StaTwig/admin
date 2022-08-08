@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 
-export default function Filter({ title }) {
+export default function Filter({ title, filters, filterKey, setInstockType, setInstockId }) {
+  const setFilter = (temp) => {
+      setInstockType(filterKey);
+      setInstockId(temp);
+  }
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <div
       ref={ref}
@@ -18,7 +22,6 @@ export default function Filter({ title }) {
   const CustomMenu = React.forwardRef(
     ({ children, style, className, "aria-labelledby": labeledBy }, ref) => {
       const [value, setValue] = useState("");
-
       return (
         <div
           ref={ref}
@@ -44,8 +47,9 @@ export default function Filter({ title }) {
       );
     }
   );
+
   return (
-    <Dropdown>
+    <Dropdown onSelect={(e) => setFilter(e)}>
       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
         <div className="table-header-with-filter">
           <p className="mi-body-sm mi-reset grey-400">{title}</p>
@@ -54,19 +58,9 @@ export default function Filter({ title }) {
       </Dropdown.Toggle>
 
       <Dropdown.Menu as={CustomMenu} className="mi-custom-filter">
-        <Dropdown.Item eventKey="1">Red Data Aplication</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-        <Dropdown.Item eventKey="3">Orange</Dropdown.Item>
-        <Dropdown.Item eventKey="1">Red-Orange</Dropdown.Item>
-        <Dropdown.Item eventKey="1">Red</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-        <Dropdown.Item eventKey="3">Orange</Dropdown.Item>
-        <Dropdown.Item eventKey="1">Red</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-        <Dropdown.Item eventKey="3">Orange</Dropdown.Item>
-        <Dropdown.Item eventKey="1">Red</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-        <Dropdown.Item eventKey="3">Orange</Dropdown.Item>
+        {filters?.map((item) => {
+            return <Dropdown.Item value={filterKey === "productName" ? item.productId : item[`${filterKey}`]} eventKey={filterKey === "productName" ? item.productId : item[`${filterKey}`]}>{item[`${filterKey}`]}</Dropdown.Item>
+        })}
       </Dropdown.Menu>
     </Dropdown>
   );

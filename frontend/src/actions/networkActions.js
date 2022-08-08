@@ -39,6 +39,19 @@ export const getmanufacturerInStockReport = async (reportWarehouse, date) => {
     return false;
   }
 };
+export const getInStockFilterOptions = async (reportWarehouse, date) => {
+  try {
+    date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
+    const url = config().getmanufacturerInStockFilterOptions;
+    const result = await axios.get(
+      url + `?warehouseId=${reportWarehouse}&date=${date}`
+    );
+    return result.data.data;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
 
 export const getmanufacturerOutStockReport = async (reportWarehouse, date) => {
   try {

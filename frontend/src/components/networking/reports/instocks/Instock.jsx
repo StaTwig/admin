@@ -9,7 +9,7 @@ import InstockRow from "./InstockRow";
 import { useSelector } from "react-redux";
 import Filter from "../Filter/Filter";
 
-export default function Instock({ inStock, reportWarehouse }) {
+export default function Instock({ inStock, inStockFilters, reportWarehouse, setInstockType, setInstockId }) {
   const { user } = useSelector((state) => state);
   const Distributor = user.type === "DISTRIBUTORS";
   return (
@@ -23,21 +23,32 @@ export default function Instock({ inStock, reportWarehouse }) {
           <TableHead>
             <TableRow>
               <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <Filter title="Product Category" />
+                <Filter filters={inStockFilters} filterKey={"productCategory"} title="Product Category" setInstockType={setInstockType} setInstockId={setInstockId} />
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <Filter title="Product Name" />
+                <Filter filters={inStockFilters} title="Product Name" filterKey={"productName"} setInstockType={setInstockType} setInstockId={setInstockId}/>
               </TableCell>
               {Distributor && (
                 <TableCell className="mi-custom-tableHead">
-                  <Filter title="Product Manufacturer" />
+                  <Filter
+                    filters={inStockFilters}
+                    title="Product Manufacturer"
+                  />
                 </TableCell>
               )}
               <TableCell className="mi-custom-tableHead">
-                <Filter title="Opening balance" />
+                <div className="table-header-with-filter">
+                  <p className="mi-body-sm mi-reset grey-400">
+                    Opening balance
+                  </p>
+                </div>
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <Filter title="Opening Current In stock (Qty)" />
+                <div className="table-header-with-filter">
+                  <p className="mi-body-sm mi-reset grey-400">
+                  Opening Current In stock (Qty)
+                  </p>
+                </div>
               </TableCell>
               <TableCell className="mi-custom-tableHead"></TableCell>
             </TableRow>
