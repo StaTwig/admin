@@ -4122,6 +4122,9 @@ exports.trackJourney = [
                   {
                     "products.batchNumber": trackingId,
                   },
+                  {
+                    "products.serialNumbersRange" : trackingId,
+                  },
                 ],
               },
             },
@@ -4195,17 +4198,19 @@ exports.trackJourney = [
 
                 };
               }
-              if (currentLocationData[shipment.receiver.locationId]) {
-                currentLocationData[shipment.receiver.locationId].received += parseInt(
-                  shipment.products[0].productQuantity
-                );
-              } else {
-                currentLocationData[shipment.receiver.locationId] = {
-                  received: parseInt(shipment.products[0].productQuantity),
-                  productName : shipment.products[0].productName,
-                  manufacturer : shipment.products[0].manufacturer,
-                  batchNumber : shipment.products[0].batchNumber
-                };
+              if(shipment.status=="RECEIVED"){
+                if (currentLocationData[shipment.receiver.locationId]) {
+                  currentLocationData[shipment.receiver.locationId].received += parseInt(
+                    shipment.products[0].productQuantity
+                  );
+                } else {
+                  currentLocationData[shipment.receiver.locationId] = {
+                    received: parseInt(shipment.products[0].productQuantity),
+                    productName : shipment.products[0].productName,
+                    manufacturer : shipment.products[0].manufacturer,
+                    batchNumber : shipment.products[0].batchNumber
+                  };
+                }
               }
             });
             var atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
@@ -4233,7 +4238,10 @@ exports.trackJourney = [
                      },
                      {
                       poId : trackingId,
-                     }
+                     },
+                     {
+                      "products.serialNumbersRange" : trackingId,
+                    },
                    ],
                  }
                );
@@ -4244,7 +4252,8 @@ exports.trackJourney = [
                 localField: "warehouseInventory",
                 foreignField: "currentInventory",
                 as: "atoms",
-            }}
+              }
+             }
             ]);
              receiverWarehouseAtoms = await WarehouseModel.aggregate([
               { $match : { id : shipmentDetails.receiver.locationId } } ,
@@ -4253,7 +4262,9 @@ exports.trackJourney = [
                 localField: "warehouseInventory",
                 foreignField: "currentInventory",
                 as: "atoms",
-            }}]);
+               }
+              }
+            ]);
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
                 atomsData.push(atom)
@@ -4506,6 +4517,7 @@ exports.trackJourney = [
         return apiResponse.ErrorResponse(res, err.message);
       }
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
