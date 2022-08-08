@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getJourneyTrack } from "../../actions/shipmentActions";
 import ChainofCustody from "./chain-of-custody/ChainofCustody";
 import CurrentLocation from "./current-location/CurrentLocation";
 import Tab from "./tabs/Tab";
@@ -9,7 +10,28 @@ import "./Tracking.scss";
 export default function Tracking() {
   const [LocationTab, setLocationTab] = useState("CHAIN");
 
-  const [isTracking, setIsTracking] = useState(false);
+  const [trackingID, setTrackingID] = useState();
+
+  const [trackingData, setTrackingData] = useState();
+
+  const handleSearch = async () => {
+    try {
+      let result = await getJourneyTrack(trackingID);
+      if(result.status === 200) {
+        setTrackingData(result.data.data);
+      } else {
+        throw new Error(result);
+      }
+    } catch(err) {
+      console.log("Error while fetching track details - ", err.message);
+    }
+  }
+
+  const handleKeyPress = (event) => {
+    if(event.key === 'Enter') {
+      handleSearch();
+    }
+  }
 
   return (
     <div className="tracking-main-layout">
@@ -28,11 +50,10 @@ export default function Tracking() {
                   type="search"
                   placeholder="Search by Tracking ID"
                   className="track-search"
+                  onKeyUp={handleKeyPress}
+                  onChange={(event) => setTrackingID(event.target.value)}
                 />
-                <i
-                  className="bx bx-search search-track-icon"
-                  onClick={() => setIsTracking(!isTracking)}
-                ></i>
+                <i className="bx bx-search search-track-icon" onClick={handleSearch}></i>
               </div>
             </div>
           </div>
@@ -43,30 +64,11 @@ export default function Tracking() {
               setLocationTab={setLocationTab}
             />
           </div>
-          {isTracking ? (
-            <>
-              {LocationTab === "CHAIN" && <ChainofCustody />}
-              {LocationTab === "LOCATION" && <CurrentLocation />}
-            </>
-          ) : (
-            <>
-              <div className="tracking-home-layout">
-                <div className="tracking-illustation">
-                  <img
-                    src={TrackIllustration}
-                    alt="Track"
-                    className="Track-Image"
-                  />
-                  <p className="mi-body-md f-500">
-                    Search and Track your Product around the World!
-                  </p>
-                </div>
-              </div>
-            </>
-          )}
+          {LocationTab === "CHAIN" && <ChainofCustody trackingData={trackingData} />}
+          {LocationTab === "LOCATION" && <CurrentLocation currentLocationData={trackingData?.currentLocationData} />}
         </div>
         <div className="tracking-map-area">
-          <TrackingMap isTracking={isTracking} />
+          <TrackingMap LocationTab={LocationTab} trackingData={trackingData} />
         </div>
       </div>
     </div>

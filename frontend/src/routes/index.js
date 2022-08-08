@@ -83,7 +83,7 @@ const routes = (
     <Route path='/qrcode' component={requireAuth(QrCode)} />
     <Route path='/newinventory' component={requireAuth(NewInventory)} />
     <Route path='/reviewinventory' component={requireAuth(VerifyInventory)} />
-    <Route path='/track' component={requireAuth(Track)} />
+    <Route path='/track' component={requireAuth(TrackingContainer)} />
     <Route path='/trackAndTrace' component={requireAuth(trackAndTrace)} />
     <Route path='/tracing/:id' component={requireAuth(Track)} />
     <Route path='/producttracing' component={requireAuth(ProductTracing)} />
