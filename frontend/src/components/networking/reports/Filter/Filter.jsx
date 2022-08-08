@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 
-export default function Filter({ title, filters, filterKey, setInstockType, setInstockId }) {
+export default function Filter({
+  title,
+  filters,
+  filterKey,
+  setInstockType,
+  setInstockId,
+}) {
   const setFilter = (temp) => {
-      setInstockType(filterKey);
-      setInstockId(temp);
-  }
+    setInstockType(filterKey);
+    setInstockId(temp);
+  };
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <div
       ref={ref}
@@ -43,6 +49,11 @@ export default function Filter({ title, filters, filterKey, setInstockType, setI
                 !value || child.props.children.toLowerCase().startsWith(value)
             )}
           </ul>
+          <div className="filter-footer">
+            <button className="nt-btn nt-btn-xs nt-btn-blue-alt clear-btn-padding">
+              <span>Clear</span>
+            </button>
+          </div>
         </div>
       );
     }
@@ -59,7 +70,22 @@ export default function Filter({ title, filters, filterKey, setInstockType, setI
 
       <Dropdown.Menu as={CustomMenu} className="mi-custom-filter">
         {filters?.map((item) => {
-            return <Dropdown.Item value={filterKey === "productName" ? item.productId : item[`${filterKey}`]} eventKey={filterKey === "productName" ? item.productId : item[`${filterKey}`]}>{item[`${filterKey}`]}</Dropdown.Item>
+          return (
+            <Dropdown.Item
+              value={
+                filterKey === "productName"
+                  ? item.productId
+                  : item[`${filterKey}`]
+              }
+              eventKey={
+                filterKey === "productName"
+                  ? item.productId
+                  : item[`${filterKey}`]
+              }
+            >
+              {item[`${filterKey}`]}
+            </Dropdown.Item>
+          );
         })}
       </Dropdown.Menu>
     </Dropdown>
