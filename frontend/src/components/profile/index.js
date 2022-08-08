@@ -238,13 +238,14 @@ class Profile extends React.Component {
 
 
   handlePhoneVerification(currentPhone) {
-    const phone = currentPhone;
+    const phone = '+'+currentPhone;
     if (phone) {
       if (isValidPhoneNumber(phone) === false) {
         this.setState({ phoneNumberErrorMsg: "invalid_phone_number" });
       } else {
         this.setState({ phoneNumberErrorMsg: "" });
       }
+      // this.setState({ phoneNumberErrorMsg: "" });
     } else {
       this.setState({ phoneNumberErrorMsg: "" });
     }
@@ -390,7 +391,7 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    {this.state.phoneNumberErrorMsg !== '' && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
+                    {this.state.phoneNumberErrorMsg != "" && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
                     {/* <div className="form-group">
                       <label htmlFor="">{t("language")}</label>
                       <Select

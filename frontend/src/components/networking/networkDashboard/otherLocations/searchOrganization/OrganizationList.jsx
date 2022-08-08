@@ -10,32 +10,29 @@ const OrganizationList = ({ orgName, user, orgId, setReportWarehouse }) => {
   }, []);
   const [toggleButton, setToggleButton] = useState(false);
   return (
-    <div className='mi-accordion-container'>
+    <div className="mi-accordion-container">
       <div
-        className='mi-flex-sb organization-list-dropdown'
+        className="mi-flex-sb organization-list-dropdown"
         onClick={() => setToggleButton(!toggleButton)}
       >
-        <div className='mi-table-data'>
-          <p className='mi-body-md black f-700 mi-reset noselect'>{orgName}</p>
-          <p className='mi-body-xs grey f-500 mi-reset noselect'>
-            ( {warehouses?.length} Location )
-          </p>
+        <div className="mi-table-data">
+          <p className="mi-body-md black f-700 mi-reset noselect">{orgName}</p>
         </div>
         {toggleButton ? (
-          <i className='fa-solid fa-angle-up'></i>
+          <i className="fa-solid fa-angle-up"></i>
         ) : (
-          <i className='fa-solid fa-angle-down'></i>
+          <i className="fa-solid fa-angle-down"></i>
         )}
       </div>
       {toggleButton && (
-        <ul className='unordered-organization-list'>
+        <ul className="unordered-organization-list">
           {warehouses?.map((warehouse, index) => (
-            <li className='mi-flex organization-list-item' key={index}>
+            <li className="mi-flex organization-list-item" key={index}>
               <span>
-                <i className='fa-solid fa-location-dot mr-2'></i>
+                <i className="fa-solid fa-location-dot mr-2"></i>
               </span>
               <button
-                className='link-button'
+                className="link-button"
                 onClick={() => setReportWarehouse(warehouse?.warehouseId)}
                 key={index}
               >

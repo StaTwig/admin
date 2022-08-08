@@ -395,5 +395,10 @@
   "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated",
   "invalid_records": "Invalid Records",
   "Your_Profile_has_been": "Your Profile has been",
-  "Saved_Successfully": "Saved Successfully"
+  "Saved_Successfully": "Saved Successfully",
+  "search_shipment_id": "Search by Shipment ID",
+  "search_transit_id": "Search by Transit ID",
+  "enter_shipment_id": "Enter Shipment ID",
+  "enter_transit_id": "Enter Transit ID",
+  "images": "Images"
 }

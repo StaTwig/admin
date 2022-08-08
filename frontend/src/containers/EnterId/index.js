@@ -11,7 +11,7 @@ const EnterIdContainer = (props) => {
       <Header {...props} t={t} />
       <div className='d-flex'>
         <Sidebar {...props} t={t} />
-        <div className='content'>
+        <div className='Network-content'>
           <EnterId {...props} t={t} />
         </div>
       </div>

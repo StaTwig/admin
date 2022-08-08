@@ -78,9 +78,13 @@ export default function ChainCard({ expanded, setExpanded, id }) {
               </div>
               <div className="accordion-status">
                 <div className="status-button">
-                  <button className="status-lable status-2">
-                    ORDER RECEIVED
-                  </button>
+                  <div className="status-chip">
+                    {" "}
+                    <div className="status-dot recieved-dot"></div>
+                    <p className="mi-body-xs f-500 mi-reset location-text-heading-color">
+                      ORDER RECIEVED
+                    </p>
+                  </div>
                 </div>
                 <div className="collapse-icon">
                   {expanded === "panel1" ? (
