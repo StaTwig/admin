@@ -55,6 +55,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 								}}
 								onClick={() => {
 									setLocationClicked(location);
+									setChainOfCustodySelected(null);
 									setCurrentLocationSelected({
 										lat: currentLocationData[location]?.warehouse?.location?.coordinates[0],
 										lng: currentLocationData[location]?.warehouse?.location?.coordinates[1],
@@ -69,15 +70,15 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 							/>
 					  ))
 					: chainOfCustody?.map((shipment, index) => (
-							<>
+							<div key={index}>
 								<Marker
-									key={index}
 									position={{
 										lat: shipment?.supplier?.warehouse?.location?.coordinates[0],
 										lng: shipment?.supplier?.warehouse?.location?.coordinates[1],
 									}}
 									onClick={() => {
-										setLocationClicked(index);
+										setLocationClicked({index: index, address: shipment?.supplier?.warehouse});
+										setCurrentLocationSelected(null);
 										setChainOfCustodySelected({
 											lat: shipment?.supplier?.warehouse?.location?.coordinates[0],
 											lng: shipment?.supplier?.warehouse?.location?.coordinates[1],
@@ -91,13 +92,13 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 									}}
 								/>
 								<Marker
-									key={index}
 									position={{
 										lat: shipment?.receiver?.warehouse?.location?.coordinates[0],
 										lng: shipment?.receiver?.warehouse?.location?.coordinates[1],
 									}}
 									onClick={() => {
-										setLocationClicked(index);
+										setLocationClicked({index: index, address: shipment?.receiver?.warehouse});
+										setCurrentLocationSelected(null);
 										setChainOfCustodySelected({
 											lat: shipment?.receiver?.warehouse?.location?.coordinates[0],
 											lng: shipment?.receiver?.warehouse?.location?.coordinates[1],
@@ -135,7 +136,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 										],
 									}}
 								/>
-							</>
+							</div>
 					  ))}
 
 				{CurrentLocationSelected ? (
@@ -151,7 +152,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 									<i className="fa-solid fa-location-dot"></i>
 
 									<p className="mi-body-md f-500 mi-reset location-text-color">
-										{`${currentLocationData[locationClicked]?.warehouse?.warehouseAddress?.firstLine}, ${currentLocationData[locationClicked]?.warehouse?.warehouseAddress?.city}`}
+										{`${chainOfCustody[locationClicked]?.warehouse?.warehouseAddress?.firstLine}, ${currentLocationData[locationClicked]?.warehouse?.warehouseAddress?.city}`}
 									</p>
 								</div>
 							</div>
@@ -170,6 +171,42 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 							</div>
 						</div>
 					</InfoWindow>
+				) : null}
+
+				{ChainOfCustodySelected ? (
+					<InfoWindow
+					position={ChainOfCustodySelected}
+					onCloseClick={() => {
+						setChainOfCustodySelected(null);
+					}}
+				>
+					<div className="info-popup-container">
+						<div className="info-header">
+							<div className="info-header-content">
+								<i className="fa-solid fa-location-dot"></i>
+
+								<p className="mi-body-md f-500 mi-reset location-text-color">
+									{`${locationClicked?.address?.warehouseAddress?.firstLine}, ${locationClicked?.address?.warehouse?.warehouseAddress?.city}`}
+								</p>
+							</div>
+						</div>
+						<div className="info-body">
+							<p className="mi-body-sm f-500 mi-reset header-text-color">Product Details</p>
+							{chainOfCustody[locationClicked.index]?.products?.map((product) => (
+								<div className="product-details-list">
+									<div className="product-list-card map-card-design">
+										<p className="mi-body-sm f-500 mi-reset ">
+											{product?.productName}
+										</p>
+										<p className="mi-body-sm f-500 mi-reset">
+											{`${product?.productQuantity} ( ${product?.unitofMeasure?.name} )`}
+										</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</InfoWindow>
 				) : null}
 			</>
 		</GoogleMap>
