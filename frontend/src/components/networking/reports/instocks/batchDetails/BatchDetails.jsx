@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import { getBatchesofWarehouse } from "../../../../../actions/inventoryActions";
+import moment from "moment";
 function BatchRow({ row, isNearExpiry, uom }) {
   return (
     <>
@@ -39,24 +40,24 @@ function BatchRow({ row, isNearExpiry, uom }) {
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {row.quantity || 0}
+              {row?.quantity || 0}
             </p>
             <p className='mi-body-xs grey f-500 mi-reset mi-no-wrap'>
-              ( {uom || ''} )
+              ( {uom || ""} )
             </p>
           </div>
         </TableCell>
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {row.attributeSet?.mfgDate?.split("T")[0] || "N/A"}
+              {moment(row.attributeSet?.mfgDate).format("MM-yyyy") || "N/A"}
             </p>
           </div>
         </TableCell>
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {row.attributeSet?.expDate?.split("T")[0] || "N/A"}
+              {moment(row.attributeSet?.expDate).format("MM-yyyy") || "N/A"}
             </p>
           </div>
         </TableCell>
@@ -65,7 +66,12 @@ function BatchRow({ row, isNearExpiry, uom }) {
   );
 }
 
-export default function BatchDetails({ productId, warehouseId, isNearExpiry, uom }) {
+export default function BatchDetails({
+  productId,
+  warehouseId,
+  isNearExpiry,
+  uom,
+}) {
   const [Data, setData] = useState([]);
   useEffect(() => {
     async function getBatches() {
@@ -100,7 +106,12 @@ export default function BatchDetails({ productId, warehouseId, isNearExpiry, uom
           </TableHead>
           <TableBody>
             {Data?.map((row) => (
-              <BatchRow row={row} key={row.id} uom={uom} isNearExpiry={isNearExpiry} />
+              <BatchRow
+                row={row}
+                key={row.id}
+                uom={uom}
+                isNearExpiry={isNearExpiry}
+              />
             ))}
           </TableBody>
         </Table>

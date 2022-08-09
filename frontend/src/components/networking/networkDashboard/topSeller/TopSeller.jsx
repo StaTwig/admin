@@ -24,7 +24,7 @@ const TopSeller = ({ bestseller, executeScroll }) => {
           className='nt-btn nt-btn-xs nt-btn-blue-alt'
           onClick={executeScroll}
         >
-          <i class='fa-solid fa-table-list'></i>
+          <i className='fa-solid fa-table-list'></i>
           <span>View Reports</span>
         </button>
       </div>

@@ -10,6 +10,7 @@ const OrganisationModel = require("../models/OrganisationModel");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 const { startOfMonth, format } = require("date-fns");
+const { buildExcelReport, buildPdfReport } = require("../helpers/reports");
 
 async function getDistributedProducts(matchQuery, warehouseId, fieldName) {
   const products = await WarehouseModel.aggregate([
@@ -884,6 +885,7 @@ exports.bestSellers = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
+      const reportType = req.query?.reportType || null;
       const isDist = organisation.type === "DISTRIBUTORS";
       let matchQuery = {};
       if (!isDist) {
@@ -1028,10 +1030,26 @@ exports.bestSellers = [
           },
         },
       ]);
-      return apiResponse.successResponseWithData(res, "Best Sellers", {
-        bestSellers,
-        warehouseId: warehouse,
-      });
+
+      if (reportType) {
+        const reportData = await getDataForReport("BESTSELLERS", bestSellers);
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "BESTSELLERS",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "BESTSELLERS", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "Best Sellers", {
+          bestSellers,
+          warehouseId: warehouse,
+        });
+      }
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -1161,6 +1179,7 @@ exports.inStockReport = [
       const date = req.query.date
         ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd")
         : format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const reportType = req.query.reportType || null;
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
@@ -1311,10 +1330,25 @@ exports.inStockReport = [
           },
         },
       ]);
-      return apiResponse.successResponseWithData(res, "In stock Report", {
-        inStockReport,
-        warehouseId: warehouse,
-      });
+      if (reportType) {
+        const reportData = await getDataForReport("INSTOCK", inStockReport);
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "INSTOCK",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "INSTOCK", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "In stock Report", {
+          inStockReport,
+          warehouseId: warehouse,
+        });
+      }
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -1329,6 +1363,7 @@ exports.outOfStockReport = [
       const warehouse = req.query.warehouseId || req.user.warehouseId;
       const date =
         req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const reportType = req.query.reportType || null;
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
@@ -1483,13 +1518,110 @@ exports.outOfStockReport = [
           },
         },
       ]);
-      return apiResponse.successResponseWithData(res, "Out of stock Report", {
-        outOfStockReport,
-        warehouseId: warehouse,
-      });
+      if (reportType) {
+        const reportData = await getDataForReport(
+          "OUTOFSTOCK",
+          outOfStockReport
+        );
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "OU",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "OU", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "Out of stock Report", {
+          outOfStockReport,
+          warehouseId: warehouse,
+        });
+      }
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
+
+async function getDataForReport(reportType, data) {
+  const rowsPDF = [];
+  const rowsExcel = [];
+  const head = [
+    { text: "Product ID", bold: true, field: "_id" },
+    { text: "Product Category", bold: true, field: "productCategory" },
+    { text: "Product Name", bold: true, field: "productName" },
+    { text: "Manufacturer", bold: true, field: "manufacturer" },
+  ];
+  if (reportType === "INSTOCK") {
+    head.push({
+      text: "Opening Balance",
+      bold: true,
+      field: "openingBalance",
+    });
+    head.push({
+      text: "Current Inventory Balance",
+      bold: true,
+      field: "productQuantity",
+    });
+    head.push({ text: "Total Sales", bold: true, field: "totalSales" });
+  } else if (reportType === "OUTOFSTOCK") {
+    head.push({
+      text: "Product out of Stock",
+      bold: true,
+      field: "outOfStockDays",
+    });
+  } else if (reportType === "BESTSELLERS") {
+    head.push({
+      text: "No. of Units Sold",
+      bold: true,
+      field: "sales",
+    });
+  }
+  rowsPDF.push(head);
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i]);
+    const row = [
+      data[i]._id || "N/A",
+      data[i].productCategory || "N/A",
+      data[i].productName || "N/A",
+      data[i].manufacturer || "N/A",
+    ];
+    const rowObj = {
+      _id: data[i]._id || "N/A",
+      productCategory: data[i].productCategory || "N/A",
+      productName: data[i].productName || "N/A",
+      manufacturer: data[i].manufacturer || "N/A",
+    };
+
+    if (reportType === "INSTOCK") {
+      row.push(data[i].inventoryAnalytics?.openingBalance || 0);
+      row.push(data[i].productQuantity || 0);
+      row.push(data[i].totalSales || 0);
+
+      rowObj["openingBalance"] =
+        data[i].inventoryAnalytics?.openingBalance || 0;
+      rowObj["productQuantity"] = data[i].productQuantity || 0;
+      rowObj["totalSales"] = data[i].inventoryAnalytics?.totalSales || 0;
+    } else if (reportType === "OUTOFSTOCK") {
+      row.push(data[i].inventoryAnalytics?.outOfStockDays || "N/A");
+
+      rowObj["outOfStockDays"] =
+        data[i].inventoryAnalytics?.outOfStockDays || "N/A";
+    } else if (reportType === "BESTSELLERS") {
+      row.push(data[i].inventoryAnalytics?.sales || "N/A");
+
+      rowObj["sales"] = data[i].inventoryAnalytics?.sales || "N/A";
+    }
+    rowsPDF.push(row);
+    rowsExcel.push(rowObj);
+  }
+  return {
+    header: head,
+    pdfData: rowsPDF,
+    excelData: rowsExcel,
+  };
+}

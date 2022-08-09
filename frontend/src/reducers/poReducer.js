@@ -1,4 +1,4 @@
-import { SET_POS, RESET_POS } from '../constants/poconstants';
+import { SET_POS, RESET_POS } from "../constants/poconstants";
 
 export const initialState = [];
 
@@ -7,7 +7,7 @@ export const poReducer = (state = initialState, action) => {
     case SET_POS:
       return [
         // ...state, ...action.payload
-        ...action.payload.data
+        ...action.payload.data,
       ];
     case RESET_POS:
       return initialState;

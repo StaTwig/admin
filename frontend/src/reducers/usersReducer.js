@@ -1,6 +1,4 @@
-import {
-  GET_ALL_USERS_SUCCESS,
-} from '../constants/userConstants';
+import { GET_ALL_USERS_SUCCESS } from "../constants/userConstants";
 
 export const initialState = [];
 

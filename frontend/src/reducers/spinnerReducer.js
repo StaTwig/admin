@@ -1,4 +1,4 @@
-import { TURN_OFF, TURN_ON } from '../constants/spinnerConstants';
+import { TURN_OFF, TURN_ON } from "../constants/spinnerConstants";
 
 export const spinnerReducer = (state = false, action) => {
   switch (action.type) {

@@ -299,16 +299,14 @@ exports.getCountryDetailsByRegion = [
           if (typeof warehouse.country === "string") {
             countrySet.add(warehouse.country);
           } else {
-            console.log(warehouse);
-            countrySet.add(warehouse?.country?.countryName);
+            countrySet.add(warehouse.country.countryName);
           }
         }
         for (const org of orgs) {
-          if (typeof org.country === "string") {
-            countrySet.add(org?.country);
+          if (typeof orgs.country === "string") {
+            countrySet.add(org.country);
           } else {
-            console.log(org);
-            countrySet.add(org?.country?.countryName);
+            countrySet.add(org.country.countryName);
           }
         }
         const orgArray = [...countrySet];
