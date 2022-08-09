@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import BestSeller from "./bestseller/BestSeller";
 import Instock from "./instocks/Instock";
 import Outstock from "./outofstock/Outstock";
 import DatePicker from "react-datepicker";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import "./Report.scss";
 import Tab from "./tabs/Tab";
-
+import { getReports } from "../../../actions/networkActions";
 export default function Reports(props) {
   const {
     bestseller,
@@ -18,6 +20,34 @@ export default function Reports(props) {
     startDate,
     setStartDate,
   } = props;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = async (type) => {
+    if (type) {
+      const fileData = await getReports(
+        MainTab,
+        type,
+        reportWarehouse,
+        startDate
+      );
+      const downloadUrl = window.URL.createObjectURL(new Blob([fileData]));
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute(
+        "download",
+        `${MainTab}-${startDate.toISOString().split("T")[0]}.${
+          type.toLowerCase() === "excel" ? "xlsx" : "pdf"
+        }`
+      ); //any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+    setAnchorEl(null);
+  };
   return (
     <div className='reports-main-container'>
       <div className='reports-header'>
@@ -42,7 +72,31 @@ export default function Reports(props) {
             />
             <i className='fa-solid fa-calendar-days cal-icon'></i>
           </div>
-          {/* <button className="nt-btn nt-btn-sm nt-btn-blue">Export</button> */}
+          <button
+            className='nt-btn nt-btn-sm nt-btn-blue'
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            Export
+          </button>
+          <Menu
+            id='basic-menu'
+            anchorEl={anchorEl}
+            open={open}
+            onClose={() => handleClose(null)}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <div className='d-flex flex-column'>
+              <MenuItem onClick={() => handleClose("pdf")} className='mb-3'>
+                PDF
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("excel")}>EXCEL</MenuItem>
+            </div>
+          </Menu>
         </div>
       </div>
       <div className='reports-body'>

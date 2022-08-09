@@ -1044,11 +1044,12 @@ exports.bestSellers = [
         } else {
           await buildPdfReport(res, reportData.pdfData, "BESTSELLERS", date);
         }
+      } else {
+        return apiResponse.successResponseWithData(res, "Best Sellers", {
+          bestSellers,
+          warehouseId: warehouse,
+        });
       }
-      return apiResponse.successResponseWithData(res, "Best Sellers", {
-        bestSellers,
-        warehouseId: warehouse,
-      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -1342,11 +1343,12 @@ exports.inStockReport = [
         } else {
           await buildPdfReport(res, reportData.pdfData, "INSTOCK", date);
         }
+      } else {
+        return apiResponse.successResponseWithData(res, "In stock Report", {
+          inStockReport,
+          warehouseId: warehouse,
+        });
       }
-      return apiResponse.successResponseWithData(res, "In stock Report", {
-        inStockReport,
-        warehouseId: warehouse,
-      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
@@ -1532,11 +1534,12 @@ exports.outOfStockReport = [
         } else {
           await buildPdfReport(res, reportData.pdfData, "OU", date);
         }
+      } else {
+        return apiResponse.successResponseWithData(res, "Out of stock Report", {
+          outOfStockReport,
+          warehouseId: warehouse,
+        });
       }
-      return apiResponse.successResponseWithData(res, "Out of stock Report", {
-        outOfStockReport,
-        warehouseId: warehouse,
-      });
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err);

@@ -85,3 +85,24 @@ export const getManufacturerFilterOptions = async (type, regExp) => {
     return false;
   }
 };
+
+export const getReports = async (report, fileType, reportWarehouse, date) => {
+  try {
+    let url;
+    date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
+    if (report === "INSTOCK") url = config().getmanufacturerInStockReportUrl;
+    if (report === "OUTSTOCK") url = config().getmanufacturerOutStockReportUrl;
+    if (report === "BESTSELLER") url = config().getBestSellersUrl;
+    const res = await axios.get(
+      url +
+        `?warehouseId=${reportWarehouse}&date=${date}&reportType=${fileType}`,
+      {
+        responseType: "blob",
+      }
+    );
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
