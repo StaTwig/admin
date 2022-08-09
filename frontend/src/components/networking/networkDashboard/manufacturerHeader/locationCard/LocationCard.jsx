@@ -13,8 +13,9 @@ export default function LocationCard({
   return (
     <div className='location-card-container'>
       <div
-        className={`location-card my-card ${!MylocationFilter && "active"}`}
+        className={`location-card my-card ${MylocationFilter && "active"}`}
         onClick={() => {
+          setPartnerLocation(false);
           setMylocationFilter(!MylocationFilter);
         }}
       >
@@ -38,8 +39,9 @@ export default function LocationCard({
         )}
       </div>
       <div
-        className={`location-card partner-card ${!partnerLocation && "active"}`}
+        className={`location-card partner-card ${partnerLocation && "active"}`}
         onClick={() => {
+          setMylocationFilter(false);
           setPartnerLocation(!partnerLocation);
         }}
       >
