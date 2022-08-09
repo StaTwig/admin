@@ -4204,7 +4204,6 @@ exports.trackJourney = [
                     productCategory: product.productCategory,
                   }
                 });
-                console.log("IMPORTANT",currentLocationData[shipment.supplier.locationId])
               }
               if(shipment.status=="RECEIVED"){
                 if (currentLocationData[shipment.receiver.locationId]) {
