@@ -4319,6 +4319,8 @@ exports.trackJourney = [
                 return product.stock > 0 ;
               })
             })
+            currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].length> 0 ).
+            reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
         }
         catch(err){
           console.log(err)
