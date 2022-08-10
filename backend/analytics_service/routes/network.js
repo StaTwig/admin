@@ -7,5 +7,5 @@ router.get("/bestSellerSummary", AnalyticsController.bestSellerSummary);
 router.get("/inStockReport", AnalyticsController.inStockReport);
 router.get("/outOfStockReport", AnalyticsController.outOfStockReport);
 router.get("/inStockFilterOptions", AnalyticsController.inStockFilterOptions);
-// router.get("/outOfStockReport", AnalyticsController.outOfStockReport);
+router.get("/outStockFilterOptions", AnalyticsController.outOfStockFilterOptions);
 module.exports = router;

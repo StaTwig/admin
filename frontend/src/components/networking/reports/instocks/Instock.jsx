@@ -23,10 +23,10 @@ export default function Instock({ inStock, inStockFilters, reportWarehouse, setI
           <TableHead>
             <TableRow>
               <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <Filter filters={inStockFilters} filterKey={"productCategory"} title="Product Category" setInstockType={setInstockType} setInstockId={setInstockId} />
+                <Filter filters={inStockFilters} filterKey={"productCategory"} title="Product Category" setStockType={setInstockType} setStockId={setInstockId} />
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <Filter filters={inStockFilters} title="Product Name" filterKey={"productName"} setInstockType={setInstockType} setInstockId={setInstockId}/>
+                <Filter filters={inStockFilters} title="Product Name" filterKey={"productName"} setStockType={setInstockType} setStockId={setInstockId}/>
               </TableCell>
               {Distributor && (
                 <TableCell className="mi-custom-tableHead">

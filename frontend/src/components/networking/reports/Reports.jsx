@@ -19,7 +19,10 @@ export default function Reports(props) {
     setStartDate,
     inStockFilters,
     setInstockType,
-    setInstockId
+    setInstockId,
+    setOutstockType,
+    setOutstockId,
+    outStockFilters
   } = props;
   return (
     <div className="reports-main-container">
@@ -58,7 +61,7 @@ export default function Reports(props) {
             <Instock inStock={inStock} inStockFilters={inStockFilters} setInstockType={setInstockType} setInstockId={setInstockId} reportWarehouse={reportWarehouse} />
           )}
           {MainTab === "OUTSTOCK" && (
-            <Outstock outStock={outStock} reportWarehouse={reportWarehouse} />
+            <Outstock setOutstockType={setOutstockType} outStockFilters={outStockFilters} setOutstockId={setOutstockId} outStock={outStock} reportWarehouse={reportWarehouse} />
           )}
           {MainTab === "BESTSELLER" && (
             <BestSeller

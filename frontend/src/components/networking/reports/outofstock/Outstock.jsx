@@ -7,8 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import OutstockRow from "./OutstockRow";
 import { useSelector } from "react-redux";
+import Filter from "../Filter/Filter";
 
-export default function Outstock({outStock}) {
+export default function Outstock({outStock, outStockFilters, setOutstockType,setOutstockId}) {
   const {user} = useSelector((state) => state);
   const Distributor = user.type === "DISTRIBUTORS"
   return (
@@ -22,10 +23,22 @@ export default function Outstock({outStock}) {
           <TableHead>
             <TableRow>
               <TableCell className="mi-custom-tableHead mi-first-cell-padding">
-                <p className="mi-body-sm mi-reset grey-400">Product Category</p>
+                <Filter
+                    filters={outStockFilters}
+                    title="Product Category"
+                    filterKey="productCategory"
+                    setStockType={setOutstockType}
+                    setStockId={setOutstockId}
+                  />
               </TableCell>
               <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Name</p>
+              <Filter
+                    filters={outStockFilters}
+                    title="Product Name"
+                    filterKey="productName"
+                    setStockType={setOutstockType}
+                    setStockId={setOutstockId}
+                  />
               </TableCell>
              {Distributor && <TableCell className="mi-custom-tableHead">
                 <p className="mi-body-sm mi-reset grey-400">Product Manufacturer</p>

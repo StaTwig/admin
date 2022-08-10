@@ -6,12 +6,12 @@ export default function Filter({
   title,
   filters,
   filterKey,
-  setInstockType,
-  setInstockId,
+  setStockType,
+  setStockId,
 }) {
   const setFilter = (temp) => {
-    setInstockType(filterKey);
-    setInstockId(temp);
+    setStockType(filterKey);
+    setStockId(temp);
   };
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <div
@@ -49,7 +49,7 @@ export default function Filter({
                 !value || child.props.children.toLowerCase().startsWith(value)
             )}
           </ul>
-          <div className="filter-footer">
+          <div className="filter-footer" onClick={() => setStockType("clear")}>
             <button className="nt-btn nt-btn-xs nt-btn-blue-alt clear-btn-padding">
               <span>Clear</span>
             </button>

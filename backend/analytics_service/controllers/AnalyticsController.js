@@ -1653,8 +1653,9 @@ exports.inStockFilterOptions = [
           },
         },
       ]);
+      const Filters = inStockReport.length > 0 ? inStockReport[0].products : [];
       return apiResponse.successResponseWithData(res, "In stock Report Filters", {
-        filters: inStockReport[0].products,
+        filters: Filters,
         warehouseId: warehouse,
       });
     } catch (err) {
@@ -1813,20 +1814,22 @@ exports.outOfStockFilterOptions = [
             },
           },
         },
-        {
-          $match: matchQuery,
-        },
+        // {
+        //   $match: matchQuery,
+        // },
         {
           $match: matchQuery2,
         },
         {
-          $sort: {
-            "inventoryAnalytics.outOfStockDays": -1,
+          $group: {
+            _id: "productFilters",
+            products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
           },
         },
       ]);
+      const Filters = outOfStockReport.length > 0 ? outOfStockReport[0].products : [];
       return apiResponse.successResponseWithData(res, "Out of stock Report", {
-        outOfStockReport,
+        filters:  Filters,
         warehouseId: warehouse,
       });
     } catch (err) {
