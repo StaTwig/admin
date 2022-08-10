@@ -50,15 +50,15 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 							<Marker
 								key={index}
 								position={{
-									lat: currentLocationData[location]?.warehouse?.location?.coordinates[0],
-									lng: currentLocationData[location]?.warehouse?.location?.coordinates[1],
+									lat: currentLocationData[location][0]?.warehouse?.location?.coordinates[0],
+									lng: currentLocationData[location][0]?.warehouse?.location?.coordinates[1],
 								}}
 								onClick={() => {
 									setLocationClicked(location);
 									setChainOfCustodySelected(null);
 									setCurrentLocationSelected({
-										lat: currentLocationData[location]?.warehouse?.location?.coordinates[0],
-										lng: currentLocationData[location]?.warehouse?.location?.coordinates[1],
+										lat: currentLocationData[location][0]?.warehouse?.location?.coordinates[0],
+										lng: currentLocationData[location][0]?.warehouse?.location?.coordinates[1],
 									});
 								}}
 								icon={{

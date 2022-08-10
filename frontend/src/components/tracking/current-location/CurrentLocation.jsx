@@ -7,7 +7,7 @@ export default function CurrentLocation({currentLocationData}) {
     <div>
       {currentLocationData && Object.keys(currentLocationData).map((key, index) => (
         <div key={index} style={{marginTop: "10px"}}>
-          <TrackLocationCard warehouse={currentLocationData[key]} />
+          <TrackLocationCard warehouse={currentLocationData[key][0]} />
         </div>
       ))}
     </div>
