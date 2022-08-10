@@ -4184,8 +4184,10 @@ exports.trackJourney = [
           try
           {
             var currentLocationData = {};
+            var allowedOrgs = []
             await trackedShipment.forEach(async function (shipment) {
-              let products = [];
+              if(!allowedOrgs.includes(shipment.supplier.id)) allowedOrgs.push(shipment.supplier.id)
+              if(!allowedOrgs.includes(shipment.receiver.id)) allowedOrgs.push(shipment.receiver.id)
               if (currentLocationData[shipment.supplier.locationId]) {
                 shipment.products.forEach(async function (product) {
                   for await ( productSupplier of currentLocationData[shipment.supplier.locationId]){
@@ -4266,8 +4268,8 @@ exports.trackJourney = [
                 localField: "warehouseInventory",
                 foreignField: "currentInventory",
                 as: "atoms",
-              }
-             }
+              },
+             },
             ]);
              receiverWarehouseAtoms = await WarehouseModel.aggregate([
               { $match : { id : shipmentDetails.receiver.locationId } } ,
@@ -4277,7 +4279,7 @@ exports.trackJourney = [
                 foreignField: "currentInventory",
                 as: "atoms",
                }
-              }
+              },
             ]);
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
@@ -4296,7 +4298,6 @@ exports.trackJourney = [
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
               organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId });
               atomProduct = await ProductModel.findOne({ id : atom.productId });
-             }
               if (currentLocationData[warehouseCurrentStock.id]){
                 for await (product of currentLocationData[warehouseCurrentStock.id]){
                   if (product.productName == atomProduct.name && atom.product?.stock){
@@ -4310,9 +4311,12 @@ exports.trackJourney = [
                     product.productAttributes = atom.attributeSet;
                     product.warehouse = warehouseCurrentStock
                     product.organisation = organisation
-                   }
-                }
-            }
+                    product.batchNumber = atom.batchNumbers[0];
+                    product.productInfo = atomProduct;
+                } 
+             }
+           }
+        }
             const keys = Object.keys(currentLocationData);
             keys.forEach( async function(warehouse){
               currentLocationData[warehouse] = currentLocationData[warehouse].filter( function (product){
@@ -4534,10 +4538,10 @@ exports.trackJourney = [
         return apiResponse.successResponseWithData(res, "Shipments Table", {
           poDetails: poDetails,
           inwardShipmentsArray: inwardShipmentsArray,
-          trackedShipment: trackedShipment,
+          trackedShipment: allowedOrgs.includes(req.user.organisationId) ? trackedShipment : [],
           outwardShipmentsArray: outwardShipmentsArray,
           poShipmentsArray: poShipmentsArray,
-          currentLocationData: currentLocationData,
+          currentLocationData: allowedOrgs.includes(req.user.organisationId) ? currentLocationData : {},
         });
       } catch (err) {
         return apiResponse.ErrorResponse(res, err.message);
