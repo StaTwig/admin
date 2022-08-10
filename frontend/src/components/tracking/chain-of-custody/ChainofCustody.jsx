@@ -1,19 +1,28 @@
 import React from "react";
 import ChainGroup from "./ChainGroup";
 import "./ChainofCustody.scss";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
+import TrackIllustration from "../../../assets/images/track.webp";
 
-export default function ChainofCustody({trackingData}) {
-  return (
-    <div className="chain-of-custody-container">
-      {trackingData?.trackedShipment?.map((element, index) => (
-        <div key={index} className="chain-level-1" style={{"gridTemplateColumns": `${index*1.5}rem 1fr`}}>
-          <div className="null-space"></div>
-          <ChainGroup shipmentData={element} />
-        </div>
-      ))}
-    </div>
-  );
+export default function ChainofCustody({ trackingData }) {
+	return trackingData ? (
+		<div className="chain-of-custody-container">
+			{trackingData?.trackedShipment?.map((element, index) => (
+				<div
+					key={index}
+					className="chain-level-1"
+					style={{ gridTemplateColumns: `${index * 1.5}rem 1fr` }}
+				>
+					<div className="null-space"></div>
+					<ChainGroup shipmentData={element} />
+				</div>
+			))}
+		</div>
+	) : (
+		<div className="tracking-illustation">
+			<img src={TrackIllustration} alt="tracking" />
+			<p className="mi-body-md f-500 grey mi-reset">
+				Try serach using your shipment ID to track your Shipment
+			</p>
+		</div>
+	);
 }
