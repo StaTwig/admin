@@ -1167,6 +1167,12 @@ exports.inStockReport = [
       const isDist = organisation.type === "DISTRIBUTORS";
       let matchQuery1 = {};
       let matchQuery2 = {};
+      let matchQuery3 = {};
+      const {type, id} = req.query;
+      if(id)
+        matchQuery3[`_id`] = id;
+      if(type)
+        matchQuery3[`productCategory`] = type;
       if (!isDist) {
         matchQuery2[`manufacturerId`] = req.user.organisationId;
       } else {
@@ -1306,6 +1312,9 @@ exports.inStockReport = [
           $match: matchQuery2,
         },
         {
+          $match: matchQuery3,
+        },
+        {
           $sort: {
             productQuantity: -1,
           },
@@ -1333,9 +1342,18 @@ exports.outOfStockReport = [
         id: req.user.organisationId,
       });
       const isDist = organisation.type === "DISTRIBUTORS";
+
+
       let matchQuery = {};
       let matchQuery1 = {};
       let matchQuery2 = {};
+      let matchQuery3 = {};
+      const {type, id} = req.query;
+      if(id)
+        matchQuery3[`_id`] = id;
+      if(type)
+        matchQuery3[`productCategory`] = type;
+
       if (!isDist) {
         matchQuery2[`manufacturerId`] = req.user.organisationId;
       } else {
@@ -1476,6 +1494,9 @@ exports.outOfStockReport = [
         },
         {
           $match: matchQuery2,
+        },
+        {
+          $match: matchQuery3,
         },
         {
           $sort: {
@@ -1825,7 +1846,8 @@ exports.outOfStockFilterOptions = [
             _id: "productFilters",
             products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
           },
-        },
+        }
+       
       ]);
       const Filters = outOfStockReport.length > 0 ? outOfStockReport[0].products : [];
       return apiResponse.successResponseWithData(res, "Out of stock Report", {

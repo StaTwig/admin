@@ -99,16 +99,27 @@ const NetworkingContainer = (props) => {
   }, []);
   useEffect(()=>{
     async function filterInstockReports(){
+      let pname;
+      let type;
+      if(InstockType && InstockType === "clear"){
+        pname = null;
+        type = null;
+      }
+      else if(InstockType && InstockType === "productCategory"){
+          type = InstockId;
+      }
+        else{
+          pname = InstockId;
+        }
+
       const inStock = await getmanufacturerInStockReport(
         reportWarehouse,
-        startDate
+        startDate,
+        type,
+        pname
       );
-      if(InstockType && InstockType === "productCategory")
-        setInStock(inStock.data.inStockReport.filter((item) => item.productCategory === InstockId));
-      else if(InstockType && InstockType === "clear")
-        setInStock(inStock.data.inStockReport);        
-      else
-        setInStock(inStock.data.inStockReport.filter((item) => item._id === InstockId));
+
+        setInStock(inStock.data.inStockReport);
     }
     filterInstockReports();
   }, [InstockType, InstockId])
@@ -116,16 +127,26 @@ const NetworkingContainer = (props) => {
 
   useEffect(()=>{
     async function filterOustockReports(){
+      let pname;
+      let type;
+      if(OutstockType && OutstockType === "clear"){
+        pname = null;
+        type = null;
+      }
+      else if(OutstockType && OutstockType === "productCategory"){
+          type = OutstockId;
+      }
+        else{
+          pname = OutstockId;
+        }
       const outStock = await getmanufacturerOutStockReport(
         reportWarehouse,
-        startDate
+        startDate,
+        type,
+        pname
       );
-      if(OutstockType && OutstockType === "productCategory")
-        setOutStock(outStock.data.outOfStockReport.filter((item) => item.productCategory === OutstockId));
-      else if(OutstockType && OutstockType === "clear")
-        setOutStock(outStock.data.outOfStockReport);        
-      else
-        setOutStock(outStock.data.outOfStockReport.filter((item) => item._id === OutstockId));
+
+        setOutStock(outStock.data.outOfStockReport);
     }
     filterOustockReports();
   }, [OutstockType, OutstockId])

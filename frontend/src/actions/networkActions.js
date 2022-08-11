@@ -26,12 +26,12 @@ export const getBestSellerSummary = async (reportWarehouse) => {
   }
 };
 
-export const getmanufacturerInStockReport = async (reportWarehouse, date) => {
+export const getmanufacturerInStockReport = async (reportWarehouse, date, type, pname) => {
   try {
     date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
     const url = config().getmanufacturerInStockReportUrl;
     const result = await axios.get(
-      url + `?warehouseId=${reportWarehouse}&date=${date}`
+      url + `?warehouseId=${reportWarehouse}&date=${date}&type=${type ? type : ''}&id=${pname ? pname : ''}`
     );
     return result.data;
   } catch (e) {
@@ -67,12 +67,12 @@ export const getOutStockFilterOptions = async (reportWarehouse, date) => {
   }
 };
 
-export const getmanufacturerOutStockReport = async (reportWarehouse, date) => {
+export const getmanufacturerOutStockReport = async (reportWarehouse, date, type, pname) => {
   try {
     date = date ? format(startOfMonth(new Date(date)), "yyyy-MM-dd") : "";
     const url = config().getmanufacturerOutStockReportUrl;
     const result = await axios.get(
-      url + `?warehouseId=${reportWarehouse}&date=${date}`
+      url + `?warehouseId=${reportWarehouse}&date=${date}&type=${type ? type : ''}&id=${pname ? pname : ''}`
     );
     return result.data;
   } catch (e) {
