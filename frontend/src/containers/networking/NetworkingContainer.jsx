@@ -11,25 +11,33 @@ import {
   getManufacturerWarehouses,
   getManufacturerFilterOptions,
   getBestSellerSummary,
+  getInStockFilterOptions,
+  getOutStockFilterOptions
 } from "../../actions/networkActions";
 
 const NetworkingContainer = (props) => {
   const { t } = useTranslation();
-  const [user, setUser] = React.useState();
-  const [bestseller, setBestseller] = React.useState();
-  const [TopBestseller, setTopBestseller] = React.useState();
-  const [inStock, setInStock] = React.useState();
-  const [outStock, setOutStock] = React.useState();
+  const [user, setUser] = useState();
+  const [bestseller, setBestseller] = useState();
+  const [TopBestseller, setTopBestseller] = useState();
+  const [inStock, setInStock] = useState([]);
+  const [inStockFilters, setInStockFilters] = useState();
+  const [outStockFilters, setOutStockFilters] = useState();
+  const [outStock, setOutStock] = useState([]);
   const [MainTab, setMainTab] = useState("INSTOCK");
+  const [InstockType, setInstockType] = useState("");
+  const [OutstockType, setOutstockType] = useState("");
+  const [OutstockId, setOutstockId] = useState("");
+  const [InstockId, setInstockId] = useState("");
   const date = new Date();
   const [startDate, setStartDate] = useState(
     new Date(date.getFullYear(), date.getMonth(), 1)
   );
-  const [manufacturer, setManufacturer] = React.useState({
+  const [manufacturer, setManufacturer] = useState({
     myLocations: 0,
     partnerLocations: 0,
   });
-  const [oManufacturer, setOManufacturer] = React.useState([]);
+  const [oManufacturer, setOManufacturer] = useState([]);
   const [reportWarehouse, setReportWarehouse] = useState("");
   const [partnerLocation, setPartnerLocation] = useState(false);
   const [MylocationFilter, setMylocationFilter] = useState(false);
@@ -50,6 +58,18 @@ const NetworkingContainer = (props) => {
     );
     if (inStock) setInStock(inStock.data.inStockReport);
     if (inStock) setReportWarehouse(inStock.data.warehouseId);
+  };
+  const getInstockFilters = async () => {
+    const inStockFilters = await getInStockFilterOptions(
+      reportWarehouse,
+      ""
+    );
+    const outStockFilters = await getOutStockFilterOptions(
+      reportWarehouse,
+      ""
+    );
+    if (inStockFilters) setInStockFilters(inStockFilters.filters);
+    if(outStockFilters) setOutStockFilters(outStockFilters.filters);
   };
   const getOutStock = async () => {
     const outStock = await getmanufacturerOutStockReport(
@@ -74,8 +94,63 @@ const NetworkingContainer = (props) => {
   };
   useEffect(() => {
     getManFilters();
+    getInstockFilters();
     getTopBestsellers();
   }, []);
+  useEffect(()=>{
+    async function filterInstockReports(){
+      let pname;
+      let type;
+      if(InstockType && InstockType === "clear"){
+        pname = null;
+        type = null;
+      }
+      else if(InstockType && InstockType === "productCategory"){
+          type = InstockId;
+      }
+        else{
+          pname = InstockId;
+        }
+
+      const inStock = await getmanufacturerInStockReport(
+        reportWarehouse,
+        startDate,
+        type,
+        pname
+      );
+
+        setInStock(inStock.data.inStockReport);
+    }
+    filterInstockReports();
+  }, [InstockType, InstockId])
+
+
+  useEffect(()=>{
+    async function filterOustockReports(){
+      let pname;
+      let type;
+      if(OutstockType && OutstockType === "clear"){
+        pname = null;
+        type = null;
+      }
+      else if(OutstockType && OutstockType === "productCategory"){
+          type = OutstockId;
+      }
+        else{
+          pname = OutstockId;
+        }
+      const outStock = await getmanufacturerOutStockReport(
+        reportWarehouse,
+        startDate,
+        type,
+        pname
+      );
+
+        setOutStock(outStock.data.outOfStockReport);
+    }
+    filterOustockReports();
+  }, [OutstockType, OutstockId])
+  
   useEffect(() => {
     (async () => {
       getBestsellers(startDate);
@@ -118,6 +193,12 @@ const NetworkingContainer = (props) => {
             setMylocationFilter={setMylocationFilter}
             startDate={startDate}
             setStartDate={setStartDate}
+            inStockFilters={inStockFilters}
+            outStockFilters={outStockFilters}
+            setInstockType={setInstockType}
+            setInstockId={setInstockId}
+            setOutstockType={setOutstockType}
+            setOutstockId={setOutstockId}
           />
         </div>
       </div>

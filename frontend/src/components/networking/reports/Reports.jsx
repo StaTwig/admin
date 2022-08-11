@@ -19,6 +19,12 @@ export default function Reports(props) {
     setMainTab,
     startDate,
     setStartDate,
+    inStockFilters,
+    setInstockType,
+    setInstockId,
+    setOutstockType,
+    setOutstockId,
+    outStockFilters
   } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -106,10 +112,10 @@ export default function Reports(props) {
 
         <div className='report-table-container'>
           {MainTab === "INSTOCK" && (
-            <Instock inStock={inStock} reportWarehouse={reportWarehouse} />
+            <Instock inStock={inStock} inStockFilters={inStockFilters} setInstockType={setInstockType} setInstockId={setInstockId} reportWarehouse={reportWarehouse} />
           )}
           {MainTab === "OUTSTOCK" && (
-            <Outstock outStock={outStock} reportWarehouse={reportWarehouse} />
+            <Outstock setOutstockType={setOutstockType} outStockFilters={outStockFilters} setOutstockId={setOutstockId} outStock={outStock} reportWarehouse={reportWarehouse} />
           )}
           {MainTab === "BESTSELLER" && (
             <BestSeller

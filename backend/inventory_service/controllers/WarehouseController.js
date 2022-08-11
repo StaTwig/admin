@@ -5,8 +5,10 @@ const WarehouseModel = require("../models/WarehouseModel");
 const ProductModel = require("../models/ProductModel");
 const OrganisationModel = require("../models/OrganisationModel");
 
-async function DistributorMapLocations(organisationId, warehouseOrg) {
+async function DistributorMapLocations(organisationId, warehouseOrg, countryName) {
   let matchQuery = [];
+  let queryObj = {};
+  if (countryName && countryName !== "undefined" && countryName !== "") queryObj[`country.countryName`] = countryName;
   if (warehouseOrg)
     matchQuery.push({
       $match: {
@@ -133,6 +135,7 @@ async function DistributorMapLocations(organisationId, warehouseOrg) {
         country: "$country",
       },
     },
+    {$match: queryObj},
     {
       $facet: {
         allLocations: [],
@@ -471,8 +474,10 @@ exports.getManufacturerWarehouses = [
       if (isDist) {
         const warehouses = await DistributorMapLocations(
           organisationId,
-          warehouseOrg
+          warehouseOrg,
+          countryName
         );
+        
         const response = {
           partnerLocations: warehouses[0]?.partnerLocations.length,
           myLocations: warehouses[0]?.myLocations.length,
