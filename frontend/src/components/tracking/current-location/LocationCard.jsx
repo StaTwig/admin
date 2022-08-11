@@ -1,8 +1,13 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const TrackLocationCard = ({warehouse}) => {
-  return (
+const TrackLocationCard = ({ currentLocation }) => {
+
+	const warehouse = currentLocation[0];
+
+	console.log(warehouse);
+
+	return warehouse ? (
 		<>
 			<div className="current-location-container">
 				<div className="current-location-header mi-flex-sb gap-2">
@@ -20,17 +25,23 @@ const TrackLocationCard = ({warehouse}) => {
 						</div>
 					</div>
 					<div className="header-date-space">
-            <p className="mi-body-sm mi-reset f-700 black">{(new Date(warehouse?.updatdAt)).toLocaleDateString()}</p>
+						<p className="mi-body-sm mi-reset f-700 black">
+							{new Date(warehouse?.updatdAt).toLocaleDateString()}
+						</p>
 					</div>
 				</div>
 				<div className="current-location-body">
 					<p className="mi-body-md f-700 mi-reset black">Product List</p>
-					<div className="product-list-area">
-						<ProductCard warehouse={warehouse} />
-					</div>
+					{currentLocation?.map((warehouse) => (
+						<div className="product-list-area">
+							<ProductCard warehouse={warehouse} />
+						</div>
+					))}
 				</div>
 			</div>
 		</>
+	) : (
+		null
 	);
 };
 

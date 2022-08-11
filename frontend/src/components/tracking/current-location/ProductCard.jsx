@@ -97,7 +97,7 @@ const ProductCard = ({ warehouse }) => {
 					<li className="product-list-card">
 						<div className="mi-flex-ac gap-1">
 							<i className="fa-solid fa-prescription-bottle-medical color-green"></i>
-							<p className="mi-body-sm f-500 mi-reset grey">Paracetomal</p>
+							<p className="mi-body-sm f-500 mi-reset grey">Product Name</p>
 						</div>
 						<p className="mi-body-sm f-500 mi-reset color-blue">{productName}</p>
 					</li>
@@ -122,8 +122,15 @@ const ProductCard = ({ warehouse }) => {
             </div>
             <p className='mi-body-sm f-500 mi-reset color-blue'>{label}</p>
           </li>
+					<li className='product-list-card'>
+            <div className='mi-flex-ac gap-1'>
+              <i className='fa-solid fa-tag color-green'></i>
+              <p className='mi-body-sm f-500 mi-reset grey'>Quantity</p>
+            </div>
+            <p className='mi-body-sm f-500 mi-reset color-blue'>{warehouse?.stock}</p>
+          </li>
 				</ul>
-				<div className="product-quantity-details">
+				{/* <div className="product-quantity-details">
 					<div>
 						<Chart
 							options={radialBarOptions.options}
@@ -148,7 +155,7 @@ const ProductCard = ({ warehouse }) => {
 							Quantity Received
 						</div>
 					</div>
-				</div>
+				</div> */}
 				<div className="product-date-details">
 					<div className="date-container">
 						<div className="date-header mi-flex-ac gap-1">

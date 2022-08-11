@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getJourneyTrack } from "../../actions/shipmentActions";
 import ChainofCustody from "./chain-of-custody/ChainofCustody";
 import CurrentLocation from "./current-location/CurrentLocation";
@@ -6,22 +6,42 @@ import Tab from "./tabs/Tab";
 import TrackingMap from "./tracking-map/TrackingMap";
 import TrackIllustration from "../../assets/images/track.webp";
 import "./Tracking.scss";
+import { useHistory, useParams } from "react-router";
 
 export default function Tracking() {
+  const { id } = useParams();
+  const history = useHistory();
+
   const [LocationTab, setLocationTab] = useState("CHAIN");
 
-  const [trackingID, setTrackingID] = useState();
+  const [trackingID, setTrackingID] = useState(id);
 
   const [trackingData, setTrackingData] = useState();
 
+  useEffect(async () => {
+    try {
+      if(id) {
+        let result = await getJourneyTrack(id);
+        if(result.status === 200) {
+          setTrackingData(result.data.data);
+        } else {
+          throw new Error(result);
+        }
+      }
+    } catch(err) {
+      console.log("Error while fetching track details - ", err.message);
+    }
+  }, [id])
+
   const handleSearch = async () => {
     try {
-      let result = await getJourneyTrack(trackingID);
-      if(result.status === 200) {
-        setTrackingData(result.data.data);
-      } else {
-        throw new Error(result);
-      }
+      history.push(`/track/${trackingID}`);
+      // let result = await getJourneyTrack(trackingID);
+      // if(result.status === 200) {
+      //   setTrackingData(result.data.data);
+      // } else {
+      //   throw new Error(result);
+      // }
     } catch(err) {
       console.log("Error while fetching track details - ", err.message);
     }
