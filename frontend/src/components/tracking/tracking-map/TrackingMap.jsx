@@ -77,7 +77,19 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 										lng: shipment?.supplier?.warehouse?.location?.coordinates[1],
 									}}
 									onClick={() => {
-										setLocationClicked({index: index, address: shipment?.supplier?.warehouse});
+										let warehouse = shipment?.supplier?.warehouse;
+										let region = warehouse?.region?.regionName
+											? ', ' + warehouse?.region?.regionName
+											: warehouse?.region
+											? ', ' + warehouse?.region
+											: "";
+										let country = warehouse?.country?.countryName
+											? ", " + warehouse?.country?.countryName
+											: warehouse?.country
+											? ", " + warehouse?.country
+											: "";
+										let addr = `${warehouse?.warehouseAddress?.firstLine} ${country} ${region}`;
+										setLocationClicked({ index: index, address: addr });
 										setCurrentLocationSelected(null);
 										setChainOfCustodySelected({
 											lat: shipment?.supplier?.warehouse?.location?.coordinates[0],
@@ -97,7 +109,19 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 										lng: shipment?.receiver?.warehouse?.location?.coordinates[1],
 									}}
 									onClick={() => {
-										setLocationClicked({index: index, address: shipment?.receiver?.warehouse});
+										let warehouse = shipment?.receiver?.warehouse;
+										let region = warehouse?.region?.regionName
+											? ', ' + warehouse?.region?.regionName
+											: warehouse?.region
+											? ', ' + warehouse?.region
+											: "";
+										let country = warehouse?.country?.countryName
+											? ", " + warehouse?.country?.countryName
+											: warehouse?.country
+											? ", " + warehouse?.country
+											: "";
+										let addr = `${warehouse?.warehouseAddress?.firstLine} ${country} ${region}`;
+										setLocationClicked({ index: index, address: addr });
 										setCurrentLocationSelected(null);
 										setChainOfCustodySelected({
 											lat: shipment?.receiver?.warehouse?.location?.coordinates[0],
@@ -152,21 +176,21 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 									<i className="fa-solid fa-location-dot"></i>
 
 									<p className="mi-body-md f-500 mi-reset location-text-color">
-										{`${chainOfCustody[locationClicked]?.warehouse?.warehouseAddress?.firstLine}, ${currentLocationData[locationClicked]?.warehouse?.warehouseAddress?.city}`}
+										{`${currentLocationData[locationClicked][0]?.warehouse?.warehouseAddress?.firstLine}, ${currentLocationData[locationClicked][0]?.warehouse?.warehouseAddress?.city}`}
 									</p>
 								</div>
 							</div>
 							<div className="info-body">
 								<p className="mi-body-sm f-500 mi-reset header-text-color">Product Details</p>
 								<div className="product-details-list">
-									<div className="product-list-card map-card-design">
-										<p className="mi-body-sm f-500 mi-reset ">
-											{currentLocationData[locationClicked]?.productName}
-										</p>
-										<p className="mi-body-sm f-500 mi-reset">
-											{`${currentLocationData[locationClicked]?.stock} ( Packs )`}
-										</p>
-									</div>
+									{currentLocationData[locationClicked]?.map((product) => (
+										<div className="product-list-card map-card-design">
+											<p className="mi-body-sm f-500 mi-reset ">{product?.productName}</p>
+											<p className="mi-body-sm f-500 mi-reset">
+												{`${product?.stock} ( ${product?.product[0]?.unitofMeasure?.name} )`}
+											</p>
+										</div>
+									))}
 								</div>
 							</div>
 						</div>
@@ -175,38 +199,36 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 
 				{ChainOfCustodySelected ? (
 					<InfoWindow
-					position={ChainOfCustodySelected}
-					onCloseClick={() => {
-						setChainOfCustodySelected(null);
-					}}
-				>
-					<div className="info-popup-container">
-						<div className="info-header">
-							<div className="info-header-content">
-								<i className="fa-solid fa-location-dot"></i>
+						position={ChainOfCustodySelected}
+						onCloseClick={() => {
+							setChainOfCustodySelected(null);
+						}}
+					>
+						<div className="info-popup-container">
+							<div className="info-header">
+								<div className="info-header-content">
+									<i className="fa-solid fa-location-dot"></i>
 
-								<p className="mi-body-md f-500 mi-reset location-text-color">
-									{`${locationClicked?.address?.warehouseAddress?.firstLine}, ${locationClicked?.address?.warehouse?.warehouseAddress?.city}`}
-								</p>
+									<p className="mi-body-md f-500 mi-reset location-text-color">
+										{locationClicked?.address}
+									</p>
+								</div>
+							</div>
+							<div className="info-body">
+								<p className="mi-body-sm f-500 mi-reset header-text-color">Product Details</p>
+								{chainOfCustody[locationClicked.index]?.products?.map((product) => (
+									<div className="product-details-list">
+										<div className="product-list-card map-card-design">
+											<p className="mi-body-sm f-500 mi-reset ">{product?.productName}</p>
+											<p className="mi-body-sm f-500 mi-reset">
+												{`${product?.productQuantity} ( ${product?.unitofMeasure?.name} )`}
+											</p>
+										</div>
+									</div>
+								))}
 							</div>
 						</div>
-						<div className="info-body">
-							<p className="mi-body-sm f-500 mi-reset header-text-color">Product Details</p>
-							{chainOfCustody[locationClicked.index]?.products?.map((product) => (
-								<div className="product-details-list">
-									<div className="product-list-card map-card-design">
-										<p className="mi-body-sm f-500 mi-reset ">
-											{product?.productName}
-										</p>
-										<p className="mi-body-sm f-500 mi-reset">
-											{`${product?.productQuantity} ( ${product?.unitofMeasure?.name} )`}
-										</p>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				</InfoWindow>
+					</InfoWindow>
 				) : null}
 			</>
 		</GoogleMap>

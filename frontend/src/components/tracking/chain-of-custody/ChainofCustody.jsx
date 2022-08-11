@@ -33,7 +33,7 @@ export default function ChainofCustody({ trackingData }) {
 		<div className="tracking-illustation">
 			<img src={TrackIllustration} alt="tracking" />
 			<p className="mi-body-md f-500 grey mi-reset">
-				Try serach using your shipment ID to track your Shipment
+				Try search using your Tracking ID to track your Products/Shipment
 			</p>
 		</div>
 	);
