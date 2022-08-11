@@ -89,7 +89,25 @@ const ProductCard = ({ warehouse }) => {
 	const batch = warehouse?.batchNumber;
 	const manufacturer = warehouse?.manufacturer;
 	const label = warehouse?.label?.labelId;
-  
+
+	let mfgDate = warehouse?.productAttributes?.mfgDate
+		? new Date(warehouse?.productAttributes?.mfgDate)
+		: "N/A";
+	if (mfgDate !== "N/A") {
+		let mm = '0' + (mfgDate.getMonth() + 1);
+		let yyyy = mfgDate.getFullYear();
+		mfgDate = mm.slice(-2) + "/" + yyyy;
+	}
+
+	let expDate = warehouse?.productAttributes?.expDate
+		? new Date(warehouse?.productAttributes?.expDate)
+		: "N/A";
+	if (expDate !== "N/A") {
+		let mm = '0' + (expDate.getMonth() + 1);
+		let yyyy = expDate.getFullYear();
+		expDate = mm.slice(-2) + "/" + yyyy;
+	}
+
 	return (
 		<>
 			<div className="product-card-location">
@@ -115,20 +133,20 @@ const ProductCard = ({ warehouse }) => {
 						</div>
 						<p className="mi-body-sm f-500 mi-reset color-blue">{batch}</p>
 					</li>
-					<li className='product-list-card'>
-            <div className='mi-flex-ac gap-1'>
-              <i className='fa-solid fa-tag color-green'></i>
-              <p className='mi-body-sm f-500 mi-reset grey'>Label</p>
-            </div>
-            <p className='mi-body-sm f-500 mi-reset color-blue'>{label}</p>
-          </li>
-					<li className='product-list-card'>
-            <div className='mi-flex-ac gap-1'>
-              <i className='fa-solid fa-tag color-green'></i>
-              <p className='mi-body-sm f-500 mi-reset grey'>Quantity</p>
-            </div>
-            <p className='mi-body-sm f-500 mi-reset color-blue'>{warehouse?.stock}</p>
-          </li>
+					<li className="product-list-card">
+						<div className="mi-flex-ac gap-1">
+							<i className="fa-solid fa-tag color-green"></i>
+							<p className="mi-body-sm f-500 mi-reset grey">Label</p>
+						</div>
+						<p className="mi-body-sm f-500 mi-reset color-blue">{label}</p>
+					</li>
+					<li className="product-list-card">
+						<div className="mi-flex-ac gap-1">
+							<i className="fa-solid fa-tag color-green"></i>
+							<p className="mi-body-sm f-500 mi-reset grey">Quantity</p>
+						</div>
+						<p className="mi-body-sm f-500 mi-reset color-blue">{warehouse?.stock}</p>
+					</li>
 				</ul>
 				{/* <div className="product-quantity-details">
 					<div>
@@ -162,18 +180,14 @@ const ProductCard = ({ warehouse }) => {
 							<i className="fa-solid fa-calendar-days calender-icon white"></i>
 							<p className="mi-body-xs f-500 mi-reset white ">Mfg Date</p>
 						</div>
-						<p className="mi-body-xs f-500 mi-reset white">
-							{warehouse?.productAttributes?.mfgDate ? (new Date(warehouse?.productAttributes?.mfgDate)).toLocaleDateString() : "N/A"}
-						</p>
+						<p className="mi-body-xs f-500 mi-reset white">{mfgDate}</p>
 					</div>
 					<div className="date-container">
 						<div className="date-header mi-flex-ac gap-1">
 							<i className="fa-solid fa-calendar-days calender-icon white"></i>
 							<p className="mi-body-xs f-500 mi-reset white ">Exp Date</p>
 						</div>
-						<p className="mi-body-xs f-500 mi-reset white">
-							{warehouse?.productAttributes?.expDate ? (new Date(warehouse?.productAttributes?.expDate)).toLocaleDateString() : "N/A"}
-						</p>
+						<p className="mi-body-xs f-500 mi-reset white">{expDate}</p>
 					</div>
 				</div>
 			</div>
