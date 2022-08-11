@@ -108,9 +108,9 @@ const EnterId = (props) => {
 
   return (
     <>
-      <div className="update-status-layout">
-        <div className="status-page-header">
-          <h1 className="vl-heading-bdr" style={{ paddingBottom: "10px" }}>
+      <div className='update-status-layout'>
+        <div className='status-page-header'>
+          <h1 className='vl-heading-bdr' style={{ paddingBottom: "10px" }}>
             {t("update_shipment")}
           </h1>
         </div>
@@ -155,21 +155,21 @@ const EnterId = (props) => {
             setFieldValue,
             dirty,
           }) => (
-            <form onSubmit={handleSubmit} className="status-update-main">
-              <div className="update-form-container">
-                <div className="ship-form-space">
-                  <div className="shipment-search-form">
-                    <div className="label-header">
-                      <i class="fa-solid fa-address-card"></i>
-                      <p className="mi-body-md f-500 mi-reset grey">
+            <form onSubmit={handleSubmit} className='status-update-main'>
+              <div className='update-form-container'>
+                <div className='ship-form-space'>
+                  <div className='shipment-search-form'>
+                    <div className='label-header'>
+                      <i className='fa-solid fa-address-card'></i>
+                      <p className='mi-body-md f-500 mi-reset grey'>
                         {t("search_shipment_id")}
                       </p>
                     </div>
 
-                    <div className="search-area">
+                    <div className='search-area'>
                       <Autocomplete
                         {...defaultProps}
-                        id="auto-complete"
+                        id='auto-complete'
                         value={value}
                         onChange={(event, newValue) => {
                           setValue(newValue);
@@ -186,9 +186,9 @@ const EnterId = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            name="shipmentId"
-                            margin="normal"
-                            variant="outlined"
+                            name='shipmentId'
+                            margin='normal'
+                            variant='outlined'
                             placeholder={t("enter_shipment_id")}
                           />
                         )}
@@ -197,28 +197,28 @@ const EnterId = (props) => {
                   </div>
 
                   <div className={`error-space ${errorShipment && "visible"}`}>
-                    <p className="mi-body-xs f-400 mi-reset">
+                    <p className='mi-body-xs f-400 mi-reset'>
                       {t("update_msg")}
                     </p>
                   </div>
                 </div>
 
-                <div className="shipment-or">
-                  <p className="mi-body-xl f-700 mi-reset">{t("or")}</p>
+                <div className='shipment-or'>
+                  <p className='mi-body-xl f-700 mi-reset'>{t("or")}</p>
                 </div>
-                <div className="ship-form-space">
-                  <div className="shipment-search-form">
-                    <div className="label-header">
-                      <i class="fa-solid fa-address-card"></i>
-                      <p className="mi-body-md f-500 mi-reset grey">
+                <div className='ship-form-space'>
+                  <div className='shipment-search-form'>
+                    <div className='label-header'>
+                      <i className='fa-solid fa-address-card'></i>
+                      <p className='mi-body-md f-500 mi-reset grey'>
                         {t("search_transit_id")}
                       </p>
                     </div>
 
-                    <div className="search-area">
+                    <div className='search-area'>
                       <Autocomplete
                         {...defaultProps1}
-                        id="billNo"
+                        id='billNo'
                         value1={value1}
                         onChange={(event, newValue) => {
                           setValue1(newValue);
@@ -233,9 +233,9 @@ const EnterId = (props) => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            name="billNo"
-                            margin="normal"
-                            variant="outlined"
+                            name='billNo'
+                            margin='normal'
+                            variant='outlined'
                             placeholder={t("enter_transit_id")}
                           />
                         )}
@@ -244,31 +244,31 @@ const EnterId = (props) => {
                   </div>
 
                   <div className={`error-space ${errorShipment1 && "visible"}`}>
-                    <p className="mi-body-xs f-400 mi-reset">
+                    <p className='mi-body-xs f-400 mi-reset'>
                       {t("update_msg")}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="update-btn-space">
-                <div className="btn-status-group">
+              <div className='update-btn-space'>
+                <div className='btn-status-group'>
                   <button
-                    type="button"
-                    className="mi-btn mi-btn-md mi-btn-blue mr-2"
+                    type='button'
+                    className='mi-btn mi-btn-md mi-btn-blue mr-2'
                     onClick={() => props.history.push(`/shipments`)}
                   >
                     {t("cancel")}
                   </button>
                   <button
                     disabled={shipdisabled}
-                    className="mi-btn mi-btn-md mi-btn-orange"
+                    className='mi-btn mi-btn-md mi-btn-orange'
                     onClick={handleUpdateStatus}
                   >
                     <img
                       src={update}
-                      width="20"
-                      height="17"
-                      className="mr-2 mb-1"
+                      width='20'
+                      height='17'
+                      className='mr-2 mb-1'
                     />
                     <span>{t("update_shipment")}</span>
                   </button>

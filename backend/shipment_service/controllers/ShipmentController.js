@@ -4122,6 +4122,9 @@ exports.trackJourney = [
                   {
                     "products.batchNumber": trackingId,
                   },
+                  {
+                    "products.serialNumbersRange" : trackingId,
+                  },
                 ],
               },
             },
@@ -4181,32 +4184,50 @@ exports.trackJourney = [
           try
           {
             var currentLocationData = {};
+            var allowedOrgs = []
             await trackedShipment.forEach(async function (shipment) {
+              if(!allowedOrgs.includes(shipment.supplier.id)) allowedOrgs.push(shipment.supplier.id)
+              if(!allowedOrgs.includes(shipment.receiver.id)) allowedOrgs.push(shipment.receiver.id)
               if (currentLocationData[shipment.supplier.locationId]) {
-                currentLocationData[shipment.supplier.locationId].sent += parseInt(
-                  shipment.products[0].productQuantity
-                );
+                shipment.products.forEach(async function (product) {
+                  for await ( productSupplier of currentLocationData[shipment.supplier.locationId]){
+                    if(productSupplier.productName == product.productName){
+                      productSupplier.productQuantity += product.productQuantity;
+                    }
+                  }
+                })
               } else {
-                currentLocationData[shipment.supplier.locationId] = {
-                  sent: parseInt(shipment.products[0].productQuantity),
-                  productName : shipment.products[0].productName,
-                  manufacturer : shipment.products[0].manufacturer,
-                  batchNumber : shipment.products[0].batchNumber
-
-                };
+                currentLocationData[shipment.supplier.locationId] = shipment.products.map( function (product) {
+                  return {
+                    productQuantity : product.productQuantity,
+                    manufacturer : product.manufacturer,
+                    productID : product.productID,
+                    productName : product.productName,
+                    productCategory: product.productCategory,
+                  }
+                });
               }
-              if (currentLocationData[shipment.receiver.locationId]) {
-                currentLocationData[shipment.receiver.locationId].received += parseInt(
-                  shipment.products[0].productQuantity
-                );
-              } else {
-                currentLocationData[shipment.receiver.locationId] = {
-                  received: parseInt(shipment.products[0].productQuantity),
-                  productName : shipment.products[0].productName,
-                  manufacturer : shipment.products[0].manufacturer,
-                  batchNumber : shipment.products[0].batchNumber
-                };
-              }
+              if(shipment.status=="RECEIVED"){
+                if (currentLocationData[shipment.receiver.locationId]) {
+                  shipment.products.forEach(async function (product) {
+                    for await ( productReceiver of currentLocationData[shipment.receiver.locationId]){
+                      if(productReceiver.productName == product.productName){
+                        productReceiver.productQuantityDelivered += product.productQuantityDelivered;
+                      }
+                    }
+                  })
+                } else {
+                  currentLocationData[shipment.receiver.locationId] = shipment.products.map( function (product) {
+                    return {
+                      productQuantityDelivered : product.productQuantityDelivered,
+                      manufacturer : product.manufacturer,
+                      productID : product.productID,
+                      productName : product.productName,
+                      productCategory: product.productCategory,
+                    }
+                  });
+                  };
+                }
             });
             var atomsData = await AtomModel.aggregate([ { $match :{ batchNumbers : trackingId } }, 
               { 
@@ -4233,7 +4254,10 @@ exports.trackJourney = [
                      },
                      {
                       poId : trackingId,
-                     }
+                     },
+                     {
+                      "products.serialNumbersRange" : trackingId,
+                    },
                    ],
                  }
                );
@@ -4244,7 +4268,8 @@ exports.trackJourney = [
                 localField: "warehouseInventory",
                 foreignField: "currentInventory",
                 as: "atoms",
-            }}
+              },
+             },
             ]);
              receiverWarehouseAtoms = await WarehouseModel.aggregate([
               { $match : { id : shipmentDetails.receiver.locationId } } ,
@@ -4253,37 +4278,53 @@ exports.trackJourney = [
                 localField: "warehouseInventory",
                 foreignField: "currentInventory",
                 as: "atoms",
-            }}]);
+               }
+              },
+            ]);
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
-                atomsData.push(atom)
+                for await(shipmentProducts of shipmentDetails.products){
+                  if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
+                }
               }
             }
             for await ( warehouse of receiverWarehouseAtoms ){
-              for await ( atom of warehouse.atoms){
-                atomsData.push(atom)
+              for await(shipmentProducts of shipmentDetails.products){
+                if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
           }
              for await (atom of atomsData ) {
               warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
-              organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId })
-              if (currentLocationData[warehouseCurrentStock.id]?.stock){
-               currentLocationData[warehouseCurrentStock.id].stock += atom.quantity;
-              }
-              else if (currentLocationData[warehouseCurrentStock.id]){
-               currentLocationData[warehouseCurrentStock.id].warehouse = warehouseCurrentStock
-               currentLocationData[warehouseCurrentStock.id].organisation = organisation
-               currentLocationData[warehouseCurrentStock.id].stock = atom.quantity;
-               currentLocationData[warehouseCurrentStock.id].updatdAt = atom.updatedAt;
-               currentLocationData[warehouseCurrentStock.id].label = atom.label;
-               currentLocationData[warehouseCurrentStock.id].product = atom.productInfo;
-               currentLocationData[warehouseCurrentStock.id].productAttributes = atom.attributeSet;
-              } 
-            }
-            currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].stock> 0 ).
-            reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
+              organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId });
+              atomProduct = await ProductModel.findOne({ id : atom.productId });
+              if (currentLocationData[warehouseCurrentStock.id]){
+                for await (product of currentLocationData[warehouseCurrentStock.id]){
+                  if (product.productName == atomProduct.name && atom.product?.stock){
+                    product.stock += atom.quantity;
+                  }
+                  else if (product.productName == atomProduct.name ){
+                    product.stock = atom.quantity || 0;
+                    product.updatdAt = atom.updatedAt;
+                    product.label = atom.label;
+                    product.product = atom.productInfo;
+                    product.productAttributes = atom.attributeSet;
+                    product.warehouse = warehouseCurrentStock
+                    product.organisation = organisation
+                    product.batchNumber = atom.batchNumbers[0];
+                    product.productInfo = atomProduct;
+                } 
+             }
+           }
+        }
             const keys = Object.keys(currentLocationData);
+            keys.forEach( async function(warehouse){
+              currentLocationData[warehouse] = currentLocationData[warehouse].filter( function (product){
+                return product.stock > 0 ;
+              })
+            })
+            currentLocationData = await Object.keys(currentLocationData).filter((key) => currentLocationData[key].length> 0 ).
+            reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
         }
         catch(err){
           console.log(err)
@@ -4497,15 +4538,16 @@ exports.trackJourney = [
         return apiResponse.successResponseWithData(res, "Shipments Table", {
           poDetails: poDetails,
           inwardShipmentsArray: inwardShipmentsArray,
-          trackedShipment: trackedShipment,
+          trackedShipment: allowedOrgs.includes(req.user.organisationId) ? trackedShipment : [],
           outwardShipmentsArray: outwardShipmentsArray,
           poShipmentsArray: poShipmentsArray,
-          currentLocationData: currentLocationData,
+          currentLocationData: allowedOrgs.includes(req.user.organisationId) ? currentLocationData : {},
         });
       } catch (err) {
         return apiResponse.ErrorResponse(res, err.message);
       }
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

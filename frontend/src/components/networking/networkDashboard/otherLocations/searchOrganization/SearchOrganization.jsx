@@ -21,6 +21,7 @@ const SearchOrganization = ({ user, nManufacturer, setReportWarehouse }) => {
               orgName={org?.orgName}
               orgId={org?.orgId}
               user={user}
+              key={index}
             />
           );
         })}

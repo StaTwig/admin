@@ -1,7 +1,7 @@
 import {
   SET_REVIEW_INVENTORY,
   RESET_REVIEW_INVENTORY,
-} from '../constants/inventoryConstants';
+} from "../constants/inventoryConstants";
 
 export const initialState = [];
 

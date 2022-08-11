@@ -37,13 +37,6 @@ const Orders = (props) => {
 	const [limit] = useState(10);
 	const [alerts, setAlerts] = useState(false);
 	const dispatch = useDispatch();
-	const [outboundRecords, setOutboundRecords] = useState([]);
-	const [inboundRecords, setInboundRecords] = useState([]);
-	const [dateFilter, setDateFilter] = useState("");
-	const [productNameFilter, setProductNameFilter] = useState("");
-	const [toFilter, setToFilter] = useState("");
-	const [fromFilter, setFromFilter] = useState("");
-	const [orderIdFilter, setOrderIdFilter] = useState("");
 	const [statusFilter, setStatusFilter] = useState("");
 	const [locationFilter, setLocationFilter] = useState("");
 	const [poOrderIdList, setPoOrderIdList] = useState([]);
@@ -54,6 +47,13 @@ const Orders = (props) => {
 	const [exportFilterData, setExportFilterData] = useState([]);
 	const [showExportFilter, setShowExportFilter] = useState(false);
 	const [fromFilterDate, setFromFilterDate] = useState("");
+	const [outboundRecords, setOutboundRecords] = useState([]);
+	const [inboundRecords, setInboundRecords] = useState([]);
+	const [dateFilter, setDateFilter] = useState("");
+	const [productNameFilter, setProductNameFilter] = useState("");
+	const [toFilter, setToFilter] = useState("");
+	const [fromFilter, setFromFilter] = useState("");
+	const [orderIdFilter, setOrderIdFilter] = useState("");
 	const [toFilterDate, setToFilterDate] = useState("");
 	if (!isAuthenticated("viewInboundOrders") && !isAuthenticated("viewOutboundOrders"))
 		props.history.push(`/profile`);
@@ -287,14 +287,6 @@ const Orders = (props) => {
 		setOpenExcel(false);
 	};
 
-	// const closeModal = () => {
-	//   setOpenCreatedOrder(false);
-	// };
-
-	const setData = (v, a = false) => {
-		setvisible(v);
-		setAlerts(a);
-	};
 	const setDateFilterOnSelect = async (dateFilterSelected) => {
 		setDateFilter(dateFilterSelected);
 		setSkip(0);
@@ -334,6 +326,15 @@ const Orders = (props) => {
 			setInboundRecords(inboundRes.data.inboundPOs);
 			setCount(inboundRes.data.count);
 		}
+	};
+
+	// const closeModal = () => {
+	//   setOpenCreatedOrder(false);
+	// };
+
+	const setData = (v, a = false) => {
+		setvisible(v);
+		setAlerts(a);
 	};
 
 	const setLocationFilterOnSelect = async (locationFilterSelected) => {

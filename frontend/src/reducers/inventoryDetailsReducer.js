@@ -1,4 +1,7 @@
-import {GET_INVENTORY_DETAILS_SUCCESS, GET_INVENTORY_DETAILS_FAILURE} from "../constants/inventoryConstants";
+import {
+  GET_INVENTORY_DETAILS_SUCCESS,
+  GET_INVENTORY_DETAILS_FAILURE,
+} from "../constants/inventoryConstants";
 
 export const initialState = [];
 
@@ -7,7 +10,7 @@ export const inventoryDetailsReducer = (state = initialState, action) => {
     case GET_INVENTORY_DETAILS_SUCCESS:
       return action.payload.data;
     case GET_INVENTORY_DETAILS_FAILURE:
-      return initialState
+      return initialState;
     default:
       return state;
   }

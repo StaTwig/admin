@@ -201,7 +201,7 @@ export default function InstockRow({ product, reportWarehouse }) {
                 </p>
               </div>
               <div className='modal-closing-space' onClick={handleClose}>
-                <i class='fa-solid fa-xmark'></i>
+                <i className='fa-solid fa-xmark'></i>
               </div>
             </div>
             <div className='nt-modal-body'>

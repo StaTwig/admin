@@ -17,8 +17,8 @@ export default function Instock({ inStock, inStockFilters, reportWarehouse, setI
       <TableContainer>
         <Table
           sx={{ minWidth: 665 }}
-          className="mi-custom-table"
-          aria-label="collapsible table"
+          className='mi-custom-table'
+          aria-label='collapsible table'
         >
           <TableHead>
             <TableRow>
@@ -50,7 +50,7 @@ export default function Instock({ inStock, inStockFilters, reportWarehouse, setI
                   </p>
                 </div>
               </TableCell>
-              <TableCell className="mi-custom-tableHead"></TableCell>
+              <TableCell className='mi-custom-tableHead'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

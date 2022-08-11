@@ -12,7 +12,6 @@
     "@react-google-maps/api": "^2.12.0",
     "apexcharts": "^3.35.4",
     "axios": "^0.24.0",
-    "bootstrap": "^5.2.0",
     "chart.js": "^3.8.2",
     "chartkick": "^4.2.0",
     "connected-react-router": "^6.9.3",

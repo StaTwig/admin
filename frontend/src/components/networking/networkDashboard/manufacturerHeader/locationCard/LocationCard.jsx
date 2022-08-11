@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./LocationCard.scss";
 
 export default function LocationCard({
@@ -11,55 +11,57 @@ export default function LocationCard({
 }) {
   // const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
   return (
-    <div className="location-card-container">
+    <div className='location-card-container'>
       <div
-        className={`location-card my-card ${!MylocationFilter && "active"}`}
+        className={`location-card my-card ${MylocationFilter && "active"}`}
         onClick={() => {
+          setPartnerLocation(false);
           setMylocationFilter(!MylocationFilter);
         }}
       >
-        <div className="location-card-top">
-          <div className="location-icon-space">
-            <i className="fa-solid fa-location-crosshairs"></i>
+        <div className='location-card-top'>
+          <div className='location-icon-space'>
+            <i className='fa-solid fa-location-crosshairs'></i>
           </div>
-          <p className="mi-body-xl f-700 mi-reset">My</p>
-          <p className="mi-body-sm mi-reset">Location</p>
+          <p className='mi-body-xl f-700 mi-reset'>My</p>
+          <p className='mi-body-sm mi-reset'>Location</p>
         </div>
-        <div className="location-card-bottom">
-          <h1 className="mi-title-sm f-700 mi-reset">
+        <div className='location-card-bottom'>
+          <h1 className='mi-title-sm f-700 mi-reset'>
             {manufacturer?.myLocations ? manufacturer?.myLocations : 0}
           </h1>
           {/* <p className="mi-body-sm f-500 mi-reset">ABC Manufacturer</p> */}
         </div>
         {MylocationFilter && (
-          <div className="check-box-icon">
-            <i class="fa-solid fa-circle-check"></i>
+          <div className='check-box-icon'>
+            <i className='fa-solid fa-circle-check'></i>
           </div>
         )}
       </div>
       <div
-        className={`location-card partner-card ${!partnerLocation && "active"}`}
+        className={`location-card partner-card ${partnerLocation && "active"}`}
         onClick={() => {
+          setMylocationFilter(false);
           setPartnerLocation(!partnerLocation);
         }}
       >
-        <div className="location-card-top">
-          <div className="location-icon-space">
-            <i className="fa-solid fa-map-location-dot"></i>
+        <div className='location-card-top'>
+          <div className='location-icon-space'>
+            <i className='fa-solid fa-map-location-dot'></i>
           </div>
-          <p className="mi-body-xl f-700 mi-reset">Partner</p>
-          <p className="mi-body-sm  mi-reset">Location</p>
+          <p className='mi-body-xl f-700 mi-reset'>Partner</p>
+          <p className='mi-body-sm  mi-reset'>Location</p>
         </div>
-        <div className="location-card-bottom">
-          <h1 className="mi-title-sm f-700 mi-reset">
+        <div className='location-card-bottom'>
+          <h1 className='mi-title-sm f-700 mi-reset'>
             {manufacturer?.partnerLocations
               ? manufacturer?.partnerLocations
               : 0}
           </h1>
         </div>
         {partnerLocation && (
-          <div className="check-box-icon">
-            <i class="fa-solid fa-circle-check"></i>
+          <div className='check-box-icon'>
+            <i className='fa-solid fa-circle-check'></i>
           </div>
         )}
       </div>

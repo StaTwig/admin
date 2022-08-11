@@ -749,28 +749,28 @@ exports.addPOsFromExcel = [
               const inventoryResult = new InventoryModel({ id: inventoryId });
               await inventoryResult.save();
               const warehouse = new WarehouseModel({
-								title: "Office",
-								id: warehouseId,
-								warehouseInventory: inventoryId,
-								organisationId: organisationId,
-								postalAddress: address,
-								warehouseAddress: {
-									firstLine: address,
-									secondLine: "",
-									region: region,
-									city: address,
-									state: address,
-									country: country,
-									landmark: "",
-								},
-								country: {
-									countryId: "001",
-									countryName: country,
-								},
-								region: {
-									regionName: region,
-								},
-							});
+                title: "Office",
+                id: warehouseId,
+                warehouseInventory: inventoryId,
+                organisationId: organisationId,
+                postalAddress: address,
+                warehouseAddress: {
+                  firstLine: address,
+                  secondLine: "",
+                  region: region,
+                  city: address,
+                  state: address,
+                  country: country,
+                  landmark: "",
+                },
+                country: {
+                  countryId: "001",
+                  countryName: country,
+                },
+                region: {
+                  regionName: region,
+                },
+              });
               await warehouse.save();
               poDataArray[i].customer.shippingAddress = {
                 shippingAddressId: warehouseId,
@@ -917,28 +917,28 @@ exports.addPOsFromExcel = [
               const inventoryResult = new InventoryModel({ id: inventoryId });
               await inventoryResult.save();
               const warehouse = new WarehouseModel({
-								title: "Office",
-								id: warehouseId,
-								warehouseInventory: inventoryId,
-								organisationId: organisationId,
-								postalAddress: address,
-								warehouseAddress: {
-									firstLine: address,
-									secondLine: "",
-									city: address,
-									state: address,
-									region: region,
-									country: country,
-									landmark: "",
-								},
-								country: {
-									countryId: "001",
-									countryName: country,
-								},
-								region: {
-									regionName: region,
-								},
-							});
+                title: "Office",
+                id: warehouseId,
+                warehouseInventory: inventoryId,
+                organisationId: organisationId,
+                postalAddress: address,
+                warehouseAddress: {
+                  firstLine: address,
+                  secondLine: "",
+                  city: address,
+                  state: address,
+                  region: region,
+                  country: country,
+                  landmark: "",
+                },
+                country: {
+                  countryId: "001",
+                  countryName: country,
+                },
+                region: {
+                  regionName: region,
+                },
+              });
               await warehouse.save();
               poDataArray[i].supplier.supplierType = "CUSTOMER_SUPPLIER";
               poDataArray[i].supplier.shippingAddress = {
@@ -2038,7 +2038,6 @@ function buildExcelReport(req, res, dataForExcel) {
       },
     },
   };
-
   const specification = {
     id: {
       displayName: req.t("Order_ID"),
