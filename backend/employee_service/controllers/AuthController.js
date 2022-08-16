@@ -28,6 +28,23 @@ const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+const utils = require('ethereumjs-util');
+
+async function verifyAuth(nonce, signature) {
+  try {
+    nonce = "\x19Ethereum Signed Message:\n" + nonce.length + nonce;
+    nonce = utils.keccak(Buffer.from(nonce, "utf-8"));
+    // console.log('nonce is '+ nonce)
+    const { v, r, s } = utils.fromRpcSig(signature);
+    const pubKey = utils.ecrecover(utils.toBuffer(nonce), v, r, s);
+    const addrBuf = utils.pubToAddress(pubKey);
+    const signingAddress = utils.bufferToHex(addrBuf);
+    return signingAddress;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
 
 /**
  * Uniques email check
@@ -122,22 +139,22 @@ exports.register = [
     .isLength({ min: 1 })
     .trim()
     .withMessage("organization_validation_error"),
-  // body("emailId")
-  // .trim()
-  // .toLowerCase()
-  // .custom(async (value) => {
-  //   if (value) {
-  //     const emailId = value.toLowerCase().replace("", "");
-  //     let user;
-  //     if (!emailId.match(emailRegex))
-  //       return Promise.reject("not_valid_email");
-  //     if (emailId.indexOf("@") > -1)
-  //       user = await EmployeeModel.findOne({ emailId });
-  //     if (user) {
-  //       return Promise.reject("account_already_exists");
-  //     }
-  //   }
-  //   }),
+  body("emailId")
+  .trim()
+  .toLowerCase()
+  .custom(async (value) => {
+    if (value) {
+      const emailId = value.toLowerCase().replace("", "");
+      let user;
+      if (!emailId.match(emailRegex))
+        return Promise.reject("not_valid_email");
+      if (emailId.indexOf("@") > -1)
+        user = await EmployeeModel.findOne({ emailId });
+      if (user) {
+        return Promise.reject("account_already_exists");
+      }
+    }
+    }),
   // body("phoneNumber").custom(async (value) => {
   //   if (value) {
   // const emailId = value.toLowerCase().replace("", "");
@@ -659,6 +676,172 @@ exports.verifyOtp = [
         } else {
           return apiResponse.ErrorResponse(req, res, "otp_not_match");
         }
+      }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, "default_error");
+    }
+  },
+];
+exports.verifyAuthentication = [
+  body("emailId")
+    .isLength({ min: 1 })
+    .trim()
+    .toLowerCase()
+    .withMessage("email_phone_validation_error"),
+  // body("otp").isLength({ min: 4 }).trim().withMessage("otp_validation_error"),
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return apiResponse.validationErrorWithData(
+          req,
+          res,
+          "validation_error",
+          errors.array()
+        );
+      } else {
+        let query = {};
+        if (req.body.emailId.indexOf("@") === -1) {
+          let phone = "+" + req.body.emailId;
+          query = { phoneNumber: phone };
+        } else {
+          query = { emailId: req.body.emailId };
+        }
+        const user = await EmployeeModel.findOne(query);
+        if(!user){
+          return apiResponse.unauthorizedResponse(
+            res,
+            `User with mail id ${req.body.emailId} does not exist, please register and try again`
+          );
+        }
+        let signingAddress = await verifyAuth(
+          req.body.message,
+          req.body.signature
+        );
+        if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()){
+          return apiResponse.unauthorizedResponse(
+            res,
+            "The wallet id doesn't match signature"
+          );
+        }
+        else {
+          let query = {};
+          if (req.body.emailId.indexOf("@") === -1) {
+            let phone = "+" + req.body.emailId;
+            query = { phoneNumber: phone };
+          } else {
+            query = { emailId: req.body.emailId };
+          }
+          // const userDetails = await EmployeeModel.findOne(query);
+          // console.log(userDetails)
+          let address;
+          if (
+            user.walletAddress == null ||
+            user.walletAddress == req.body.walletId
+          ) {
+            // const response = await axios.get(
+            //   `${blockchain_service_url}/createUserAddress`
+            // );
+            // address = response.data.items;
+            // const userData = {
+            //   address,
+            // };
+            /* await axios.post(
+              `${blockchain_service_url}/grantPermission`,
+              userData
+            );*/
+            await EmployeeModel.updateOne(query, {
+              otp: null,
+              walletAddress: req.body.walletId,
+            });
+          } else {
+            address = user.walletAddress;
+          }
+
+          const activeWarehouse = await WarehouseModel.find({
+            $and: [
+              { id: { $in: user.warehouseId } },
+              {
+                $or: [
+                  { status: "ACTIVE" },
+                  { status: "PENDING" },
+                  { status: { $exists: false } },
+                ],
+              },
+            ],
+          });
+
+          let userData;
+          if (activeWarehouse.length > 0) {
+            let activeWarehouseId = 0;
+            const activeWRs = activeWarehouse.filter(
+              (w) => w.status == "ACTIVE"
+            );
+            if (activeWRs.length > 0) activeWarehouseId = activeWRs[0].id;
+            else activeWarehouseId = activeWarehouse[0].id;
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: activeWarehouseId,
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber,
+              org: user.msp,
+              userName: user.emailId,
+              preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
+            };
+          } else {
+            userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: [],
+              organisationId: user.organisationId,
+              walletAddress: address,
+              phoneNumber: user.phoneNumber,
+              org: user.msp,
+              userName: user.emailId,
+              preferredLanguage: user.preferredLanguage,
+              isCustom: user.isCustom,
+            };
+          }
+          //Prepare JWT token for authentication
+          const jwtPayload = userData;
+          const jwtData = {
+            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+          };
+          const secret = process.env.JWT_SECRET;
+          //Generated JWT token with Payload and secret.
+          userData.permissions = await RbacModel.findOne({ role: user.role });
+          userData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+          const bc_data = {
+            username: req.body.emailId,
+            password: "",
+            orgName: "org1MSP",
+            role: "",
+            email: req.body.emailId,
+          };
+          console.log(bc_data);
+          await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+        if(user.accountStatus === 'ACTIVE'){
+          return apiResponse.successResponseWithData(
+            req,
+            res,
+            "login_success",
+            userData
+          );
+        }
+        else {
+          return apiResponse.ErrorResponse(req, res, "User not approved");
+        }
+        } 
+
       }
     } catch (err) {
       console.log(err);
