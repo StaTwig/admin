@@ -29,7 +29,7 @@ const month = [
 ];
 
 async function buildPdfReport(res, data, reportType, date) {
-  const displayDate = date ? ` - ${month[new Date(date).getMonth]}` : "";
+  const displayDate = date ? ` - ${month[new Date(date).getMonth()]}` : "";
   const docDefinition = {
     content: [
       {
