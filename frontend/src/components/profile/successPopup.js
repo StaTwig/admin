@@ -15,8 +15,8 @@ const SuccessPopUp = (props) => {
           alt='Success'
         />
         <div className='alert'>{t('success')}!</div>
-        <div className='data'>{t('Your_Profile_has_been')}</div>
-        <div className='data mb-4'>{t('Saved_Successfully')}!</div>
+        <div className='data'>Your Profile has been</div>
+        <div className='data mb-4'>Saved Successfully!</div>
         <button className='btn-primary btn' onClick={props.onHide}>
         {t("ok")}
         </button>
