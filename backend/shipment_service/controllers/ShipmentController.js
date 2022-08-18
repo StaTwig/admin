@@ -4243,6 +4243,7 @@ exports.trackJourney = [
               }
             }
           ])
+          console.log(atomsData)
             if(!atomsData || atomsData.length<1){
               const shipmentDetails = await ShipmentModel.findOne(
                  {
@@ -4288,12 +4289,14 @@ exports.trackJourney = [
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
                 for await(shipmentProducts of shipmentDetails.products){
+                  console.log(atom.batchNumbers)
                   if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
                 }
               }
             }
             for await ( warehouse of receiverWarehouseAtoms ){
               for await(shipmentProducts of shipmentDetails.products){
+                console.log(atom.batchNumbers)
                 if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
@@ -4304,7 +4307,7 @@ exports.trackJourney = [
               atomProduct = await ProductModel.findOne({ id : atom.productId });
               if (currentLocationData[warehouseCurrentStock.id]){
                 for await (product of currentLocationData[warehouseCurrentStock.id]){
-                  if (product.productName == atomProduct.name && atom.product?.stock){
+                  if (product.productName == atomProduct.name && product?.stock){
                     product.stock += atom.quantity;
                   }
                   else if (product.productName == atomProduct.name ){
@@ -4541,7 +4544,7 @@ exports.trackJourney = [
         try
           {
             var currentLocationData = {};
-            let trackedShipment = poShipmentsArray;
+            trackedShipment = trackedShipment.length >0 ? trackedShipment : poShipmentsArray 
             await trackedShipment.forEach(async function (shipment) {
               if(!allowedOrgs.includes(shipment.supplier.id)) { 
                 allowedOrgs.push(shipment.supplier.id) 
@@ -4659,7 +4662,7 @@ exports.trackJourney = [
               atomProduct = await ProductModel.findOne({ id : atom.productId });
               if (currentLocationData[warehouseCurrentStock.id]){
                 for await (product of currentLocationData[warehouseCurrentStock.id]){
-                  if (product.productName == atomProduct.name && atom.product?.stock){
+                  if (product.productName == atomProduct.name && product?.stock){
                     product.stock += atom.quantity;
                   }
                   else if (product.productName == atomProduct.name ){
