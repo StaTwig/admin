@@ -4186,10 +4186,8 @@ exports.trackJourney = [
           {
             var currentLocationData = {};
             await trackedShipment.forEach(async function (shipment) {
-              console.log(shipment.supplier.id)
               if(!allowedOrgs.includes(shipment.supplier.id)) { 
                 allowedOrgs.push(shipment.supplier.id) 
-                console.log(shipment.supplier.id) 
               }
               if(!allowedOrgs.includes(shipment.receiver.id)) allowedOrgs.push(shipment.receiver.id)
               if (currentLocationData[shipment.supplier.locationId]) {
@@ -4243,7 +4241,6 @@ exports.trackJourney = [
               }
             }
           ])
-          console.log(atomsData)
             if(!atomsData || atomsData.length<1){
               const shipmentDetails = await ShipmentModel.findOne(
                  {
@@ -4289,14 +4286,12 @@ exports.trackJourney = [
             for await ( warehouse of senderWarehouseAtoms ){
               for await ( atom of warehouse.atoms){
                 for await(shipmentProducts of shipmentDetails.products){
-                  console.log(atom.batchNumbers)
                   if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
                 }
               }
             }
             for await ( warehouse of receiverWarehouseAtoms ){
               for await(shipmentProducts of shipmentDetails.products){
-                console.log(atom.batchNumbers)
                 if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
@@ -4692,7 +4687,6 @@ exports.trackJourney = [
           console.log(err)
           console.log("Error in calculating current location data")
         }
-        console.log("ALLOWED ORGS ARE",allowedOrgs)
         return apiResponse.successResponseWithData(res, "Shipments Table", {
           poDetails: poDetails,
           inwardShipmentsArray: inwardShipmentsArray,
