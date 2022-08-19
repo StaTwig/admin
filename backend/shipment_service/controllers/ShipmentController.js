@@ -4263,8 +4263,8 @@ exports.trackJourney = [
                    ],
                  }
                );
-             senderWarehouseAtoms = await WarehouseModel.aggregate([ 
-              { $match : { id : shipmentDetails.supplier.locationId } },
+             warehouseAtoms = await WarehouseModel.aggregate([ 
+              { $match : { $or: [ { id : shipmentDetails.receiver.locationId }, { id : shipmentDetails.supplier.locationId }  ] } },
               { $lookup : {
                 from: "atoms",
                 localField: "warehouseInventory",
@@ -4273,31 +4273,18 @@ exports.trackJourney = [
               },
              },
             ]);
-             receiverWarehouseAtoms = await WarehouseModel.aggregate([
-              { $match : { id : shipmentDetails.receiver.locationId } } ,
-              { $lookup : {
-                from: "atoms",
-                localField: "warehouseInventory",
-                foreignField: "currentInventory",
-                as: "atoms",
-               }
-              },
-            ]);
-            for await ( warehouse of senderWarehouseAtoms ){
+            for await ( warehouse of warehouseAtoms ){
               for await ( atom of warehouse.atoms){
                 for await(shipmentProducts of shipmentDetails.products){
-                  if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
+                  if(atom.batchNumbers.includes(shipmentProducts.batchNumber)){
+                    atomsData.push(atom)
+                  }
                 }
-              }
-            }
-            for await ( warehouse of receiverWarehouseAtoms ){
-              for await(shipmentProducts of shipmentDetails.products){
-                if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
               }
             }
           }
              for await (atom of atomsData ) {
-              warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
+              warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.currentInventory});
               organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId });
               atomProduct = await ProductModel.findOne({ id : atom.productId });
               if (currentLocationData[warehouseCurrentStock.id]){
@@ -4535,8 +4522,7 @@ exports.trackJourney = [
               },
             ]);
           }
-        }
-        try
+          try
           {
             var currentLocationData = {};
             trackedShipment = trackedShipment.length >0 ? trackedShipment : poShipmentsArray 
@@ -4618,43 +4604,30 @@ exports.trackJourney = [
                    ],
                  }
                );
-             senderWarehouseAtoms = await WarehouseModel.aggregate([ 
-              { $match : { id : shipmentDetails.supplier.locationId } },
-              { $lookup : {
-                from: "atoms",
-                localField: "warehouseInventory",
-                foreignField: "currentInventory",
-                as: "atoms",
-              },
-             },
-            ]);
-             receiverWarehouseAtoms = await WarehouseModel.aggregate([
-              { $match : { id : shipmentDetails.receiver.locationId } } ,
-              { $lookup : {
-                from: "atoms",
-                localField: "warehouseInventory",
-                foreignField: "currentInventory",
-                as: "atoms",
-               }
-              },
-            ]);
-            for await ( warehouse of senderWarehouseAtoms ){
-              for await ( atom of warehouse.atoms){
-                for await(shipmentProducts of shipmentDetails.products){
-                  if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
+               warehouseAtoms = await WarehouseModel.aggregate([ 
+                { $match : { $or: [ { id : shipmentDetails.receiver.locationId }, { id : shipmentDetails.supplier.locationId }  ] } },
+                { $lookup : {
+                  from: "atoms",
+                  localField: "warehouseInventory",
+                  foreignField: "currentInventory",
+                  as: "atoms",
+                },
+               },
+              ]);
+              for await ( warehouse of warehouseAtoms ){
+                for await ( atom of warehouse.atoms){
+                  for await(shipmentProducts of shipmentDetails.products){
+                    if(atom.batchNumbers.includes(shipmentProducts.batchNumber)){
+                      atomsData.push(atom)
+                    }
+                  }
                 }
               }
             }
-            for await ( warehouse of receiverWarehouseAtoms ){
-              for await(shipmentProducts of shipmentDetails.products){
-                if(shipmentProducts.batchNumber==atom.batchNumbers[0]) atomsData.push(atom)
-              }
-            }
-          }
-             for await (atom of atomsData ) {
-              warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.inventoryIds[atom.inventoryIds.length-1]});
-              organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId });
-              atomProduct = await ProductModel.findOne({ id : atom.productId });
+               for await (atom of atomsData ) {
+                warehouseCurrentStock = await WarehouseModel.findOne({ warehouseInventory: atom.currentInventory});
+                organisation = await OrganisationModel.findOne({ id : warehouseCurrentStock.organisationId });
+                atomProduct = await ProductModel.findOne({ id : atom.productId });
               if (currentLocationData[warehouseCurrentStock.id]){
                 for await (product of currentLocationData[warehouseCurrentStock.id]){
                   if (product.productName == atomProduct.name && product?.stock){
@@ -4686,6 +4659,7 @@ exports.trackJourney = [
         catch(err){
           console.log(err)
           console.log("Error in calculating current location data")
+        }
         }
         return apiResponse.successResponseWithData(res, "Shipments Table", {
           poDetails: poDetails,
