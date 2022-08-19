@@ -7,90 +7,106 @@ import TrackingMap from "./tracking-map/TrackingMap";
 import TrackIllustration from "../../assets/images/track.webp";
 import "./Tracking.scss";
 import { useHistory, useParams } from "react-router";
+import Modal from "../../shared/modal";
+import FailedPopUp from "../../shared/PopUp/failedPopUp";
+import { useTranslation } from "react-i18next";
 
 export default function Tracking() {
-  const { id } = useParams();
+	const { id } = useParams();
   const history = useHistory();
+  const { t } = useTranslation();
 
-  const [LocationTab, setLocationTab] = useState("CHAIN");
+	const [LocationTab, setLocationTab] = useState("CHAIN");
+	const [trackingID, setTrackingID] = useState(id);
+	const [trackingData, setTrackingData] = useState();
+	const [errorInTrack, setErrorInTrack] = useState("");
+	const [openFailedPopup, setOpenFailedPopup] = useState(false);
 
-  const [trackingID, setTrackingID] = useState(id);
+	const closeModalFailedPopUp = () => {
+		setOpenFailedPopup(false);
+    setErrorInTrack("");
+    history.push(`/track`);
+    setTrackingID("");
+	};
 
-  const [trackingData, setTrackingData] = useState();
+	useEffect(async () => {
+		try {
+			if (id) {
+				let result = await getJourneyTrack(id);
+				if (result.status === 200) {
+					setErrorInTrack("");
+					setTrackingData(result.data.data);
+				} else {
+					throw new Error(result.message);
+				}
+			}
+		} catch (err) {
+			console.log(err.message);
+			setErrorInTrack(err.message);
+			setOpenFailedPopup(true);
+		}
+	}, [id]);
 
-  useEffect(async () => {
-    try {
-      if(id) {
-        let result = await getJourneyTrack(id);
-        if(result.status === 200) {
-          setTrackingData(result.data.data);
-        } else {
-          throw new Error(result);
-        }
-      }
-    } catch(err) {
-      console.log("Error while fetching track details - ", err.message);
-    }
-  }, [id])
+	const handleSearch = async () => {
+		try {
+			history.push(`/track/${trackingID}`);
+			// let result = await getJourneyTrack(trackingID);
+			// if(result.status === 200) {
+			//   setTrackingData(result.data.data);
+			// } else {
+			//   throw new Error(result);
+			// }
+		} catch (err) {
+			console.log("Error while fetching track details - ", err.message);
+		}
+	};
 
-  const handleSearch = async () => {
-    try {
-      history.push(`/track/${trackingID}`);
-      // let result = await getJourneyTrack(trackingID);
-      // if(result.status === 200) {
-      //   setTrackingData(result.data.data);
-      // } else {
-      //   throw new Error(result);
-      // }
-    } catch(err) {
-      console.log("Error while fetching track details - ", err.message);
-    }
-  }
+	const handleKeyPress = (event) => {
+		if (event.key === "Enter") {
+			handleSearch();
+		}
+	};
 
-  const handleKeyPress = (event) => {
-    if(event.key === 'Enter') {
-      handleSearch();
-    }
-  }
-
-  return (
-    <div className="tracking-main-layout">
-      <div className="track-grid-container">
-        <div className="tracking-content-area">
-          <div className="tracking-header">
-            <h1
-              style={{ paddingBottom: "10px" }}
-              className="vl-heading-bdr black f-700 mi-reset"
-            >
-              Track & Trace
-            </h1>
-            <div className="tracking-search-bar">
-              <div className="mi-flex-ac">
-                <input
-                  type="search"
-                  placeholder="Search by Tracking ID"
-                  className="track-search"
-                  onKeyUp={handleKeyPress}
+	return (
+		<div className="tracking-main-layout">
+			<div className="track-grid-container">
+				<div className="tracking-content-area">
+					<div className="tracking-header">
+						<h1 style={{ paddingBottom: "10px" }} className="vl-heading-bdr black f-700 mi-reset">
+							Track & Trace
+						</h1>
+						<div className="tracking-search-bar">
+							<div className="mi-flex-ac">
+								<input
+									type="search"
+									placeholder="Search by Tracking ID"
+									className="track-search"
+									onKeyUp={handleKeyPress}
                   onChange={(event) => setTrackingID(event.target.value)}
-                />
-                <i className="bx bx-search search-track-icon" onClick={handleSearch}></i>
-              </div>
-            </div>
-          </div>
-          <div className="tab-buttons">
-            <Tab
-              layout="button"
-              LocationTab={LocationTab}
-              setLocationTab={setLocationTab}
-            />
-          </div>
-          {LocationTab === "CHAIN" && <ChainofCustody trackingData={trackingData} />}
-          {LocationTab === "LOCATION" && <CurrentLocation currentLocationData={trackingData?.currentLocationData} />}
-        </div>
-        <div className="tracking-map-area">
-          <TrackingMap LocationTab={LocationTab} trackingData={trackingData} />
-        </div>
-      </div>
-    </div>
-  );
+                  value={trackingID}
+								/>
+								<i className="bx bx-search search-track-icon" onClick={handleSearch}></i>
+							</div>
+						</div>
+					</div>
+					<div className="tab-buttons">
+						<Tab layout="button" LocationTab={LocationTab} setLocationTab={setLocationTab} />
+					</div>
+					{LocationTab === "CHAIN" && <ChainofCustody trackingData={trackingData} />}
+					{LocationTab === "LOCATION" && (
+						<CurrentLocation currentLocationData={trackingData?.currentLocationData} />
+					)}
+				</div>
+				<div className="tracking-map-area">
+					<TrackingMap LocationTab={LocationTab} trackingData={trackingData} />
+				</div>
+			</div>
+
+			{openFailedPopup && (
+				<Modal close={() => closeModalFailedPopUp()} size="modal-sm">
+					<FailedPopUp message={errorInTrack} onHide={closeModalFailedPopUp} t={t} />
+				</Modal>
+			)}
+		</div>
+	);
 }
