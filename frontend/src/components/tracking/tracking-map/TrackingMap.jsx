@@ -29,7 +29,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 		setLocationClicked(null);
 		setChainOfCustodySelected(null);
 		setCurrentLocationSelected(null);
-	}, [LocationTab])
+	}, [LocationTab]);
 
 	const India = {
 		lat: 20.593683,
@@ -85,9 +85,9 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 									onClick={() => {
 										let warehouse = shipment?.supplier?.warehouse;
 										let region = warehouse?.region?.regionName
-											? ', ' + warehouse?.region?.regionName
+											? ", " + warehouse?.region?.regionName
 											: warehouse?.region
-											? ', ' + warehouse?.region
+											? ", " + warehouse?.region
 											: "";
 										let country = warehouse?.country?.countryName
 											? ", " + warehouse?.country?.countryName
@@ -117,9 +117,9 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 									onClick={() => {
 										let warehouse = shipment?.receiver?.warehouse;
 										let region = warehouse?.region?.regionName
-											? ', ' + warehouse?.region?.regionName
+											? ", " + warehouse?.region?.regionName
 											: warehouse?.region
-											? ', ' + warehouse?.region
+											? ", " + warehouse?.region
 											: "";
 										let country = warehouse?.country?.countryName
 											? ", " + warehouse?.country?.countryName
@@ -193,7 +193,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 										<div className="product-list-card map-card-design">
 											<p className="mi-body-sm f-500 mi-reset ">{product?.productName}</p>
 											<p className="mi-body-sm f-500 mi-reset">
-												{`${product?.stock} ( ${product?.product[0]?.unitofMeasure?.name} )`}
+												{`${product?.stock} ( ${product?.productInfo?.unitofMeasure?.name} )`}
 											</p>
 										</div>
 									))}
