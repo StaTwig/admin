@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader, Polyline } from "@react-google-maps/api";
 
 import mapStyles from "./data/mapStyles";
@@ -24,6 +24,12 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 
 	const chainOfCustody = trackingData?.trackedShipment;
 	const currentLocationData = trackingData?.currentLocationData;
+
+	useEffect(() => {
+		setLocationClicked(null);
+		setChainOfCustodySelected(null);
+		setCurrentLocationSelected(null);
+	}, [LocationTab])
 
 	const India = {
 		lat: 20.593683,
