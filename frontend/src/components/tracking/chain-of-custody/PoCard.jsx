@@ -82,7 +82,7 @@ export default function PoCard({ poDetails }) {
 							</div>
 							<div className="accordion-status">
 								<div className="status-button">
-									<button className="status-lable status-2" disabled>
+									<button className="status-lable status-2" style={{width:"100%"}} disabled>
 										{poDetails?.poStatus}
 									</button>
 								</div>

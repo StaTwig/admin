@@ -51,6 +51,15 @@ export default function ChainCard({ shipmentData }) {
 		setExpanded(newExpanded ? panel : false);
 	};
 
+	let displayDate;
+	if(shipmentData?.status === "CREATED") {
+		displayDate = shipmentData?.createdAt;
+	} else if(shipmentData?.actualDeliveryDate) {
+		displayDate = shipmentData?.actualDeliveryDate;
+	} else {
+		displayDate = shipmentData?.updatedAt;
+	}
+
 	return (
 		<div className="chain-card-container">
 			<div className="location-address-header">
@@ -74,15 +83,15 @@ export default function ChainCard({ shipmentData }) {
 										<i className="fa-solid fa-calendar-days"></i>
 									</div>
 									<p className="mi-body-xs f-500 mi-reset grey">
-										{shipmentData?.actualDeliveryDate
-											? new Date(shipmentData?.actualDeliveryDate).toLocaleDateString()
+										{displayDate
+											? new Date(displayDate).toLocaleDateString()
 											: "N/A"}
 									</p>
 								</div>
 							</div>
 							<div className="accordion-status">
 								<div className="status-button">
-									<button className="status-lable status-2" disabled>
+									<button className="status-lable status-2" style={{width:"100%"}} disabled>
 										{shipmentData?.status}
 									</button>
 								</div>
