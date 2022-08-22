@@ -29,7 +29,7 @@ const LoginContainer = (props) => {
     // console.log("phone:", phone.length);
     console.log("email:", email);
     if(email===""&&phone.length<13){
-      setErrorMessage("Provide Valid Phone Number");
+      setErrorMessage("Provide Valid Phone Number or EmailId");
       dispatch(turnOff());  
     }
     else{
