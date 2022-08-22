@@ -32,17 +32,17 @@ const FormPage = (props) => {
   const [emailError, setemailerror] = useState(false);
   const [phoneError, setphoneerror] = useState(false);
   const [signupDisable, setsignupDisable] = useState(true);
+  const [email, setEmail] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [checker, setChecker] = useState(true);
+  const [emailErrorMsg, setEmailErrorMsg] = useState("");
+  const [phoneErrorMsg, setPhoneErrorMsg] = useState("");
   const [lastNameError, setLastNameError] = useState(false);
   const [firstNameError, setFirstNameError] = useState(false);
   const [mailError, setMailError] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [checker, setChecker] = useState(true);
-  const [emailErrorMsg, setEmailErrorMsg] = useState("");
-  const [phoneErrorMsg, setPhoneErrorMsg] = useState("");
   const [validEmailErr, setValidEmailErr] = useState("");
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -67,18 +67,22 @@ const FormPage = (props) => {
     fetchOrganisationType();
     // fetchData();
   }, []);
+  const [orgNames, setOrgNames] = useState([])
+
+  const showOrgByType = (value) => {
+    let arr = organisations.filter((data) => data.type === value);
+    arr.push({ name: t("other") });
+    return arr;
+  };
+
   var orgTypeArray = [];
   organisationsType.forEach((data) => {
     for (var i = 0; i < data.length; i++) {
       orgTypeArray.push(data[i].name);
     }
   });
-  const showOrgByType = (value) => {
-    let arr = organisations.filter((data) => data.type === value);
-    arr.push({ name: t("other") });
-    return arr;
-  };
-  const [orgNames, setOrgNames] = useState([])
+
+
 
   React.useEffect(() => {
     console.log("selected type changed", selectedType);
@@ -127,6 +131,26 @@ const FormPage = (props) => {
   //   return arr
   // },[value]);
 
+  const handlePhoneVerification = () => {
+    if (props.phone) {
+      if (isValidPhoneNumber(props.phone) === false) {
+        setPhoneErrorMsg("invalid_phone_number");
+      } else {
+        setPhoneErrorMsg("");
+        verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v) => {
+          console.log(v);
+          if (v?.data[0]?.phoneNumber) {
+            setphoneerror(true);
+          } else {
+            setphoneerror(false);
+            setPhoneErrorMsg("");
+          }
+        });
+      }
+    }
+  };
+
+
   const handleEmailVerification = () => {
     if (props.email) {
       if (props.email.match(emailRegex) === null) {
@@ -142,25 +166,6 @@ const FormPage = (props) => {
             setemailerror(false);
             setEmailErrorMsg("");
             //setsignupDisable(false);
-          }
-        });
-      }
-    }
-  };
-
-  const handlePhoneVerification = () => {
-    if (props.phone) {
-      if (isValidPhoneNumber(props.phone) === false) {
-        setPhoneErrorMsg("invalid_phone_number");
-      } else {
-        setPhoneErrorMsg("");
-        verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v) => {
-          console.log(v);
-          if (v?.data[0]?.phoneNumber) {
-            setphoneerror(true);
-          } else {
-            setphoneerror(false);
-            setPhoneErrorMsg("");
           }
         });
       }
