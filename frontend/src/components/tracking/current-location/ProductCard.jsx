@@ -145,7 +145,7 @@ const ProductCard = ({ warehouse }) => {
 							<i className="fa-solid fa-tag color-green"></i>
 							<p className="mi-body-sm f-500 mi-reset grey">Quantity</p>
 						</div>
-						<p className="mi-body-sm f-500 mi-reset color-blue">{warehouse?.stock}</p>
+						<p className="mi-body-sm f-500 mi-reset color-blue">{`${warehouse?.stock} (${warehouse?.productInfo?.unitofMeasure?.name})`}</p>
 					</li>
 				</ul>
 				{/* <div className="product-quantity-details">
