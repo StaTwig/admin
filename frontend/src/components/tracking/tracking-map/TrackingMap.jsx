@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader, Polyline } from "@react-google-maps/api";
 
 import mapStyles from "./data/mapStyles";
+import blueStyles from "./data/BlueMap";
 
 const containerStyle = {
 	width: "100%",
@@ -10,7 +11,7 @@ const containerStyle = {
 };
 
 const options = {
-	styles: mapStyles,
+	styles: blueStyles,
 	disableDefaultUI: true,
 	zoomControl: true,
 	rotateControl: true,
