@@ -1,0 +1,57 @@
+.showcase-section {
+  background-color: #f7f7f7f7;
+  background: linear-gradient(
+      99.16deg,
+      rgba(0, 98, 255, 0.5) 34.61%,
+      rgba(174, 186, 205, 0.5) 73.1%
+    ),
+    url("../../../assests/files/images/bg/showcase-bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.showcase-two-column-grid-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 2rem;
+}
+
+.grid-content-column {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.illustration-vector {
+  display: block;
+  position: absolute;
+  bottom: -5.2rem;
+  right: -7rem;
+  width: 24rem;
+  object-fit: contain;
+}
+
+@media screen and (max-width: 992px) {
+  .showcase-two-column-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    gap: 2.5rem;
+  }
+  .illustration-vector {
+    display: none;
+  }
+  .grid-content-column {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
