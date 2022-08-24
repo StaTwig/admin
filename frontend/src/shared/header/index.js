@@ -9,9 +9,10 @@ import searchingIcon from "../../assets/icons/searching@2x.png";
 // import bellIcon from "../../assets/icons/bellwhite.png";
 import bellIcon from "../../assets/icons/bell.png"
 import dropdownIcon from "../../assets/icons/DropdownIcon.png";
-import { getUserInfo, logoutUser } from "../../actions/userActions";
+import { getImage, getUserInfo, logoutUser } from "../../actions/userActions";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { t } from "i18next";
+import defaultAvatar from "../../assets/icons/user.png";
 
 const Header = (props) => {
   const [menu, setMenu] = useState(false);
@@ -40,6 +41,13 @@ const Header = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
+
+  let displayImage;
+  useEffect(() => {
+    console.log(profile?.photoId);
+    displayImage = getImage(profile?.photoId);
+  }, [profile])
+
   const clearNotification = async (notification) => {};
 
   return (
@@ -117,7 +125,7 @@ const Header = (props) => {
 
           <div className="userPic">
             <img
-              src={profile?.photoId}
+              src={displayImage ? displayImage : defaultAvatar}
               alt={profile?.firstName + " " + profile?.lastName}
               className="rounded rounded-circle"
               style={{color:"#0B65C1"}}
