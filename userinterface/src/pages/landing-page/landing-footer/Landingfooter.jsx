@@ -3,6 +3,7 @@ import "./Landingfooter.css";
 import Statwig from "../../../assests/files/logos/statwig-logo.png";
 import googlestore from "../../../assests/files/images/social/googlestore.png";
 import appstore from "../../../assests/files/images/social/appstore.png";
+import { Link } from "react-router-dom";
 
 export default function Landingfooter() {
   return (
@@ -92,30 +93,8 @@ export default function Landingfooter() {
               </div>
             </div>
             <div className="support-column">
-              <h1 className="mi-subtitle f-500 mi-black">Support</h1>
+              <h1 className="mi-subtitle f-500 mi-black">Follow Us</h1>
               <div className="footer-content-area">
-                {/* <ul className="social-media-list">
-                <li className="social-items">
-                  <Link to="/">
-                    <i className="fa-brands fa-linkedin"></i>
-                  </Link>
-                </li>
-                <li className="social-items">
-                  <Link to="/">
-                    <i className="fa-brands fa-square-gitlab"></i>
-                  </Link>
-                </li>
-                <li className="social-items">
-                  <Link to="/">
-                    <i className="fa-brands fa-square-twitter"></i>
-                  </Link>
-                </li>
-                <li className="social-items">
-                  <Link to="/">
-                    <i className="fa-brands fa-square-facebook"></i>
-                  </Link>
-                </li>
-              </ul> */}
                 <div className="call-to-action">
                   <button className="mi-btn mi-btn-sm mi-btn-primary">
                     <div className="contact-heading">
@@ -124,6 +103,28 @@ export default function Landingfooter() {
                     </div>
                   </button>
                 </div>
+                <ul className="social-media-list">
+                  <li className="social-items">
+                    <Link to="/" className="footer-social-icon mi-link">
+                      <i className="fa-brands fa-linkedin"></i>
+                    </Link>
+                  </li>
+                  <li className="social-items">
+                    <Link to="/" className="footer-social-icon mi-link">
+                      <i className="fa-brands fa-square-gitlab"></i>
+                    </Link>
+                  </li>
+                  <li className="social-items">
+                    <Link to="/" className="footer-social-icon mi-link">
+                      <i className="fa-brands fa-square-twitter"></i>
+                    </Link>
+                  </li>
+                  <li className="social-items">
+                    <Link to="/" className="footer-social-icon mi-link">
+                      <i className="fa-brands fa-square-facebook"></i>
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

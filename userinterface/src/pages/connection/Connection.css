@@ -117,7 +117,8 @@
 .account-section {
   width: 100%;
   height: 100%;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .login-system-layout {
@@ -131,7 +132,7 @@
 .account-form-container {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 .form-headers {
@@ -153,8 +154,16 @@
   display: grid;
   grid-template-columns: 3rem 1fr;
 }
+.verify-terms-card-sm {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  padding-top: 0.6rem;
+}
 .verify-terms-card > h2 {
   margin-top: 1rem;
+}
+.verify-terms-card-sm > h2 {
+  margin-top: 0.6rem;
 }
 @media screen and (max-width: 992px) {
   .connection-two-column-grid-layout {

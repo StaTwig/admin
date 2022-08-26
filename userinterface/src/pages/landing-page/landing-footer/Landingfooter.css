@@ -57,6 +57,22 @@
   border-top: 1px solid var(--grey-medium);
 }
 
+.social-media-list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-social-icon > i {
+  font-size: 1.5rem;
+  color: var(--grey-medium);
+  transition: all 0.3s ease-in-out;
+}
+
+.footer-social-icon > i:hover {
+  color: var(--brand-link);
+}
+
 @media screen and (max-width: 1264px) {
   .footer-four-column-layout {
     display: grid;

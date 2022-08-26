@@ -19,3 +19,7 @@
   gap: 1.25rem;
   padding: 1rem 0 2rem 0 !important;
 }
+
+.mi-radio-btn {
+  margin-right: 2rem;
+}
