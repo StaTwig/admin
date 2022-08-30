@@ -69,7 +69,7 @@ const DashBoard = (props) => {
     locationApprovals,
     redirectToConfigurationPage
   } = props;
-  requestsPending.sort(function (a, b) {
+  requestsPending?.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
   locationApprovals.sort(function (a, b) {
