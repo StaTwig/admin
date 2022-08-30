@@ -372,7 +372,7 @@ export const getOrgActiveUsers = () => {
         payload: result.data,
       });
       dispatch(turnOff());
-      return result.data.data.length;
+      return result?.data?.data?.length;
     };
   } catch (e) {
     throw Error(e.message);
