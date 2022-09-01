@@ -1,0 +1,67 @@
+.mi-title {
+  font-size: 2.5rem;
+}
+
+.mi-subtitle {
+  font-size: 1.3rem;
+}
+
+.mi-heading {
+  font-size: 2rem;
+}
+
+.mi-subheading {
+  font-size: 1.125rem;
+}
+
+.mi-body {
+  font-size: 1rem;
+}
+
+.mi-note {
+  font-size: 0.875rem;
+}
+
+.mi-small {
+  font-size: 0.75rem;
+}
+
+.mi-line-xl {
+  line-height: 3rem;
+}
+
+.mi-line-md {
+  line-height: 2rem;
+}
+.mi-line-sm {
+  line-height: 1.6rem;
+}
+@media screen and (max-width: 586px) {
+  .mi-title {
+    font-size: 1.85rem;
+  }
+
+  .mi-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .mi-heading {
+    font-size: 1.6rem;
+  }
+
+  .mi-subheading {
+    font-size: 1.1rem;
+  }
+
+  .mi-body {
+    font-size: 1rem;
+  }
+
+  .mi-note {
+    font-size: 0.875rem;
+  }
+
+  .mi-small {
+    font-size: 0.75rem;
+  }
+}
