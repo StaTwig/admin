@@ -117,9 +117,7 @@ class Profile extends React.Component {
     this.setState({ image: resultImage.data });
   }
 
-  closeModal() {
-    this.setState({ openModal: false, message: "" });
-  }
+
   onCancel() {
     const {
       prof,
@@ -190,6 +188,10 @@ class Profile extends React.Component {
           });
       }
     }
+  }
+
+  closeModal() {
+    this.setState({ openModal: false, message: "" });
   }
 
   async onSubmit() {
@@ -682,7 +684,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Phone Number"
                         />
-                        {this.state.phoneNumber ? (
+                        {this.state.phoneNumber.length!=0 ? (
                           <span>
                             +{this.state.phoneNumber.replaceAll("+", "")}
                           </span>
