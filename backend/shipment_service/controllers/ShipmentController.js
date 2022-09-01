@@ -1468,6 +1468,7 @@ exports.receiveShipment = [
               {
                 batchNumbers: products[count].batchNumber,
                 currentInventory: recvInventoryId,
+                quantity: products[count].productQuantityDelivered,
               },
               {
                 $addToSet: {
@@ -4001,7 +4002,7 @@ exports.trackJourney = [
       var inwardShipmentsArray = [];
       var outwardShipmentsArray = [];
       var poDetails, trackedShipment;
-      const trackingId = req.query.trackingId;
+      let trackingId = req.query.trackingId;
       var poShipmentsArray = "";
       try {
         if (!trackingId.includes("PO")) {
@@ -4184,6 +4185,10 @@ exports.trackJourney = [
           ]);
           try
           {
+            /*Iterate through the tracked shipment
+                1) Add the sender and receiver orgs of each shipment into allowed orgs for viewing the Chain of Custody and Current Location Data
+                2)
+            */
             var currentLocationData = {};
             await trackedShipment.forEach(async function (shipment) {
               if(!allowedOrgs.includes(shipment.supplier.id)) { 
@@ -4525,7 +4530,9 @@ exports.trackJourney = [
           try
           {
             var currentLocationData = {};
-            trackedShipment = trackedShipment.length >0 ? trackedShipment : poShipmentsArray 
+            trackedShipment = trackedShipment?.length >0 ? trackedShipment : poShipmentsArray
+            if(trackedShipment?.length == 0 ) trackedShipment = outwardShipmentsArray;
+            console.log("SHIPMENT IS",trackedShipment) 
             await trackedShipment.forEach(async function (shipment) {
               if(!allowedOrgs.includes(shipment.supplier.id)) { 
                 allowedOrgs.push(shipment.supplier.id) 
@@ -4581,9 +4588,20 @@ exports.trackJourney = [
                   as: "productInfo",
               }
             }
-          ])
+          ]) 
             if(!atomsData || atomsData.length<1){
-              const shipmentDetails = await ShipmentModel.findOne(
+              const poDetails = await RecordModel.findOne({ id : trackingId })
+              var shipmentDetails;
+              if (trackingId.includes("PO")) {
+                trackingId = poDetails.shipments;
+                shipmentDetails = await ShipmentModel.findOne(
+                  {
+                        id: { $in : trackingId },
+                  }
+                );
+              }
+              else {
+                shipmentDetails = await ShipmentModel.findOne(
                  {
                    $or: [
                      {
@@ -4604,6 +4622,7 @@ exports.trackJourney = [
                    ],
                  }
                );
+              }
                warehouseAtoms = await WarehouseModel.aggregate([ 
                 { $match : { $or: [ { id : shipmentDetails.receiver.locationId }, { id : shipmentDetails.supplier.locationId }  ] } },
                 { $lookup : {
@@ -4658,15 +4677,16 @@ exports.trackJourney = [
         }
         catch(err){
           console.log(err)
+          allowedOrgs = [];
           console.log("Error in calculating current location data")
         }
         }
         return apiResponse.successResponseWithData(res, "Shipments Table", {
           poDetails: poDetails,
-          inwardShipmentsArray: inwardShipmentsArray,
+          inwardShipmentsArray: allowedOrgs?.includes(req.user.organisationId) ? inwardShipmentsArray : [],
           trackedShipment: allowedOrgs?.includes(req.user.organisationId) ? trackedShipment : [],
-          outwardShipmentsArray: outwardShipmentsArray,
-          poShipmentsArray: poShipmentsArray,
+          outwardShipmentsArray: allowedOrgs?.includes(req.user.organisationId) ? outwardShipmentsArray : [],
+          poShipmentsArray: allowedOrgs?.includes(req.user.organisationId) ? poShipmentsArray : [],
           currentLocationData: allowedOrgs?.includes(req.user.organisationId) ? currentLocationData : {},
         });
       } catch (err) {
