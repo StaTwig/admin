@@ -29,7 +29,7 @@ const month = [
 ];
 
 async function buildPdfReport(res, data, reportType, date) {
-  const displayDate = date ? ` - ${month[new Date(date).getMonth()]}` : "";
+  const displayDate = date ? ` - ${month[new Date(date).getMonth()]}/${new Date(date).getFullYear()}` : "";
   const docDefinition = {
     content: [
       {
@@ -66,7 +66,7 @@ async function buildPdfReport(res, data, reportType, date) {
 }
 
 function buildExcelReport(res, headerData, dataForExcel, reportType, date) {
-  const displayDate = date ? ` - ${month[new Date(date).getMonth()]}` : "";
+  const displayDate = date ? ` - ${month[new Date(date).getMonth()]}/${new Date(date).getFullYear()}` : "";
   const styles = {
     headerDark: {
       fill: {
