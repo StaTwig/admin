@@ -29,7 +29,7 @@ const LoginContainer = (props) => {
     // console.log("phone:", phone.length);
     console.log("email:", email);
     if(email===""&&phone.length<13){
-      setErrorMessage("Provide Valid Phone Number");
+      setErrorMessage("Provide Valid Phone Number or EmailId");
       dispatch(turnOff());  
     }
     else{
@@ -46,8 +46,9 @@ const LoginContainer = (props) => {
         const err = result.data.message;
         setErrorMessage(err);
       } else {
-        const err = result.data.data.emailId;
-        setErrorMessage(err);
+        // const err = result.data.data.emailId;
+        console.log("result ", result);
+        setErrorMessage(result);
       }
       dispatch(turnOff());      
     }

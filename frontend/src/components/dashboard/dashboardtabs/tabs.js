@@ -62,7 +62,7 @@ const Tabs = (props) => {
                 freeSolo
                 id='free-solo-2-demo'
                 disableClearable
-                sx={{ width: "300px", height: "3rem" }}
+                sx={{ width: "300px" }}
                 options={filteredWareHouses.map((warehouse) => warehouse)}
                 getOptionLabel={(warehouse) =>
                   visible ? warehouse.id : warehouse.title
@@ -81,7 +81,7 @@ const Tabs = (props) => {
                     }
                     InputProps={{
                       ...params.InputProps,
-                      type: "search",
+                      type: "searcH",
                     }}
                     onChange={(e) => {
                       if (isClicked) setIsClicked(false);
@@ -89,11 +89,12 @@ const Tabs = (props) => {
                     }}
                     onClick={() => onWarehouseChange("")}
                     size='small'
+                    className="mi-auto-height"
                   />
                 )}
               />
               <Search
-                className='network-search-icon'
+                className='network-search-icon darkblue'
                 style={{}}
                 onClick={() => onSearchClick()}
               />
@@ -102,7 +103,7 @@ const Tabs = (props) => {
           <div>
             {!visible && (
               <button
-                className=' btn-primary btn-warehouse'
+                className='mi-btn mi-btn-md mi-btn-primary'
                 onClick={() => {
                   setContent(false);
                   setDashVisible(true);

@@ -7,9 +7,58 @@ const POModel = require("../models/POModel");
 const ShippingOrderModel = require("../models/ShippingOrderModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const OrganisationModel = require("../models/OrganisationModel");
-//this helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
+const { startOfMonth, format } = require("date-fns");
+const { buildExcelReport, buildPdfReport } = require("../helpers/reports");
+
+async function getDistributedProducts(matchQuery, warehouseId, fieldName) {
+  const products = await WarehouseModel.aggregate([
+    {
+      $match: {
+        id: warehouseId,
+      },
+    },
+    {
+      $lookup: {
+        localField: "warehouseInventory",
+        from: "inventories",
+        foreignField: "id",
+        as: "inventory",
+      },
+    },
+    {
+      $unwind: {
+        path: "$inventory",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $replaceWith: {
+        $mergeObjects: [null, "$inventory"],
+      },
+    },
+    {
+      $unwind: {
+        path: "$inventoryDetails",
+      },
+    },
+    {
+      $group: {
+        _id: "items",
+        distItems: { $addToSet: "$inventoryDetails.productId" },
+      },
+    },
+  ]);
+  if (products.length > 0) {
+    if (products[0].distItems.length > 0) {
+      matchQuery[`${fieldName}`] = {
+        $in: products[0].distItems,
+      };
+    }
+  }
+  return matchQuery;
+}
 
 exports.getAnalytics = [
   auth,
@@ -340,13 +389,13 @@ exports.getAnalytics = [
       data.inventoryToOrderRatio = inventoryToOrderRatio;
       var count = 0;
       let org = await OrganisationModel.find({ id: req.user.organisationId });
-      totalmilliseconds = org.totalProcessingTime ? org.totalProcessingTime : 0;
+      var totalmilliseconds = org.totalProcessingTime ? org.totalProcessingTime : 0;
 
       count = await POModel.aggregate([
         {
           $match: {
-            poStatus: { $ne: "CREATED" },
-            poStatus: { $ne: "ACCEPTED" },
+            poStatus: { $nin: ["CREATED", "ACCEPTED"] },
+            // poStatus: { $ne: "ACCEPTED" },
           },
         },
         { $group: { _id: null, myCount: { $sum: 1 } } },
@@ -363,7 +412,7 @@ exports.getAnalytics = [
 
       var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
 
-      var numseconds = ((seconds % 86400) % 3600) % 60;
+      // var numseconds = ((seconds % 86400) % 3600) % 60;
       var averageOrderProcessingTime =
         numdays + "days " + numhours + "hrs " + numminutes + "min";
 
@@ -441,7 +490,7 @@ exports.getOverviewAnalytics = [
 
       var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
 
-      var numseconds = ((seconds % 86400) % 3600) % 60;
+      // var numseconds = ((seconds % 86400) % 3600) % 60;
       var averageOrderProcessingTime =
         numdays + "d " + numhours + "h " + numminutes + "m";
 
@@ -500,20 +549,13 @@ exports.getInventoryAnalytics = [
       const batchNearExpiration = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                "attributeSet.expDate": {
-                  $gte: today.toISOString(),
-                  $lt: nextMonth.toISOString(),
-                },
-              },
-              {
-                $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] },
-              },
-              { batchNumbers: { $ne: "" } },
-              { "attributeSet.mfgDate": { $ne: "" } },
-              { "attributeSet.expDate": { $ne: "" } },
-            ],
+            "attributeSet.expDate": {
+              $gte: today.toISOString(),
+              $lt: nextMonth.toISOString(),
+            },
+            currentInventory: warehouse.warehouseInventory,
+            batchNumbers: { $ne: "" },
+            "attributeSet.mfgDate": { $ne: "" },
           },
         },
         {
@@ -527,19 +569,13 @@ exports.getInventoryAnalytics = [
       const batchExpired = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                "attributeSet.expDate": {
-                  $lt: today.toISOString(),
-                },
-              },
-              {
-                $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] },
-              },
-              { batchNumbers: { $ne: "" } },
-              { "attributeSet.mfgDate": { $ne: "" } },
-              { "attributeSet.expDate": { $ne: "" } },
-            ],
+            "attributeSet.expDate": {
+              $lt: today.toISOString(),
+            },
+
+            currentInventory: warehouse.warehouseInventory,
+            batchNumbers: { $ne: "" },
+            "attributeSet.mfgDate": { $ne: "" },
           },
         },
         {
@@ -838,3 +874,1126 @@ exports.getOrderAnalytics = [
     }
   },
 ];
+
+exports.bestSellers = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query?.warehouseId || req.user.warehouseId;
+      const date =
+        req.query?.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const reportType = req.query?.reportType || null;
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery = {};
+      if (!isDist) {
+        matchQuery[`manufacturerId`] = req.user.organisationId;
+      } else {
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery = await getDistributedProducts(
+            matchQuery,
+            req.user.warehouseId,
+            `_id`
+          );
+        }
+      }
+
+      const bestSellers = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            totalSales: {
+              $first: "$inventoryDetails.totalSales",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $match: {
+            "inventoryAnalytics.sales": {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $sort: {
+            "inventoryAnalytics.sales": -1,
+          },
+        },
+      ]);
+
+      if (reportType) {
+        const reportData = await getDataForReport("BESTSELLERS", bestSellers);
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "BESTSELLERS",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "BESTSELLERS", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "Best Sellers", {
+          bestSellers,
+          warehouseId: warehouse,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.bestSellerSummary = [
+  auth,
+  async function (req, res) {
+    try {
+      const limit = req.query.limit || 5;
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      const matchQuery = {};
+      if (!isDist) {
+        matchQuery[`manufacturerId`] = req.user.organisationId;
+      }
+      const bestSellers = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "products",
+          },
+        },
+        {
+          $unwind: {
+            path: "$products",
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$products.type",
+            },
+            productName: {
+              $first: "$products.name",
+            },
+            unitofMeasure: {
+              $first: "$products.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$products.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$products.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+          },
+        },
+        {
+          $match: {
+            totalSales: {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $sort: {
+            totalSales: -1,
+          },
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+      return apiResponse.successResponseWithData(res, "Best Sellers Summary", {
+        limit,
+        warehouseId: warehouse,
+        bestSellers,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.inStockReport = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const date = req.query.date
+        ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd")
+        : format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const reportType = req.query.reportType || null;
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      let matchQuery3 = {};
+      const {type, id} = req.query;
+      if(id)
+        matchQuery3[`_id`] = id;
+      if(type)
+        matchQuery3[`productCategory`] = type;
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
+      const inStockReport = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: matchQuery1,
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $match: matchQuery2,
+        },
+        {
+          $match: matchQuery3,
+        },
+        {
+          $sort: {
+            productQuantity: -1,
+          },
+        },
+      ]);
+      if (reportType) {
+        const reportData = await getDataForReport("INSTOCK", inStockReport);
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "INSTOCK",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "INSTOCK", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "In stock Report", {
+          inStockReport,
+          warehouseId: warehouse,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.outOfStockReport = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const date =
+        req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const reportType = req.query.reportType || null;
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+
+
+      let matchQuery = {};
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      let matchQuery3 = {};
+      const {type, id} = req.query;
+      if(id)
+        matchQuery3[`_id`] = id;
+      if(type)
+        matchQuery3[`productCategory`] = type;
+
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        matchQuery[`totalSales`] = {
+          $gt: 0,
+        };
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
+      const outOfStockReport = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: matchQuery1,
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": 0,
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $match: matchQuery2,
+        },
+        {
+          $match: matchQuery3,
+        },
+        {
+          $sort: {
+            "inventoryAnalytics.outOfStockDays": -1,
+          },
+        },
+      ]);
+      if (reportType) {
+        const reportData = await getDataForReport(
+          "OUTOFSTOCK",
+          outOfStockReport
+        );
+        if (reportType === "excel") {
+          await buildExcelReport(
+            res,
+            reportData.header,
+            reportData.excelData,
+            "OU",
+            date
+          );
+        } else {
+          await buildPdfReport(res, reportData.pdfData, "OU", date);
+        }
+      } else {
+        return apiResponse.successResponseWithData(res, "Out of stock Report", {
+          outOfStockReport,
+          warehouseId: warehouse,
+        });
+      }
+
+      return apiResponse.successResponseWithData(res, "Out of stock Report", {
+        outOfStockReport,
+        warehouseId: warehouse,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.inStockFilterOptions = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const date = req.query.date
+        ? format(startOfMonth(new Date(req.query.date)), "yyyy-MM-dd")
+        : format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
+      const inStockReport = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: matchQuery1,
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": {
+              $gt: 0,
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        {
+          $match: matchQuery2,
+        },
+        {
+          $group: {
+            _id: "productFilters",
+            products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
+          },
+        },
+      ]);
+      const Filters = inStockReport.length > 0 ? inStockReport[0].products : [];
+      return apiResponse.successResponseWithData(res, "In stock Report Filters", {
+        filters: Filters,
+        warehouseId: warehouse,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.outOfStockFilterOptions = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouse = req.query.warehouseId || req.user.warehouseId;
+      const date =
+        req.query.date || format(startOfMonth(new Date()), "yyyy-MM-dd");
+      const organisation = await OrganisationModel.findOne({
+        id: req.user.organisationId,
+      });
+      const isDist = organisation.type === "DISTRIBUTORS";
+      let matchQuery = {};
+      let matchQuery1 = {};
+      let matchQuery2 = {};
+      if (!isDist) {
+        matchQuery2[`manufacturerId`] = req.user.organisationId;
+      } else {
+        matchQuery[`totalSales`] = {
+          $gt: 0,
+        };
+        if (
+          req.user.warehouseId &&
+          req.user.warehouseId !== req.query.warehouseId
+        ) {
+          matchQuery1 = await getDistributedProducts(
+            matchQuery1,
+            req.user.warehouseId,
+            `inventoryDetails.productId`
+          );
+        }
+      }
+      const outOfStockReport = await WarehouseModel.aggregate([
+        {
+          $match: {
+            id: warehouse,
+          },
+        },
+        {
+          $lookup: {
+            localField: "warehouseInventory",
+            from: "inventories",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceWith: {
+            $mergeObjects: [null, "$inventory"],
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $match: matchQuery1,
+        },
+        {
+          $match: {
+            "inventoryDetails.quantity": 0,
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "inventoryDetails.productId",
+            foreignField: "id",
+            as: "product",
+          },
+        },
+        {
+          $unwind: {
+            path: "$product",
+          },
+        },
+        {
+          $lookup: {
+            from: "inventory_analytics",
+            let: {
+              arg1: "$inventoryDetails.productId",
+              arg2: date,
+              arg3: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $eq: ["$productId", "$$arg1"],
+                      },
+                      {
+                        $eq: ["$inventoryId", "$$arg3"],
+                      },
+                      {
+                        $eq: ["$date", "$$arg2"],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "inventory_analytics",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventory_analytics",
+          },
+        },
+        {
+          $group: {
+            _id: "$inventoryDetails.productId",
+            productCategory: {
+              $first: "$product.type",
+            },
+            productName: {
+              $first: "$product.name",
+            },
+            unitofMeasure: {
+              $first: "$product.unitofMeasure",
+            },
+            manufacturer: {
+              $first: "$product.manufacturer",
+            },
+            manufacturerId: {
+              $first: "$product.manufacturerId",
+            },
+            productQuantity: {
+              $sum: "$inventoryDetails.quantity",
+            },
+            totalSales: {
+              $sum: "$inventoryDetails.totalSales",
+            },
+            inventoryAnalytics: {
+              $first: "$inventory_analytics",
+            },
+            updatedAt: {
+              $first: "$inventoryDetails.updatedAt",
+            },
+          },
+        },
+        // {
+        //   $match: matchQuery,
+        // },
+        {
+          $match: matchQuery2,
+        },
+        {
+          $group: {
+            _id: "productFilters",
+            products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
+          },
+        }
+       
+      ]);
+      const Filters = outOfStockReport.length > 0 ? outOfStockReport[0].products : [];
+      return apiResponse.successResponseWithData(res, "Out of stock Report", {
+        filters:  Filters,
+        warehouseId: warehouse,
+      });
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+async function getDataForReport(reportType, data) {
+  const rowsPDF = [];
+  const rowsExcel = [];
+  const head = [
+    { text: "Product ID", bold: true, field: "_id" },
+    { text: "Product Category", bold: true, field: "productCategory" },
+    { text: "Product Name", bold: true, field: "productName" },
+    { text: "Manufacturer", bold: true, field: "manufacturer" },
+  ];
+  if (reportType === "INSTOCK") {
+    head.push({
+      text: "Opening Balance",
+      bold: true,
+      field: "openingBalance",
+    });
+    head.push({
+      text: "Current Inventory Balance",
+      bold: true,
+      field: "productQuantity",
+    });
+    head.push({ text: "Total Sales", bold: true, field: "totalSales" });
+  } else if (reportType === "OUTOFSTOCK") {
+    head.push({
+      text: "Product out of Stock",
+      bold: true,
+      field: "outOfStockDays",
+    });
+  } else if (reportType === "BESTSELLERS") {
+    head.push({
+      text: "No. of Units Sold",
+      bold: true,
+      field: "sales",
+    });
+  }
+  rowsPDF.push(head);
+  for (let i = 0; i < data.length; i++) {
+    console.log(data[i]);
+    const row = [
+      data[i]._id || "N/A",
+      data[i].productCategory || "N/A",
+      data[i].productName || "N/A",
+      data[i].manufacturer || "N/A",
+    ];
+    const rowObj = {
+      _id: data[i]._id || "N/A",
+      productCategory: data[i].productCategory || "N/A",
+      productName: data[i].productName || "N/A",
+      manufacturer: data[i].manufacturer || "N/A",
+    };
+
+    if (reportType === "INSTOCK") {
+      row.push(data[i].inventoryAnalytics?.openingBalance || 0);
+      row.push(data[i].productQuantity || 0);
+      row.push(data[i].totalSales || 0);
+
+      rowObj["openingBalance"] =
+        data[i].inventoryAnalytics?.openingBalance || 0;
+      rowObj["productQuantity"] = data[i].productQuantity || 0;
+      rowObj["totalSales"] = data[i].inventoryAnalytics?.totalSales || 0;
+    } else if (reportType === "OUTOFSTOCK") {
+      row.push(data[i].inventoryAnalytics?.outOfStockDays || "N/A");
+
+      rowObj["outOfStockDays"] =
+        data[i].inventoryAnalytics?.outOfStockDays || "N/A";
+    } else if (reportType === "BESTSELLERS") {
+      row.push(data[i].inventoryAnalytics?.sales || "N/A");
+
+      rowObj["sales"] = data[i].inventoryAnalytics?.sales || "N/A";
+    }
+    rowsPDF.push(row);
+    rowsExcel.push(rowObj);
+  }
+  return {
+    header: head,
+    pdfData: rowsPDF,
+    excelData: rowsExcel,
+  };
+}

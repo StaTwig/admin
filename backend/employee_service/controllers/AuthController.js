@@ -225,7 +225,7 @@ exports.register = [
         const organisation = await OrganisationModel.findOne({
           name: new RegExp("^" + organisationName + "$", "i"),
         });
-        if (organisation) {
+        if (organisation && organisation.isRegistered) {
           organisationId = organisation.id;
         } else {
           const country = req.body?.address?.country
@@ -243,17 +243,7 @@ exports.register = [
             address.state +
             ", " +
             address.pincode;
-          const orgCounter = await CounterModel.findOneAndUpdate(
-            { "counters.name": "orgId" },
-            {
-              $inc: {
-                "counters.$.value": 1,
-              },
-            },
-            { new: true }
-          );
-          organisationId =
-            orgCounter.counters[2].format + orgCounter.counters[2].value;
+
           const warehouseCounter = await CounterModel.findOneAndUpdate(
             { "counters.name": "warehouseId" },
             {
@@ -266,25 +256,58 @@ exports.register = [
           warehouseId =
             warehouseCounter.counters[3].format +
             warehouseCounter.counters[3].value;
-          const org = new OrganisationModel({
-            primaryContactId: employeeId,
-            name: organisationName,
-            id: organisationId,
-            type: req.body?.type ? req.body.type : "CUSTOMER_SUPPLIER",
-            status: "NOTVERIFIED",
-            postalAddress: addr,
-            warehouses: [warehouseId],
-            warehouseEmployees: [employeeId],
-            region: {
-              name: region,
-            },
-            country: {
-              countryName: country,
-            },
-            configuration_id: "CONF000",
-            authority: req.body?.authority,
-          });
-          await org.save();
+
+          let org;
+          if (organisation && !organisation.isRegistered) {
+            org = await OrganisationModel.findOneAndUpdate(
+              { id: organisation.id },
+              {
+                $set: {
+                  primaryContactId: employeeId,
+                  name: organisationName,
+                  status: "NOTVERIFIED",
+                  isRegistered: true,
+                  postalAddress: addr,
+                  warehouses: [warehouseId],
+                  warehouseEmployees: [employeeId],
+                  region: region,
+                  country: country,
+                  configuration_id: "CONF000",
+                  authority: req.body?.authority,
+                },
+              }
+            );
+          } else {
+            const orgCounter = await CounterModel.findOneAndUpdate(
+              { "counters.name": "orgId" },
+              {
+                $inc: {
+                  "counters.$.value": 1,
+                },
+              },
+              { new: true }
+            );
+            organisationId =
+              orgCounter.counters[2].format + orgCounter.counters[2].value;
+
+            org = new OrganisationModel({
+              primaryContactId: employeeId,
+              name: organisationName,
+              id: organisationId,
+              type: req.body?.type ? req.body.type : "CUSTOMER_SUPPLIER",
+              status: "NOTVERIFIED",
+              isRegistered: true,
+              postalAddress: addr,
+              warehouses: [warehouseId],
+              warehouseEmployees: [employeeId],
+              region: region,
+              country: country,
+              configuration_id: "CONF000",
+              authority: req.body?.authority,
+            });
+            await org.save();
+          }
+
           const invCounter = await CounterModel.findOneAndUpdate(
             { "counters.name": "inventoryId" },
             {

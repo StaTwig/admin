@@ -4,7 +4,10 @@ import Add from "../../assets/icons/createshipment.png";
 import CalenderIcon from "../../assets/icons/date_icon.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
-import { createShipment, getViewShipment } from "../../actions/shipmentActions";
+import {
+  createShipmentForTpl,
+  getViewShipment,
+} from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getShippingOrderById,
@@ -12,7 +15,7 @@ import {
   getAllOrganisations,
   getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
-import { getOrder, getOpenOrderIds, addNewProduct } from "../../actions/poActions";
+import { getOrder, getOpenOrderIds } from "../../actions/poActions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from "./shipmentPopUp";
@@ -21,12 +24,10 @@ import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
-import { getProducts, searchProduct } from "../../actions/poActions";
+import { getProducts } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
 import { config } from "../../config";
 import axios from "axios";
-// import PopUpLocation from "../../components/profile/popuplocation";
-// import AddLocationCard from "../../components/editLocation/index";
 import { AddLocationCard } from "../../components/Addlocation/index";
 import OrganisationPopUp from "../signUp/organisationPopUp";
 
@@ -34,7 +35,7 @@ const CreateShipment = (props) => {
   const { t } = props;
   //const intelEnabled = props.user.type == "Third Party Logistics" ? true : false;
   const intelEnabled = true;
-  const [senderOrganisationId, setSenderOrganistionId] = useState('');
+  const [senderOrganisationId, setSenderOrganistionId] = useState("");
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
@@ -47,23 +48,16 @@ const CreateShipment = (props) => {
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const [FromOrgLabel, setFromOrgLabel] = useState(
-    "Select Organisation Location"
+    "Select Organization Location"
   );
 
-
-  // const [fromNewOrg, setFromNewOrg] = useState('');
-  const [toNewOrg, setToNewOrg] = useState('');
   const [enableFromNewOrg, setEnablFromeNewOrg] = useState(false);
-  const [enableToNewOrg, setEnablToeNewOrg] = useState(false);
-  const [fromNewOrgRes, setFromNewOrgRes] = useState({ value: '', id: '' });
-  const [toNewOrgRes, setToNewOrgRes] = useState({ value: '', id: '' });
-
   const [fromAddLocation, setFromAddLocation] = useState(false);
 
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
-  const [senderOrgId, setSenderOrgId] = useState("null");
+  const [senderOrgId, setSenderOrgId] = useState("Select Organization Name");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [validShipmentID, setValidShipmentID] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
@@ -85,7 +79,7 @@ const CreateShipment = (props) => {
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
-  const [createNewWareNOrgSuccess, setCreateNewWareNOrgSuccess] = useState('');
+  const [createNewWareNOrgSuccess, setCreateNewWareNOrgSuccess] = useState("");
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const customStyles = {
@@ -118,9 +112,9 @@ const CreateShipment = (props) => {
   };
 
   useEffect(() => {
-    if (createNewWareNOrgSuccess === '') return;
+    if (createNewWareNOrgSuccess === "") return;
     async function fetchData() {
-      const userType = intelEnabled ? "TPL" : "regular"
+      const userType = intelEnabled ? "TPL" : "regular";
       const orgs = await getAllOrganisations(userType);
       const organisations = orgs.data.map((item) => {
         return {
@@ -128,15 +122,14 @@ const CreateShipment = (props) => {
           value: item.id,
           label: item.name,
         };
-      })
-      // console.log("organisatoins ", organisations);
+      });
       setAllOrganisations([
         ...organisations,
-        { name: 'new org', value: 'New org', label: 'New Org' }
+        { name: "new org", value: "New org", label: "New Org" },
       ]);
     }
     fetchData();
-  }, [createNewWareNOrgSuccess])
+  }, [createNewWareNOrgSuccess]);
 
   useEffect(() => {
     async function fetchData() {
@@ -151,21 +144,19 @@ const CreateShipment = (props) => {
         };
       });
       setOrderIds(ids);
-      const userType = intelEnabled ? "TPL" : "regular"
+      const userType = intelEnabled ? "TPL" : "regular";
       const orgs = await getAllOrganisations(userType);
       const orgSplit = user.organisation?.split("/");
-      console.log("orgs ", orgs);
       const organisations = orgs.data.map((item) => {
         return {
           ...item,
           value: item.id,
           label: item.name,
         };
-      })
-      console.log("organisatoins ", organisations);
+      });
       setAllOrganisations([
         ...organisations,
-        { name: 'new org', value: 'New org', label: 'New Org' }
+        { name: "new org", value: "New org", label: "New Org" },
       ]);
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
@@ -180,7 +171,9 @@ const CreateShipment = (props) => {
           })
       );
 
-      const warehouses = await getWarehouseByOrgId(orgSplit?.length ? orgSplit[1] : "");
+      const warehouses = await getWarehouseByOrgId(
+        orgSplit?.length ? orgSplit[1] : ""
+      );
       if (warehouses) {
         const ware = warehouses.data.map((v) => {
           return {
@@ -188,14 +181,14 @@ const CreateShipment = (props) => {
             value: v.id,
             label: v?.warehouseAddress
               ? v?.warehouseAddress?.firstLine +
-              "/" +
-              v?.warehouseAddress?.city +
-              ", " +
-              v?.warehouseAddress?.state
+                "/" +
+                v?.warehouseAddress?.city +
+                ", " +
+                v?.warehouseAddress?.state
               : v?.title + "/" + v.postalAddress,
           };
         });
-        ware.push({ name: 'new org', value: 'New org', label: 'New Org' });
+        ware.push({ name: "new org", value: "New org", label: "New Org" });
         setSenderWarehouses(ware);
       }
 
@@ -203,11 +196,11 @@ const CreateShipment = (props) => {
       setOrgTypes(
         orgType.data.length > 0
           ? orgType.data[0].organisationTypes.map((item) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })
+              return {
+                value: item.id,
+                label: item.name,
+              };
+            })
           : []
       );
 
@@ -231,7 +224,7 @@ const CreateShipment = (props) => {
 
   const onOrgChange = async (value) => {
     try {
-      const userType = intelEnabled ? "TPL" : "regular"
+      const userType = intelEnabled ? "TPL" : "regular";
       const warehouse = await getWarehouseByOrgId(value, userType);
       setReceiverWarehouses(
         warehouse.data.map((v) => {
@@ -239,12 +232,12 @@ const CreateShipment = (props) => {
             ...v,
             value: v.id,
             label: v?.warehouseAddress
-            ? v?.warehouseAddress?.firstLine +
-            "/" +
-            v?.warehouseAddress?.city +
-            ", " +
-            v?.warehouseAddress?.state
-            : v?.title + "/" + v.postalAddress,
+              ? v?.warehouseAddress?.firstLine +
+                "/" +
+                v?.warehouseAddress?.city +
+                ", " +
+                v?.warehouseAddress?.state
+              : v?.title + "/" + v.postalAddress,
           };
         })
       );
@@ -255,7 +248,7 @@ const CreateShipment = (props) => {
 
   const onSenderOrgChange = async (value) => {
     try {
-      const userType = intelEnabled ? "TPL" : "regular"
+      const userType = intelEnabled ? "TPL" : "regular";
       const warehouse = await getWarehouseByOrgId(value, userType);
       setSenderWarehouses(
         warehouse.data.map((v) => {
@@ -264,10 +257,10 @@ const CreateShipment = (props) => {
             value: v.id,
             label: v?.warehouseAddress
               ? v?.warehouseAddress?.firstLine +
-              "/" +
-              v?.warehouseAddress?.city +
-              ", " +
-              v?.warehouseAddress?.state
+                "/" +
+                v?.warehouseAddress?.city +
+                ", " +
+                v?.warehouseAddress?.state
               : v?.title + "/" + v.postalAddress,
           };
         })
@@ -282,7 +275,7 @@ const CreateShipment = (props) => {
       if (!intelEnabled) {
         const prods = await getProductsByInventoryId(value);
         if (prods.data.length === 0) {
-          alert("No products availabe in this warehouse");
+          alert("No products available in this warehouse");
           setErrorMessage("err");
           return false;
         }
@@ -312,7 +305,6 @@ const CreateShipment = (props) => {
     }
   };
 
-
   const onAssign = async (values) => {
     let error = false;
     // dates.forEach(date => { if (!error) dateValidation(date) });
@@ -341,7 +333,7 @@ const CreateShipment = (props) => {
     if (!error) {
       const data = {
         airWayBillNo,
-        poId: reset && reset != "Select Order ID" ? reset : null,
+        poId: reset && reset !== "Select Order ID" ? reset : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -362,16 +354,16 @@ const CreateShipment = (props) => {
         expectedDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
             : "",
         actualDeliveryDate:
           estimateDeliveryDate !== ""
             ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
             : "",
         status: "CREATED",
         products: products,
@@ -397,47 +389,22 @@ const CreateShipment = (props) => {
         setShipmentError(t("check_batch_numberssssssssssss"));
         setOpenShipmentFail(true);
       } else {
-        let i, j;
-        let nn = data.products.length;
-        for (i = 0; i < data.products.length; i++) {
-          let prdctName = data.products[i].productName;
-          let flag = false;
-
-          for (j = 0; j < productsList.length; j++) {
-            if (productsList[j].productName === prdctName) {
-              flag = true;
-              break;
-            } else {
-              flag = false;
-            }
-          }
-
-          if (!flag) {
-            setShipmentError(t("product_not_exist_inventory"));
-            setOpenShipmentFail(true);
-            break;
-          }
-        }
-
-        if (i >= nn) {
-          dispatch(turnOn());
-          const result = await createShipment(data);
-          dispatch(turnOff());
-          if (result?.id) {
-            setMessage("Created Shipment Success");
-            setOpenCreatedInventory(true);
-            setModalProps({
-              message: "Created Successfully!",
-              id: result?.id,
-              type: "Success",
-              t: t,
-            });
-          } else {
-
-            setShipmentError(result?.data?.message);
-            setOpenShipmentFail(true);
-            setErrorMessage("Create Shipment Failed");
-          }
+        dispatch(turnOn());
+        const result = await createShipmentForTpl(data);
+        dispatch(turnOff());
+        if (result?.id) {
+          setMessage("Created Shipment Success");
+          setOpenCreatedInventory(true);
+          setModalProps({
+            message: "Created Successfully!",
+            id: result?.id,
+            type: "Success",
+            t: t,
+          });
+        } else {
+          setShipmentError(result?.data?.message);
+          setOpenShipmentFail(true);
+          setErrorMessage("Create Shipment Failed");
         }
       }
     } else {
@@ -461,51 +428,10 @@ const CreateShipment = (props) => {
     setOrderDetails(soDetailsClone);
   };
 
-  const handleBatchChange = (value, i) => {
-    console.log("Batch:", value, i);
-    const soDetailsClone = { ...OrderDetails };
-    soDetailsClone.products[i].batchNumber = value;
-    setOrderDetails(soDetailsClone);
-  };
-
-
   const handleLabelIdChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
-  };
-  const onCategoryChange = async (index, value, setFieldValue) => {
-    try {
-      const warehouse = await searchProduct(value, selectedWarehouse);
-      let newArr = [...addProducts];
-      newArr[index]["type"] = value;
-      newArr[index] = {
-        productId: "",
-        batchNumber: "",
-        id: "",
-        productQuantity: "",
-        name: "",
-        type: value,
-        manufacturer: "",
-        unitofMeasure: "",
-      };
-      newArr[index]["quantity"] = "";
-      setAddProducts((prod) => [...newArr]);
-      let buffer = warehouse.filter(
-        (item) => item.inventoryDetails.quantity > 0
-      );
-      setProducts(
-        buffer.map((item) => {
-          return {
-            value: item.products.name,
-            label: item.products.name,
-            ...item.products,
-          };
-        })
-      );
-    } catch (err) {
-      setErrorMessage(err);
-    }
   };
 
   const onRemoveRow = (index) => {
@@ -526,7 +452,6 @@ const CreateShipment = (props) => {
   }
 
   const saveFromNewOrgNWaherhouse = (data) => {
-
     const body = {
       org: { name: data.name },
       warehouse: {
@@ -545,29 +470,29 @@ const CreateShipment = (props) => {
           region: data.region,
           secondLine: null,
           state: data.state,
-          zipCode: data.pincode
-        }
-      }
-    }
+          zipCode: data.pincode,
+        },
+      },
+    };
 
     // if (fromNewOrg === '') return;
-    axios.post(`${config().addNewOrgNWarehouse}`, body, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => {
-      console.log("res ", res);
-      setCreateNewWareNOrgSuccess(res.data.data[0].id);
-      setEnablFromeNewOrg(false);
-
-    }).catch((err) => console.log(err));
+    axios
+      .post(`${config().addNewOrgNWarehouse}`, body, {
+        headers: { "Access-Control-Allow-Origin": "*" },
+      })
+      .then((res) => {
+        setCreateNewWareNOrgSuccess(res.data.data[0].id);
+        setEnablFromeNewOrg(false);
+      })
+      .catch((err) => console.log(err));
     // setEnablFromeNewOrg(false);
-  }
+  };
 
   // const saveToNewOrg = () => {
   //   if (toNewOrg === '') return;
   //   axios.post(`${config().createNewOrg}`, { name: toNewOrg }, { headers: { "Access-Control-Allow-Origin": "*" } }).then((res) => setToNewOrgRes({ value: res.data.data.name, label: res.data.data.id })).catch((err) => console.log(err));
   //   setEnablToeNewOrg(false);
   // }
-
-  // console.log("allOrganisations ", allOrganisations);
-
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
@@ -694,9 +619,9 @@ const CreateShipment = (props) => {
                             }
                             setReceiverOrgLoc(
                               result.poDetails[0].customer.warehouse.title +
-                              "/" +
-                              result.poDetails[0].customer.warehouse
-                                .postalAddress
+                                "/" +
+                                result.poDetails[0].customer.warehouse
+                                  .postalAddress
                             );
                             setReceiverOrgId(
                               result.poDetails[0].customer.organisation.name
@@ -704,7 +629,7 @@ const CreateShipment = (props) => {
                             setOrderDetails(result.poDetails[0]);
                             dispatch(turnOff());
                             setDisabled(true);
-                            let warehouse = senderWarehouses.filter((w) => {
+                            senderWarehouses.forEach((w) => {
                               let supplierWarehouse =
                                 result.poDetails[0].supplier.organisation
                                   .warehouses;
@@ -716,13 +641,11 @@ const CreateShipment = (props) => {
                                 return w.id === supplierWarehouse[i];
                               }
                             });
-                            setFieldValue("fromOrg", "");
-                            setFieldValue("fromOrgLoc", "");
                             setFieldValue(
                               "toOrg",
                               result.poDetails[0].customer.organisation.id +
-                              "/" +
-                              result.poDetails[0].customer.organisation.name
+                                "/" +
+                                result.poDetails[0].customer.organisation.name
                             );
                             // settoOrgLocLabel(result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name)
                             let wa = result.poDetails[0].customer.warehouse;
@@ -730,22 +653,22 @@ const CreateShipment = (props) => {
                               "toOrgLoc",
                               result.poDetails[0].customer.shippingAddress
                                 .shippingAddressId +
-                              "/" +
-                              (wa?.warehouseAddress
-                                ? wa?.title +
                                 "/" +
-                                wa?.warehouseAddress?.firstLine +
-                                ", " +
-                                wa?.warehouseAddress?.city
-                                : wa?.title + "/" + wa.postalAddress)
+                                (wa?.warehouseAddress
+                                  ? wa?.title +
+                                    "/" +
+                                    wa?.warehouseAddress?.firstLine +
+                                    ", " +
+                                    wa?.warehouseAddress?.city
+                                  : wa?.title + "/" + wa.postalAddress)
                             );
                             settoOrgLocLabel(
                               wa?.warehouseAddress
                                 ? wa?.title +
-                                "/" +
-                                wa?.warehouseAddress?.firstLine +
-                                ", " +
-                                wa?.warehouseAddress?.city
+                                    "/" +
+                                    wa?.warehouseAddress?.firstLine +
+                                    ", " +
+                                    wa?.warehouseAddress?.city
                                 : wa?.title + "/" + wa.postalAddress
                             );
                             setFieldValue(
@@ -839,20 +762,21 @@ const CreateShipment = (props) => {
                       style={{ height: "25px", width: "50px" }}
                       className='btn btn-fetch'
                       onClick={async () => {
-                        console.log("Fetch button");
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
                         setAddProducts((p) => []);
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        if (values.shipmentID.length == 0) {
+                        if (values.shipmentID.length === 0) {
                           setShipmentError(t("shipment_cannot_be_empty"));
                           setOpenShipmentFail(true);
                           dispatch(turnOff());
                         } else {
                           if (validShipmentID) {
-                            let result = await getViewShipment(values.shipmentID);
+                            let result = await getViewShipment(
+                              values.shipmentID
+                            );
 
                             // This is required.
                             result = result.data;
@@ -860,7 +784,9 @@ const CreateShipment = (props) => {
                             if (result.status !== "RECEIVED") {
                               values.shipmentID = "";
                               // alert("The shipment has to be delivered first");
-                              setShipmentError(t("shipment_has_to_be_delivered"));
+                              setShipmentError(
+                                t("shipment_has_to_be_delivered")
+                              );
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
                             } else {
@@ -869,7 +795,6 @@ const CreateShipment = (props) => {
                                 i < result.products?.length;
                                 i++
                               ) {
-
                                 result.products[i].orderedQuantity =
                                   result.products[i].productQuantity;
                               }
@@ -882,7 +807,9 @@ const CreateShipment = (props) => {
                               setFieldValue("toOrg", "");
 
                               if (result.status === 500) {
-                                setShipmentError(t("check_shipment_reference_id"));
+                                setShipmentError(
+                                  t("check_shipment_reference_id")
+                                );
                                 setOpenShipmentFail(true);
                               } else {
                                 setOrderDetails(result);
@@ -924,9 +851,7 @@ const CreateShipment = (props) => {
                               }
                             }
                           } else {
-                            setShipmentError(
-                              t("invalid_shipmentid_enter")
-                            );
+                            setShipmentError(t("invalid_shipmentid_enter"));
                             setOpenShipmentFail(true);
                             dispatch(turnOff());
                           }
@@ -970,33 +895,34 @@ const CreateShipment = (props) => {
                 <label htmlFor='client' className='headsup'>
                   {t("from")}
                 </label>
-                {!intelEnabled && (<div className="row">
-                  <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label htmlFor="organizationType">Organisation Type*</label>
-                      <div className="form-control">
-                        <Select
-                          styles={customStyles}
-                          isDisabled={disabled}
-                          placeholder={
-                            disabled
-                              ? values.rtype
-                              : t("select")
-                          }
-                          onChange={(v) => {
-                            setFieldValue('type', v?.value);
-                            setFieldValue('typeName', v?.label);
-                          }}
-                          defaultInputValue={values.typeName}
-                          options={orgTypes}
-                        />
-                        {errors.type && touched.type && (
-                          <span className="error-msg text-danger">{errors.type}</span>
-                        )}
+                {!intelEnabled && (
+                  <div className='row'>
+                    <div className='col-md-6 com-sm-12'>
+                      <div className='form-group'>
+                        <label htmlFor='organizationType'>
+                          Organisation Type*
+                        </label>
+                        <div className='form-control'>
+                          <Select
+                            styles={customStyles}
+                            isDisabled={disabled}
+                            placeholder={disabled ? values.rtype : t("select")}
+                            onChange={(v) => {
+                              setFieldValue("type", v?.value);
+                              setFieldValue("typeName", v?.label);
+                            }}
+                            defaultInputValue={values.typeName}
+                            options={orgTypes}
+                          />
+                          {errors.type && touched.type && (
+                            <span className='error-msg text-danger'>
+                              {errors.type}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
                 )}
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
@@ -1017,16 +943,13 @@ const CreateShipment = (props) => {
                             styles={customStyles}
                             isDisabled={intelEnabled ? disabled : true}
                             onChange={(v) => {
-                              if (v.label === 'New Org') {
+                              if (v.label === "New Org") {
                                 // setFromNewOrg('');
                                 setEnablFromeNewOrg(true);
-                                // console.log('new organisation');
-                                // console.log(intelEnabled);
-                              }
-                              else {
+                              } else {
                                 setEnablFromeNewOrg(false);
                                 // setFromNewOrg('')
-                              };
+                              }
 
                               setFieldValue("fromOrgLoc", "");
                               setSenderOrgId(v.label);
@@ -1041,11 +964,9 @@ const CreateShipment = (props) => {
                             }
                             defaultInputValue={values.fromOrg}
                             value={
-                              (
-                                values.fromOrg === ""
-                                  ? t("select") + " " + t("organisation_name")
-                                  : { value: values.fromOrg, label: senderOrgId }
-                              )
+                              values.fromOrg === ""
+                                ? t("select") + " " + t("organisation_name")
+                                : { value: values.fromOrg, label: senderOrgId }
                             }
                             options={allOrganisations.filter(
                               (a) => a.name.length > 1
@@ -1062,10 +983,11 @@ const CreateShipment = (props) => {
                         {t("organisation_location")}*
                       </label>
                       <div
-                        className={`line ${errors.fromOrgLoc && touched.fromOrgLoc
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`line ${
+                          errors.fromOrgLoc && touched.fromOrgLoc
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         {/* <DropdownButton
                           name={senderOrgLoc}
@@ -1102,9 +1024,9 @@ const CreateShipment = (props) => {
                           }
                           onChange={async (v) => {
                             if (v.label === "New Org Location") {
-                              setFromAddLocation(true)
+                              setFromAddLocation(true);
                               return;
-                            };
+                            }
                             // let res = await onWarehouseChange(
                             //   v.warehouseInventory
                             // );
@@ -1112,10 +1034,10 @@ const CreateShipment = (props) => {
                             //   return;
                             // }
                             setFromOrgLabel(v.label);
+                            setFieldValue("fromOrgLoc", v.value);
                             setSelectedWarehouse(v.id);
                             setFromLocationSelected(true);
                             // setFieldValue("fromOrg", senderOrganisation[0]);
-                            setFieldValue("fromOrgLoc", v.value);
                             // setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
@@ -1125,23 +1047,32 @@ const CreateShipment = (props) => {
                               batchNumber: "",
                             };
                             setAddProducts((prod) => [...prod, newArr]);
-                            console.log({ senderOrganisation: senderOrganisation[0], FromOrgLabel: v.label });
                           }}
                           value={
                             values.fromOrgLoc === ""
                               ? t("select") + " " + t("organisation_location")
                               : {
-                                value: values.fromOrgLoc,
-                                label: FromOrgLabel,
-                              }
+                                  value: values.fromOrgLoc,
+                                  label: FromOrgLabel,
+                                }
                           }
-                          options={senderWarehouses.length ? [...senderWarehouses.filter(
-                            (ele, ind) =>
-                              ind ===
-                              senderWarehouses.findIndex(
-                                (elem) => elem.label === ele.label
-                              )
-                          ), { value: "New Org Location", label: "New Org Location" }] : []}
+                          options={
+                            senderWarehouses.length
+                              ? [
+                                  ...senderWarehouses.filter(
+                                    (ele, ind) =>
+                                      ind ===
+                                      senderWarehouses.findIndex(
+                                        (elem) => elem.label === ele.label
+                                      )
+                                  ),
+                                  {
+                                    value: "New Org Location",
+                                    label: "New Org Location",
+                                  },
+                                ]
+                              : []
+                          }
                         />
                         {/* {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
@@ -1162,7 +1093,6 @@ const CreateShipment = (props) => {
                 </div>} */}
               </div>
             </div>
-
 
             <div className='row mb-3'>
               <div className='col bg-white formContainer low mr-3'>
@@ -1212,8 +1142,9 @@ const CreateShipment = (props) => {
                         {t("organisation_name")}*
                       </label>
                       <div
-                        className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : ""
-                          }`}
+                        className={`line ${
+                          errors.toOrg && touched.toOrg ? "border-danger" : ""
+                        }`}
                       >
                         {/* <DropdownButton
                           name={receiverOrgId}
@@ -1244,26 +1175,19 @@ const CreateShipment = (props) => {
                               : { value: values.toOrg, label: receiverOrgId }
                           }
                           onChange={(v) => {
-                            console.log({ v });
                             // if (v.label === 'New Org') {
                             //   setToNewOrg('');
                             //   setEnablToeNewOrg(true);
-                            //   console.log('new organisation');
-                            //   console.log(intelEnabled);
                             // }
                             // else {
                             //   setEnablToeNewOrg(false);
                             //   setToNewOrg('')
                             // };
-                            if (v.label === 'New Org') {
-                     
+                            if (v.label === "New Org") {
                               setEnablFromeNewOrg(true);
-                      
-                            }
-                            else {
+                            } else {
                               setEnablFromeNewOrg(false);
-                
-                            };
+                            }
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
                             setFieldValue("toOrg", v.value);
@@ -1283,17 +1207,17 @@ const CreateShipment = (props) => {
                     </div>
                   </div>
 
-
                   <div className='col-md-6 com-sm-12'>
                     <div className='form-group'>
                       <label className='name' htmlFor='delLocation'>
                         {t("delivery_location")}*
                       </label>
                       <div
-                        className={`line ${errors.toOrgLoc && touched.toOrgLoc
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`line ${
+                          errors.toOrgLoc && touched.toOrgLoc
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         {/* <DropdownButton
                           name={receiverOrgLoc}
@@ -1319,7 +1243,6 @@ const CreateShipment = (props) => {
                               ? values.toOrgLoc.split("/")[1]
                               : t("select_delivery_location")
                           }
-
                           //placeholder={"Select Delivery Location"}
                           value={
                             values.toOrgLoc === ""
@@ -1328,20 +1251,30 @@ const CreateShipment = (props) => {
                           }
                           onChange={(v) => {
                             if (v.label === "New Org Location") {
-                              setFromAddLocation(true)
+                              setFromAddLocation(true);
                               return;
-                            };
+                            }
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
-                          options={receiverWarehouses.length ?  [...receiverWarehouses.filter(
-                            (ele, ind) =>
-                              ind ===
-                              receiverWarehouses.findIndex(
-                                (elem) => elem.label === ele.label
-                              )
-                          ),  { value: "New Org Location", label: "New Org Location" }]: []}
+                          options={
+                            receiverWarehouses.length
+                              ? [
+                                  ...receiverWarehouses.filter(
+                                    (ele, ind) =>
+                                      ind ===
+                                      receiverWarehouses.findIndex(
+                                        (elem) => elem.label === ele.label
+                                      )
+                                  ),
+                                  {
+                                    value: "New Org Location",
+                                    label: "New Org Location",
+                                  },
+                                ]
+                              : []
+                          }
                           noOptionsMessage={() => t("no_options")}
                         />
                         {/* {errors.toOrgLoc && touched.toOrgLoc && (
@@ -1375,10 +1308,11 @@ const CreateShipment = (props) => {
                       {t("transit_no")}*
                     </label>
                     <input
-                      className={`input refship ${errors.airWayBillNo && touched.airWayBillNo
-                        ? "border-danger"
-                        : ""
-                        }`}
+                      className={`input refship ${
+                        errors.airWayBillNo && touched.airWayBillNo
+                          ? "border-danger"
+                          : ""
+                      }`}
                       type='text'
                       id='referenceShipmentId'
                       name='airWayBillNo'
@@ -1400,10 +1334,11 @@ const CreateShipment = (props) => {
                         {t("shipment_date")}*
                       </label>
                       <div
-                        className={`input refship ${errors.shipmentDate && touched.shipmentDate
-                          ? "border-danger"
-                          : ""
-                          }`}
+                        className={`input refship ${
+                          errors.shipmentDate && touched.shipmentDate
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         <DatePicker
                           ref={ref1}
@@ -1473,11 +1408,12 @@ const CreateShipment = (props) => {
                         {t("estimated_delivery_date")}
                       </label>
                       <div
-                        className={`input refship ${errors.estimateDeliveryDate &&
+                        className={`input refship ${
+                          errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate
-                          ? "border-danger"
-                          : ""
-                          }`}
+                            ? "border-danger"
+                            : ""
+                        }`}
                       >
                         <DatePicker
                           ref={ref2}
@@ -1490,8 +1426,8 @@ const CreateShipment = (props) => {
                           selected={
                             values.estimateDeliveryDate
                               ? new Date(
-                                Date.parse(values.estimateDeliveryDate)
-                              )
+                                  Date.parse(values.estimateDeliveryDate)
+                                )
                               : values.estimateDeliveryDate
                           }
                           minDate={new Date()}
@@ -1591,18 +1527,29 @@ const CreateShipment = (props) => {
               )
               } */}
 
-              {(
+              {
                 <>
                   <EditTable
                     check='0'
                     warehouseID={senderOrgId}
                     product={addProducts}
                     t={t}
-                    products={products}
+                    products={addProducts}
                     category={category}
-                    handleQuantityChange={(v, i) => {
-                      let newArr = [...addProducts];
-                      newArr[i].productQuantity = v;
+                    handleCategoryChange={(v, i) => {
+                      let buffer = addProducts.map((product) => ({
+                        productName: product.productName
+                          ? product.productName
+                          : product.name,
+                        productCategory: product.type,
+                        productQuantity: product.productQuantity,
+                        batchNumber: product.batchNumber,
+                        manufacturer: product.manufacturer,
+                        quantity: product.quantity,
+                      }));
+                      let newArr = [...buffer];
+                      newArr[i].productCategory = v;
+                      setAddProducts(newArr);
                       setFieldValue(
                         "products",
                         newArr.map((row) => ({
@@ -1615,46 +1562,88 @@ const CreateShipment = (props) => {
                           quantity: row.quantity,
                         }))
                       );
-                      setAddProducts((prod) => [...newArr]);
+                      setFieldValue("products", addProducts);
+                      //setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleProductChange={(i, v) => {
+                      let newArr = [...addProducts];
+                      newArr[i].productName = v;
+                      setFieldValue(
+                        "products",
+                        newArr.map((product) => ({
+                          productCategory: product.type,
+                          productQuantity: product.productQuantity,
+                          batchNumber: product.batchNumber,
+                          productName: product.name,
+                          manufacturer: product.manufacturer,
+                          quantity: product.quantity,
+                        }))
+                      );
+
+                      setFieldValue("products", addProducts);
+                      setAddProducts(newArr);
+                      // setProducts(prod => [...newArray]);
+                    }}
+                    handleManufacturerChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      setAddProducts(newArr);
+                      newArr[i].manufacturer = v;
+
+                      setAddProducts(newArr);
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setFieldValue("products", addProducts);
+                      //setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleQuantityChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      setAddProducts(newArr);
+
+                      newArr[i].productQuantity = v;
+
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          additionalData: row,
+                        }))
+                      );
+                      setFieldValue("products", addProducts);
+                      //setAddProducts((prod) => [...newArr]);
                     }}
                     handleBatchChange={(v, i, batch) => {
                       let newArr = [...addProducts];
-                      if (batch?.length > 1 && batch[0].index === i) {
-                        batch.forEach((elem) => {
-                          newArr[elem.index] = { ...addProducts[0] };
-                          newArr[elem.index].batchNumber = elem.bnp;
-                          newArr[elem.index].productQuantity = elem.quant;
-                        })
-                        setFieldValue(
-                          "products",
-                          newArr.map((row) => ({
-                            productCategory: row.type,
-                            productID: row.id,
-                            productQuantity: row.productQuantity,
-                            batchNumber: row.batchNumber,
-                            productName: row.name,
-                            manufacturer: row.manufacturer,
-                            quantity: row.quantity,
-                          }))
-                        );
-                        setAddProducts(() => [...newArr]);
-                      } else if (batch?.length === 1) {
-                        newArr[i].batchNumber = v;
-                        setFieldValue(
-                          "products",
-                          newArr.map((row) => ({
-                            productCategory: row.type,
-                            productID: row.id,
-                            productQuantity: row.productQuantity,
-                            batchNumber: row.batchNumber,
-                            productName: row.name,
-                            manufacturer: row.manufacturer,
-                            quantity: row.quantity,
-                          }))
-                        );
-                        setAddProducts(() => [...newArr]);
-                      }
+                      newArr[i].batchNumber = v;
 
+                      setAddProducts(newArr);
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setFieldValue("products", addProducts);
+                      //setAddProducts((prod) => [...newArr]);
                     }}
                     enableDelete={true}
                     onRemoveRow={(index) => {
@@ -1686,37 +1675,7 @@ const CreateShipment = (props) => {
                       else setFieldValue("products", []);
                       setAddProducts((prod) => [...newArr]);
                     }}
-                    handleProductChange={(index, item) => {
-                      addProducts.splice(index, 1, item);
-                      let newArr = [...addProducts];
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productId: row.id,
-                          batchNumber: row.batchNumber,
-                          id: row.id,
-                          productQuantity: "",
-                          quantity: "",
-                          name: row.name,
-                          type: row.type,
-                          manufacturer: row.manufacturer,
-                          unitofMeasure: row.unitofMeasure,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
-
-                      const prodIndex = products.findIndex(
-                        (p) => p.id === item.id
-                      );
-                      let newArray = [...products];
-                      newArray[prodIndex] = {
-                        ...newArray[prodIndex],
-                        isSelected: true,
-                      };
-                      // setProducts(prod => [...newArray]);
-                    }}
                     handleLabelIdChange={handleLabelIdChange}
-                    handleCategoryChange={onCategoryChange}
                   />
                   <div className='d-flex justify-content-between'>
                     <button
@@ -1736,7 +1695,7 @@ const CreateShipment = (props) => {
                     </button>
                   </div>
                 </>
-              )}
+              }
               {/* <div className="table productTable mt-2">
                 <div className="rTable">
                   <div className="rTableHeading">
@@ -1769,6 +1728,7 @@ const CreateShipment = (props) => {
                 <button
                   disabled={!FromLocationSelected}
                   className='btn btn-orange fontSize20 font-bold'
+                  type='submit'
                 >
                   <img
                     src={Add}
@@ -1816,20 +1776,28 @@ const CreateShipment = (props) => {
           close={() => setFromAddLocation(false)}
           // size='modal-lg' //for other size's use `modal-lg, modal-md, modal-sm`
           style={{ width: "60vw" }}
-          className="modal-lg"
-          size="modal-md"
+          className='modal-lg'
+          size='modal-md'
         >
-          <AddLocationCard {...props} popup={true} senderOrgId={senderOrganisationId} close={() => setFromAddLocation(false)} />
-
+          <AddLocationCard
+            {...props}
+            popup={true}
+            senderOrgId={senderOrganisationId}
+            close={() => setFromAddLocation(false)}
+          />
         </Modal>
       )}
       {enableFromNewOrg && (
         <Modal
           isMandatory={true}
           close={() => setEnablFromeNewOrg(false)}
-          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+          size='modal-md' //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <OrganisationPopUp onHide={() => setEnablFromeNewOrg(false)} enableFromNewOrg={enableFromNewOrg} onSignup={saveFromNewOrgNWaherhouse} />
+          <OrganisationPopUp
+            onHide={() => setEnablFromeNewOrg(false)}
+            enableFromNewOrg={enableFromNewOrg}
+            onSignup={saveFromNewOrgNWaherhouse}
+          />
         </Modal>
       )}
     </div>

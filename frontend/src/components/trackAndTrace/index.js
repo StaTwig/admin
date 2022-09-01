@@ -12,7 +12,7 @@ const trackAndTrace = (props) => {
   return (
     <div className='trackTrace'>
       <div className='d-flex justify-content-between mb-3'>
-        <h1 className='breadcrumb'>{t('trackntrace')}</h1>
+      <h1 className="vl-heading-bdr black f-700">{t('trackntrace')}</h1>
         <div className='search-form'>
           <input type='text' className='form-control search-field' />
           <button className='btn btn-main-blue fontSize20 font-bold floated'>

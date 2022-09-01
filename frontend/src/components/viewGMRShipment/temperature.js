@@ -20,7 +20,7 @@ const Chart = (props) => {
       setInitial(result.data.graph);
     }
     fetchAvgTemperature();
-  }, [props.shipmentId]);
+  }, [page, props.shipmentId]);
   const handlePrevHistory = () => {
     setPage(parseInt(page) + 1);
   };

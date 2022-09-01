@@ -8,7 +8,6 @@ import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { getImage } from "../../actions/notificationActions";
 import SuccessPopUp from "./successPopup";
@@ -18,7 +17,8 @@ import PopUpLocation from "./popuplocation";
 import Modal from "./modal/index";
 import Modal1 from "../../shared/modal";
 import moment from "moment";
-import { COUNTRY_CODE } from "../../constants/countryCode";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 const axios = require("axios");
 
 class Profile extends React.Component {
@@ -117,9 +117,7 @@ class Profile extends React.Component {
     this.setState({ image: resultImage.data });
   }
 
-  closeModal() {
-    this.setState({ openModal: false, message: "" });
-  }
+
   onCancel() {
     const {
       prof,
@@ -192,6 +190,10 @@ class Profile extends React.Component {
     }
   }
 
+  closeModal() {
+    this.setState({ openModal: false, message: "" });
+  }
+
   async onSubmit() {
     this.onChange();
     let {
@@ -238,13 +240,14 @@ class Profile extends React.Component {
 
 
   handlePhoneVerification(currentPhone) {
-    const phone = currentPhone;
+    const phone = '+'+currentPhone;
     if (phone) {
       if (isValidPhoneNumber(phone) === false) {
         this.setState({ phoneNumberErrorMsg: "invalid_phone_number" });
       } else {
         this.setState({ phoneNumberErrorMsg: "" });
       }
+      // this.setState({ phoneNumberErrorMsg: "" });
     } else {
       this.setState({ phoneNumberErrorMsg: "" });
     }
@@ -376,8 +379,10 @@ class Profile extends React.Component {
                       /> */}
                       <PhoneInput
                         international={true}
-                        // countryCallingCodeEditable={false}
-                        defaultCountry={COUNTRY_CODE}
+                      //  countryCallingCodeEditable={false}
+                        defaultCountry="United States"
+                        country="United States"
+
                         className="phone-Input-new-profile"
                         placeholder={t("enter_phone_number")}
                         value={this.state.phoneNumber}
@@ -388,7 +393,7 @@ class Profile extends React.Component {
                         }
                       />
                     </div>
-                    {this.state.phoneNumberErrorMsg !== '' && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
+                    {this.state.phoneNumberErrorMsg != "" && <div style={{color:'red', marginLeft: '17rem', marginTop: '-1rem', marginBottom: '1rem' }} >{t(this.state.phoneNumberErrorMsg)}</div>}
                     {/* <div className="form-group">
                       <label htmlFor="">{t("language")}</label>
                       <Select
@@ -679,7 +684,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Phone Number"
                         />
-                        {this.state.phoneNumber ? (
+                        {this.state.phoneNumber.length!=0 ? (
                           <span>
                             +{this.state.phoneNumber.replaceAll("+", "")}
                           </span>
@@ -824,7 +829,7 @@ class Profile extends React.Component {
               ) : (
                 <div
                   className="d-flex flex-row justify-content-between"
-                  style={{ position: "relative", left: -100 }}
+                  style={{ position: "relative", right: "10rem" }}
                 >
                   <button
                     className="buttonS btn btn-outline-primary mr-2"

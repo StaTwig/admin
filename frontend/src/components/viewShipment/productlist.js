@@ -6,8 +6,9 @@ const ProductList = (props) => {
 
   const getVisibleDate = (dateString) => {
     let date = new Date(dateString);
-    if(date.toLocaleDateString() === "Invalid Date") return "N/A";
-    return date.toLocaleDateString();
+    if (date.toLocaleDateString() === "Invalid Date") return "N/A";
+    console.log(`${date.getMonth() + 1}/${date.getFullYear()}`)
+    return `${date.getMonth() + 1}/${date.getFullYear()}`;
   }
 
   return Object.keys(props.shipments).length === 0 ? (

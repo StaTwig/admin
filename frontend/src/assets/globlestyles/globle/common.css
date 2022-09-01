@@ -1,0 +1,35 @@
+.text-none {
+  text-decoration: none !important;
+}
+
+.text-none:hover {
+  text-decoration: none !important;
+}
+
+.mi-d-block {
+  display: inline-block !important;
+}
+
+table.table th,
+table.table td {
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.cursor-none {
+  cursor: default !important;
+}
+
+.cursor-none:hover {
+  cursor: default !important;
+  opacity: 1 !important;
+}
+
+.mi-reset {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.mi-no-wrap {
+  white-space: nowrap;
+}

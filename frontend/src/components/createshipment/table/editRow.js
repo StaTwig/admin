@@ -52,9 +52,9 @@ const EditRow = (props) => {
   if (
     check === "0" &&
     quantityChecker === 1 &&
-    typeof prod !== undefined &&
-    typeof (prod.name !== undefined) &&
-    typeof productsList != undefined
+    typeof prod !== "undefined" &&
+    typeof prod.name !== "undefined" &&
+    typeof productsList !== "undefined"
   ) {
     let qty;
     for (let i = 0; i < productsList?.length; i++) {
@@ -99,7 +99,7 @@ const EditRow = (props) => {
                     placeholder='Product Category'
                     value={prod.type}
                     onChange={(e) =>
-                      handleCategoryChange(index, e.target.value)
+                      handleCategoryChange(e.target.value, index)
                     }
                   />
                 ) : (
@@ -137,7 +137,7 @@ const EditRow = (props) => {
               placeholder='Manufacturer'
               value={prod.manufacturer}
               onChange={(e) => {
-                handleManufacturerChange(index, e.target.value);
+                handleManufacturerChange(e.target.value, index);
               }}
             />
           ) : (

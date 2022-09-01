@@ -25,6 +25,9 @@ router.get("/getIotEnabledStatus", ProductController.getIotEnabledStatus);
 router.get("/getproductcategory", ProductController.getproductcategory);
 router.get("/getproductname", ProductController.getproductname);
 
+// This is a one time use temporary API
+/* router.get("/syncOrganisationsWithProducts", ProductController.syncOrganisationsWithProducts); */
+
 //router.post("/addProduct", ProductController.addProduct);
 router.post(
   "/addProduct",

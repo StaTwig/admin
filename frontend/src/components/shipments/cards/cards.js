@@ -26,8 +26,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="recived-text-cards font-weight-bold">{t('inbound_shipments')}</p>
-          <h1 className="count recived-text-cards">
+          <p className="card-text f-500 blue">{t('inbound_shipments')}</p>
+          <h1 className="number-text f-500 blue">
             {shipmentAnalytics.inboundShipments}
           </h1>
         </div>
@@ -39,8 +39,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="sent-text font-weight-bold">{t('outbound_shipments')}</p>
-          <h1 className="count sent-text">
+          <p className="card-text f-500 orange">{t('outbound_shipments')}</p>
+          <h1 className="number-text f-500 orange">
             {shipmentAnalytics.outboundShipments}
           </h1>
         </div>
@@ -55,8 +55,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="inbound-text font-weight-bold">{t('inbound_alert')}</p>
-          <h1 className="count inbound-text">
+          <p className="card-text f-500 darkblue">{t('inbound_alert')}</p>
+          <h1 className="number-text f-500 darkblue">
             {shipmentAnalytics.inboundAlerts}
           </h1>
         </div>
@@ -71,8 +71,8 @@ function Cards(props) {
         </div>
 
         <div className="tile-content">
-          <p className="outbound-text font-weight-bold">{t('outbound_alert')}</p>
-          <h1 className="count outbound-text">
+          <p className="card-text f-500 tale">{t('outbound_alert')}</p>
+          <h1 className="number-text f-500 tale">
             {shipmentAnalytics.outboundAlerts}
           </h1>
         </div>

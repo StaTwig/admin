@@ -12,18 +12,6 @@ services:
       - "./traefik.toml:/traefik.toml"
       - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    # labels:
-    #   # Dashboard
-    #   - traefik.enable=true
-    #   - traefik.docker.network=proxy
-    #   - traefik.http.routers.traefik.entrypoints=websecure
-    #   - traefik.http.routers.traefik.rule=Host(`test.traefik.vaccineledger.com`)
-    #   - traefik.http.routers.traefik.service=api@internal"
-    #   - traefik.http.routers.traefik.tls=true
-    #   - traefik.http.routers.traefik.tls.certresolver=lets-encrypt
-    #   - traefik.http.routers.traefik.middlewares=authtraefik
-    #   - traefik.http.middlewares.authtraefik.basicauth.users=user:admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/
-
   cache:
     image: "redis"
     container_name: "cache"
@@ -41,23 +29,6 @@ services:
     volumes:
       - ./cache-data:/data
     command: ["redis-server", "--requirepass", "StaTwig2021"]
-
-  advancedanalytics:
-    build: "./backend/advanced_analytics_service"
-    image: "advanced_analytics_service1.0"
-    container_name: "advanced_analytics_service1.0"
-    restart: always
-    env_file:
-      - ./env/ledger.env
-    depends_on:
-      - cache
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.advancedanalytics.entrypoints=websecure"
-      - "traefik.http.routers.advancedanalytics.rule=Host(`test.vaccineledger.com`) && PathPrefix(`/advancedanalytics/`)"
-      - "traefik.http.routers.advancedanalytics.tls=true"
-      - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
 
   alert:
     build: "./backend/alert_service"

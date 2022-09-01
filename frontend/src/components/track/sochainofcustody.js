@@ -20,11 +20,18 @@ const SoChainOfCustody = (props) => {
     setV,
     len,
     parentIndex,
-    t
+    t,
   } = props;
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
+  const dateArr = update.updatedOn.split("");
+  const updatedDate = () => {
+    const dateArr = update.updatedOn.split("/");
+    const date = dateArr[1] + "/" + dateArr[0] + "/" + dateArr[2];
+    return date;
+  };
+  console.log("props ", props);
 
   return (
     <>
@@ -47,9 +54,9 @@ const SoChainOfCustody = (props) => {
               pindex > 1 && `border-primary border-left`
             } `}
           >
-            <div className='row dot-pad'>
+            <div className="row dot-pad">
               <div className={`big-dot dot-${container} bg-info`}></div>
-              <span className='text-primary pl-4 pb-1 row col-12 font-weight-bold'>
+              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">
                 {isShipment
                   ? data?.receiver?.org?.name +
                     "/" +
@@ -61,51 +68,59 @@ const SoChainOfCustody = (props) => {
               className={`panel row container-${container} mr-0 commonpanle`}
               style={{ marginLeft: "0.5rem" }}
             >
-              <div className='col-12 row justify-content-between'>
+              <div className="col-12 row justify-content-between">
                 <div className={`${visible && v ? `col` : `col-10`}`}>
-                  <span className='font-weight-bold'>
-                    {isShipment ? t(update.status.toLowerCase()) :  t(update.poStatus.toLowerCase())}
+                  <span className="font-weight-bold">
+                    {isShipment
+                      ? t(update.status.toLowerCase())
+                      : t(update.poStatus.toLowerCase())}
                   </span>
                   {(!visible || !v) && (
-                    <div className='text-primary mt-2'>
-                      <span className=' '>
-                        {isShipment ? t('shipment_id') : t('order_id')}:{" "}
+                    <div className="text-primary mt-2">
+                      <span className=" ">
+                        {isShipment ? t("shipment_id") : t("order_id")}:{" "}
                       </span>
-                      <span className=' font-weight-bold'>{data.id}</span>
+                      <span className=" font-weight-bold">{data.id}</span>
                     </div>
                   )}
                 </div>
                 {visible && v && (
-                  <div className='col-6 text-primary'>
-                    <span className=' '>
-                      {isShipment ? t('shipment_id') : t('order_id')}:{" "}
+                  <div className="col-6 text-primary">
+                    <span className=" ">
+                      {isShipment ? t("shipment_id") : t("order_id")}:{" "}
                     </span>
-                    <span className=' font-weight-bold'>{data.id}</span>
+                    <span className=" font-weight-bold">{data.id}</span>
                   </div>
                 )}
-                <div className='text-primary col-2'>
-                  <div className='text-muted'>
+                <div className="text-primary col-2">
+                  <div className="text-muted">
                     {new Date(update.updatedOn).toDateString()}
                   </div>
-                  <div className='text-muted'>
-                    {formatTimeAMPM(new Date(update.updatedOn).toString().split(" ")[4])}
+                  <div className="text-muted">
+                    {[...dateArr].includes("/")
+                      ? formatTimeAMPM(
+                          new Date(updatedDate()).toString().split(" ")[4]
+                        )
+                      : formatTimeAMPM(
+                          new Date(update.updatedOn).toString().split(" ")[4]
+                        )}
                   </div>
                 </div>
               </div>
               {visible && v && (
                 <>
-                  <div className='row mt-1 ml-1 col-5'>
+                  <div className="row mt-1 ml-1 col-5">
                     {update.products.map((product, index) => (
                       <div
                         key={index}
-                        className='col-12 row justify-content-between'
+                        className="col-12 row justify-content-between"
                       >
-                        <span className='text-muted'>
+                        <span className="text-muted">
                           {product?.productName
                             ? product?.productName
                             : product.name}
                         </span>
-                        <span className='text-muted text-weight-bold'>
+                        <span className="text-muted text-weight-bold">
                           {product?.productQuantity
                             ? product.productQuantity
                             : product.quantity}
@@ -118,7 +133,7 @@ const SoChainOfCustody = (props) => {
                       </div>
                     ))}
                   </div>
-                  <div className='col-12 mt-2'>
+                  <div className="col-12 mt-2">
                     <Link
                       to={
                         isShipment
@@ -126,8 +141,8 @@ const SoChainOfCustody = (props) => {
                           : `/vieworder/${data.id}`
                       }
                     >
-                      <button className='btn btn-orange fontSize20 font-bold'>
-                        {t('view')}
+                      <button className="btn btn-orange fontSize20 font-bold">
+                        {t("view")}
                       </button>
                     </Link>
                   </div>
@@ -135,24 +150,24 @@ const SoChainOfCustody = (props) => {
               )}
               {visible && v ? (
                 <div
-                  className='arrow bg-primary float-right'
+                  className="arrow bg-primary float-right"
                   onClick={() => {
                     setVisible(false);
                     if (i === 0 && len > 1) setOp(op - 1);
                   }}
                 >
-                  <img src={Down} alt='actions' height='7' width='12' />
+                  <img src={Down} alt="actions" height="7" width="12" />
                 </div>
               ) : (
                 <div
-                  className='arrow float-right'
+                  className="arrow float-right"
                   onClick={() => {
                     setVisible(true);
                     if (i === 0 && len > 1) setOp(level + 1);
                     setV(true);
                   }}
                 >
-                  <img src={traceDrop} alt='actions' height='7' width='12' />
+                  <img src={traceDrop} alt="actions" height="7" width="12" />
                 </div>
               )}
             </div>

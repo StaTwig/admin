@@ -1,7 +1,7 @@
 import {
   GET_SHIPMENTSCOUNT_SUCCESS,
   GET_SHIPMENTSCOUNT_FAILURE,
-} from '../constants/shipmentConstants';
+} from "../constants/shipmentConstants";
 
 export const initialState = {
   totalShipments: {},

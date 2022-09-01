@@ -183,15 +183,10 @@ const LastMile = (props) => {
       <div>
         <div
           className="lastmile"
-          style={{ position: "relative", left: "-22px", top: "-20px" }}
+          style={{ position: "relative", left: "-22px", top: "-10px" }}
         >
-          <h1 className="breadcrumb"> {t("last_mile")} </h1>
-          {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
-              <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span>Export</span>
-              <img src={dropdownIcon} width="12" height="12" className="ml-3" />
-</button> */}
-          <div className="row">
+          <h1 style={{paddingBottom:"10px"}} className="vl-heading-bdr black f-700"> {t("last_mile")} </h1>
+          <div className="row mt-3">
             <div className="col tab" style={{ width: "76%" }}>
               <div className="">
                 <TableFilter data={headers} fb="85%" />

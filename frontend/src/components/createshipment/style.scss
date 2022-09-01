@@ -89,8 +89,6 @@
     }
     .name{
       color: #707070;
-      font-weight: 400;
-      font-size: 14px;
       padding: 0;
     }
     @media (min-width: $xl) {
@@ -132,8 +130,6 @@
     border-radius: 10px;
   }
   .headsup{
-    font-size: 15px;
-    font-weight: 700;
     padding-top:1.25rem;
     padding-bottom: 0.625rem; 
   }
@@ -249,7 +245,6 @@
   font-size: 12px;
 }
 .refship {
-  font-size: 14px;
   width: 65%;
   padding: 8px 10px;
   box-sizing: border-box;

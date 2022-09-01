@@ -34,8 +34,6 @@ const NewShipment = (props) => {
   const [senderWarehouses, setSenderWarehouses] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
-  const [fetchdisabled, setfetchdisabled] = useState(false);
-  const [pofetchdisabled] = useState(false);
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
@@ -43,6 +41,8 @@ const NewShipment = (props) => {
     "Select Organisation Location"
   );
   const dispatch = useDispatch();
+  const [fetchdisabled, setfetchdisabled] = useState(false);
+  const [pofetchdisabled] = useState(false);
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
@@ -96,6 +96,15 @@ const NewShipment = (props) => {
     const result = await getShippingOrderById(item);
     setOrderDetails(result);
     dispatch(turnOff());
+  };
+
+  const closeModal = () => {
+    setOpenCreatedInventory(false);
+    props.history.push("/shipments");
+  };
+
+  const closeModalFail = () => {
+    setOpenShipmentFail(false);
   };
 
   useEffect(() => {
@@ -178,15 +187,6 @@ const NewShipment = (props) => {
 
     fetchData();
   }, [props.location, user.organisation]);
-
-  const closeModal = () => {
-    setOpenCreatedInventory(false);
-    props.history.push("/shipments");
-  };
-
-  const closeModalFail = () => {
-    setOpenShipmentFail(false);
-  };
 
   const onOrgChange = async (value) => {
     try {
@@ -550,6 +550,7 @@ const NewShipment = (props) => {
                             setOrderId(v.value);
                             dispatch(turnOn());
                             let result = await dispatch(getOrder(v.value));
+                            setSenderOrgId(result.poDetails[0].customer.warehouse.id);
                             for (
                               let i = 0;
                               i < result.poDetails[0].products.length;
@@ -741,10 +742,9 @@ const NewShipment = (props) => {
                         } else {
                           if (validShipmentID) {
                             let result = await getViewShipment(values.shipmentID);
-
+                            setSenderOrgId(result.data.supplier.locationId);
                             // This is required.
                             result = result.data;
-
                             if (result.status !== "RECEIVED") {
                               values.shipmentID = "";
                               // alert("The shipment has to be delivered first");

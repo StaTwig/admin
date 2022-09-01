@@ -79,6 +79,7 @@ const ShipmentSchema = new Schema(
         endLocation: String,
       },
     ],
+    tplOrgId : { type : String , required : false},
   },
   { timestamps: true }
 );

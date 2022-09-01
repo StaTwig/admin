@@ -2,7 +2,7 @@
 
 .overview {
   position: relative;
-  top: -22px;
+  top: -10px;
   padding-right: 35px;
   padding-left: 55px;
   overflow: hidden;
@@ -31,6 +31,11 @@
     }
   }
 
+  .vl-card-subtext{
+    font-weight: bold;
+    position: relative;
+    top: 8px;
+  }
   .ribben-space {
     margin-top: 7rem;
 
@@ -56,9 +61,7 @@
     flex-direction: column;
     .card-title {
       margin-bottom: 0.75rem;
-      font-size: 20px;
-      font-weight: 500;
-      color: #4d4f5c;
+      color: var(--grey);
     }
     .card-header,
     .card-footer {
@@ -69,11 +72,11 @@
       margin: 0;
     }
     @media (min-width: $lg) {
-      height: 420px;
+      height: 26.25rem;
     }
 
     @media (min-width: $xl) {
-      height: 420px;
+      height: 26.25rem;
     }
 
     .card-body {
@@ -89,7 +92,7 @@
 
       .total {
         .value {
-          font-size: 30px;
+          font-size: 1.875rem;
           font-weight: bold;
         }
       }
@@ -106,7 +109,7 @@
   .panel {
     background: $eeGrey;
     padding: 1rem;
-    height: 80px;
+    height: 5rem;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -131,8 +134,8 @@
       }
       @media (min-width: $xl) {
         display: flex;
-        width: 60px;
-        height: 60px;
+        width: 3.75rem;
+        height: 3.75rem;
       }
 
       @media screen and (max-width: 768px) {
@@ -159,9 +162,9 @@
     }
 
     .time {
-      width: 52px;
-      height: 52px;
-      background-color: white;
+      width: 3.25rem;
+      height: 3.25rem;
+      background-color: var(--white);
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 50%;
       justify-content: center;
@@ -170,8 +173,8 @@
       display: flex;
       @media (min-width: $xl) {
         display: flex;
-        width: 60px;
-        height: 60px;
+        width: 3.75rem;
+        height: 3.75rem;
       }
     }
 
@@ -179,80 +182,65 @@
       font-size: 9px;
       line-height: 10px;
       font-weight: bold;
-      color: #707070;
+      color: var(--grey);
       @media (min-width: $xl) {
         font-size: 12px;
       }
     }
 
     .count1 {
-      font-size: 30px;
-      color: #0b65c1;
-      font-weight: bold;
-      //margin-top: 6px;
-      position: relative;
-      top: 8px;
+      color: var(--primary);
+     
       @media (max-width: $lg) {
-        font-size: 22px;
+        font-size: 1.375rem;
       }
       @media (max-width: $md) {
-        font-size: 20px;
+        font-size: 1.25rem;
       }
     }
 
     .count2 {
-      font-size: 30px;
-      color: #2a9faa;
-      font-weight: bold;
-      position: relative;
-      top: 8px;
+      color: var(--tale);
+     
       @media (max-width: $lg) {
-        font-size: 22px;
+        font-size: 1.375rem;
       }
       @media (max-width: $md) {
-        font-size: 20px;
+        font-size: 1.25rem;
       }
     }
 
     .count3 {
-      font-size: 30px;
-      color: #0093e9;
-      font-weight: bold;
-      position: relative;
-      top: 8px;
+      color: var(--blue);
+     
       @media (max-width: $lg) {
-        font-size: 22px;
+        font-size: 1.375rem;
       }
       @media (max-width: $md) {
-        font-size: 20px;
+        font-size: 1.25rem;
       }
     }
 
     .count4 {
-      font-size: 30px;
-      color: #fa7923;
-      font-weight: bold;
-      position: relative;
-      top: 8px;
+      color: var(--orange);
+      
       @media (max-width: $lg) {
-        font-size: 22px;
+        font-size: 1.375rem;
       }
       @media (max-width: $md) {
-        font-size: 20px;
+        font-size: 1.25rem;
       }
     }
 
     .count5 {
-      font-size: 30px;
-      color: #ffab1d;
-      font-weight: bold;
-      position: relative;
-      top: 8px;
+
+      color: var(--yellow);
+      
       @media (max-width: $lg) {
-        font-size: 22px;
+        font-size: 1.375rem;
       }
       @media (max-width: $md) {
-        font-size: 20px;
+        font-size: 1.25rem;
       }
     }
 

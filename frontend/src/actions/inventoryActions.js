@@ -382,3 +382,16 @@ export const getBatchDetailsByWareHouse = async (inventory_id, product_id) => {
     return {};
   }
 };
+export const getBatchesofWarehouse = async (warehouseId, product_id) => {
+try{
+  const res = await axios.get(
+    `${config().fetchBatchesOfInventory}?productId=${
+      product_id
+    }&wareId=${warehouseId}`
+  );
+  return res.data.data;
+}catch(err){
+  return err;
+}
+
+}

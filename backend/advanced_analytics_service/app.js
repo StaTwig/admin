@@ -5,16 +5,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
-// var { aggregateData } = require("./helpers/dataAggregator");
 var cors = require("cors");
-// var cron = require("node-cron");
-
-// const CALCULATE_RETURNS_CRON_TIME = `*/15 * * * *`;
-
-// cron.schedule(CALCULATE_RETURNS_CRON_TIME, () => {
-// 	console.log('running calculateReturns job');
-// 	aggregateData("month");
-// });
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;

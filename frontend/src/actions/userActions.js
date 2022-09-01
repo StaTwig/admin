@@ -17,9 +17,10 @@ export const updateProfile = async (data) => {
   }
 };
 
-export const addWarehouse = async (data,userType) => {
+export const addWarehouse = async (data, userType) => {
   try {
-    const url = userType=="TPL" ? config().addWarehouseForTpl : config().addWarehouse
+    const url =
+      userType === "TPL" ? config().addWarehouseForTpl : config().addWarehouse;
     const result = await axios.post(url, data);
     return result;
   } catch (e) {
@@ -258,7 +259,6 @@ export const getAllManageAlerts = async () => {
     const result = await axios.get(config().getAllManageAlertsUrl);
     return result.data.data || [];
   } catch (e) {
-    console.log("error: ", e);
     return [];
   }
 };

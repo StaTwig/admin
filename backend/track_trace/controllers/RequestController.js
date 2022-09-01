@@ -6,7 +6,6 @@ const {
 } = require("../middlewares/rbac_middleware");
 const RequestModel = require("../models/RequestModel");
 const ShipmentModel = require("../models/ShipmentModel");
-const EmployeeModel = require("../models/EmployeeModel");
 const axios = require("axios");
 const { asyncForEach } = require("../helpers/utility");
 const URL =
@@ -23,7 +22,7 @@ exports.getRequests = [
       });
       return apiResponse.successResponseWithData(
         res,
-        `All Requests for Organisation Id : ${organisationId}`,
+        `All Requests for Organization Id : ${organisationId}`,
         requests
       );
     } catch (err) {
@@ -149,7 +148,10 @@ exports.updateRequest = [
           { new: true }
         );
         if (
-        (status === "ACCEPTED") && (request.type === "LOCATION_MISMATCH" || request.type === "ORGANISATION_MISMATCH")){
+          status === "ACCEPTED" &&
+          (request.type === "LOCATION_MISMATCH" ||
+            request.type === "ORGANISATION_MISMATCH")
+        ) {
           shipment = await ShipmentModel.findOneAndUpdate(
             { "label.labelId": request.label.labelId },
             {

@@ -10,7 +10,7 @@ const tablefilter = (props) => {
           <div className="box col-3">
             <div className="filter-item ml-0">
               <div className="icon mr-2">{props.data.img1}</div>
-              <div className="filterTitle">{props.data.coloumn1}</div>
+              <div className="table-heading mi-reset f-500">{props.data.coloumn1}</div>
               <div className="filterAction">
                 {/* <img src={updownarrow} width="9" height="9" /> */}
               </div>
@@ -20,7 +20,7 @@ const tablefilter = (props) => {
           <div className="box col-2">
             <div className="filter-item ml-0">
               <div className="icon mr-2">{props.data.img2}</div>
-              <div className="filterTitle">{props.data.coloumn2}</div>
+              <div className="table-heading mi-reset f-500">{props.data.coloumn2}</div>
               <div className="filterAction">
                 {/* <img src={updownarrow} width="9" height="9" /> */}
               </div>
@@ -30,7 +30,7 @@ const tablefilter = (props) => {
           <div className="box col-2">
             <div className="filter-item ml-0">
               <div className="icon mr-2">{props.data.img3}</div>
-              <div className="filterTitle">{props.data.coloumn3}</div>
+              <div className="table-heading mi-reset f-500">{props.data.coloumn3}</div>
               <div className="filterAction">
                 {/* <img src={updownarrow} width="9" height="9" /> */}
               </div>
@@ -41,7 +41,7 @@ const tablefilter = (props) => {
             <div className="box col-2">
               <div className="filter-item ml-0">
                 <div className="icon mr-2">{props.data.img4}</div>
-                <div className="filterTitle">{props.data.coloumn4}</div>
+                <div className="table-heading mi-reset f-500">{props.data.coloumn4}</div>
                 <div className="filterAction">
                   {/* <img src={updownarrow} width="9" height="9" /> */}
                 </div>
@@ -53,7 +53,7 @@ const tablefilter = (props) => {
             <div className="box col-2">
               <div className="filter-item ml-0">
                 <div className="icon mr-2">{props.data.img5}</div>
-                <div className="filterTitle">{props.data.coloumn5}</div>
+                <div className="table-heading mi-reset f-500">{props.data.coloumn5}</div>
                 <div className="filterAction">
                   {/* <img src={updownarrow} width="9" height="9" /> */}
                 </div>

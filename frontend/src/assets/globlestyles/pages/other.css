@@ -1,0 +1,16 @@
+.user-image-holder {
+  width: 2.2rem;
+  height: 2.2rem;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4rem;
+  margin-right: 0.6rem;
+  background-color: #e5e7eb;
+}
+
+.user-image-holder > i {
+  font-size: 1.5rem;
+  color: #374151;
+}

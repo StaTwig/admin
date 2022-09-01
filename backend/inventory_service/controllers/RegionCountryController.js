@@ -25,6 +25,7 @@ exports.getCountries = [
         countries
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -48,6 +49,7 @@ exports.getStatesByCountry = [
         allStates
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -66,6 +68,7 @@ exports.getAllStates = [
         allStates
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -85,6 +88,7 @@ exports.getDistrictsByState = [
         allStates
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -108,6 +112,7 @@ exports.getCitiesByState = [
         allCities
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -129,6 +134,7 @@ exports.getVendorsByDistrict = [
         allVendors
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -165,6 +171,7 @@ exports.getAllSKUs = [
         allSKUs
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -197,6 +204,7 @@ exports.getOrganizationsByType = [
         organisations
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -227,6 +235,7 @@ exports.getOrganizationInfoByID = [
         responseObj
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -240,25 +249,20 @@ exports.getRegions = [
       var orgs;
       const orgSet = new Set();
       if (!orgType) {
-        orgs = await OrganisationModel.find({}).select("region.name");
+        orgs = await OrganisationModel.find({}).select("region");
       } else {
         orgs = await OrganisationModel.find({ type: orgType }).select(
-          "region.name id"
+          "region id"
         );
-        try {
-          const warehouseRegions = await WarehouseModel.find({
-            organisationId: { $in: orgs.map((org) => org.id) },
-          }).select("region");
-          for (let warehouse of warehouseRegions) {
-            orgSet.add(warehouse.region.name);
-            orgSet.add(warehouse.region.regionName);
-          }
-        } catch (err) {
-          console.log(err);
+        const warehouseRegions = await WarehouseModel.find({
+          organisationId: { $in: orgs.map((org) => org.id) },
+        }).select("region");
+        for (let warehouse of warehouseRegions) {
+          orgSet.add(warehouse.region);
         }
       }
       for (let org of orgs) {
-        orgSet.add(org.region.name);
+        orgSet.add(org.region);
       }
       return apiResponse.successResponseWithData(
         res,
@@ -266,45 +270,50 @@ exports.getRegions = [
         [...orgSet]
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
 
 exports.getCountryDetailsByRegion = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
+      let common = [];
       const { region, orgType } = req.query;
-      var common = [];
       const countrySet = new Set();
       if (region && orgType) {
-        var countries = await CountryModel.find(
+        const countriesList = await CountryModel.find(
           { region: region },
           { _id: 0 }
         ).select("name");
-        countries = countries.map((country) => country.name);
+        const countries = countriesList.map((country) => country?.name);
         const orgs = await OrganisationModel.find({ type: orgType }).select(
           "country id"
         );
-        try {
-          const warehouseCountries = await WarehouseModel.find({
-            organisationId: { $in: orgs.map((org) => org.id) },
-          }).select("country");
-          for (let warehouse of warehouseCountries) {
+        const warehouseCountries = await WarehouseModel.find({
+          organisationId: { $in: orgs.map((org) => org.id) },
+        }).select("country");
+        for (const warehouse of warehouseCountries) {
+          if (typeof warehouse.country === "string") {
+            countrySet.add(warehouse.country);
+          } else {
             countrySet.add(warehouse.country.countryName);
           }
-        } catch (err) {
-          console.log(err);
         }
-        for (let org of orgs) {
-          countrySet.add(org.country.countryName);
+        for (const org of orgs) {
+          if (typeof orgs.country === "string") {
+            countrySet.add(org.country);
+          } else {
+            countrySet.add(org.country.countryName);
+          }
         }
         const orgArray = [...countrySet];
         orgArray.sort();
 
         // Get common countries
-        var i = 0,
+        let i = 0,
           j = 0;
         while (i < countries.length && j < orgArray.length) {
           if (countries[i] == orgArray[j]) {
@@ -333,6 +342,7 @@ exports.getCountryDetailsByRegion = [
         common
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -373,6 +383,7 @@ exports.getAddresses = [
         warehouseData
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -388,12 +399,12 @@ exports.getOrganizations = [
         orgs = await OrganisationModel.find({
           $and: [
             { type: orgType },
-            { "country.countryName": country },
+            {$or: [{ "country.countryName": country }, { country: country }]},
             { status: "ACTIVE" },
           ],
         });
       } else if (country) {
-        orgs = await OrganisationModel.find({ "country.countryName": country });
+        orgs = await OrganisationModel.find({$or: [{ "country.countryName": country }, { country: country }]});
       } else {
         return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
       }
@@ -403,6 +414,7 @@ exports.getOrganizations = [
         orgs
       );
     } catch (err) {
+      console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

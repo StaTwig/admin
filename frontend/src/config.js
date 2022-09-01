@@ -10,7 +10,7 @@ export const LOCAL_SERVER_URL_INVENTORY = "http://localhost:3007";
 export const LOCAL_SERVER_URL_PO = "http://localhost:3012";
 export const LOCAL_SERVER_URL_TRACKANDTRACE = "http://localhost:3005";
 export const LOCAL_SERVER_URL_NOTIFICATION = "http://localhost:3006";
-export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3015";
+export const LOCAL_SERVER_URL_ANALYTICS = "http://localhost:3014";
 export const LOCAL_SERVER_URL_EOL = "http://localhost:3017";
 export const LOCAL_SERVER_URL_EVENT = "http://localhost:3013";
 export const LOCAL_SERVER_URL_PRODUCTS = "http://localhost:3010";
@@ -68,6 +68,7 @@ export function config() {
       addProductsToInventory: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addProductsToInventory`,
       addInventoriesFromExcel: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/createShipment`,
+      createShipmentForTpl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/createShipmentForTpl`,
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
       shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
@@ -99,6 +100,7 @@ export function config() {
       addNewProduct: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProduct`,
       getOrganisations: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/getOrganisations`,
       getOrganisationsAtSignup: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/getOrganisationsAtSignup`,
+      getUnregisteredOrganisations: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/getUnregisteredOrganisations`,
       addWarehouseForTpl: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/addWarehouseForTpl`,
       getWarehouseByOrgId: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/warehouses?id=`,
       getAllWarehouses: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/organisation/allWarehouses`,
@@ -161,6 +163,12 @@ export function config() {
       temperatureGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      getBestSellersUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/bestSellers`,
+      getBestSellersSummaryUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/bestSellerSummary`,
+      getmanufacturerInStockReportUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/inStockReport`,
+      getmanufacturerOutStockReportUrl: `${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/network/outOfStockReport`,
+      getManufacturerWarehouses: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerWarehouses`,
+      getManufacturerFilterOptions: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -198,6 +206,7 @@ export function config() {
       getShippingOrderIdsUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl: `${TEST_SERVER_URL}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
       createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
+      createShipmentForTpl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipmentForTpl`,
       fetchGMRShipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchGMRShipments`,
       newShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/newShipment`,
       viewShipmentGmrUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/viewShipmentGmr?shipmentId=`,
@@ -240,6 +249,7 @@ export function config() {
       trackProduct: `${TEST_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       getOrganisations: `${TEST_SERVER_URL}/productmanagement/api/organisation/getOrganisations`,
       getOrganisationsAtSignup: `${TEST_SERVER_URL}/productmanagement/api/organisation/getOrganisationsAtSignup`,
+      getUnregisteredOrganisations: `${TEST_SERVER_URL}/productmanagement/api/organisation/getUnregisteredOrganisations`,
       getwarehouseByType: `${TEST_SERVER_URL}/usermanagement/api/auth/getwarehouseByType?id=`,
       getWarehouseByOrgId: `${TEST_SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,
       getAllWarehouses: `${TEST_SERVER_URL}/productmanagement/api/organisation/allWarehouses`,
@@ -304,6 +314,14 @@ export function config() {
       temperatureGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/sensorHistory`,
       driverGraph: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/driverHistory`,
       customReceiveShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/customReceiveShipment`,
+      getBestSellersUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/bestSellers`,
+      getBestSellersSummaryUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/bestSellerSummary`,
+      getmanufacturerInStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockReport`,
+      getmanufacturerOutStockReportUrl: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outOfStockReport`,
+      getManufacturerWarehouses: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerWarehouses`,
+      getManufacturerFilterOptions: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
+      getmanufacturerInStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockFilterOptions`,
+      getmanufacturerOutStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outStockFilterOptions`,
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -350,6 +368,7 @@ export function config() {
       fetchPurchaseOrderUrl: `${PROD_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${PROD_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
+      createShipmentForTpl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/createShipmentForTpl`,
       changePOStatus: `${PROD_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${PROD_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -379,6 +398,7 @@ export function config() {
       trackProduct: `${PROD_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       getOrganisations: `${PROD_SERVER_URL}/productmanagement/api/organisation/getOrganisations`,
       getOrganisationsAtSignup: `${PROD_SERVER_URL}/productmanagement/api/organisation/getOrganisationsAtSignup`,
+      getUnregisteredOrganisations: `${PROD_SERVER_URL}/productmanagement/api/organisation/getUnregisteredOrganisations`,
       getOrganizationsByType: `${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getwarehouseByType: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseByType?id=`,
       getWarehouseByOrgId: `${PROD_SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,
@@ -474,6 +494,7 @@ export function config() {
       getShippingOrderIdsUrl: `${UNICEFTEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl: `${UNICEFTEST_SERVER_URL}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
       createShipmentUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
+      createShipmentForTpl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipmentForTpl`,
       shipmentsSearch: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       createPurchaseOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
       createOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/createOrder`,
@@ -509,6 +530,7 @@ export function config() {
       trackProduct: `${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       getOrganisations: `${UNICEFTEST_SERVER_URL}/productmanagement/api/organisation/getOrganisations`,
       getOrganisationsAtSignup: `${UNICEFTEST_SERVER_URL}/productmanagement/api/organisation/getOrganisationsAtSignup`,
+      getUnregisteredOrganisations: `${UNICEFTEST_SERVER_URL}/productmanagement/api/organisation/getUnregisteredOrganisations`,
       getOrganizationsByType: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getwarehouseByType: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseByType?id=`,
       getWarehouseByOrgId: `${UNICEFTEST_SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,

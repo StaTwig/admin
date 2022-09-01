@@ -51,6 +51,8 @@ import ViewProduct from "../containers/viewProduct";
 import ViewExpiry from "../containers/viewexpiry";
 import SettingsContainer from "../containers/settings";
 import AddProductContainer from "../containers/addproduct";
+import NetworkingContainer from "../containers/networking/NetworkingContainer";
+import TrackingContainer from "../containers/tracking/TrackingContainer";
 
 const routes = (
   <Switch>
@@ -81,11 +83,11 @@ const routes = (
     <Route path='/qrcode' component={requireAuth(QrCode)} />
     <Route path='/newinventory' component={requireAuth(NewInventory)} />
     <Route path='/reviewinventory' component={requireAuth(VerifyInventory)} />
-    <Route path='/track' component={requireAuth(Track)} />
+    <Route path='/track/:id?' component={requireAuth(TrackingContainer)} />
     <Route path='/trackAndTrace' component={requireAuth(trackAndTrace)} />
     <Route path='/tracing/:id' component={requireAuth(Track)} />
     <Route path='/producttracing' component={requireAuth(ProductTracing)} />
-    <Route path='/network' component={requireAuth(Network)} />
+    {/* <Route path='/network' component={requireAuth(Network)} /> */}
     <Route
       path='/transactionHistory'
       component={requireAuth(TransactionHistory)}
@@ -129,6 +131,8 @@ const routes = (
     <Route path='/viewexpiry' component={requireAuth(ViewExpiry)} />
     <Route path='/viewproduct' component={requireAuth(ViewProduct)} />
     <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
+    <Route path='/network' component={requireAuth(NetworkingContainer)} />
+    <Route path='/tracking/:id' component={requireAuth(TrackingContainer)} />
 
     <Route component={ErrorPageContainer} />
   </Switch>

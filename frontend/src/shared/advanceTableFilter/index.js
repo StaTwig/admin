@@ -87,9 +87,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleInventoryStatusClick}
           >
             <div className='icon'>{props.data.img6}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn6}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} width='10' height='10' alt='Arrow' />
             )}
@@ -255,9 +255,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleInventoryStatusClick}
           >
             <div className='icon'>{props.data.img6}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn6}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='' />
             )}
@@ -373,7 +373,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleInventoryStatusClick}
           >
             <div className='icon mr-2'>{props.data.img5}</div>
-            <div className='filterTitle'>{props.data.displayColoumn5}</div>
+            <div className='table-heading mi-reset f-500'>
+              {props.data.displayColoumn5}
+            </div>
             {props?.shouldEnable === false ? null : (
               <img
                 src={updownarrow}
@@ -479,9 +481,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleInventoryStatusClick}
           >
             <div className='icon'>{props.data.img5}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn5}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='' />
             )}
@@ -551,9 +553,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handlePoDeliveryLocationClick}
           >
             <div className='icon'>{props.data.img5}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn5}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='' />
             )}
@@ -619,9 +621,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right'>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img5}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn5}
-            </div>
+            </h1>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -681,9 +683,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleToShipmentClick}
           >
             <div className='icon'>{props.data.img4}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn4}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='' />
             )}
@@ -742,9 +744,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handlePoProductNameClick}
           >
             <div className='icon'>{props.data.img4}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn4}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='icon' />
           </div>
           <StyledMenu
@@ -806,9 +808,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleInventoryStatusClick}
           >
             <div className='icon'>{props.data.img4}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn4}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='' />
           </div>
           <StyledMenu
@@ -862,17 +864,12 @@ const AdvanceTableFilter = (props) => {
       );
     } else if (columnData === "Quantity") {
       return (
-        // <th className="cursorP table-border-right col-2">
-        //   <div className="cursorP d-flex align-items-center">
-        //     <div className="icon">{props.data.img4}</div>
-        //     <div className="mx-2 table-text-filter">{props.data.coloumn4}</div>
-        //     <img src={updownarrow} height="10" width="15" alt="" />
-        //   </div>
-        // </th>
         <div className='box col'>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img4}</div>
-            <div className='filterTitle'>{props.data.displayColoumn4}</div>
+            <div className='table-heading mi-reset f-500'>
+              {props.data.displayColoumn4}
+            </div>
             <div className='filterAction'>
               {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
@@ -884,9 +881,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right'>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img4}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn4}
-            </div>
+            </h1>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -936,9 +933,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleFromShipmentClick}
           >
             <div className='icon'>{props.data.img3}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn3}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='icon' />
             )}
@@ -998,9 +995,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handlePoOrderIdClick}
           >
             <div className='icon'>{props.data.img3}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn3}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='' />
           </div>
           <StyledMenu
@@ -1053,7 +1050,9 @@ const AdvanceTableFilter = (props) => {
         <div className='box col' onClick={(e) => dateclick(e)}>
           <div className='filter-item'>
             <div className='icon mr-2'>{props.data.img3}</div>
-            <div className='filterTitle'>{props.data.displayColoumn3}</div>
+            <div className='table-heading mi-reset f-500'>
+              {props.data.displayColoumn3}
+            </div>
             <div className='filterAction'>
               <img src={updownarrow} alt='arrow' width='9' height='9' />
             </div>
@@ -1079,9 +1078,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right'>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img3}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn3}
-            </div>
+            </h1>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -1112,7 +1111,9 @@ const AdvanceTableFilter = (props) => {
                 onClick={handleInventoryProductCategoryClick}
               >
                 <div className='icon mr-2'>{props.data.img2}</div>
-                <div className='filterTitle'>{props.data.displayColoumn2}</div>
+                <div className='table-heading mi-reset f-500'>
+                  {props.data.displayColoumn2}
+                </div>
                 <img
                   src={updownarrow}
                   width='10'
@@ -1184,9 +1185,9 @@ const AdvanceTableFilter = (props) => {
                 onClick={handleInventoryProductCategoryClick}
               >
                 <div className='icon'>{props.data.img2}</div>
-                <div className='mx-2 table-text-filter'>
-                  {props.data.coloumn2}
-                </div>
+                <h1 className='mx-2 table-heading mi-reset'>
+                  {props.data.displayColoumn2}
+                </h1>
                 <img src={updownarrow} height='10' width='15' alt='' />
               </div>
               <StyledMenu
@@ -1253,9 +1254,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right' onClick={dateclick}>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img2}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn2}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='' />
             )}
@@ -1281,9 +1282,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right' onClick={dateclick}>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img2}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn2}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='' />
           </div>
           <StyledMenu
@@ -1307,9 +1308,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right'>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img2}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn2}
-            </div>
+            </h1>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>
@@ -1380,9 +1381,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handleShipmentIdClick}
           >
             <div className='icon'>{props.data.img1}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn1}
-            </div>
+            </h1>
             {props?.shouldEnable === false ? null : (
               <img src={updownarrow} height='10' width='15' alt='icon' />
             )}
@@ -1442,9 +1443,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handlePoToClick}
           >
             <div className='icon'>{props.data.img1}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn1}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='' />
           </div>
           <StyledMenu
@@ -1514,9 +1515,9 @@ const AdvanceTableFilter = (props) => {
             onClick={handlePoFromClick}
           >
             <div className='icon'>{props.data.img1}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn1}
-            </div>
+            </h1>
             <img src={updownarrow} height='10' width='15' alt='' />
           </div>
           <StyledMenu
@@ -1586,7 +1587,9 @@ const AdvanceTableFilter = (props) => {
                 style={{ position: "relative", left: "-70px" }}
               >
                 <div className='icon mr-2'>{props.data.img1}</div>
-                <div className='filterTitle'>{props.data.displayColoumn1}</div>
+                <div className='table-heading mi-reset f-500'>
+                  {props.data.displayColoumn1}
+                </div>
                 <img
                   src={updownarrow}
                   width='10'
@@ -1656,9 +1659,9 @@ const AdvanceTableFilter = (props) => {
                 onClick={handleInventoryProductNameClick}
               >
                 <div className='icon'>{props.data.img1}</div>
-                <div className='mx-2 table-text-filter'>
-                  {props.data.coloumn1}
-                </div>
+                <h1 className='mx-2 table-heading mi-reset'>
+                  {props.data.displayColoumn1}
+                </h1>
                 <img src={updownarrow} height='10' width='15' alt='' />
               </div>
               <StyledMenu
@@ -1722,9 +1725,9 @@ const AdvanceTableFilter = (props) => {
         <th className='cursorP table-border-right'>
           <div className='cursorP d-flex align-items-center'>
             <div className='icon'>{props.data.img1}</div>
-            <div className='mx-2 table-text-filter'>
+            <h1 className='mx-2 table-heading mi-reset'>
               {props.data.displayColoumn1}
-            </div>
+            </h1>
             {/* <img src={updownarrow} height="10" width="15" alt="" /> */}
           </div>
         </th>

@@ -1,7 +1,7 @@
 @import "../../../assets/styles/global.scss";
 
 .dashboardtabs {
-  margin-left: -5rem;
+  margin-left: -6.5rem;
   padding-left: 5rem;
 
   ul {
@@ -92,4 +92,8 @@
 }
 .css-hdw1oc {
   display: none !important;
+}
+
+.mi-auto-height > .MuiOutlinedInput-root > .MuiOutlinedInput-notchedOutline{
+ height: 3rem !important;
 }

@@ -1,0 +1,213 @@
+
+.reports-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    background-color: #fff;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.reports-body{
+    padding: 1rem;
+    background-color: rgb(246, 245, 245);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.report-table-container{
+    width: 100%;
+}
+
+.mi-custom-table{
+    border-collapse: separate !important;
+    border-spacing: 0 12px !important;
+}
+
+.mi-custom-tableHead{
+    padding: 0 16px !important;
+    border: none !important;
+}
+.mi-custom-tableRow{
+    background-color: #fff !important;
+    border-radius: 0.6rem !important;
+}
+.mi-radius-first{
+    border-radius: 0.6rem 0 0 0.6rem !important;
+}
+.mi-radius-last{
+    border-radius:0.6rem !important;
+}
+.mi-table-data{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.table-icon-space{
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.3rem;
+    background-color: #7D4CDC57;
+    display: grid;
+    place-content: center;
+}
+
+.table-icon-space > i{
+   color:#7D4CDC ;
+   font-size: 1rem;
+}
+
+.table-button-space{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.8rem;
+}
+
+.mi-custom-cell{
+    padding: 10px 16px !important;
+}
+
+.error-icon{
+    color:var(--red);
+}
+
+.mi-first-cell-padding{
+    padding-left: 2.5rem !important;
+}
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    max-width: unset !important;
+}
+
+.mi-custom-dialog-content{
+    padding: 0 !important;
+}
+
+
+// Modal Dialog Styles
+.modal-heading-space{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nt-modal-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 1rem 2rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.modal-closing-space{
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 1.5rem;
+    background-color: #fff;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    display: grid;
+    place-content: center;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.modal-closing-space:hover{
+    background-color: #eaeaea;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.nt-modal-body{
+    background-color: rgb(246, 245, 245);
+    padding: 0.3rem 2rem;
+    max-height: 30rem;
+    overflow-y: auto;
+}
+
+.nt-modal-actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.input-calender-form{
+    width: 8rem;
+    outline: none;
+   border: none;
+    cursor: pointer;
+    color: #1275E6;
+}
+.date-picker{
+    margin-right: 1.5rem;
+    padding: 0.425rem 0;
+    border-radius: 0.3rem;
+    border: 1px solid #1275E6;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.header-actions-group{
+    display: flex;
+    align-items: center;
+}
+
+.cal-icon{
+    cursor: pointer;
+    color: #1275E6;
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   right: 1rem;
+   pointer-events: none;
+}
+
+.date-input{
+    width: 9rem;
+    border: none;
+    outline: none;
+    padding: 0 1rem;
+    cursor: pointer;
+    color: #1275E6;
+}
+
+.table-header-with-filter{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    cursor: pointer;
+}
+
+.table-header-with-filter > i{
+    color:#7D4CDC
+}
+
+.mi-custom-list-height{
+    height: 8rem;
+    overflow-y: scroll;
+}
+.form-space-area{
+    padding: 0.6rem !important;
+}
+
+.mi-custom-list-height > a{
+    white-space:unset !important;
+    padding: 0.25rem 1rem !important;
+}
+
+.filter-footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.6rem;
+    padding-bottom: 0.2rem;
+    border-top: 1px solid #eee;
+}
+
+.filter-footer > .clear-btn-padding{
+    padding: 0.3rem 1.5rem !important;
+}

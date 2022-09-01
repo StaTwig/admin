@@ -23,7 +23,7 @@ const prepareAggregateQueryForLocation = (
           $push: {
             name: "$name",
             id: "$id",
-            spanishName: '$translations.es'
+            spanishName: "$translations.es",
           },
         },
       },

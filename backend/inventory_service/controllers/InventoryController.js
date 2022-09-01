@@ -7,6 +7,7 @@ const utility = require("../helpers/utility");
 const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
+const InventoryAnalyticsModel = require("../models/InventoryAnalytics");
 const RecordModel = require("../models/RecordModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const ShipmentModel = require("../models/ShipmentModel");
@@ -14,6 +15,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
+const { format, startOfMonth } = require("date-fns");
 const { responses } = require("../helpers/responses");
 const logEvent = require("../../../utils/event_logger");
 const checkPermissions =
@@ -647,7 +649,6 @@ exports.addProductsToInventory = [
               const new_quantity =
                 exist_quantity[0].inventoryDetails[0].quantity +
                 product.quantity;
-
               await InventoryModel.updateOne(
                 {
                   id: inventoryId,
@@ -673,7 +674,6 @@ exports.addProductsToInventory = [
               );
 
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-              //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
                   id: `${serialNumberText}${i}`,
@@ -686,13 +686,12 @@ exports.addProductsToInventory = [
                   quantity: 1,
                   productId: product.productId,
                   inventoryIds: [inventory.id],
-                  lastInventoryId: "",
-                  lastShipmentId: "",
+                  currentInventory: inventory.id,
                   poIds: [],
                   shipmentIds: [],
                   txIds: [],
                   batchNumbers: [product.batchNumber],
-                  atomStatus: "Healthy",
+                  status: "HEALTHY",
                   attributeSet: {
                     mfgDate: product.mfgDate,
                     expDate: product.expDate,
@@ -701,7 +700,6 @@ exports.addProductsToInventory = [
                     eolId: "IDN29402-23423-23423",
                     eolDate: "2021-03-31T18:30:00.000Z",
                     eolBy: id,
-                    eolUserInfo: "",
                   },
                 };
                 atomsArray.push(atom);
@@ -716,13 +714,12 @@ exports.addProductsToInventory = [
                 quantity: product.quantity,
                 productId: product.productId,
                 inventoryIds: [inventory.id],
-                lastInventoryId: "",
-                lastShipmentId: "",
+                currentInventory: inventory.id,
                 poIds: [],
                 shipmentIds: [],
                 txIds: [],
                 batchNumbers: [product.batchNumber],
-                atomStatus: "Healthy",
+                status: "HEALTHY",
                 attributeSet: {
                   mfgDate: product.mfgDate,
                   expDate: product.expDate,
@@ -731,7 +728,6 @@ exports.addProductsToInventory = [
                   eolId: "IDN29402-23423-23423",
                   eolDate: "2021-03-31T18:30:00.000Z",
                   eolBy: id,
-                  eolUserInfo: "",
                 },
               };
               atomsArray.push(atom);
@@ -739,7 +735,7 @@ exports.addProductsToInventory = [
             for (let i = 0; i < atomsArray.length; i++) {
               let batchDup = await AtomModel.findOne({
                 batchNumbers: atomsArray[i].batchNumbers[0],
-                inventoryIds: warehouse.warehouseInventory,
+                currentInventory: warehouse.warehouseInventory,
               });
               if (!batchDup) {
                 continue;
@@ -754,6 +750,24 @@ exports.addProductsToInventory = [
             }
             if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
             await inventory.save();
+            await InventoryAnalyticsModel.updateOne(
+              {
+                productId: product.productId,
+                inventoryId: inventory.id,
+                date: format(startOfMonth(new Date()), "yyyy-MM-dd"),
+              },
+              {
+                $inc: {
+                  quantity: product.quantity,
+                },
+                $setOnInsert: {
+                  openingBalance: product.quantity,
+                },
+              },
+              {
+                upsert: true,
+              }
+            );
           });
           if (duplicateBatch) {
             return apiResponse.ErrorResponse(
@@ -941,7 +955,7 @@ exports.addInventoriesFromExcel = [
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                // preffered Langauge in not working in correct manner.
+                // preferred Language in not working in correct manner.
                 // responses(req.user.preferredLanguage).product_doesnt_exist
                 "Product_Doesn't_exist_in_the_inventory"
               );
@@ -2178,10 +2192,20 @@ exports.uploadSalesData = [
       const { collectedDate, targetPercentage } = req.body;
 
       let uploadDate = new Date(collectedDate);
-      let startOfMonth = new Date(uploadDate.getFullYear(), uploadDate.getMonth(), 1);
-      let endOfMonth = new Date(uploadDate.getFullYear(), uploadDate.getMonth() + 1, 0);
-      let recordExists = await AnalyticsModel.find({uploadDate: { $gte: startOfMonth, $lte: endOfMonth }});
-      if(recordExists && recordExists.length) {
+      let startOfMonth = new Date(
+        uploadDate.getFullYear(),
+        uploadDate.getMonth(),
+        1
+      );
+      let endOfMonth = new Date(
+        uploadDate.getFullYear(),
+        uploadDate.getMonth() + 1,
+        0
+      );
+      let recordExists = await AnalyticsModel.find({
+        uploadDate: { $gte: startOfMonth, $lte: endOfMonth },
+      });
+      if (recordExists && recordExists.length) {
         throw new Error("Record for the given month already exists!");
       }
 
@@ -2284,7 +2308,6 @@ exports.getBatchNearExpiration = [
                     $in: [warehouse.warehouseInventory, "$inventoryIds"],
                   },
                 },
-                // {batchNumbers: {$ne: ""}},
                 { "attributeSet.mfgDate": { $ne: "" } },
                 { "attributeSet.expDate": { $ne: "" } },
               ],
@@ -2385,12 +2408,8 @@ exports.getBatchWarehouse = [
       const result = await AtomModel.aggregate([
         {
           $match: {
-            $and: [
-              {
-                productId: productId,
-              },
-              { $expr: { $in: [inventoryId, "$inventoryIds"] } },
-            ],
+            productId: productId,
+            currentInventory: inventoryId,
           },
         },
         {
@@ -2815,8 +2834,9 @@ exports.fetchBatchesOfInventory = [
       const inventoryId = warehouse.warehouseInventory;
       const batches = await AtomModel.find({
         productId: productId,
-        batchNumbers: { $nin: ["", null, null] },
-        inventoryIds: inventoryId,
+        batchNumbers: { $nin: ["", "null", null] },
+        status: "HEALTHY",
+        currentInventory: inventoryId,
         quantity: { $nin: [0] },
       }).sort({ "attributeSet.expDate": 1 });
       return apiResponse.successResponseWithData(

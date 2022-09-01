@@ -130,12 +130,12 @@ export const fetchairwayBillNumber = async () => {
 };
 
 export const getJourneyTrack = async (id) => {
-  try {
-    const result = await axios.get(`${config().trackJourney + id}`);
-    return result;
-  } catch (e) {
-    return [];
-  }
+	try {
+		const result = await axios.get(`${config().trackJourney + id}`);
+		return result;
+	} catch (e) {
+		throw new Error(e.response.data.message);
+	}
 };
 
 export const trackShipment = (shipmentId) => {
@@ -243,6 +243,15 @@ export const getShipmentsById = (query) => {
 export const createShipment = async (data) => {
   try {
     const result = await axios.post(config().createShipmentUrl, data);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const createShipmentForTpl = async (data) => {
+  try {
+    const result = await axios.post(config().createShipmentForTpl, data);
     return result.data.data;
   } catch (e) {
     return e.response;

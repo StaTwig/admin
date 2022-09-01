@@ -15,9 +15,8 @@ const VerifyContainer = (props) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const dispatch = useDispatch();  
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dispatch = useDispatch();
+
   const verifyOTP = useCallback(async () => {
     dispatch(turnOn());
     const params = props.location.search.split("emailId=");
@@ -35,10 +34,9 @@ const VerifyContainer = (props) => {
         localStorage.setItem("theLedgerToken", token);
         localStorage.setItem("bkp", result.data.data.permissions.permissions);
         dispatch(setCurrentUser(decoded));
-        const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
-        props.history.push(
-          intelEnabled ? `/shipments` : `/overview`
-        );
+        const intelEnabled =
+          props.user?.type === "Third Party Logistics" ? true : false;
+        props.history.push(intelEnabled ? `/shipments` : `/overview`);
       } else {
         const err = result.data.message;
         setErrorMessage(err);

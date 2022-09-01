@@ -1,10 +1,11 @@
-.error-grid-container{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 85px 1fr;
-    grid-template-areas: "header-row header-row"
+.error-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 85px 1fr;
+  grid-template-areas:
+    "header-row header-row"
     "content-row content-row";
 }
-.page-grid-content{
-    grid-area: content-row;
+.page-grid-content {
+  grid-area: content-row;
 }

@@ -327,7 +327,7 @@
   "select_the_language": "Select the Language",
   "batch_details": "Batch Details",
   "search_location": "Search Location",
-  "cancelled": "CANCELLED",
+  "cancelled": "Cancelled",
   "was_cancelled": "Was Cancelled",
   "updated_successfully": "Updated Successfully",
   "the_new": "The new",
@@ -393,5 +393,12 @@
   "enter_qunatity": "Enter Quantity",
   "Product_Doesn't_exist_in_the_inventory": "Product Doesn't exist in the inventory.",
   "delivered_shipments_cannot_be_updated": "Delivered Shipments cannot be updated",
-  "invalid_records": "Invalid Records"
+  "invalid_records": "Invalid Records",
+  "Your_Profile_has_been": "Your Profile has been",
+  "Saved_Successfully": "Saved Successfully",
+  "search_shipment_id": "Search by Shipment ID",
+  "search_transit_id": "Search by Transit ID",
+  "enter_shipment_id": "Enter Shipment ID",
+  "enter_transit_id": "Enter Transit ID",
+  "images": "Images"
 }
