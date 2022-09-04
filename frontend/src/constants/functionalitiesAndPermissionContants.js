@@ -19,11 +19,11 @@ export const SEARCH_CONSTANTS = [
         value: 'search_by_product_category',
         hasPermission: false
     },
-    {
-        key: 'searchByProductId',
-        value: 'search_by_product_id',
-        hasPermission: false
-    },
+    // {
+    //     key: 'searchByProductId',
+    //     value: 'search_by_product_id',
+    //     hasPermission: false
+    // },
     {
         key: 'searchByProductName',
         value: 'search_by_product_name',
@@ -72,21 +72,21 @@ export const INVENTORY_CONSTANTS = [
         value: 'inventory_filters',
         hasPermission: false
     },
-    {
-        key: 'inventoryExportReport',
-        value: 'export_report_in_excel_and_pdf',
-        hasPermission: false
-    },
-    {
-        key: 'viewInventory',
-        value: 'view_inventory',
-        hasPermission: false
-    }, 
-    {
-        key: 'viewProductInfo',
-        value: 'view_inventory_info',
-        hasPermission: false
-    },
+    // {
+    //     key: 'inventoryExportReport',
+    //     value: 'export_report_in_excel_and_pdf',
+    //     hasPermission: false
+    // },
+    // {
+    //     key: 'viewInventory',
+    //     value: 'view_inventory',
+    //     hasPermission: false
+    // }, 
+    // {
+    //     key: 'viewProductInfo',
+    //     value: 'view_inventory_info',
+    //     hasPermission: false
+    // },
 ]
 
 export const ORDERS_CONSTANTS = [
