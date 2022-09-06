@@ -1,0 +1,116 @@
+.footer-four-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 0.5fr;
+  gap: 5rem;
+}
+
+.footer-content-area {
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.company-logo-image {
+  width: 15rem;
+  object-fit: contain;
+}
+
+.mobile-app-stores {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.mobile-app-stores > img {
+  width: 100%;
+}
+
+.address-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 1rem;
+}
+
+.contact-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 1rem;
+}
+
+.contact-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.contact-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.copy-rights {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--grey-medium);
+}
+
+.social-media-list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-social-icon > i {
+  font-size: 1.5rem;
+  color: var(--grey-medium);
+  transition: all 0.3s ease-in-out;
+}
+
+.footer-social-icon > i:hover {
+  color: var(--brand-link);
+}
+
+@media screen and (max-width: 1264px) {
+  .footer-four-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 3rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .footer-four-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .footer-four-column-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .mobile-app-stores {
+    width: 100%;
+    max-width: 24rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 586px) {
+  .footer-four-column-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

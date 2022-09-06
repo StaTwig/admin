@@ -1,0 +1,123 @@
+.icon-space {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon-space > img {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.login-button-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border-color);
+  padding: 0.95rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.login-button-card:hover {
+  box-shadow: 0px 10px 10px 0px rgba(82, 63, 105, 0.05);
+}
+
+.connect-popup-container {
+  background-color: var(--white);
+  padding: 4rem 7rem;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auto-connect-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.manual-connect-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.change-input-option {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.divider-bar {
+  width: 0.6rem;
+  height: 2px;
+  background-color: var(--grey-light);
+}
+
+.option-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.popup-actions {
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 992px) {
+  .connect-popup-container {
+    width: 100%;
+    max-width: 40rem;
+    margin: 0 auto;
+    background-color: var(--white);
+    padding: 4rem 7rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 586px) {
+  .connect-popup-container {
+    background-color: var(--white);
+    padding: 3rem 3rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .connect-popup-container {
+    background-color: var(--white);
+    padding: 1.25rem 1.25rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .login-button-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border-color);
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .option-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.2rem 0;
+  }
+}
