@@ -8,6 +8,8 @@ import { Checkbox } from "@mui/material";
 import GoogleIcon from "../../../assets/files/images/social/google.png";
 import TorusIcon from "../../../assets/files/images/social/torus.png";
 import { useHistory } from "react-router";
+import PhoneInput from "react-phone-number-input";
+import { COUNTRY_CODE } from "../../../constants/countryCode";
 
 export default function Account() {
   const history = useHistory();
@@ -61,7 +63,7 @@ export default function Account() {
               <div
                 className="login-button-card"
                 onClick={() => {
-                  history.push("/register/organization")
+                  history.push("/register/organization");
                 }}
               >
                 <div className="icon-space">
@@ -88,11 +90,25 @@ export default function Account() {
               <TextField fullWidth variant="outlined" label="Email Address" />
             </div>
             <div className="input-single-column">
-              <TextField
+              <PhoneInput
+                international
+                countryCallingCodeEditable={false}
+                defaultCountry={COUNTRY_CODE}
+                className="vl-custom-phone-input"
+                inputProps={{
+                  name: "phone",
+                  required: true,
+                  // enableSearch: true,
+                }}
+                // value={phone}
+                // onChange={onPhoneChange}
+                maxLength={15}
+              />
+              {/* <TextField
                 fullWidth
                 variant="outlined"
                 label="Phone Number ( Optional )"
-              />
+              /> */}
             </div>
             <div className="radio-btn-group">
               <FormControl>

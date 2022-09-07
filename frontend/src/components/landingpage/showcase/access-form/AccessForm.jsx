@@ -88,7 +88,7 @@ export default function AccessForm() {
               international
               countryCallingCodeEditable={false}
               defaultCountry={COUNTRY_CODE}
-              className="phone-Input-new-login"
+              className="vl-custom-phone-input"
               placeholder={t("enter_phone_number")}
               inputProps={{
                 name: "phone",
