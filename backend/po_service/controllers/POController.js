@@ -1100,7 +1100,7 @@ exports.createOrder = [
         Employees: "",
       };
       let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
-      await axios.post(
+      axios.post(
         `${hf_blockchain_url}/api/v1/transactionapi/record/create`,
         bc_data,
         {
