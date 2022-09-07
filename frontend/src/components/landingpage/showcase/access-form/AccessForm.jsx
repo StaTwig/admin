@@ -3,29 +3,49 @@ import TextField from "@mui/material/TextField";
 import GoogleIcon from "../../../../assets/files/images/social/google.png";
 import TorusIcon from "../../../../assets/files/images/social/torus.png";
 import "./AccessForm.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import GoogleAuth from "./GoogleAuth";
+import { useTranslation } from "react-i18next";
+import PhoneInput from "react-phone-number-input";
+import { COUNTRY_CODE } from "../../../../constants/countryCode";
 
 export default function AccessForm() {
+  const history = useHistory();
+  const { t } = useTranslation();
+  
   const [EmailPhone, setEmailPhone] = useState("email");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value.toLowerCase());
+    setPhone("");
+  }
+
+  const onPhoneChange = (value) => {
+    setPhone(value)
+  }
+
   return (
     <div className="connect-popup-container">
       <div className="auto-connect-options">
-        <div
+        <GoogleAuth />
+        {/* <div
           className="login-button-card"
           // onClick={() => {
-          //   Navigate("/register/account", { replace: true });
+          //   history.push("/register/account");
           // }}
-        >
-          <div className="icon-space">
+        > */}
+          {/* <div className="icon-space">
             <img src={GoogleIcon} alt="social" />
           </div>
-          <p className="vl-subheading f-500 no-space">Sign In with Google</p>
-        </div>
+          <p className="vl-subheading f-500 no-space">Sign In with Google</p> */}
+        {/* </div> */}
         <div
           className="login-button-card"
-          // onClick={() => {
-          //   Navigate("/register/organization", { replace: true });
-          // }}
+          onClick={() => {
+            history.push("/register/organization");
+          }}
         >
           <div className="icon-space">
             <img src={TorusIcon} alt="social" />
@@ -43,9 +63,12 @@ export default function AccessForm() {
           <div className="input-space-holder">
             <TextField
               id="outlined-basic"
-              label="Email Address"
+              label={t("email_id")}
               variant="outlined"
               fullWidth
+              autoCapitalize="none"
+              value={email}
+              onChange={onEmailChange}
             />
           </div>
           <div className="change-input-option">
@@ -61,12 +84,27 @@ export default function AccessForm() {
       ) : (
         <div className="manual-connect-options">
           <div className="input-space-holder">
-            <TextField
+            <PhoneInput 
+              international
+              countryCallingCodeEditable={false}
+              defaultCountry={COUNTRY_CODE}
+              className="phone-Input-new-login"
+              placeholder={t("enter_phone_number")}
+              inputProps={{
+                name: "phone",
+                required: true,
+                // enableSearch: true,
+              }}
+              value={phone}
+              onChange={onPhoneChange}
+              maxLength={15}
+            />
+            {/* <TextField
               id="outlined-basic"
               label="Phone Numer"
               variant="outlined"
               fullWidth
-            />
+            /> */}
           </div>
           <div className="change-input-option">
             <div
@@ -83,9 +121,9 @@ export default function AccessForm() {
       <div className="popup-actions">
         <button
           className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
-          // onClick={() => {
-          //   Navigate("/register/verify", { replace: true });
-          // }}
+          onClick={() => {
+            history.push("register/verify");
+          }}
         >
           Sign In
         </button>

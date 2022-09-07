@@ -121,3 +121,14 @@
     padding: 0.2rem 0;
   }
 }
+
+.phone-Input-new-login {
+  width: 131.5% !important;
+  margin-left: 2.5rem;
+  border-bottom: 1px solid #707070 !important;
+  padding-bottom: 0.6rem;
+}
+.phone-Input-new-login > input {
+  border: none;
+  outline: none;
+}

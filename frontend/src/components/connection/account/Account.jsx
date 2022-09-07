@@ -7,11 +7,11 @@ import FormControl from "@mui/material/FormControl";
 import { Checkbox } from "@mui/material";
 import GoogleIcon from "../../../assets/files/images/social/google.png";
 import TorusIcon from "../../../assets/files/images/social/torus.png";
+import { useHistory } from "react-router";
 
 export default function Account() {
+  const history = useHistory();
   const [RadioValue, setRadioValue] = React.useState("existing");
-
-  console.log(RadioValue);
 
   const handleChange = (event) => {
     setRadioValue(event.target.value);
@@ -47,9 +47,9 @@ export default function Account() {
             <div className="input-two-auto-column">
               <div
                 className="login-button-card"
-                // onClick={() => {
-                //   Navigate("/register/account", { replace: true });
-                // }}
+                onClick={() => {
+                  history.push("/register/account");
+                }}
               >
                 <div className="icon-space">
                   <img src={GoogleIcon} alt="social" />
@@ -60,9 +60,9 @@ export default function Account() {
               </div>
               <div
                 className="login-button-card"
-                // onClick={() => {
-                //   Navigate("/register/organization", { replace: true });
-                // }}
+                onClick={() => {
+                  history.push("/register/organization")
+                }}
               >
                 <div className="icon-space">
                   <img src={TorusIcon} alt="social" />
