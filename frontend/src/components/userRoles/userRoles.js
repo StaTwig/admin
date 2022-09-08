@@ -190,10 +190,10 @@ const UserRoles = ({
         <div className="feature-functionality-permissions">
           <div className="feature-functionality-permissions-headers">
             <span className="functionality-permission-text">
-              {t("functionality")}
+              {t("Functionality")}
             </span>
             <span className="functionality-permission-text">
-              {t("permission")}
+              {t("Permission")}
             </span>
           </div>
           {functionalitiesPermissionPanelData.length > 0
