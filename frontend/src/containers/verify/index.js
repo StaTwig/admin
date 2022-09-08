@@ -48,6 +48,7 @@ const VerifyContainer = (props) => {
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resendOtp = useCallback(async () => {
+    setOtp("");
     dispatch(turnOn());
     const params = props.location.search.split("emailId=");
     const data = { emailId: params[1] };
