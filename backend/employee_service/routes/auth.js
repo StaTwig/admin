@@ -56,4 +56,6 @@ router.get(
 router.get("/emailverify", AuthController.emailverify);
 router.get("/images/:key", AuthController.Image);
 
+router.post("/googleLogin", AuthController.googleLogIn);
+
 module.exports = router;
