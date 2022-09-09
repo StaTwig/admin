@@ -19,27 +19,15 @@ const EditLocation = (props) => {
   const id = props.match.params.id;
   const [addressTitle, setAddressTitle] = useState("");
   const [addressLine, setAddressLine] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
   const [pincode, setPincode] = useState("");
   const [region, setregion] = useState("");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
-
   const [allregions, setallregions] = useState([]);
   const [allState, setallState] = useState([]);
   const [allCity, setallCity] = useState([]);
-
-  const closeModalAddedLocation = () => {
-    setAddedLocationModal(false);
-    props.history.push({
-      pathname: "/profile",
-      state: {
-        // props.location.state.editMode=true,
-        editMode: true,
-      },
-    });
-  };
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
 
   // const getDataForWareHouse = async(id) => {
   //   const result = await getWarehouseById(id);
@@ -87,6 +75,25 @@ const EditLocation = (props) => {
     setallCity(res.data);
   }
 
+  const closeModalAddedLocation = () => {
+    setAddedLocationModal(false);
+    props.history.push({
+      pathname: "/profile",
+      state: {
+        // props.location.state.editMode=true,
+        editMode: true,
+      },
+    });
+  };
+
+  function search(name, myArray) {
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i].name === name) {
+        return myArray[i].id;
+      }
+    }
+  }
+
   const updateStatus = async (values, id) => {
     const data = {
       title: values.addressTitle,
@@ -119,13 +126,7 @@ const EditLocation = (props) => {
     }
   };
 
-  function search(name, myArray) {
-    for (var i = 0; i < myArray.length; i++) {
-      if (myArray[i].name === name) {
-        return myArray[i].id;
-      }
-    }
-  }
+
   // const requestadminforapproval = () => {
   //  props.history.push('/profile');
   // };
