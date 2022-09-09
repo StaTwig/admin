@@ -322,6 +322,7 @@ export function config() {
       getManufacturerFilterOptions: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
       getmanufacturerInStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockFilterOptions`,
       getmanufacturerOutStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outStockFilterOptions`,
+      verifyAuth: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyAuth`
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
