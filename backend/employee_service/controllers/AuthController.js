@@ -17,6 +17,7 @@ const mailer = require("../helpers/mailer");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
 const cuid = require("cuid");
+const { OAuth2Client } = require("google-auth-library")
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
@@ -45,6 +46,10 @@ async function verifyAuth(nonce, signature) {
     return null;
   }
 }
+
+const googleClient = new OAuth2Client({
+  clientId: process.env.GOOGLE_CLIENT_ID
+})
 
 /**
  * Uniques email check
@@ -846,6 +851,43 @@ exports.verifyAuthentication = [
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(req, res, "default_error");
+    }
+  },
+];
+
+/**
+ * Google log in
+ * 
+ * @param {string} token
+ * 
+ * @returns {Object}
+ */
+exports.googleLogIn = [
+	body("token").isLength({ min: 1 }).withMessage("Token required!"),
+	async (req, res) => {
+    try {
+      const { token } = req.body;
+
+      const googleRes = await googleClient.verifyIdToken({
+        id: token,
+        audience: process.env.GOOGLE_CLIENT_ID
+      });
+
+      const payload = googleRes.getPayload();
+
+      let user = await EmployeeModel.findOne({
+        emailId: payload?.email
+      });
+
+      if(!user) {
+        return apiResponse.ErrorResponse(req, res, "User does not exist!");
+      }
+
+      // Create and send a token
+
+    } catch(err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, "Error in authenticating user - " + err.message);
     }
   },
 ];

@@ -1,0 +1,141 @@
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import GoogleIcon from "../../../../assets/files/images/social/google.png";
+import TorusIcon from "../../../../assets/files/images/social/torus.png";
+import "./AccessForm.css";
+import { Link, useHistory } from "react-router-dom";
+import GoogleAuth from "./GoogleAuth";
+import { useTranslation } from "react-i18next";
+import PhoneInput from "react-phone-number-input";
+import { COUNTRY_CODE } from "../../../../constants/countryCode";
+
+export default function AccessForm() {
+  const history = useHistory();
+  const { t } = useTranslation();
+  
+  const [EmailPhone, setEmailPhone] = useState("email");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value.toLowerCase());
+    setPhone("");
+  }
+
+  const onPhoneChange = (value) => {
+    setPhone(value)
+  }
+
+  return (
+    <div className="connect-popup-container">
+      <div className="auto-connect-options">
+        <GoogleAuth />
+        {/* <div
+          className="login-button-card"
+          // onClick={() => {
+          //   history.push("/register/account");
+          // }}
+        > */}
+          {/* <div className="icon-space">
+            <img src={GoogleIcon} alt="social" />
+          </div>
+          <p className="vl-subheading f-500 no-space">Sign In with Google</p> */}
+        {/* </div> */}
+        <div
+          className="login-button-card"
+          onClick={() => {
+            history.push("/register/organization");
+          }}
+        >
+          <div className="icon-space">
+            <img src={TorusIcon} alt="social" />
+          </div>
+          <p className="vl-subheading f-500 no-space">Sign In with Wallet ID</p>
+        </div>
+      </div>
+      <div className="option-divider">
+        <div className="divider-bar"></div>
+        <p className="vl-subheading vl-grey-xs">OR</p>
+        <div className="divider-bar"></div>
+      </div>
+      {EmailPhone === "email" ? (
+        <div className="manual-connect-options">
+          <div className="input-space-holder">
+            <TextField
+              id="outlined-basic"
+              label={t("email_id")}
+              variant="outlined"
+              fullWidth
+              autoCapitalize="none"
+              value={email}
+              onChange={onEmailChange}
+            />
+          </div>
+          <div className="change-input-option">
+            <div
+              className="vl-flex vl-align-center vl-gap-xs vl-blue vl-link"
+              onClick={() => setEmailPhone("phone")}
+            >
+              <i className="fa-solid fa-phone vl-icon-xs"></i>
+              <p className="vl-note">Use Phone Number</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="manual-connect-options">
+          <div className="input-space-holder">
+            <PhoneInput 
+              international
+              countryCallingCodeEditable={false}
+              defaultCountry={COUNTRY_CODE}
+              className="vl-custom-phone-input"
+              placeholder={t("enter_phone_number")}
+              inputProps={{
+                name: "phone",
+                required: true,
+                // enableSearch: true,
+              }}
+              value={phone}
+              onChange={onPhoneChange}
+              maxLength={15}
+            />
+            {/* <TextField
+              id="outlined-basic"
+              label="Phone Numer"
+              variant="outlined"
+              fullWidth
+            /> */}
+          </div>
+          <div className="change-input-option">
+            <div
+              className="vl-flex vl-align-center vl-gap-xs vl-blue  vl-link"
+              onClick={() => setEmailPhone("email")}
+            >
+              <i className="fa-solid fa-envelope vl-icon-xs"></i>
+              <p className="vl-note vl-link">Use Email Address</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="popup-actions">
+        <button
+          className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
+          onClick={() => {
+            history.push("register/verify");
+          }}
+        >
+          Sign In
+        </button>
+      </div>
+      <section className="further-links vl-justify-auto">
+        <p className="vl-note vl-grey-xs f-400">
+          Don't have Account?{" "}
+          <Link to="/" className="vl-blue vl-link">
+            Create Account
+          </Link>
+        </p>
+      </section>
+    </div>
+  );
+}

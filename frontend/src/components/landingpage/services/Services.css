@@ -1,0 +1,14 @@
+.service-card-container {
+  padding: 3rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: 2rem;
+}
+
+@media screen and (max-width: 586px) {
+  .service-card-container {
+    padding-top: 2rem !important;
+    padding-bottom: 0 !important;
+    gap: 1.5rem;
+  }
+}

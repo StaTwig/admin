@@ -3,7 +3,6 @@ import { Route, Switch } from "react-router";
 import "./style.scss";
 import Login from "../containers/login";
 import Verify from "../containers/verify";
-import LandingPage from "../containers/landingpage";
 import OverView from "../containers/overview";
 import Shipment from "../containers/shipments";
 import NewShipment from "../containers/newshipment";
@@ -53,17 +52,20 @@ import SettingsContainer from "../containers/settings";
 import AddProductContainer from "../containers/addproduct";
 import NetworkingContainer from "../containers/networking/NetworkingContainer";
 import TrackingContainer from "../containers/tracking/TrackingContainer";
+import LandingContainer from "../containers/landingpage/LandingContainer";
+import ConnectionContainer from "../containers/connection/ConnectionContainer";
 
 const routes = (
   <Switch>
     <Route exact path='/' component={Home} />
+    <Route exact path='/home' component={LandingContainer} />
+    <Route exact path='/register/:id' component={ConnectionContainer} />
     <Route exact path='/login' component={Login} />
     <Route path='/verify' component={Verify} />
     <Route path='/signup' component={Signup} />
     <Route path='/overview' component={requireAuth(OverView)} />
     <Route path='/forgotPassword' component={ForgotPassword} />
     <Route path='/resetPassword' component={resetPasswordPage} />
-    <Route path='/landingpage' component={requireAuth(LandingPage)} />
     <Route path='/profile' component={requireAuth(Profile)} />
     <Route path='/settings' component={requireAuth(SettingsContainer)} />
     <Route path='/adminprofile' component={requireAuth(AdminProfile)} />
