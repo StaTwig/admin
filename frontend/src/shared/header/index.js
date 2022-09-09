@@ -38,6 +38,7 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
+  console.log("User : ", props.user);
   const { t } = props;
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -341,6 +342,20 @@ const Header = (props) => {
     },
   };
 
+  const searchPermissions = props.user.permissions.search;
+
+  const [allowSearch, setAllowSearch] = useState(false);
+
+
+  useEffect(() => {
+    for (const property in searchPermissions) {
+      if (searchPermissions[property]) {
+        setAllowSearch(true);
+        break;
+      }
+    }
+  });
+
   return (
     <div className='navBar'>
       {/* Container */}
@@ -360,119 +375,42 @@ const Header = (props) => {
           <MenuOutlined className='hambergerMenu' />
 
           <ul className='navList'>
-            <li className='navItems'>
-              {/* <Autocomplete 
-                  style={{width:"400px"}}
-                  freeSolo
-                  id="free-solo-2-demo"
-                  disableClearable
-                  forcePopupIcon={true}
-                  popupIcon={<Search style={{ color: "#0b65c1" }} />}
-                  options={options}
-                  getOptionLabel={(option) => option._id}
-                  filterOptions={filterOptions}
-                  placeholder="Search PO ID/ Shipment ID/ Transit Number"
-                  onFocus={(e) => (e.target.placeholder = "")}
-                  onBlur={(e) =>
-                    (e.target.placeholder =
-                      "Search PO ID/ Shipment ID/ Transit Number")
-                  }
-                  inputValue={search}
-                  onInputChange={(event, newInputValue) => {
-                    setSearch(newInputValue);
-                    onSearchChange(newInputValue);
-                  }}
-                  onChange={(event, newValue) => {
-                    onSearchChange(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Search PO ID/ Shipment ID/ Transit Number"
-                      InputProps={{
-                        ...params.InputProps,
-                        type: "search",
-                      }}
-                    />
-                  )}
-                /> */}
-              <div className='search-form' tabIndex='-1' onKeyDown={onkeydown}>
-                {/* <Autocomplete
-                  id='free-solo-demo'
-                  freeSolo
-                  //value={search}
-                  disableClearable
-                  // autoComplete
-                  // forcePopupIcon={true}
-                  // popupIcon={<Search style={{ color: "#0b65c1" }} onClick={onIcon} />}
-                  options={options}
-                  // getOptionLabel={(option) => option._id}
-                  // filterOptions={filterOptions}
-                  placeholder={search_placeholder}
-                  onFocus={(e) => (e.target.placeholder = "")}
-                  onBlur={(e) =>
-                    (e.target.placeholder = { search_placeholder })
-                  }
-                  value={searchString}
-                  // inputValue={search}
-                  // onInputChange={(event, newInputValue) => {
-                    
-                  //   setSearch(newInputValue);
-                  //   onSearchChange(newInputValue);
-                  // }}
-                  onChange={(event, newValue) => {
-                    console.log({ newValue });
-                    onSearchChange(newValue);
-                    // onSeach();  
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={search_placeholder}
-                      margin='normal'
-                      variant='outlined'
-                      sx={{ width: "7rem" }}
-                    />
-                  )}
-                />
-                <Search
-                  className='Auto-search-icon'
-                  style={{}}
-                  onClick={onIcon}
-                /> */}
-                <Autocomplete
-                  {...defaultProps}
-                  id='controlled-demo'
-                  value={searchString}
-                  disableClearable
-                  placeholder={search_placeholder}
-                  onFocus={(e) => (e.target.placeholder = "")}
-                  onBlur={(e) =>
-                    (e.target.placeholder = { search_placeholder })
-                  }
-                  onInputChange={(event, newInputValue) => {
-                    console.log({ newInputValue });
-                    setSearch(newInputValue);
-                    onSearchChange(newInputValue);
-                  }}
-                  onChange={(event, newValue) => {
-                    console.log("onchange ", newValue);
-                    // onSearchChange(newValue);
-                    setSearchString(newValue._id);
-                    onSeach(newValue._id);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={search_placeholder}
-                      sx={{ width: "7rem" }}
-                      margin='normal'
-                      variant='outlined'
-                    />
-                  )}
-                />
-              </div>
-            </li>
+            {allowSearch &&
+              (<li className='navItems'>
+                <div className='search-form' tabIndex='-1' onKeyDown={onkeydown}>
+                  <Autocomplete
+                    {...defaultProps}
+                    id='controlled-demo'
+                    value={searchString}
+                    disableClearable
+                    placeholder={search_placeholder}
+                    onFocus={(e) => (e.target.placeholder = "")}
+                    onBlur={(e) =>
+                      (e.target.placeholder = { search_placeholder })
+                    }
+                    onInputChange={(event, newInputValue) => {
+                      console.log({ newInputValue });
+                      setSearch(newInputValue);
+                      onSearchChange(newInputValue);
+                    }}
+                    onChange={(event, newValue) => {
+                      console.log("onchange ", newValue);
+                      // onSearchChange(newValue);
+                      setSearchString(newValue._id);
+                      onSeach(newValue._id);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={search_placeholder}
+                        sx={{ width: "7rem" }}
+                        margin='normal'
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                </div>
+              </li>)}
             {/* Notification Icons */}
 
             <li className='navItems notifyList'>
