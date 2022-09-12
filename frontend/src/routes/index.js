@@ -59,7 +59,15 @@ const routes = (
   <Switch>
     <Route exact path='/' component={Home} />
     <Route exact path='/home' component={LandingContainer} />
-    <Route exact path='/register/:id' component={ConnectionContainer} />
+    <Route exact path='/register/account'>
+      <ConnectionContainer connection="account" />
+    </Route>
+    <Route exact path='/register/organization'>
+      <ConnectionContainer connection="organization" />
+    </Route>
+    <Route exact path='/login/verify'>
+      <ConnectionContainer connection="verify" />
+    </Route>
     <Route exact path='/login' component={Login} />
     <Route path='/verify' component={Verify} />
     <Route path='/signup' component={Signup} />
