@@ -61,7 +61,7 @@ const LocationRequests = (props) => {
             </span>
           </div>
           <div className="pb-2">
-            <span className="txtColor">{t('location')}: </span>
+            <span className="txtColor">{t('Location')}: </span>
             <span>{getAddress(row?.warehouseAddress)} </span>
           </div>
         </div>
