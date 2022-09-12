@@ -144,7 +144,7 @@ export default function Organization(props) {
 										getOptionLabel={(option) => option.name || ""}
 										{...field}
 										onChange={(event, value) => {
-											field.onChange(value);
+											field.onChange(value.name);
 											getAllStates(value);
 											setValue("state", "");
 											setValue("city", "");
@@ -166,7 +166,7 @@ export default function Organization(props) {
 										getOptionLabel={(option) => option.name || ""}
 										{...field}
 										onChange={(event, value) => {
-											field.onChange(value);
+											field.onChange(value.name);
 											getAllCities(value);
 											setValue("city", "");
 											setValue("address", "");
@@ -185,7 +185,7 @@ export default function Organization(props) {
 										getOptionLabel={(option) => option.name || ""}
 										{...field}
 										onChange={(event, value) => {
-											field.onChange(value);
+											field.onChange(value.name);
 											setValue("address", "");
 										}}
 										renderInput={(params) => <TextField {...params} label="City" />}

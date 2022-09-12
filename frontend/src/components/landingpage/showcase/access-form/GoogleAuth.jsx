@@ -10,10 +10,10 @@ import setAuthToken from "../../../../utils/setAuthToken";
 import { turnOff, turnOn } from "../../../../actions/spinnerActions";
 import { useHistory } from "react-router";
 
-export default function GoogleAuth() {
+export default function GoogleAuth(props) {
 	const history = useHistory();
 	const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
 	useEffect(() => {
 		function start() {
@@ -51,18 +51,25 @@ export default function GoogleAuth() {
 				dispatch(setCurrentUser(decoded));
 				// const intelEnabled = props.user?.type === "Third Party Logistics" ? true : false;
 				// props.history.push(intelEnabled ? `/shipments` : `/overview`);
-			} else if (result.status === 401) {
-				// Redirect user to signup
 				history.push({
-					pathname: "/register/account",
-					state: googleRes
-				})
+					pathname: "/overview",
+				});
+			} else if (result.status === 401) {
+				if(props.register) {
+					props.setGoogleData(googleRes);
+				} else {
+					// Redirect user to signup
+					history.push({
+						pathname: "/register/account",
+						state: googleRes,
+					});
+				}
 			} else {
 				const err = result.data.message;
 				setErrorMessage(err);
 			}
 			dispatch(turnOff());
-		} catch(err) {
+		} catch (err) {
 			dispatch(turnOff());
 			console.log(err);
 		}
@@ -80,7 +87,7 @@ export default function GoogleAuth() {
 					<div className="icon-space">
 						<img src={GoogleIcon} alt="social" />
 					</div>
-					<p className="vl-subheading f-500 no-space">Sign In with Google</p>
+					<p className="vl-subheading f-500 no-space">Sign {props.register ? "Up" : "In"} with Google</p>
 				</div>
 			)}
 			onSuccess={onSuccess}

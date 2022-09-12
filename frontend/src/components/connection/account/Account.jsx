@@ -14,12 +14,13 @@ import { useForm, Controller } from "react-hook-form";
 import { getOrganizationsByType } from "../../../actions/userActions";
 import { getOrganisationsAtSignup } from "../../../actions/productActions";
 import { useTranslation } from "react-i18next";
+import GoogleAuth from "../../landingpage/showcase/access-form/GoogleAuth";
 
 export default function Account(props) {
 	const location = useLocation();
-	let googleData;
+	const [googleData, setGoogleData] = useState();
 	if (location?.state?.tokenId) {
-		googleData = location.state.profileObj;
+		setGoogleData(location.state.profileObj);
 	}
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -54,9 +55,11 @@ export default function Account(props) {
 		} else {
 			props.onUserDataSubmit(data, organizationExists === "existing");
 
-			history.push({
-			  pathname: "/register/organization"
-			})
+			if(organizationExists === "new") {
+				history.push({
+					pathname: "/neworganization"
+				})
+			}
 		}
 	};
 
@@ -110,21 +113,11 @@ export default function Account(props) {
 					</hgroup>
 					<section className="vl-input-group form-auto-fill-section">
 						<div className="input-two-auto-column">
+							<GoogleAuth register={true} setGoogleData={setGoogleData} />
 							<div
 								className="login-button-card"
 								onClick={() => {
-									history.push("/register/account");
-								}}
-							>
-								<div className="icon-space">
-									<img src={GoogleIcon} alt="social" />
-								</div>
-								<p className="vl-subheading f-500 no-space">Sign Up with Google</p>
-							</div>
-							<div
-								className="login-button-card"
-								onClick={() => {
-									history.push("/register/organization");
+									history.push("/neworganization");
 								}}
 							>
 								<div className="icon-space">

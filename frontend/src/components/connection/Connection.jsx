@@ -68,13 +68,11 @@ export default function Connection(props) {
 				// Redirect to pending page
 				console.log("Req pending!");
 			} else {
-				console.log("Error - ", result.data.message);
+				console.log("Error - ", result.data);
 			}
 			dispatch(turnOff());
 		}
 	};
-
-	console.log(registerData);
 
 	return (
 		<section className="connect-layout-container">
@@ -136,10 +134,10 @@ export default function Connection(props) {
 						</figure>
 					</div>
 					<div className="connection-body-container">
-						<section className="back-navigation vl-link vl-grey-xs">
+						{/* <section className="back-navigation vl-link vl-grey-xs">
 							<i className="fa-solid fa-arrow-left"></i>
 							<p className="vl-subheading f-400">Back</p>
-						</section>
+						</section> */}
 						<div className="login-system-layout">
 							{connection === "account" && <Account onUserDataSubmit={onUserDataSubmit} />}
 							{connection === "organization" && (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import TextField from "@mui/material/TextField";
 import GoogleIcon from "../../../../assets/files/images/social/google.png";
 import TorusIcon from "../../../../assets/files/images/social/torus.png";
@@ -8,10 +8,14 @@ import GoogleAuth from "./GoogleAuth";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 import { COUNTRY_CODE } from "../../../../constants/countryCode";
+import { useDispatch } from "react-redux";
+import { sendOtp } from "../../../../actions/userActions";
+import { turnOff, turnOn } from "../../../../actions/spinnerActions";
 
 export default function AccessForm() {
   const history = useHistory();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
   
   const [EmailPhone, setEmailPhone] = useState("email");
   const [email, setEmail] = useState("");
@@ -31,6 +35,26 @@ export default function AccessForm() {
     setPhone("");
     setEmail("");
   }, [EmailPhone]);
+
+  const onSendOtp = useCallback(async () => {
+    console.log(email, phone);
+    dispatch(turnOn());
+    if(!email && !phone) {
+      console.log("Please provide email or phone!");
+      dispatch(turnOff());
+    } else {
+      const data = {
+        emailId: email ? email : phone
+      }
+      const result = await sendOtp(data, i18n.language);
+      if(result?.status === 200) {
+        history.push(`/verify?emailId=${data.emailId}`);
+      } else {
+        console.log("Error - ", result.data.message);
+      }
+      dispatch(turnOff());
+    }
+  });
 
   // const onSendOtp = useCallback(async () => {
   //   dispatch(turnOn());
@@ -80,9 +104,9 @@ export default function AccessForm() {
         {/* </div> */}
         <div
           className="login-button-card"
-          onClick={() => {
-            history.push("/register/organization");
-          }}
+          // onClick={() => {
+          //   history.push("/register/organization");
+          // }}
         >
           <div className="icon-space">
             <img src={TorusIcon} alt="social" />
@@ -158,9 +182,7 @@ export default function AccessForm() {
       <div className="popup-actions">
         <button
           className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
-          onClick={() => {
-            history.push("register/verify");
-          }}
+          onClick={onSendOtp}
         >
           Sign In
         </button>
@@ -168,7 +190,7 @@ export default function AccessForm() {
       <section className="further-links vl-justify-auto">
         <p className="vl-note vl-grey-xs f-400">
           Don't have Account?{" "}
-          <Link to="/" className="vl-blue vl-link">
+          <Link to="/signup" className="vl-blue vl-link">
             Create Account
           </Link>
         </p>
