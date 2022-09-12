@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import GoogleIcon from "../../../../assets/files/images/social/google.png";
 import TorusIcon from "../../../../assets/files/images/social/torus.png";
@@ -23,8 +23,45 @@ export default function AccessForm() {
   }
 
   const onPhoneChange = (value) => {
-    setPhone(value)
+    setPhone(value);
+    setEmail("");
   }
+
+  useEffect(() => {
+    setPhone("");
+    setEmail("");
+  }, [EmailPhone]);
+
+  // const onSendOtp = useCallback(async () => {
+  //   dispatch(turnOn());
+  //   const data = { emailId: email !== "" ? email : phone };
+  //   // console.log("phone:", phone.length);
+  //   console.log("email:", email);
+  //   if(email==="" && phone.length < 13){
+  //     setErrorMessage("Provide Valid Phone Number or EmailId");
+  //     dispatch(turnOff());  
+  //   }
+  //   else{
+  //     const result = await sendOtp(data, i18n.language);
+  //     if (result?.status === 200) {
+  //       props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
+  //     } else if (result?.status === 500) {
+  //       const err = result.data.message;
+  //       setErrorMessage(err);
+  //     } else if (result?.status === 404) {
+  //       const err = result.data.message;
+  //       setErrorMessage(err);
+  //     } else if (result?.status === 401) {
+  //       const err = result.data.message;
+  //       setErrorMessage(err);
+  //     } else {
+  //       // const err = result.data.data.emailId;
+  //       console.log("result ", result);
+  //       setErrorMessage(result);
+  //     }
+  //     dispatch(turnOff());      
+  //   }
+  // });
 
   return (
     <div className="connect-popup-container">

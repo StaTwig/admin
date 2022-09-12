@@ -10,10 +10,28 @@ import Organization from "./organization/Organization";
 import Verify from "./verify/Verify";
 import { useParams } from "react-router-dom";
 
-export default function Connection() {
+export default function Connection(props) {
   let { id } = useParams();
   console.log(id);
   const [connection] = useState(id);
+
+  const [registerData, setRegisterData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: ""
+  });
+
+  const onUserDataSubmit = (data, isFinal=false) => {
+    setRegisterData({...registerData, ...data});
+    if(isFinal) {
+      // API call to backend
+      // Redirect to request pending
+    }
+  }
+
+  console.log("Register data - ", registerData);
+
   return (
     <section className="connect-layout-container">
       <div className="connection-two-column-grid-layout">
@@ -101,8 +119,8 @@ export default function Connection() {
               <p className="vl-subheading f-400">Back</p>
             </section>
             <div className="login-system-layout">
-              {connection === "account" && <Account />}
-              {connection === "organization" && <Organization />}
+              {connection === "account" && <Account onUserDataSubmit={onUserDataSubmit} />}
+              {connection === "organization" && <Organization onUserDataSubmit={onUserDataSubmit} />}
               {connection === "verify" && <Verify />}
             </div>
           </div>

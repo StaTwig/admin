@@ -863,28 +863,134 @@ exports.verifyAuthentication = [
  * @returns {Object}
  */
 exports.googleLogIn = [
-	body("token").isLength({ min: 1 }).withMessage("Token required!"),
+	body("tokenId").isLength({ min: 1 }).withMessage("Token required!"),
 	async (req, res) => {
     try {
-      const { token } = req.body;
+      console.log(req.body);
+      const { tokenId } = req.body;
 
       const googleRes = await googleClient.verifyIdToken({
-        id: token,
+        idToken: tokenId,
         audience: process.env.GOOGLE_CLIENT_ID
       });
-
       const payload = googleRes.getPayload();
+
+      if(!payload || !payload?.email) {
+        throw new Error("Failed to verify account with google!");
+      }
 
       let user = await EmployeeModel.findOne({
         emailId: payload?.email
       });
 
       if(!user) {
-        return apiResponse.ErrorResponse(req, res, "User does not exist!");
+        return apiResponse.unauthorizedResponse(req, res, "User does not exist!");
       }
 
       // Create and send a token
+      let address;
+      if (
+        user.walletAddress == null ||
+        user.walletAddress == "wallet12345address"
+      ) {
+        const response = await axios.get(
+          `${blockchain_service_url}/createUserAddress`
+        );
+        address = response.data.items;
+        // const userData = {
+        //   address,
+        // };
+        /* await axios.post(
+          `${blockchain_service_url}/grantPermission`,
+          userData
+        );*/
+        await EmployeeModel.updateOne(
+					{ emailId: payload?.email },
+					{
+						otp: null,
+						walletAddress: address,
+					},
+				);
+      } else {
+        address = user.walletAddress;
+      }
 
+      const activeWarehouse = await WarehouseModel.find({
+        $and: [
+          { id: { $in: user.warehouseId } },
+          {
+            $or: [
+              { status: "ACTIVE" },
+              { status: "PENDING" },
+              { status: { $exists: false } },
+            ],
+          },
+        ],
+      });
+
+      let userData;
+      if (activeWarehouse.length > 0) {
+        let activeWarehouseId = 0;
+        const activeWRs = activeWarehouse.filter(
+          (w) => w.status == "ACTIVE"
+        );
+        if (activeWRs.length > 0) activeWarehouseId = activeWRs[0].id;
+        else activeWarehouseId = activeWarehouse[0].id;
+        userData = {
+          id: user.id,
+          firstName: user.firstName,
+          emailId: user.emailId,
+          role: user.role,
+          warehouseId: activeWarehouseId,
+          organisationId: user.organisationId,
+          walletAddress: address,
+          phoneNumber: user.phoneNumber,
+          org: user.msp,
+          userName: user.emailId,
+          preferredLanguage: user.preferredLanguage,
+          isCustom: user.isCustom,
+        };
+      } else {
+        userData = {
+          id: user.id,
+          firstName: user.firstName,
+          emailId: user.emailId,
+          role: user.role,
+          warehouseId: [],
+          organisationId: user.organisationId,
+          walletAddress: address,
+          phoneNumber: user.phoneNumber,
+          org: user.msp,
+          userName: user.emailId,
+          preferredLanguage: user.preferredLanguage,
+          isCustom: user.isCustom,
+        };
+      }
+      //Prepare JWT token for authentication
+      const jwtPayload = userData;
+      const jwtData = {
+        expiresIn: process.env.JWT_TIMEOUT_DURATION,
+      };
+      const secret = process.env.JWT_SECRET;
+      //Generated JWT token with Payload and secret.
+      userData.permissions = await RbacModel.findOne({ role: user.role });
+      userData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+      const bc_data = {
+        username: payload?.email,
+        password: "",
+        orgName: "org1MSP",
+        role: "",
+        email: payload?.email,
+      };
+      console.log(bc_data);
+      await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+      return apiResponse.successResponseWithData(
+        req,
+        res,
+        "login_success",
+        userData
+      );
     } catch(err) {
       console.log(err);
       return apiResponse.ErrorResponse(req, res, "Error in authenticating user - " + err.message);

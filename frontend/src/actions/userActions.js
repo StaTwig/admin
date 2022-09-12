@@ -271,3 +271,12 @@ export const createUpdateNewAlert = async (data) => {
     return e.response;
   }
 };
+
+export const googleLogin = async (data) => {
+  try {
+    const result = await axios.post(config().googleLoginUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
