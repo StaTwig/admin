@@ -55,10 +55,10 @@ export default function Account(props) {
 		} else {
 			props.onUserDataSubmit(data, organizationExists === "existing");
 
-			if(organizationExists === "new") {
+			if (organizationExists === "new") {
 				history.push({
-					pathname: "/neworganization"
-				})
+					pathname: "/neworganization",
+				});
 			}
 		}
 	};
@@ -113,7 +113,13 @@ export default function Account(props) {
 					</hgroup>
 					<section className="vl-input-group form-auto-fill-section">
 						<div className="input-two-auto-column">
-							<GoogleAuth register={true} setGoogleData={setGoogleData} />
+							{/* <GoogleAuth register={true} googleData={googleData} setGoogleData={setGoogleData} /> */}
+							<div className="login-button-card">
+								<div className="icon-space">
+									<img src={GoogleIcon} alt="social" />
+								</div>
+								<p className="vl-subheading f-500 no-space">Sign Up with Google</p>
+							</div>
 							<div
 								className="login-button-card"
 								onClick={() => {

@@ -56,11 +56,12 @@ export default function GoogleAuth(props) {
 				});
 			} else if (result.status === 401) {
 				if(props.register) {
-					props.setGoogleData(googleRes);
-				} else {
+					if(props.googleData?.email !== googleRes.email)
+						props.setGoogleData(googleRes);
+				} else if(props.signin) {
 					// Redirect user to signup
 					history.push({
-						pathname: "/register/account",
+						pathname: "/signup",
 						state: googleRes,
 					});
 				}

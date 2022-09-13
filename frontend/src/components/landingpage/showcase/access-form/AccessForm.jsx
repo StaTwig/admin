@@ -56,52 +56,21 @@ export default function AccessForm() {
     }
   });
 
-  // const onSendOtp = useCallback(async () => {
-  //   dispatch(turnOn());
-  //   const data = { emailId: email !== "" ? email : phone };
-  //   // console.log("phone:", phone.length);
-  //   console.log("email:", email);
-  //   if(email==="" && phone.length < 13){
-  //     setErrorMessage("Provide Valid Phone Number or EmailId");
-  //     dispatch(turnOff());  
-  //   }
-  //   else{
-  //     const result = await sendOtp(data, i18n.language);
-  //     if (result?.status === 200) {
-  //       props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
-  //     } else if (result?.status === 500) {
-  //       const err = result.data.message;
-  //       setErrorMessage(err);
-  //     } else if (result?.status === 404) {
-  //       const err = result.data.message;
-  //       setErrorMessage(err);
-  //     } else if (result?.status === 401) {
-  //       const err = result.data.message;
-  //       setErrorMessage(err);
-  //     } else {
-  //       // const err = result.data.data.emailId;
-  //       console.log("result ", result);
-  //       setErrorMessage(result);
-  //     }
-  //     dispatch(turnOff());      
-  //   }
-  // });
-
   return (
     <div className="connect-popup-container">
       <div className="auto-connect-options">
-        <GoogleAuth />
-        {/* <div
+        {/* <GoogleAuth signin={true} /> */}
+        <div
           className="login-button-card"
           // onClick={() => {
           //   history.push("/register/account");
           // }}
-        > */}
-          {/* <div className="icon-space">
+        >
+          <div className="icon-space">
             <img src={GoogleIcon} alt="social" />
           </div>
-          <p className="vl-subheading f-500 no-space">Sign In with Google</p> */}
-        {/* </div> */}
+          <p className="vl-subheading f-500 no-space">Sign In with Google</p>
+        </div>
         <div
           className="login-button-card"
           // onClick={() => {
