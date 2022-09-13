@@ -69,7 +69,8 @@ export default function Connection(props) {
       const result = registerUser(reqData, i18n.language);
       if (result.status === 200) {
         // Redirect to pending page
-        console.log("Req pending!");
+				console.log("Req pending!");
+				history.push("/success");
       } else {
         console.log("Error - ", result.data);
       }
