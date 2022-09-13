@@ -179,7 +179,7 @@ export function config() {
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
       checkUserUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
-      googleLoginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/googleLogin`,
+      googleLoginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/googleLogin`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       locationUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/switchLocation`,
