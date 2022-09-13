@@ -8,7 +8,7 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.4",
+    "@mui/material": "^5.10.5",
     "@react-google-maps/api": "^2.12.2",
     "@toruslabs/torus-embed": "^1.35.6",
     "apexcharts": "^3.35.5",
