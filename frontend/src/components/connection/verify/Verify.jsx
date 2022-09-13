@@ -114,7 +114,8 @@ export default function Verify() {
 									variant="outlined"
 									placeholder="*"
 									inputProps={{ maxLength: 1 }}
-									autoFocus={index === 0 ? true : undefined}
+                  autoFocus={index === 0 ? true : undefined}
+                  required
 								/>
 							))}
 						</div>

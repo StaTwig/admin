@@ -36,6 +36,7 @@ export default function Organization(props) {
 			let temp = arr.data.map((elem) => elem.name);
 			setUnregisteredOrganisations(temp);
 		}
+		fetchUnregisteredOrganisations();
 	}, []);
 
 	async function getAllCountries(region) {
@@ -44,7 +45,7 @@ export default function Organization(props) {
 	}
 
 	async function getAllStates(country) {
-		console.log(country)
+		console.log(country);
 		let states = await fetchStateByCountry(country.id);
 		setAllStates(states.data);
 	}
@@ -64,6 +65,7 @@ export default function Organization(props) {
 		organizationName: "",
 		region: "",
 		country: "",
+		state: "",
 		city: "",
 		pincode: "",
 		address: "",
@@ -88,6 +90,7 @@ export default function Organization(props) {
 							<Controller
 								name="organizationName"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<Autocomplete
 										fullWidth
@@ -107,7 +110,14 @@ export default function Organization(props) {
 											}
 											return filtered;
 										}}
-										renderInput={(params) => <TextField {...params} label="Organization Name" />}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label="Organization Name"
+												error={Boolean(errors.organizationName)}
+												helperText={errors.organizationName && "Organization Name is required!"}
+											/>
+										)}
 									/>
 								)}
 							/>
@@ -116,6 +126,7 @@ export default function Organization(props) {
 							<Controller
 								name="region"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<Autocomplete
 										fullWidth
@@ -130,13 +141,21 @@ export default function Organization(props) {
 											setValue("city", "");
 											setValue("address", "");
 										}}
-										renderInput={(params) => <TextField {...params} label="Region" />}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label="Region"
+												error={Boolean(errors.region)}
+												helperText={errors.region && "Region is required!"}
+											/>
+										)}
 									/>
 								)}
 							/>
 							<Controller
 								name="country"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<Autocomplete
 										fullWidth
@@ -150,7 +169,14 @@ export default function Organization(props) {
 											setValue("city", "");
 											setValue("address", "");
 										}}
-										renderInput={(params) => <TextField {...params} label="Country" />}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label="Country"
+												error={Boolean(errors.country)}
+												helperText={errors.country && "Country is required!"}
+											/>
+										)}
 									/>
 								)}
 							/>
@@ -159,6 +185,7 @@ export default function Organization(props) {
 							<Controller
 								name="state"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<Autocomplete
 										fullWidth
@@ -171,13 +198,21 @@ export default function Organization(props) {
 											setValue("city", "");
 											setValue("address", "");
 										}}
-										renderInput={(params) => <TextField {...params} label="State" />}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label="State"
+												error={Boolean(errors.state)}
+												helperText={errors.state && "State is required!"}
+											/>
+										)}
 									/>
 								)}
 							/>
 							<Controller
 								name="city"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<Autocomplete
 										fullWidth
@@ -188,7 +223,14 @@ export default function Organization(props) {
 											field.onChange(value.name);
 											setValue("address", "");
 										}}
-										renderInput={(params) => <TextField {...params} label="City" />}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label="City"
+												error={Boolean(errors.city)}
+												helperText={errors.city && "City is required!"}
+											/>
+										)}
 									/>
 								)}
 							/>
@@ -197,8 +239,16 @@ export default function Organization(props) {
 							<Controller
 								name="pincode"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
-									<TextField fullWidth variant="outlined" label="Pincode" {...field} required />
+									<TextField
+										fullWidth
+										variant="outlined"
+										label="Pincode"
+										{...field}
+										error={Boolean(errors.pincode)}
+										helperText={errors.pincode && "Pincode is required!"}
+									/>
 								)}
 							/>
 						</div>
@@ -206,6 +256,7 @@ export default function Organization(props) {
 							<Controller
 								name="address"
 								control={control}
+								rules={{ required: true }}
 								render={({ field }) => (
 									<TextField
 										fullWidth
@@ -213,7 +264,8 @@ export default function Organization(props) {
 										label="Address"
 										multiline
 										{...field}
-										required
+										error={Boolean(errors.address)}
+										helperText={errors.address && "Address is required!"}
 									/>
 								)}
 							/>

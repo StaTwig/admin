@@ -13,11 +13,13 @@ import { turnOff, turnOn } from "../../actions/spinnerActions";
 import { registerUser } from "../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import Success from "./success/Success";
+import { useHistory } from "react-router";
 
 export default function Connection(props) {
-  const { connection } = props;
-
-  const dispatch = useDispatch();
+	const { connection } = props;
+	
+	const history = useHistory();
+	const dispatch = useDispatch();
   const { i18n } = useTranslation();
 
   const [registerData, setRegisterData] = useState({
@@ -75,103 +77,89 @@ export default function Connection(props) {
     }
   };
 
-  return (
-    <section className="connect-layout-container">
-      <div className="connection-two-column-grid-layout">
-        <div className="banner-section banner-grid-name">
-          <div className="banner-inner-container">
-            <div className="banner-top">
-              <figure className="connection-brand-logo">
-                <img src={Vaccineledgerlight} alt="Vaccineledger" />
-              </figure>
-              <section className="our-benefits-container">
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    Maintain your Orders
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    Real Time shipment details
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">Track & Trace</p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    View your Partner Locations
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    Alerts and Notifications
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    Monitor Cold chain conditions
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    Efficiently manage your inventory
-                  </p>
-                </article>
-              </section>
-            </div>
-            <div className="powerby">
-              <p className="vl-small f-700 vl-white">Powered by</p>
-              <img src={statwig} alt="statwig" className="statwig-power-logo" />
-            </div>
-            <img
-              src={Illustration}
-              alt="Illustration"
-              className="connect-Illustration"
-            />
-          </div>
-        </div>
-        <div className="main-context-section form-grid-name">
-          <div className="connection-mobile-header">
-            <figure className="brand-logo">
-              <img
-                src={VaccineLedgerLogo}
-                alt="vaccineledger"
-                className="brand-logo-image"
-              />
-            </figure>
-          </div>
-          <div className="connection-body-container">
-            <section className="back-navigation vl-link vl-grey-xs">
-              <i className="fa-solid fa-arrow-left"></i>
-              <p className="vl-subheading f-400">Back</p>
-            </section>
-            <div className="login-system-layout">
-              {connection === "account" && (
-                <Account onUserDataSubmit={onUserDataSubmit} />
-              )}
-              {connection === "organization" && (
-                <Organization onUserDataSubmit={onUserDataSubmit} />
-              )}
-              {connection === "verify" && <Verify />}
+	const handleBack = (event) => {
+		if(connection === "organization") {
+			history.push('/signup');
+		} else {
+			history.push('/');
+		}
+	}
+
+	return (
+		<section className="connect-layout-container">
+			<div className="connection-two-column-grid-layout">
+				<div className="banner-section banner-grid-name">
+					<div className="banner-inner-container">
+						<div className="banner-top">
+							<figure className="connection-brand-logo">
+								<img src={Vaccineledgerlight} alt="Vaccineledger" />
+							</figure>
+							<section className="our-benefits-container">
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Maintain your Orders</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Real Time shipment details</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Track & Trace</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">View your Partner Locations</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Alerts and Notifications</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Monitor Cold chain conditions</p>
+									<div className="straight-line"></div>
+								</article>
+								<article className="benefit-card">
+									<img src={check} alt="check" className="check-icon" />
+									<p className="vl-subheading f-500 vl-white">Efficiently manage your inventory</p>
+								</article>
+							</section>
+						</div>
+						<div className="powerby">
+							<p className="vl-small f-700 vl-white">Powered by</p>
+							<img src={statwig} alt="statwig" className="statwig-power-logo" />
+						</div>
+						<img src={Illustration} alt="Illustration" className="connect-Illustration" />
+					</div>
+				</div>
+				<div className="main-context-section form-grid-name">
+					<div className="connection-mobile-header">
+						<figure className="brand-logo">
+							<img src={VaccineLedgerLogo} alt="vaccineledger" className="brand-logo-image" />
+						</figure>
+					</div>
+					<div className="connection-body-container">
+						<section className="back-navigation vl-link vl-grey-xs" onClick={handleBack}>
+							<i className="fa-solid fa-arrow-left"></i>
+							<p className="vl-subheading f-400">Back</p>
+						</section>
+						<div className="login-system-layout">
+							{connection === "account" && <Account onUserDataSubmit={onUserDataSubmit} />}
+							{connection === "organization" && (
+								<Organization onUserDataSubmit={onUserDataSubmit} />
+							)}
+							{connection === "verify" && <Verify />}
               {connection === "success" && <Success />}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 }
