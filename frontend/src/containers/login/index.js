@@ -7,7 +7,7 @@ import Login from "../../components/login";
 import { sendOtp } from "../../actions/userActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import { useTranslation } from "react-i18next";
-import axios from 'axios';
+import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { setCurrentUser } from "../../actions/userActions";
@@ -56,7 +56,7 @@ export const fetchAccountData = async (provider) => {
 };
 
 export const getTorusProvider = async () => {
-  if(!torus.isInitialized){
+  if (!torus.isInitialized) {
     try {
       await torus.init({
         buildEnv: "production", // default: production
@@ -74,8 +74,6 @@ export const getTorusProvider = async () => {
   await torus.login();
   return torus;
 };
-
-
 
 const LoginContainer = (props) => {
   const { i18n } = useTranslation();
@@ -98,27 +96,17 @@ const LoginContainer = (props) => {
     const torusInfo = await torus.getUserInfo();
     let abc = await fetchAccountData(provider);
     console.log("torusInfo is: ", torusInfo);
-    let signData = await verifyAuth(
-      abc[0]?.address,
-      true,
-      web3,
-      torusInfo,
-    );
+    let signData = await verifyAuth(abc[0]?.address, true, web3, torusInfo);
     console.log(signData);
   };
-  const verifyAuth = async (
-    address,
-    isTorus,
-    torus,
-    torusInfo,
-  ) => {
+  const verifyAuth = async (address, isTorus, torus, torusInfo) => {
     try {
-      const baseURL = 'http://localhost:3001'
+      const baseURL = "http://localhost:3001";
       const message = "An amazing message, for use with MetaMask!";
       let signatures;
       if (!isTorus) {
         // await window.web3.currentProvider.enable();
-        console.log(address)
+        console.log(address);
         const web3 = new Web3(window.ethereum);
         signatures = await web3.eth.personal.sign(message, address, "");
       } else {
@@ -126,47 +114,45 @@ const LoginContainer = (props) => {
         signatures = await torus.eth.personal.sign(message, address, "");
       }
       // if (torusInfo?.isNewUser) {
-        // try {
-        //   const result = await axios.post(
-        //     baseURL + "/api/user_service/register",
-        //     {
-        //       walletAddress: address,
-        //       emailId: torusInfo?.email,
-        //       firstName: torusInfo?.name,
-        //     }
-        //   );
-        //   console.log(result);
-        // } catch (e) {
-        //   console.log(e);
-        // }
+      // try {
+      //   const result = await axios.post(
+      //     baseURL + "/api/user_service/register",
+      //     {
+      //       walletAddress: address,
+      //       emailId: torusInfo?.email,
+      //       firstName: torusInfo?.name,
+      //     }
+      //   );
+      //   console.log(result);
+      // } catch (e) {
+      //   console.log(e);
       // }
-      try{
-      const result = await axios.post(config().verifyAuth, {
-        walletId: address,
-        signature: signatures,
-        message: message,
-        emailId: torusInfo?.email
-      });
-      if (result.status === 200) {
-        // Set auth token auth
-        const token = result.data.data.token;
-        setAuthToken(token);
-        // Decode token and get user info and exp
-        const decoded = jwt_decode(token);
-        // Set user and isAuthenticated
-        localStorage.setItem("theLedgerToken", token);
-        localStorage.setItem("bkp", result.data.data.permissions.permissions);
-        dispatch(setCurrentUser(decoded));
-        // const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
-        props.history.push(
-          `/overview`
-        );
-      } else {
-        const err = result.data.message;
+      // }
+      try {
+        const result = await axios.post(config().verifyAuth, {
+          walletId: address,
+          signature: signatures,
+          message: message,
+          emailId: torusInfo?.email,
+        });
+        if (result.status === 200) {
+          // Set auth token auth
+          const token = result.data.data.token;
+          setAuthToken(token);
+          // Decode token and get user info and exp
+          const decoded = jwt_decode(token);
+          // Set user and isAuthenticated
+          localStorage.setItem("theLedgerToken", token);
+          localStorage.setItem("bkp", result.data.data.permissions.permissions);
+          dispatch(setCurrentUser(decoded));
+          // const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
+          props.history.push(`/overview`);
+        } else {
+          const err = result.data.message;
+          console.log(err);
+        }
+      } catch (err) {
         console.log(err);
-      }
-    }catch(err){
-      console.log(err);
       }
       // dispatch(setAccountData({ ...res.data.data, isTorus: isTorus }));
       return { signature: signatures, message: message };
@@ -185,11 +171,10 @@ const LoginContainer = (props) => {
     const data = { emailId: email !== "" ? email : phone };
     // console.log("phone:", phone.length);
     console.log("email:", email);
-    if(email===""&&phone.length<13){
+    if (email === "" && phone.length < 13) {
       setErrorMessage("Provide Valid Phone Number or EmailId");
-      dispatch(turnOff());  
-    }
-    else{
+      dispatch(turnOff());
+    } else {
       const result = await sendOtp(data, i18n.language);
       if (result?.status === 200) {
         props.history.push(`/verify?emailId=${email !== "" ? email : phone}`);
@@ -207,9 +192,8 @@ const LoginContainer = (props) => {
         console.log("result ", result);
         setErrorMessage(result);
       }
-      dispatch(turnOff());      
+      dispatch(turnOff());
     }
-
   });
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
@@ -238,12 +222,11 @@ const LoginContainer = (props) => {
           }}
           onPhoneChange={(value) => {
             setPhone(value);
-            if(value){
+            if (value) {
               let temp_phone = value.slice(2, value.length);
-            if (temp_phone !== "") setemailFieldDisable(true);
-            else setemailFieldDisable(false);
-            }
-            else setemailFieldDisable(false);
+              if (temp_phone !== "") setemailFieldDisable(true);
+              else setemailFieldDisable(false);
+            } else setemailFieldDisable(false);
           }}
           email={email}
           torusLogin={torusLogin}
