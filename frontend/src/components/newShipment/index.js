@@ -43,6 +43,10 @@ const NewShipment = (props) => {
   const dispatch = useDispatch();
   const [fetchdisabled, setfetchdisabled] = useState(false);
   const [pofetchdisabled] = useState(false);
+  const [toOrgLocLabel, settoOrgLocLabel] = useState("");
+  const [receiverOrgLoc, setReceiverOrgLoc] = useState(
+    t("select_delivery_location")
+  );
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("null");
@@ -51,10 +55,6 @@ const NewShipment = (props) => {
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
-  );
-  const [toOrgLocLabel, settoOrgLocLabel] = useState("");
-  const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-    t("select_delivery_location")
   );
   const user = useSelector((state) => state.user);
   const [OrderDetails, setOrderDetails] = useState({});
@@ -761,14 +761,13 @@ const NewShipment = (props) => {
                                 result.products[i].orderedQuantity =
                                   result.products[i].productQuantity;
                               }
-                              dispatch(turnOff());
-                              setReceiverOrgLoc();
-                              setReceiverOrgId();
                               setFieldValue("fromOrg", "");
                               setFieldValue("fromOrgLoc", "");
                               setFieldValue("rtype");
                               setFieldValue("toOrg", "");
-
+                              dispatch(turnOff());
+                              setReceiverOrgLoc();
+                              setReceiverOrgId();
                               if (result.status === 500) {
                                 setShipmentError(t("check_shipment_reference_id"));
                                 setOpenShipmentFail(true);
@@ -805,8 +804,8 @@ const NewShipment = (props) => {
                                     result.products[i].productID;
                                 }
                                 if (result.products.length > 0) {
-                                  setProducts((p) => []);
                                   setAddProducts((p) => []);
+                                  setProducts((p) => []);
                                   setFieldValue("products", products_temp);
                                 } else setFieldValue("products", []);
                               }
