@@ -57,12 +57,23 @@ import ConnectionContainer from "../containers/connection/ConnectionContainer";
 
 const routes = (
   <Switch>
-    <Route exact path='/' component={Home} />
-    <Route exact path='/home' component={LandingContainer} />
-    <Route exact path='/register/:id' component={ConnectionContainer} />
-    <Route exact path='/login' component={Login} />
+    {/* <Route exact path='/' component={Home} /> */}
+    <Route exact path='/' component={LandingContainer} />
+    <Route exact path='/signup'>
+      <ConnectionContainer connection="account" />
+    </Route>
+    <Route exact path='/neworganization'>
+      <ConnectionContainer connection="organization" />
+    </Route>
+    <Route exact path='/verify'>
+      <ConnectionContainer connection="verify" />
+    </Route>
+    <Route exact path='/success'>
+      <ConnectionContainer connection="success" />
+    </Route>
+    {/* <Route exact path='/login' component={Login} />
     <Route path='/verify' component={Verify} />
-    <Route path='/signup' component={Signup} />
+    <Route path='/signup' component={Signup} /> */}
     <Route path='/overview' component={requireAuth(OverView)} />
     <Route path='/forgotPassword' component={ForgotPassword} />
     <Route path='/resetPassword' component={resetPasswordPage} />

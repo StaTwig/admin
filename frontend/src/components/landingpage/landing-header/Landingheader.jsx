@@ -3,7 +3,7 @@ import "./Landingheader.css";
 import VaccineLedgerLogo from "../../../assets/files/logos/vaccineledger.svg";
 import EnglishFlag from "../../../assets/files/images/flags/English.webp";
 import SpanishFlag from "../../../assets/files/images/flags/Spanish.webp";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -28,10 +28,15 @@ let useClickOutside = (handler) => {
 export default function Landingheader() {
   const [LanguageOpen, setLanguageOpen] = useState(false);
   const [Language, setLanguage] = useState("english");
+  const history = useHistory();
 
   let domNode = useClickOutside(() => {
     setLanguageOpen(false);
   });
+
+  const handleSignup = () => {
+    history.push('/signup')
+  }
   return (
     <header className="landing-header">
       <div className="vl-page-container">
@@ -141,7 +146,7 @@ export default function Landingheader() {
               </section>
             </li>
             <li className="landing-nav-item mobile-nav-item">
-              <button className="vl-btn vl-btn-sm vl-btn-secondary">
+              <button onClick={handleSignup} className="vl-btn vl-btn-sm vl-btn-secondary">
                 Sign Up
               </button>
             </li>
