@@ -51,6 +51,11 @@ html {
 .vl-custom-textfield > .MuiInputBase-root > fieldset > legend {
   width: 0 !important;
 }
+
+.form-center-align {
+  justify-content: center;
+  text-align: center;
+}
 @media screen and (max-width: 586px) {
   .section-space {
     padding: 2rem 0;

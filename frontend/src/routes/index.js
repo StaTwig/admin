@@ -68,6 +68,9 @@ const routes = (
     <Route exact path='/verify'>
       <ConnectionContainer connection="verify" />
     </Route>
+    <Route exact path='/success'>
+      <ConnectionContainer connection="success" />
+    </Route>
     {/* <Route exact path='/login' component={Login} />
     <Route path='/verify' component={Verify} />
     <Route path='/signup' component={Signup} /> */}

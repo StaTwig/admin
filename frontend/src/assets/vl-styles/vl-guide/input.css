@@ -21,7 +21,7 @@
 
 .input-otp-column {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.25rem;
   padding: 1rem 0 2rem 0 !important;
 }

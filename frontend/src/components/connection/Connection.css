@@ -165,6 +165,21 @@
 .verify-terms-card-sm > h2 {
   margin-top: 0.6rem;
 }
+
+.cele-icon {
+  width: 3rem;
+  object-fit: contain;
+  margin-left: 1rem;
+}
+.illustration-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.illustration-holder > img {
+  width: 20rem;
+  object-fit: contain;
+}
 @media screen and (max-width: 992px) {
   .connection-two-column-grid-layout {
     display: grid;
