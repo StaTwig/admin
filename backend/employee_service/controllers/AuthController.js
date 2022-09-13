@@ -17,7 +17,7 @@ const mailer = require("../helpers/mailer");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
 const cuid = require("cuid");
-const { OAuth2Client } = require("google-auth-library")
+const { OAuth2Client } = require("google-auth-library");
 const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
@@ -29,7 +29,7 @@ const { uploadFile, getFileStream } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-const utils = require('ethereumjs-util');
+const utils = require("ethereumjs-util");
 
 async function verifyAuth(nonce, signature) {
   try {
@@ -48,8 +48,8 @@ async function verifyAuth(nonce, signature) {
 }
 
 const googleClient = new OAuth2Client({
-  clientId: process.env.GOOGLE_CLIENT_ID
-})
+  clientId: process.env.GOOGLE_CLIENT_ID,
+});
 
 /**
  * Uniques email check
@@ -145,20 +145,20 @@ exports.register = [
     .trim()
     .withMessage("organization_validation_error"),
   body("emailId")
-  .trim()
-  .toLowerCase()
-  .custom(async (value) => {
-    if (value) {
-      const emailId = value.toLowerCase().replace("", "");
-      let user;
-      if (!emailId.match(emailRegex))
-        return Promise.reject("not_valid_email");
-      if (emailId.indexOf("@") > -1)
-        user = await EmployeeModel.findOne({ emailId });
-      if (user) {
-        return Promise.reject("account_already_exists");
+    .trim()
+    .toLowerCase()
+    .custom(async (value) => {
+      if (value) {
+        const emailId = value.toLowerCase().replace("", "");
+        let user;
+        if (!emailId.match(emailRegex))
+          return Promise.reject("not_valid_email");
+        if (emailId.indexOf("@") > -1)
+          user = await EmployeeModel.findOne({ emailId });
+        if (user) {
+          return Promise.reject("account_already_exists");
+        }
       }
-    }
     }),
   // body("phoneNumber").custom(async (value) => {
   //   if (value) {
@@ -688,6 +688,7 @@ exports.verifyOtp = [
     }
   },
 ];
+
 exports.verifyAuthentication = [
   body("emailId")
     .isLength({ min: 1 })
@@ -714,8 +715,9 @@ exports.verifyAuthentication = [
           query = { emailId: req.body.emailId };
         }
         const user = await EmployeeModel.findOne(query);
-        if(!user){
+        if (!user) {
           return apiResponse.unauthorizedResponse(
+            req,
             res,
             `User with mail id ${req.body.emailId} does not exist, please register and try again`
           );
@@ -724,13 +726,13 @@ exports.verifyAuthentication = [
           req.body.message,
           req.body.signature
         );
-        if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()){
+        if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()) {
           return apiResponse.unauthorizedResponse(
+            req,
             res,
             "The wallet id doesn't match signature"
           );
-        }
-        else {
+        } else {
           let query = {};
           if (req.body.emailId.indexOf("@") === -1) {
             let phone = "+" + req.body.emailId;
@@ -834,19 +836,17 @@ exports.verifyAuthentication = [
           };
           console.log(bc_data);
           await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
-        if(user.accountStatus === 'ACTIVE'){
-          return apiResponse.successResponseWithData(
-            req,
-            res,
-            "login_success",
-            userData
-          );
+          if (user.accountStatus === "ACTIVE") {
+            return apiResponse.successResponseWithData(
+              req,
+              res,
+              "login_success",
+              userData
+            );
+          } else {
+            return apiResponse.ErrorResponse(req, res, "User not approved");
+          }
         }
-        else {
-          return apiResponse.ErrorResponse(req, res, "User not approved");
-        }
-        } 
-
       }
     } catch (err) {
       console.log(err);
@@ -857,34 +857,38 @@ exports.verifyAuthentication = [
 
 /**
  * Google log in
- * 
+ *
  * @param {string} token
- * 
+ *
  * @returns {Object}
  */
 exports.googleLogIn = [
-	body("tokenId").isLength({ min: 1 }).withMessage("Token required!"),
-	async (req, res) => {
+  body("tokenId").isLength({ min: 1 }).withMessage("Token required!"),
+  async (req, res) => {
     try {
       console.log(req.body);
       const { tokenId } = req.body;
 
       const googleRes = await googleClient.verifyIdToken({
         idToken: tokenId,
-        audience: process.env.GOOGLE_CLIENT_ID
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
       const payload = googleRes.getPayload();
 
-      if(!payload || !payload?.email) {
+      if (!payload || !payload?.email) {
         throw new Error("Failed to verify account with google!");
       }
 
       let user = await EmployeeModel.findOne({
-        emailId: payload?.email
+        emailId: payload?.email,
       });
 
-      if(!user) {
-        return apiResponse.unauthorizedResponse(req, res, "User does not exist!");
+      if (!user) {
+        return apiResponse.unauthorizedResponse(
+          req,
+          res,
+          "User does not exist!"
+        );
       }
 
       // Create and send a token
@@ -905,12 +909,12 @@ exports.googleLogIn = [
           userData
         );*/
         await EmployeeModel.updateOne(
-					{ emailId: payload?.email },
-					{
-						otp: null,
-						walletAddress: address,
-					},
-				);
+          { emailId: payload?.email },
+          {
+            otp: null,
+            walletAddress: address,
+          }
+        );
       } else {
         address = user.walletAddress;
       }
@@ -931,9 +935,7 @@ exports.googleLogIn = [
       let userData;
       if (activeWarehouse.length > 0) {
         let activeWarehouseId = 0;
-        const activeWRs = activeWarehouse.filter(
-          (w) => w.status == "ACTIVE"
-        );
+        const activeWRs = activeWarehouse.filter((w) => w.status == "ACTIVE");
         if (activeWRs.length > 0) activeWarehouseId = activeWRs[0].id;
         else activeWarehouseId = activeWarehouse[0].id;
         userData = {
@@ -991,9 +993,13 @@ exports.googleLogIn = [
         "login_success",
         userData
       );
-    } catch(err) {
+    } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(req, res, "Error in authenticating user - " + err.message);
+      return apiResponse.ErrorResponse(
+        req,
+        res,
+        "Error in authenticating user - " + err.message
+      );
     }
   },
 ];
