@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://demo.vaccineledger.com";
+export const TEST_SERVER_URL = "https://test.vaccineledger.com";
 export const TEST_SERVER_URL_FOR_ROAMBEE =
   "https://integrations.vaccineledger.com";
 export const PROD_SERVER_URL = "https://vaccineledger.com";
@@ -27,6 +27,7 @@ export function config() {
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
       checkUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
+      verifyAuth: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyAuth`,
       googleLoginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/googleLogin`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
@@ -179,6 +180,7 @@ export function config() {
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
       checkUserUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
+      verifyAuth: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyAuth`,
       googleLoginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/googleLogin`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
@@ -324,7 +326,6 @@ export function config() {
       getManufacturerFilterOptions: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
       getmanufacturerInStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/inStockFilterOptions`,
       getmanufacturerOutStockFilterOptions: `${TEST_SERVER_URL}/analyticsmanagement/api/network/outStockFilterOptions`,
-      verifyAuth: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyAuth`
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -333,6 +334,7 @@ export function config() {
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
       checkUserUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
+      verifyAuth: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyAuth`,
       googleLoginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/googleLogin`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
@@ -468,6 +470,7 @@ export function config() {
       sendOtpUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/register`,
       checkUserUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/check`,
+      verifyAuth: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/verifyAuth`,
       verifyOtpUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       locationUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/switchLocation`,
