@@ -1,12 +1,18 @@
 import React from "react";
+import { useHistory } from "react-router";
 import Cele from "../../../assets/files/icons/cele.png";
 import Wait from "../../../assets/files/icons/waiting.jpg";
 
 export default function Success() {
+  const history = useHistory();
+  const onSubmit = (event) => {
+    event.preventDefault();
+    history.push("/");
+  }
   return (
     <section className="account-section">
       <div className="vl-verify-container">
-        <form className="account-form-container">
+        <form onSubmit={onSubmit} className="account-form-container">
           <section className="illustration-holder">
             <img src={Wait} alt="wait" />
           </section>
