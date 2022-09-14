@@ -280,3 +280,12 @@ export const googleLogin = async (data) => {
     return e.response;
   }
 };
+
+export const verifyAuth = async (data) => {
+  try {
+    const result = await axios.post(config().verifyAuth, data);
+    return result;
+  } catch(err) {
+    return err.response;
+  }
+}
