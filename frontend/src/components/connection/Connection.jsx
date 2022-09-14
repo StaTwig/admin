@@ -37,7 +37,7 @@ export default function Connection(props) {
     address: "",
   });
 
-  const onUserDataSubmit = (data, isFinal = false) => {
+  const onUserDataSubmit = async (data, isFinal = false) => {
     let values = { ...registerData, ...data };
     setRegisterData(values);
     if (isFinal) {
@@ -50,23 +50,25 @@ export default function Connection(props) {
         organisationId: values.organization.id,
       };
       if (values.organizationExists === "new") {
-        reqData.organizationName = values.organizationName;
-        reqData.address = {
-          line1: values.address,
-          pincode: values.pincode,
-          city: values.city,
-          state: values.state,
-          country: values.country,
-          region: values.region,
-        };
-        reqData.type = values.organizationType;
+				if(!values.skipOrgRegistration) {
+					reqData.organisationName = values.organizationName;
+					reqData.address = {
+						line1: values.address,
+						pincode: values.pincode,
+						city: values.city,
+						state: values.state,
+						country: values.country,
+						region: values.region,
+					};
+				}
+				reqData.type = values.organizationType;
         reqData.organisationId = 0;
       }
 
       console.log("Request Data - ", reqData);
 
       dispatch(turnOn());
-      const result = registerUser(reqData, i18n.language);
+      const result = await registerUser(reqData, i18n.language);
       if (result.status === 200) {
         // Redirect to pending page
 				console.log("Req pending!");

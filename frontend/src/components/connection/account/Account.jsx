@@ -26,7 +26,6 @@ export default function Account(props) {
 	});
 
 	const history = useHistory();
-	const { t } = useTranslation();
 
 	const [organizations, setOrganizations] = useState([""]);
 	const [organisationTypes, setOrganisationTypes] = useState([""]);
@@ -46,9 +45,11 @@ export default function Account(props) {
 			organizationExists: "existing",
 			organizationType: "",
 			organization: "",
+			skipOrgRegistration: false
 		},
 	});
 
+	const skipOrgRegistration = watch("skipOrgRegistration");
 	const organizationExists = watch("organizationExists");
 	const watchPhone = watch("phone");
 	const watchOrgType = watch("organizationType");
@@ -94,7 +95,7 @@ export default function Account(props) {
 
 	const onFailure = (data) => {
 		console.log("Auth failed - ", data);
-	}
+	};
 
 	const showOrganizationsByType = (orgType) => {
 		let arr = organizations.filter((organization) => organization.type === orgType);
@@ -105,8 +106,7 @@ export default function Account(props) {
 		if (!data.email && !data.phone) {
 			console.log("Please enter email or phone!");
 		} else {
-			props.onUserDataSubmit(data, organizationExists === "existing");
-
+			props.onUserDataSubmit(data, organizationExists === "existing" || skipOrgRegistration);
 			if (organizationExists === "new") {
 				history.push({
 					pathname: "/neworganization",
@@ -202,11 +202,6 @@ export default function Account(props) {
 									/>
 								)}
 							/>
-							{/* <TextField
-                fullWidth
-                variant="outlined"
-                label="Phone Number ( Optional )"
-              /> */}
 						</div>
 						<div className="radio-btn-group">
 							<FormControl>
@@ -313,12 +308,18 @@ export default function Account(props) {
 										)}
 									/>
 								</div>
-								{/* <div className="verify-terms-card-sm">
-									<Checkbox />
+								<div className="verify-terms-card-sm">
+									<Controller
+										name="skipOrgRegistration"
+										control={control}
+										render={({field}) => (
+											<Checkbox {...field} />
+										)}
+									/>
 									<h2 className="vl-subheading f-400 vl-grey-xs">
 										Skip the Organization Registration
 									</h2>
-								</div> */}
+								</div>
 							</div>
 						)}
 					</section>
