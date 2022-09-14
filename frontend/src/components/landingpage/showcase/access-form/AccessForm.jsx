@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 import { COUNTRY_CODE } from "../../../../constants/countryCode";
 import { useDispatch } from "react-redux";
-import { sendOtp } from "../../../../actions/userActions";
+import { googleLogin, sendOtp, verifyAuth } from "../../../../actions/userActions";
 import { turnOff, turnOn } from "../../../../actions/spinnerActions";
 import jwt_decode from "jwt-decode";
 import { setCurrentUser } from "../../../../actions/userActions";
@@ -18,6 +18,7 @@ import Web3 from "web3";
 import axios from "axios";
 import { config } from "../../../../config";
 import setAuthToken from "../../../../utils/setAuthToken";
+import TorusAuth from "./TorusAuth";
 
 const torus = new Torus();
 window.torus = torus;
@@ -123,105 +124,61 @@ export default function AccessForm() {
 		}
 	});
 
-	const torusLogin = async () => {
-		console.log("TORUS LOGIN");
-		const torus = await getTorusProvider();
-		console.log(torus);
-		const provider = torus.provider;
-		const web3 = await getWeb3(provider);
-		console.log("web3 is: ", web3);
-		let res = await web3.eth.getAccounts();
-		console.log("accounts are ", res);
-		const torusInfo = await torus.getUserInfo();
-		let abc = await fetchAccountData(provider);
-		console.log("torusInfo is: ", torusInfo);
-		let signData = await verifyAuth(abc[0]?.address, true, web3, torusInfo);
-		console.log(signData);
-	};
-
-	const verifyAuth = async (address, isTorus, torus, torusInfo) => {
+	const setSessionToken = (result) => {
 		try {
-			const baseURL = "http://localhost:3001";
-			const message = "An amazing message, for use with MetaMask!";
-			let signatures;
-			if (!isTorus) {
-				// await window.web3.currentProvider.enable();
-				console.log(address);
-				const web3 = new Web3(window.ethereum);
-				signatures = await web3.eth.personal.sign(message, address, "");
-			} else {
-				// await window.web3.currentProvider.enable();
-				signatures = await torus.eth.personal.sign(message, address, "");
+			const token = result.data.data.token;
+			setAuthToken(token);
+			// Decode token and get user info and exp
+			const decoded = jwt_decode(token);
+			// Set user and isAuthenticated
+			localStorage.setItem("theLedgerToken", token);
+			localStorage.setItem("bkp", result.data.data.permissions.permissions);
+			dispatch(setCurrentUser(decoded));
+		} catch(err) {
+			throw err;
+		}
+	}
+
+	const onAuthSuccess = async (data, type) => {
+		try {
+			let result;
+			if(type === "torus") {
+				result = await verifyAuth(data);
+			} else if(type === "google") {
+				result = await googleLogin({tokenId: data.tokenId});
 			}
-			// if (torusInfo?.isNewUser) {
-			// try {
-			//   const result = await axios.post(
-			//     baseURL + "/api/user_service/register",
-			//     {
-			//       walletAddress: address,
-			//       emailId: torusInfo?.email,
-			//       firstName: torusInfo?.name,
-			//     }
-			//   );
-			//   console.log(result);
-			// } catch (e) {
-			//   console.log(e);
-			// }
-			// }
-			try {
-				const result = await axios.post(config().verifyAuth, {
-					walletId: address,
-					signature: signatures,
-					message: message,
-					emailId: torusInfo?.email,
-				});
+
+			if(result) {
 				if (result.status === 200) {
-					// Set auth token auth
-					const token = result.data.data.token;
-					setAuthToken(token);
-					// Decode token and get user info and exp
-					const decoded = jwt_decode(token);
-					// Set user and isAuthenticated
-					localStorage.setItem("theLedgerToken", token);
-					localStorage.setItem("bkp", result.data.data.permissions.permissions);
-					dispatch(setCurrentUser(decoded));
+					// Set auth token
+					setSessionToken(result);
 					// const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
 					history.push(`/overview`);
+				} else if(result.status === 401) {
+					// Redirect to signup if user does not exist
+					history.push({
+						pathname: "/signup",
+						state: data
+					})
 				} else {
 					const err = result.data.message;
 					console.log(err);
 				}
-			} catch (err) {
-				console.log(err);
 			}
-			// dispatch(setAccountData({ ...res.data.data, isTorus: isTorus }));
-			return { signature: signatures, message: message };
-		} catch (e) {
-			console.log(e);
+		} catch(err) {
+			console.log(err);
 		}
-	};
+	}
+
+	const onFailure = (data) => {
+		console.log("Auth failed - ", data)
+	}
 
 	return (
 		<div className="connect-popup-container">
 			<div className="auto-connect-options">
-				{/* <GoogleAuth signin={true} /> */}
-				<div
-					className="login-button-card"
-					// onClick={() => {
-					//   history.push("/register/account");
-					// }}
-				>
-					<div className="icon-space">
-						<img src={GoogleIcon} alt="social" />
-					</div>
-					<p className="vl-subheading f-500 no-space">Sign In with Google</p>
-				</div>
-				<div className="login-button-card" onClick={() => torusLogin()}>
-					<div className="icon-space">
-						<img src={TorusIcon} alt="social" />
-					</div>
-					<p className="vl-subheading f-500 no-space">Sign In with Wallet</p>
-				</div>
+				<GoogleAuth onAuthSuccess={onAuthSuccess} onFailure={onFailure} />
+				<TorusAuth onAuthSuccess={onAuthSuccess} onFailure={onFailure} />
 			</div>
 			<div className="option-divider">
 				<div className="divider-bar"></div>

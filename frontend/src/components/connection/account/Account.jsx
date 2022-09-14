@@ -15,13 +15,16 @@ import { getOrganizationsByType } from "../../../actions/userActions";
 import { getOrganisationsAtSignup } from "../../../actions/productActions";
 import { useTranslation } from "react-i18next";
 import GoogleAuth from "../../landingpage/showcase/access-form/GoogleAuth";
+import TorusAuth from "../../landingpage/showcase/access-form/TorusAuth";
 
 export default function Account(props) {
 	const location = useLocation();
-	const [googleData, setGoogleData] = useState();
-	if (location?.state?.tokenId) {
-		setGoogleData(location.state.profileObj);
-	}
+	const [authData, setAuthData] = useState({
+		firstName: location?.state?.firstName,
+		lastName: location?.state?.lastName,
+		emailId: location?.state?.emailId,
+	});
+
 	const history = useHistory();
 	const { t } = useTranslation();
 
@@ -31,13 +34,14 @@ export default function Account(props) {
 	const {
 		watch,
 		control,
+		setValue,
 		formState: { errors },
 		handleSubmit,
 	} = useForm({
 		defaultValues: {
-			firstName: googleData?.givenName,
-			lastName: googleData?.familyName,
-			email: googleData?.email,
+			firstName: authData?.firstName ? authData?.firstName : "",
+			lastName: authData?.lastName ? authData?.lastName : "",
+			email: authData?.emailId ? authData?.emailId : "",
 			phone: "",
 			organizationExists: "existing",
 			organizationType: "",
@@ -49,25 +53,6 @@ export default function Account(props) {
 	const watchPhone = watch("phone");
 	const watchOrgType = watch("organizationType");
 
-	const onSubmit = (data) => {
-		if (!data.email && !data.phone) {
-			console.log("Please enter email or phone!");
-		} else {
-			props.onUserDataSubmit(data, organizationExists === "existing");
-
-			if (organizationExists === "new") {
-				history.push({
-					pathname: "/neworganization",
-				});
-			}
-		}
-	};
-
-	const showOrganizationsByType = (orgType) => {
-		let arr = organizations.filter((organization) => organization.type === orgType);
-		return arr;
-	};
-
 	useEffect(() => {
 		// Get org types
 		async function fetchOrgTypes() {
@@ -78,7 +63,6 @@ export default function Account(props) {
 			});
 			setOrganisationTypes(arr);
 		}
-
 		fetchOrgTypes();
 	}, []);
 
@@ -101,6 +85,36 @@ export default function Account(props) {
 		}
 	}, [watchOrgType]);
 
+	const onAuthSuccess = (data) => {
+		console.log("Auth success - ", data);
+		setValue("firstName", data.firstName);
+		setValue("lastName", data.lastName);
+		setValue("email", data.emailId);
+	};
+
+	const onFailure = (data) => {
+		console.log("Auth failed - ", data);
+	}
+
+	const showOrganizationsByType = (orgType) => {
+		let arr = organizations.filter((organization) => organization.type === orgType);
+		return arr;
+	};
+
+	const onSubmit = (data) => {
+		if (!data.email && !data.phone) {
+			console.log("Please enter email or phone!");
+		} else {
+			props.onUserDataSubmit(data, organizationExists === "existing");
+
+			if (organizationExists === "new") {
+				history.push({
+					pathname: "/neworganization",
+				});
+			}
+		}
+	};
+
 	return (
 		<section className="account-section">
 			<div className="vl-connection-container">
@@ -113,24 +127,8 @@ export default function Account(props) {
 					</hgroup>
 					<section className="vl-input-group form-auto-fill-section">
 						<div className="input-two-auto-column">
-							{/* <GoogleAuth register={true} googleData={googleData} setGoogleData={setGoogleData} /> */}
-							<div className="login-button-card">
-								<div className="icon-space">
-									<img src={GoogleIcon} alt="social" />
-								</div>
-								<p className="vl-subheading f-500 no-space">Sign Up with Google</p>
-							</div>
-							<div
-								className="login-button-card"
-								onClick={() => {
-									history.push("/neworganization");
-								}}
-							>
-								<div className="icon-space">
-									<img src={TorusIcon} alt="social" />
-								</div>
-								<p className="vl-subheading f-500 no-space">Sign Up with Wallet ID</p>
-							</div>
+							<GoogleAuth register={true} onAuthSuccess={onAuthSuccess} onFailure={onFailure} />
+							<TorusAuth register={true} onAuthSuccess={onAuthSuccess} onFailure={onFailure} />
 						</div>
 						<div className="option-divider">
 							<div className="divider-bar"></div>
