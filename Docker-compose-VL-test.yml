@@ -241,7 +241,7 @@ services:
 
   frontend:
     build:
-      context: .
+      context: frontend
       dockerfile: frontend/Dockerfile
       args:
         - "ENVIRONMENT=prod"
