@@ -14,79 +14,92 @@ import { registerUser } from "../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import Success from "./success/Success";
 import { useHistory } from "react-router";
+import { Dialog, DialogContent } from "@mui/material";
+import FailedPopUp from "../../shared/PopUp/failedPopUp";
 
 export default function Connection(props) {
 	const { connection } = props;
-	
+
 	const history = useHistory();
 	const dispatch = useDispatch();
-  const { i18n } = useTranslation();
+	const { t, i18n } = useTranslation();
 
-  const [registerData, setRegisterData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    organizationType: "",
-    organization: "",
-    organizationName: "",
-    region: "",
-    country: "",
-    city: "",
-    pincode: "",
-    address: "",
-  });
+	const [errorModal, setErrorModal] = useState(false);
+	const [errorMessage, setErrorMessage] = useState();
 
-  const onUserDataSubmit = async (data, isFinal = false) => {
-    let values = { ...registerData, ...data };
-    setRegisterData(values);
-    if (isFinal) {
-      // API call to backend
-      let reqData = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        emailId: values.email,
-        phoneNumber: values.phone,
-        organisationId: values.organization.id,
-      };
-      if (values.organizationExists === "new") {
-				if(!values.skipOrgRegistration) {
-					reqData.organisationName = values.organizationName;
-					reqData.address = {
-						line1: values.address,
-						pincode: values.pincode,
-						city: values.city,
-						state: values.state,
-						country: values.country,
-						region: values.region,
-					};
+	const [registerData, setRegisterData] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		phone: "",
+		organizationType: "",
+		organization: "",
+		organizationName: "",
+		region: "",
+		country: "",
+		city: "",
+		pincode: "",
+		address: "",
+	});
+
+	const onUserDataSubmit = async (data, isFinal = false) => {
+		try {
+			let values = { ...registerData, ...data };
+			setRegisterData(values);
+			if (isFinal) {
+				// API call to backend
+				dispatch(turnOn());
+				let reqData = {
+					firstName: values.firstName,
+					lastName: values.lastName,
+					emailId: values.email,
+					phoneNumber: values.phone,
+					organisationId: values.organization.id,
+				};
+				if (values.organizationExists === "new") {
+					if (!values.skipOrgRegistration) {
+						reqData.organisationName = values.organizationName;
+						reqData.address = {
+							line1: values.address,
+							pincode: values.pincode,
+							city: values.city,
+							state: values.state,
+							country: values.country,
+							region: values.region,
+						};
+					}
+					reqData.type = values.organizationType;
+					reqData.organisationId = 0;
 				}
-				reqData.type = values.organizationType;
-        reqData.organisationId = 0;
-      }
 
-      console.log("Request Data - ", reqData);
+				console.log("Request Data - ", reqData);
 
-      dispatch(turnOn());
-      const result = await registerUser(reqData, i18n.language);
-      if (result.status === 200) {
-        // Redirect to pending page
-				console.log("Req pending!");
-				history.push("/success");
-      } else {
-        console.log("Error - ", result.data);
-      }
-      dispatch(turnOff());
-    }
-  };
+				// const result = await registerUser(reqData, i18n.language);
+				// if (result.status === 200) {
+				// 	// Redirect to pending page
+				// 	console.log("Req pending!");
+				// 	history.push("/success");
+				// } else {
+				// 	console.log("Error - ", result.data);
+				// 	throw new Error(result.data.message);
+				// }
+				dispatch(turnOff());
+			}
+		} catch (err) {
+			console.log(err);
+			setErrorMessage(err.message);
+			setErrorModal(true);
+			dispatch(turnOff());
+		}
+	};
 
 	const handleBack = (event) => {
-		if(connection === "organization") {
-			history.push('/signup');
+		if (connection === "organization") {
+			history.push("/signup");
 		} else {
-			history.push('/');
+			history.push("/");
 		}
-	}
+	};
 
 	return (
 		<section className="connect-layout-container">
@@ -153,16 +166,29 @@ export default function Connection(props) {
 							<p className="vl-subheading f-400">Back</p>
 						</section>
 						<div className="login-system-layout">
-							{connection === "account" && <Account onUserDataSubmit={onUserDataSubmit} />}
+							{connection === "account" && (
+								<Account
+									onUserDataSubmit={onUserDataSubmit}
+									setErrorMessage={setErrorMessage}
+									setErrorModal={setErrorModal}
+								/>
+							)}
 							{connection === "organization" && (
 								<Organization onUserDataSubmit={onUserDataSubmit} />
 							)}
 							{connection === "verify" && <Verify />}
-              {connection === "success" && <Success />}
+							{connection === "success" && <Success />}
 						</div>
 					</div>
 				</div>
 			</div>
+			{errorModal && (
+				<Dialog open={errorModal} onClose={() => setErrorModal(false)}>
+					<DialogContent>
+						<FailedPopUp t={t} onHide={() => setErrorModal(false)} message={errorMessage} />
+					</DialogContent>
+				</Dialog>
+			)}
 		</section>
 	);
 }

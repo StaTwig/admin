@@ -132,3 +132,11 @@
   border: none;
   outline: none;
 }
+
+.text-dangerS {
+  color: rgb(216, 9, 9);
+  position: relative;
+  left: 25px;
+  top: 0px;
+  font-size: 15px;
+}
