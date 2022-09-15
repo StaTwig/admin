@@ -242,7 +242,7 @@ services:
   frontend:
     build:
       context: frontend
-      dockerfile: frontend/Dockerfile
+      dockerfile: Dockerfile
       args:
         - "ENVIRONMENT=prod"
         - "SERVER_URL=https://test.vaccineledger.com"
