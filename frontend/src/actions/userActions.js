@@ -74,7 +74,7 @@ export const getOrganizationsTypewithauth = async (data) => {
 export const verifyEmailAndPhoneNo = async (data) => {
   try {
     const result = await axios.get(`${config().emailverify}?${data}`);
-    return result.data;
+    return result;
   } catch (e) {
     return [];
   }

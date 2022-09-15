@@ -295,7 +295,7 @@ export function config() {
       getStatesByCountry: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
       getCitiesByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
-      emailverify: `${TEST_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      emailverify: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
       fetchairwayBillNumber: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
       fetchAllRegions: `${TEST_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion: `${TEST_SERVER_URL}/productmanagement/api/location?region=`,

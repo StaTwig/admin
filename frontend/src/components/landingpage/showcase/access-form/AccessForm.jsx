@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import TextField from "@mui/material/TextField";
-import GoogleIcon from "../../../../assets/files/images/social/google.png";
-import TorusIcon from "../../../../assets/files/images/social/torus.png";
 import "./AccessForm.css";
 import { Link, useHistory } from "react-router-dom";
 import GoogleAuth from "./GoogleAuth";
@@ -13,72 +11,12 @@ import { googleLogin, sendOtp, verifyAuth } from "../../../../actions/userAction
 import { turnOff, turnOn } from "../../../../actions/spinnerActions";
 import jwt_decode from "jwt-decode";
 import { setCurrentUser } from "../../../../actions/userActions";
-import Torus from "@toruslabs/torus-embed";
-import Web3 from "web3";
-import axios from "axios";
-import { config } from "../../../../config";
 import setAuthToken from "../../../../utils/setAuthToken";
 import TorusAuth from "./TorusAuth";
-
-const torus = new Torus();
-window.torus = torus;
-const getWeb3 = async (provider) => {
-	const web3 = new Web3(provider);
-	return web3;
-};
-export const fetchAccountData = async (provider) => {
-	// Get a Web3 instance for the wallet
-	try {
-		// const provider = await getProvider();
-		const web3 = await getWeb3(provider);
-		// Get connected chain id from Ethereum node
-		const chainId = await web3.eth.getChainId();
-		// Load chain information over an HTTP API
-		// const chainData = getChain(chainId);
-		// dispatch(setChainData(chainData));
-		// Get list of  of the connected wallet
-		const accounts = await web3.eth.getAccounts();
-		console.log(accounts);
-		const accountsArray = [];
-		// MetaMask does not give you all accounts, only the selected account
-		const rowResolvers = accounts.map(async (address) => {
-			const balance = await web3.eth.getBalance(address);
-			const ethBalance = web3.utils.fromWei(balance, "ether");
-			const humanFriendlyBalance = parseFloat(ethBalance).toFixed(4);
-			accountsArray.push({
-				address,
-				balance,
-				ethBalance,
-				humanFriendlyBalance,
-			});
-		});
-		await Promise.all(rowResolvers);
-		console.log(accountsArray, accounts);
-		return accountsArray || accounts;
-	} catch (err) {
-		console.log(err);
-	}
-};
-
-export const getTorusProvider = async () => {
-	if (!torus.isInitialized) {
-		try {
-			await torus.init({
-				buildEnv: "production", // default: production
-				enableLogging: true, // default: false
-				network: {
-					host: "mumbai", // default: mainnet
-					chainId: 80001, // default: 1
-					networkName: "Mumbai Test Network", // default: Main Ethereum Network
-				},
-			});
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	await torus.login();
-	return torus;
-};
+import { Dialog, DialogContent } from "@mui/material";
+import FailedPopUp from "../../../../shared/PopUp/failedPopUp";
+import { Controller, useForm } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export default function AccessForm() {
 	const history = useHistory();
@@ -86,41 +24,72 @@ export default function AccessForm() {
 	const dispatch = useDispatch();
 
 	const [EmailPhone, setEmailPhone] = useState("email");
-	const [email, setEmail] = useState("");
-	const [phone, setPhone] = useState("");
 
-	const onEmailChange = (e) => {
-		setEmail(e.target.value.toLowerCase());
-		setPhone("");
-	};
+	const [errorModal, setErrorModal] = useState(false);
+	const [errorMessage, setErrorMessage] = useState();
 
-	const onPhoneChange = (value) => {
-		setPhone(value);
-		setEmail("");
-	};
+	const {
+		watch,
+		control,
+		setValue,
+		formState: { errors },
+		handleSubmit,
+	} = useForm({
+		defaultValues: {
+			email: "",
+			phone: "",
+		},
+	});
+
+	const watchEmail = watch("email");
+	const watchPhone = watch("phone");
 
 	useEffect(() => {
-		setPhone("");
-		setEmail("");
+		setValue("email", "");
+		setValue("phone", "");
 	}, [EmailPhone]);
 
-	const onSendOtp = useCallback(async () => {
-		console.log(email, phone);
-		dispatch(turnOn());
-		if (!email && !phone) {
-			console.log("Please provide email or phone!");
-			dispatch(turnOff());
-		} else {
-			const data = {
-				emailId: email ? email : phone,
-			};
-			const result = await sendOtp(data, i18n.language);
-			if (result?.status === 200) {
-				history.push(`/verify?emailId=${data.emailId}`);
-			} else {
-				console.log("Error - ", result.data.message);
+	const validateEmailPhone = () => {
+		try {
+			const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+			if (watchEmail && watchEmail.match(emailRegex) === null) {
+				throw new Error("Email ID is invalid!");
 			}
+			if (watchPhone && isValidPhoneNumber(watchPhone) === false) {
+				throw new Error("Phone number is invalid!");
+			}
+		} catch (err) {
+			throw err;
+		}
+	};
+
+	const onSendOtp = useCallback(async (formData) => {
+		try {
+			dispatch(turnOn());
+			if (!formData.email && !formData.phone) {
+				console.log("Please provide email or phone!");
+				dispatch(turnOff());
+			} else {
+				validateEmailPhone();
+				const data = {
+					emailId: formData.email ? formData.email : formData.phone,
+				};
+				console.log(data);
+				const result = await sendOtp(data, i18n.language);
+				if (result?.status === 200) {
+					history.push(`/verify?emailId=${data.emailId}`);
+				} else {
+					console.log("Error - ", result.data.message);
+					throw new Error(result.data.message);
+				}
+				dispatch(turnOff());
+			}
+		} catch (err) {
+			console.log(err);
 			dispatch(turnOff());
+			setErrorMessage(err.message);
+			setErrorModal(true);
 		}
 	});
 
@@ -134,45 +103,47 @@ export default function AccessForm() {
 			localStorage.setItem("theLedgerToken", token);
 			localStorage.setItem("bkp", result.data.data.permissions.permissions);
 			dispatch(setCurrentUser(decoded));
-		} catch(err) {
+		} catch (err) {
 			throw err;
 		}
-	}
+	};
 
 	const onAuthSuccess = async (data, type) => {
 		try {
 			let result;
-			if(type === "torus") {
+			if (type === "torus") {
 				result = await verifyAuth(data);
-			} else if(type === "google") {
-				result = await googleLogin({tokenId: data.tokenId});
+			} else if (type === "google") {
+				result = await googleLogin({ tokenId: data.tokenId });
 			}
 
-			if(result) {
+			if (result) {
 				if (result.status === 200) {
 					// Set auth token
 					setSessionToken(result);
 					// const intelEnabled = props.user?.type == "Third Party Logistics" ? true : false;
 					history.push(`/overview`);
-				} else if(result.status === 401) {
+				} else if (result.status === 401) {
 					// Redirect to signup if user does not exist
 					history.push({
 						pathname: "/signup",
-						state: data
-					})
+						state: data,
+					});
 				} else {
 					const err = result.data.message;
 					console.log(err);
+					setErrorMessage(err);
+					setErrorModal(true);
 				}
 			}
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 		}
-	}
+	};
 
 	const onFailure = (data) => {
-		console.log("Auth failed - ", data)
-	}
+		console.log("Auth failed - ", data);
+	};
 
 	return (
 		<div className="connect-popup-container">
@@ -185,71 +156,82 @@ export default function AccessForm() {
 				<p className="vl-subheading vl-grey-xs">OR</p>
 				<div className="divider-bar"></div>
 			</div>
-			{EmailPhone === "email" ? (
-				<div className="manual-connect-options">
-					<div className="input-space-holder">
-						<TextField
-							id="outlined-basic"
-							label={t("email_id")}
-							variant="outlined"
-							fullWidth
-							autoCapitalize="none"
-							value={email}
-							onChange={onEmailChange}
-						/>
-					</div>
-					<div className="change-input-option">
-						<div
-							className="vl-flex vl-align-center vl-gap-xs vl-blue vl-link"
-							onClick={() => setEmailPhone("phone")}
-						>
-							<i className="fa-solid fa-phone vl-icon-xs"></i>
-							<p className="vl-note">Use Phone Number</p>
+			<form onSubmit={handleSubmit(onSendOtp)}>
+				{EmailPhone === "email" ? (
+					<div className="manual-connect-options">
+						<div className="input-space-holder">
+							<Controller
+								name="email"
+								control={control}
+								rules={{ required: watchPhone === "" }}
+								render={({ field }) => (
+									<TextField
+										id="outlined-basic"
+										label={t("email_id")}
+										variant="outlined"
+										fullWidth
+										autoCapitalize="none"
+										error={Boolean(errors.email)}
+										{...field}
+									/>
+								)}
+							/>
+							{errors.email && (
+								<span className="error-msg text-dangerS">Email ID is required!</span>
+							)}
+						</div>
+						<div className="change-input-option">
+							<div
+								className="vl-flex vl-align-center vl-gap-xs vl-blue vl-link"
+								onClick={() => setEmailPhone("phone")}
+							>
+								<i className="fa-solid fa-phone vl-icon-xs"></i>
+								<p className="vl-note">Use Phone Number</p>
+							</div>
 						</div>
 					</div>
-				</div>
-			) : (
-				<div className="manual-connect-options">
-					<div className="input-space-holder">
-						<PhoneInput
-							international
-							countryCallingCodeEditable={false}
-							defaultCountry={COUNTRY_CODE}
-							className="vl-custom-phone-input"
-							placeholder={t("enter_phone_number")}
-							inputProps={{
-								name: "phone",
-								required: true,
-								// enableSearch: true,
-							}}
-							value={phone}
-							onChange={onPhoneChange}
-							maxLength={15}
-						/>
-						{/* <TextField
-              id="outlined-basic"
-              label="Phone Numer"
-              variant="outlined"
-              fullWidth
-            /> */}
-					</div>
-					<div className="change-input-option">
-						<div
-							className="vl-flex vl-align-center vl-gap-xs vl-blue  vl-link"
-							onClick={() => setEmailPhone("email")}
-						>
-							<i className="fa-solid fa-envelope vl-icon-xs"></i>
-							<p className="vl-note vl-link">Use Email Address</p>
+				) : (
+					<div className="manual-connect-options">
+						<div className="input-space-holder">
+							<Controller
+								name="phone"
+								control={control}
+								rules={{ required: watchEmail === "" }}
+								render={({ field }) => (
+									<PhoneInput
+										international
+										countryCallingCodeEditable={false}
+										defaultCountry={COUNTRY_CODE}
+										className="vl-custom-phone-input"
+										placeholder={t("enter_phone_number")}
+										maxLength={15}
+										style={{ borderColor: Boolean(errors.phone) ? "#da323c" : "" }}
+										{...field}
+									/>
+								)}
+							/>
+							{errors.phone && (
+								<span className="error-msg text-dangerS">Phone Number is required!</span>
+							)}
+						</div>
+						<div className="change-input-option">
+							<div
+								className="vl-flex vl-align-center vl-gap-xs vl-blue  vl-link"
+								onClick={() => setEmailPhone("email")}
+							>
+								<i className="fa-solid fa-envelope vl-icon-xs"></i>
+								<p className="vl-note vl-link">Use Email Address</p>
+							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)}
 
-			<div className="popup-actions">
-				<button className="vl-btn vl-btn-md vl-btn-full vl-btn-primary" onClick={onSendOtp}>
-					Sign In
-				</button>
-			</div>
+				<div className="popup-actions">
+					<button type="submit" className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
+						Sign In
+					</button>
+				</div>
+			</form>
 			<section className="further-links vl-justify-auto">
 				<p className="vl-note vl-grey-xs f-400">
 					Don't have Account?{" "}
@@ -258,6 +240,13 @@ export default function AccessForm() {
 					</Link>
 				</p>
 			</section>
+			{errorModal && (
+				<Dialog open={errorModal} onClose={() => setErrorModal(false)}>
+					<DialogContent>
+						<FailedPopUp t={t} onHide={() => setErrorModal(false)} message={errorMessage} />
+					</DialogContent>
+				</Dialog>
+			)}
 		</div>
 	);
 }

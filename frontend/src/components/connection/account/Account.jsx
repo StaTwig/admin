@@ -5,17 +5,15 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import { Checkbox } from "@mui/material";
-import GoogleIcon from "../../../assets/files/images/social/google.png";
-import TorusIcon from "../../../assets/files/images/social/torus.png";
 import { useHistory, useLocation } from "react-router";
 import PhoneInput from "react-phone-number-input";
 import { COUNTRY_CODE } from "../../../constants/countryCode";
 import { useForm, Controller } from "react-hook-form";
-import { getOrganizationsByType } from "../../../actions/userActions";
+import { getOrganizationsByType, verifyEmailAndPhoneNo } from "../../../actions/userActions";
 import { getOrganisationsAtSignup } from "../../../actions/productActions";
-import { useTranslation } from "react-i18next";
 import GoogleAuth from "../../landingpage/showcase/access-form/GoogleAuth";
 import TorusAuth from "../../landingpage/showcase/access-form/TorusAuth";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export default function Account(props) {
 	const location = useLocation();
@@ -35,6 +33,7 @@ export default function Account(props) {
 		control,
 		setValue,
 		formState: { errors },
+		clearErrors,
 		handleSubmit,
 	} = useForm({
 		defaultValues: {
@@ -45,12 +44,13 @@ export default function Account(props) {
 			organizationExists: "existing",
 			organizationType: "",
 			organization: "",
-			skipOrgRegistration: false
+			skipOrgRegistration: false,
 		},
 	});
 
 	const skipOrgRegistration = watch("skipOrgRegistration");
 	const organizationExists = watch("organizationExists");
+	const watchEmail = watch("email");
 	const watchPhone = watch("phone");
 	const watchOrgType = watch("organizationType");
 
@@ -86,6 +86,14 @@ export default function Account(props) {
 		}
 	}, [watchOrgType]);
 
+	useEffect(() => {
+		if (errors.email && errors.phone) {
+			if (watchEmail || watchPhone) {
+				clearErrors(["email", "phone"]);
+			}
+		}
+	}, [watchEmail, watchPhone]);
+
 	const onAuthSuccess = (data) => {
 		console.log("Auth success - ", data);
 		setValue("firstName", data.firstName);
@@ -102,16 +110,64 @@ export default function Account(props) {
 		return arr;
 	};
 
+	const validateEmailPhone = () => {
+		const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+		return new Promise((resolve, reject) => {
+			try {
+				let data;
+
+				if (watchEmail) {
+					data = "emailId=" + watchEmail;
+					if (watchEmail.match(emailRegex) === null) {
+						props.setErrorMessage("Email ID is invalid!");
+						props.setErrorModal(true);
+						reject("Invalid email!");
+					}
+				}
+
+				if (watchPhone) {
+					data = "phoneNumber=" + watchPhone;
+					if (isValidPhoneNumber(watchPhone) === false) {
+						props.setErrorMessage("Phone number is invalid!");
+						props.setErrorModal(true);
+						reject("Invalid phone!");
+					}
+				}
+
+				if (data) {
+					verifyEmailAndPhoneNo(data).then((res) => {
+						if (res.status === 200) {
+							resolve("Valid email/phone!");
+						} else {
+							props.setErrorMessage("Duplicate EmailId/Phone!");
+							props.setErrorModal(true);
+							reject("Duplicate EmailId/Phone!");
+						}
+					});
+				}
+			} catch (err) {
+				reject(err);
+			}
+		});
+	};
+
 	const onSubmit = (data) => {
 		if (!data.email && !data.phone) {
 			console.log("Please enter email or phone!");
 		} else {
-			props.onUserDataSubmit(data, organizationExists === "existing" || skipOrgRegistration);
-			if (organizationExists === "new") {
-				history.push({
-					pathname: "/neworganization",
+			validateEmailPhone()
+				.then((res) => {
+					props.onUserDataSubmit(data, organizationExists === "existing" || skipOrgRegistration);
+					if (organizationExists === "new" && !skipOrgRegistration) {
+						history.push({
+							pathname: "/neworganization",
+						});
+					}
+				})
+				.catch((err) => {
+					console.log("Error in validation - ", err);
 				});
-			}
 		}
 	};
 
@@ -191,6 +247,7 @@ export default function Account(props) {
 							<Controller
 								name="phone"
 								control={control}
+								rules={{ required: watchEmail === "" }}
 								render={({ field }) => (
 									<PhoneInput
 										international
@@ -199,6 +256,7 @@ export default function Account(props) {
 										className="vl-custom-phone-input"
 										{...field}
 										maxLength={15}
+										style={{ borderColor: Boolean(errors.phone) ? "#da323c" : "" }}
 									/>
 								)}
 							/>
@@ -312,9 +370,7 @@ export default function Account(props) {
 									<Controller
 										name="skipOrgRegistration"
 										control={control}
-										render={({field}) => (
-											<Checkbox {...field} />
-										)}
+										render={({ field }) => <Checkbox {...field} />}
 									/>
 									<h2 className="vl-subheading f-400 vl-grey-xs">
 										Skip the Organization Registration
