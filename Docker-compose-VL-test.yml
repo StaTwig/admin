@@ -244,9 +244,11 @@ services:
     image: "frontend2.0"
     container_name: "cra-frontend"
     restart: always
-    environment:
-      - "NODE_ENV=production"
-      - "ENVIRONMENT=test"
+    env_file:
+      - ./env/ledger.env
+    args:
+      - "ENVIRONMENT=prod"
+      - "SERVER_URL=https://test.vaccineledger.com"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
