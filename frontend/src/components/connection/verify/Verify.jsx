@@ -7,6 +7,7 @@ import { setCurrentUser, verifyOtp } from "../../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import setAuthToken from "../../../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import { Controller, useForm } from "react-hook-form";
 
 export default function Verify() {
 	const dispatch = useDispatch();
@@ -14,33 +15,47 @@ export default function Verify() {
 	const location = useLocation();
 	const { i18n } = useTranslation();
 
-  const [otp, setOtp] = useState("");
+	const [otp, setOtp] = useState("");
 	const [otpArray, setOtpArray] = useState(["", "", "", ""]);
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const firstInputRef = useRef(null);
-	const secondInputRef = useRef(null);
-	const thirdInputRef = useRef(null);
-	const fourthInputRef = useRef(null);
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const otpRefs = [firstInputRef, secondInputRef, thirdInputRef, fourthInputRef];
+	const {
+		watch,
+		control,
+		setFocus,
+		setValue,
+		formState: { errors },
+		handleSubmit,
+	} = useForm({
+		defaultValues: {
+			otp0: "",
+			otp1: "",
+			otp2: "",
+			otp3: "",
+		},
+	});
+
+	useEffect(() => {
+		Object.keys(errors).length ? setErrorMessage("OTP is required!") : setErrorMessage("");
+	}, [errors]);
 
 	const otpChange = (index) => {
 		return (event) => {
+			setErrorMessage("");
 			let value = event.target.value;
 			if (isNaN(Number(value))) {
 				return;
 			}
 			const otpArrayCopy = otpArray.concat();
 			otpArrayCopy[index] = value;
+			setValue(`otp${index}`, value);
 			setOtpArray(otpArrayCopy);
-      let entireOtp = otpArrayCopy.join("");
-      setOtp(entireOtp);
-			console.log(entireOtp);
+			let entireOtp = otpArrayCopy.join("");
+			setOtp(entireOtp);
 			if (value !== "") {
-				if (index === 0) secondInputRef.current.focus();
-				else if (index === 1) thirdInputRef.current.focus();
-				else if (index === 2) fourthInputRef.current.focus();
+				if (index < 3) setFocus(`otp${index + 1}`);
+				else setFocus("otp3");
 			}
 		};
 	};
@@ -48,21 +63,19 @@ export default function Verify() {
 	const onOtpKeyPress = (index) => {
 		return ({ nativeEvent: { key: value } }) => {
 			if (value === "Backspace" && otpArray[index] === "") {
-				if (index === 1) firstInputRef.current.focus();
-				else if (index === 2) secondInputRef.current.focus();
-				else if (index === 3) thirdInputRef.current.focus();
+				if (index > 0) setFocus(`otp${index - 1}`);
+				else setFocus("otp0");
 			}
 		};
 	};
 
-	const handleVerifyOtp = async (event) => {
-    event.preventDefault();
-    const params = location.search.split("emailId=");
+	const handleVerifyOtp = async (values) => {
+		const params = location.search.split("emailId=");
 		if (params.length > 1) {
-      const emailId = params[1];
+			dispatch(turnOn());
+			const emailId = params[1];
 			const data = { emailId, otp };
 			const result = await verifyOtp(data, i18n.language);
-			dispatch(turnOn());
 			if (result.status === 200) {
 				// Set auth token auth
 				const token = result.data.data.token;
@@ -90,7 +103,7 @@ export default function Verify() {
 	return (
 		<section className="account-section">
 			<div className="vl-verify-container">
-				<form onSubmit={handleVerifyOtp} className="account-form-container">
+				<form onSubmit={handleSubmit(handleVerifyOtp)} className="account-form-container">
 					<hgroup className="form-headers">
 						<h1 className="vl-heading f-700 vl-black">Verify your Account</h1>
 						<h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm f-500-sm">
@@ -99,29 +112,40 @@ export default function Verify() {
 					</hgroup>
 					<section className="vl-input-group form-auto-fill-section">
 						<div className="input-otp-column">
-							{otpRefs.map((otpRef, index) => (
-								<TextField
+							{otpArray.map((val, index) => (
+								<Controller
 									key={index}
-									inputRef={otpRef}
 									name={`otp${index}`}
-									id={`otp${index}`}
-									className="vl-custom-textfield"
-									fullWidth
-									value={otpArray[index]}
-									onChange={otpChange(index)}
-									onKeyUp={onOtpKeyPress(index)}
-									onKeyDown={onkeydown}
-									variant="outlined"
-									placeholder="*"
-									inputProps={{ maxLength: 1 }}
-                  autoFocus={index === 0 ? true : undefined}
-                  required
+									control={control}
+									rules={{ required: true }}
+									render={({ field: { ref, ...field } }) => (
+										<TextField
+											{...field}
+											inputRef={ref}
+											id={`otp${index}`}
+											className="vl-custom-textfield"
+											fullWidth
+											onChange={otpChange(index)}
+											onKeyUp={onOtpKeyPress(index)}
+											onKeyDown={onkeydown}
+											variant="outlined"
+											placeholder="*"
+											inputProps={{ maxLength: 1 }}
+											autoFocus={index === 0 ? true : undefined}
+											error={Boolean(errors[`otp${index}`])}
+										/>
+									)}
 								/>
 							))}
 						</div>
+						{errorMessage !== "" ? (
+							<span className="error-msg text-dangerS">{errorMessage}</span>
+						) : null}
 					</section>
 					<section className="call-by-action">
-						<button type="submit" className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">Verify</button>
+						<button type="submit" className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
+							Verify
+						</button>
 					</section>
 					{/* <section className="further-links vl-justify-auto">
             <p className="vl-note vl-grey-xs f-400">

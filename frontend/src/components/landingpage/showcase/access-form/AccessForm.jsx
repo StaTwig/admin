@@ -26,7 +26,7 @@ export default function AccessForm() {
 	const [EmailPhone, setEmailPhone] = useState("email");
 
 	const [errorModal, setErrorModal] = useState(false);
-	const [errorMessage, setErrorMessage] = useState();
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const {
 		watch,
@@ -48,6 +48,15 @@ export default function AccessForm() {
 		setValue("email", "");
 		setValue("phone", "");
 	}, [EmailPhone]);
+
+	useEffect(() => {
+		if (errors.email) setErrorMessage("Email ID is required!");
+		else if (errors.phone) setErrorMessage("Phone Number is requried!");
+	}, [errors]);
+
+	useEffect(() => {
+		if(watchEmail || watchPhone) setErrorMessage("");
+	}, [watchEmail, watchPhone]);
 
 	const validateEmailPhone = () => {
 		try {
@@ -89,7 +98,7 @@ export default function AccessForm() {
 			console.log(err);
 			dispatch(turnOff());
 			setErrorMessage(err.message);
-			setErrorModal(true);
+			// setErrorModal(true);
 		}
 	});
 
@@ -132,8 +141,8 @@ export default function AccessForm() {
 				} else {
 					const err = result.data.message;
 					console.log(err);
-					setErrorMessage(err);
-					setErrorModal(true);
+					setErrorMessage("Something went wrong!");
+					// setErrorModal(true);
 				}
 			}
 		} catch (err) {
@@ -171,13 +180,13 @@ export default function AccessForm() {
 										variant="outlined"
 										fullWidth
 										autoCapitalize="none"
-										error={Boolean(errors.email)}
+										error={errorMessage !== ""}
 										{...field}
 									/>
 								)}
 							/>
-							{errors.email && (
-								<span className="error-msg text-dangerS">Email ID is required!</span>
+							{errorMessage !== "" && (
+								<span className="error-msg text-dangerS">{errorMessage}</span>
 							)}
 						</div>
 						<div className="change-input-option">
@@ -205,13 +214,13 @@ export default function AccessForm() {
 										className="vl-custom-phone-input"
 										placeholder={t("enter_phone_number")}
 										maxLength={15}
-										style={{ borderColor: Boolean(errors.phone) ? "#da323c" : "" }}
+										style={{ borderColor: errorMessage !== "" ? "#da323c" : "" }}
 										{...field}
 									/>
 								)}
 							/>
-							{errors.phone && (
-								<span className="error-msg text-dangerS">Phone Number is required!</span>
+							{errorMessage !== "" && (
+								<span className="error-msg text-dangerS">{errorMessage}</span>
 							)}
 						</div>
 						<div className="change-input-option">
