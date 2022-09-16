@@ -28,10 +28,13 @@ export default function Account(props) {
 	const [organizations, setOrganizations] = useState([""]);
 	const [organisationTypes, setOrganisationTypes] = useState([""]);
 
+	const [errorMessage, setErrorMessage] = useState();
+
 	const {
 		watch,
 		control,
 		setValue,
+		setError,
 		formState: { errors },
 		clearErrors,
 		handleSubmit,
@@ -116,21 +119,24 @@ export default function Account(props) {
 		return new Promise((resolve, reject) => {
 			try {
 				let data;
+				let type;
 
 				if (watchEmail) {
 					data = "emailId=" + watchEmail;
+					type = "email";
 					if (watchEmail.match(emailRegex) === null) {
-						props.setErrorMessage("Email ID is invalid!");
-						props.setErrorModal(true);
+						setError("email", { type: "custom", message: "Email ID is invalid!" });
+						setErrorMessage("Email ID is invalid!");
 						reject("Invalid email!");
 					}
 				}
 
 				if (watchPhone) {
 					data = "phoneNumber=" + watchPhone;
+					type = "phone";
 					if (isValidPhoneNumber(watchPhone) === false) {
-						props.setErrorMessage("Phone number is invalid!");
-						props.setErrorModal(true);
+						setError("phone", { type: "custom", message: "Phone Number is invalid!" });
+						setErrorMessage("Phone number is invalid!");
 						reject("Invalid phone!");
 					}
 				}
@@ -140,8 +146,11 @@ export default function Account(props) {
 						if (res.status === 200) {
 							resolve("Valid email/phone!");
 						} else {
-							props.setErrorMessage("Duplicate EmailId/Phone!");
-							props.setErrorModal(true);
+							setError(type, {
+								type: "custom",
+								message: "Duplicate " + (type === "email" ? "Email ID!" : "Phone Number!"),
+							});
+							setErrorMessage("Duplicate EmailId/Phone!");
 							reject("Duplicate EmailId/Phone!");
 						}
 					});
@@ -238,7 +247,11 @@ export default function Account(props) {
 										label="Email Address"
 										{...field}
 										error={Boolean(errors.email)}
-										helperText={errors.email && "Email or Phone is required!"}
+										helperText={
+											errors.email?.type === "required"
+												? "Email or Phone is required!"
+												: errors.email?.message
+										}
 									/>
 								)}
 							/>
@@ -260,6 +273,9 @@ export default function Account(props) {
 									/>
 								)}
 							/>
+							{errors.phone?.type === "custom" ? (
+								<span className="error-msg text-dangerS">{errors.phone?.message}</span>
+							) : null}
 						</div>
 						<div className="radio-btn-group">
 							<FormControl>

@@ -420,7 +420,7 @@ exports.sendOtp = [
 				let phone = "";
 				if (emailId.indexOf("@") > -1) user = await EmployeeModel.findOne({ emailId });
 				else {
-					phone = "+" + emailId;
+					phone = emailId.startsWith('+') ? emailId : `+${emailId}`;
 					user = await EmployeeModel.findOne({ phoneNumber: phone });
 				}
 				if (user) {
