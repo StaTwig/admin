@@ -74,15 +74,15 @@ export default function Connection(props) {
 
 				console.log("Request Data - ", reqData);
 
-				// const result = await registerUser(reqData, i18n.language);
-				// if (result.status === 200) {
-				// 	// Redirect to pending page
-				// 	console.log("Req pending!");
-				// 	history.push("/success");
-				// } else {
-				// 	console.log("Error - ", result.data);
-				// 	throw new Error(result.data.message);
-				// }
+				const result = await registerUser(reqData, i18n.language);
+				if (result.status === 200) {
+					// Redirect to pending page
+					console.log("Req pending!");
+					history.push("/success");
+				} else {
+					console.log("Error - ", result.data);
+					throw new Error(result.data.message);
+				}
 				dispatch(turnOff());
 			}
 		} catch (err) {
