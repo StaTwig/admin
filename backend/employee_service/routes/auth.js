@@ -59,4 +59,6 @@ router.get("/images/:key", AuthController.Image);
 
 router.post("/googleLogin", AuthController.googleLogIn);
 
+router.delete("/deleteProfile", AuthController.deleteProfile);
+
 module.exports = router;

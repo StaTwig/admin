@@ -71,11 +71,14 @@ exports.checkEmail = [
 			let phone = "";
 			if (emailId.indexOf("@") > -1) {
 				if (!emailId.match(emailRegex)) return Promise.reject("not_valid_email");
-				user = await EmployeeModel.findOne({ emailId });
+				user = await EmployeeModel.findOne({ emailId: emailId, accountStatus: { $ne: "DELETED" } });
 			} else {
 				if (!emailId.match(phoneRegex)) return Promise.reject("not_valid_phone");
 				phone = "+" + emailId;
-				user = await EmployeeModel.findOne({ phoneNumber: phone });
+				user = await EmployeeModel.findOne({
+					phoneNumber: phone,
+					accountStatus: { $ne: "DELETED" },
+				});
 			}
 			if (user) {
 				return Promise.reject("account_already_exists");
@@ -123,7 +126,11 @@ exports.register = [
 				const emailId = value.toLowerCase().replace("", "");
 				let user;
 				if (!emailId.match(emailRegex)) return Promise.reject("not_valid_email");
-				if (emailId.indexOf("@") > -1) user = await EmployeeModel.findOne({ emailId });
+				if (emailId.indexOf("@") > -1)
+					user = await EmployeeModel.findOne({
+						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
+					});
 				if (user) {
 					return Promise.reject("account_already_exists");
 				}
@@ -154,7 +161,11 @@ exports.register = [
 				let user;
 				if (!emailId.match(emailRegex))
 					return apiResponse.ErrorResponse(req, res, "not_valid_email");
-				if (emailId.indexOf("@") > -1) user = await EmployeeModel.findOne({ emailId: emailId });
+				if (emailId.indexOf("@") > -1)
+					user = await EmployeeModel.findOne({
+						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
+					});
 				if (user) {
 					return apiResponse.ErrorResponse(req, res, "account_already_exists");
 				}
@@ -165,7 +176,10 @@ exports.register = [
 				// if (!phoneNumber.match(phoneRegex))
 				//   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
 				// phone = "+" + phoneNumber;
-				user = await EmployeeModel.findOne({ phoneNumber: phoneNumber });
+				user = await EmployeeModel.findOne({
+					phoneNumber: phoneNumber,
+					accountStatus: { $ne: "DELETED" },
+				});
 				if (user) {
 					return apiResponse.ErrorResponse(req, res, "account_already_exists");
 				}
@@ -418,10 +432,17 @@ exports.sendOtp = [
 				const emailId = req.body.emailId.toLowerCase();
 				let user;
 				let phone = "";
-				if (emailId.indexOf("@") > -1) user = await EmployeeModel.findOne({ emailId });
+				if (emailId.indexOf("@") > -1)
+					user = await EmployeeModel.findOne({
+						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
+					});
 				else {
-					phone = emailId.startsWith('+') ? emailId : `+${emailId}`;
-					user = await EmployeeModel.findOne({ phoneNumber: phone });
+					phone = emailId.startsWith("+") ? emailId : `+${emailId}`;
+					user = await EmployeeModel.findOne({
+						phoneNumber: phone,
+						accountStatus: { $ne: "DELETED" },
+					});
 				}
 				if (user) {
 					if (user.accountStatus === "ACTIVE") {
@@ -486,12 +507,12 @@ exports.verifyOtp = [
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(req, res, "validation_error", errors.array());
 			} else {
-				let query = {};
+				let query = { accountStatus: { $ne: "DELETED" } };
 				if (req.body.emailId.indexOf("@") === -1) {
 					let phone = "+" + req.body.emailId;
-					query = { phoneNumber: phone };
+					query.phoneNumber = phone;
 				} else {
-					query = { emailId: req.body.emailId };
+					query.emailId = req.body.emailId;
 				}
 				const user = await EmployeeModel.findOne(query);
 				if (user && user.otp == req.body.otp) {
@@ -603,12 +624,12 @@ exports.verifyAuthentication = [
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(req, res, "validation_error", errors.array());
 			} else {
-				let query = {};
+				let query = { accountStatus: { $ne: "DELETED" } };
 				if (req.body.emailId.indexOf("@") === -1) {
 					let phone = "+" + req.body.emailId;
-					query = { phoneNumber: phone };
+					query = { ...query, phoneNumber: phone };
 				} else {
-					query = { emailId: req.body.emailId };
+					query = { ...query, emailId: req.body.emailId };
 				}
 				const user = await EmployeeModel.findOne(query);
 				if (!user) {
@@ -760,6 +781,7 @@ exports.googleLogIn = [
 
 			let user = await EmployeeModel.findOne({
 				emailId: payload?.email,
+				accountStatus: { $ne: "DELETED" },
 			});
 
 			// User does not exist in our db
@@ -969,6 +991,7 @@ exports.updateProfile = [
 		try {
 			const employee = await EmployeeModel.findOne({
 				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
 			});
 			const {
 				firstName,
@@ -977,6 +1000,7 @@ exports.updateProfile = [
 				warehouseId,
 				organisation,
 				preferredLanguage,
+				photoId = null
 			} = req.body;
 
 			const organisationId = organisation.split("/")[1];
@@ -986,6 +1010,9 @@ exports.updateProfile = [
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
+			if (photoId) {
+				employee.photoId = photoId;
+			}
 			await employee.save();
 
 			const returnData = { isRefresh: false };
@@ -1017,6 +1044,24 @@ exports.updateProfile = [
 	},
 ];
 
+exports.deleteProfile = [
+	auth,
+	async (req, res) => {
+		try {
+			const employee = await EmployeeModel.updateOne(
+				{ id: req.user.id },
+				{ $set: { accountStatus: "DELETED" } },
+				{new: true}
+			);
+
+			return apiResponse.successResponse(req, res, "User account deleted successfully!");
+		} catch(err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(req, res, err.message);
+		}
+	}
+]
+
 exports.createUserAddress = [
 	async (req, res) => {
 		try {
@@ -1038,7 +1083,10 @@ exports.getAllUsers = [
 	auth,
 	async (req, res) => {
 		try {
-			const users = await EmployeeModel.find({}, "firstName walletAddress emailId");
+			const users = await EmployeeModel.find(
+				{ accountStatus: { $ne: "DELETED" } },
+				"firstName walletAddress emailId",
+			);
 			const confirmedUsers = users.filter((user) => user.walletAddress !== "");
 			return apiResponse.successResponseWithData(req, res, "all_users_success", confirmedUsers);
 		} catch (err) {
@@ -1368,6 +1416,7 @@ exports.uploadImage = [
 				const employee = await EmployeeModel.findOneAndUpdate(
 					{
 						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
 					},
 					{
 						$push: userData,
@@ -1387,6 +1436,7 @@ exports.uploadImage = [
 				const employee = await EmployeeModel.findOneAndUpdate(
 					{
 						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
 					},
 					{
 						$push: userData,
@@ -1398,6 +1448,7 @@ exports.uploadImage = [
 				const employeeUpdate = await EmployeeModel.findOneAndUpdate(
 					{
 						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
 					},
 					{
 						$set: { photoId: Upload.key },
@@ -1431,6 +1482,7 @@ exports.fetchImage = [
 				$and: [
 					{
 						emailId: emailId,
+						accountStatus: { $ne: "DELETED" },
 					},
 					{
 						"userDocuments.idType": type,
@@ -1443,6 +1495,7 @@ exports.fetchImage = [
 						$and: [
 							{
 								emailId: emailId,
+								accountStatus: { $ne: "DELETED" },
 							},
 							{
 								"userDocuments.idType": type,
@@ -1478,7 +1531,7 @@ exports.getAllRegisteredUsers = [
 			/* 
       Performance Bottleneck 
       */
-			const users = await EmployeeModel.find({})
+			const users = await EmployeeModel.find({ accountStatus: { $ne: "DELETED" } })
 				.skip(resPerPage * page - resPerPage)
 				.limit(resPerPage);
 			const confirmedUsers = users.filter((user) => user.walletAddress !== "");
@@ -1555,6 +1608,7 @@ exports.getAllUsersByWarehouse = [
 			});
 			const users = await EmployeeModel.find({
 				warehouseId: req.params.warehouseId,
+				accountStatus: { $ne: "DELETED" },
 			})
 				.skip(resPerPage * page - resPerPage)
 				.limit(resPerPage);
@@ -1634,6 +1688,7 @@ exports.getAllUsersByOrganisation = [
 			});
 			const users = await EmployeeModel.find({
 				organisationId: req.params.organisationId,
+				accountStatus: { $ne: "DELETED" },
 			})
 				.skip(resPerPage * page - resPerPage)
 				.limit(resPerPage);
@@ -1853,7 +1908,10 @@ exports.emailverify = [
 			const phoneNumber = req.query.phoneNumber ? req.query.phoneNumber.trim() : "";
 			const email = await EmployeeModel.find(
 				{
-					$or: [{ phoneNumber: "+" + phoneNumber }, { emailId: emailId ? emailId : "" }],
+					$or: [
+						{ phoneNumber: "+" + phoneNumber, accountStatus: { $ne: "DELETED" } },
+						{ emailId: emailId ? emailId : "", accountStatus: { $ne: "DELETED" } },
+					],
 				},
 				"emailId phoneNumber",
 			);
@@ -1887,6 +1945,7 @@ exports.switchLocation = [
 		try {
 			const employee = await EmployeeModel.findOne({
 				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
 			});
 			const { warehouseId } = req.body;
 			const returnData = { isRefresh: false };

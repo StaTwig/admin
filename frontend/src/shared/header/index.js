@@ -229,9 +229,9 @@ const Header = (props) => {
     return state.user;
   });
   useEffect(() => {
-    if (profile?.photoId != null) {
+    if (profile?.photoId) {
       getImage(profile?.photoId).then((result) => {
-        setImage(result.data);
+        setImage(result?.data);
       });
     }
   }, [profile]);

@@ -555,8 +555,9 @@ exports.createShipment = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       if (empData == null) {
         return apiResponse.ErrorResponse(
           res,
@@ -1104,8 +1105,9 @@ exports.createShipmentForTpl = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       if (empData == null) {
         return apiResponse.ErrorResponse(
           res,
@@ -1397,8 +1399,9 @@ exports.receiveShipment = [
         const email = req.user.emailId;
         const user_id = req.user.id;
         const empData = await EmployeeModel.findOne({
-          emailId: req.user.emailId,
-        });
+					emailId: req.user.emailId,
+					accountStatus: { $ne: "DELETED" },
+				});
         const orgId = empData.organisationId;
         const orgName = empData.name;
         const orgData = await OrganisationModel.findOne({ id: orgId });
@@ -2227,8 +2230,9 @@ exports.customReceiveShipment = [
         { new: true }
       );
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       const orgId = empData.organisationId;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({
@@ -4039,10 +4043,17 @@ exports.fetchAllWarehouseShipments = [
       const { skip, limit } = req.query;
       const { emailId, phoneNumber } = req.user;
       let empDetails;
-      if (emailId) empDetails = await EmployeeModel.findOne({ emailId });
-      else {
-        empDetails = await EmployeeModel.findOne({ phoneNumber });
-      }
+      if (emailId)
+				empDetails = await EmployeeModel.findOne({
+					emailId: emailId,
+					accountStatus: { $ne: "DELETED" },
+				});
+			else {
+				empDetails = await EmployeeModel.findOne({
+					phoneNumber: phoneNumber,
+					accountStatus: { $ne: "DELETED" },
+				});
+			}
       const warehouses = empDetails.warehouseId;
       const shipments = await ShipmentModel.aggregate([
         {
