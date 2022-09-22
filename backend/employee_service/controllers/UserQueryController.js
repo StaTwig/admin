@@ -45,7 +45,7 @@ exports.newUserQuery = [
 				`<p>Phone Number - ${req.user?.phoneNumber ? req.user?.phoneNumber : 'N/A'}</p>`;
 
 			const result = await axios.post(process.env.SEND_MESSAGE, {
-				email: "siddhant@statwig.com",
+				email: "dev@statwig.com",
 				subject: `User Query - ${userQuery.queryType}`,
 				content: queryContent,
 				cc: req.user?.emailId,
