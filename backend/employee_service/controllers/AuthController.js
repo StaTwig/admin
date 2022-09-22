@@ -509,99 +509,102 @@ exports.verifyOtp = [
 			} else {
 				let query = { accountStatus: { $ne: "DELETED" } };
 				if (req.body.emailId.indexOf("@") === -1) {
-					let phone = "+" + req.body.emailId;
+					let phone = req.body.emailId.startsWith("+") ? req.body.emailId : "+" + req.body.emailId;
 					query.phoneNumber = phone;
 				} else {
 					query.emailId = req.body.emailId;
 				}
 				const user = await EmployeeModel.findOne(query);
-				if (user && user.otp == req.body.otp) {
-					let address;
-					if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
-						const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-						address = response.data.items;
-						// const userData = {
-						//   address,
-						// };
-						/* await axios.post(
-              `${blockchain_service_url}/grantPermission`,
-              userData
-            );*/
-						await EmployeeModel.updateOne(query, {
-							otp: null,
-							walletAddress: address,
+				if(user) {
+					if (user.otp == req.body.otp) {
+						let address;
+						if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
+							const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+							address = response.data.items;
+							// const userData = {
+							//   address,
+							// };
+							/* await axios.post(
+								`${blockchain_service_url}/grantPermission`,
+								userData
+							);*/
+							await EmployeeModel.updateOne(query, {
+								otp: null,
+								walletAddress: address,
+							});
+						} else {
+							address = user.walletAddress;
+						}
+	
+						const activeWarehouse = await WarehouseModel.find({
+							$and: [
+								{ id: { $in: user.warehouseId } },
+								{
+									$or: [{ status: "ACTIVE" }, { status: "PENDING" }, { status: { $exists: false } }],
+								},
+							],
 						});
-					} else {
-						address = user.walletAddress;
-					}
-
-					const activeWarehouse = await WarehouseModel.find({
-						$and: [
-							{ id: { $in: user.warehouseId } },
-							{
-								$or: [{ status: "ACTIVE" }, { status: "PENDING" }, { status: { $exists: false } }],
-							},
-						],
-					});
-
-					let userData;
-					if (activeWarehouse.length > 0) {
-						let activeWarehouseId = 0;
-						const activeWRs = activeWarehouse.filter((w) => w.status == "ACTIVE");
-						if (activeWRs.length > 0) activeWarehouseId = activeWRs[0].id;
-						else activeWarehouseId = activeWarehouse[0].id;
-						userData = {
-							id: user.id,
-							firstName: user.firstName,
-							emailId: user.emailId,
-							role: user.role,
-							warehouseId: activeWarehouseId,
-							organisationId: user.organisationId,
-							walletAddress: address,
-							phoneNumber: user.phoneNumber,
-							org: user.msp,
-							userName: user.emailId,
-							preferredLanguage: user.preferredLanguage,
-							isCustom: user.isCustom,
+	
+						let userData;
+						if (activeWarehouse.length > 0) {
+							let activeWarehouseId = 0;
+							const activeWRs = activeWarehouse.filter((w) => w.status == "ACTIVE");
+							if (activeWRs.length > 0) activeWarehouseId = activeWRs[0].id;
+							else activeWarehouseId = activeWarehouse[0].id;
+							userData = {
+								id: user.id,
+								firstName: user.firstName,
+								emailId: user.emailId,
+								role: user.role,
+								warehouseId: activeWarehouseId,
+								organisationId: user.organisationId,
+								walletAddress: address,
+								phoneNumber: user.phoneNumber,
+								org: user.msp,
+								userName: user.emailId,
+								preferredLanguage: user.preferredLanguage,
+								isCustom: user.isCustom,
+							};
+						} else {
+							userData = {
+								id: user.id,
+								firstName: user.firstName,
+								emailId: user.emailId,
+								role: user.role,
+								warehouseId: [],
+								organisationId: user.organisationId,
+								walletAddress: address,
+								phoneNumber: user.phoneNumber,
+								org: user.msp,
+								userName: user.emailId,
+								preferredLanguage: user.preferredLanguage,
+								isCustom: user.isCustom,
+							};
+						}
+						//Prepare JWT token for authentication
+						const jwtPayload = userData;
+						const jwtData = {
+							expiresIn: process.env.JWT_TIMEOUT_DURATION,
 						};
-					} else {
-						userData = {
-							id: user.id,
-							firstName: user.firstName,
-							emailId: user.emailId,
-							role: user.role,
-							warehouseId: [],
-							organisationId: user.organisationId,
-							walletAddress: address,
-							phoneNumber: user.phoneNumber,
-							org: user.msp,
-							userName: user.emailId,
-							preferredLanguage: user.preferredLanguage,
-							isCustom: user.isCustom,
+						const secret = process.env.JWT_SECRET;
+						//Generated JWT token with Payload and secret.
+						userData.permissions = await RbacModel.findOne({ role: user.role });
+						userData.token = jwt.sign(jwtPayload, secret, jwtData);
+	
+						const bc_data = {
+							username: req.body.emailId,
+							password: "",
+							orgName: "org1MSP",
+							role: "",
+							email: req.body.emailId,
 						};
+						await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+						return apiResponse.successResponseWithData(req, res, "login_success", userData);
+					} else {
+						return apiResponse.ErrorResponse(req, res, "otp_not_match");
 					}
-					//Prepare JWT token for authentication
-					const jwtPayload = userData;
-					const jwtData = {
-						expiresIn: process.env.JWT_TIMEOUT_DURATION,
-					};
-					const secret = process.env.JWT_SECRET;
-					//Generated JWT token with Payload and secret.
-					userData.permissions = await RbacModel.findOne({ role: user.role });
-					userData.token = jwt.sign(jwtPayload, secret, jwtData);
-
-					const bc_data = {
-						username: req.body.emailId,
-						password: "",
-						orgName: "org1MSP",
-						role: "",
-						email: req.body.emailId,
-					};
-					console.log(bc_data);
-					await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
-					return apiResponse.successResponseWithData(req, res, "login_success", userData);
 				} else {
-					return apiResponse.ErrorResponse(req, res, "otp_not_match");
+					return apiResponse.ErrorResponse(req, res, "account_not_found")
 				}
 			}
 		} catch (err) {
@@ -1010,7 +1013,7 @@ exports.updateProfile = [
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
-			if (photoId) {
+			if (photoId === "") {
 				employee.photoId = photoId;
 			}
 			await employee.save();
