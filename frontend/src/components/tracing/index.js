@@ -46,7 +46,7 @@ const Tracing = (props) => {
         <div className='row'>
           <Link
             to={
-              status === "RECEIVED" ? `/tracing/${id}` : `/updatestatus/${id}`
+              status === "RECEIVED" ? `/track/${id}` : `/updatestatus/${id}`
             }
           >
             <button
@@ -59,7 +59,7 @@ const Tracing = (props) => {
           <Link
             to={
               status === "RECEIVED"
-                ? `/tracing/${id}`
+                ? `/track/${id}`
                 : `/receiveShipment/${id}`
             }
           >

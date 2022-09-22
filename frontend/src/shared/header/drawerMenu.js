@@ -94,10 +94,10 @@ const DrawerMenu = ({ match, location, close }) => {
             <span>Inventory</span>
           </Link>
         </li>
-        <li className={url === "/trackAndTrace" ? "active" : ""}>
-          <Link to='/trackAndTrace'>
+        <li className={url === "/track" ? "active" : ""}>
+          <Link to='/track'>
             <img
-              src={url === "/trackAndTrace" ? trackSelectedIcon : trackIcon}
+              src={url === "/track" ? trackSelectedIcon : trackIcon}
               alt='Track & Trace'
             />
             <span>Track & Trace</span>

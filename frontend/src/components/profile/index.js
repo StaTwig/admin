@@ -114,7 +114,7 @@ class Profile extends React.Component {
       });
     }
     const resultImage = await getImage(this.props.user?.photoId);
-    this.setState({ image: resultImage.data });
+    this.setState({ image: resultImage?.data });
   }
 
 
@@ -670,7 +670,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Address"
                         />
-                        {this.props.user.emailId ? (
+                        {this.props.user?.emailId ? (
                           <span>{this.props.user.emailId}</span>
                         ) : (
                           <span>N/A</span>
@@ -684,7 +684,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Phone Number"
                         />
-                        {this.state.phoneNumber.length!=0 ? (
+                        {this.state.phoneNumber?.length ? (
                           <span>
                             +{this.state.phoneNumber.replaceAll("+", "")}
                           </span>

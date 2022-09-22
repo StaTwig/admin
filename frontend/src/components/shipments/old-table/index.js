@@ -151,7 +151,7 @@ const Table = (props) => {
                     onClick={() => {
                       const data = shipments[index];
                       dispatch(setTracingShipments(data));
-                      props.history.push(`/tracing/${shipments[index].id}`);
+                      props.history.push(`/track/${shipments[index].id}`);
                     }}
                   >
                     <img
