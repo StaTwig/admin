@@ -1003,7 +1003,6 @@ exports.updateProfile = [
 				warehouseId,
 				organisation,
 				preferredLanguage,
-				photoId = null
 			} = req.body;
 
 			const organisationId = organisation.split("/")[1];
@@ -1013,9 +1012,6 @@ exports.updateProfile = [
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
-			if (photoId === "") {
-				employee.photoId = photoId;
-			}
 			await employee.save();
 
 			const returnData = { isRefresh: false };
@@ -1046,6 +1042,54 @@ exports.updateProfile = [
 		}
 	},
 ];
+
+exports.deleteProfilePicture = [
+	auth,
+	async (req, res) => {
+		try {
+			const employee = await EmployeeModel.findOneAndUpdate(
+				{ id: req.user.id },
+				{ $set: { photoId: "" } },
+				{ new: true },
+			);
+
+			if (!employee) {
+				throw new Error("Couldn't update profile!");
+			}
+
+			let userData = {
+				id: employee.id,
+				firstName: employee.firstName,
+				emailId: employee.emailId,
+				role: employee.role,
+				organisationId: employee.organisationId,
+				warehouseId: employee.warehouseId,
+				phoneNumber: employee.phoneNumber,
+				photoId: "",
+			};
+
+			let returnData = {};
+			const jwtPayload = userData;
+			const jwtData = {
+				expiresIn: process.env.JWT_TIMEOUT_DURATION,
+			};
+			const secret = process.env.JWT_SECRET;
+			//Generated JWT token with Payload and secret.
+			returnData.isRefresh = true;
+			returnData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+			return apiResponse.successResponseWithData(req, res, "user_info_success", returnData);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(
+				req,
+				res,
+				"Error in deleting profile picture - ",
+				err.message,
+			);
+		}
+	}
+]
 
 exports.deleteProfile = [
 	auth,

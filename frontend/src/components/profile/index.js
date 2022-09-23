@@ -117,7 +117,6 @@ class Profile extends React.Component {
     this.setState({ image: resultImage?.data });
   }
 
-
   onCancel() {
     const {
       prof,
@@ -162,6 +161,7 @@ class Profile extends React.Component {
       title,
     });
   }
+
   onChange() {
     const formData = new FormData();
     formData.append("photo", this.state.selectedFile);
@@ -238,7 +238,6 @@ class Profile extends React.Component {
     }
   }
 
-
   handlePhoneVerification(currentPhone) {
     const phone = '+'+currentPhone;
     if (phone) {
@@ -252,7 +251,6 @@ class Profile extends React.Component {
       this.setState({ phoneNumberErrorMsg: "" });
     }
   }
-
 
   render() {
     const { editMode, selectedFile, firstName, lastName, image } = this.state;
