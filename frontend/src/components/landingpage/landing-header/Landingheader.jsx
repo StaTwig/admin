@@ -35,38 +35,44 @@ export default function Landingheader() {
   });
 
   const handleSignup = () => {
-    history.push('/signup')
-  }
+    history.push("/signup");
+  };
   return (
-    <header className="landing-header">
-      <div className="vl-page-container">
-        <nav className="landing-navbar">
-          <figure className="brand-logo">
+    <header className='landing-header'>
+      <div className='vl-page-container'>
+        <nav className='landing-navbar'>
+          <figure className='brand-logo'>
             <img
               src={VaccineLedgerLogo}
-              alt="vaccineledger"
-              className="brand-logo-image"
+              alt='vaccineledger'
+              className='brand-logo-image'
             />
           </figure>
-          <ul className="landing-navlist">
-            <li className="landing-nav-item">
-              <Link to="/" className="landing-nav-link active">
-                <p className="vl-body">Home</p>
+          <ul className='landing-navlist'>
+            <li className='landing-nav-item'>
+              <Link to='/' className='landing-nav-link active'>
+                <p className='vl-body'>Home</p>
               </Link>
             </li>
-            <li className="landing-nav-item">
-              <Link to="/" className="landing-nav-link">
-                <p className="vl-body">Services</p>
+            <li className='landing-nav-item'>
+              <Link to='/' className='landing-nav-link'>
+                <p className='vl-body'>Services</p>
               </Link>
             </li>
-            <li className="landing-nav-item">
-              <Link to="/" className="landing-nav-link">
-                <p className="vl-body">Contact Us</p>
+            <li className='landing-nav-item'>
+              <Link to='/' className='landing-nav-link'>
+                <p className='vl-body'>Contact Us</p>
               </Link>
             </li>
-            <li className="landing-nav-item mobile-nav-item">
-              <Link to="/" className="landing-nav-link">
-                <p className="vl-body">Gitlab Repository</p>
+            <li className='landing-nav-item mobile-nav-item'>
+              <Link
+                to={{
+                  pathname: "https://gitlab.com/statwig-public/theledger",
+                }}
+                target='_blank'
+                className='landing-nav-link'
+              >
+                <p className='vl-body'>Gitlab Repository</p>
               </Link>
             </li>
             <li
@@ -81,86 +87,89 @@ export default function Landingheader() {
               >
                 {Language === "english" ? (
                   <>
-                    <div className="flag-circle">
+                    <div className='flag-circle'>
                       <img
                         src={EnglishFlag}
-                        alt="flags"
-                        className="flag-circle-image"
+                        alt='flags'
+                        className='flag-circle-image'
                       />
                     </div>
 
-                    <p className="vl-body">Eng</p>
+                    <p className='vl-body'>Eng</p>
                   </>
                 ) : (
                   <>
-                    <div className="flag-circle">
+                    <div className='flag-circle'>
                       <img
                         src={SpanishFlag}
-                        alt="flags"
-                        className="flag-circle-image"
+                        alt='flags'
+                        className='flag-circle-image'
                       />
                     </div>
 
-                    <p className="vl-body">Spa</p>
+                    <p className='vl-body'>Spa</p>
                   </>
                 )}
 
-                <i className="fa-solid fa-caret-down"></i>
+                <i className='fa-solid fa-caret-down'></i>
               </section>
               {/* Dropdown */}
-              <section className="language-list">
+              <section className='language-list'>
                 <article
-                  className="language-card"
+                  className='language-card'
                   onClick={() => {
                     setLanguage("english");
                     setLanguageOpen(false);
                   }}
                 >
-                  <div className="flag-circle">
+                  <div className='flag-circle'>
                     <img
                       src={EnglishFlag}
-                      alt="flags"
-                      className="flag-circle-image"
+                      alt='flags'
+                      className='flag-circle-image'
                     />
                   </div>
 
-                  <p className="vl-body">English</p>
+                  <p className='vl-body'>English</p>
                 </article>
                 <article
-                  className="language-card no-border"
+                  className='language-card no-border'
                   onClick={() => {
                     setLanguage("spanish");
                     setLanguageOpen(false);
                   }}
                 >
-                  <div className="flag-circle">
+                  <div className='flag-circle'>
                     <img
                       src={SpanishFlag}
-                      alt="flags"
-                      className="flag-circle-image"
+                      alt='flags'
+                      className='flag-circle-image'
                     />
                   </div>
 
-                  <p className="vl-body">Spanish</p>
+                  <p className='vl-body'>Spanish</p>
                 </article>
               </section>
             </li>
-            <li className="landing-nav-item mobile-nav-item">
-              <button onClick={handleSignup} className="vl-btn vl-btn-sm vl-btn-secondary">
+            <li className='landing-nav-item mobile-nav-item'>
+              <button
+                onClick={handleSignup}
+                className='vl-btn vl-btn-sm vl-btn-secondary'
+              >
                 Sign Up
               </button>
             </li>
 
             {/* Mobile Link */}
-            <li className="landing-nav-item tablet-menu-icon vl-link">
-              <div className="landing-nav-link active">
-                <i className="fa-solid fa-bars vl-body"></i>
+            <li className='landing-nav-item tablet-menu-icon vl-link'>
+              <div className='landing-nav-link active'>
+                <i className='fa-solid fa-bars vl-body'></i>
               </div>
             </li>
           </ul>
-          <div className="landing-nav-item mobile-menu-icon vl-link">
-            <div className="landing-nav-link active">
-              <i className="fa-solid fa-bars vl-body"></i>
+          <div className='landing-nav-item mobile-menu-icon vl-link'>
+            <div className='landing-nav-link active'>
+              <i className='fa-solid fa-bars vl-body'></i>
             </div>
           </div>
         </nav>
