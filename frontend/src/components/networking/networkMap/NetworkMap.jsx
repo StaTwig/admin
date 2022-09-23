@@ -8,6 +8,9 @@ import {
 } from "@react-google-maps/api";
 import "./NetworkMap.scss";
 import BlueMap from "./data/BlueMap";
+import greenPointer from "../../../assets/markers/green.png";
+import bluePointer from "../../../assets/markers/blue.png";
+import redPointer from "../../../assets/markers/red.png";
 
 const containerStyle = {
   width: "100%",
@@ -74,8 +77,8 @@ export default function NetworkMap({
               icon={{
                 url:
                   park.warehouseId === (reportWarehouse || user.warehouseId[0])
-                    ? "/markers/loc3.png"
-                    : "/markers/loc1.png",
+                    ? redPointer
+                    : greenPointer,
                 scaledSize: new window.google.maps.Size(30, 30),
                 origin: new window.google.maps.Point(0, 0),
                 anchor: new window.google.maps.Point(15, 15),
@@ -104,8 +107,8 @@ export default function NetworkMap({
               icon={{
                 url:
                   park.warehouseId === (reportWarehouse || user.warehouseId[0])
-                    ? "/markers/loc3.png"
-                    : "/markers/loc2.png",
+                    ? redPointer
+                    : bluePointer,
                 scaledSize: new window.google.maps.Size(30, 30),
                 origin: new window.google.maps.Point(0, 0),
                 anchor: new window.google.maps.Point(15, 15),
@@ -124,25 +127,25 @@ export default function NetworkMap({
               setMapSelected(null);
             }}
           >
-            <div className="info-popup-container">
-              <div className="info-header">
-                <div className="info-header-content">
+            <div className='info-popup-container'>
+              <div className='info-header'>
+                <div className='info-header-content'>
                   {MapSelected?.orgId === user.organisation?.split("/")[1] ? (
-                    <i className="fa-solid fa-location-crosshairs info-icon"></i>
+                    <i className='fa-solid fa-location-crosshairs info-icon'></i>
                   ) : (
-                    <i className="fa-solid fa-map-location info-icon"></i>
+                    <i className='fa-solid fa-map-location info-icon'></i>
                   )}
 
-                  <p className="mi-body-xl black f-700 mi-reset">
+                  <p className='mi-body-xl black f-700 mi-reset'>
                     {MapSelected?.orgName}
                   </p>
                 </div>
               </div>
-              <div className="info-body">
-                <p className="mi-body-md black f-500  mi-reset">
+              <div className='info-body'>
+                <p className='mi-body-md black f-500  mi-reset'>
                   {MapSelected.title}
                 </p>
-                <p className="mi-body-sm black  mi-reset">{MapSelected.city}</p>
+                <p className='mi-body-sm black  mi-reset'>{MapSelected.city}</p>
               </div>
             </div>
           </InfoWindow>
