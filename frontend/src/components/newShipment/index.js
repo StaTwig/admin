@@ -725,7 +725,6 @@ const NewShipment = (props) => {
                       style={{ height: "25px", width: "50px" }}
                       className='btn btn-fetch'
                       onClick={async () => {
-                        console.log("Fetch button");
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
                         setAddProducts((p) => []);
@@ -739,14 +738,13 @@ const NewShipment = (props) => {
                         } else {
                           if (validShipmentID) {
                             let result = await getViewShipment(values.shipmentID);
-                            if(result.status === 500) {
+                            if(!result.success) {
                               setShipmentError(t("check_shipment_reference_id"));
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
                             } else {
                               // Check whether the shipment is an outbound shipment
                               if(user.warehouseId.includes(result.data.supplier.locationId)) {
-                                console.log("Outbound shipment!");
                                 setShipmentError(t("The shipment is an outbound shipment!"));
                                 setOpenShipmentFail(true);
                                 dispatch(turnOff());
@@ -782,9 +780,9 @@ const NewShipment = (props) => {
                                     products_temp[i].name = result.products[i].productName;
                                     products_temp[i].productQuantity =
                                       parseInt(
-                                        result.poDetails[0].products[i].productQuantityDelivered || 0,
+                                        result?.poDetails[0]?.products[i].productQuantityDelivered || 0,
                                       ) -
-                                      parseInt(result.products[i].productQuantityTaggedSent || 0);
+                                      parseInt(result?.products[i].productQuantityTaggedSent || 0);
                                     products_temp[i].productCategory =
                                       result.products[i].productCategory;
                                     delete products_temp[i].productQuantityDelivered;
