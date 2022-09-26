@@ -778,11 +778,24 @@ const NewShipment = (props) => {
                                   for (let i = 0; i < products_temp.length; i++) {
                                     products_temp[i].manufacturer = result.products[i].manufacturer;
                                     products_temp[i].name = result.products[i].productName;
-                                    products_temp[i].productQuantity =
-                                      parseInt(
-                                        result?.poDetails[0]?.products[i].productQuantityDelivered || 0,
-                                      ) -
-                                      parseInt(result?.products[i].productQuantityTaggedSent || 0);
+                                    if(result?.poDetails && result?.poDetails?.length) {
+                                      products_temp[i].productQuantity =
+																				parseInt(
+																					result?.poDetails[0]?.products[i]
+																						.productQuantityDelivered || 0,
+																				) -
+																				parseInt(
+																					result?.products[i].productQuantityTaggedSent || 0,
+																				);
+                                    } else {
+                                      products_temp[i].productQuantity =
+																				parseInt(
+																					result?.products[i].productQuantityDelivered || 0,
+																				) -
+																				parseInt(
+																					result?.products[i].productQuantityTaggedSent || 0,
+																				);
+                                    }
                                     products_temp[i].productCategory =
                                       result.products[i].productCategory;
                                     delete products_temp[i].productQuantityDelivered;
