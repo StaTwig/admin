@@ -181,6 +181,7 @@ async function calculateCurrentLocationData(trackedShipment,allowedOrgs,tracking
     reduce((cur, key) => { return Object.assign(cur, { [key]: currentLocationData[key] })}, {});
     return currentLocationData;
 }
+
 async function quantityOverflow(warehouseId, shipmentProducts) {
   let overflow = false;
   const warehouse = await WarehouseModel.findOne({ id: warehouseId });

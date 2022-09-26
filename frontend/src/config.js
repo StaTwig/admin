@@ -214,7 +214,7 @@ export function config() {
       viewShipmentGmrUrl: `${SERVER_URL}/shipmentmanagement/api/shipment/viewShipmentGmr?shipmentId=`,
       shipmentsSearch: `${SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       createPurchaseOrderUrl: `${SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
-      createOrderUrl: `${SERVER_URL}/pomanagement/api/po/createOrder`,
+      createOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
       changePOStatus: `${SERVER_URL}/pomanagement/api/po/changePOStatus`,
