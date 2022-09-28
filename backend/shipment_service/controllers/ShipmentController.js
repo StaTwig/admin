@@ -4323,8 +4323,8 @@ exports.exportInboundShipments = [
         whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
-      if (status) {
-        if (status == "RECEIVED") {
+      if (status && status !== "null") {
+        if (status === "RECEIVED") {
           whereQuery["status"] = status;
         } else {
           whereQuery["status"] = { $ne: "RECEIVED" };
@@ -4346,83 +4346,76 @@ exports.exportInboundShipments = [
       if (toReceiver) {
         whereQuery["receiver.id"] = toReceiver;
       }
-      try {
-        let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
-        ShipmentModel.find(whereQuery)
-          .sort({ createdAt: -1 })
-          .then((inboundShipmentsList) => {
-            let inboundShipmentsRes = [];
-            let findInboundShipmentData = inboundShipmentsList.map(
-              async (inboundShipment) => {
-                let inboundShipmentData = JSON.parse(
-                  JSON.stringify(inboundShipment)
-                );
-                let supplierOrganisation = await OrganisationModel.findOne({
-                  id: inboundShipmentData.supplier.id,
-                });
-                let supplierWarehouse = await WarehouseModel.findOne({
-                  id: inboundShipmentData.supplier.locationId,
-                });
-                let receiverOrganisation = await OrganisationModel.findOne({
-                  id: inboundShipmentData.receiver.id,
-                });
-                let receiverWarehouse = await WarehouseModel.findOne({
-                  id: inboundShipmentData.receiver.locationId,
-                });
-                inboundShipmentData.supplier[`org`] = supplierOrganisation;
-                inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
-                inboundShipmentData.receiver[`org`] = receiverOrganisation;
-                inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
-                inboundShipmentsRes.push(inboundShipmentData);
-              }
-            );
 
-            Promise.all(findInboundShipmentData).then(function (results) {
-              let data = [];
-              let rowData;
-              for (const row of inboundShipmentsRes) {
-                for (const product of row.products) {
-                  rowData = {
-                    id: row.id,
-                    poId: row.poId,
-                    productCategory: product.productCategory,
-                    productName: product.productName,
-                    productID: product.productID,
-                    productQuantity:
-                      product.productQuantity +
-                      " " +
-                      product?.unitofMeasure?.name,
-                    batchNumber: product.batchNumber,
-                    manufacturer: product.manufacturer,
-                    supplierOrgName: row?.supplier?.org?.name,
-                    supplierOrgId: row?.supplier?.org?.id,
-                    supplierOrgLocation: row?.supplier?.locationId,
-                    recieverOrgName: row?.receiver?.org?.name,
-                    recieverOrgId: row?.receiver?.org?.id,
-                    recieverOrgLocation: row?.receiver?.locationId,
-                    airWayBillNo: row.airWayBillNo,
-                    label: row?.label?.labelId,
-                    shippingDate: row.shippingDate,
-                    expectedDeliveryDate: row.expectedDeliveryDate || "unknown",
-                  };
-                  data.push(rowData);
-                }
-              }
-              if (req.query.type == "pdf") {
-                res = buildPdfReport(req, res, data, "Inbound");
-              } else {
-                res = buildExcelReport(req, res, data);
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Inbound Shipment Records"
-                );
-              }
-            });
-          });
-      } catch (err) {
-        return apiResponse.ErrorResponse(res, err.message);
-      }
+      try {
+				let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
+        let inboundShipmentsList = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 });
+        if(!inboundShipmentsList || !inboundShipmentsList.length) {
+          throw new Error("No shipment data found!");
+        }
+
+				let inboundShipmentsRes = [];
+				for (let i = 0; i < inboundShipmentsList.length; ++i) {
+					let inboundShipment = inboundShipmentsList[i];
+					let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment));
+					let supplierOrganisation = await OrganisationModel.findOne({
+						id: inboundShipmentData.supplier.id,
+					});
+					let supplierWarehouse = await WarehouseModel.findOne({
+						id: inboundShipmentData.supplier.locationId,
+					});
+					let receiverOrganisation = await OrganisationModel.findOne({
+						id: inboundShipmentData.receiver.id,
+					});
+					let receiverWarehouse = await WarehouseModel.findOne({
+						id: inboundShipmentData.receiver.locationId,
+					});
+					inboundShipmentData.supplier[`org`] = supplierOrganisation;
+					inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+					inboundShipmentData.receiver[`org`] = receiverOrganisation;
+					inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+					inboundShipmentsRes.push(inboundShipmentData);
+				}
+
+				let data = [];
+				let rowData;
+				for (const row of inboundShipmentsRes) {
+					for (const product of row.products) {
+						rowData = {
+							id: row.id,
+							poId: row.poId,
+							productCategory: product.productCategory,
+							productName: product.productName,
+							productID: product.productID,
+							productQuantity: product.productQuantity + " " + product?.unitofMeasure?.name,
+							batchNumber: product.batchNumber,
+							manufacturer: product.manufacturer,
+							supplierOrgName: row?.supplier?.org?.name,
+							supplierOrgId: row?.supplier?.org?.id,
+							supplierOrgLocation: row?.supplier?.locationId,
+							recieverOrgName: row?.receiver?.org?.name,
+							recieverOrgId: row?.receiver?.org?.id,
+							recieverOrgLocation: row?.receiver?.locationId,
+							airWayBillNo: row.airWayBillNo,
+							label: row?.label?.labelId,
+							shippingDate: new Date(row.shippingDate),
+							expectedDeliveryDate: row.expectedDeliveryDate ? new Date(row.expectedDeliveryDate) : "N/A",
+						};
+						data.push(rowData);
+					}
+				}
+				if (req.query.type === "pdf") {
+					res = buildPdfReport(req, res, data, "Inbound");
+				} else {
+					res = buildExcelReport(req, res, data);
+					// return apiResponse.successResponseWithData(res, "Inbound Shipment Records");
+				}
+			} catch (err) {
+        console.log("Inner catch - ", err);
+				return apiResponse.ErrorResponse(res, err.message);
+			}
     } catch (err) {
+      console.log("Outer catch - ", err);
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
