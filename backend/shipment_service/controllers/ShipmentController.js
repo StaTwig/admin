@@ -4493,7 +4493,7 @@ exports.exportOutboundShipments = [
         whereQuery[`shippingDate`] = { $gte: firstDate, $lte: nextDate };
       }
 
-      if (status) {
+      if (status && status !== "null") {
         whereQuery["status"] = status;
       }
 
