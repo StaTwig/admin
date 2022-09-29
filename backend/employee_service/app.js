@@ -7,6 +7,23 @@ const apiResponse = require("./helpers/apiResponse");
 const { getFileStream } = require("./helpers/s3");
 const cors = require("cors");
 
+// Docs
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const options = {
+	failOnErrors: true,
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "Vaccine Ledger Admin",
+			version: "1.0.0",
+		},
+	},
+	apis: ["./routes/api.js", "./routes/auth.js"],
+};
+const openApiSpecification = swaggerJsDoc(options);
+
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
@@ -50,6 +67,7 @@ app.get("/usermanagement/api/auth/images/:key", (req, res) => {
   const FileStream = getFileStream(req.params.key);
   FileStream.pipe(res);
 });
+app.use("/usermanagement/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpecification));
 // throw 404 if URL not found
 app.all("*", function (req, res) {
   return apiResponse.notFoundResponse(res, "Page not found");
