@@ -38,7 +38,6 @@ import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
 const Header = (props) => {
-  console.log("User : ", props.user);
   const { t } = props;
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -178,7 +177,7 @@ const Header = (props) => {
         if (airWayBillNo.indexOf(search) !== -1) {
           let index = airWayBillNo.indexOf(search);
           props.history.push(
-            `/tracing/${airWayBillNowithshipmentID[index].id}`
+            `/track/${airWayBillNowithshipmentID[index].id}`
           );
         } else setInvalidSearch(true);
       });
@@ -229,9 +228,9 @@ const Header = (props) => {
     return state.user;
   });
   useEffect(() => {
-    if (profile?.photoId != null) {
+    if (profile?.photoId) {
       getImage(profile?.photoId).then((result) => {
-        setImage(result.data);
+        setImage(result?.data);
       });
     }
   }, [profile]);

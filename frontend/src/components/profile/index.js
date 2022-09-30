@@ -114,9 +114,8 @@ class Profile extends React.Component {
       });
     }
     const resultImage = await getImage(this.props.user?.photoId);
-    this.setState({ image: resultImage.data });
+    this.setState({ image: resultImage?.data });
   }
-
 
   onCancel() {
     const {
@@ -162,6 +161,7 @@ class Profile extends React.Component {
       title,
     });
   }
+
   onChange() {
     const formData = new FormData();
     formData.append("photo", this.state.selectedFile);
@@ -238,7 +238,6 @@ class Profile extends React.Component {
     }
   }
 
-
   handlePhoneVerification(currentPhone) {
     const phone = '+'+currentPhone;
     if (phone) {
@@ -252,7 +251,6 @@ class Profile extends React.Component {
       this.setState({ phoneNumberErrorMsg: "" });
     }
   }
-
 
   render() {
     const { editMode, selectedFile, firstName, lastName, image } = this.state;
@@ -670,7 +668,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Address"
                         />
-                        {this.props.user.emailId ? (
+                        {this.props.user?.emailId ? (
                           <span>{this.props.user.emailId}</span>
                         ) : (
                           <span>N/A</span>
@@ -684,7 +682,7 @@ class Profile extends React.Component {
                           className="mr-3"
                           alt="Phone Number"
                         />
-                        {this.state.phoneNumber.length!=0 ? (
+                        {this.state.phoneNumber?.length ? (
                           <span>
                             +{this.state.phoneNumber.replaceAll("+", "")}
                           </span>

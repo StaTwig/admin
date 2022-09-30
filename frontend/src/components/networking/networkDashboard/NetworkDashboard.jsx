@@ -6,12 +6,9 @@ import TopSeller from "./topSeller/TopSeller";
 
 const NetworkDashboard = (props) => {
   const {
-    bestseller,
-    inStock,
     manufacturer,
     oManufacturer,
     partnerLocation,
-    outStock,
     setReportWarehouse,
     MylocationFilter,
     setMylocationFilter,
@@ -23,8 +20,8 @@ const NetworkDashboard = (props) => {
   } = props;
 
   return (
-    <div className="network-sidebar-container">
-      <div className="dashboard-card">
+    <div className='network-sidebar-container'>
+      <div className='dashboard-card'>
         <ManufacturerHeader
           user={user}
           manufacturer={manufacturer}
@@ -36,10 +33,10 @@ const NetworkDashboard = (props) => {
           setPartnerLocation={setPartnerLocation}
         />
       </div>
-      <div className="dashboard-card">
+      <div className='dashboard-card'>
         <TopSeller bestseller={TopBestseller} executeScroll={executeScroll} />
       </div>
-      <div className="dashboard-card">
+      <div className='dashboard-card'>
         <OtherLocations
           setReportWarehouse={(param) => setReportWarehouse(param)}
           oManufacturer={oManufacturer}

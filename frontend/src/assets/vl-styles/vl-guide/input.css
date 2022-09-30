@@ -1,0 +1,62 @@
+.vl-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.vl-custom-textfield > .MuiInputBase-root > .MuiInputBase-input {
+  text-align: center !important;
+}
+
+.input-two-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 1.25rem;
+}
+
+.input-two-auto-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1.25rem;
+}
+
+.input-otp-column {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  padding: 1rem 0 2rem 0 !important;
+}
+
+.vl-radio-btn {
+  margin-right: 2rem;
+}
+
+.vl-custom-phone-input {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  padding: 15.5px 14px;
+  border-radius: 4px;
+}
+
+.vl-custom-phone-input > input {
+  outline: none !important;
+  border: none !important;
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+}
+
+.vl-custom-phone-input > input:focus {
+  outline: none !important;
+  border: none !important;
+}

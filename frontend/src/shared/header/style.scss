@@ -569,19 +569,19 @@
     }
   }
 }
-.MuiOutlinedInput-notchedOutline {
+.mui-existing-input.MuiOutlinedInput-notchedOutline {
   border-color: #0093e9 !important;
   border-radius: 15px !important;
   height: 3.2rem;
 }
-.MuiInputLabel-root {
+.mui-existing-input.MuiInputLabel-root {
   margin: -4px 0px 0px 0px;
   font-size: 14px !important;
 }
 /* .MuiInputLabel-outlined.MuiInputLabel-shrink {
    //display:none;
 } */
-.MuiInputBase-input {
+.mui-existing-input.MuiInputBase-input {
   font: inherit;
   color: currentColor;
   width: 100%;
@@ -732,6 +732,6 @@
 .Auto-search-icon:hover {
   color: #6f7174 !important;
 }
-.MuiInputBase-input.MuiOutlinedInput-input.MuiAutocomplete-input {
+.mui-auto.MuiInputBase-input.MuiOutlinedInput-input.MuiAutocomplete-input {
   padding: 0.2rem 3rem 0 0 !important;
 }

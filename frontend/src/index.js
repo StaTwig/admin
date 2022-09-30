@@ -7,6 +7,7 @@ import "./i18n";
 import configureStore, { history } from "./configureStore";
 import { setCurrentUser, logoutUser } from "./actions/userActions";
 import setAuthToken from "./utils/setAuthToken";
+import "./assets/vl-styles/index.css";
 
 const store = configureStore();
 setAuthToken();

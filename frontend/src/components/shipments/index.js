@@ -388,6 +388,7 @@ const ShipmentAnalytic = (props) => {
       dispatch(turnOff());
     }
   };
+  
   const sendData = () => {
     let rtnArr = visible === "one" ? inboundShipments : outboundShipments;
     if (alerts)

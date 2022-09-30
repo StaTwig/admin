@@ -74,7 +74,7 @@ export const getOrganizationsTypewithauth = async (data) => {
 export const verifyEmailAndPhoneNo = async (data) => {
   try {
     const result = await axios.get(`${config().emailverify}?${data}`);
-    return result.data;
+    return result;
   } catch (e) {
     return [];
   }
@@ -271,3 +271,21 @@ export const createUpdateNewAlert = async (data) => {
     return e.response;
   }
 };
+
+export const googleLogin = async (data) => {
+  try {
+    const result = await axios.post(config().googleLoginUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const verifyAuth = async (data) => {
+  try {
+    const result = await axios.post(config().verifyAuth, data);
+    return result;
+  } catch(err) {
+    return err.response;
+  }
+}

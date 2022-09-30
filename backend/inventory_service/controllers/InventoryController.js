@@ -555,8 +555,9 @@ exports.addProductsToInventory = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
@@ -839,8 +840,9 @@ exports.addInventoriesFromExcel = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       const orgId = empData.organisationId;
       const orgName = empData.name;
       checkPermissions(permission_request, async (permissionResult) => {
@@ -2529,8 +2531,9 @@ exports.deleteProductsFromInventory = [
       const user_id = req.user.id;
       const email = req.user.emailId;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       const orgId = empData.organisationId;
       const orgData = await OrganisationModel.findOne({
         id: orgId,
@@ -2693,7 +2696,7 @@ exports.autoCompleteSuggestions = [
     try {
       const { searchString } = req.query;
 
-      const suggestions1 = await RecordModel.aggregate([
+      const suggestions1 = await aggregate([
         {
           $project: {
             _id: 0,
@@ -2756,7 +2759,7 @@ exports.autoCompleteSuggestions = [
         { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
-      const suggestions3 = await RecordModel.aggregate([
+      const suggestions3 = await aggregate([
         // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {
@@ -2858,8 +2861,9 @@ exports.reduceBatch = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-        emailId: req.user.emailId,
-      });
+				emailId: req.user.emailId,
+				accountStatus: { $ne: "DELETED" },
+			});
       const orgId = empData?.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });

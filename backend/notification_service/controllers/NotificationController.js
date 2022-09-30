@@ -12,8 +12,8 @@ const { constants } = require("../helpers/constants");
 const fromMobile = process.env.FROMNO;
 const cuid = require("cuid");
 
-function sendEmail(subject, data, emailId) {
-  return mailer.send(constants.confirmEmails.from, emailId, subject, data);
+function sendEmail(subject, data, emailId, cc) {
+  return mailer.send(constants.confirmEmails.from, emailId, subject, data, cc);
 }
 
 function sendSMS(content, mobile) {
@@ -166,15 +166,16 @@ exports.sendMessage = [
       }
       if (req.body.email)
         sendEmail(
-          req.body.subject,
-          {
-            body: req?.body?.content,
-            source: req?.body?.source,
-            isOTP: false,
-            isCustom: req.body?.isCustom || false,
-          },
-          req.body.email
-        );
+					req.body.subject,
+					{
+						body: req?.body?.content,
+						source: req?.body?.source,
+						isOTP: false,
+						isCustom: req.body?.isCustom || false,
+					},
+					req.body.email,
+					req?.body?.cc,
+				);
       return apiResponse.successResponse(res, "Message Sent Success");
     } catch (err) {
       console.log(err);

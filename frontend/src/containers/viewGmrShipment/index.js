@@ -36,7 +36,7 @@ const ViewShipmentContainer = (props) => {
   }, [props.match.params.id]);
 
   const openInTrackingPage = () => {
-    props.history.push(`/tracing/${props.match.params.id}?status=shipmentView`);
+    props.history.push(`/track/${props.match.params.id}?status=shipmentView`);
   };
 
   return (

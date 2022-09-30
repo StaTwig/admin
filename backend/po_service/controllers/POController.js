@@ -1066,6 +1066,8 @@ exports.createOrder = [
           responses(req.user.preferredLanguage).receiver_not_defined
         );
       }
+      purchaseOrder.customer.customerIncharge = receiverOrgData.primaryContactId;
+
       var datee = new Date();
       datee = datee.toISOString();
       const supplierName = supplierOrgData.name;
@@ -2058,7 +2060,7 @@ function buildExcelReport(req, res, dataForExcel) {
       width: 220,
     },
     orderReceiveIncharge: {
-      displayName: req.t("Order_Received_By"),
+      displayName: req.t("Order_Receive_Incharge"),
       headerStyle: styles.headerDark,
       cellStyle: styles.cellGreen,
       width: 220,
@@ -2215,3 +2217,36 @@ async function buildPdfReport(req, res, data, orderType) {
   });
   return;
 }
+
+exports.syncPoReceivers_DO_NOT_USE = [
+  async (req, res) => {
+    try {
+      const records = await RecordModel.find({
+				$and: [
+					{ "customer.customerOrganisation": { $ne: null } },
+					{ "customer.customerIncharge": null },
+				],
+			});
+      console.log(records.length);
+      for(let i = 0; i < records.length; ++i) {
+        const org = await OrganisationModel.findOne({id: records[i].customer.customerOrganisation});
+        if(!org) {
+          console.log("Org not found - ", records[i].customer.customerOrganisation);
+          continue;
+        }
+        await RecordModel.findOneAndUpdate(
+					{ id: records[i].id },
+					{ $set: { "customer.customerIncharge": org.primaryContactId } },
+					{ new: true },
+				).then((res) => {
+					console.log("Updated - ", res.id);
+				});
+      }
+
+      return apiResponse.successResponse(res, "Success!");
+    } catch(err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, "Some err - " + err.message);
+    }
+  }
+];

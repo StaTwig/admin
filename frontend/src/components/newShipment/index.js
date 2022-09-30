@@ -69,6 +69,7 @@ const NewShipment = (props) => {
   const [productsList, setProductsList] = useState([]);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
+
   const customStyles = {
     // placeholder: (provided, state) => ({
     //   color: state.isDisabled ? "black" : "grey",
@@ -244,139 +245,135 @@ const NewShipment = (props) => {
     }
   };
 
-
   const onAssign = async (values) => {
-    let error = false;
-    // dates.forEach(date => { if (!error) dateValidation(date) });
-    const {
-      toOrg,
-      airWayBillNo,
-      reset,
-      labelCode,
-      shipmentDate,
-      estimateDeliveryDate,
-      toOrgLoc,
-      fromOrgLoc,
-      shipmentID,
-      products,
-    } = values;
-    let errorMsg = "";
-    products.forEach((p) => {
-      if (p.productQuantity < 1) {
-        error = true;
-        errorMsg = `${t("product")}${t("quantity")}`;
-      } else if (!p.batchNumber) {
-        error = true;
-        errorMsg = t("batch_number");
-      }
-    });
-    if (!error) {
-      const data = {
-        airWayBillNo,
-        poId: reset && reset != "Select Order ID" ? reset : null,
-        label: {
-          labelId: labelCode,
-          labelType: "QR_2DBAR",
-        },
-        taggedShipments: shipmentID,
-        externalShipmentId: "",
-        supplier: {
-          id: user.organisationId,
-          locationId: fromOrgLoc,
-        },
-        receiver: {
-          id: toOrg.split("/")[0],
-          locationId: toOrgLoc.split("/")[0],
-        },
-        shippingDate: new Date(
-          shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
-        ).toISOString(),
-        expectedDeliveryDate:
-          estimateDeliveryDate !== ""
-            ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
-            : "",
-        actualDeliveryDate:
-          estimateDeliveryDate !== ""
-            ? new Date(
-              estimateDeliveryDate.getTime() -
-              estimateDeliveryDate.getTimezoneOffset() * 60000
-            ).toISOString()
-            : "",
-        status: "CREATED",
-        products: products,
-        // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
-      };
+		let error = false;
+		// dates.forEach(date => { if (!error) dateValidation(date) });
+		const {
+			toOrg,
+			airWayBillNo,
+			reset,
+			labelCode,
+			shipmentDate,
+			estimateDeliveryDate,
+			toOrgLoc,
+			fromOrgLoc,
+			shipmentID,
+			products,
+		} = values;
+		let errorMsg = "";
+		products.forEach((p) => {
+			if (p.productQuantity < 1) {
+				error = true;
+				errorMsg = `${t("product")}${t("quantity")}`;
+			} else if (!p.batchNumber) {
+				error = true;
+				errorMsg = t("batch_number");
+			}
+		});
+		if (!error) {
+			const data = {
+				airWayBillNo,
+				poId: reset && reset != "Select Order ID" ? reset : null,
+				label: {
+					labelId: labelCode,
+					labelType: "QR_2DBAR",
+				},
+				taggedShipments: shipmentID,
+				externalShipmentId: "",
+				supplier: {
+					id: user.organisationId,
+					locationId: fromOrgLoc,
+				},
+				receiver: {
+					id: toOrg.split("/")[0],
+					locationId: toOrgLoc.split("/")[0],
+				},
+				shippingDate: new Date(
+					shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000,
+				).toISOString(),
+				expectedDeliveryDate:
+					estimateDeliveryDate !== ""
+						? new Date(
+								estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
+						  ).toISOString()
+						: "",
+				actualDeliveryDate:
+					estimateDeliveryDate !== ""
+						? new Date(
+								estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
+						  ).toISOString()
+						: "",
+				status: "CREATED",
+				products: products,
+				// poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
+			};
 
-      var check = 0;
+			var check = 0;
 
-      for (var i = 0; i < data.products.length; i++) {
-        if (typeof data.products[i].productQuantity === "undefined") {
-          check = 1;
-          break;
-        }
-        if (typeof data.products[i].batchNumber === "undefined") {
-          check = 2;
-          break;
-        }
-      }
-      if (check === 1) {
-        setShipmentError(t("check_product_quantity"));
-        setOpenShipmentFail(true);
-      } else if (check === 2) {
-        setShipmentError(t("check_batch_numberssssssssssss"));
-        setOpenShipmentFail(true);
-      } else {
-        let i, j;
-        let nn = data.products.length;
-        for (i = 0; i < data.products.length; i++) {
-          let prdctName = data.products[i].productName;
-          let flag = false;
+			for (var i = 0; i < data.products.length; i++) {
+				if (typeof data.products[i].productQuantity === "undefined") {
+					check = 1;
+					break;
+				}
+				if (typeof data.products[i].batchNumber === "undefined") {
+					check = 2;
+					break;
+				}
+			}
+			if (check === 1) {
+				setShipmentError(t("check_product_quantity"));
+				setOpenShipmentFail(true);
+			} else if (check === 2) {
+				setShipmentError(t("check_batch_numberssssssssssss"));
+				setOpenShipmentFail(true);
+			} else {
+				let i, j;
+				let nn = data.products.length;
+				for (i = 0; i < data.products.length; i++) {
+					let prdctName = data.products[i].productName;
+					let flag = false;
 
-          for (j = 0; j < productsList.length; j++) {
-            if (productsList[j].productName === prdctName) {
-              flag = true;
-              break;
-            } else {
-              flag = false;
-            }
-          }
+					for (j = 0; j < productsList.length; j++) {
+						if (productsList[j].productName === prdctName) {
+							flag = true;
+							break;
+						} else {
+							flag = false;
+						}
+					}
 
-          if (!flag) {
-            setShipmentError(t("product_not_exist_inventory"));
-            setOpenShipmentFail(true);
-            break;
-          }
-        }
+					if (!flag) {
+						setShipmentError(t("product_not_exist_inventory"));
+						setOpenShipmentFail(true);
+						break;
+					}
+				}
 
-        if (i >= nn) {
-          dispatch(turnOn());
-          const result = await createShipment(data);
-          dispatch(turnOff());
-          if (result?.id) {
-            setMessage("Created Shipment Success");
-            setOpenCreatedInventory(true);
-            setModalProps({
-              message: "Created Successfully!",
-              id: result?.id,
-              type: "Success",
-              t: t,
-            });
-          } else {
-
-            setShipmentError(result?.data?.message);
-            setOpenShipmentFail(true);
-            setErrorMessage("Create Shipment Failed");
-          }
-        }
-      }
-    } else {
-      setShipmentError(t("check") + " " + errorMsg);
-      setOpenShipmentFail(true);
-    }
-  };
+				if (i >= nn) {
+					dispatch(turnOn());
+					const result = await createShipment(data);
+					dispatch(turnOff());
+					if (result?.id) {
+						setMessage("Created Shipment Success");
+						setOpenCreatedInventory(true);
+						setModalProps({
+							message: "Created Successfully!",
+							id: result?.id,
+							type: "Success",
+							t: t,
+						});
+					} else {
+						setShipmentError(result?.data?.message);
+						setOpenShipmentFail(true);
+						setErrorMessage("Create Shipment Failed");
+					}
+				}
+			}
+		} else {
+			setShipmentError(t("check") + " " + errorMsg);
+			setOpenShipmentFail(true);
+		}
+	};
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -400,12 +397,12 @@ const NewShipment = (props) => {
     setOrderDetails(soDetailsClone);
   };
 
-
   const handleLabelIdChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
+
   const onCategoryChange = async (index, value, setFieldValue) => {
     try {
       const warehouse = await searchProduct(value, selectedWarehouse);
@@ -728,86 +725,89 @@ const NewShipment = (props) => {
                       style={{ height: "25px", width: "50px" }}
                       className='btn btn-fetch'
                       onClick={async () => {
-                        console.log("Fetch button");
                         // setpofetchdisabled(true);
                         setProducts((p) => []);
                         setAddProducts((p) => []);
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        if (values.shipmentID.length == 0) {
+                        if (values.shipmentID.length === 0) {
                           setShipmentError(t("shipment_cannot_be_empty"));
                           setOpenShipmentFail(true);
                           dispatch(turnOff());
                         } else {
                           if (validShipmentID) {
                             let result = await getViewShipment(values.shipmentID);
-                            setSenderOrgId(result.data.supplier.locationId);
-                            // This is required.
-                            result = result.data;
-                            if (result.status !== "RECEIVED") {
-                              values.shipmentID = "";
-                              // alert("The shipment has to be delivered first");
-                              setShipmentError(t("shipment_has_to_be_delivered"));
+                            if(!result.success) {
+                              setShipmentError(t("check_shipment_reference_id"));
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
                             } else {
-                              for (
-                                let i = 0;
-                                i < result.products?.length;
-                                i++
-                              ) {
-
-                                result.products[i].orderedQuantity =
-                                  result.products[i].productQuantity;
-                              }
-                              setFieldValue("fromOrg", "");
-                              setFieldValue("fromOrgLoc", "");
-                              setFieldValue("rtype");
-                              setFieldValue("toOrg", "");
-                              dispatch(turnOff());
-                              setReceiverOrgLoc();
-                              setReceiverOrgId();
-                              if (result.status === 500) {
-                                setShipmentError(t("check_shipment_reference_id"));
+                              // Check whether the shipment is an outbound shipment
+                              if(user.warehouseId.includes(result.data.supplier.locationId)) {
+                                setShipmentError(t("The shipment is an outbound shipment!"));
                                 setOpenShipmentFail(true);
+                                dispatch(turnOff());
                               } else {
-                                setOrderDetails(result);
-                                setFieldValue("toOrgLoc", "");
-                                settoOrgLocLabel("");
-                                // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
-                                let products_temp = result.products;
-                                for (let i = 0; i < products_temp.length; i++) {
-                                  products_temp[i].manufacturer =
-                                    result.products[i].manufacturer;
-                                  products_temp[i].name =
-                                    result.products[i].productName;
-                                  products_temp[i].productQuantity =
-                                    parseInt(
-                                      result.poDetails[0].products[i]
-                                        .productQuantity
-                                    ) -
-                                    parseInt(
-                                      result.poDetails[0].products[i]
-                                        .productQuantityDelivered || 0
-                                    ) -
-                                    parseInt(
-                                      result.products[i]
-                                        .productQuantityTaggedSent || 0
-                                    );
-                                  products_temp[i].productCategory =
-                                    result.products[i].productCategory;
-                                  delete products_temp[i]
-                                    .productQuantityDelivered;
-                                  products_temp[i].batchNumber = "";
-                                  products_temp[i].id =
-                                    result.products[i].productID;
+                                setSenderOrgId(result.data.supplier.locationId);
+                                // This is required.
+                                result = result.data;
+                                if (result.status !== "RECEIVED") {
+                                  values.shipmentID = "";
+                                  // alert("The shipment has to be delivered first");
+                                  setShipmentError(t("shipment_has_to_be_delivered"));
+                                  setOpenShipmentFail(true);
+                                  dispatch(turnOff());
+                                } else {
+                                  for (let i = 0; i < result.products?.length; i++) {
+                                    result.products[i].orderedQuantity =
+                                      result.products[i].productQuantity;
+                                  }
+                                  setFieldValue("fromOrg", "");
+                                  setFieldValue("fromOrgLoc", "");
+                                  setFieldValue("rtype");
+                                  setFieldValue("toOrg", "");
+                                  dispatch(turnOff());
+                                  setReceiverOrgLoc();
+                                  setReceiverOrgId();
+                                  setOrderDetails(result);
+                                  setFieldValue("toOrgLoc", "");
+                                  settoOrgLocLabel("");
+                                  // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
+                                  let products_temp = result.products;
+                                  for (let i = 0; i < products_temp.length; i++) {
+                                    products_temp[i].manufacturer = result.products[i].manufacturer;
+                                    products_temp[i].name = result.products[i].productName;
+                                    if(result?.poDetails && result?.poDetails?.length) {
+                                      products_temp[i].productQuantity =
+																				parseInt(
+																					result?.poDetails[0]?.products[i]
+																						.productQuantityDelivered || 0,
+																				) -
+																				parseInt(
+																					result?.products[i].productQuantityTaggedSent || 0,
+																				);
+                                    } else {
+                                      products_temp[i].productQuantity =
+																				parseInt(
+																					result?.products[i].productQuantityDelivered || 0,
+																				) -
+																				parseInt(
+																					result?.products[i].productQuantityTaggedSent || 0,
+																				);
+                                    }
+                                    products_temp[i].productCategory =
+                                      result.products[i].productCategory;
+                                    delete products_temp[i].productQuantityDelivered;
+                                    products_temp[i].batchNumber = "";
+                                    products_temp[i].id = result.products[i].productID;
+                                  }
+                                  if (result.products.length > 0) {
+                                    setAddProducts((p) => []);
+                                    setProducts((p) => []);
+                                    setFieldValue("products", products_temp);
+                                  } else setFieldValue("products", []);
                                 }
-                                if (result.products.length > 0) {
-                                  setAddProducts((p) => []);
-                                  setProducts((p) => []);
-                                  setFieldValue("products", products_temp);
-                                } else setFieldValue("products", []);
                               }
                             }
                           } else {
