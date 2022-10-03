@@ -1,8 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router";
 import "./style.scss";
-import Login from "../containers/login";
-import Verify from "../containers/verify";
 import OverView from "../containers/overview";
 import Shipment from "../containers/shipments";
 import NewShipment from "../containers/newshipment";

@@ -598,7 +598,7 @@ exports.verifyOtp = [
 							role: "",
 							email: req.body.emailId,
 						};
-						await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+						// await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");

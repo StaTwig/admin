@@ -289,3 +289,21 @@ export const verifyAuth = async (data) => {
     return err.response;
   }
 }
+
+export const newDemoRequest = async (data) => {
+  try {
+    const result = await axios.post(config().newDemoRequestUrl, data);
+    return result;
+  } catch(err) {
+    return err.response;
+  }
+}
+
+export const validateRequest = async (data) => {
+  try {
+    const result = await axios.post(config().validateRequestUrl, data);
+    return result;
+  } catch(err) {
+    return err.response;
+  }
+}
