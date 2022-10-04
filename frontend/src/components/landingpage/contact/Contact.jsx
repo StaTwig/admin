@@ -13,7 +13,7 @@ import {
 } from "../../../actions/userActions";
 import { turnOff, turnOn } from "../../../actions/spinnerActions";
 
-export default function Contact({ handleClose }) {
+export default function Contact({ handleClose, handleAlertClick, setAlertDetails }) {
   const dispatch = useDispatch();
 
   const {
@@ -100,7 +100,8 @@ export default function Contact({ handleClose }) {
 
         const result = await newDemoRequest(data);
         if (result.status === 200) {
-          console.log("Request successful");
+          setAlertDetails({type: "success", message: "Your request is received!"});
+          handleAlertClick();
           dispatch(turnOff());
           handleClose();
         } else {
@@ -108,6 +109,8 @@ export default function Contact({ handleClose }) {
         }
       });
     } catch (err) {
+      setAlertDetails({type: "error", message: err.message});
+      handleAlertClick();
       dispatch(turnOff());
       console.log(err);
     }
@@ -272,7 +275,6 @@ export default function Contact({ handleClose }) {
           <section className="call-by-action">
             <button
               className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
-              onClick={handleAlertClick}
             >
               Submit
             </button>

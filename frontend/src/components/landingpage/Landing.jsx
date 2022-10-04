@@ -22,12 +22,14 @@ export default function Landing() {
   const [maxWidth] = React.useState("sm");
 
   const [openAlert, setOpenAlert] = React.useState(false);
+  const [alertDetails, setAlertDetails] = React.useState({});
 
   const handleAlertClick = () => {
     setOpenAlert(true);
   };
 
   const handleAlertClose = (event, reason) => {
+    setAlertDetails({});
     if (reason === "clickaway") {
       return;
     }
@@ -60,6 +62,7 @@ export default function Landing() {
           <Contact
             handleClose={handleClose}
             handleAlertClick={handleAlertClick}
+            setAlertDetails={setAlertDetails}
           />
         </DialogContent>
       </Dialog>
@@ -71,10 +74,10 @@ export default function Landing() {
       >
         <Alert
           onClose={handleAlertClose}
-          severity="error"
+          severity={alertDetails?.type}
           sx={{ width: "100%" }}
         >
-          This is a success message!
+          {alertDetails?.message}
         </Alert>
       </Snackbar>
     </React.Fragment>
