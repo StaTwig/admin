@@ -11,7 +11,9 @@ export default function Showcase({ handleClickOpen }) {
       <div className="vl-page-container">
         <div className="showcase-two-column-grid-layout">
           <article className="grid-content-column">
-            <ShowcaseContent handleClickOpen={handleClickOpen} />
+            <ShowcaseContent
+              handleClickOpen={handleClickOpen}
+            />
             <img
               src={Illustration}
               alt="Illustration"
