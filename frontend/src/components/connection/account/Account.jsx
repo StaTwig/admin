@@ -10,10 +10,13 @@ import PhoneInput from "react-phone-number-input";
 import { COUNTRY_CODE } from "../../../constants/countryCode";
 import { useForm, Controller } from "react-hook-form";
 import { getOrganizationsByType, verifyEmailAndPhoneNo } from "../../../actions/userActions";
-import { getOrganisationsAtSignup } from "../../../actions/productActions";
+import { getOrganisationsAtSignup, fetchUnregisteredOrganisations } from "../../../actions/productActions";
 import GoogleAuth from "../../landingpage/showcase/access-form/GoogleAuth";
 import TorusAuth from "../../landingpage/showcase/access-form/TorusAuth";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { createFilterOptions } from "@material-ui/lab";
+
+const filter = createFilterOptions();
 
 export default function Account(props) {
 	const location = useLocation();
@@ -27,6 +30,7 @@ export default function Account(props) {
 
 	const [organizations, setOrganizations] = useState([""]);
 	const [organisationTypes, setOrganisationTypes] = useState([""]);
+	const [unregisteredOrganisations, setUnregisteredOrganisations] = useState([]);
 
 	const [errorMessage, setErrorMessage] = useState();
 
@@ -35,6 +39,7 @@ export default function Account(props) {
 		control,
 		setValue,
 		setError,
+		resetField,
 		formState: { errors },
 		clearErrors,
 		handleSubmit,
@@ -47,6 +52,7 @@ export default function Account(props) {
 			organizationExists: "existing",
 			organizationType: "",
 			organization: "",
+			organizationName: "",
 			skipOrgRegistration: false,
 		},
 	});
@@ -68,6 +74,13 @@ export default function Account(props) {
 			setOrganisationTypes(arr);
 		}
 		fetchOrgTypes();
+
+		async function fetchUnregisteredOrgs() {
+			let arr = await fetchUnregisteredOrganisations();
+			let temp = arr.data.map((elem) => elem.name);
+			setUnregisteredOrganisations(temp);
+		}
+		fetchUnregisteredOrganisations();
 	}, []);
 
 	useEffect(() => {
@@ -88,6 +101,12 @@ export default function Account(props) {
 			fetchData("");
 		}
 	}, [watchOrgType]);
+
+	useEffect(() => {
+		resetField("organization");
+		resetField("organizationType");
+		resetField("organizationName");
+	}, [organizationExists]);
 
 	useEffect(() => {
 		if (errors.email && errors.phone) {
@@ -167,8 +186,9 @@ export default function Account(props) {
 		} else {
 			validateEmailPhone()
 				.then((res) => {
-					props.onUserDataSubmit(data, organizationExists === "existing" || skipOrgRegistration);
-					if (organizationExists === "new" && !skipOrgRegistration) {
+					let finalFlag = organizationExists === "existing" || skipOrgRegistration;
+					props.onUserDataSubmit(data, finalFlag);
+					if (!finalFlag) {
 						history.push({
 							pathname: "/neworganization",
 						});
@@ -356,7 +376,7 @@ export default function Account(props) {
 							</div>
 						) : (
 							<div className="vl-input-groups">
-								<div className="input-full-column">
+								<div className="input-two-column">
 									<Controller
 										name="organizationType"
 										control={control}
@@ -378,6 +398,40 @@ export default function Account(props) {
 												onChange={(event, value) => {
 													field.onChange(value);
 												}}
+											/>
+										)}
+									/>
+									<Controller
+										name="organizationName"
+										control={control}
+										rules={{ required: true }}
+										render={({ field }) => (
+											<Autocomplete
+												fullWidth
+												freeSolo={true}
+												options={unregisteredOrganisations}
+												getOptionLabel={(option) => option || ""}
+												{...field}
+												onChange={(event, value) => {
+													field.onChange(value);
+												}}
+												filterOptions={(options, params) => {
+													const filtered = filter(options, params);
+													const { inputValue } = params;
+													const isExisting = options.some((option) => inputValue === option);
+													if (inputValue !== "" || !isExisting) {
+														filtered.push(inputValue);
+													}
+													return filtered;
+												}}
+												renderInput={(params) => (
+													<TextField
+														{...params}
+														label="Organization Name"
+														error={Boolean(errors.organizationName)}
+														helperText={errors.organizationName && "Organization Name is required!"}
+													/>
+												)}
 											/>
 										)}
 									/>

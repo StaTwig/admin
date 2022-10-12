@@ -9,11 +9,7 @@ import {
 	fetchCitiesByState,
 	fetchCountriesByRegion,
 	fetchStateByCountry,
-	fetchUnregisteredOrganisations,
 } from "../../../actions/productActions";
-import { createFilterOptions } from "@material-ui/lab";
-
-const filter = createFilterOptions();
 
 export default function Organization(props) {
 	const { t } = useTranslation();
@@ -22,7 +18,6 @@ export default function Organization(props) {
 	const [allCountries, setAllCountries] = useState([]);
 	const [allStates, setAllStates] = useState([]);
 	const [allCities, setAllCities] = useState([]);
-	const [unregisteredOrganisations, setUnregisteredOrganisations] = useState([]);
 
 	useEffect(() => {
 		async function getAllRegions() {
@@ -30,13 +25,6 @@ export default function Organization(props) {
 			setAllRegions(regions.data);
 		}
 		getAllRegions();
-
-		async function fetchUnregisteredOrgs() {
-			let arr = await fetchUnregisteredOrganisations();
-			let temp = arr.data.map((elem) => elem.name);
-			setUnregisteredOrganisations(temp);
-		}
-		fetchUnregisteredOrganisations();
 	}, []);
 
 	async function getAllCountries(region) {
@@ -62,7 +50,6 @@ export default function Organization(props) {
 		formState: { errors },
 		handleSubmit,
 	} = useForm({
-		organizationName: "",
 		region: "",
 		country: "",
 		state: "",
@@ -86,42 +73,6 @@ export default function Organization(props) {
 						</h2>
 					</hgroup>
 					<section className="vl-input-group form-auto-fill-section">
-						<div className="input-single-column">
-							<Controller
-								name="organizationName"
-								control={control}
-								rules={{ required: true }}
-								render={({ field }) => (
-									<Autocomplete
-										fullWidth
-										freeSolo={true}
-										options={unregisteredOrganisations}
-										getOptionLabel={(option) => option || ""}
-										{...field}
-										onChange={(event, value) => {
-											field.onChange(value);
-										}}
-										filterOptions={(options, params) => {
-											const filtered = filter(options, params);
-											const { inputValue } = params;
-											const isExisting = options.some((option) => inputValue === option);
-											if (inputValue !== "" || !isExisting) {
-												filtered.push(inputValue);
-											}
-											return filtered;
-										}}
-										renderInput={(params) => (
-											<TextField
-												{...params}
-												label="Organization Name"
-												error={Boolean(errors.organizationName)}
-												helperText={errors.organizationName && "Organization Name is required!"}
-											/>
-										)}
-									/>
-								)}
-							/>
-						</div>
 						<div className="input-two-column">
 							<Controller
 								name="region"

@@ -10,12 +10,14 @@ import Organization from "./organization/Organization";
 import Verify from "./verify/Verify";
 import { useDispatch } from "react-redux";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
-import { registerUser } from "../../actions/userActions";
+import { registerUser, setCurrentUser } from "../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import Success from "./success/Success";
 import { useHistory } from "react-router";
 import { Dialog, DialogContent } from "@mui/material";
 import FailedPopUp from "../../shared/PopUp/failedPopUp";
+import setAuthToken from "../../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
 
 export default function Connection(props) {
 	const { connection } = props;
@@ -42,6 +44,21 @@ export default function Connection(props) {
 		address: "",
 	});
 
+	const setSessionToken = (result) => {
+		try {
+			const token = result.data.data?.token;
+			setAuthToken(token);
+			// Decode token and get user info and exp
+			const decoded = jwt_decode(token);
+			// Set user and isAuthenticated
+			localStorage.setItem("theLedgerToken", token);
+			localStorage.setItem("bkp", result.data.data.permissions?.permissions);
+			dispatch(setCurrentUser(decoded));
+		} catch (err) {
+			throw err;
+		}
+	};
+
 	const onUserDataSubmit = async (data, isFinal = false) => {
 		try {
 			let values = { ...registerData, ...data };
@@ -56,9 +73,10 @@ export default function Connection(props) {
 					phoneNumber: values.phone,
 					organisationId: values.organization.id,
 				};
+				
 				if (values.organizationExists === "new") {
+					reqData.organisationName = values.organizationName;
 					if (!values.skipOrgRegistration) {
-						reqData.organisationName = values.organizationName;
 						reqData.address = {
 							line1: values.address,
 							pincode: values.pincode,
@@ -67,6 +85,8 @@ export default function Connection(props) {
 							country: values.country,
 							region: values.region,
 						};
+					} else {
+						reqData.skipOrgRegistration = true;
 					}
 					reqData.type = values.organizationType;
 					reqData.organisationId = 0;
@@ -76,9 +96,12 @@ export default function Connection(props) {
 
 				const result = await registerUser(reqData, i18n.language);
 				if (result.status === 200) {
-					// Redirect to pending page
-					console.log("Req pending!");
-					history.push("/success");
+					if(values.skipOrgRegistration && result.data.data) {
+						setSessionToken(result);
+						history.push('/overview');
+					} else {
+						history.push("/success");
+					}
 				} else {
 					console.log("Error - ", result.data);
 					throw new Error(result.data.message);

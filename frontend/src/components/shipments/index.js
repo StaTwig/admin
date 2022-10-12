@@ -595,7 +595,7 @@ const ShipmentAnalytic = (props) => {
           />
         </div>
       )}
-      <div className='ribben-space'>
+      <div className='ribben-space'  style={{pointerEvents: props.demoLogin ? "none" : "auto" }}>
         <Table
           {...props}
           skip={skip}

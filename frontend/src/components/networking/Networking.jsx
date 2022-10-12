@@ -21,7 +21,7 @@ export default function Networking(props) {
   const executeScroll = () => scrollToRef(myRef);
   return (
     <div className='network-main-layout'>
-      <div className='network-grid-container'>
+      <div className='network-grid-container' style={{pointerEvents: props.demoLogin ? "none" : "auto" }}>
         <div className={`network-dashboard ${MobileDashboard && "active"}`}>
           <NetworkDashboard
             reportWarehouse={reportWarehouse}

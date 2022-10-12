@@ -151,6 +151,7 @@ const Inventory = (props) => {
       //   resultAnalytics.data.inventory.stockOut
       // )
     }
+    if(props.demoLogin) return;
     fetchData();
   }, []);
 
@@ -285,7 +286,7 @@ const Inventory = (props) => {
     ); //(skip, limit, dateFilter, productName, productCategory, status)
   };
   return (
-    <div className='inventory'>
+    <div className='inventory' style={{pointerEvents: props.demoLogin ? "none" : "auto" }}>
       <div className='d-flex justify-content-between'>
       <h1 className="vl-heading-bdr black f-700">{t("inventory")}</h1>
         <div className='d-flex'>

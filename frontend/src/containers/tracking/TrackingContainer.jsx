@@ -11,7 +11,7 @@ const TrackingContainer = (props) => {
       <Header {...props} t={t} />
       <div className="d-flex">
         <Sidebar {...props} t={t} />
-        <div className="Network-content">
+        <div className="Network-content" style={{pointerEvents: props.demoLogin ? "none" : "auto" }}>
           <Tracking />
         </div>
       </div>

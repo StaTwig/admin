@@ -1062,6 +1062,7 @@ exports.getInventoryDetails = [
     }
   },
 ];
+
 exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
@@ -1382,7 +1383,12 @@ exports.getProductListCounts = [
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0]?.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
-      const list = productList[0].inventoryDetails;
+      const list = productList[0]?.inventoryDetails;
+
+      if(!list || !list?.length) {
+        return apiResponse.successResponseWithData(res, []);
+      }
+
       const productArray = [];
       let productObj;
       for (let j = 0; j < list.length; j++) {

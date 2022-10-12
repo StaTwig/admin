@@ -274,7 +274,7 @@ const Header = (props) => {
             ...item,
           };
         });
-      if (localStorage.getItem("location") != null) {
+      if (localStorage.getItem("location") && localStorage.getItem("location") !== "undefined") {
         setLocation((prod) => JSON.parse(localStorage.getItem("location")));
         setActiveWarehouses(active);
       } else {
