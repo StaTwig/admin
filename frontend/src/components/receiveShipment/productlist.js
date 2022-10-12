@@ -6,11 +6,11 @@ const ProductList = (props) => {
   const { t } = props;
   const [deliveredProduct, setDeliveredProduct] = useState("");
   const [isVisible, setIsVisible] = useState(true);
-  const [error, setError] = useState(false);
-  let deliveredProductList = [];
   const closeModalFail = () => {
     setError(false);
   };
+  const [error, setError] = useState(false);
+  let deliveredProductList = [];
   return Object.keys(props.shipments).length === 0 ? (
     <div className='col-sm-4'>N/A</div>
   ) : (
