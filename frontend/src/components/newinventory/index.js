@@ -70,10 +70,10 @@ const NewInventory = (props) => {
     useState(false);
   const [inventoryError, setInventoryError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [openExcel, setOpenExcel] = useState(false);
   const [products, setProducts] = useState([]);
   const [inventoryState, setInventoryState] = useState([]);
   const [menu, setMenu] = useState(false);
-  const [openExcel, setOpenExcel] = useState(false);
   const [blankInventory, setBlankInventory] = useState({
     productName: "Select Product",
     categories: "Select Category",
@@ -87,6 +87,18 @@ const NewInventory = (props) => {
     unitofMeasure: "",
     products: [],
   });
+
+  const inventoryFields = [
+    "categories",
+    "productName",
+    "manufacturer",
+    "batchNumber",
+    "quantity",
+    "unitofMeasure",
+  ];
+
+  const dispatch = useDispatch();
+
   const closeModal = () => {
     setOpenCreatedInventory(false);
   };
@@ -100,17 +112,6 @@ const NewInventory = (props) => {
   const closeModalFail1 = () => {
     setOpenQuantityFailInventory(false);
   };
-
-  const dispatch = useDispatch();
-
-  const inventoryFields = [
-    "categories",
-    "productName",
-    "manufacturer",
-    "batchNumber",
-    "quantity",
-    "unitofMeasure",
-  ];
 
   const month = new Date().getMonth() + 1;
   const newMonth = `0${month}`.slice(-2);
@@ -144,11 +145,6 @@ const NewInventory = (props) => {
     return error;
   };
 
-  const importError = (message) => {
-    setInventoryError(message);
-    setOpenFailInventory(true);
-  };
-
   const checkValidationErrors = (validations) => {
     let error = false;
     inventoryState.forEach((inventory) => {
@@ -175,6 +171,12 @@ const NewInventory = (props) => {
     });
     return error;
   };
+
+  const importError = (message) => {
+    setInventoryError(message);
+    setOpenFailInventory(true);
+  };
+
   const onProceedToReview = () => {
     if (checkValidationErrors(inventoryFields)) {
       return;
@@ -186,9 +188,6 @@ const NewInventory = (props) => {
     props.history.push("/reviewinventory");
   };
 
-  const onAddAnotherProduct = () => {
-    setInventoryState([...inventoryState, blankInventory]);
-  };
   const handleInventoryChange = (index, key, value) => {
     const updatedInventoryState = JSON.parse(JSON.stringify(inventoryState));
     updatedInventoryState[index][key] = value;
@@ -220,6 +219,14 @@ const NewInventory = (props) => {
     setInventoryState(updatedInventoryState);
   };
 
+  const onCategoryChange = async (index, value) => {
+    try {
+      handleInventoryChange(index, "categories", value);
+    } catch (err) {
+      setErrorMessage(err);
+    }
+  };
+
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(JSON.stringify(inventoryState));
     inventoryStateClone.splice(index, 1);
@@ -228,12 +235,8 @@ const NewInventory = (props) => {
     inventoryStateClone.forEach((inv) => (total += parseInt(inv.quantity)));
   };
 
-  const onCategoryChange = async (index, value) => {
-    try {
-      handleInventoryChange(index, "categories", value);
-    } catch (err) {
-      setErrorMessage(err);
-    }
+  const onAddAnotherProduct = () => {
+    setInventoryState([...inventoryState, blankInventory]);
   };
 
   return (
