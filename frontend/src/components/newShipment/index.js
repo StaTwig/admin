@@ -494,9 +494,9 @@ const NewShipment = (props) => {
           if (!values.airWayBillNo) {
             errors.airWayBillNo = "Required";
           }
-          // if (!values.labelCode) {
-          //   errors.labelCode = "Required";
-          // }
+          if (!values.labelCode) {
+            errors.labelCode = "Required";
+          }
           if (!values.shipmentDate) {
             errors.shipmentDate = "Required";
           }
@@ -1270,11 +1270,11 @@ const NewShipment = (props) => {
                       placeholder={t("enter") + " " + t("label_code")}
                       onChange={handleChange}
                     />
-                    {/* {errors.labelCode && touched.labelCode && (
+                    {errors.labelCode && touched.labelCode && (
                       <span className="error-msg text-danger-LC">
                         {errors.labelCode}
                       </span>
-                    )} */}
+                    )}
                   </div>
 
                   <div className='col-md-6 com-sm-12'>
