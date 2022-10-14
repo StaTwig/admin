@@ -320,6 +320,7 @@ const AdvanceTableFilter = (props) => {
       );
     }
   };
+
   const handleClick = (event) => {
     setAnchorEl(event?.currentTarget);
   };
@@ -1372,6 +1373,7 @@ const AdvanceTableFilter = (props) => {
     props.setFromToFilterOnSelect(selectedVal);
     handlePoFromClose();
   };
+  
   const renderColumn1 = (columnData) => {
     if (columnData === "Shipment ID") {
       return (

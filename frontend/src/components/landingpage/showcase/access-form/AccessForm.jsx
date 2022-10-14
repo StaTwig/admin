@@ -84,7 +84,6 @@ export default function AccessForm() {
 				const data = {
 					emailId: formData.email ? formData.email : formData.phone,
 				};
-				console.log(data);
 				const result = await sendOtp(data, i18n.language);
 				if (result?.status === 200) {
 					history.push(`/verify?emailId=${data.emailId}`);

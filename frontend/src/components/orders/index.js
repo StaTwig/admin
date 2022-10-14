@@ -206,6 +206,7 @@ const Orders = (props) => {
 			setPoOrganisationsList(productsLocationsOrganisationsRes.organisations);
 			setSkip(0);
 		}
+		if(props.demoLogin) return;
 		fetchData();
 	}, [
 		limit,

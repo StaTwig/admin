@@ -195,6 +195,9 @@ exports.register = [
 			//   return apiResponse.ErrorResponse(req, res, "not_valid_email");
 			// } else {
 			let organisationId = req.body.organisationId;
+			const skipOrgRegistration = req.body?.skipOrgRegistration
+				? req.body?.skipOrgRegistration
+				: false;
 			let warehouseId = "NA";
 			const empCounter = await CounterModel.findOneAndUpdate(
 				{
@@ -210,10 +213,11 @@ exports.register = [
 			const employeeId = empCounter.counters[4].format + empCounter.counters[4].value;
 			const employeeStatus = "NOTAPPROVED";
 			let addr = "";
+			let organisation;
 			//create organization if doesn't exists
 			if (req.body.organisationName) {
 				const organisationName = req.body.organisationName;
-				const organisation = await OrganisationModel.findOne({
+				organisation = await OrganisationModel.findOne({
 					name: new RegExp("^" + organisationName + "$", "i"),
 				});
 				if (organisation && organisation.isRegistered) {
@@ -222,20 +226,27 @@ exports.register = [
 					const country = req.body?.address?.country ? req.body.address?.country : "India";
 					const region = req.body?.address?.region ? req.body.address?.region : "Asia";
 					const address = req.body?.address ? req.body.address : {};
-					addr =
-						address.line1 + ", " + address.city + ", " + address.state + ", " + address.pincode;
+					if (!skipOrgRegistration) {
+						addr =
+							address?.line1 +
+							", " +
+							address?.city +
+							", " +
+							address?.state +
+							", " +
+							address?.pincode;
 
-					const warehouseCounter = await CounterModel.findOneAndUpdate(
-						{ "counters.name": "warehouseId" },
-						{
-							$inc: {
-								"counters.$.value": 1,
+						const warehouseCounter = await CounterModel.findOneAndUpdate(
+							{ "counters.name": "warehouseId" },
+							{
+								$inc: {
+									"counters.$.value": 1,
+								},
 							},
-						},
-						{ new: true },
-					);
-					warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
-
+							{ new: true },
+						);
+						warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+					}
 					let org;
 					if (organisation && !organisation.isRegistered) {
 						org = await OrganisationModel.findOneAndUpdate(
@@ -244,10 +255,10 @@ exports.register = [
 								$set: {
 									primaryContactId: employeeId,
 									name: organisationName,
-									status: "NOTVERIFIED",
+									status: skipOrgRegistration ? "INCOMPLETE" : "NOTVERIFIED",
 									isRegistered: true,
 									postalAddress: addr,
-									warehouses: [warehouseId],
+									warehouses: warehouseId == "NA" ? [] : [warehouseId],
 									warehouseEmployees: [employeeId],
 									region: region,
 									country: country,
@@ -273,10 +284,10 @@ exports.register = [
 							name: organisationName,
 							id: organisationId,
 							type: req.body?.type ? req.body.type : "CUSTOMER_SUPPLIER",
-							status: "NOTVERIFIED",
+							status: skipOrgRegistration ? "INCOMPLETE" : "NOTVERIFIED",
 							isRegistered: true,
 							postalAddress: addr,
-							warehouses: [warehouseId],
+							warehouses: warehouseId == "NA" ? [] : [warehouseId],
 							warehouseEmployees: [employeeId],
 							region: region,
 							country: country,
@@ -286,47 +297,49 @@ exports.register = [
 						await org.save();
 					}
 
-					const invCounter = await CounterModel.findOneAndUpdate(
-						{ "counters.name": "inventoryId" },
-						{
-							$inc: {
-								"counters.$.value": 1,
+					if (!skipOrgRegistration) {
+						const invCounter = await CounterModel.findOneAndUpdate(
+							{ "counters.name": "inventoryId" },
+							{
+								$inc: {
+									"counters.$.value": 1,
+								},
 							},
-						},
-						{
-							new: true,
-						},
-					);
-					const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
-					const inventoryResult = new InventoryModel({ id: inventoryId });
-					await inventoryResult.save();
-					const loc = await getLatLongByCity(address.city + "," + address.country);
-					const warehouse = new WarehouseModel({
-						title: "Office",
-						id: warehouseId,
-						warehouseInventory: inventoryId,
-						organisationId: organisationId,
-						location: loc,
-						warehouseAddress: {
-							firstLine: address.line1,
-							secondLine: "",
-							region: address.region,
-							city: address.city,
-							state: address.state,
-							country: address.country,
-							landmark: "",
-							zipCode: address.pincode,
-						},
-						region: {
-							regionName: region,
-						},
-						country: {
-							countryId: "001",
-							countryName: country,
-						},
-						status: "NOTVERIFIED",
-					});
-					await warehouse.save();
+							{
+								new: true,
+							},
+						);
+						const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+						const inventoryResult = new InventoryModel({ id: inventoryId });
+						await inventoryResult.save();
+						const loc = await getLatLongByCity(address.city + "," + address.country);
+						const warehouse = new WarehouseModel({
+							title: "Office",
+							id: warehouseId,
+							warehouseInventory: inventoryId,
+							organisationId: organisationId,
+							location: loc,
+							warehouseAddress: {
+								firstLine: address.line1,
+								secondLine: "",
+								region: address.region,
+								city: address.city,
+								state: address.state,
+								country: address.country,
+								landmark: "",
+								zipCode: address.pincode,
+							},
+							region: {
+								regionName: region,
+							},
+							country: {
+								countryId: "001",
+								countryName: country,
+							},
+							status: "NOTVERIFIED",
+						});
+						await warehouse.save();
+					}
 				}
 			}
 			let emailId = null;
@@ -345,6 +358,7 @@ exports.register = [
 				postalAddress: addr,
 				accountStatus: employeeStatus,
 				warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+				...(skipOrgRegistration ? { role: "readOnly" } : {}),
 			});
 			await user.save();
 
@@ -405,7 +419,36 @@ exports.register = [
 			};
 			await logEvent(event_data);
 
-			return apiResponse.successResponse(req, res, "user_registered_success");
+			if (organisation && organisation.isRegistered && organisation.status !== "INCOMPLETE") {
+				return apiResponse.successResponseWithData(req, res, "user_registered_success", null);
+			}
+
+			if (skipOrgRegistration) {
+				let userData = {
+					id: user.id,
+					firstName: user.firstName,
+					emailId: user.emailId,
+					role: user.role,
+					warehouseId: [],
+					organisationId: user.organisationId,
+					phoneNumber: user.phoneNumber,
+					partialRegistration: true,
+				};
+				// Create a one time login JWT
+				const jwtPayload = userData;
+				const jwtData = {
+					expiresIn: process.env.JWT_TIMEOUT_DURATION,
+				};
+				const secret = process.env.JWT_SECRET;
+				//Generated JWT token with Payload and secret.
+				// Is RBAC needed for one time login?
+				userData.permissions = await RbacModel.findOne({ role: user.role });
+				userData.token = jwt.sign(jwtPayload, secret, jwtData);
+
+				return apiResponse.successResponseWithData(req, res, "user_registered_success", userData);
+			}
+
+			return apiResponse.successResponseWithData(req, res, "user_registered_success", null);
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(req, res, "default_error");
@@ -1253,6 +1296,9 @@ exports.addWarehouse = [
 					warehouseExists,
 				);
 			}
+
+			const skipOrgRegistration = req.user.partialRegistration;
+
 			const invCounter = await CounterModel.findOneAndUpdate(
 				{ "counters.name": "inventoryId" },
 				{
@@ -1296,8 +1342,13 @@ exports.addWarehouse = [
 				organisationId,
 				postalAddress,
 				title,
-				region,
-				country,
+				region: {
+					regionName: region,
+				},
+				country: {
+					countryId: "001",
+					countryName: country,
+				},
 				location: loc,
 				bottleCapacity,
 				sqft,
@@ -1307,13 +1358,25 @@ exports.addWarehouse = [
 				warehouseInventory: inventoryResult.id,
 				status: "NOTVERIFIED",
 			});
-
 			await warehouse.save();
+
+			const addr = `${warehouseAddress?.firstLine}, ${warehouseAddress?.city}, ${warehouseAddress?.state}, ${warehouseAddress?.zipCode}`;
+
 			await OrganisationModel.findOneAndUpdate(
 				{
 					id: organisationId,
 				},
 				{
+					$set: {
+						...(skipOrgRegistration
+							? {
+									postalAddress: addr,
+									country: warehouseAddress.country,
+									region: warehouseAddress.region,
+									status: "NOTVERIFIED",
+							  }
+							: {}),
+					},
 					$push: {
 						warehouses: warehouseId,
 					},
@@ -1326,7 +1389,7 @@ exports.addWarehouse = [
 				},
 				{
 					$push: {
-						pendingWarehouseId: warehouseId,
+						warehouseId: warehouseId,
 					},
 				},
 			);

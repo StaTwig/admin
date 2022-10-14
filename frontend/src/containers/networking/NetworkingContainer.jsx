@@ -188,6 +188,7 @@ const NetworkingContainer = (props) => {
             setInstockId={setInstockId}
             setOutstockType={setOutstockType}
             setOutstockId={setOutstockId}
+            demoLogin={props.demoLogin}
           />
         </div>
       </div>

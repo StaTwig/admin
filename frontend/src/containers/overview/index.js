@@ -24,9 +24,11 @@ const OverviewContainer = (props) => {
   });
 
   useEffect(() => {
+    if(props.demoLogin) return;
     dispatch(getShipments());
     dispatch(getInventories());
   }, [dispatch]);
+
   return (
     <div className='container-fluid p-0'>
       <Header {...props} t={t} />

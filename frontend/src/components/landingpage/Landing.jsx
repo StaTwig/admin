@@ -11,6 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 
 import MuiAlert from "@mui/material/Alert";
 import { Snackbar } from "@mui/material";
+import { useRef } from "react";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -23,6 +24,9 @@ export default function Landing() {
 
   const [openAlert, setOpenAlert] = React.useState(false);
   const [alertDetails, setAlertDetails] = React.useState({});
+
+  const serviceRef = useRef(null);
+  const contactRef = useRef(null);
 
   const handleAlertClick = () => {
     setOpenAlert(true);
@@ -44,14 +48,26 @@ export default function Landing() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleNavClick = (option) => {
+    switch (option) {
+			case "service":
+				serviceRef.current?.scrollIntoView({ behavaiour: "smooth" });
+				break;
+			case "contact":
+				contactRef.current?.scrollIntoView({ behavaiour: "smooth" });
+				break;
+		}
+  }
+
   return (
     <React.Fragment>
-      <Landingheader />
+      <Landingheader handleNavClick={handleNavClick} />
       <Showcase handleClickOpen={handleClickOpen} />
       <Client />
       <Features />
-      <Services />
-      <Landingfooter />
+      <Services serviceRef={serviceRef} />
+      <Landingfooter contactRef={contactRef} />
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}
