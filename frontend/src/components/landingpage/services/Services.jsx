@@ -4,9 +4,9 @@ import "./Services.css";
 
 import service from "./data/service";
 
-export default function Services() {
+export default function Services({serviceRef}) {
   return (
-    <section className="service-section section-space">
+    <section className="service-section section-space" ref={serviceRef} style={{scrollMargin: "70px"}}>
       <div className="vl-page-container">
         <div className="section-headers">
           <h1 className="vl-heading f-500 vl-black">Our Services</h1>

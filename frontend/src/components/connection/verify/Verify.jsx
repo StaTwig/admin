@@ -3,11 +3,17 @@ import TextField from "@mui/material/TextField";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { turnOff, turnOn } from "../../../actions/spinnerActions";
-import { setCurrentUser, verifyOtp } from "../../../actions/userActions";
+import { sendOtp, setCurrentUser, verifyOtp } from "../../../actions/userActions";
 import { useTranslation } from "react-i18next";
 import setAuthToken from "../../../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { Controller, useForm } from "react-hook-form";
+import MuiAlert from "@mui/material/Alert";
+import { Snackbar } from "@mui/material";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function Verify() {
 	const dispatch = useDispatch();
@@ -18,8 +24,11 @@ export default function Verify() {
 	const [otp, setOtp] = useState("");
 	const [otpArray, setOtpArray] = useState(["", "", "", ""]);
 
-	const [errorMessage, setErrorMessage] = useState("");
+	const [openAlert, setOpenAlert] = React.useState(false);
+  const [alertDetails, setAlertDetails] = React.useState({});
 
+	const [errorMessage, setErrorMessage] = useState("");
+	
 	const {
 		watch,
 		control,
@@ -39,6 +48,40 @@ export default function Verify() {
 	useEffect(() => {
 		Object.keys(errors).length ? setErrorMessage("OTP is required!") : setErrorMessage("");
 	}, [errors]);
+
+	const handleAlertClose = (event, reason) => {
+		setAlertDetails({});
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpenAlert(false);
+	};
+
+	const resendOtp = async () => {
+		console.log("triggered!");
+		try {
+			const params = location.search.split("emailId=");
+			if (params.length > 1) {
+				dispatch(turnOn());
+				const emailId = params[1];
+				const result = await sendOtp({emailId: emailId}, i18n.language);
+				if(result?.status === 200) {
+					console.log("Otp resent successfully!");
+					setAlertDetails({type: "success", message: "Otp resent successfully!"});
+					setOpenAlert(true);
+				} else {
+					console.log("Error in resending otp!");
+					setAlertDetails({type: "error", message: result?.data?.message});
+					setOpenAlert(true);
+				}
+				dispatch(turnOff());
+			}
+		} catch(err) {
+			console.log(err);
+			dispatch(turnOff());
+		}
+	}
 
 	const otpChange = (index) => {
 		return (event) => {
@@ -147,16 +190,26 @@ export default function Verify() {
 							Verify
 						</button>
 					</section>
-					{/* <section className="further-links vl-justify-auto">
-            <p className="vl-note vl-grey-xs f-400">
-              Didn’t recieve the access code ?{" "}
-              <Link to="/" className="vl-blue vl-link">
-                Resend
-              </Link>
-            </p>
-          </section> */}
+					<section className="further-links vl-justify-auto">
+						<p className="vl-note vl-grey-xs f-400">
+							Didn’t recieve the access code ?{" "}
+							<span onClick={resendOtp} className="vl-blue vl-link">
+								Resend
+							</span>
+						</p>
+					</section>
 				</form>
 			</div>
+			<Snackbar
+				open={openAlert}
+				autoHideDuration={6000}
+				onClose={handleAlertClose}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+			>
+				<Alert onClose={handleAlertClose} severity={alertDetails?.type} sx={{ width: "100%" }}>
+					{alertDetails?.message}
+				</Alert>
+			</Snackbar>
 		</section>
 	);
 }

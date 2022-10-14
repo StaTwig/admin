@@ -62,6 +62,7 @@ export default function Account(props) {
 	const watchEmail = watch("email");
 	const watchPhone = watch("phone");
 	const watchOrgType = watch("organizationType");
+	const watchOrgName = watch("organizationName");
 
 	useEffect(() => {
 		// Get org types
@@ -180,12 +181,28 @@ export default function Account(props) {
 		});
 	};
 
+	const validateOrgName = () => {
+		if(!watchOrgName) return false;
+		let orgs = organizations.filter((organization) => organization.name === watchOrgName);
+
+		if(orgs && orgs.length) {
+			console.log("Org with the same name exists!");
+			setError("organizationName", { type: "custom", message: "Duplicate Organization name!" });
+			return false;
+		}
+
+		return true;
+	}
+
 	const onSubmit = (data) => {
 		if (!data.email && !data.phone) {
 			console.log("Please enter email or phone!");
 		} else {
 			validateEmailPhone()
 				.then((res) => {
+					if(organizationExists === "new") {
+						if(!validateOrgName()) return;
+					}
 					let finalFlag = organizationExists === "existing" || skipOrgRegistration;
 					props.onUserDataSubmit(data, finalFlag);
 					if (!finalFlag) {
@@ -429,7 +446,11 @@ export default function Account(props) {
 														{...params}
 														label="Organization Name"
 														error={Boolean(errors.organizationName)}
-														helperText={errors.organizationName && "Organization Name is required!"}
+														helperText={
+															errors.organizationName?.type === "required"
+																? "Organization Name is required!"
+																: errors.organizationName?.message
+														}
 													/>
 												)}
 											/>

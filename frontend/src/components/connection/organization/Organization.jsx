@@ -67,7 +67,7 @@ export default function Organization(props) {
 			<div className="vl-connection-container">
 				<form onSubmit={handleSubmit(onSubmit)} className="account-form-container">
 					<hgroup className="form-headers">
-						<h1 className="vl-heading f-700 vl-black">Register your Organization</h1>
+						<h1 className="vl-heading f-700 vl-black">Organization Details</h1>
 						<h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm">
 							Almost there, Please provide the below details to regsiter your organization with us
 						</h2>
@@ -193,6 +193,7 @@ export default function Organization(props) {
 								rules={{ required: true }}
 								render={({ field }) => (
 									<TextField
+										type="number"
 										fullWidth
 										variant="outlined"
 										label="Pincode"

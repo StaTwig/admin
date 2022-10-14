@@ -22,7 +22,12 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-.mobile-app-stores > img {
+
+.mobile-app-stores > a {
+  width: 100%;
+}
+
+a > img {
   width: 100%;
 }
 
