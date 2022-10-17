@@ -10,9 +10,6 @@ import Pagination from "@material-ui/lab/Pagination";
 import AdvanceTableFilter from "../../../shared/advanceTableFilter";
 
 function Table(props) {
-  const intelEnabled =
-    props.user.type === "Third Party Logistics" ? true : false;
-  const dispatch = useDispatch();
   const { shpmnts, t, shouldEnable } = props;
   const shipments = shpmnts();
   shipments.sort(function (a, b) {
@@ -22,6 +19,9 @@ function Table(props) {
       return 1;
     }
   });
+  const intelEnabled =
+    props.user.type === "Third Party Logistics" ? true : false;
+  const dispatch = useDispatch();
   const handlePageChange = (event, value) => {
     props.onPageChange(value);
   };
