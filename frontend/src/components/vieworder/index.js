@@ -10,12 +10,17 @@ import { isAuthenticated } from "../../utils/commonHelper";
 const ViewOrder = (props) => {
   const { order, t } = props;
   if (!isAuthenticated("viewPO")) props.history.push(`/profile`);
-  const isEnabled = isAuthenticated("acceptRejectOrder");
   const user = useSelector((state) => {
     return state.user;
   });
   let statusStyle = "bg-primary";
   let status = order.poStatus;
+
+  const onPOStatusChange = async (status) => {
+    const data = { status, orderID: order.id };
+    await changePOStatus(data);
+  };
+  const isEnabled = isAuthenticated("acceptRejectOrder");
   if (
     order?.supplier?.supplierOrganisation === user?.organisationId &&
     order.poStatus === "CREATED"
@@ -50,11 +55,6 @@ const ViewOrder = (props) => {
     statusStyle = "bg-secondary";
     status = t("cancelled");
   }
-
-  const onPOStatusChange = async (status) => {
-    const data = { status, orderID: order.id };
-    await changePOStatus(data);
-  };
 
   return (
     <div className="vieworder text-muted">
