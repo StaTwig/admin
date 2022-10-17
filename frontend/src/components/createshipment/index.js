@@ -38,7 +38,6 @@ const CreateShipment = (props) => {
   const [senderOrganisationId, setSenderOrganistionId] = useState("");
   const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
-  const [allOrganisations, setAllOrganisations] = useState([]);
   const [senderWarehouses, setSenderWarehouses] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
@@ -47,6 +46,7 @@ const CreateShipment = (props) => {
   const [FromLocationSelected, setFromLocationSelected] = useState(false);
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
+  const [allOrganisations, setAllOrganisations] = useState([]);
   const [FromOrgLabel, setFromOrgLabel] = useState(
     "Select Organization Location"
   );
@@ -72,6 +72,8 @@ const CreateShipment = (props) => {
   const [OrderDetails, setOrderDetails] = useState({});
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
   const [productQuantity] = useState("");
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
@@ -80,8 +82,6 @@ const CreateShipment = (props) => {
   const [orgTypes, setOrgTypes] = useState([]);
   const [productsList, setProductsList] = useState([]);
   const [createNewWareNOrgSuccess, setCreateNewWareNOrgSuccess] = useState("");
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
   const customStyles = {
     // placeholder: (provided, state) => ({
     //   color: state.isDisabled ? "black" : "grey",
@@ -213,20 +213,21 @@ const CreateShipment = (props) => {
     fetchData();
   }, [props.location, user.organisation]);
 
+  const closeModalFail = () => {
+    setOpenShipmentFail(false);
+  };
+  
   const closeModal = () => {
     setOpenCreatedInventory(false);
     props.history.push("/shipments");
   };
 
-  const closeModalFail = () => {
-    setOpenShipmentFail(false);
-  };
 
-  const onOrgChange = async (value) => {
+  const onSenderOrgChange = async (value) => {
     try {
       const userType = intelEnabled ? "TPL" : "regular";
       const warehouse = await getWarehouseByOrgId(value, userType);
-      setReceiverWarehouses(
+      setSenderWarehouses(
         warehouse.data.map((v) => {
           return {
             ...v,
@@ -246,11 +247,12 @@ const CreateShipment = (props) => {
     }
   };
 
-  const onSenderOrgChange = async (value) => {
+
+  const onOrgChange = async (value) => {
     try {
       const userType = intelEnabled ? "TPL" : "regular";
       const warehouse = await getWarehouseByOrgId(value, userType);
-      setSenderWarehouses(
+      setReceiverWarehouses(
         warehouse.data.map((v) => {
           return {
             ...v,
