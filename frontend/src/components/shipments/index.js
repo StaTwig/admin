@@ -160,6 +160,11 @@ const ShipmentAnalytic = (props) => {
     setData(visible);
   };
 
+  const setData = (v, a = false) => {
+    setvisible(v);
+    setAlerts(a);
+  };
+
   const headers = {
     coloumn1: "Shipment ID",
     displayColoumn1: t("shipment_id"),
@@ -177,11 +182,6 @@ const ShipmentAnalytic = (props) => {
     img3: <img src={Received} width='16' height='16' alt='Received' />,
     img4: <img src={Sent} width='16' height='16' alt='Sent' />,
     img6: <img src={Status} width='16' height='16' alt='Status' />,
-  };
-
-  const setData = (v, a = false) => {
-    setvisible(v);
-    setAlerts(a);
   };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
