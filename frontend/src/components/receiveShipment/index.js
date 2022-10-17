@@ -43,14 +43,6 @@ const ReceiveShipment = (props) => {
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const [transitNumberArray, settransitNumberArray] = useState([]);
 
-  useEffect(() => {
-    async function fetchairwayBill() {
-      let temp_arr = await fetchairwayBillNumber();
-      settransitNumberArray(temp_arr.data);
-    }
-    fetchairwayBill();
-  }, []);
-
   const setFile = (evt) => {
     setFiles(evt.target.files);
     setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
@@ -60,6 +52,26 @@ const ReceiveShipment = (props) => {
   const clearImage = () => {
     setPhoto("");
     setPhotoUrl(undefined);
+  };
+
+  useEffect(() => {
+    async function fetchairwayBill() {
+      let temp_arr = await fetchairwayBillNumber();
+      settransitNumberArray(temp_arr.data);
+    }
+    fetchairwayBill();
+  }, []);
+
+  const qtyChange = (index, value) => {
+    let newArr = [...qtyArr];
+    newArr[index] = parseInt(value);
+    setQtyArr(newArr);
+    if (
+      newArr.filter((a) => a !== undefined && a > 0).length ===
+      tracking.products.length
+    )
+      setIsDisabled(false);
+    else setIsDisabled(true);
   };
 
   const receiveShipment = async () => {
@@ -93,18 +105,6 @@ const ReceiveShipment = (props) => {
     dispatch(turnOff());
   };
 
-  const qtyChange = (index, value) => {
-    let newArr = [...qtyArr];
-    newArr[index] = parseInt(value);
-    setQtyArr(newArr);
-    if (
-      newArr.filter((a) => a !== undefined && a > 0).length ===
-      tracking.products.length
-    )
-      setIsDisabled(false);
-    else setIsDisabled(true);
-  };
-
   const uploadPhoto = async () => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -115,13 +115,14 @@ const ReceiveShipment = (props) => {
       }
     }
   };
-  const closeModal = () => {
-    setOpenUpdatedStatus(false);
-    props.history.push("/viewshipment/" + id);
-  };
 
   const closeModalShipment = () => {
     setreceiveShipmentModal(false);
+    props.history.push("/viewshipment/" + id);
+  };
+  
+  const closeModal = () => {
+    setOpenUpdatedStatus(false);
     props.history.push("/viewshipment/" + id);
   };
 
