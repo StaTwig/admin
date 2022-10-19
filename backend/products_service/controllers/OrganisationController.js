@@ -32,9 +32,7 @@ exports.getOrganisations = [
 exports.getOrganisationsAtSignup = [
   async (req, res) => {
     try {
-      let organisations = await OrganisationModel.find({
-        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
-      })
+      let organisations = await OrganisationModel.find({ status: "ACTIVE" });
       return apiResponse.successResponseWithData(
         res,
         "Organisations",

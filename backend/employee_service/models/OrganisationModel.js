@@ -29,7 +29,7 @@ const OrganizationSchema = new mongoose.Schema(
     type: String,
     status: {
       type: String,
-      enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED"],
+      enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED", "INCOMPLETE"],
       default: "NOTVERIFIED",
     },
     warehouses: {

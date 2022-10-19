@@ -1,0 +1,38 @@
+.service-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.3rem;
+}
+
+.service-icon > img {
+  width: 100%;
+  height: 4rem;
+  object-fit: contain;
+  border-radius: 0.3rem;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 2rem 3rem 2rem;
+  border-radius: 0.8rem;
+  background-color: var(--brand-grey);
+  cursor: pointer;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 2rem 3rem 2rem;
+  border-radius: 0.8rem;
+  background-color: var(--brand-grey);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 586px) {
+  .service-card {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+}

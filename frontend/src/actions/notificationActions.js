@@ -2,9 +2,9 @@ import axios from "axios";
 
 import { config } from "../config";
 
-export const getImage = async (uri) => {
+export const getImage = async (id) => {
   try {
-    const result = await axios.get(config().getImage + "/" + uri);
+    const result = await axios.get(config().getImage + "/" + id);
     return result.data;
   } catch (e) {
     return null;

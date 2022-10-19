@@ -81,10 +81,10 @@ export const AddLocationCard = (props) => {
           : props.user.organisationId,
       postalAddress: props.user.postalAddress || null,
       region: values.region || region,
-      country:
-        intelEnabled && props?.popup
-          ? country
-          : props.user.warehouses[0].warehouseAddress.country,
+      country: country,
+        // intelEnabled && props?.popup
+        //   ? country
+        //   : values.country,
       // location: {
       //   longitude: '0',
       //   latitude: '0',
@@ -96,10 +96,10 @@ export const AddLocationCard = (props) => {
         secondLine: null,
         city: values.city,
         state: values.state,
-        country:
-          intelEnabled && props?.popup
-            ? country
-            : props.user.warehouses[0].warehouseAddress.country,
+        country: country,
+          // intelEnabled && props?.popup
+          //   ? country
+          //   : values.country,
         landmark: null,
         zipCode: values.pincode,
       },

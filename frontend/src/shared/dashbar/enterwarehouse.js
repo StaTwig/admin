@@ -77,7 +77,7 @@ const EnterWareHouse = (props) => {
           <button
             className='button btn-primary d-flex text-light pl-3 pr-3 pt-2 pb-2'
             onClick={() => {
-              props.history.push(`/tracing/${dashBarData.id}`);
+              props.history.push(`/track/${dashBarData.id}`);
             }}
           >
             <img

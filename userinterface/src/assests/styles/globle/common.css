@@ -1,0 +1,56 @@
+/* Font Class */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+.content-area {
+  margin-top: 70px;
+  padding: 5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mi-page-container {
+  width: 100%;
+  max-width: 85rem;
+  display: block;
+  margin: 0 auto;
+  padding: 0 1.2rem;
+}
+
+.no-border {
+  border: none !important;
+}
+.no-space {
+  white-space: nowrap !important;
+}
+.section-space {
+  padding: 3rem 0;
+}
+
+.top-space {
+  padding-top: 1rem;
+}
+
+.mi-connection-container {
+  width: 100%;
+  max-width: 35rem;
+  margin: 0 auto;
+  display: block;
+}
+
+.mi-verify-container {
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+  display: block;
+}
+
+@media screen and (max-width: 586px) {
+  .section-space {
+    padding: 2rem 0;
+  }
+}

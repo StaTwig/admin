@@ -22,7 +22,9 @@ router.post("/sendOtp", AuthController.sendOtp);
 router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
+router.post("/verifyAuth", AuthController.verifyAuthentication);
 router.post("/updateProfile", AuthController.updateProfile);
+router.post("/deleteProfilePicture", AuthController.deleteProfilePicture);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
@@ -55,5 +57,9 @@ router.get(
 );
 router.get("/emailverify", AuthController.emailverify);
 router.get("/images/:key", AuthController.Image);
+
+router.post("/googleLogin", AuthController.googleLogIn);
+
+router.delete("/deleteProfile", AuthController.deleteProfile);
 
 module.exports = router;

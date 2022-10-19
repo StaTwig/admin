@@ -22,6 +22,7 @@ const FormLoginPage = (props) => {
     onPhoneChange,
     emailFieldDisable,
     phoneFieldDisable,
+    torusLogin
   } = props;
   // const onkeydown = (event) => {
   //   if (event.keyCode  === 13) {
@@ -141,6 +142,14 @@ const FormLoginPage = (props) => {
                       onClick={onSendOtp}
                     >
                       {t("continue")}
+                    </button>
+                    
+                    <button
+                      type="button"
+                      className=" buttonS btn btn-primary"
+                      onClick={() => torusLogin()}
+                    >
+                      {t("Torus Login")}
                     </button>
                   </div>
                   <div className="signup-link text-center mt-4 ml-1">

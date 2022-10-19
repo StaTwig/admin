@@ -23,7 +23,8 @@ const ShipmentFailPopUp = (props) => {
           props.shipmentError === "Check Shipment Reference ID" ||
           props.shipmentError === "ShipmentID cannot be Empty" || 
           props.shipmentError === "Shipment has to be delivered" ||
-          props.shipmentError === "Invalid ShipmentID Please Enter a Valid ShipmentID"
+          props.shipmentError === "Invalid ShipmentID Please Enter a Valid ShipmentID" ||
+          props.shipmentError === "The shipment is an outbound shipment!"
             ? null
             : t("cannot_be_empty")}
         </div>

@@ -10,16 +10,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.send = function (from, to, subject, data) {
+exports.send = function (from, to, subject, data, cc) {
   return transporter.sendMail({
-    from: from,
-    to: to,
-    subject: subject,
-    html: emailBodyGenerator(
-      data.body,
-      data.source,
-      data?.isOTP,
-      data?.isCustom
-    ),
-  });
+		from: from,
+		to: to,
+		...(cc ? { cc: cc } : {}),
+		subject: subject,
+		html: emailBodyGenerator(data.body, data.source, data?.isOTP, data?.isCustom),
+	});
 };
