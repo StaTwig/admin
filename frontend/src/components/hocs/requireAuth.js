@@ -7,9 +7,9 @@ export default (ComposedComponent) => {
   class RequireAuth extends Component {
     render() {
       const { user } = this.props;
-      let token = localStorage.theLedgerToken;
+      let token = localStorage?.theLedgerToken;
       let userDetails = jwt_decode(token);
-      const demoLogin = userDetails.partialRegistration;
+      const demoLogin = userDetails?.partialRegistration;
 
       let check = user;
       if (!user)

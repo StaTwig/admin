@@ -64,6 +64,10 @@ export const getTorusProvider = async () => {
 	return torus;
 };
 
+export const torusLogout = async () => {
+	await torus.logout();
+}
+
 export default function TorusAuth(props) {
 	const torusLogin = async () => {
 		console.log("TORUS LOGIN");
@@ -77,24 +81,17 @@ export default function TorusAuth(props) {
 		const torusInfo = await torus.getUserInfo();
 		let abc = await fetchAccountData(provider);
 		console.log("torusInfo is: ", torusInfo);
-		let signData = await verifyAuth(abc[0]?.address, true, web3, torusInfo);
+		let signData = await verifyAuth(abc[0]?.address, web3, torusInfo, torus);
 		console.log(signData);
 	};
 
-	const verifyAuth = async (address, isTorus, torus, torusInfo) => {
+	const verifyAuth = async (address, web3, torusInfo, torus) => {
 		try {
 			const baseURL = "http://localhost:3001";
-			const message = "An amazing message, for use with MetaMask!";
+			const message = "An amazing message, for use with Torus!";
 			let signatures;
-			if (!isTorus) {
-				// await window.web3.currentProvider.enable();
-				console.log(address);
-				const web3 = new Web3(window.ethereum);
-				signatures = await web3.eth.personal.sign(message, address, "");
-			} else {
-				// await window.web3.currentProvider.enable();
-				signatures = await torus.eth.personal.sign(message, address, "");
-			}
+			// await window.web3.currentProvider.enable();
+			signatures = await web3.eth.personal.sign(message, address, "");
 			try {
         const reqData = {
 					walletId: address,

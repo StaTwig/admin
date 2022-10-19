@@ -2720,15 +2720,15 @@ exports.uploadImage = [
       const Id = req.query.id;
       const Upload = await uploadFile(req.file);
       await unlinkFile(req.file.path);
-      const update = await ShipmentModel.findOneAndUpdate(
-        { id: Id },
-        { $push: { imageDetails: `${Upload.key}` } },
-        { new: true }
-      );
+      // const update = await ShipmentModel.findOneAndUpdate(
+      //   { id: Id },
+      //   { $push: { imageDetails: `${Upload.key}` } },
+      //   { new: true }
+      // );
       return apiResponse.successResponseWithData(
         res,
         "Image uploaded successfully",
-        update
+        {imageId: Upload.key}
       );
     } catch (e) {
       return apiResponse.ErrorResponse(res, e.message);
