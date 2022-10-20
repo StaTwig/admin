@@ -4,6 +4,7 @@ const CounterModel = require("../models/CounterModel");
 const { default: axios } = require("axios");
 const { body, validationResult } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
+const sendMessageUrl = process.env.SEND_MESSAGE || "https://test.vaccineledger.com/notificationmanagement/api/notification/sendMessage";
 
 exports.newDemoRequest = [
   body("name").notEmpty().withMessage("Name not provided!"),
@@ -51,7 +52,7 @@ exports.newDemoRequest = [
 				`<p>EmailID - ${req.body.emailId}</p>` +
 				`<p>Phone Number - ${req.body.phoneNumber}</p>`;
 
-			await axios.post(process.env.SEND_MESSAGE, {
+			await axios.post(sendMessageUrl, {
 				email: "dev@statwig.com",
 				subject: `Demo Request from organization - ${req.body.companyName}`,
 				content: demoReqContent,
