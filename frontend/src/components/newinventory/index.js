@@ -242,7 +242,7 @@ const NewInventory = (props) => {
   return (
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-0">
-        <h1 className="vl-heading-bdr mt-3">{t("add_inventory")}</h1>
+        <h1 className="vl-heading-bdr mt-3 mb-2">{t("add_inventory")}</h1>
         <div className="d-flex flex-column align-items-center">
           {isAuthenticated("importInventory") && (
             <button
