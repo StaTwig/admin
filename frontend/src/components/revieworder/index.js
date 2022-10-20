@@ -15,6 +15,13 @@ const ReviewOrder = (props) => {
     return state?.reviewPo;
   });
   const dispatch = useDispatch();
+
+  const closeModal = () => {
+    setopenReviewOrder(false);
+    dispatch(resetReviewPos({}));
+    props.history.push("/orders");
+  };
+
   const [failedPop, setFailedPop] = useState(false);
   const [openReviewOrder, setopenReviewOrder] = useState(false);
   const [modalProps, setModalProps] = useState({});
@@ -78,11 +85,6 @@ const ReviewOrder = (props) => {
         //       setErrorMessage("Not able to create order. Try again!");
       }
     }
-  };
-  const closeModal = () => {
-    setopenReviewOrder(false);
-    dispatch(resetReviewPos({}));
-    props.history.push("/orders");
   };
   var arr = [];
   arr.push(order);
