@@ -726,9 +726,9 @@ const NewShipment = (props) => {
                       className='btn btn-fetch'
                       onClick={async () => {
                         // setpofetchdisabled(true);
-                        setProducts((p) => []);
                         setAddProducts((p) => []);
-                        setOrderIdSelected(true);
+                        setOrderIdSelected(true); 
+                        setProducts((p) => []);
                         dispatch(turnOn());
                         setDisabled(false);
                         if (values.shipmentID.length === 0) {
@@ -768,10 +768,10 @@ const NewShipment = (props) => {
                                   setFieldValue("rtype");
                                   setFieldValue("toOrg", "");
                                   dispatch(turnOff());
+                                  setFieldValue("toOrgLoc", "");
                                   setReceiverOrgLoc();
                                   setReceiverOrgId();
                                   setOrderDetails(result);
-                                  setFieldValue("toOrgLoc", "");
                                   settoOrgLocLabel("");
                                   // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
                                   let products_temp = result.products;
@@ -803,8 +803,8 @@ const NewShipment = (props) => {
                                     products_temp[i].id = result.products[i].productID;
                                   }
                                   if (result.products.length > 0) {
-                                    setAddProducts((p) => []);
                                     setProducts((p) => []);
+                                    setAddProducts((p) => []);
                                     setFieldValue("products", products_temp);
                                   } else setFieldValue("products", []);
                                 }
