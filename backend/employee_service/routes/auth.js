@@ -26,8 +26,6 @@ router.post("/verifyAuth", AuthController.verifyAuthentication);
 router.post("/updateProfile", AuthController.updateProfile);
 router.post("/deleteProfilePicture", AuthController.deleteProfilePicture);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
-// router.get("/createAddress", AuthController.createUserAddress);
-// router.post("/assignProductConsumer", AuthController.assignProductConsumer);
 router.post("/addWarehouse", AuthController.addWarehouse);
 router.post("/pushWarehouse", AuthController.pushWarehouse);
 router.post("/updateWarehouse", AuthController.updateWarehouseAddress);
