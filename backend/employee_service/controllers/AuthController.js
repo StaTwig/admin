@@ -560,10 +560,10 @@ exports.verifyOtp = [
 				const user = await EmployeeModel.findOne(query);
 				if(user) {
 					if (user.otp == req.body.otp) {
-						let address;
+						let address = "";
 						if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
-							const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-							address = response.data.items;
+							// const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+							// address = response.data.items;
 							// const userData = {
 							//   address,
 							// };
@@ -702,7 +702,7 @@ exports.verifyAuthentication = [
 					}
 					// const userDetails = await EmployeeModel.findOne(query);
 					// console.log(userDetails)
-					let address;
+					let address = "";
 					if (user.walletAddress == null || user.walletAddress == req.body.walletId) {
 						// const response = await axios.get(
 						//   `${blockchain_service_url}/createUserAddress`
@@ -845,10 +845,10 @@ exports.googleLogIn = [
 			}
 
 			// Create and send a token
-			let address;
+			let address = "";
 			if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
-				const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-				address = response.data.items;
+				// const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+				// address = response.data.items;
 				// const userData = {
 				//   address,
 				// };
