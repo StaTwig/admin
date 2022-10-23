@@ -111,7 +111,7 @@ export default function ChainCard({ shipmentData }) {
 								{shipmentData?.products?.map((product, index) => (
 									<div key={index} className="product-list-card">
 										<p className="mi-body-sm f-500 mi-reset grey">{product?.productName}</p>
-										<p className="mi-body-sm f-500 mi-reset">{`${product?.productQuantity} (${
+										<p className="mi-body-sm f-500 mi-reset">{`${product?.productQuantityDelivered} (${
 											product?.unitofMeasure?.name ? product?.unitofMeasure?.name : "N/A"
 										})`}</p>
 									</div>

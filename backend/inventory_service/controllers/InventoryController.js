@@ -2702,7 +2702,7 @@ exports.autoCompleteSuggestions = [
     try {
       const { searchString } = req.query;
 
-      const suggestions1 = await aggregate([
+      const suggestions1 = await RecordModel.aggregate([
         {
           $project: {
             _id: 0,
@@ -2765,7 +2765,7 @@ exports.autoCompleteSuggestions = [
         { $limit: 10 },
       ]).sort({ createdAt: -1 });
 
-      const suggestions3 = await aggregate([
+      const suggestions3 = await RecordModel.aggregate([
         // { $project: { _id: 0, value: "$id", record_type: "order" } },
         {
           $unionWith: {

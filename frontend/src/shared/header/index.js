@@ -150,8 +150,6 @@ const Header = (props) => {
   }
 
   const onSeach = async (searchValue) => {
-    console.log(searchValue);
-
     if (search.substring(0, 2) === "SH") {
       getAllShipmentIDs().then((result) => {
         let shippingIds = result.map((so) => so.id);
