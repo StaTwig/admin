@@ -140,7 +140,7 @@ export default function AccessForm() {
 				} else {
 					const err = result.data.message;
 					console.log(err);
-					setErrorMessage("Something went wrong!");
+					setErrorMessage(err);
 					// setErrorModal(true);
 				}
 			}

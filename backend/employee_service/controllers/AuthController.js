@@ -18,7 +18,6 @@ const auth = require("../middlewares/jwt");
 const axios = require("axios");
 const cuid = require("cuid");
 const { OAuth2Client } = require("google-auth-library");
-const blockchain_service_url = process.env.URL;
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const stream_name = process.env.INV_STREAM;
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -560,25 +559,6 @@ exports.verifyOtp = [
 				const user = await EmployeeModel.findOne(query);
 				if(user) {
 					if (user.otp == req.body.otp) {
-						let address;
-						if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
-							const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-							address = response.data.items;
-							// const userData = {
-							//   address,
-							// };
-							/* await axios.post(
-								`${blockchain_service_url}/grantPermission`,
-								userData
-							);*/
-							await EmployeeModel.updateOne(query, {
-								otp: null,
-								walletAddress: address,
-							});
-						} else {
-							address = user.walletAddress;
-						}
-	
 						const activeWarehouse = await WarehouseModel.find({
 							$and: [
 								{ id: { $in: user.warehouseId } },
@@ -601,7 +581,6 @@ exports.verifyOtp = [
 								role: user.role,
 								warehouseId: activeWarehouseId,
 								organisationId: user.organisationId,
-								walletAddress: address,
 								phoneNumber: user.phoneNumber,
 								org: user.msp,
 								userName: user.emailId,
@@ -616,7 +595,6 @@ exports.verifyOtp = [
 								role: user.role,
 								warehouseId: [],
 								organisationId: user.organisationId,
-								walletAddress: address,
 								phoneNumber: user.phoneNumber,
 								org: user.msp,
 								userName: user.emailId,
@@ -702,27 +680,6 @@ exports.verifyAuthentication = [
 					}
 					// const userDetails = await EmployeeModel.findOne(query);
 					// console.log(userDetails)
-					let address;
-					if (user.walletAddress == null || user.walletAddress == req.body.walletId) {
-						// const response = await axios.get(
-						//   `${blockchain_service_url}/createUserAddress`
-						// );
-						// address = response.data.items;
-						// const userData = {
-						//   address,
-						// };
-						/* await axios.post(
-              `${blockchain_service_url}/grantPermission`,
-              userData
-            );*/
-						await EmployeeModel.updateOne(query, {
-							otp: null,
-							walletAddress: req.body.walletId,
-						});
-					} else {
-						address = user.walletAddress;
-					}
-
 					const activeWarehouse = await WarehouseModel.find({
 						$and: [
 							{ id: { $in: user.warehouseId } },
@@ -745,7 +702,6 @@ exports.verifyAuthentication = [
 							role: user.role,
 							warehouseId: activeWarehouseId,
 							organisationId: user.organisationId,
-							walletAddress: address,
 							phoneNumber: user.phoneNumber,
 							org: user.msp,
 							userName: user.emailId,
@@ -760,7 +716,6 @@ exports.verifyAuthentication = [
 							role: user.role,
 							warehouseId: [],
 							organisationId: user.organisationId,
-							walletAddress: address,
 							phoneNumber: user.phoneNumber,
 							org: user.msp,
 							userName: user.emailId,
@@ -845,28 +800,6 @@ exports.googleLogIn = [
 			}
 
 			// Create and send a token
-			let address;
-			if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
-				const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-				address = response.data.items;
-				// const userData = {
-				//   address,
-				// };
-				/* await axios.post(
-          `${blockchain_service_url}/grantPermission`,
-          userData
-        );*/
-				await EmployeeModel.updateOne(
-					{ emailId: payload?.email },
-					{
-						otp: null,
-						walletAddress: address,
-					},
-				);
-			} else {
-				address = user.walletAddress;
-			}
-
 			const activeWarehouse = await WarehouseModel.find({
 				$and: [
 					{ id: { $in: user.warehouseId } },
@@ -889,7 +822,6 @@ exports.googleLogIn = [
 					role: user.role,
 					warehouseId: activeWarehouseId,
 					organisationId: user.organisationId,
-					walletAddress: address,
 					phoneNumber: user.phoneNumber,
 					org: user.msp,
 					userName: user.emailId,
@@ -904,7 +836,6 @@ exports.googleLogIn = [
 					role: user.role,
 					warehouseId: [],
 					organisationId: user.organisationId,
-					walletAddress: address,
 					phoneNumber: user.phoneNumber,
 					org: user.msp,
 					userName: user.emailId,
@@ -1152,23 +1083,6 @@ exports.deleteProfile = [
 	}
 ]
 
-exports.createUserAddress = [
-	async (req, res) => {
-		try {
-			const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-			const address = response.data.items;
-			const userData = {
-				address,
-			};
-			await axios.post(`${blockchain_service_url}/grantPermission`, userData);
-			return apiResponse.successResponseWithData(req, res, "user_address_success", address);
-		} catch (err) {
-			console.log(err);
-			return apiResponse.ErrorResponse(req, res, "default_error");
-		}
-	},
-];
-
 exports.getAllUsers = [
 	auth,
 	async (req, res) => {
@@ -1179,58 +1093,6 @@ exports.getAllUsers = [
 			);
 			const confirmedUsers = users.filter((user) => user.walletAddress !== "");
 			return apiResponse.successResponseWithData(req, res, "all_users_success", confirmedUsers);
-		} catch (err) {
-			console.log(err);
-			return apiResponse.ErrorResponse(req, res, "default_error");
-		}
-	},
-];
-
-exports.assignProductConsumer = [
-	async (req, res) => {
-		try {
-			const user = new ConsumerModel({
-				shipmentId: req.body.consumer.shipmentId,
-				name: req.body.consumer.name,
-				gender: req.body.consumer.gender,
-				age: req.body.consumer.age,
-				aadhar: req.body.consumer.aadhar,
-				vaccineId: req.body.vaccine.serialNumber,
-			});
-
-			await user.save();
-			let userData = {
-				_id: user._id,
-				Name: user.name,
-				Aadhar: user.aadhar,
-				ShipmentId: user.ShipmentId,
-			};
-
-			const date_ob = new Date();
-			const date = ("0" + date_ob.getDate()).slice(-2);
-			const month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-			const year = date_ob.getFullYear();
-			const today = date + "-" + month + "-" + year;
-
-			const userData1 = {
-				stream: stream_name,
-				key: req.body.vaccine.serialNumber,
-				address: "1bCBUXox5GXGAiTxGgNbmhETUaHMJZVLwctveT",
-				data: {
-					...req.body,
-					...{ consumedStatus: "Y", consumedDate: today },
-				},
-			};
-			const response = await axios.post(`${blockchain_service_url}/publish`, userData1);
-			const txnId = response.data.transactionId;
-			const productQuery = { serialNumber: req.body.vaccine.serialNumber };
-			const productFound = await InventoryModel.findOne(productQuery);
-			if (productFound) {
-				await InventoryModel.updateOne(productQuery, {
-					transactionIds: [...productFound.transactionIds, txnId],
-				});
-			}
-			return apiResponse.successResponseWithData(req, res, "product_consumer_success", userData);
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(req, res, "default_error");

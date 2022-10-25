@@ -58,10 +58,8 @@ export default function InstockRow({ product, reportWarehouse }) {
   const [maxWidth, setMaxWidth] = React.useState("md");
 
   const handleMaxWidthChange = (event) => {
-    setMaxWidth(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
+    // ts-expect-error autofill of arbitrary value is not handled.
+    setMaxWidth(event.target.value);
   };
 
   const handleFullWidthChange = (event) => {

@@ -212,7 +212,7 @@ class Profile extends React.Component {
       title,
       preferredLanguage,
     } = this.state;
-    phoneNumber = phoneNumber ? phoneNumber.replaceAll("+", "") : "";
+    phoneNumber = phoneNumber ? phoneNumber : "";
     const data = {
       firstName,
       lastName,
