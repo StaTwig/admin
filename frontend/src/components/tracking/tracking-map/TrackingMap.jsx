@@ -204,7 +204,7 @@ export default function TrackingMap({ LocationTab, trackingData }) {
 										<div className="product-list-card map-card-design">
 											<p className="mi-body-sm f-500 mi-reset ">{product?.productName}</p>
 											<p className="mi-body-sm f-500 mi-reset">
-												{`${product?.stock} ( ${product?.productInfo?.unitofMeasure?.name} )`}
+												{`${product?.productQuantity} ( ${product?.productInfo?.unitofMeasure?.name} )`}
 											</p>
 										</div>
 									))}
