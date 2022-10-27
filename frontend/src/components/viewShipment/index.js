@@ -23,14 +23,16 @@ const Tracing = (props) => {
   const [productHighLight, setProductHighLight] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
-  const status = tracking.status;
-  const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
-  const { id } = props.match.params;
-  if (!isAuthenticated("viewShipment")) props.history.push(`/profile`);
 
   const closeModalShipping = () => {
     setOpenShipping(false);
   };
+
+  
+  const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
+  const { id } = props.match.params;
+  if (!isAuthenticated("viewShipment")) props.history.push(`/profile`);
+  const status = tracking.status;
 
   return (
     <div className='tracing'>
