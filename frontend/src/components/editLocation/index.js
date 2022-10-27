@@ -651,6 +651,7 @@ const EditLocation = (props) => {
             <SuccessPopup
               t={props.t}
               onHide={closeModalAddedLocation} //FailurePopUp
+              user={props.user}
             />
           </Modal>
         )}

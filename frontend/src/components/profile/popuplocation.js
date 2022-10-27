@@ -50,7 +50,7 @@ const PopUpLocation = (props) => {
       }
     }
   };
-  console.log(props.wareHouses);
+
   return (
     <div className='addLocation'>
       <center>

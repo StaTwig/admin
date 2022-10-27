@@ -1262,7 +1262,7 @@ exports.addWarehouse = [
 						role: "powerUser"
 					},
 					$push: {
-						warehouseId: warehouseId,
+						pendingWarehouseId: warehouseId,
 					},
 				},
 			);
@@ -1353,6 +1353,14 @@ exports.updateWarehouseAddress = [
 			const warehouse = await WarehouseModel.findOneAndUpdate({ id: req.query.warehouseId }, data, {
 				new: true,
 			});
+			const employee = await EmployeeModel.findOneAndUpdate(
+				{ id: req.user.id },
+				{
+					$push: { pendingWarehouseId: warehouse.id },
+					$pull: { warehouseId: warehouse.id },
+				},
+				{ new: true },
+			);
 			return apiResponse.successResponseWithData(req, res, "update_warehouse_success", warehouse);
 		} catch (err) {
 			console.log(err);
