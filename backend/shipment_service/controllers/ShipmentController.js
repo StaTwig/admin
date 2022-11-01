@@ -2775,11 +2775,7 @@ exports.updateTrackingStatus = [
         updatedAt: req.body.updatedAt,
         isAlertTrue: req.body.isAlertTrue,
       };
-      if (req.file) {
-        Upload = await uploadFile(req.file);
-        await unlinkFile(req.file.path);
-      }
-      data.imageId = Upload?.key || null;
+      data.imageId = req.body?.imageId;
       data.updatedOn = new Date().toISOString();
       data.updatedBy = req.user.id;
       data.status = "UPDATED";

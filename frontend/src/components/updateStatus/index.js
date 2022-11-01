@@ -143,44 +143,51 @@ const UpdateStatus = (props) => {
 	const uploadPhoto = async () => {
 		const formData = new FormData();
 		formData.append("photo", photo, photo.name);
-    const result = await uploadImage(id, formData);
+		const result = await uploadImage(id, formData);
+		return result.data.data;
 	};
 
 	const updateStatus = async (values) => {
-		if (shipmentData.status === "RECEIVED") {
-			setErrorMessage("delivered_shipments_cannot_be_updated");
-			setTryAgainEnabled(false);
-			setOpenShipmentFail(true);
-			return;
-		}
+		try {
+			if (shipmentData.status === "RECEIVED") {
+				setErrorMessage("delivered_shipments_cannot_be_updated");
+				setTryAgainEnabled(false);
+				setOpenShipmentFail(true);
+				return;
+			}
+	
+			const { shipmentId, updateStatusLocation } = values;
+	
+			if (updateStatusLocation === "") {
+				setErrorMessage("Require Update Status Location");
+			}
+			const formData = new FormData();
+	
+			if (photo) {
+				const uploadRes = await uploadPhoto();
+				formData.append("imageId", uploadRes.imageId);
+			}
+			formData.append("id", shipmentId);
+			formData.append("updateComment", comment);
+			formData.append("updatedBy", profile.id);
+			formData.append("orgId", profile.organisation);
+			formData.append("orgLocation", profile.location);
+			formData.append("updatedAt", updateStatusLocation);
+			formData.append("isAlertTrue", true);
+	
+			for (var pair of formData.entries()) {
+				console.log(pair[0] + " : ", pair[1]);
+			}
 
-		const { shipmentId, updateStatusLocation } = values;
-
-		if (updateStatusLocation === "") {
-			setErrorMessage("Require Update Status Location");
-		}
-		const formData = new FormData();
-		if (photo) {
-			formData.append("photo", photo, photo.name);
-    }
-		formData.append("id", shipmentId);
-		formData.append("updateComment", comment);
-		formData.append("updatedBy", profile.id);
-		formData.append("orgId", profile.organisation);
-		formData.append("orgLocation", profile.location);
-		formData.append("updatedAt", updateStatusLocation);
-		formData.append("isAlertTrue", true);
-
-		for (var pair of formData.entries()) {
-			console.log(pair[0] + " : ", pair[1]);
-		}
-
-		const result = await updateTrackingStatus(formData);
-		if (result.status === 200) {
-			setOpenUpdatedStatus(true);
-		} else {
-			setOpenShipmentFail(true);
-			setErrorMessage("Failed to Update");
+			const result = await updateTrackingStatus(formData);
+			if (result.status === 200) {
+				setOpenUpdatedStatus(true);
+			} else {
+				setOpenShipmentFail(true);
+				setErrorMessage("Failed to Update");
+			}
+		} catch(err) {
+			console.log(err);
 		}
 	};
 
@@ -543,9 +550,9 @@ const UpdateStatus = (props) => {
 										)}
 									</div>
 									<div className="col">
-										<div className="row">
+										{/* <div className="row">
 											<h6 className="col font-weight-bold mt-4">{t("uploaded_image")}</h6>
-											{/* <button
+											<button
 												type="button"
 												className="col col-3 btn btn-primary font-weight-bold mr-5 mb-3"
 												onClick={uploadPhoto}
@@ -558,8 +565,8 @@ const UpdateStatus = (props) => {
 													alt="Upload"
 												/>
 												<span>{t("upload")}</span>
-											</button> */}
-										</div>
+											</button>
+										</div> */}
 										<div className="d-flex flex-column upload bg-white col-9 p-5">
 											{photo ? (
 												<div className="row">

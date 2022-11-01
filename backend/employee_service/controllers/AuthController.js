@@ -171,6 +171,7 @@ exports.register = [
 			} else if (req.body.phoneNumber != "") {
 				let phoneNumber = req.body.phoneNumber;
 				phoneNumber = phoneNumber.toLowerCase().replace("", "");
+				phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
 				let user;
 				// if (!phoneNumber.match(phoneRegex))
 				//   return apiResponse.ErrorResponse(req, res, "not_valid_phone");
@@ -345,7 +346,10 @@ exports.register = [
 			if (req.body?.emailId) emailId = req.body.emailId.toLowerCase().replace(" ", "");
 
 			let phoneNumber = null;
-			if (req.body?.phoneNumber) phoneNumber = req.body?.phoneNumber;
+			if (req.body?.phoneNumber) {
+				phoneNumber = req.body?.phoneNumber;
+				phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+			}
 
 			const user = new EmployeeModel({
 				firstName: req.body.firstName,
@@ -982,10 +986,14 @@ exports.updateProfile = [
 			const organisationId = organisation.split("/")[1];
 			employee.firstName = firstName;
 			employee.lastName = lastName;
-			employee.phoneNumber = phoneNumber;
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
+			if(phoneNumber) {
+				employee.phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+			} else {
+				employee.phoneNumber = phoneNumber;
+			}
 			await employee.save();
 
 			const returnData = { isRefresh: false };
@@ -1250,8 +1258,11 @@ exports.addWarehouse = [
 					id: req.user.id,
 				},
 				{
+					$set: {
+						role: "powerUser"
+					},
 					$push: {
-						warehouseId: warehouseId,
+						pendingWarehouseId: warehouseId,
 					},
 				},
 			);
@@ -1342,6 +1353,14 @@ exports.updateWarehouseAddress = [
 			const warehouse = await WarehouseModel.findOneAndUpdate({ id: req.query.warehouseId }, data, {
 				new: true,
 			});
+			const employee = await EmployeeModel.findOneAndUpdate(
+				{ id: req.user.id },
+				{
+					$push: { pendingWarehouseId: warehouse.id },
+					$pull: { warehouseId: warehouse.id },
+				},
+				{ new: true },
+			);
 			return apiResponse.successResponseWithData(req, res, "update_warehouse_success", warehouse);
 		} catch (err) {
 			console.log(err);
