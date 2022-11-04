@@ -6,6 +6,7 @@ const CounterModel = require("../models/CounterModel");
 const DoseModel = require("../models/DoseModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const InventoryModel = require("../models/InventoryModel");
+const OrganisationModel = require("../models/OrganisationModel");
 const VaccineVialModel = require("../models/VaccineVialModel");
 const WarehouseModel = require("../models/WarehouseModel");
 
@@ -15,7 +16,13 @@ exports.fetchBatchById = [
 		try {
 			const userId = req.user.id;
 			const batchNumber = req.body.batchNumber;
-			const warehouseId = req.body.warehouseId;
+      const warehouseId = req.body.warehouseId;
+      
+      const user = await EmployeeModel.findOne({ id: userId });
+
+      if(!user.warehouseId.includes(warehouseId)) {
+        throw new Error("User does not have access to this warehouse!");
+      }
 
 			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
@@ -263,14 +270,25 @@ exports.getVaccinationDetailsByBatch = [
 
 const buildWarehouseQuery = async (user, city) => {
 	try {
-		const userDetails = await EmployeeModel.findOne({ id: user.id });
+    const userDetails = await EmployeeModel.findOne({ id: user.id });
+    
+    let warehouseIds = userDetails.warehouseId;
+    
+    // If user is powerUser show organisation wide details
+    if(userDetails.role === "powerUser") {
+      let warehouses = await WarehouseModel.findOne({
+				organisationId: userDetails.organisationId,
+				status: "ACTIVE",
+			});
+      warehouseIds = warehouses.map((warehouse) => warehouse.id);
+    }
 
 		let warehouseQuery = {};
 		let queryExprs = [];
 
 		// Modify the if once a new Role is added
-		if (userDetails) {
-      queryExprs.push({ id: { $in: userDetails.warehouseId } });
+		if (userDetails && userDetails.role !== "GoverningBody") {
+			queryExprs.push({ id: { $in: warehouseIds } });
 		}
 		if (city) {
 			queryExprs.push({ $eq: ["warehouseAddress.city", city] });
@@ -306,9 +324,9 @@ const buildDoseQuery = async (gender, minAge, maxAge) => {
 
 		if (queryExprs.length) {
 			doseQuery = {
-        $expr: {
-          $and: queryExprs,
-        }
+				$expr: {
+					$and: queryExprs,
+				},
 			};
 		}
 
@@ -323,10 +341,10 @@ exports.getAllVaccinationDetails = [
 	async (req, res) => {
 		try {
 			const { gender, city, manufacturerName, minAge, maxAge } = req.body;
-			const user = req.user;
-
-      const warehouseQuery = await buildWarehouseQuery(user, city);
-      const doseQuery = await buildDoseQuery(gender, minAge, maxAge);
+      const user = req.user;
+      
+			const warehouseQuery = await buildWarehouseQuery(user, city);
+			const doseQuery = await buildDoseQuery(gender, minAge, maxAge);
 			let manufacturerQuery = {};
 			if (manufacturerName) {
 				manufacturerQuery = { $expr: { $eq: [("product.manufacturer", manufacturerName)] } };
