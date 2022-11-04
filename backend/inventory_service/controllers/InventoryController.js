@@ -638,7 +638,7 @@ exports.addProductsToInventory = [
                 { "inventoryDetails.productId": product.productId },
               ],
             });
-            if (checkProduct != "") {
+            if (checkProduct && checkProduct?.length) {
               const exist_quantity = await InventoryModel.find(
                 { id: inventoryId },
                 {

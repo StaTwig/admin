@@ -258,13 +258,13 @@ async function inventoryUpdate(
   }
   if (shipmentStatus == "RECEIVED") {
     await InventoryModel.updateOne(
-      { id: recvId },
-      {
-        $addToSet: {
-          inventoryDetails: { productId: id },
-        },
-      }
-    );
+			{ $and: [{ id: recvId }, { "inventoryDetails.productId": { $ne: id } }] },
+			{
+				$addToSet: {
+					inventoryDetails: { productId: id },
+				},
+			},
+		);
     const updatedInventory = await InventoryModel.findOneAndUpdate(
       {
         id: recvId,
@@ -363,7 +363,7 @@ async function poUpdate(id, quantity, poId, shipmentStatus, actor) {
         },
       },
       payload: {
-        data: event.payloadData || null,
+        data: event?.payloadData || null,
       },
     };
     await logEvent(event_data);
@@ -1606,7 +1606,7 @@ exports.receiveShipment = [
               {
                 batchNumbers: products[count].batchNumber,
                 currentInventory: recvInventoryId,
-                quantity: products[count].productQuantityDelivered,
+                quantity: products[count].productQuantity,
               },
               {
                 $addToSet: {
