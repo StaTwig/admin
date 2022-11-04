@@ -295,13 +295,13 @@ const buildDoseQuery = async (gender, minAge, maxAge) => {
 
 		// Modify the if once a new Role is added
 		if (gender) {
-			queryExprs.push({ $eq: ["gender", gender] });
+			queryExprs.push({ $eq: ["$gender", gender] });
 		}
 		if (minAge) {
-			queryExprs.push({ $gte: ["age", minAge] });
+			queryExprs.push({ $gte: ["$age", minAge] });
 		}
 		if (maxAge) {
-			queryExprs.push({ $lte: ["age", maxAge] });
+			queryExprs.push({ $lte: ["$age", maxAge] });
 		}
 
 		if (queryExprs.length) {
@@ -336,7 +336,7 @@ exports.getAllVaccinationDetails = [
 				{ $match: warehouseQuery },
 				{
 					$lookup: {
-						from: "vaccinations",
+						from: "vaccinevials",
 						let: { warehouseId: "$id" },
 						pipeline: [
 							{ $match: { $expr: { $eq: ["$warehouseId", "$$warehouseId"] } } },
