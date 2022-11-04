@@ -61,3 +61,7 @@ html {
     padding: 2rem 0;
   }
 }
+
+.landing-page-white-background {
+  background-color: #fff !important;
+}

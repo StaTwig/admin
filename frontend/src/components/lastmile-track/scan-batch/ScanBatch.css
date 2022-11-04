@@ -1,0 +1,25 @@
+.ScanBatch--Image-space > img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.ScanBatch--container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
+
+.ScanBatch--inner-wrapper {
+  max-width: 18rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ScanBatch--Batch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-align: center;
+}

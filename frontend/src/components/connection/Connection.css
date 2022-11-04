@@ -226,3 +226,15 @@
     gap: 0.875rem;
   }
 }
+
+.error-text {
+  color: rgb(245, 32, 32) !important;
+}
+
+.error-text.visible {
+  opacity: 1 !important;
+}
+
+.error-text.hide {
+  opacity: 0 !important;
+}
