@@ -1,7 +1,9 @@
 const express = require("express");
-const lastMileQueryRouter = require("./lastmile");
 const app = express();
+const vaccinationRouter = require("./vaccination");
+const lastMileQueryRouter = require("./lastmile");
 
 app.use("/", lastMileQueryRouter);
+app.use("/vaccination/", vaccinationRouter);
 
 module.exports = app;
