@@ -97,6 +97,7 @@ exports.GetEOLInfoByIdentityId = [
     }
   },
 ];
+
 exports.GetEOLInfoByPlaceAdministered = [
   async (req, res) => {
     try {
@@ -115,6 +116,7 @@ exports.GetEOLInfoByPlaceAdministered = [
     }
   },
 ];
+
 exports.getProductsByWarehouse = [
   auth,
   async (req, res) => {
@@ -144,6 +146,7 @@ exports.getProductsByWarehouse = [
     }
   },
 ];
+
 exports.GetEOLListByDateWindow = [
   async (req, res) => {
     try {
