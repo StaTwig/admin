@@ -1,9 +1,9 @@
-FROM node:14.16.1 as react_build 
+FROM node:16.18 as react_build 
 
 WORKDIR /app
 
 COPY . /app/
- 
+
 RUN yarn install
 
 RUN yarn run build 
