@@ -19,7 +19,7 @@ const DoseSchema = new mongoose.Schema(
 		gender: {
 			required: true,
 			type: String,
-			enum: ["MALE", "FEMALE"],
+			enum: ["MALE", "FEMALE", "GENERAL"],
 		},
 	},
 	{ timestamps: true },

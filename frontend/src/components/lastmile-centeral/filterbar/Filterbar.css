@@ -1,0 +1,61 @@
+.Filterbar--header {
+  padding: 1.25rem;
+  background-color: #ffbfbf;
+  position: sticky;
+  top: 0;
+  right: 0;
+}
+.Filterbar--filterCard {
+  padding: 1.25rem 1.25rem 0rem 1.25rem;
+}
+.filterCard-header {
+  display: flex;
+  flex-direction: column;
+}
+.filterCard-inner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.filter-clear-btn {
+  font-size: 0.8rem;
+  border: 1px solid var(--blue);
+  background-color: var(--white);
+  color: var(--blue);
+  outline: none;
+  padding: 0.4rem 1rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.filter-clear-btn:hover {
+  border: 1px solid var(--blue);
+  background-color: var(--blue);
+  color: var(--white);
+}
+
+.mui-custom-radio-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.25rem !important;
+  flex-direction: row !important;
+}
+
+.filterCard-body {
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
+}
+.filterCard-body.border-btm {
+  border-bottom: 1px dashed #c4c4c4;
+}
+.side-space {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.slider-select {
+  padding-top: 2rem;
+}

@@ -52,6 +52,8 @@ import NetworkingContainer from "../containers/networking/NetworkingContainer";
 import TrackingContainer from "../containers/tracking/TrackingContainer";
 import LandingContainer from "../containers/landingpage/LandingContainer";
 import ConnectionContainer from "../containers/connection/ConnectionContainer";
+import LastmileTrackingContainer from "../containers/lastmile-track/LastmileTrackingContainer";
+import LastmileCenteralContainer from "../containers/lastmile-centeral/LastmileCenteralContainer";
 
 const routes = (
   <Switch>
@@ -114,6 +116,8 @@ const routes = (
     />
     <Route path='/Addlocation' component={requireAuth(AddLocation)} />
     <Route path='/lastMile' component={requireAuth(LastMile)} />
+    <Route path='/lastMile-Track' component={requireAuth(LastmileTrackingContainer)} />
+    <Route path='/lastMile-Centeral' component={requireAuth(LastmileCenteralContainer)} />
     <Route path='/enterid' component={requireAuth(enterId)} />
     <Route path='/editLocation/:id' component={requireAuth(EditLocation)} />
     <Route

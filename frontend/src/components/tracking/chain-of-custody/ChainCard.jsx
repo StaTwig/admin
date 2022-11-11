@@ -83,15 +83,13 @@ export default function ChainCard({ shipmentData }) {
 										<i className="fa-solid fa-calendar-days"></i>
 									</div>
 									<p className="mi-body-xs f-500 mi-reset grey">
-										{displayDate
-											? new Date(displayDate).toLocaleDateString()
-											: "N/A"}
+										{displayDate ? new Date(displayDate).toLocaleDateString() : "N/A"}
 									</p>
 								</div>
 							</div>
 							<div className="accordion-status">
 								<div className="status-button">
-									<button className="status-lable status-2" style={{width:"100%"}} disabled>
+									<button className="status-lable status-2" style={{ width: "100%" }} disabled>
 										{shipmentData?.status}
 									</button>
 								</div>
@@ -111,9 +109,11 @@ export default function ChainCard({ shipmentData }) {
 								{shipmentData?.products?.map((product, index) => (
 									<div key={index} className="product-list-card">
 										<p className="mi-body-sm f-500 mi-reset grey">{product?.productName}</p>
-										<p className="mi-body-sm f-500 mi-reset">{`${product?.productQuantityDelivered} (${
-											product?.unitofMeasure?.name ? product?.unitofMeasure?.name : "N/A"
-										})`}</p>
+										<p className="mi-body-sm f-500 mi-reset">{`${
+											product?.productQuantityDelivered
+												? product?.productQuantityDelivered
+												: product?.productQuantity
+										} (${product?.unitofMeasure?.name ? product?.unitofMeasure?.name : "N/A"})`}</p>
 									</div>
 								))}
 							</div>

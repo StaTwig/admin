@@ -1,0 +1,34 @@
+.Lastmile--pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.LastmileCenteral--Grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 26rem;
+  grid-template-areas: "TableWrapper Filterbar";
+  gap: 1.25rem;
+}
+.LastmileCenteral--table-wrapper {
+  grid-area: TableWrapper;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+.LastmileCenteral--filter-wrapper {
+  grid-area: Filterbar;
+  width: 26rem;
+  position: fixed;
+  top: 85px;
+  right: 0;
+  height: calc(100vh - 85px);
+  overflow-y: scroll;
+  background-color: #fff;
+}
+
+.LastmileCenteral--Stats-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 1.25rem;
+}
