@@ -24,8 +24,8 @@ export default (ComposedComponent) => {
     }
   }
 
-  const mapStateToProps = ({ user }) => ({
-    user: user,
+  const mapStateToProps = (state) => ({
+    user: state.user,
   });
 
   return connect(mapStateToProps)(RequireAuth);

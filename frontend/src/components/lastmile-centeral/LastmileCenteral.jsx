@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchAnalytics } from "../../actions/lastMileActions";
 import AnalyticTiles from "../../shared/stats-tile/AnalyticTiles";
 import Filterbar from "./filterbar/Filterbar";
 import "./LastmileCenteral.css";
 import CenteralStatsTable from "./stats-table/CenteralStatsTable";
 
 export default function LastmileCenteral() {
+	const [analytics, setAnalytics] = useState();
+
+	useEffect(async () => {
+		// Fetch analytics
+		const result = await fetchAnalytics();
+		if(result?.data?.success) {
+			setAnalytics(result.data.data);
+		}
+	}, []);
+
   return (
     <div className="LastmileCenteral--Grid-layout">
       <div className="LastmileCenteral--table-wrapper">
@@ -27,7 +38,7 @@ export default function LastmileCenteral() {
             layout="2"
             variant="1"
             title="Total Number of Units Utilized"
-            stat="320"
+            stat={analytics?.unitsUtilized ? analytics.unitsUtilized : 0}
             link="/units"
           />
 
@@ -35,7 +46,7 @@ export default function LastmileCenteral() {
             layout="2"
             variant="2"
             title="No. of Beneficiaries Vaccinated so far"
-            stat="1220"
+            stat={analytics?.totalVaccinations ? analytics.totalVaccinations : 0}
             link="/units"
           />
 
@@ -43,7 +54,7 @@ export default function LastmileCenteral() {
             layout="2"
             variant="3"
             title="No. of Beneficaries Vaccinated today"
-            stat="45"
+            stat={analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0}
             link="/units"
           />
         </div>

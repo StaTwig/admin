@@ -16,13 +16,13 @@ exports.fetchBatchById = [
 		try {
 			const userId = req.user.id;
 			const batchNumber = req.body.batchNumber;
-      const warehouseId = req.body.warehouseId;
-      
-      const user = await EmployeeModel.findOne({ id: userId });
+			const warehouseId = req.body.warehouseId;
 
-      if(!user.warehouseId.includes(warehouseId)) {
-        throw new Error("User does not have access to this warehouse!");
-      }
+			const user = await EmployeeModel.findOne({ id: userId });
+
+			if (!user.warehouseId.includes(warehouseId)) {
+				throw new Error("User does not have access to this warehouse!");
+			}
 
 			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
@@ -64,8 +64,14 @@ exports.fetchBatchById = [
 				{ $project: { atom: 1, product: 1 } },
 			]);
 
-			if (productDetails && productDetails.length && !productDetails[0]?.atom?.quantity) {
-				throw new Error("Batch exhausted!");
+			if (productDetails) {
+				if (productDetails.length) {
+					if (!productDetails[0]?.atom?.quantity) {
+						throw new Error("Batch exhausted!");
+					}
+				} else {
+					throw new Error("Batch not found!");
+				}
 			}
 
 			return apiResponse.successResponseWithData(res, "Product Details", productDetails);
@@ -180,6 +186,106 @@ exports.vaccinateIndividual = [
 	},
 ];
 
+exports.vaccinateMultiple = [
+	auth,
+	async (req, res) => {
+		try {
+			const { productId, batchNumber, doses } = req.body;
+
+			if (doses?.length && doses.length > 10) {
+				throw new Error("Cannot vaccinate more than 10 people with a single vial!");
+			}
+
+			const vaccineVialCounter = await CounterModel.findOneAndUpdate(
+				{
+					"counters.name": "vaccineVialId",
+				},
+				{
+					$inc: {
+						"counters.$.value": 1,
+					},
+				},
+				{
+					new: true,
+				},
+			);
+
+			// Create an id
+			const vaccineVialId =
+				vaccineVialCounter.counters[13].format + vaccineVialCounter.counters[13].value;
+
+			// New vaccine vial
+			const vaccineVial = new VaccineVialModel({
+				id: vaccineVialId,
+				warehouseId: warehouseId,
+				productId: productId,
+				batchNumber: batchNumber,
+				numberOfDoses: 0,
+			});
+			await vaccineVial.save();
+
+			// Reduce inventory in InventoryModel and AtomModel
+			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+			const atom = await AtomModel.findOneAndUpdate(
+				{
+					currentInventory: warehouse.warehouseInventory,
+					batchNumbers: batchNumber,
+					status: "HEALTHY",
+				},
+				{
+					$inc: { quantity: -1 },
+				},
+				{ new: true },
+			);
+
+			const inventory = await InventoryModel.updateOne(
+				{ id: warehouse.warehouseInventory, "inventoryDetails.productId": productId },
+				{ $inc: { "inventoryDetails.$.quantity": -1 } },
+			);
+
+			for (let i = 0; i < doses.length; ++i) {
+				const doseCounter = await CounterModel.findOneAndUpdate(
+					{
+						"counters.name": "doseId",
+					},
+					{
+						$inc: {
+							"counters.$.value": 1,
+						},
+					},
+					{
+						new: true,
+					},
+				);
+
+				// Create an id
+				const doseId = doseCounter.counters[14].format + doseCounter.counters[14].value;
+
+				const dose = new DoseModel({
+					id: doseId,
+					vaccineVialId: vaccineVialId,
+					age: doses[i].age,
+					gender: doses[i].gender,
+				});
+				await dose.save();
+
+				// Increment number of doses in VaccineVial model
+				await VaccineVialModel.findOneAndUpdate(
+					{ id: vaccineVialId },
+					{ $inc: { numberOfDoses: 1 } },
+				);
+			}
+
+			return apiResponse.successResponseWithData(res, "Dose added successfully!", {
+				vaccineVialId: vaccineVialId,
+			});
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err.message);
+		}
+	},
+];
+
 exports.getVaccinationDetailsByVial = [
 	auth,
 	async (req, res) => {
@@ -270,23 +376,22 @@ exports.getVaccinationDetailsByBatch = [
 
 const buildWarehouseQuery = async (user, city) => {
 	try {
-    const userDetails = await EmployeeModel.findOne({ id: user.id });
-    
-    let warehouseIds = userDetails.warehouseId;
-    
-    // If user is powerUser show organisation wide details
-    if(userDetails.role === "powerUser") {
-      let warehouses = await WarehouseModel.findOne({
+		const userDetails = await EmployeeModel.findOne({ id: user.id });
+
+		let warehouseIds = userDetails.warehouseId;
+
+		// If user is powerUser show organisation wide details
+		if (userDetails.role === "powerUser") {
+			let warehouses = await WarehouseModel.findOne({
 				organisationId: userDetails.organisationId,
 				status: "ACTIVE",
 			});
-      warehouseIds = warehouses.map((warehouse) => warehouse.id);
-    }
+			warehouseIds = warehouses.map((warehouse) => warehouse.id);
+		}
 
 		let warehouseQuery = {};
 		let queryExprs = [];
 
-		// Modify the if once a new Role is added
 		if (userDetails && userDetails.role !== "GoverningBody") {
 			queryExprs.push({ id: { $in: warehouseIds } });
 		}
@@ -341,8 +446,8 @@ exports.getAllVaccinationDetails = [
 	async (req, res) => {
 		try {
 			const { gender, city, manufacturerName, minAge, maxAge } = req.body;
-      const user = req.user;
-      
+			const user = req.user;
+
 			const warehouseQuery = await buildWarehouseQuery(user, city);
 			const doseQuery = await buildDoseQuery(gender, minAge, maxAge);
 			let manufacturerQuery = {};
@@ -396,6 +501,59 @@ exports.getAllVaccinationDetails = [
 				"Fetched doses successfully!",
 				vaccinationDetails,
 			);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err.message);
+		}
+	},
+];
+
+exports.getAnalytics = [
+	auth,
+	async (req, res) => {
+		try {
+			const user = req.user;
+			const userDetails = await EmployeeModel.findOne({ id: user.id });
+			let warehouseIds = userDetails.warehouseId;
+			let query = {};
+			if (userDetails.role === "powerUser") {
+				let warehouses = await WarehouseModel.find({
+					organisationId: userDetails.organisationId,
+					status: "ACTIVE",
+				});
+				warehouseIds = warehouses.map((warehouse) => warehouse.id);
+			}
+			if (userDetails.role !== "GoverningBody") {
+				query = { warehouseId: { $in: warehouseIds } };
+			}
+
+			const analytics = await VaccineVialModel.find(query);
+
+			let totalVaccinations = 0;
+			let todaysVaccinations = 0;
+			let now = new Date();
+			let today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+
+			for (let i = 0; i < analytics.length; ++i) {
+				let createdAt = new Date(analytics[i].createdAt);
+				let filterDate = new Date(
+					Date.UTC(createdAt.getUTCFullYear(), createdAt.getUTCMonth(), createdAt.getUTCDate()),
+				);
+
+				totalVaccinations += analytics[i].numberOfDoses;
+
+				if (today === filterDate) {
+					todaysVaccinations += analytics[i].numberOfDoses;
+				}
+			}
+
+			let result = {
+				unitsUtilized: analytics.length,
+				totalVaccinations: totalVaccinations,
+				todaysVaccinations: todaysVaccinations,
+			};
+
+			return apiResponse.successResponseWithData(res, "Analytics fetched successfully!", result);
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(res, err.message);
