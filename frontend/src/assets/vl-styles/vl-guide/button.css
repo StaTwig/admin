@@ -51,6 +51,11 @@
   border: 2px solid var(--brand-secondary);
   color: var(--brand-secondary);
 }
+.vl-btn-secondary:hover {
+  background-color: var(--brand-secondary);
+  border: 2px solid var(--brand-secondary);
+  color: var(--white);
+}
 .vl-btn-grey {
   background-color: var(--white);
   border: 2px solid var(--grey-light);

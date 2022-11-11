@@ -94,6 +94,12 @@ li {
   list-style: none;
 }
 
+a {
+  text-decoration: none !important;
+}
+a:hover {
+  text-decoration: none !important;
+}
 .vl-link {
   text-decoration: none;
   opacity: 1;
