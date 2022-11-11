@@ -264,5 +264,5 @@ services:
 
 networks:
   default:
-    external:
-      name: proxy
+    name: proxy
+    external: true
