@@ -382,7 +382,7 @@ const buildWarehouseQuery = async (user, city) => {
 
 		// If user is powerUser show organisation wide details
 		if (userDetails.role === "powerUser") {
-			let warehouses = await WarehouseModel.findOne({
+			let warehouses = await WarehouseModel.find({
 				organisationId: userDetails.organisationId,
 				status: "ACTIVE",
 			});
@@ -455,7 +455,7 @@ exports.getAllVaccinationDetails = [
 				manufacturerQuery = { $expr: { $eq: [("product.manufacturer", manufacturerName)] } };
 			}
 
-			const vaccinationDetails = await WarehouseModel.aggregate([
+			const warehouses = await WarehouseModel.aggregate([
 				{ $match: warehouseQuery },
 				{
 					$lookup: {
@@ -490,10 +490,28 @@ exports.getAllVaccinationDetails = [
 					},
 				},
 			]);
-			if (!vaccinationDetails) {
+			if (!warehouses) {
 				return apiResponse.validationErrorWithData(res, "VaccineVialId invalid!", {
 					vaccineVialId: vaccineVialId,
 				});
+			}
+
+			const vaccinationDetails = [];
+			for (let i = 0; i < warehouses.length; ++i) {
+				const vaccineVials = warehouses[i].vaccinations;
+				for (let j = 0; j < vaccineVials.length; ++j) {
+					const doses = vaccineVials[j].doses;
+					for (let k = 0; k < doses.length; ++k) {
+						const data = {
+							batchNumber: vaccineVials[j].batchNumber,
+							organisationName: vaccineVials[j]?.product?.manufacturer,
+							location: warehouses[i].warehouseAddress.city,
+							gender: doses[k].gender,
+							age: doses[k].age,
+						};
+						vaccinationDetails.push(data);
+					}
+				}
 			}
 
 			return apiResponse.successResponseWithData(

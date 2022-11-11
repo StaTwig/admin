@@ -5,16 +5,16 @@ import CenteralStatsRow from "./CenteralStatsRow";
 import { getAllVaccinationDetails } from "../../../actions/lastMileActions";
 import { useState } from "react";
 
-export default function CenteralStatsTable() {
+export default function CenteralStatsTable({filters}) {
 	const rows = [{}, {}, {}, {}, {}, {}, {}];
 	const [vaccinationList, setVaccinationList] = useState([]);
 
 	useEffect(async () => {
-		const result = await getAllVaccinationDetails({});
+		const result = await getAllVaccinationDetails(filters);
 		if (result?.data?.success) {
 			setVaccinationList(result.data.data);
 		}
-	}, []);
+	}, [filters]);
 
 	return (
 		<>
@@ -50,8 +50,8 @@ export default function CenteralStatsTable() {
 						</TableRow>
 					</TableHead>
 					<TableBody className="vl-mui-custom-tablebody">
-						{rows.map((row) => (
-							<CenteralStatsRow />
+						{vaccinationList.map((row) => (
+							<CenteralStatsRow data={row} />
 						))}
 					</TableBody>
 				</Table>

@@ -6,7 +6,8 @@ import "./LastmileCenteral.css";
 import CenteralStatsTable from "./stats-table/CenteralStatsTable";
 
 export default function LastmileCenteral() {
-	const [analytics, setAnalytics] = useState();
+  const [analytics, setAnalytics] = useState();
+  const [filters, setFilters] = useState({});
 
 	useEffect(async () => {
 		// Fetch analytics
@@ -58,10 +59,10 @@ export default function LastmileCenteral() {
             link="/units"
           />
         </div>
-        <CenteralStatsTable />
+        <CenteralStatsTable filters={filters} />
       </div>
       <div className="LastmileCenteral--filter-wrapper">
-        <Filterbar />
+        <Filterbar setFilters={setFilters} />
       </div>
     </div>
   );
