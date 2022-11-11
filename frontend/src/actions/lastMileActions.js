@@ -47,3 +47,14 @@ export const getVaccinationDetailsByVial = async (vaccineVialId) => {
 		throw err;
 	}
 };
+
+export const getCitiesAndOrgsForFilters = async () => {
+	try {
+		const result = await axios.get(
+			`${config().getCitiesAndOrgsForFilters}`,
+		);
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};

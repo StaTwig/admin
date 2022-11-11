@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { fetchAnalytics } from "../../actions/lastMileActions";
+import { fetchAnalytics, getAllVaccinationDetails } from "../../actions/lastMileActions";
 import AnalyticTiles from "../../shared/stats-tile/AnalyticTiles";
 import Filterbar from "./filterbar/Filterbar";
 import "./LastmileCenteral.css";
 import CenteralStatsTable from "./stats-table/CenteralStatsTable";
 
-export default function LastmileCenteral() {
+export default function LastmileCenteral(props) {
   const [analytics, setAnalytics] = useState();
   const [filters, setFilters] = useState({});
 
+  const [vaccinationList, setVaccinationList] = useState([]);
+
 	useEffect(async () => {
-		// Fetch analytics
-		const result = await fetchAnalytics();
-		if(result?.data?.success) {
-			setAnalytics(result.data.data);
+		const result = await getAllVaccinationDetails(filters);
+		if (result?.data?.success) {
+      setVaccinationList(result.data.data.vaccinationDetails);
+      setAnalytics(result.data.data.analytics);
 		}
-	}, []);
+	}, [filters]);
 
   return (
     <div className="LastmileCenteral--Grid-layout">
@@ -27,12 +29,12 @@ export default function LastmileCenteral() {
           >
             LastMile
           </h1>
-          <button className="vl-btn vl-btn-sm vl-btn-primary">
+          {/* <button className="vl-btn vl-btn-sm vl-btn-primary">
             <span>
               <i class="fa-solid fa-file-export"></i>
             </span>{" "}
             Export
-          </button>
+          </button> */}
         </div>
         <div className="LastmileCenteral--Stats-filters">
           <AnalyticTiles
@@ -59,10 +61,10 @@ export default function LastmileCenteral() {
             link="/units"
           />
         </div>
-        <CenteralStatsTable filters={filters} />
+        <CenteralStatsTable vaccinationList={vaccinationList} />
       </div>
       <div className="LastmileCenteral--filter-wrapper">
-        <Filterbar setFilters={setFilters} />
+        <Filterbar setFilters={setFilters} {...props} />
       </div>
     </div>
   );

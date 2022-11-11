@@ -16,7 +16,7 @@ const LastmileCenteralContainer = (props) => {
           className="Network-content"
           style={{ pointerEvents: props.demoLogin ? "none" : "auto" }}
         >
-          <LastmileCenteral />
+          <LastmileCenteral {...props} />
         </div>
       </div>
     </div>
