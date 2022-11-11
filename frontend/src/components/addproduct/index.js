@@ -290,7 +290,7 @@ const AddProduct = (props) => {
                     {manufacturerErr && (
                       <span
                         className='error-msg text-danger mt-3 '
-                        style={{ top: "-10px", left: "0px" }}
+                        style={{ left: "0px" }}
                       >
                         {t("enter_manufacturer")}
                       </span>
@@ -340,7 +340,7 @@ const AddProduct = (props) => {
                     {categoryErr && (
                       <span
                         className='error-msg text-danger mt-3 '
-                        style={{ top: "-10px", left: "0px" }}
+                        style={{ left: "0px" }}
                       >
                         {t("product_category")}
                       </span>
