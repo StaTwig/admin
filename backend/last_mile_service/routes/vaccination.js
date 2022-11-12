@@ -11,5 +11,6 @@ router.get("/getAnalytics", VaccinationController.getAnalytics);
 router.get("/getVialsUtilised", VaccinationController.getVialsUtilised);
 router.get("/getVaccinationsList", VaccinationController.getVaccinationsList);
 router.get("/getCitiesAndOrgsForFilters", VaccinationController.getCitiesAndOrgsForFilters);
+router.post("/exportVaccinationList", VaccinationController.exportVaccinationList);
 
 module.exports = router;

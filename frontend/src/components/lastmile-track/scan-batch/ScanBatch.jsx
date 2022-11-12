@@ -85,7 +85,12 @@ export default function ScanBatch(props) {
 					</div>
 				</div>
 			</form>
-			<Snackbar open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				open={openAlert}
+				autoHideDuration={6000}
+				onClose={handleAlertClose}
+			>
 				<Alert onClose={handleAlertClose} severity="error" sx={{ width: "100%" }}>
 					{errorMessage}
 				</Alert>

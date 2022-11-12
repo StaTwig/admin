@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
 	exportVaccinationList,
 	fetchAnalytics,
@@ -9,11 +9,36 @@ import Filterbar from "./filterbar/Filterbar";
 import "./LastmileCenteral.css";
 import CenteralStatsTable from "./stats-table/CenteralStatsTable";
 
+let useClickOutside = (handler) => {
+	let domNode = useRef();
+
+	useEffect(() => {
+		let maybeHandler = (event) => {
+			if (!domNode.current.contains(event.target)) {
+				handler();
+			}
+		};
+
+		document.addEventListener("mousedown", maybeHandler);
+
+		return () => {
+			document.removeEventListener("mousedown", maybeHandler);
+		};
+	});
+
+	return domNode;
+};
+
 export default function LastmileCenteral(props) {
 	const [analytics, setAnalytics] = useState();
 	const [filters, setFilters] = useState({});
 
 	const [vaccinationList, setVaccinationList] = useState([]);
+	const [ButtonOpen, setButtonOpen] = useState(false);
+
+	let domNode = useClickOutside(() => {
+		setButtonOpen(false);
+	});
 
 	useEffect(async () => {
 		const result = await getAllVaccinationDetails(filters);
@@ -49,7 +74,7 @@ export default function LastmileCenteral(props) {
 						LastMile
 					</h1>
 					<button
-						onClick={(event) => exportVaccinationReport("excel")}
+						onClick={() => setButtonOpen(!ButtonOpen)}
 						className="vl-btn vl-btn-sm vl-btn-primary"
 					>
 						<span>
@@ -57,6 +82,22 @@ export default function LastmileCenteral(props) {
 						</span>
 						Export
 					</button>
+					<div className={`export-button-dropdown ${ButtonOpen && "active"}`}>
+						<div
+							className="export-btn-dropdown-card"
+							onClick={() => exportVaccinationReport("excel")}
+						>
+							<i class="fa-solid fa-file-csv vl-excel"></i>
+							<p className="vl-note f-500">Export as Excel</p>
+						</div>
+						<div
+							className="export-btn-dropdown-card"
+							onClick={() => exportVaccinationReport("pdf")}
+						>
+							<i class="fa-solid fa-file-pdf vl-pdf"></i>
+							<p className="vl-note f-500">Export as PDF</p>
+						</div>
+					</div>
 				</div>
 				<div className="LastmileCenteral--Stats-filters">
 					<AnalyticTiles

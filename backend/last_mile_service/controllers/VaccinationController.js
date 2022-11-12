@@ -10,6 +10,19 @@ const OrganisationModel = require("../models/OrganisationModel");
 const VaccineVialModel = require("../models/VaccineVialModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const excel = require("node-excel-export");
+const PdfPrinter = require("pdfmake");
+const { resolve } = require("path");
+const fs = require("fs");
+
+const fontDescriptors = {
+  Roboto: {
+    normal: resolve("./controllers/Roboto-Regular.ttf"),
+    bold: resolve("./controllers/Roboto-Medium.ttf"),
+    italics: resolve("./controllers/Roboto-Italic.ttf"),
+    bolditalics: resolve("./controllers/Roboto-MediumItalic.ttf"),
+  },
+};
+const printer = new PdfPrinter(fontDescriptors);
 
 exports.fetchBatchById = [
 	auth,
@@ -769,81 +782,137 @@ exports.getCitiesAndOrgsForFilters = [
 ];
 
 function buildExcelReport(req, res, dataForExcel) {
-  const styles = {
-    headerDark: {
-      fill: {
-        fgColor: {
-          rgb: "FF000000",
-        },
-      },
-      font: {
-        color: {
-          rgb: "FFFFFFFF",
-        },
-        sz: 14,
-        bold: true,
-        underline: true,
-      },
-    },
-    cellGreen: {
-      fill: {
-        fgColor: {
-          rgb: "FF00FF00",
-        },
-      },
-    },
-  };
+	const styles = {
+		headerDark: {
+			fill: {
+				fgColor: {
+					rgb: "FF000000",
+				},
+			},
+			font: {
+				color: {
+					rgb: "FFFFFFFF",
+				},
+				sz: 14,
+				bold: true,
+				underline: true,
+			},
+		},
+		cellGreen: {
+			fill: {
+				fgColor: {
+					rgb: "FF00FF00",
+				},
+			},
+		},
+	};
 
-  const specification = {
-    batchNumber: {
-      displayName: "Batch Number",
-      headerStyle: styles.headerDark,
-      cellStyle: styles.cellGreen,
-      width: 220,
-    },
-    organisationName: {
-      displayName: "Organisation Name",
-      headerStyle: styles.headerDark,
-      cellStyle: styles.cellGreen,
-      width: 220,
-    },
-    location: {
-      displayName: "Location",
-      headerStyle: styles.headerDark,
-      cellStyle: styles.cellGreen,
-      width: 220,
-    },
-    gender: {
-      displayName: "Gender",
-      headerStyle: styles.headerDark,
-      cellStyle: styles.cellGreen,
-      width: 120,
-    },
-    age: {
-      displayName: "Age",
-      headerStyle: styles.headerDark,
-      cellStyle: styles.cellGreen,
-      width: 120,
-    },
-  };
+	const specification = {
+		batchNumber: {
+			displayName: "Batch Number",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 120,
+		},
+		organisationName: {
+			displayName: "Organisation Name",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 220,
+		},
+		location: {
+			displayName: "Location",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 220,
+		},
+		gender: {
+			displayName: "Gender",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 120,
+		},
+		age: {
+			displayName: "Age",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 60,
+		},
+	};
 
-  const report = excel.buildExport([
-    {
-      name: "Report Shipment",
-      specification: specification,
-      data: dataForExcel,
-    },
-  ]);
+	const report = excel.buildExport([
+		{
+			name: "Report Shipment",
+			specification: specification,
+			data: dataForExcel,
+		},
+	]);
 
-  res.attachment("report.xlsx");
-  return res.send(report);
+	res.attachment("report.xlsx");
+	return res.send(report);
+}
+
+function buildPdfReport(req, res, data, orderType) {
+	var rows = [];
+	rows.push([
+		{ text: "Batch Number", bold: true },
+		{ text: "Organisation Name", bold: true },
+		{ text: "Location", bold: true },
+		{ text: "Gender", bold: true },
+		{ text: "Age", bold: true },
+	]);
+	for (var i = 0; i < data.length; i++) {
+		rows.push([
+			data[i].batchNumber || "N/A",
+			data[i].organisationName || "N/A",
+			data[i].location || "N/A",
+			data[i].gender || "N/A",
+			data[i].age || "N/A",
+		]);
+	}
+
+	var docDefinition = {
+		pageSize: "A4",
+		pageOrientation: "portrait",
+		pageMargins: [30, 30, 2, 2],
+		content: [
+			{ text: "Vaccinations List", fontSize: 34, style: "header" },
+			{
+				table: {
+					margin: [1, 1, 1, 1],
+					headerRows: 1,
+					headerStyle: "header",
+					widths: [100, 200, 100, 60, 30],
+					body: rows,
+				},
+			},
+		],
+		styles: {
+			header: {
+				bold: true,
+				margin: [10, 10, 10, 10],
+			},
+		},
+	};
+
+	var options = { fontLayoutCache: true };
+	var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+	var temp123;
+	var pdfFile = pdfDoc.pipe((temp123 = fs.createWriteStream("./report.pdf")));
+	var path = pdfFile.path;
+	pdfDoc.end();
+	temp123.on("finish", async function () {
+		// do send PDF file
+		return res.sendFile(resolve(path));
+	});
+	return;
 }
 
 exports.exportVaccinationList = [
 	auth,
 	async (req, res) => {
 		try {
-			const { gender, city, organisation, minAge, maxAge } = req.body;
+			const { gender, city, organisation, minAge, maxAge, reportType } = req.body;
 			const user = req.user;
 
 			const filters = {
@@ -857,14 +926,14 @@ exports.exportVaccinationList = [
 
 			const result = await generateVaccinationsList(filters);
 
-			res = buildExcelReport(req, res, result.vaccinationDetails);
+			if (reportType === "excel") res = buildExcelReport(req, res, result.vaccinationDetails);
+			else res = buildPdfReport(req, res, result.vaccinationDetails);
 
-			return apiResponse.successResponseWithMultipleData(
-				res,
-				"Outbound Shipment Records"
-			);
-
-		} catch(err) {
+			// return apiResponse.successResponseWithMultipleData(
+			// 	res,
+			// 	"Outbound Shipment Records"
+			// );
+		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(res, err.message);
 		}
