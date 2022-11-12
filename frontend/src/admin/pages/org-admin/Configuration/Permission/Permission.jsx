@@ -38,7 +38,7 @@ export default function Permission({permissions}) {
     <section className="permission-container">
       <p className="vl-body f-500 vl-black">Permission Details</p>
       {List.map((list) => (
-        <Roles list={list} permission={permissions ? permissions[`${list.title.toLowerCase()}`] : null}/>
+        permissions && permissions[`${list.title.toLowerCase()}`] && <Roles list={list} permissions={permissions ? permissions[`${list.title.toLowerCase()}`] : null}/>
       ))}
     </section>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
@@ -10,8 +10,14 @@ import Switch from "@mui/material/Switch";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-export default function Roles({ list, permission }) {
-  const [expanded, setExpanded] = React.useState("");
+export default function Roles({ list, permissions }) {
+  const [expanded, setExpanded] = useState("");
+  const [permission, setPermission] = useState({});
+  useEffect(() => {
+    setPermission(permissions);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -32,7 +38,7 @@ export default function Roles({ list, permission }) {
   }));
 
   const AccordionSummary = styled((props) => (
-    <MuiAccordionSummary {...props} />
+    <MuiAccordionSummary  key={props.key} {...props} />
   ))(({ theme }) => ({
     flexDirection: "row-reverse",
     "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
@@ -82,16 +88,26 @@ export default function Roles({ list, permission }) {
             </div>
           </div>
         </AccordionSummary>
+        {
+        permission && Object.keys(permission).map((key, index) => 
+        <div key={key}>
         <AccordionDetails>
-         {
-        Object.keys(permission).forEach(function(key, index) {
          <div className="permission-role-body">
             <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">Search by Order ID</p>
-              <Switch {...label} />
+              <p className="vl-body vl-grey-md f-500">{key}</p>
+              <Switch {...label} 
+              onChange={() => {
+                let obj = permission;
+                obj[`${key}`] = !obj[`${key}`];
+                setPermission(obj);
+              }}
+              checked={permission[`${key}`]} 
+              />
             </div>
-          </div>})}
+          </div>
         </AccordionDetails>
+        </div>
+        )}
       </Accordion>
     </div>
   );
