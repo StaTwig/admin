@@ -19,12 +19,29 @@ exports.getApprovals = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          await EmployeeModel.find({
-            $and: [
-              { accountStatus: "NOTAPPROVED" },
-              { organisationId: organisationId },
-            ],
-          })
+          await EmployeeModel.aggregate([
+            {
+              $match: {
+                $and: [
+                  { accountStatus: "NOTAPPROVED" },
+                  { organisationId: organisationId },
+                ],
+              },
+            },
+              {
+                $lookup: {
+                  from: "organisations",
+                  localField: "organisationId",
+                  foreignField: "id",
+                  as: "orgDetails",
+                },
+              },
+              {
+              $unwind: {
+                  path: "$orgDetails"
+                  } 
+              }
+          ])
             .then((employees) => {
               return apiResponse.successResponseWithData(
                 res,
