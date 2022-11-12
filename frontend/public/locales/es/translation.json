@@ -328,7 +328,7 @@
     "Back":"Espalda",
     "NEXT":"SIGUIENTE",
     "enter_email":"Ingrese Correo Electrónico",
-    "email_has_already_been_taken":"El correo ya a sido recibido",
+    "Email_ID_Already_registered": "ID de correo electrónico Ya registrado",
     "add_new_user_role":"Añadir nuevo rol de usuario",
     "search_by_order_id":"Buscar por ID de pedido",
     "search_by_product_category":"búsqueda por categoría de producto",
@@ -403,5 +403,9 @@
     "Enter the email address of the users you'd like to add or invite and choose the role they should have.":"Ingrese la dirección de correo electrónico de los usuarios que desea agregar o invitar y elija el rol que deben tener.",
     "ADD NEW USER":"AÑADIR NUEVO USUARIO",
     "Description":"Descripción",
-    "Clear":"Claro"
-}   
+    "Clear":"Claro",
+    "enter_first_name": "Ingrese el nombre",
+    "enter_last_name": "Introduzca el apellido",
+    "phoneNumber_has_already_been_taken": "El número de teléfono ya ha sido tomado",
+    "add_new_role": "Agregar nuevo rol"
+}

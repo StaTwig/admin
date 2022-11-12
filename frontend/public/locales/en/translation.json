@@ -332,5 +332,11 @@
     "integration":"Integration",
     "analytics":"Analytics",
     "rules":"Rules",
-    "send_otp":"Send OTP"
+    "send_otp":"Send OTP",
+    "Email_ID_Already_registered": "Email ID Already registered",
+    "email_has_already_been_taken": "Email has already been taken",
+    "enter_first_name": "Enter First Name",
+    "enter_last_name": "Enter Last Name",
+    "phoneNumber_has_already_been_taken": "Phone Number has already been taken",
+    "add_new_role": "Add new role"
 }

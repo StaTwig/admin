@@ -10,6 +10,7 @@ const {
   deactivateUser,
 } = require("../controllers/ApprovalController");
 const { getOrgs, updateOrg } = require("../controllers/OrganisationController");
+const { Image } = require("../controllers/AuthController");
 const app = express();
 
 app.use("/auth", authRouter);
@@ -21,6 +22,7 @@ app.post("/addUser", addUser);
 app.post("/updateOrg", updateOrg);
 app.get("/activateUser", activateUser); // /activateUser?id=123
 app.get("/deactivateUser", deactivateUser); // /deactivateUser?id=123
+app.get("/getImage/:key", Image);
 
 app.get("/images/:key", (req, res) => {
   const FileStream = getFileStream(req.params.key);

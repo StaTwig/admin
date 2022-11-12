@@ -70,7 +70,7 @@ exports.acceptApproval = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationName } = req.user;
-          const { id, role, warehouseId } = req.query;
+          const { id, role, warehouseId, phoneNumber } = req.query;
           EmployeeModel.findOne({
             $and: [{ accountStatus: "NOTAPPROVED" }, { id: id }],
           })
@@ -102,6 +102,7 @@ exports.acceptApproval = [
                             isConfirmed: true,
                             walletAddress,
                             role,
+                            phoneNumber,
                           },
                           $push: { warehouseId },
                         },
@@ -238,56 +239,67 @@ exports.addUser = [
     try {
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { organisationId, organisationName } = req.user;
-          const email = req.body.emailId == "null" ? null : req.body.emailId;
-          const warehouse = req.body.warehouse;
-          const firstName = email?.split("@")[0];
-          const phoneNumber = req.body.phoneNumber;
-          const incrementCounterEmployee = await CounterModel.update(
-            {
-              "counters.name": "employeeId",
-            },
-            {
-              $inc: {
-                "counters.$.value": 1,
-              },
-            }
-          );
-
-          const employeeCounter = await CounterModel.findOne(
-            { "counters.name": "employeeId" },
-            { "counters.$": 1 }
-          );
-          var employeeId =
-            employeeCounter.counters[0].format +
-            employeeCounter.counters[0].value;
-
-          const user = new EmployeeModel({
-            firstName: firstName,
-            lastName: firstName,
-            emailId: email,
-            phoneNumber: phoneNumber,
-            organisationId: organisationId,
-            role: req.body.role,
-            accountStatus: "ACTIVE",
-            warehouseId: warehouse,
-            isConfirmed: true,
-            id: employeeId,
-          });
-          await user.save();
-          let emailBody = AddUserEmail({
-            name: firstName,
-            organisation: organisationName,
-          });
           try {
-            mailer.send(
-              constants.addUser.from,
-              req.body.emailId,
-              constants.addUser.subject,
-              emailBody
+            const { organisationId, organisationName } = req.user;
+            const email =
+              !req.body.emailId || req.body.emailId == "null"
+                ? null
+                : req.body.emailId;
+            const warehouse = req.body.warehouse;
+            const firstName = req.body.firstName;
+            const lastName = req.body.lastName;
+            // const firstName = email?.split("@")[0];
+            const phoneNumber = req.body.phoneNumber
+              ? "+" + req.body.phoneNumber
+              : null;
+            const incrementCounterEmployee = await CounterModel.updateOne(
+              {
+                "counters.name": "employeeId",
+              },
+              {
+                $inc: {
+                  "counters.$.value": 1,
+                },
+              }
             );
+
+            const employeeCounter = await CounterModel.findOne(
+              { "counters.name": "employeeId" },
+              { "counters.$": 1 }
+            );
+            var employeeId =
+              employeeCounter.counters[0].format +
+              employeeCounter.counters[0].value;
+
+            const user = new EmployeeModel({
+              firstName: firstName,
+              lastName: lastName,
+              emailId: email,
+              phoneNumber: phoneNumber,
+              organisationId: organisationId,
+              role: req.body.role,
+              accountStatus: "ACTIVE",
+              warehouseId: warehouse,
+              isConfirmed: true,
+              id: employeeId,
+            });
+            await user.save();
+            let emailBody = AddUserEmail({
+              name: firstName,
+              organisation: organisationName,
+            });
+            mailer
+              .send(
+                constants.addUser.from,
+                req.body.emailId,
+                constants.addUser.subject,
+                emailBody
+              )
+              .catch((err) => {
+                console.log("Error in mailing user!");
+              });
           } catch (err) {
-            console.log(err);
+            return apiResponse.ErrorResponse(res, err);
           }
           return apiResponse.successResponse(res, "User Added");
         } else {

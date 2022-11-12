@@ -27,6 +27,8 @@ const DashBoardContainer = (props) => {
   const [locationApprovals, setLocationApprovals] = useState([]);
   const dispatch = useDispatch();
 
+  const [autoPopUp, setAutoPopUp] = useState(props.location.state?.state?.newUser || false);
+
   const addresses = useSelector((state) => {
     return state.organisation.addresses;
   });
@@ -53,26 +55,26 @@ const DashBoardContainer = (props) => {
 
   useEffect(() => {
     dispatch(getRequestsPending());
-    dispatch(getPermissions());
+    props.user.organisationType == "Third Party Logistics" ? dispatch(getPermissions(props.user.organisationId)) : dispatch(getPermissions());
     dispatch(getRecentReqSent());
     dispatch(getAllOrganisations());
     dispatch(getOrgActiveUsers());
     dispatch(getWareHouses());
-    async function loadData() {
 
-      try{
+    async function loadData() {
+      try {
         const result = await getLocationApproval();
         result.data.sort(function (a, b) {
           return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
         });
-  
-        console.log('GetLocationApproval',result.data);
+        console.log('GetLocationApproval', result.data);
         setLocationApprovals(result.data);
       }
-      catch(err){
+      catch (err) {
         console.log('Error from Location Appoval', error);
       }
     }
+
     loadData();
   }, []);
 
@@ -86,8 +88,14 @@ const DashBoardContainer = (props) => {
 
   const acceptApproval = async (data) => {
     let result;
-    if (data?.emailId) result = await addOrgUser(data);
-    else result = await verifyOrgUser(data);
+    if (!data?.id) {
+      console.log("New user fired!");
+      result = await addOrgUser(data);
+    }
+    else {
+      console.log("Approve user fired!");
+      result = await verifyOrgUser(data);
+    }
     if (result.status == 200) {
       if (data.rindex) reqPending.splice(data.rindex, 1);
       setMessage(result.data.message);
@@ -169,9 +177,10 @@ const DashBoardContainer = (props) => {
       }, 3000);
     }
   };
-  
+
   const redirectToConfigurationPage = () => {
-    props.history.push(`/configuration`);
+    // props.history.push(`/configuration`);
+    props.history.push(`/configuration`, {state: {state: true}})
   };
 
   return (
@@ -196,6 +205,7 @@ const DashBoardContainer = (props) => {
             locationApprovals={locationApprovals}
             modifyLocations={modifyLocations}
             redirectToConfigurationPage={redirectToConfigurationPage}
+            popupUser={[autoPopUp, setAutoPopUp]}
           />
         </div>
       </div>

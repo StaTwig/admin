@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import { t } from "i18next";
+import defaultAvatar from "../../assets/icons/user.png";
 
 const NewRequests = (props) => {
   const {
@@ -14,11 +15,12 @@ const NewRequests = (props) => {
     setTitle,
     setBtnTxt,
   } = props;
+
   return (
     <div className="card flex-row justify-content-between rounded border border-white shadow bg-white mt-3 ml-2 p-3">
       <div className="d-flex flex-row w-50">
         <div className="userPic rounded">
-          <img src={requestRow?.photoId} alt="User" className="rounded" />
+          <img src={requestRow?.photoId !== "default.jpg" ? requestRow?.photoId : defaultAvatar} alt="User" className="rounded" />
         </div>
         <div className="pl-1 w-100">
           <span className="pb-2">
@@ -69,6 +71,7 @@ const NewRequests = (props) => {
               setData({
                 id: requestRow?.id,
                 ref: requestRow?.emailId,
+                emailId: requestRow?.emailId, // Same as above but for a different purpose
                 phoneNumber: requestRow?.phoneNumber,
                 rindex: rindex,
               });

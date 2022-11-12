@@ -26,6 +26,7 @@ var WarehouseSchema = new mongoose.Schema(
       required: true,
       properties: {
         firstLine: { type: String },
+        region: { type: String },
         secondLine: { type: String },
         city: { type: String },
         state: { type: String },
@@ -64,6 +65,14 @@ var WarehouseSchema = new mongoose.Schema(
       required: true,
       default: "No Inventory",
     },
+    bottleCapacity: {
+      type: Number,
+      default: 0
+    },
+    sqft: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );

@@ -19,11 +19,11 @@ export const SEARCH_CONSTANTS = [
         value: 'search_by_product_category',
         hasPermission: false
     },
-    {
-        key: 'searchByProductId',
-        value: 'search_by_product_id',
-        hasPermission: false
-    },
+    // {
+    //     key: 'searchByProductId',
+    //     value: 'search_by_product_id',
+    //     hasPermission: false
+    // },
     {
         key: 'searchByProductName',
         value: 'search_by_product_name',
@@ -72,21 +72,21 @@ export const INVENTORY_CONSTANTS = [
         value: 'inventory_filters',
         hasPermission: false
     },
-    {
-        key: 'inventoryExportReport',
-        value: 'export_report_in_excel_and_pdf',
-        hasPermission: false
-    },
-    {
-        key: 'viewInventory',
-        value: 'view_inventory',
-        hasPermission: false
-    }, 
-    {
-        key: 'viewProductInfo',
-        value: 'view_inventory_info',
-        hasPermission: false
-    },
+    // {
+    //     key: 'inventoryExportReport',
+    //     value: 'export_report_in_excel_and_pdf',
+    //     hasPermission: false
+    // },
+    // {
+    //     key: 'viewInventory',
+    //     value: 'view_inventory',
+    //     hasPermission: false
+    // }, 
+    // {
+    //     key: 'viewProductInfo',
+    //     value: 'view_inventory_info',
+    //     hasPermission: false
+    // },
 ]
 
 export const ORDERS_CONSTANTS = [
@@ -192,7 +192,27 @@ export const SHIPMENT_CONSTANTS = [
         key: 'shipmentExportReport',
         value: 'export_report_in_excel_and_pdf',
         hasPermission: false
-    }
+    },
+    {
+        key: 'shipmentReference',
+        value: 'Reference Id',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentTemperture',
+        value: 'Temperture',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentTripscore',
+        value: 'Trip Score',
+        hasPermission: false
+    },
+    {
+        key: 'shipmentMap',
+        value: 'Maps',
+        hasPermission: false
+    },
 ]
 
 export const NETWORK_CONSTANTS = [
@@ -207,6 +227,24 @@ export const TRACK_AND_TRACE_CONSTANTS = [
     {
         key: 'trackAndTrace',
         value: 'trackntrace',
+        hasPermission: false
+    },
+]
+
+export const IOT_CONSTANTS = [
+    {
+        key: 'roambee',
+        value: 'Roambee',
+        hasPermission: false
+    },
+    {
+        key: 'mobileye',
+        value: 'Mobil Eye',
+        hasPermission: false
+    },
+    {
+        key: 'vacus',
+        value: 'Vacus',
         hasPermission: false
     },
 ]

@@ -159,6 +159,7 @@ exports.updateOrg = [
         {
           $set: {
             accountStatus: status,
+            role: "powerUser"
           },
         }
       );
