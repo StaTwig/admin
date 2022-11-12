@@ -413,7 +413,11 @@ exports.getOrgUsers = [
             role: 1,
             emailId: 1,
             postalAddress: 1,
+            createdAt: 1,
             location: "$orgs.postalAddress",
+            city: "$orgs.city",
+            region: "$orgs.region",
+            country: "$orgs.country"
           },
         },
       ]);
