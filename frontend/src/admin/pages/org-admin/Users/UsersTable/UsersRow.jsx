@@ -13,10 +13,10 @@ export default function UsersRow({ rows }) {
   console.log(checked);
 
   const options = [
-    { label: "1" },
-    { label: "2" },
-    { label: "3" },
-    { label: "4" },
+    { label: "powerUser" },
+    { label: "admin" },
+    { label: "user" },
+    { label: "tester" },
   ];
   return (
     <>
@@ -43,7 +43,7 @@ export default function UsersRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            John Steven
+            {`${rows.firstName} ${rows.lastName}`}
           </p>
         </TableCell>
         <TableCell>
@@ -66,7 +66,7 @@ export default function UsersRow({ rows }) {
                 <TextField
                   {...params}
                   className="vl-edit-input"
-                  placeholder="Power User"
+                  placeholder={rows.role}
                 />
               )}
             />
@@ -78,7 +78,7 @@ export default function UsersRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            johnstevan@gmail.com
+            {rows.emailId}
           </p>
         </TableCell>
         <TableCell>
@@ -87,7 +87,7 @@ export default function UsersRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            +91 9159732640
+            {rows.phoneNumber}
           </p>
         </TableCell>
         <TableCell>
@@ -104,12 +104,12 @@ export default function UsersRow({ rows }) {
                 checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
               }`}
             >
-              Hyderabad
+              {rows.location}
             </p>
           </div>
         </TableCell>
         <TableCell>
-          {rows.status ? (
+          {rows.accountStatus === "ACTIVE" ? (
             <div className="label-status-btn status-accept-bg">
               <div className="status-dot status-accept-dot"></div>
               <p className="vl-small f-500 vl-black">Active</p>
@@ -126,14 +126,14 @@ export default function UsersRow({ rows }) {
             <p
               className={`vl-note f-500 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
-              29/08/2022
+              {new Date(rows.createdAt).toLocaleDateString()}
             </p>
             <p
               className={`vl-small f-500 ${
                 checked ? "vl-black" : "vl-grey-sm"
               }`}
             >
-              11.00 AM
+              {new Date(rows.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} 
             </p>
           </div>
         </TableCell>
@@ -151,22 +151,21 @@ export default function UsersRow({ rows }) {
               <div className="location-detail-grid">
                 <p className="vl-note vl-black f-500">Address :</p>
                 <p className="vl-body vl-grey-md">
-                  T-Hub, IIIT-Hyderabad, Gachibowli, Hyderabad, Telangana,
-                  India.
+                  {rows.location}
                 </p>
               </div>
               <div className="location-detail-grid">
                 <p className="vl-note vl-black f-500">Region :</p>
-                <p className="vl-body vl-grey-md">Asia</p>
+                <p className="vl-body vl-grey-md">{rows.region}</p>
               </div>
               <div className="location-detail-grid">
                 <p className="vl-note vl-black f-500">Country :</p>
-                <p className="vl-body vl-grey-md">India</p>
+                <p className="vl-body vl-grey-md">{rows.country}</p>
               </div>
-              <div className="location-detail-grid">
+              {/* <div className="location-detail-grid">
                 <p className="vl-note vl-black f-500">Pin :</p>
-                <p className="vl-body vl-grey-md">500032</p>
-              </div>
+                <p className="vl-body vl-grey-md">{rows.pin}</p>
+              </div> */}
             </div>
           </Collapse>
         </TableCell>

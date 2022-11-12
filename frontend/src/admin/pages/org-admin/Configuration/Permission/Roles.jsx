@@ -10,12 +10,11 @@ import Switch from "@mui/material/Switch";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-export default function Roles({ list }) {
+export default function Roles({ list, permission }) {
   const [expanded, setExpanded] = React.useState("");
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-
   const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
   ))(({ theme }) => ({
@@ -84,36 +83,14 @@ export default function Roles({ list }) {
           </div>
         </AccordionSummary>
         <AccordionDetails>
-          <div className="permission-role-body">
+         {
+        Object.keys(permission).forEach(function(key, index) {
+         <div className="permission-role-body">
             <div className="roles-card">
               <p className="vl-body vl-grey-md f-500">Search by Order ID</p>
               <Switch {...label} />
             </div>
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">
-                Search by Product Category
-              </p>
-              <Switch {...label} />
-            </div>
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">Search by Product ID</p>
-              <Switch {...label} />
-            </div>
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">Search by Product Name</p>
-              <Switch {...label} />
-            </div>
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">Search by Shipment ID</p>
-              <Switch {...label} />
-            </div>
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">
-                Search by Transit Number
-              </p>
-              <Switch {...label} />
-            </div>
-          </div>
+          </div>})}
         </AccordionDetails>
       </Accordion>
     </div>

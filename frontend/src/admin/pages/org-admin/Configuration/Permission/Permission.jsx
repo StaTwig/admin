@@ -2,7 +2,8 @@ import React from "react";
 import "./Permission.css";
 import Roles from "./Roles";
 
-export default function Permission() {
+export default function Permission({permissions}) {
+  console.log(permissions)
   const List = [
     {
       id: "1",
@@ -37,7 +38,7 @@ export default function Permission() {
     <section className="permission-container">
       <p className="vl-body f-500 vl-black">Permission Details</p>
       {List.map((list) => (
-        <Roles list={list} />
+        <Roles list={list} permission={permissions ? permissions[`${list.title.toLowerCase()}`] : null}/>
       ))}
     </section>
   );

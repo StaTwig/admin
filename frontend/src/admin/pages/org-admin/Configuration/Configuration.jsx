@@ -1,16 +1,31 @@
-import { Autocomplete, TextField } from "@mui/material";
-import React from "react";
+import { Autocomplete, MenuItem, Select, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { getAllRoles, getPermissionByRole } from "../../../actions/organisationActions";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
 
 export default function Configuration() {
-  const options = [
-    { label: "1" },
-    { label: "2" },
-    { label: "3" },
-    { label: "4" },
-  ];
+  const [roles, setRoles] = useState([]);
+  const [selectedRole, setSelectedRole] = useState("admin");
+  const [permissions, setPermissions] = useState({});
+  async function getUserRoles(){
+    const roles = await getAllRoles();
+    setRoles(roles);
+  }
+  useEffect(() => { 
+    getUserRoles();
+  }, [])
+  async function getRolePermissions(){
+    const permissions = await getPermissionByRole(selectedRole);
+    setPermissions(permissions);
+  }
+  useEffect(() => { 
+    getRolePermissions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRole])
+  const uniq = [...new Set(roles)];
+
   return (
     <>
       <OrgHeader />
@@ -30,18 +45,15 @@ export default function Configuration() {
             <div className="input-set">
               <p className="vl-body f-500 vl-black">Select Role</p>
               <div className="input-full-column-space">
-                <Autocomplete
+                <Select
                   fullWidth
                   id="combo-box-demo"
                   className="vl-role-select"
-                  options={options}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="WarehouseEmployeeJunior"
-                    />
-                  )}
-                />
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  value={selectedRole}
+                >
+                  {uniq.map((role) => <MenuItem value={role} key={role}>{role}</MenuItem>)}
+                </Select>
               </div>
             </div>
 
@@ -57,7 +69,7 @@ export default function Configuration() {
               </div>
             </div>
 
-            <Permission />
+            <Permission permissions={permissions[0]} />
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,42 +8,14 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import UsersRow from "./UsersRow";
-
+import {getOrgUsers} from "../../../../actions/organisationActions"
+import { useDispatch, useSelector } from "react-redux";
 export default function UsersTable() {
-  const Data = [
-    {
-      id: "1",
-      status: true,
-    },
-    {
-      id: "2",
-      status: true,
-    },
-    {
-      id: "3",
-      status: false,
-    },
-    {
-      id: "4",
-      status: true,
-    },
-    {
-      id: "5",
-      status: true,
-    },
-    {
-      id: "6",
-      status: false,
-    },
-    {
-      id: "7",
-      status: false,
-    },
-    {
-      id: "8",
-      status: true,
-    },
-  ];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getOrgUsers());
+  }, [dispatch]);
+  const { users } = useSelector((state) => state.organisationReducer);
 
   const [page, setPage] = React.useState(2);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -102,7 +74,7 @@ export default function UsersTable() {
           </TableRow>
         </TableHead>
         <TableBody className="organization-tbody">
-          {Data.map((rows, index) => (
+          {users.map((rows, index) => (
             <UsersRow key={rows.id} rows={rows} index={index} />
           ))}
         </TableBody>
