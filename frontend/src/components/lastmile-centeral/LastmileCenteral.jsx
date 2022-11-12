@@ -1,23 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { fetchAnalytics, getAllVaccinationDetails } from "../../actions/lastMileActions";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  fetchAnalytics,
+  getAllVaccinationDetails,
+} from "../../actions/lastMileActions";
 import AnalyticTiles from "../../shared/stats-tile/AnalyticTiles";
 import Filterbar from "./filterbar/Filterbar";
 import "./LastmileCenteral.css";
 import CenteralStatsTable from "./stats-table/CenteralStatsTable";
 
+let useClickOutside = (handler) => {
+  let domNode = useRef();
+
+  useEffect(() => {
+    let maybeHandler = (event) => {
+      if (!domNode.current.contains(event.target)) {
+        handler();
+      }
+    };
+
+    document.addEventListener("mousedown", maybeHandler);
+
+    return () => {
+      document.removeEventListener("mousedown", maybeHandler);
+    };
+  });
+
+  return domNode;
+};
+
 export default function LastmileCenteral(props) {
   const [analytics, setAnalytics] = useState();
   const [filters, setFilters] = useState({});
 
+  const [ButtonOpen, setButtonOpen] = useState(false);
+
+  let domNode = useClickOutside(() => {
+    setButtonOpen(false);
+  });
+
   const [vaccinationList, setVaccinationList] = useState([]);
 
-	useEffect(async () => {
-		const result = await getAllVaccinationDetails(filters);
-		if (result?.data?.success) {
+  useEffect(async () => {
+    const result = await getAllVaccinationDetails(filters);
+    if (result?.data?.success) {
       setVaccinationList(result.data.data.vaccinationDetails);
       setAnalytics(result.data.data.analytics);
-		}
-	}, [filters]);
+    }
+  }, [filters]);
 
   return (
     <div className="LastmileCenteral--Grid-layout">
@@ -29,12 +58,27 @@ export default function LastmileCenteral(props) {
           >
             LastMile
           </h1>
-          {/* <button className="vl-btn vl-btn-sm vl-btn-primary">
-            <span>
-              <i class="fa-solid fa-file-export"></i>
-            </span>{" "}
-            Export
-          </button> */}
+          <div className="export-collapse-btn" ref={domNode}>
+            <button
+              className="vl-btn vl-btn-sm vl-btn-primary"
+              onClick={() => setButtonOpen(!ButtonOpen)}
+            >
+              <span>
+                <i class="fa-solid fa-file-export"></i>
+              </span>{" "}
+              Export
+            </button>
+            <div className={`export-button-dropdown ${ButtonOpen && "active"}`}>
+              <div className="export-btn-dropdown-card">
+                <i class="fa-solid fa-file-csv vl-excel"></i>
+                <p className="vl-note f-500">Export as Excel</p>
+              </div>
+              <div className="export-btn-dropdown-card">
+                <i class="fa-solid fa-file-pdf vl-pdf"></i>
+                <p className="vl-note f-500">Export as PDF</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="LastmileCenteral--Stats-filters">
           <AnalyticTiles
@@ -49,7 +93,9 @@ export default function LastmileCenteral(props) {
             layout="2"
             variant="2"
             title="No. of Beneficiaries Vaccinated so far"
-            stat={analytics?.totalVaccinations ? analytics.totalVaccinations : 0}
+            stat={
+              analytics?.totalVaccinations ? analytics.totalVaccinations : 0
+            }
             link="/units"
           />
 
@@ -57,7 +103,9 @@ export default function LastmileCenteral(props) {
             layout="2"
             variant="3"
             title="No. of Beneficaries Vaccinated today"
-            stat={analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0}
+            stat={
+              analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0
+            }
             link="/units"
           />
         </div>
