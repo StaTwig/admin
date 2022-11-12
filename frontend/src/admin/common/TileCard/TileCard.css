@@ -1,0 +1,15 @@
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.tile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  cursor: default;
+}

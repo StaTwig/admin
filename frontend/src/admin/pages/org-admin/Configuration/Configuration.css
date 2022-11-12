@@ -1,0 +1,63 @@
+.role-headers {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.role-page-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.admin-role-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.vl-role-select
+  > .MuiFormControl-root
+  > .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  background-color: #fff !important;
+}
+
+.permission-tab-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  border-bottom: 2px solid var(--disabled);
+}
+
+.ribbon-tab {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+}
+.ribbon-tab > p {
+  font-weight: 500;
+  color: var(--grey-medium);
+  transition: all 0.3s ease-in-out;
+}
+.ribbon-tab:hover > p {
+  font-weight: 500;
+  color: var(--black);
+}
+.ribbon-tab.active {
+  position: relative;
+  isolation: isolate;
+}
+.ribbon-tab.active > p {
+  font-weight: 500;
+  color: var(--black);
+}
+.ribbon-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background-color: #5d5fef;
+}

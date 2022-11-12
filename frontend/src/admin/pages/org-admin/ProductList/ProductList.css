@@ -1,0 +1,30 @@
+.product-list-two-column {
+  padding: 2rem 0;
+  display: grid;
+  grid-template-columns: 2.05fr 1fr;
+  gap: 1.5rem;
+}
+
+.table-action-space {
+  margin-right: 2rem;
+}
+
+.add-product-card {
+  background-color: var(--white);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-radius: 0.6rem;
+}
+
+.divider-space {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+}
+.dotted-line {
+  width: 4rem;
+  border-bottom: 3px dashed var(--grey-light);
+}
