@@ -17,14 +17,14 @@ export default function LastmileTrack(props) {
 	useEffect(async () => {
 		// Fetch analytics
 		const result = await fetchAnalytics();
-		if(result?.data?.success) {
+		if (result?.data?.success) {
 			setAnalytics(result.data.data);
 		}
 	}, []);
 
 	const completeVaccination = () => {
 		// Refetch analytics
-	}
+	};
 
 	return (
 		<>
@@ -51,21 +51,22 @@ export default function LastmileTrack(props) {
 							variant="1"
 							title="Total Number of Units Utilized"
 							stat={analytics?.unitsUtilized ? analytics.unitsUtilized : 0}
-							link="/units"
+							link="/lastMile-Centeral"
 						/>
 						<AnalyticTiles
 							layout="1"
 							variant="2"
 							title="No. of Beneficiaries Vaccinated so far"
 							stat={analytics?.totalVaccinations ? analytics.totalVaccinations : 0}
-							link="/units"
+							link="/lastMile-Centeral"
 						/>
 						<AnalyticTiles
 							layout="1"
 							variant="3"
 							title="No. of Beneficaries Vaccinated today"
 							stat={analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0}
-							link="/units"
+							link="/lastMile-Centeral"
+							link=""
 						/>
 					</div>
 				</div>

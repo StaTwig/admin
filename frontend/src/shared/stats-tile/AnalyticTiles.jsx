@@ -1,7 +1,16 @@
 import React from "react";
+import { useHistory } from "react-router";
 import "./AnalyticTiles.css";
 
 export default function AnalyticTiles({ variant, title, stat, link, layout }) {
+  const history = useHistory();
+
+  const handleClick = () => {
+    if(link) {
+      history.push(link);
+    }
+  }
+
   return (
     <>
       {layout === "1" && (
@@ -12,7 +21,7 @@ export default function AnalyticTiles({ variant, title, stat, link, layout }) {
               <h1 className="vl-title f-700">{stat}</h1>
             </div>
             <div className="action-content-wrapper">
-              <button className={`Analytic-btn tile-btn-variant-${variant}`}>
+              <button onClick={handleClick} className={`Analytic-btn tile-btn-variant-${variant}`}>
                 View
               </button>
             </div>

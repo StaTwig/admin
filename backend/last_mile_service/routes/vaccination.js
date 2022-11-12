@@ -8,5 +8,8 @@ router.post("/vaccinateMultiple", VaccinationController.vaccinateMultiple);
 router.post("/getAllVaccinationDetails", VaccinationController.getAllVaccinationDetails);
 router.get("/getVaccinationDetailsByVial", VaccinationController.getVaccinationDetailsByVial);
 router.get("/getAnalytics", VaccinationController.getAnalytics);
+router.get("/getVialsUtilised", VaccinationController.getVialsUtilised);
+router.get("/getVaccinationsList", VaccinationController.getVaccinationsList);
+router.get("/getCitiesAndOrgsForFilters", VaccinationController.getCitiesAndOrgsForFilters);
 
 module.exports = router;

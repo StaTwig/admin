@@ -174,8 +174,11 @@ export function config() {
       getManufacturerFilterOptions: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getManufacturerFilterOptions`,
       fetchBatchDetails: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/fetchBatchById`,
       vaccinateIndividual: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/vaccinateIndividual`,
+      vaccinateMultiple: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/vaccinateMultiple`,
       getAllVaccinationDetails: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getAllVaccinationDetails`,
       getVaccinationDetailsByVial: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVaccinationDetailsByVial`,
+      getVaccineAnalytics: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getAnalytics`,
+      getCitiesAndOrgsForFilters: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
     },
     prod: {
       getOrganizationsUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -338,6 +341,7 @@ export function config() {
       getAllVaccinationDetails: `${SERVER_URL}/lastmilemanagement/api/vaccination/getAllVaccinationDetails`,
       getVaccinationDetailsByVial: `${SERVER_URL}/lastmilemanagement/api/vaccination/getVaccinationDetailsByVial`,
       getVaccineAnalytics: `${SERVER_URL}/lastmilemanagement/api/vaccination/getAnalytics`,
+      getCitiesAndOrgsForFilters: `${SERVER_URL}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
     },
   };
 

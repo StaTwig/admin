@@ -43,7 +43,7 @@ export default function NewDose(props) {
 		<section className="Beneficiary--Add-wrapper">
 			<form onSubmit={handleSubmit(newDose)}>
 				<div className="Beneficiary--Add-inner-wrapper">
-					<h1 className="vl-subheading f-700 vl-grey-md">Beneficiary Details</h1>
+					<h1 className="vl-subheading f-700 vl-grey-md">Personal Details</h1>
 					<div className="Add-form-space">
 						<Controller
 							name="gender"
