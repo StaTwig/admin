@@ -74,3 +74,14 @@ export const getCitiesAndOrgsForFilters = async () => {
 		throw err;
 	}
 };
+
+export const exportVaccinationList = async (data) => {
+	try {
+		const result = await axios.post(`${config().exportVaccinationList}`, data, {
+			responseType: "blob",
+		});
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};

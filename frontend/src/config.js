@@ -344,6 +344,7 @@ export function config() {
       getVialsUtilised: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVialsUtilised`,
       getVaccinationsList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVaccinationsList`,
       getCitiesAndOrgsForFilters: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
+      exportVaccinationList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/exportVaccinationList`,
     },
   };
 
