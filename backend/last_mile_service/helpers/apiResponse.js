@@ -55,3 +55,20 @@ exports.forbiddenResponse = function (res, msg) {
   };
   return res.status(403).json(data);
 };
+
+exports.successResponseWithMultipleData = function (
+  res,
+  msg,
+  data,
+  dataIn,
+  dataOut
+) {
+  const resData = {
+    success: true,
+    message: msg,
+    data: data,
+    inboundShipments: dataIn,
+    outboundShipments: dataOut,
+  };
+  return res.status(200).json(resData);
+};

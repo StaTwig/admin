@@ -22,7 +22,7 @@ function ResultCard({ age, gender, variant }) {
 }
 
 export default function Beneficiary(props) {
-	const { batchDetails, setSteps } = props;
+	const { batchDetails } = props;
 
 	const [LayoutType, setLayoutType] = useState(1);
 
@@ -45,11 +45,6 @@ export default function Beneficiary(props) {
 			setVialId(result.vaccineVialId);
 		}
 		setLayoutType(1);
-	};
-
-	const completeVaccination = () => {
-		props.completeVaccination();
-		setSteps(1);
 	};
 
 	return (
@@ -108,7 +103,7 @@ export default function Beneficiary(props) {
 												{doses?.length ? doses.length : 0}
 											</p>
 										</div>
-										<button className="vl-btn vl-btn-sm vl-btn-primary" onClick={() => setSteps(1)}>
+										<button className="vl-btn vl-btn-sm vl-btn-primary" onClick={props.completeVaccination}>
 											Complete
 										</button>
 									</div>
