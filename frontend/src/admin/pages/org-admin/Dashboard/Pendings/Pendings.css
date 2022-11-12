@@ -79,5 +79,5 @@
 .pending-body {
   width: 100%;
   height: calc(100vh - 13rem);
-  overflow-y: scroll;
+  overflow-y: scroll !important;
 }

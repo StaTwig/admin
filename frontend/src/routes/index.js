@@ -159,16 +159,16 @@ const routes = (
     <Route path='/tracking/:id' component={requireAuth(TrackingContainer)} />
 
     {/* Admin Statwig */}
-    <Route path='/statwig/dashboard' component={Dashboard} />
-    <Route path='/statwig/manage-organization' component={AdminOrganization} />
-    <Route path='/statwig/view-locations' component={Locations} />
-    <Route path='/statwig/view-users' component={ViewUsers} />
+    <Route path='/statwig/dashboard' component={requireAuth(Dashboard, true)} />
+    <Route path='/statwig/manage-organization' component={requireAuth(AdminOrganization, true)} />
+    <Route path='/statwig/view-locations' component={requireAuth(Locations, true)} />
+    <Route path='/statwig/view-users' component={requireAuth(ViewUsers, true)} />
 
     {/* Admin Organization */}
-    <Route path='/org/dashboard' component={OrgDashboard} />
-    <Route path='/org/manage-users' component={Users} />
-    <Route path='/org/roles' component={Configuration} />
-    <Route path='/org/product-list' component={AdminProductList} />
+    <Route path='/org/dashboard' component={requireAuth(OrgDashboard, true)} />
+    <Route path='/org/manage-users' component={requireAuth(Users, true)} />
+    <Route path='/org/roles' component={requireAuth(Configuration, true)} />
+    <Route path='/org/product-list' component={requireAuth(AdminProductList, true)} />
 
     <Route component={ErrorPageContainer} />
   </Switch>
