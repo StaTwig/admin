@@ -64,7 +64,7 @@ export function config() {
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
       verifyOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/verifyOtp`,
-      getApprovalsUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getApprovals`,
+      getApprovalsUrl: `${TEST_SERVER_URL}/api/employee_service/getApprovals`,
       getPermissionsUrl: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       getWareHousesUrl: `${TEST_SERVER_URL}/api/address_service/fetchWarehouses`,
       updateOrgUrl: `${TEST_SERVER_URL}/api/employee_service/updateOrg`,
