@@ -263,6 +263,8 @@ const Header = (props) => {
       setCount(response.data.data?.totalRecords);
       setIcount(response.data.data?.data?.length);
       const warehouses = await getActiveWareHouses();
+      console.log(warehouses);
+      console.log(warehouses.filter((warehouse) => warehouse.status === "ACTIVE"));
       const active = warehouses
         .filter((i) => i.status === "ACTIVE")
         .map((item) => {

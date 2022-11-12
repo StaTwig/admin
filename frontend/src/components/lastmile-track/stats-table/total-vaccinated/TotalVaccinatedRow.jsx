@@ -1,32 +1,32 @@
 import { TableCell, TableRow } from "@mui/material";
 import React from "react";
 
-export default function TotalVaccinatedRow() {
+export default function TotalVaccinatedRow({dose, index}) {
   return (
     <TableRow className="vl-mui-custom-tr">
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">01</p>
+          <p className="vl-body f-500 ">{index + 1}</p>
         </div>
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">#20462</p>
+          <p className="vl-body f-500 ">{dose.batchNumber}</p>
         </div>
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">Male</p>
+          <p className="vl-body f-500 ">{dose.gender}</p>
         </div>
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">29</p>
+          <p className="vl-body f-500 ">{dose.age}</p>
         </div>
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">20/09/2022</p>
+          <p className="vl-body f-500 ">{new Date(dose.createdAt).toDateString()}</p>
         </div>
       </TableCell>
     </TableRow>

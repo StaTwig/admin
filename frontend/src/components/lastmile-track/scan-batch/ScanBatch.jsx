@@ -4,11 +4,14 @@ import "./ScanBatch.css";
 import ScanImage from "../../../assets/files/designs/scan.jpg";
 import { fetchBatch } from "../../../actions/lastMileActions";
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 export default function ScanBatch(props) {
 	const { setBatchDetails, setSteps } = props;
 	const [openAlert, setOpenAlert] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+
+	const userLocation = useSelector((store) => store.userLocation);
 
 	const {
 		control,
@@ -25,7 +28,7 @@ export default function ScanBatch(props) {
 			// Fetch batch details
 			const data = {
 				batchNumber: values.batchNumber,
-				warehouseId: props.user.warehouseId[0],
+				warehouseId: userLocation ? userLocation.id : props.user.warehouseId[0],
 			};
 			const result = await fetchBatch(data);
 			if (result?.data?.success === true) {
@@ -82,7 +85,12 @@ export default function ScanBatch(props) {
 					</div>
 				</div>
 			</form>
-			<Snackbar open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				open={openAlert}
+				autoHideDuration={6000}
+				onClose={handleAlertClose}
+			>
 				<Alert onClose={handleAlertClose} severity="error" sx={{ width: "100%" }}>
 					{errorMessage}
 				</Alert>

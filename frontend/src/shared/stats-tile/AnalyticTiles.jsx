@@ -1,13 +1,10 @@
 import React from "react";
-import { useHistory } from "react-router";
 import "./AnalyticTiles.css";
 
-export default function AnalyticTiles({ variant, title, stat, link, layout }) {
-  const history = useHistory();
-
+export default function AnalyticTiles({ variant, title, stat, layout, onClick, name }) {
   const handleClick = () => {
-    if(link) {
-      history.push(link);
+    if(name) {
+      onClick(name);
     }
   }
 

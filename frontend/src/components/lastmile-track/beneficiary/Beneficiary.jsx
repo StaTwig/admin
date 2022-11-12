@@ -2,10 +2,10 @@ import React from "react";
 import { useState } from "react";
 import "./Beneficiary.css";
 import AddImage from "../../../assets/files/designs/add.jpg";
-import { MenuItem, Select, TextField } from "@mui/material";
 import { useEffect } from "react";
 import NewDose from "./NewDose";
 import { getVaccinationDetailsByVial } from "../../../actions/lastMileActions";
+import { useSelector } from "react-redux";
 
 function ResultCard({ age, gender, variant }) {
 	return (
@@ -22,12 +22,14 @@ function ResultCard({ age, gender, variant }) {
 }
 
 export default function Beneficiary(props) {
-	const { batchDetails, setSteps } = props;
+	const { batchDetails } = props;
 
 	const [LayoutType, setLayoutType] = useState(1);
 
 	const [vialId, setVialId] = useState();
 	const [doses, setDoses] = useState([]);
+
+	const userLocation = useSelector((store) => store.userLocation);
 
 	useEffect(async () => {
 		if (LayoutType === 1 && vialId) {
@@ -45,11 +47,6 @@ export default function Beneficiary(props) {
 			setVialId(result.vaccineVialId);
 		}
 		setLayoutType(1);
-	};
-
-	const completeVaccination = () => {
-		props.completeVaccination();
-		setSteps(1);
 	};
 
 	return (
@@ -108,7 +105,10 @@ export default function Beneficiary(props) {
 												{doses?.length ? doses.length : 0}
 											</p>
 										</div>
-										<button className="vl-btn vl-btn-sm vl-btn-primary" onClick={() => setSteps(1)}>
+										<button
+											className="vl-btn vl-btn-sm vl-btn-primary"
+											onClick={props.completeVaccination}
+										>
 											Complete
 										</button>
 									</div>
@@ -125,7 +125,7 @@ export default function Beneficiary(props) {
 					{LayoutType === 2 && (
 						<NewDose
 							vaccineVialId={vialId}
-							warehouseId={props?.user?.warehouseId[0]}
+							warehouseId={userLocation ? userLocation.id : props?.user?.warehouseId[0]}
 							productId={batchDetails.product.id}
 							batchNumber={batchDetails?.batchNumber}
 							newVaccination={newVaccination}
