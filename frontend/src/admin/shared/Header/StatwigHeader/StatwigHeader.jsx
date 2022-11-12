@@ -51,9 +51,9 @@ export default function StatwigHeader() {
                   <i class="fa-solid fa-caret-down"></i>
                 </div>
                 <div className={`configure-list active `}>
-                  <div className="btn-dropdown-card vl-link">
-                    <p className="vl-note f-500">Switch to User</p>
-                  </div>
+                  <button className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">
+                    Switch to User
+                  </button>
                 </div>
               </li>
               <li className="admin-nav-item">
