@@ -43,11 +43,11 @@
 }
 .benefit-card > .straight-line {
   width: 2px;
-  height: 2.3rem;
+  height: 2rem;
   border-right: 2px dashed var(--white);
   position: absolute;
   left: 0.65rem;
-  bottom: -2.4rem;
+  bottom: -2.1rem;
 }
 .check-icon {
   width: 1.5rem;
@@ -58,7 +58,7 @@
 .our-benefits-container {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2.2rem;
   margin: 3rem 0;
 }
 
@@ -77,10 +77,10 @@
 }
 
 .connect-Illustration {
-  width: 16rem;
+  width: 15rem;
   object-fit: contain;
   position: absolute;
-  right: -6.5rem;
+  right: -8.5rem;
   bottom: -2.5rem;
 }
 

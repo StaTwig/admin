@@ -30,9 +30,19 @@
   display: block;
   position: absolute;
   bottom: -5.2rem;
-  right: -7rem;
+  right: -12rem;
   width: 24rem;
   object-fit: contain;
+}
+@media screen and (max-width:1068px) {
+  .illustration-vector {
+    display: block;
+    position: absolute;
+    bottom: -5.2rem;
+    right: -12rem;
+    width: 20rem;
+    object-fit: contain;
+  }
 }
 
 @media screen and (max-width: 992px) {
