@@ -92,7 +92,7 @@ export default function LastmileTrack(props) {
 							) : (
 								<Beneficiary
 									batchDetails={batchDetails}
-									completeVaccinations={completeVaccination}
+									completeVaccination={completeVaccination}
 									{...props}
 								/>
 							)}
