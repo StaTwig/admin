@@ -61,3 +61,9 @@
   border-radius: 4px 4px 0 0;
   background-color: #5d5fef;
 }
+
+.config-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}

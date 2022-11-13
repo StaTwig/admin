@@ -1,7 +1,16 @@
-import { Autocomplete, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Dialog,
+  DialogContent,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getAllRoles, getPermissionByRole, getPermissions, updatePermissionsByRole } from "../../../actions/organisationActions";
+import AddRole from "../../../components/AddRole/AddRole";
+import AssignRole from "../../../components/AssignRole/AssignRole";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
@@ -15,7 +24,7 @@ export default function Configuration(props) {
     const roles = await getAllRoles();
     setRoles(roles);
   }
-  useEffect(() => { 
+  useEffect(() => {
     getUserRoles();
   }, [])
   const dispatch = useDispatch();
@@ -25,7 +34,7 @@ export default function Configuration(props) {
     console.log(allPermissions)
     setPermissions(permissions);
   }
-  useEffect(() => { 
+  useEffect(() => {
     getRolePermissions();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRole])
@@ -44,6 +53,29 @@ export default function Configuration(props) {
   async function updatePermissions(data){
     setUpdatedPermissions(data);
   }
+
+
+  const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
+  const [fullWidth] = React.useState(true);
+  const [maxWidth] = React.useState("md");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
   return (
     <>
       <OrgHeader />
@@ -55,12 +87,26 @@ export default function Configuration(props) {
                 <p className="vl-subheading f-700">Configuration</p>
                 <p className="vl-body f-400 vl-grey-sm">Roles & Permissions</p>
               </div>
-              {/* <button onClick={() => permissionUpdate()} className="vl-btn vl-btn-md vl-btn-primary">
-                Save
-              </button> */}
-              <button className="vl-btn vl-btn-md vl-btn-primary">
-                Add Roles
-              </button>
+              <div className="config-btn-group">
+                <button
+                  className="vl-btn vl-btn-md vl-btn-secondary"
+                  onClick={handleClickOpen2}
+                >
+                  Assign Role to User
+                </button>
+                <button
+                  className="vl-btn vl-btn-md vl-btn-primary"
+                  onClick={handleClickOpen}
+                >
+                  Add Roles
+                </button>
+                <button
+                  className="vl-btn vl-btn-md vl-btn-primary"
+                  onClick={permissionUpdate}
+                >
+                  Save
+                </button>
+              </div>
             </div>
 
             <div className="input-set">
@@ -73,7 +119,11 @@ export default function Configuration(props) {
                   onChange={(e) => setSelectedRole(e.target.value)}
                   value={selectedRole}
                 >
-                  {uniq.map((role) => <MenuItem value={role} key={role}>{role}</MenuItem>)}
+                  {uniq.map((role) => (
+                    <MenuItem value={role} key={role}>
+                      {role}
+                    </MenuItem>
+                  ))}
                 </Select>
               </div>
             </div>
@@ -94,6 +144,27 @@ export default function Configuration(props) {
           </div>
         </div>
       </section>
+      <Dialog
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogContent sx={{ padding: "0rem !important" }}>
+          <AddRole handleClose={handleClose} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        open={open2}
+        onClose={handleClose2}
+      >
+        <DialogContent sx={{ padding: "0rem !important" }}>
+          <AssignRole handleClose={handleClose2} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
