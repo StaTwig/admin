@@ -1,14 +1,16 @@
 import { Autocomplete, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getAllRoles, getPermissionByRole } from "../../../actions/organisationActions";
+import { useDispatch } from "react-redux";
+import { getAllRoles, getPermissionByRole, getPermissions, updatePermissionsByRole } from "../../../actions/organisationActions";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
 
-export default function Configuration() {
+export default function Configuration(props) {
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("admin");
   const [permissions, setPermissions] = useState({});
+  const [updatedPermissions, setUpdatedPermissions] = useState(null);
   async function getUserRoles(){
     const roles = await getAllRoles();
     setRoles(roles);
@@ -16,16 +18,32 @@ export default function Configuration() {
   useEffect(() => { 
     getUserRoles();
   }, [])
+  const dispatch = useDispatch();
   async function getRolePermissions(){
     const permissions = await getPermissionByRole(selectedRole);
+    const allPermissions = await dispatch(getPermissions());
+    console.log(allPermissions)
     setPermissions(permissions);
   }
   useEffect(() => { 
     getRolePermissions();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRole])
-  const uniq = [...new Set(roles)];
+  async function permissionUpdate(){
+    if(updatedPermissions){
+      const res = await updatePermissionsByRole({
+        permissions: updatedPermissions,
+        orgId: props.user.organisationId,
+        role: selectedRole
+      });
+    console.log(res);
+    }
+  }
 
+  const uniq = [...new Set(roles)];
+  async function updatePermissions(data){
+    setUpdatedPermissions(data);
+  }
   return (
     <>
       <OrgHeader />
@@ -37,6 +55,9 @@ export default function Configuration() {
                 <p className="vl-subheading f-700">Configuration</p>
                 <p className="vl-body f-400 vl-grey-sm">Roles & Permissions</p>
               </div>
+              {/* <button onClick={() => permissionUpdate()} className="vl-btn vl-btn-md vl-btn-primary">
+                Save
+              </button> */}
               <button className="vl-btn vl-btn-md vl-btn-primary">
                 Add Roles
               </button>
@@ -69,7 +90,7 @@ export default function Configuration() {
               </div>
             </div>
 
-            <Permission permissions={permissions[0]} />
+            <Permission permissions={permissions[0]} updatePermissions={updatePermissions} />
           </div>
         </div>
       </section>

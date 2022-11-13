@@ -10,14 +10,16 @@ import Switch from "@mui/material/Switch";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-export default function Roles({ list, permissions }) {
+export default function Roles({ list, permissions, refresh, flag, updatePermissions }) {
   const [expanded, setExpanded] = useState("");
   const [permission, setPermission] = useState({});
   useEffect(() => {
     setPermission(permissions);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+  useEffect(() => {
+    // setPermission(permission);
+  }, [permission]);
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -72,12 +74,12 @@ export default function Roles({ list, permissions }) {
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
+        key={permission}
       >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" key={JSON.stringify(permission)}>
           <div className="role-header-space">
             <div className="role-header-text-space">
-              <h1 className="vl-subheading vl-black f-700">{list.id}</h1>
-              <h1 className="vl-subheading vl-black f-700">{list.title}</h1>
+              <h1 className="vl-subheading vl-black f-700">{list}</h1>
             </div>
             <div className="indication-icon">
               {expanded === "panel1" ? (
@@ -89,9 +91,9 @@ export default function Roles({ list, permissions }) {
           </div>
         </AccordionSummary>
         {
-        permission && Object.keys(permission).map((key, index) => 
-        <div key={key}>
-        <AccordionDetails>
+        Object.keys(permission).map((key, index) => 
+
+        <AccordionDetails key={key + permission[`${key}`]}>
          <div className="permission-role-body">
             <div className="roles-card">
               <p className="vl-body vl-grey-md f-500">{key}</p>
@@ -100,13 +102,14 @@ export default function Roles({ list, permissions }) {
                 let obj = permission;
                 obj[`${key}`] = !obj[`${key}`];
                 setPermission(obj);
+                updatePermissions(obj);
+                refresh(!flag);
               }}
               checked={permission[`${key}`]} 
               />
             </div>
           </div>
         </AccordionDetails>
-        </div>
         )}
       </Accordion>
     </div>

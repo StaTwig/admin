@@ -1,45 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Permission.css";
 import Roles from "./Roles";
 
-export default function Permission({permissions}) {
+export default function Permission({permissions, updatePermissions}) {
+  const [flag, setFlag] = useState(false);
   console.log(permissions)
-  const List = [
-    {
-      id: "1",
-      title: "Overview",
-    },
-    {
-      id: "2",
-      title: "Search",
-    },
-    {
-      id: "3",
-      title: "Inventory",
-    },
-    {
-      id: "4",
-      title: "Orders",
-    },
-    {
-      id: "5",
-      title: "Shipments",
-    },
-    {
-      id: "6",
-      title: "Network",
-    },
-    {
-      id: "7",
-      title: "Track & Trace",
-    },
-  ];
+  const List = permissions ? Object.keys(permissions) : []
   return (
     <section className="permission-container">
       <p className="vl-body f-500 vl-black">Permission Details</p>
-      {List.map((list) => (
-        permissions && permissions[`${list.title.toLowerCase()}`] && <Roles list={list} permissions={permissions ? permissions[`${list.title.toLowerCase()}`] : null}/>
-      ))}
+      {List.map(
+        (list) =>
+          Boolean(permissions) && list !== "_id" &&
+          list !== "role" && list !== "permissions" &&
+          permissions[`${list.toLowerCase()}`] && (
+            <Roles
+              updatePermissions={updatePermissions}
+              flag={flag}
+              refresh={(f) => setFlag(f)}
+              list={list}
+              permissions={
+                permissions ? permissions[`${list.toLowerCase()}`] : null
+              }
+            />
+          )
+      )}
     </section>
   );
 }
