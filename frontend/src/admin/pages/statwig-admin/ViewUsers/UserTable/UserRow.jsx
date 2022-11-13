@@ -3,17 +3,18 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { Checkbox } from "@mui/material";
 import { useState } from "react";
+import { getUserInfo } from "../../../../../actions/userActions";
 
 export default function UserRow({ rows }) {
   const [checked, setChecked] = useState(false);
-  console.log(checked);
+  // getUserInfo
   return (
     <>
       <TableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         className={`organization-tr ${checked && "organization-bar-added"}`}
       >
-        <TableCell>
+        {/* <TableCell>
           <Checkbox
             className="vl-checkbox"
             value={checked}
@@ -25,14 +26,14 @@ export default function UserRow({ rows }) {
               },
             }}
           />
-        </TableCell>
+        </TableCell> */}
         <TableCell>
           <p
             className={`vl-body ${
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            John Steven 
+            {`${rows.firstName} ${rows.lastName}`} 
           </p>
         </TableCell>
         <TableCell>
@@ -41,7 +42,7 @@ export default function UserRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            johnstevan@gmail.com
+            {rows.emailId}
           </p>
         </TableCell>
         <TableCell>
@@ -50,11 +51,11 @@ export default function UserRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Power User
+            {rows.role}
           </p>
         </TableCell>
         <TableCell>
-          {rows.status ? (
+          {rows.status === "ACTIVE" ? (
             <div className="label-status-btn status-accept-bg">
               <div className="status-dot status-accept-dot"></div>
               <p className="vl-small f-500 vl-black">Active</p>
@@ -71,14 +72,14 @@ export default function UserRow({ rows }) {
             <p
               className={`vl-note f-500 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
-              29/08/2022
+              {new Date(rows.createdAt).toLocaleDateString()}
             </p>
             <p
               className={`vl-small f-500 ${
                 checked ? "vl-black" : "vl-grey-sm"
               }`}
             >
-              11.00 AM
+              {new Date(rows.createdAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
             </p>
           </div>
         </TableCell>

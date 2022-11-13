@@ -161,7 +161,7 @@ const routes = (
     {/* Admin Statwig */}
     <Route path='/statwig/dashboard' component={requireAuth(Dashboard, true)} />
     <Route path='/statwig/manage-organization' component={requireAuth(AdminOrganization, true)} />
-    <Route path='/statwig/view-locations' component={requireAuth(Locations, true)} />
+    <Route path='/statwig/view-locations/:org' component={requireAuth(Locations, true)} />
     <Route path='/statwig/view-users/:product/:org' component={requireAuth(ViewUsers, true)} />
 
     {/* Admin Organization */}

@@ -13,8 +13,10 @@ import {
   SET_ORGANISATION_TYPES,
   SET_COUNTRY_TYPES,
   SET_REGION_TYPES,
+  SET_WAREHOUSE_USERS,
   SET_ALL_ORGANISATIONS,
   SET_ALL_ORGANISATION_ACTIVE_USERS,
+  SET_ORG_ANALYTICS
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -266,6 +268,24 @@ export const getOrgUsers = (params) => {
   }
 };
 
+export const getWarehouseUsers = (params) => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const url = params ? `${config().getWarehouseUsers}?${params}` : config().getWarehouseUsers;
+      const result = await axios.get(url);
+      dispatch({
+        type: SET_WAREHOUSE_USERS,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
 export const getOrgs = (params) => {
   try {
     return async (dispatch) => {
@@ -281,6 +301,24 @@ export const getOrgs = (params) => {
     };
   } catch (e) {
     throw Error(e.message);
+  }
+};
+
+export const getOrgAnalytics = () => {
+    return async (dispatch) => {
+      try{
+      dispatch(turnOn());
+      const url =  config().getOrgAnalytics;
+      const result = await axios.get(url);
+      dispatch({
+        type: SET_ORG_ANALYTICS,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data;
+    }catch(err){
+      console.log(err);
+    };
   }
 };
 

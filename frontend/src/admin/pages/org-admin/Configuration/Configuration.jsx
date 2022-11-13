@@ -99,7 +99,7 @@ export default function Configuration(props) {
                 <p className="vl-subheading f-700">Configuration</p>
                 <p className="vl-body f-400 vl-grey-sm">Roles & Permissions</p>
               </div>
-              <div className="config-btn-group">
+              {/* <div className="config-btn-group">
                 <button
                   className="vl-btn vl-btn-md vl-btn-secondary"
                   onClick={handleClickOpen2}
@@ -112,13 +112,7 @@ export default function Configuration(props) {
                 >
                   Add Roles
                 </button>
-                {/* <button
-                  className="vl-btn vl-btn-md vl-btn-primary"
-                  onClick={permissionUpdate}
-                >
-                  Save
-                </button> */}
-              </div>
+              </div> */}
             </div>
 
             <div className="input-set">

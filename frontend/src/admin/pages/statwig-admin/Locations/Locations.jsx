@@ -7,15 +7,15 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import LocationMap from "./LocationMap/Map";
 import "./Locations.css";
 import LocationTable from "./LocationTable/LocationTable";
-import { useHistory } from "react-router";
 import { getWareHouses } from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 export default function Locations() {
   const [Map, setMap] = useState(false);
-  const history = useHistory();
+  const params = useParams();
   const dispatch = useDispatch();
-  const org = history.location.state.rows;
-  useEffect(() => {dispatch(getWareHouses(`orgId=${history.location.state.rows.id}`))}, [dispatch, history.location.state.rows.id])
+  const org = JSON.parse(params.org);
+  useEffect(() => {dispatch(getWareHouses(`orgId=${org.id}`))}, [dispatch, org.id])
   const { addresses } = useSelector((state) => state.organisationReducer)
   return (
     <>
