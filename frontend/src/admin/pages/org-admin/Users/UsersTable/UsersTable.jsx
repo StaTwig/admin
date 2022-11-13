@@ -10,8 +10,11 @@ import { TablePagination } from "@mui/material";
 import UsersRow from "./UsersRow";
 import {getOrgUsers} from "../../../../actions/organisationActions"
 import { useDispatch, useSelector } from "react-redux";
-export default function UsersTable() {
+
+export default function UsersTable(props) {
   const dispatch = useDispatch();
+  const { defaultRoles } = props;
+
   useEffect(() => {
     dispatch(getOrgUsers());
   }, [dispatch]);
@@ -75,7 +78,7 @@ export default function UsersTable() {
         </TableHead>
         <TableBody className="organization-tbody">
           {users.map((rows, index) => (
-            <UsersRow key={rows.id} rows={rows} index={index} />
+            <UsersRow key={rows.id} rows={rows} index={index} defaultRoles={defaultRoles} />
           ))}
         </TableBody>
       </Table>

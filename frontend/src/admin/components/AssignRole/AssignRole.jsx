@@ -11,7 +11,7 @@ export default function AssignRole({ handleClose2 }) {
   return (
     <div className="addOrganization-container">
       <div className="addorganization-header">
-        <p className="vl-subheading f-500 vl-blue">Add Organization</p>
+        <p className="vl-subheading f-500 vl-blue">Assign Role</p>
         <i className="fa-solid fa-xmark" onClick={handleClose2}></i>
       </div>
       <div className="addorganization-body">
