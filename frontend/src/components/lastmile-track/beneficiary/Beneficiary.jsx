@@ -107,7 +107,7 @@ export default function Beneficiary(props) {
 										</div>
 										<button
 											className="vl-btn vl-btn-sm vl-btn-primary"
-											onClick={props.completeVaccination}
+											onClick={() => props.completeVaccination()}
 										>
 											Complete
 										</button>
@@ -125,7 +125,7 @@ export default function Beneficiary(props) {
 					{LayoutType === 2 && (
 						<NewDose
 							vaccineVialId={vialId}
-							warehouseId={userLocation ? userLocation.id : props?.user?.warehouseId[0]}
+							warehouseId={userLocation?.id ? userLocation.id : props?.user?.warehouseId[0]}
 							productId={batchDetails.product.id}
 							batchNumber={batchDetails?.batchNumber}
 							newVaccination={newVaccination}
