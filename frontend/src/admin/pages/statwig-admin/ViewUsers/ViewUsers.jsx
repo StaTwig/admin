@@ -5,8 +5,15 @@ import TileCard from "../../../common/TileCard/TileCard";
 import "./ViewUsers.css";
 import UserTable from "./UserTable/UserTable";
 import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
+import { useParams } from "react-router-dom";
 
-export default function ViewUsers() {
+export default function ViewUsers() {  
+  const params = useParams();
+  const org = JSON.parse(params.org);
+  const product = JSON.parse(params.product);
+  console.log(org, product)
+
+
   return (
     <>
       <StatwigHeader />
@@ -35,7 +42,7 @@ export default function ViewUsers() {
                 </div>
               </div>
               <div className="location-details-grid">
-                <LocationCard layout="user" />
+                <LocationCard layout="user" org={org}/>
                 <TileCard layout="user" />
               </div>
             </div>

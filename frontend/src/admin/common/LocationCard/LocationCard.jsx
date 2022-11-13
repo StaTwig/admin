@@ -2,15 +2,15 @@ import React from "react";
 import Avatar from "@mui/material/Avatar";
 import "./LocationCard.css";
 
-export default function LocationCard({ layout }) {
+export default function LocationCard({ layout, org }) {
   return (
     <>
       {layout === "location" && (
         <div className="admin-location-card-container">
           <div className="admin-location-header">
-            <Avatar className="location-avatar">R</Avatar>
+            <Avatar className="location-avatar">{org.name[0]}</Avatar>
             <h1 className="vl-subheading f-700">
-              Monument Impire Fx Organization
+              {org.name}
             </h1>
           </div>
           <div className="admin-location-body">
@@ -27,7 +27,7 @@ export default function LocationCard({ layout }) {
           <div className="admin-location-header">
             <Avatar className="location-avatar">R</Avatar>
             <h1 className="vl-subheading f-700">
-              Monument Impire Fx Organization
+              {org.name}
             </h1>
           </div>
           <div className="admin-location-body">

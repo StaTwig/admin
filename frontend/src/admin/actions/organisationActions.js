@@ -92,11 +92,11 @@ export const getPermissions = () => {
   }
 };
 
-export const getWareHouses = () => {
+export const getWareHouses = (params) => {
   try {
     return async (dispatch) => {
       dispatch(turnOn());
-      const result = await axios.get(config().getWareHousesUrl);
+      const result = await axios.get(config().getWareHousesUrl + (params ? `?${params}` : ''));
       dispatch({
         type: SET_ORGANISATION_ADDRESSES,
         payload: result.data,

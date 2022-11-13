@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import LocationCard from "../../../common/LocationCard/LocationCard";
@@ -7,9 +7,16 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import LocationMap from "./LocationMap/Map";
 import "./Locations.css";
 import LocationTable from "./LocationTable/LocationTable";
-
+import { useHistory } from "react-router";
+import { getWareHouses } from "../../../actions/organisationActions";
+import { useDispatch, useSelector } from "react-redux";
 export default function Locations() {
   const [Map, setMap] = useState(false);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const org = history.location.state.rows;
+  useEffect(() => {dispatch(getWareHouses(`orgId=${history.location.state.rows.id}`))}, [dispatch, history.location.state.rows.id])
+  const { addresses } = useSelector((state) => state.organisationReducer)
   return (
     <>
       <StatwigHeader />
@@ -38,7 +45,7 @@ export default function Locations() {
                 </div>
               </div>
               <div className="location-details-grid">
-                <LocationCard layout="location" />
+                <LocationCard layout="location" org={org} />
                 <TileCard layout="location" />
               </div>
 
@@ -67,7 +74,7 @@ export default function Locations() {
                 <LocationMap />
               </div>
             ) : (
-              <LocationTable />
+              <LocationTable Locations={addresses} org={org} />
             )}
           </div>
         </div>
