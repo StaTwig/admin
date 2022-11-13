@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import {
-	fetchAnalytics,
-	getVaccinationsList,
-	getVialsUtilised,
+  fetchAnalytics,
+  getVaccinationsList,
+  getVialsUtilised,
 } from "../../actions/lastMileActions";
 import AnalyticTiles from "../../shared/stats-tile/AnalyticTiles";
 import Beneficiary from "./beneficiary/Beneficiary";
@@ -14,63 +14,64 @@ import TotalVaccinatedTable from "./stats-table/total-vaccinated/TotalVaccinated
 import UnitUsedTable from "./stats-table/units-used/UnitUsedTable";
 
 export default function LastmileTrack(props) {
-	const [Steps, setSteps] = useState(1);
-	const [tableView, setTableView] = useState(false);
-	const [tableComp, setTableComp] = useState(null);
+  const [Steps, setSteps] = useState(1);
+  const [tableView, setTableView] = useState(false);
+  const [tableComp, setTableComp] = useState(null);
 
-	const [analytics, setAnalytics] = useState();
-	const [unitsUtilized, setUnitsUtilized] = useState();
-	const [totalVaccinations, setTotalVaccinations] = useState();
-	const [todaysVaccinations, setTodaysVaccinations] = useState();
-	const [batchDetails, setBatchDetails] = useState();
+  const [analytics, setAnalytics] = useState();
+  const [unitsUtilized, setUnitsUtilized] = useState();
+  const [totalVaccinations, setTotalVaccinations] = useState();
+  const [todaysVaccinations, setTodaysVaccinations] = useState();
+  const [batchDetails, setBatchDetails] = useState();
 
-	useEffect(async () => {
-		// Fetch analytics
-		const analytics = await fetchAnalytics();
-		if (analytics?.data?.success) {
-			setAnalytics(analytics.data.data);
-		}
+  useEffect(async () => {
+    // Fetch analytics
+    const analytics = await fetchAnalytics();
+    if (analytics?.data?.success) {
+      setAnalytics(analytics.data.data);
+    }
 
-		const unitsUtilized = await getVialsUtilised();
-		if (unitsUtilized?.data?.success) {
-			setUnitsUtilized(unitsUtilized.data.data);
-		}
+    const unitsUtilized = await getVialsUtilised();
+    if (unitsUtilized?.data?.success) {
+      setUnitsUtilized(unitsUtilized.data.data);
+    }
 
-		const vaccinationsList = await getVaccinationsList();
-		if (vaccinationsList?.data?.success) {
-			setTotalVaccinations(vaccinationsList.data.data.vaccinationsList);
-			setTodaysVaccinations(vaccinationsList.data.data.todaysVaccinationsList);
-		}
-	}, []);
+    const vaccinationsList = await getVaccinationsList();
+    if (vaccinationsList?.data?.success) {
+      setTotalVaccinations(vaccinationsList.data.data.vaccinationsList);
+      setTodaysVaccinations(vaccinationsList.data.data.todaysVaccinationsList);
+    }
+  }, []);
 
-	const completeVaccination = async () => {
-		setSteps(1);
-		const result = await fetchAnalytics();
-		if (result?.data?.success) {
-			setAnalytics(result.data.data);
-		}
-	};
+  const completeVaccination = async () => {
+    setSteps(1);
+    console.log("helllo i am running");
+    const result = await fetchAnalytics();
+    if (result?.data?.success) {
+      setAnalytics(result.data.data);
+    }
+  };
 
-	const handleAnalyticsClicked = (tableType) => {
-		let table;
-		switch (tableType) {
-			case "unitsUtilized": {
-				table = <UnitUsedTable unitsUtilized={unitsUtilized} />;
-				break;
-			}
-			case "totalVaccinations": {
-				table = <TotalVaccinatedTable vaccinationsList={totalVaccinations} />;
-				break;
-			}
-			case "todaysVaccinations": {
-				table = <TodayVaccinatedTable vaccinationsList={todaysVaccinations} />;
-				break;
-			}
-		}
+  const handleAnalyticsClicked = (tableType) => {
+    let table;
+    switch (tableType) {
+      case "unitsUtilized": {
+        table = <UnitUsedTable unitsUtilized={unitsUtilized} />;
+        break;
+      }
+      case "totalVaccinations": {
+        table = <TotalVaccinatedTable vaccinationsList={totalVaccinations} />;
+        break;
+      }
+      case "todaysVaccinations": {
+        table = <TodayVaccinatedTable vaccinationsList={todaysVaccinations} />;
+        break;
+      }
+    }
 
-		setTableComp(table);
-		setTableView(true);
-	};
+    setTableComp(table);
+    setTableView(true);
+  };
 
 	return (
 		<>
