@@ -68,10 +68,19 @@ exports.getOrgs = [
   auth,
   async (req, res) => {
     try {
+      console.log(req.query.skip)
+
       const users = await OrganisationModel.aggregate([
         {
           $match: getOrgCondition(req.query),
         },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        { $skip: parseInt(req.query.skip) || 0 },
+        { $limit: parseInt(req.query.limit) || 10 },
       ]);
       for (var c = 0; c < users.length; c++) {
         if (EmployeeIdMap.has(users[c].primaryContactId)) {
@@ -92,7 +101,9 @@ exports.getOrgs = [
               users[c].primaryContactId = employeeEmail.phoneNumber;
             }
 
-          } catch (err) {}
+          } catch (err) {
+            console.log(err);
+          }
         }
       }
       // console.log("Users", users);
@@ -107,7 +118,85 @@ exports.getOrgs = [
     }
   },
 ];
-
+exports.getOrgAnalytics = [
+  auth,
+  async (req, res) => {
+    try{
+      const analytics = await OrganisationModel.aggregate([
+        {
+          $facet: {
+            total: [
+              { $match: {} },
+              {
+                $group: {
+                  _id: null,
+                  organisations: {
+                    $addToSet: {
+                      organisationId: "$id",
+                      status: "$status",
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$organisations" },
+                      then: { $size: "$organisations" },
+                      else: "NA",
+                    },
+                  },
+                },
+              },
+            ],
+            active: [
+              { $match: { status: "ACTIVE" } },
+              {
+                $group: {
+                  _id: null,
+                  organisations: {
+                    $addToSet: {
+                      organisationId: "$id",
+                      status: "$status",
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$organisations" },
+                      then: { $size: "$organisations" },
+                      else: "NA",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {$unwind: "$total"},
+        {$unwind: "$active"},
+      ]);
+      console.log(analytics);
+      const analyticsObject = {
+        totalCount: analytics[0].total.count,
+        activeCount: analytics[0].active.count,
+        inactiveCount:  analytics[0].total.count - analytics[0].active.count,
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisation list",
+        analyticsObject
+      );
+    }catch(err){
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
 exports.updateOrg = [
   auth,
   async (req, res) => {

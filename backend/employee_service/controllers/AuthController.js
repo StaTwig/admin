@@ -383,6 +383,24 @@ exports.getAllUsers = [
   },
 ];
 
+exports.getWarehouseUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find(
+        {warehouseId: req.query.warehouseId}
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Users Retrieved Success",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getOrgUsers = [
   auth,
   async (req, res) => {
