@@ -1,0 +1,9 @@
+.admin--Graphs-container {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: 0.4rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

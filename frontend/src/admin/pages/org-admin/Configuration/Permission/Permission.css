@@ -35,3 +35,9 @@
 .indication-icon {
   margin-right: 1rem;
 }
+
+.permission-container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
