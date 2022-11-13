@@ -8,6 +8,7 @@ const {
   addUser,
   activateUser,
   deactivateUser,
+  updateUserRole,
 } = require("../controllers/ApprovalController");
 const { getOrgs, updateOrg } = require("../controllers/OrganisationController");
 const { Image } = require("../controllers/AuthController");
@@ -19,6 +20,7 @@ app.get("/getApprovals", getApprovals);
 app.get("/acceptApproval", acceptApproval); // /approveApproval?id=123
 app.get("/rejectApproval", rejectApproval); // /rejectApproval?id=123
 app.post("/addUser", addUser);
+app.get("/updateUserRole", updateUserRole);
 app.post("/updateOrg", updateOrg);
 app.get("/activateUser", activateUser); // /activateUser?id=123
 app.get("/deactivateUser", deactivateUser); // /deactivateUser?id=123
