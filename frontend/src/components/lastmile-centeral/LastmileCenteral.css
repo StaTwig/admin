@@ -34,7 +34,7 @@
 }
 
 .export-collapse-btn {
-  position: relative;
+  position: relative !important;
 }
 
 .export-button-dropdown {
