@@ -34,7 +34,7 @@ export default function OrganizationRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            ABC Redfort Organization{" "}
+            {rows.name + " "}
           </p>
         </TableCell>
         <TableCell>
@@ -43,7 +43,7 @@ export default function OrganizationRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Manufacturer
+            {rows.type}
           </p>
         </TableCell>
         <TableCell>
@@ -61,7 +61,7 @@ export default function OrganizationRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            5
+            {rows.warehouses.length}
           </p>
         </TableCell>
         <TableCell>
@@ -70,7 +70,7 @@ export default function OrganizationRow({ rows }) {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            India
+            {rows.country}
           </p>
         </TableCell>
         <TableCell>
@@ -91,14 +91,14 @@ export default function OrganizationRow({ rows }) {
             <p
               className={`vl-note f-500 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
-              29/08/2022
+              {new Date(rows.createdAt).toLocaleDateString()}
             </p>
             <p
               className={`vl-small f-500 ${
                 checked ? "vl-black" : "vl-grey-sm"
               }`}
             >
-              11.00 AM
+              {new Date(rows.createdAt).toLocaleTimeString([], {hour: "2-digit" , minute: "2-digit"})}
             </p>
           </div>
         </TableCell>

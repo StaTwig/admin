@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,45 +8,24 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import OrganizationRow from "./OrganizationRow";
 import { TablePagination } from "@mui/material";
+import { getOrgs } from "../../../../actions/organisationActions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OrganizationTable() {
   const Data = [
     {
       id: "1",
       status: true,
-    },
-    {
-      id: "2",
-      status: true,
-    },
-    {
-      id: "3",
-      status: false,
-    },
-    {
-      id: "4",
-      status: true,
-    },
-    {
-      id: "5",
-      status: true,
-    },
-    {
-      id: "6",
-      status: false,
-    },
-    {
-      id: "7",
-      status: false,
-    },
-    {
-      id: "8",
-      status: true,
-    },
+    }
   ];
-
-  const [page, setPage] = React.useState(2);
+  const dispatch = useDispatch();
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  useEffect(() => {dispatch(getOrgs(`skip=${page * 10}&limit=${rowsPerPage}`))}, [dispatch, page, rowsPerPage]);
+  const { list }= useSelector((state) => state.organisationReducer);
+  console.log(list);
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -102,7 +81,7 @@ export default function OrganizationTable() {
           </TableRow>
         </TableHead>
         <TableBody className="organization-tbody">
-          {Data.map((rows, index) => (
+          {list.map((rows, index) => (
             <OrganizationRow key={rows.id} rows={rows} index={index} />
           ))}
         </TableBody>
