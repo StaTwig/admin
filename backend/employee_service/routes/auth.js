@@ -9,6 +9,9 @@ router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
 router.get("/getOrgUsers", AuthController.getOrgUsers);
+router.get("/getWarehouseUsers", AuthController.getWarehouseUsers);
+router.get("/getOrgUserAnalytics", AuthController.getOrgUserAnalytics);
+
 router.get("/getOrgActiveUsers", AuthController.getOrgActiveUsers);
 router.get("/getUsers", AuthController.getUsers);
 router.post("/updateProfile", AuthController.updateProfile);

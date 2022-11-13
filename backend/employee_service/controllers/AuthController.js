@@ -383,6 +383,24 @@ exports.getAllUsers = [
   },
 ];
 
+exports.getWarehouseUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find(
+        {warehouseId: req.query.warehouseId}
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Users Retrieved Success",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getOrgUsers = [
   auth,
   async (req, res) => {
@@ -420,6 +438,8 @@ exports.getOrgUsers = [
             country: "$orgs.country"
           },
         },
+        {$skip: parseInt(req.query.skip) || 0},
+        {$limit: parseInt(req.query.limit) || 0}
       ]);
 
       return apiResponse.successResponseWithData(
@@ -433,6 +453,84 @@ exports.getOrgUsers = [
     }
   },
 ];
+
+exports.getOrgUserAnalytics = [
+  auth,
+  async (req, res) => {
+    try{
+      const analytics = await EmployeeModel.aggregate([
+        {
+          $facet: {
+            total: [
+              { $match: {} },
+              {
+                $group: {
+                  _id: null,
+                  employees: {
+                    $addToSet: {
+                      employeeId: "$id",
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$employees" },
+                      then: { $size: "$employees" },
+                      else: "NA",
+                    },
+                  },
+                },
+              },
+            ],
+            active: [
+              { $match: { accountStatus: "ACTIVE" } },
+              {
+                $group: {
+                  _id: null,
+                  employees: {
+                    $addToSet: {
+                      employeeId: "$id",
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$employees" },
+                      then: { $size: "$employees" },
+                      else: "NA",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {$unwind: "$total"},
+        {$unwind: "$active"},
+      ]);
+      console.log(analytics);
+      const analyticsObject = {
+        totalCount: analytics[0].total.count,
+        activeCount: analytics[0].active.count,
+        inactiveCount:  analytics[0].total.count - analytics[0].active.count,
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "User Analytics",
+        analyticsObject
+      );
+    }catch(err){
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
 
 exports.getUsers = [
   auth,
