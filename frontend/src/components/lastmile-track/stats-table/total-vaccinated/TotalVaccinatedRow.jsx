@@ -1,4 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
+import { format } from 'date-fns';
 import React from "react";
 
 export default function TotalVaccinatedRow({dose, index}) {
@@ -26,7 +27,7 @@ export default function TotalVaccinatedRow({dose, index}) {
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">{new Date(dose.createdAt).toDateString()}</p>
+          <p className="vl-body f-500 ">{format(new Date(dose.createdAt), 'dd/mm/yyyy')}</p>
         </div>
       </TableCell>
     </TableRow>
