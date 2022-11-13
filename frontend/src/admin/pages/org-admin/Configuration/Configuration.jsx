@@ -8,10 +8,17 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getAllRoles, getPermissionByRole, getPermissions, updatePermissionsByRole } from "../../../actions/organisationActions";
+import Modal from "../../../../shared/modal";
+import {
+  getAllRoles,
+  getPermissionByRole,
+  getPermissions,
+  updatePermissionsByRole,
+} from "../../../actions/organisationActions";
 import AddRole from "../../../components/AddRole/AddRole";
 import AssignRole from "../../../components/AssignRole/AssignRole";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
+import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
 
@@ -20,40 +27,41 @@ export default function Configuration(props) {
   const [selectedRole, setSelectedRole] = useState("admin");
   const [permissions, setPermissions] = useState({});
   const [updatedPermissions, setUpdatedPermissions] = useState(null);
-  async function getUserRoles(){
+  const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
+  async function getUserRoles() {
     const roles = await getAllRoles();
     setRoles(roles);
   }
   useEffect(() => {
     getUserRoles();
-  }, [])
+  }, []);
   const dispatch = useDispatch();
-  async function getRolePermissions(){
+  async function getRolePermissions() {
     const permissions = await getPermissionByRole(selectedRole);
     const allPermissions = await dispatch(getPermissions());
-    console.log(allPermissions)
+    console.log(allPermissions);
     setPermissions(permissions);
   }
   useEffect(() => {
     getRolePermissions();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRole])
-  async function permissionUpdate(){
-    if(updatedPermissions){
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRole]);
+  async function permissionUpdate() {
+    if (updatedPermissions) {
       const res = await updatePermissionsByRole({
         permissions: updatedPermissions,
         orgId: props.user.organisationId,
-        role: selectedRole
+        role: selectedRole,
       });
-    console.log(res);
+      console.log(res);
+      setOpenSuccessPopup(true);
     }
   }
 
   const uniq = [...new Set(roles)];
-  async function updatePermissions(data){
+  async function updatePermissions(data) {
     setUpdatedPermissions(data);
   }
-
 
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
@@ -76,6 +84,10 @@ export default function Configuration(props) {
     setOpen2(false);
   };
 
+  const closeModal = () => {
+    setOpenSuccessPopup(false);
+    // props.history.push("/inventory");
+  };
   return (
     <>
       <OrgHeader />
@@ -100,12 +112,12 @@ export default function Configuration(props) {
                 >
                   Add Roles
                 </button>
-                <button
+                {/* <button
                   className="vl-btn vl-btn-md vl-btn-primary"
                   onClick={permissionUpdate}
                 >
                   Save
-                </button>
+                </button> */}
               </div>
             </div>
 
@@ -140,10 +152,27 @@ export default function Configuration(props) {
               </div>
             </div>
 
-            <Permission permissions={permissions[0]} updatePermissions={updatePermissions} />
+            <Permission
+              permissions={permissions[0]}
+              updatePermissions={updatePermissions}
+              permissionUpdate={permissionUpdate}
+              updatedPermissions={updatedPermissions}
+            />
           </div>
         </div>
       </section>
+      {openSuccessPopup && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModal}
+            successMessage="Permissions updated successfully"
+            // errorMessage="Put the Error Message Here"
+          />
+        </Modal>
+      )}
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}

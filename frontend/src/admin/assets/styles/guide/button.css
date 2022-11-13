@@ -71,7 +71,7 @@
   background-color: var(--white);
   border: 2px solid var(--disabled);
   color: var(--disabled);
-  cursor: default;
+  cursor: default !important;
 }
 .vl-btn-accept {
   background-color: var(--btn-accept);
