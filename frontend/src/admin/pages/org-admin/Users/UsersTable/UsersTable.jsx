@@ -12,14 +12,14 @@ import {getOrgUsers} from "../../../../actions/organisationActions"
 import { useDispatch, useSelector } from "react-redux";
 export default function UsersTable() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getOrgUsers());
-  }, [dispatch]);
+
   const { users } = useSelector((state) => state.organisationReducer);
 
-  const [page, setPage] = React.useState(2);
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  useEffect(() => {
+    dispatch(getOrgUsers(`skip=${page * 10}&limit=${rowsPerPage}`));
+  }, [dispatch, page, rowsPerPage]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -81,7 +81,7 @@ export default function UsersTable() {
       </Table>
       <TablePagination
         component="div"
-        count={100}
+        count={1000}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

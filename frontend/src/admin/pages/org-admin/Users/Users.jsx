@@ -5,6 +5,8 @@ import { Dialog, DialogContent } from "@mui/material";
 import UsersTable from "./UsersTable/UsersTable";
 import AddUsers from "../../../components/AddUsers/AddUsers";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrgUserAnalytics } from "../../../actions/organisationActions";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -28,7 +30,10 @@ let useClickOutside = (handler) => {
 
 export default function Users() {
   const [ButtonOpen, setButtonOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(getOrgUserAnalytics())}, [dispatch]);
+  const { userAnalytics } = useSelector((state) => state.organisationReducer);
+  const { totalCount, activeCount, inactiveCount } = userAnalytics;
   let domNode = useClickOutside(() => {
     setButtonOpen(false);
   });
@@ -54,24 +59,24 @@ export default function Users() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="436"
-                valueTitle="Total Number of Organization"
+                value={totalCount}
+                valueTitle="Total Number of Users"
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
               />
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="316"
-                valueTitle="Active Organization"
+                value={activeCount}
+                valueTitle="Active Users"
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
               />
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="120"
-                valueTitle="In Active Organization"
+                value={inactiveCount}
+                valueTitle="Inactive Users"
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"
               />

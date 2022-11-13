@@ -15,6 +15,7 @@ import {
   SET_ALL_ORGANISATION_ACTIVE_USERS,
   SET_WAREHOUSE_USERS,
   SET_ORG_ANALYTICS,
+  SET_USER_ANALYTICS,
 } from "../admin/constants/organisationConstants";
 
 export const initialState = {
@@ -31,7 +32,8 @@ export const initialState = {
   allList: [],
   activeUsers: [],
   warehouseUsers: [],
-  orgAnalytics: {}
+  orgAnalytics: {},
+  userAnalytics: {},
 };
 
 export const organisationReducer = (state = initialState, action) => {
@@ -44,6 +46,8 @@ export const organisationReducer = (state = initialState, action) => {
       return { ...state, addresses: action.payload.data };
     case SET_ORG_ANALYTICS:
         return { ...state, orgAnalytics: action.payload.data };
+    case SET_USER_ANALYTICS:
+          return { ...state, userAnalytics: action.payload.data };
     case SET_ORGANISATION_TYPES:
       return { ...state, types: action.payload };
     case SET_ORGANISATION_USERS:

@@ -16,7 +16,8 @@ import {
   SET_WAREHOUSE_USERS,
   SET_ALL_ORGANISATIONS,
   SET_ALL_ORGANISATION_ACTIVE_USERS,
-  SET_ORG_ANALYTICS
+  SET_ORG_ANALYTICS,
+  SET_USER_ANALYTICS
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -320,6 +321,24 @@ export const getOrgAnalytics = () => {
       console.log(err);
     };
   }
+};
+
+export const getOrgUserAnalytics = () => {
+  return async (dispatch) => {
+    try{
+    dispatch(turnOn());
+    const url =  config().getOrgUserAnalytics;
+    const result = await axios.get(url);
+    dispatch({
+      type: SET_USER_ANALYTICS,
+      payload: result.data,
+    });
+    dispatch(turnOff());
+    return result.data.data;
+  }catch(err){
+    console.log(err);
+  };
+}
 };
 
 export const getTypes = () => {
