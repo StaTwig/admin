@@ -246,14 +246,16 @@ services:
       - "traefik.http.routers.track.tls=true"
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
 
-  frontend:
-    build: "./frontend"
-    image: "frontend1.0"
-    container_name: "frontend"
-    restart: always
-    environment:
-      - "NODE_ENV=production"
-      - "ENVIRONMENT=prod"
+frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+      args:
+        - "ENVIRONMENT=prod"
+        - "SERVER_URL=https://vaccineledger.com"
+        - "GOOGLE_CLIENT_ID="
+    image: "frontend2.0"
+    container_name: "cra-frontend"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
