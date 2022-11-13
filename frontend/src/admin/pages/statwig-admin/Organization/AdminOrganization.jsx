@@ -5,6 +5,8 @@ import OrganizationTable from "./OrganizationTable/OrganizationTable";
 import AddOrganization from "../../../components/AddOrganization/AddOrganization";
 import { Dialog, DialogContent } from "@mui/material";
 import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrgAnalytics } from "../../../actions/organisationActions";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -28,7 +30,10 @@ let useClickOutside = (handler) => {
 
 export default function AdminOrganization() {
   const [ButtonOpen, setButtonOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(getOrgAnalytics())}, [dispatch]);
+  const { orgAnalytics } = useSelector((state) => state.organisationReducer);
+  const { totalCount, activeCount, inactiveCount } = orgAnalytics;
   let domNode = useClickOutside(() => {
     setButtonOpen(false);
   });
@@ -54,7 +59,7 @@ export default function AdminOrganization() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="436"
+                value={totalCount}
                 valueTitle="Total Number of Organization"
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
@@ -62,7 +67,7 @@ export default function AdminOrganization() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="316"
+                value={activeCount}
                 valueTitle="Active Organization"
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
@@ -70,7 +75,7 @@ export default function AdminOrganization() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="120"
+                value={inactiveCount}
                 valueTitle="In Active Organization"
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"

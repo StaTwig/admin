@@ -13,9 +13,9 @@ export default function OrganizationRow({ rows }) {
       <TableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         className={`organization-tr ${checked && "organization-bar-added"}`}
-        onClick={() => history.push("/statwig/view-locations")}
+        onClick={() => history.push("/statwig/view-locations/" + JSON.stringify(rows))}
       >
-        <TableCell>
+        {/* <TableCell>
           <Checkbox
             className="vl-checkbox"
             value={checked}
@@ -27,7 +27,7 @@ export default function OrganizationRow({ rows }) {
               },
             }}
           />
-        </TableCell>
+        </TableCell> */}
         <TableCell>
           <p
             className={`vl-body ${

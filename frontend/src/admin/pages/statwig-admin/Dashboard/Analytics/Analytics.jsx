@@ -1,6 +1,7 @@
 import React from "react";
 import "./Analytics.css";
 import AnalyticsCard from "../../../../common/AnalyticsCard/AnalyticsCard";
+import Graphs from "../../../../components/Graphs/Graphs";
 
 export default function Analytics() {
   return (
@@ -25,6 +26,22 @@ export default function Analytics() {
           valueTitle="Total Revenue"
           bgColor="analytic-bg-2"
           textColor="analytic-text-2"
+        />
+      </div>
+      <div className="analytics-full-column-layout">
+        <Graphs
+          role="statwig"
+          type="column"
+          title="Orders Received VS Shipments Delivered"
+          color="1"
+        />
+      </div>
+      <div className="analytics-full-column-layout">
+        <Graphs
+          role="statwig"
+          type="column"
+          title="Orders Received VS Shipments Delivered"
+          color="2"
         />
       </div>
     </section>

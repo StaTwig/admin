@@ -9,53 +9,18 @@ import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import UserRow from "./UserRow";
 
-export default function UserTable() {
-  const Data = [
-    {
-      id: "1",
-      status: true,
-    },
-    {
-      id: "2",
-      status: true,
-    },
-    {
-      id: "3",
-      status: false,
-    },
-    {
-      id: "4",
-      status: true,
-    },
-    {
-      id: "5",
-      status: true,
-    },
-    {
-      id: "6",
-      status: false,
-    },
-    {
-      id: "7",
-      status: false,
-    },
-    {
-      id: "8",
-      status: true,
-    },
-  ];
+export default function UserTable({employees}) {
+  // const [page, setPage] = React.useState(2);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
   return (
     <>
@@ -81,7 +46,7 @@ export default function UserTable() {
         >
           <TableHead className="organization-thead">
             <TableRow className="organization-tr">
-              <TableCell>
+              {/* <TableCell>
                 <Checkbox
                   className="vl-checkbox"
                   name="allCheck"
@@ -92,7 +57,7 @@ export default function UserTable() {
                     },
                   }}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <h1 className="vl-note f-500 vl-blue">User Name</h1>
               </TableCell>
@@ -111,19 +76,19 @@ export default function UserTable() {
             </TableRow>
           </TableHead>
           <TableBody className="organization-tbody">
-            {Data.map((rows, index) => (
-              <UserRow key={rows.id} rows={rows} index={index} />
+            {employees.map((rows, index) => (
+              <UserRow key={rows} rows={rows} index={index} />
             ))}
           </TableBody>
         </Table>
-        <TablePagination
+        {/* <TablePagination
           component="div"
           count={100}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        /> */}
       </TableContainer>
     </>
   );

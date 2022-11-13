@@ -7,7 +7,7 @@ import AddUsers from "../../../components/AddUsers/AddUsers";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addOrgUser,
+	addOrgUser,
 	getAllOrganisations,
 	getAllRoles,
 	getAllRolesForTPL,
@@ -16,6 +16,7 @@ import {
 	getRecentReqSent,
 	getRequestsPending,
 	getWareHouses,
+	getOrgUserAnalytics,
 } from "../../../actions/organisationActions";
 
 let useClickOutside = (handler) => {
@@ -43,6 +44,8 @@ export default function Users(props) {
 
 	const permissions = useSelector((state) => state?.organisationReducer?.permissions);
 	const addresses = useSelector((state) => state?.organisationReducer?.addresses);
+	const { userAnalytics } = useSelector((state) => state.organisationReducer);
+	const { totalCount, activeCount, inactiveCount } = userAnalytics;
 
 	const [ButtonOpen, setButtonOpen] = useState(false);
 
@@ -65,6 +68,7 @@ export default function Users(props) {
 		dispatch(getAllOrganisations());
 		dispatch(getOrgActiveUsers());
 		dispatch(getWareHouses());
+		dispatch(getOrgUserAnalytics());
 
 		//getRoles
 		async function getRoles() {
@@ -80,17 +84,17 @@ export default function Users(props) {
 	}, []);
 
 	const onSuccess = async (data) => {
-    try {
-      const result = await addOrgUser(data);
-      if(result.status === 200) {
-        console.log("User added successfully!");
-        handleClose();
-      } else {
-        console.log("Error in adding user - ", result.data.message);
-      }
-    } catch(err) {
-      console.log("error - ", err);
-    }
+		try {
+			const result = await addOrgUser(data);
+			if (result.status === 200) {
+				console.log("User added successfully!");
+				handleClose();
+			} else {
+				console.log("Error in adding user - ", result.data.message);
+			}
+		} catch (err) {
+			console.log("error - ", err);
+		}
 	};
 
 	const handleClickOpen = () => {
@@ -110,7 +114,7 @@ export default function Users(props) {
 							<AnalyticsCard
 								layout="type4"
 								icon="fa-building"
-								value="436"
+								value={totalCount}
 								valueTitle="Total Number of Organization"
 								bgColor="analytic-bg-1"
 								textColor="analytic-text-1"
@@ -118,7 +122,7 @@ export default function Users(props) {
 							<AnalyticsCard
 								layout="type4"
 								icon="fa-building"
-								value="316"
+								value={activeCount}
 								valueTitle="Active Organization"
 								bgColor="analytic-bg-2"
 								textColor="analytic-text-2"
@@ -126,7 +130,7 @@ export default function Users(props) {
 							<AnalyticsCard
 								layout="type4"
 								icon="fa-building"
-								value="120"
+								value={inactiveCount}
 								valueTitle="In Active Organization"
 								bgColor="analytic-bg-3"
 								textColor="analytic-text-3"
@@ -148,17 +152,17 @@ export default function Users(props) {
 									<div className="table-dropdown-button" ref={domNode}>
 										<button
 											className="vl-btn vl-btn-alt vl-btn-primary"
-                      // onClick={() => setButtonOpen(!ButtonOpen)}
-                      onClick={handleClickOpen}
+											// onClick={() => setButtonOpen(!ButtonOpen)}
+											onClick={handleClickOpen}
 										>
 											Add Users
 										</button>
 
 										<div className={`button-dropdown ${ButtonOpen && "active"}`}>
-											{/* <div className="btn-dropdown-card">
-                        <i className="fa-solid fa-upload"></i>
-                        <p className="vl-note f-500">Import Users</p>
-                      </div> */}
+											<div className="btn-dropdown-card">
+												<i className="fa-solid fa-upload"></i>
+												<p className="vl-note f-500">Import Users</p>
+											</div>
 											<div className="btn-dropdown-card" onClick={handleClickOpen}>
 												<i className="fa-solid fa-plus"></i>
 												<p className="vl-note f-500">Add Users</p>
@@ -176,8 +180,8 @@ export default function Users(props) {
 						<AddUsers
 							handleClose={handleClose}
 							addresses={addresses}
-              defaultRoles={defaultRoles}
-              onSuccess={onSuccess}
+							defaultRoles={defaultRoles}
+							onSuccess={onSuccess}
 						/>
 					</DialogContent>
 				</Dialog>

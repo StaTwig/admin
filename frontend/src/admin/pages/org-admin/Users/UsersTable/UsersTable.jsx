@@ -20,9 +20,11 @@ export default function UsersTable(props) {
   }, [dispatch]);
   const { users } = useSelector((state) => state.organisationReducer);
 
-  const [page, setPage] = React.useState(2);
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  useEffect(() => {
+    dispatch(getOrgUsers(`skip=${page * 10}&limit=${rowsPerPage}`));
+  }, [dispatch, page, rowsPerPage]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -84,7 +86,7 @@ export default function UsersTable(props) {
       </Table>
       <TablePagination
         component="div"
-        count={100}
+        count={1000}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

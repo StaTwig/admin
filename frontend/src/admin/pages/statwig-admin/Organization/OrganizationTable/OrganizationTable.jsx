@@ -45,7 +45,7 @@ export default function OrganizationTable() {
       >
         <TableHead className="organization-thead">
           <TableRow className="organization-tr">
-            <TableCell>
+            {/* <TableCell>
               <Checkbox
                 className="vl-checkbox"
                 name="allCheck"
@@ -56,7 +56,7 @@ export default function OrganizationTable() {
                   },
                 }}
               />
-            </TableCell>
+            </TableCell> */}
             <TableCell>
               <h1 className="vl-note f-500 vl-blue">Organization Name</h1>
             </TableCell>
@@ -88,7 +88,7 @@ export default function OrganizationTable() {
       </Table>
       <TablePagination
         component="div"
-        count={100}
+        count={1000}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

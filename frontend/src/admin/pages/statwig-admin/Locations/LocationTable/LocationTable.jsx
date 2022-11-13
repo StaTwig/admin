@@ -7,29 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import LocationRow from "./LocationRow";
 
-export default function LocationTable() {
-  const Locations = [
-    {
-      id: "1",
-      status: true,
-    },
-    {
-      id: "2",
-      status: true,
-    },
-    {
-      id: "3",
-      status: false,
-    },
-    {
-      id: "4",
-      status: true,
-    },
-    {
-      id: "5",
-      status: true,
-    },
-  ];
+export default function LocationTable({Locations, org}) {
+  
   return (
     <>
       <TableContainer>
@@ -59,7 +38,7 @@ export default function LocationTable() {
           </TableHead>
           <TableBody>
             {Locations.map((product) => (
-              <LocationRow key={product.id} product={product} />
+              <LocationRow key={product.id} product={product} org={org} />
             ))}
           </TableBody>
         </Table>

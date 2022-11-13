@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LocationCard from "../../../common/LocationCard/LocationCard";
 import TileCard from "../../../common/TileCard/TileCard";
 import "./ViewUsers.css";
 import UserTable from "./UserTable/UserTable";
 import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
+import { useParams } from "react-router-dom";
+import { getWarehouseUsers } from "../../../actions/organisationActions";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function ViewUsers() {
+export default function ViewUsers() {  
+  const params = useParams();
+  const org = JSON.parse(params.org);
+  const product = JSON.parse(params.product);
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(getWarehouseUsers(`warehouseId=${product.id}`))}, [dispatch, product.id])
+  const { warehouseUsers } = useSelector((state) => state.organisationReducer);
+
+
   return (
     <>
       <StatwigHeader />
@@ -35,12 +46,12 @@ export default function ViewUsers() {
                 </div>
               </div>
               <div className="location-details-grid">
-                <LocationCard layout="user" />
+                <LocationCard layout="user" org={org} product={product}/>
                 <TileCard layout="user" />
               </div>
             </div>
 
-            <UserTable />
+            <UserTable employees={warehouseUsers}/>
           </div>
         </div>
       </section>
