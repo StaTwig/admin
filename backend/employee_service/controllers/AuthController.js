@@ -383,6 +383,24 @@ exports.getAllUsers = [
   },
 ];
 
+exports.getWarehouseUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find(
+        {warehouseId: req.query.warehouseId}
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Users Retrieved Success",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getOrgUsers = [
   auth,
   async (req, res) => {
@@ -413,7 +431,11 @@ exports.getOrgUsers = [
             role: 1,
             emailId: 1,
             postalAddress: 1,
+            createdAt: 1,
             location: "$orgs.postalAddress",
+            city: "$orgs.city",
+            region: "$orgs.region",
+            country: "$orgs.country"
           },
         },
       ]);

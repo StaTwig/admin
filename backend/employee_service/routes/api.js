@@ -9,12 +9,13 @@ const {
   activateUser,
   deactivateUser,
 } = require("../controllers/ApprovalController");
-const { getOrgs, updateOrg } = require("../controllers/OrganisationController");
+const { getOrgs, updateOrg, getOrgAnalytics } = require("../controllers/OrganisationController");
 const { Image } = require("../controllers/AuthController");
 const app = express();
 
 app.use("/auth", authRouter);
 app.get("/getOrgs", getOrgs);
+app.get("/getOrgAnalytics", getOrgAnalytics);
 app.get("/getApprovals", getApprovals);
 app.get("/acceptApproval", acceptApproval); // /approveApproval?id=123
 app.get("/rejectApproval", rejectApproval); // /rejectApproval?id=123
