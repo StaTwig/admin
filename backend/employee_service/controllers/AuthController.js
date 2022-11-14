@@ -561,7 +561,7 @@ exports.verifyOtp = [
 					query.emailId = req.body.emailId;
 				}
 				const user = await EmployeeModel.findOne(query);
-				if(user) {
+				if (user) {
 					if (user.otp == req.body.otp) {
 						const activeWarehouse = await WarehouseModel.find({
 							$and: [
@@ -571,7 +571,7 @@ exports.verifyOtp = [
 								},
 							],
 						});
-	
+
 						let userData;
 						if (activeWarehouse.length > 0) {
 							let activeWarehouseId = 0;
@@ -615,7 +615,7 @@ exports.verifyOtp = [
 						//Generated JWT token with Payload and secret.
 						userData.permissions = await RbacModel.findOne({ role: user.role });
 						userData.token = jwt.sign(jwtPayload, secret, jwtData);
-	
+
 						const bc_data = {
 							username: req.body.emailId,
 							password: "",
@@ -989,7 +989,7 @@ exports.updateProfile = [
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
-			if(phoneNumber) {
+			if (phoneNumber) {
 				employee.phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
 			} else {
 				employee.phoneNumber = phoneNumber;
@@ -1077,14 +1077,13 @@ exports.deleteProfile = [
 	auth,
 	async (req, res) => {
 		try {
-			const employee = await EmployeeModel.updateOne(
+			await EmployeeModel.updateOne(
 				{ id: req.user.id },
 				{ $set: { accountStatus: "DELETED" } },
-				{new: true}
 			);
 
 			return apiResponse.successResponse(req, res, "User account deleted successfully!");
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(req, res, err.message);
 		}
@@ -1240,11 +1239,11 @@ exports.addWarehouse = [
 					$set: {
 						...(skipOrgRegistration
 							? {
-									postalAddress: addr,
-									country: warehouseAddress.country,
-									region: warehouseAddress.region,
-									status: "NOTVERIFIED",
-							  }
+								postalAddress: addr,
+								country: warehouseAddress.country,
+								region: warehouseAddress.region,
+								status: "NOTVERIFIED",
+							}
 							: {}),
 					},
 					$push: {
@@ -1520,8 +1519,8 @@ exports.getAllRegisteredUsers = [
 			const page = req.query.page || 1; // Page
 			const totalRecords = await EmployeeModel.count({});
 			/* 
-      Performance Bottleneck 
-      */
+	  Performance Bottleneck 
+	  */
 			const users = await EmployeeModel.find({ accountStatus: { $ne: "DELETED" } })
 				.skip(resPerPage * page - resPerPage)
 				.limit(resPerPage);
@@ -1906,7 +1905,7 @@ exports.emailverify = [
 				},
 				"emailId phoneNumber",
 			);
-			if(email && email.length) {
+			if (email && email.length) {
 				return apiResponse.validationErrorWithData(
 					req,
 					res,
