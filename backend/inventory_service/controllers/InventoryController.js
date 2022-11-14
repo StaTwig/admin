@@ -555,9 +555,9 @@ exports.addProductsToInventory = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-				emailId: req.user.emailId,
-				accountStatus: { $ne: "DELETED" },
-			});
+        emailId: req.user.emailId,
+        accountStatus: { $ne: "DELETED" },
+      });
       const orgId = empData?.organisationId || req.user.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });
@@ -837,14 +837,6 @@ exports.addInventoriesFromExcel = [
         role: role,
         permissionRequired: ["addInventory"],
       };
-      const email = req.user.emailId;
-      const user_id = req.user.id;
-      const empData = await EmployeeModel.findOne({
-				emailId: req.user.emailId,
-				accountStatus: { $ne: "DELETED" },
-			});
-      const orgId = empData.organisationId;
-      const orgName = empData.name;
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
           const dir = `uploads`;
@@ -859,151 +851,44 @@ exports.addInventoriesFromExcel = [
             { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
           );
 
-          // Validate excel format
-          // I'm not sure how to put camel case field names in spanish so only validating english
-          const expectedColNames = [
-            "productName",
-            "manufacturerName",
-            "quantity",
-            "unitOfMeasure.name",
-            "manufacturingDate",
-            "expiryDate",
-            "storageConditionsMax",
-            "batchNumber",
-            "serialNumber",
-            "storageConditionsMin",
-            "orderID",
-          ];
-          if (!utility.compareArrays(expectedColNames, Object.keys(data[0]))) {
-            // Invalid format logic
-            return apiResponse.validationErrorWithData(
-              res,
-              responses(req.user.preferredLanguage).invalid_excel,
-              Object.keys(data[0])
-            );
-          }
-
-          const resData = utility.excludeExpireProduct(data);
-
-          const { address } = req.user;
-          let count = 0;
-          const chunkSize = 50;
-          let limit = chunkSize;
-          let skip = 0;
-
-          async function recursiveFun() {
-            skip = chunkSize * count;
-            count++;
-            limit = chunkSize * count;
-            const chunkedData = resData.slice(skip, limit);
-            let chunkUrls = [];
-            const serialNumbers = chunkedData.map((inventory) => {
-              return { id: inventory.serialNumber.trim() };
-            });
-            const inventoriesFound = await AtomModel.findOne({
-              $or: serialNumbers,
-            });
-            if (inventoriesFound) {
-              const newNotification = new NotificationModel({
-                owner: address,
-                message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                  inventoriesFound.serialNumber
-                }`,
-              });
-              await newNotification.save();
-              return apiResponse.ErrorResponse(
-                res,
-                "Duplicate Inventory Found"
-              );
-            }
-            chunkedData.forEach((inventory) => {
-              inventory.serialNumber = inventory.serialNumber.trim();
-              const userData = {
-                stream: stream_name,
-                key: inventory.serialNumber.trim(),
-                address: address,
-                data: inventory,
-              };
-              const postRequest = axios.post(
-                `${blockchain_service_url}/publishExcelData`,
-                userData
-              );
-              chunkUrls.push(postRequest);
-            });
-            axios
-              .all(chunkUrls)
-              .then(
-                axios.spread(async (...responses) => {
-                  const inventoryData = responses.map(
-                    (response) => response.data
-                  );
-                  if (limit < resData.length) {
-                    recursiveFun();
-                  }
-                })
-              )
-              .catch((errors) => {
-                console.log(errors);
-              });
-          }
-          recursiveFun();
-          for (const [index, prod] of resData.entries()) {
-            let product = await ProductModel.findOne({
-              name: prod.productName,
+          const formatedData = new Array();
+          for (const [index, prod] of data.entries()) {
+            const productCategory = prod?.['PRODUCT CATEGORY'] || prod?.['CATEGORIA DE PRODUCTO']
+            const productName = prod?.['PRODUCT NAME'] || prod?.['NOMBRE DEL PRODUCTO'];
+            const batchNumber = prod?.['BATCH NO'] || prod?.['LOT NUMBER'];
+            const manufacturerName = prod?.['MANUFACTURER'] || prod?.['FABRICANTE'];
+            const quantity = prod?.['QUANTITY'] || prod?.['CANTIDAD'] || 1;
+            const unitOfMeasure = prod?.['UNITS'] || prod?.['UNIDAD DE MEDIDA'];
+            const mfgDate = prod?.['MFG DATE'] || prod?.['FECHA DE FABRICACION'];
+            const expDate = prod?.['EXP DATE'] || prod?.['FECHA DE VENCIMIENTO'];
+            const product = await ProductModel.findOne({
+              name: productName.trim()
             });
             if (product) {
-              resData[index].productId = product.id;
-              resData[index].type = product.type;
+              formatedData[index] = {
+                productId: product.id,
+                type: product.type,
+                productCategory: productCategory,
+                productName: productName,
+                batchNumber: batchNumber,
+                manufacturerName: manufacturerName,
+                quantity: quantity,
+                unitOfMeasure: unitOfMeasure,
+                manufacturingDate: mfgDate,
+                expiryDate: expDate,
+              }
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                // preferred Language in not working in correct manner.
-                // responses(req.user.preferredLanguage).product_doesnt_exist
-                "Product_Doesn't_exist_in_the_inventory"
+                "Product Doesn't exist in the inventory"
               );
             }
           }
-
-          const event_data = {
-            eventID: cuid(),
-            eventTime: new Date().toISOString(),
-            eventType: {
-              primary: "ADD",
-              description: "INVENTORY",
-            },
-            actor: {
-              actorid: user_id || null,
-              actoruserid: email || null,
-            },
-            actorWarehouseId: req.user.warehouseId,
-            stackholders: {
-              ca: {
-                id: CENTRAL_AUTHORITY_ID || null,
-                name: CENTRAL_AUTHORITY_NAME || null,
-                address: CENTRAL_AUTHORITY_ADDRESS || null,
-              },
-              actororg: {
-                id: orgId || req.user.organisationId || null,
-                name: orgName || null,
-                address: address || null,
-              },
-              secondorg: {
-                id: null,
-                name: null,
-                address: null,
-              },
-            },
-            payload: {
-              data: {
-                products: [...resData],
-              },
-            },
-          };
-          logEvent(event_data);
+          const result = utility.excludeExpireProduct(formatedData);
           return apiResponse.successResponseWithData(
             res,
             responses(req.user.preferredLanguage).success,
-            resData
+            result
           );
         } else {
           return apiResponse.ErrorResponse(
@@ -1385,7 +1270,7 @@ exports.getProductListCounts = [
       const productList = await InventoryModel.find({ id: val });
       const list = productList[0]?.inventoryDetails;
 
-      if(!list || !list?.length) {
+      if (!list || !list?.length) {
         return apiResponse.successResponseWithData(res, []);
       }
 
@@ -2537,9 +2422,9 @@ exports.deleteProductsFromInventory = [
       const user_id = req.user.id;
       const email = req.user.emailId;
       const empData = await EmployeeModel.findOne({
-				emailId: req.user.emailId,
-				accountStatus: { $ne: "DELETED" },
-			});
+        emailId: req.user.emailId,
+        accountStatus: { $ne: "DELETED" },
+      });
       const orgId = empData.organisationId;
       const orgData = await OrganisationModel.findOne({
         id: orgId,
@@ -2867,9 +2752,9 @@ exports.reduceBatch = [
       const email = req.user.emailId;
       const user_id = req.user.id;
       const empData = await EmployeeModel.findOne({
-				emailId: req.user.emailId,
-				accountStatus: { $ne: "DELETED" },
-			});
+        emailId: req.user.emailId,
+        accountStatus: { $ne: "DELETED" },
+      });
       const orgId = empData?.organisationId || null;
       const orgName = empData.name;
       const orgData = await OrganisationModel.findOne({ id: orgId });

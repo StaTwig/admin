@@ -43,7 +43,7 @@ const VerifyInventory = (props) => {
         unitOfMeasure: inventory?.unitofMeasure?.name,
       };
     });
-   
+
     const result = await addProductsToInventory({
       products: postData,
     });
@@ -67,9 +67,6 @@ const VerifyInventory = (props) => {
     <div className='verifyinventory'>
       <div className='d-flex flex-row justify-content-between'>
         <h1 className='breadcrumb mt-2'>{t("review_inventory")}</h1>
-        {/* <button type="button" className="btn btn-outline-info">
-          Export
-        </button> */}
       </div>
       <div className='card'>
         <div className='card-body'>
@@ -139,22 +136,18 @@ const VerifyInventory = (props) => {
               var expiryMonth;
               var manufMonth;
               if (typeof reviewInventory.expiryDate == "object") {
-                manufMonth = `${
-                  new Date(reviewInventory.manufacturingDate).getMonth() + 1
-                }`;
-                expiryMonth = `${
-                  new Date(reviewInventory.expiryDate).getMonth() + 1
-                }`;
+                manufMonth = `${new Date(reviewInventory.manufacturingDate).getMonth() + 1
+                  }`;
+                expiryMonth = `${new Date(reviewInventory.expiryDate).getMonth() + 1
+                  }`;
               } else if (reviewInventory.expiryDate.length === 24) {
-                manufMonth = `${
-                  new Date(
-                    Date.parse(reviewInventory.manufacturingDate)
-                  ).getMonth() + 1
-                }`;
-                expiryMonth = `${
-                  new Date(Date.parse(reviewInventory.expiryDate)).getMonth() +
+                manufMonth = `${new Date(
+                  Date.parse(reviewInventory.manufacturingDate)
+                ).getMonth() + 1
+                  }`;
+                expiryMonth = `${new Date(Date.parse(reviewInventory.expiryDate)).getMonth() +
                   1
-                }`;
+                  }`;
               } else {
                 manufMonth = `${new Date(
                   Date.parse(reviewInventory.manufacturingDate)
@@ -186,7 +179,7 @@ const VerifyInventory = (props) => {
                     {reviewInventory["quantity"]}
                     <span>{"("}</span>
                     {typeof reviewInventory.unitofMeasure === "object" &&
-                    reviewInventory.unitofMeasure != null
+                      reviewInventory.unitofMeasure != null
                       ? reviewInventory.unitofMeasure.name
                       : reviewInventory["unitOfMeasure.name"]}
                     <span>{")"}</span>
@@ -195,28 +188,28 @@ const VerifyInventory = (props) => {
                     className='col-1'
                     style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
                   >
-                    {reviewInventory.manufacturingDate
+                    {reviewInventory?.manufacturingDate
                       ? `0${manufMonth}`.slice(-2) +
-                        "/" +
-                        new Date(
-                          Date.parse(reviewInventory.manufacturingDate)
-                        ).getFullYear()
+                      "/" +
+                      new Date(
+                        Date.parse(reviewInventory?.manufacturingDate)
+                      ).getFullYear()
                       : ""}
                   </span>
                   <span
                     className='col-1'
                     style={{ flex: "0 0 11.333333%", maxWidth: "11.333333%" }}
                   >
-                    {reviewInventory.expiryDate
+                    {reviewInventory?.expiryDate
                       ? `0${new Date(expiryMonth).getMonth() + 1}`.slice(-2) +
-                        "/" +
-                        new Date(
-                          Date.parse(reviewInventory.expiryDate)
-                        ).getFullYear()
+                      "/" +
+                      new Date(
+                        Date.parse(reviewInventory.expiryDate)
+                      ).getFullYear()
                       : ""}
                   </span>
                   <span className={i18n.language === "en" ? "col-2" : "col-1"}>
-                    {reviewInventory.batchNumber}
+                    {reviewInventory?.batchNumber}
                   </span>
                   <span
                     className='col-2'
@@ -227,7 +220,7 @@ const VerifyInventory = (props) => {
                       maxWidth: "15.666667%",
                     }}
                   >
-                    {reviewInventory.serialNumber}
+                    {reviewInventory?.serialNumber}
                   </span>
                 </div>
               );
