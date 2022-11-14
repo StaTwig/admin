@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import Modal from "../../../../shared/modal";
 import {
   getAllRoles,
@@ -23,6 +24,11 @@ import "./Configuration.css";
 import Permission from "./Permission/Permission";
 
 export default function Configuration(props) {
+  const history = useHistory();
+  if(props.user.role !== "admin") {
+    history.push("/overview");
+  }
+
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("admin");
   const [permissions, setPermissions] = useState({});

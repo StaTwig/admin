@@ -1,11 +1,17 @@
 import { TextField } from "@mui/material";
 import React from "react";
+import { useHistory } from "react-router";
 import AnalyticsCard from "../../../common/AnalyticsCard/AnalyticsCard";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./ProductList.css";
 import ProductTable from "./ProductTable/ProductTable";
 
-export default function AdminProductList() {
+export default function AdminProductList(props) {
+  const history = useHistory();
+  if(props.user.role !== "admin") {
+    history.push("/overview");
+  }
+
   return (
     <>
       <OrgHeader />

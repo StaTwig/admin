@@ -1,13 +1,18 @@
 import React from "react";
 import vaccineledger from "../../../assets/files/brands/vaccineledger.svg";
 import profile from "../../../assets/files/profile/profile.jpg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import "../Header.css";
 
 export default function OrgHeader() {
   let location = useLocation();
+  const history = useHistory();
+
+  const handleUiSwitch = () => {
+    history.push("/overview");
+  }
 
   console.log(location.pathname);
   return (
@@ -72,7 +77,7 @@ export default function OrgHeader() {
                   <i class="fa-solid fa-caret-down"></i>
                 </div>
                 <div className={`configure-list active `}>
-                  <button className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">
+                  <button onClick={handleUiSwitch} className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">
                     Switch to User
                   </button>
                 </div>

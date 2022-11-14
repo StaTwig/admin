@@ -16,6 +16,14 @@ export const updateProfile = async (data) => {
   }
 };
 
+export const addNewOrganisation = async (data) => {
+  try {
+    const result = await axios.post(config().addNewOrganisation, data);
+  } catch(err) {
+    return err.response;
+  }
+}
+
 export const verifyOtp = async (data) => {
   try {
     const result = await axios.post(config().verifyOtpUrl, data);

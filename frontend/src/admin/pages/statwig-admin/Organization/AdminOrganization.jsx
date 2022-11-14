@@ -7,6 +7,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
+import { useHistory } from "react-router";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -28,7 +29,12 @@ let useClickOutside = (handler) => {
   return domNode;
 };
 
-export default function AdminOrganization() {
+export default function AdminOrganization(props) {
+  const history = useHistory();
+  if(props.user.type !== "CENTRAL_AUTHORITY") {
+    history.push("/overview");
+  }
+
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {dispatch(getOrgAnalytics())}, [dispatch]);
@@ -97,7 +103,8 @@ export default function AdminOrganization() {
                   <div className="table-dropdown-button" ref={domNode}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"
-                      onClick={() => setButtonOpen(!ButtonOpen)}
+                      // onClick={() => setButtonOpen(!ButtonOpen)}
+                      onClick={handleClickOpen}
                     >
                       Add Organization
                     </button>
