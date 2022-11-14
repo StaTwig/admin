@@ -420,7 +420,7 @@ const Header = (props) => {
             <li className="admin-nav-item configure-link user-switch-btn">
               <div className="switch-button">
                 <p className="vl-note">User</p>
-                <i class="fa-solid fa-caret-down"></i>
+                <i className="fa-solid fa-caret-down"></i>
               </div>
               <div className={`configure-list active `}>
                 <button className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">

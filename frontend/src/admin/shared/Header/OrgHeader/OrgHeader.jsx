@@ -11,93 +11,93 @@ export default function OrgHeader() {
 
   console.log(location.pathname);
   return (
-    <header className="admin-header">
-      <div className="admin-container">
-        <nav className="admin-nav">
-          <article className="admin-nav-left">
-            <figure className="admin-logo">
-              <img src={vaccineledger} alt="vaccineledger" />
+    <header className='admin-header'>
+      <div className='admin-container'>
+        <nav className='admin-nav'>
+          <article className='admin-nav-left'>
+            <figure className='admin-logo'>
+              <img src={vaccineledger} alt='vaccineledger' />
             </figure>
-            <ul className="admin-nav-list">
-              <li className="admin-nav-item">
+            <ul className='admin-nav-list'>
+              <li className='admin-nav-item'>
                 <Link
-                  to="/org/dashboard"
+                  to='/org/dashboard'
                   className={`admin-nav-link ${
                     location.pathname === "/" && "active"
                   }`}
                 >
-                  <p className="vl-note">Dashboard</p>
+                  <p className='vl-note'>Dashboard</p>
                 </Link>
               </li>
-              <li className="admin-nav-item">
+              <li className='admin-nav-item'>
                 <Link
-                  to="/org/manage-users"
+                  to='/org/manage-users'
                   className={`admin-nav-link ${
                     location.pathname === "/org/manage-users" && "active"
                   }`}
                 >
-                  <p className="vl-note">Manage Users</p>
+                  <p className='vl-note'>Manage Users</p>
                 </Link>
               </li>
-              <li className="admin-nav-item configure-link">
+              <li className='admin-nav-item configure-link'>
                 <div
                   className={`admin-nav-link ${
                     location.pathname === "/org/roles" && "active"
                   } ${location.pathname === "/org/product-list" && "active"}`}
                 >
-                  <p className="vl-note">
-                    <span className="link-right-space">Configuration</span>
-                    <i class="fa-solid fa-caret-down"></i>
+                  <p className='vl-note'>
+                    <span className='link-right-space'>Configuration</span>
+                    <i className='fa-solid fa-caret-down'></i>
                   </p>
                 </div>
                 <div className={`configure-list active `}>
-                  <Link to="/org/roles" className="btn-dropdown-card vl-link">
-                    <p className="vl-note f-500">Roles & Permission</p>
+                  <Link to='/org/roles' className='btn-dropdown-card vl-link'>
+                    <p className='vl-note f-500'>Roles & Permission</p>
                   </Link>
                   <Link
-                    to="/org/product-list"
-                    className="btn-dropdown-card vl-link"
+                    to='/org/product-list'
+                    className='btn-dropdown-card vl-link'
                   >
-                    <p className="vl-note f-500">Product List</p>
+                    <p className='vl-note f-500'>Product List</p>
                   </Link>
                 </div>
               </li>
             </ul>
           </article>
-          <article className="admin-nav-right">
-            <ul className="admin-nav-list switch-button-container">
-              <li className="admin-nav-item configure-link">
-                <div className="switch-button">
-                  <p className="vl-note">Admin</p>
-                  <i class="fa-solid fa-caret-down"></i>
+          <article className='admin-nav-right'>
+            <ul className='admin-nav-list switch-button-container'>
+              <li className='admin-nav-item configure-link'>
+                <div className='switch-button'>
+                  <p className='vl-note'>Admin</p>
+                  <i className='fa-solid fa-caret-down'></i>
                 </div>
                 <div className={`configure-list active `}>
-                  <button className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">
+                  <button className='vl-btn vl-btn-sm vl-btn-full vl-btn-primary'>
                     Switch to User
                   </button>
                 </div>
               </li>
-              <li className="admin-nav-item">
-                <Link className="admin-nav-link">
-                  <Badge color="error" variant="dot">
-                    <i className="fa-solid fa-bell"></i>
+              <li className='admin-nav-item'>
+                <Link className='admin-nav-link'>
+                  <Badge color='error' variant='dot'>
+                    <i className='fa-solid fa-bell'></i>
                   </Badge>
                 </Link>
               </li>
             </ul>
-            <div className="admin-mini-profile">
-              <div className="admin-profile-card vl-flex-md">
-                <figure className="profile-space">
-                  <img src={profile} alt="profile" />
+            <div className='admin-mini-profile'>
+              <div className='admin-profile-card vl-flex-md'>
+                <figure className='profile-space'>
+                  <img src={profile} alt='profile' />
                 </figure>
-                <hgroup className="profile-name-card">
-                  <h1 className="vl-note vl-light f-700">Johns Steven</h1>
-                  <h2 className="vl-small vl-light f-400">ABC Organization</h2>
+                <hgroup className='profile-name-card'>
+                  <h1 className='vl-note vl-light f-700'>Johns Steven</h1>
+                  <h2 className='vl-small vl-light f-400'>ABC Organization</h2>
                 </hgroup>
               </div>
             </div>
-            <div className="mobile-menu-icon">
-              <i className="fa-solid fa-bars vl-light"></i>
+            <div className='mobile-menu-icon'>
+              <i className='fa-solid fa-bars vl-light'></i>
             </div>
           </article>
         </nav>
