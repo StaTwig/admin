@@ -3,12 +3,12 @@ import { useHistory } from "react-router";
 import Cele from "../../../assets/files/icons/cele.png";
 import Wait from "../../../assets/files/icons/waiting.jpg";
 
-export default function Success() {
+export default function Success({ t }) {
   const history = useHistory();
   const onSubmit = (event) => {
     event.preventDefault();
     history.push("/");
-  }
+  };
   return (
     <section className="account-section">
       <div className="vl-verify-container">
@@ -18,14 +18,13 @@ export default function Success() {
           </section>
           <div className="form-headers form-center-align">
             <h1 className="vl-heading f-700 vl-black">
-              Welcome On Board{" "}
+              {t("welcome_board")}{" "}
               <span>
                 <img src={Cele} alt="cele" className="cele-icon" />
               </span>
             </h1>
             <h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm f-500-sm">
-              We have sent the your request to admin.Please wait for the
-              Approval, Thankyou
+              {t("welcome_board_msg")}
             </h2>
           </div>
           <section className="call-by-action top-space">
@@ -33,7 +32,7 @@ export default function Success() {
               type="submit"
               className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
             >
-              Go to Home
+              {t("welcome_board_btn")}
             </button>
           </section>
         </form>

@@ -251,10 +251,11 @@ export default function Account(props) {
           className="account-form-container"
         >
           <hgroup className="form-headers">
-            <h1 className="vl-heading f-700 vl-black">Create your Account</h1>
+            <h1 className="vl-heading f-700 vl-black">
+              {t("create_ur_account")}
+            </h1>
             <h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm">
-              Join VaccineLedger to ensure quality and safety of your Vaccines
-              using Blockchain
+              {t("create_sub_message")}
             </h2>
           </hgroup>
           <section className="vl-input-group form-auto-fill-section">
@@ -274,7 +275,7 @@ export default function Account(props) {
             </div>
             <div className="option-divider">
               <div className="divider-bar"></div>
-              <p className="vl-subheading vl-grey-xs">OR</p>
+              <p className="vl-subheading vl-grey-xs">{t("or")}</p>
               <div className="divider-bar"></div>
             </div>
           </section>
@@ -289,7 +290,7 @@ export default function Account(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="First Name"
+                    label={t("first_name")}
                     {...field}
                     error={Boolean(errors.firstName)}
                     helperText={errors.firstName && "First Name is required!"}
@@ -304,7 +305,7 @@ export default function Account(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Last Name"
+                    label={t("last_name")}
                     {...field}
                     error={Boolean(errors.lastName)}
                     helperText={errors.lastName && "Last Name is required!"}
@@ -321,7 +322,7 @@ export default function Account(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Email Address"
+                    label={t("email_address")}
                     {...field}
                     error={Boolean(errors.email)}
                     helperText={
@@ -377,7 +378,7 @@ export default function Account(props) {
                           inputProps={{ "aria-label": "A" }}
                         />
                         <p className="vl-body f-400 vl-grey-md vl-line-sm">
-                          Existing Organization
+                          {t("ext_org")}
                         </p>
                       </div>
                       <div className="vl-radio-btn vl-align-center">
@@ -386,7 +387,7 @@ export default function Account(props) {
                           inputProps={{ "aria-label": "B" }}
                         />
                         <p className="vl-body f-400 vl-grey-md vl-line-sm">
-                          New Organization
+                          {t("new_org")}
                         </p>
                       </div>
                     </RadioGroup>
@@ -408,7 +409,7 @@ export default function Account(props) {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Organization Type"
+                          label={t("organization_type")}
                           error={Boolean(errors.organizationType)}
                           helperText={
                             errors.organizationType &&
@@ -435,7 +436,7 @@ export default function Account(props) {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Organization Name"
+                          label={t("organization_name")}
                           error={Boolean(errors.organization)}
                           helperText={
                             errors.organization &&
@@ -529,7 +530,7 @@ export default function Account(props) {
                     render={({ field }) => <Checkbox {...field} />}
                   />
                   <h2 className="vl-subheading f-400 vl-grey-xs">
-                    Skip the Organization Registration
+                    {t("skip")}
                   </h2>
                 </div>
               </div>
@@ -544,7 +545,7 @@ export default function Account(props) {
               type="submit"
               className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
             >
-              Continue
+              {t("continue")}
             </button>
           </section>
         </form>

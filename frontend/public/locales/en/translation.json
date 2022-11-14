@@ -450,6 +450,35 @@
   "company":"Company Name",
   "des":"Designation",
   "software":"Software Application (Optional)",
-  "no_of_work":"Number of employees (Optional)"
+  "no_of_work":"Number of employees (Optional)",
+  "back":"Back",
+  "create_ur_account":"Create your Account",
+  "create_sub_message":"Join VaccineLedger to ensure quality and safety of your Vaccines using Blockchain",
+  "skip":"Skip the Organization Registration",
+  "email_address":"Email Address",
+  "organization_type":"Organization Type",
+  "organization_name":"Organization Name",
+  "ext_org":"Existing Organization",
+  "new_org":"New Organization",
+  "org_detail":"Organization Details",
+  "org_detail_msg":"Almost there, Please provide the below details to regsiter your organization with us",
+  "register":"Register",
+  "welcome_board":"Welcome On Board",
+  "welcome_board_msg":"We have sent the your request to admin.Please wait for the Approval, Thankyou",
+  "welcome_board_btn":"Go to Home",
+  "verify_head":"Verify your Account",
+  "verify_msg":"We have sent the access code to your Email/ Phone Number, please check and verify",
+  "verify_btn":"Verify",
+  "no_access_code":"Didn’t recieve the access code ?",
+  "resend":"Resend",
+  "side_point-1":"Maintain your Orders",
+  "side_point-2":"Real Time shipment details",
+  "side_point-3":"Track & Trace",
+  "side_point-4":"View your Partner Locations",
+  "side_point-5":"Alerts and Notifications",
+  "side_point-6":"Monitor Cold chain conditions",
+  "side_point-7":"Efficiently manage your inventory"
+  
+  
 
 }
