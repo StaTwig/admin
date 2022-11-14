@@ -312,6 +312,34 @@ exports.addUser = [
   },
 ];
 
+exports.updateUserRole = [
+  auth,
+  async (req, res) => {
+    try {
+			checkToken(req, res, async (result) => {
+				if (result.success) {
+          const { userId, role } = req.query;
+          const result = await EmployeeModel.findOneAndUpdate(
+						{ id: userId },
+						{ $set: { role: role } },
+						{ new: true },
+          );
+          
+          if(result) {
+            return apiResponse.successResponse(res, "User role updated successfully!");
+          } else {
+            throw new Error("Error in updating user role!");
+          }
+				} else {
+					return apiResponse.unauthorizedResponse(res, "Auth Failed");
+				}
+			});
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+  }
+]
+
 exports.activateUser = [
   auth,
   (req, res) => {
