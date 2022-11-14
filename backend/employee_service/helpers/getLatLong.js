@@ -16,12 +16,12 @@ const getLatLongByCity = async (param) => {
     */
     return result.data.items.length
       ? {
-          type: "Point",
-          coordinates: [
-            result.data.items[0].position.lat,
-            result.data.items[0].position.lng,
-          ],
-        }
+        type: "Point",
+        coordinates: [
+          result.data.items[0].position.lat,
+          result.data.items[0].position.lng,
+        ],
+      }
       : { type: "Point", coordinates: [0, 0] };
   } catch (e) {
     console.log(e);

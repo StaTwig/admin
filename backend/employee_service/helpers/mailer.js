@@ -29,7 +29,7 @@ exports.validateEmail = (email) => {
   if (re.test(email)) {
     if (
       email.indexOf("@statwig.com", email.length - "@statwig.com".length) !==
-        -1 ||
+      -1 ||
       email.indexOf(
         "@cloudleaf.com",
         email.length - "@cloudleaf.com".length

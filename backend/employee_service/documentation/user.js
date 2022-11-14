@@ -1,5 +1,5 @@
-export const getUserList = () =>  {
-  return [
+export const getUserList = () => {
+    return [
         {
             id: 1,
             isPublic: true,
@@ -12,10 +12,10 @@ export const getUserList = () =>  {
             {
                 name: 'book2',
                 amount: 200,
-             }
-        ]
-     }, 
-    {
+            }
+            ]
+        },
+        {
             id: 2,
             isPublic: true,
             name: 'kk',
@@ -29,20 +29,20 @@ export const getUserList = () =>  {
                     name: 'kk2',
                     amount: 200,
                 }
-           ]
-      }
-   ]
+            ]
+        }
+    ]
 }
 
 
-export const findUserById = (id) =>{
-const users = getUserList()
-   const userFound = users.filter((user) => {
+export const findUserById = (id) => {
+    const users = getUserList()
+    const userFound = users.filter((user) => {
         if (user.id === id) {
-             return user
-        }   
+            return user
+        }
     });
-   if(userFound.length>0){
+    if (userFound.length > 0) {
         return userFound
     }
     return false
