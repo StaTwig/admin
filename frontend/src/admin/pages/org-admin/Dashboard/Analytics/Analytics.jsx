@@ -7,7 +7,7 @@ export default function Analytics() {
   return (
     <section className="Analytics-area">
       <div className="analytics-one-column-layout">
-        <AnalyticsCard layout="type1" />
+        <AnalyticsCard layout="type2" />
       </div>
       <div className="analytics-full-column-layout">
         <Graphs

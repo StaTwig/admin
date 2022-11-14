@@ -68,7 +68,7 @@ export default function AnalyticsCard({
                 </Avatar>
               </div>
             </div>
-            <p className="vl-note f-400 vl-blue vl-hidden">Null Space</p>
+            <p className="vl-note f-400 vl-blue vl-link">View Users</p>
           </div>
         </div>
       )}

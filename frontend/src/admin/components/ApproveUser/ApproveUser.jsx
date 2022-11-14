@@ -1,92 +1,54 @@
-import { Autocomplete, TextField } from "@mui/material";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import PhoneInput from "react-phone-input-2";
+import { Autocomplete, TextField } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 import { COUNTRY_CODE } from "../../../constants/countryCode";
-import "./AddUsers.css";
+import PhoneInput from "react-phone-input-2";
 
-export default function AddUsers(props) {
-	const { addresses, onSuccess, defaultRoles, handleClose } = props;
+export default function ApproveUser(props) {
+	const { data, addresses, onSuccess, defaultRoles, handleClose } = props;
 
-	const {
-		watch,
+  const {
 		control,
 		formState: { errors },
 		handleSubmit,
 	} = useForm({
 		defaultValues: {
-			firstName: "",
-			lastName: "",
-			emailId: "",
-			phoneNumber: "",
+			emailId: data?.emailId,
+			phoneNumber: data?.phoneNumber,
 			role: "",
 			warehouse: "",
 		},
 	});
 
-	const watchEmail = watch("emailId");
-	const watchPhone = watch("phoneNumber");
-
-	const addUser = (values) => {
-		const reqData = {
-			firstName: values.firstName,
-			lastName: values.lastName,
-			emailId: values.emailId,
-			phoneNumber: values.phoneNumber,
+	const approveUser = (values) => {
+    const reqData = {
+			id: data.id,
 			role: values.role,
 			warehouse: [values.warehouse.id],
-		};
-
+			phoneNumber: values.phoneNumber,
+    };
+    
 		onSuccess(reqData);
 	};
 
+	const options = [{ label: "1" }, { label: "2" }, { label: "3" }, { label: "4" }];
 	return (
 		<div className="addOrganization-container">
-			<form onSubmit={handleSubmit(addUser)}>
+			<form onSubmit={handleSubmit(approveUser)}>
 				<div className="addorganization-header">
-					<p className="vl-subheading f-500 vl-blue">Add Organization</p>
+					<p className="vl-subheading f-500 vl-blue">Assign Role and Warehouse</p>
 					<i className="fa-solid fa-xmark" onClick={handleClose}></i>
 				</div>
 				<div className="addorganization-body">
 					<div className="input-set">
-						<p className="vl-body f-500 vl-black">Personal detail</p>
-						<div className="input-two-column-space">
-							<Controller
-								name="firstName"
-								control={control}
-								rules={{ required: true }}
-								render={({ field }) => (
-									<TextField
-										fullWidth
-										variant="outlined"
-										label="First Name"
-										{...field}
-										error={Boolean(errors.firstName)}
-										helperText={errors.firstName && "First Name is required!"}
-									/>
-								)}
-							/>
-							<Controller
-								name="lastName"
-								control={control}
-								rules={{ required: true }}
-								render={({ field }) => (
-									<TextField
-										fullWidth
-										variant="outlined"
-										label="Last Name"
-										{...field}
-										error={Boolean(errors.lastName)}
-										helperText={errors.lastName && "Last Name is required!"}
-									/>
-								)}
-							/>
-						</div>
+						<p className="vl-body f-500 vl-black">
+							User Details
+						</p>
 						<div className="input-two-column-space">
 							<Controller
 								name="emailId"
 								control={control}
-								rules={{ required: watchPhone ? false : true }}
+								rules={{ required: data?.phoneNumber ? false : true }}
 								render={({ field }) => (
 									<TextField
 										fullWidth
@@ -96,13 +58,14 @@ export default function AddUsers(props) {
 										inputProps={{ style: { textAlign: "left" } }}
 										error={Boolean(errors.emailId)}
 										helperText={errors.emailId && "Email ID is required!"}
+										disabled={data?.emailId ? true : false}
 									/>
 								)}
 							/>
 							<Controller
 								name="phone"
 								control={control}
-								rules={{ required: watchEmail ? false : true }}
+								rules={{ required: data?.emailId ? false : true }}
 								render={({ field }) => (
 									<PhoneInput
 										international
@@ -112,6 +75,7 @@ export default function AddUsers(props) {
 										{...field}
 										maxLength={15}
 										style={{ borderColor: Boolean(errors.phone) ? "#da323c" : "" }}
+										disabled
 									/>
 								)}
 							/>
@@ -121,7 +85,7 @@ export default function AddUsers(props) {
 						</div>
 					</div>
 					<div className="input-set">
-						<p className="vl-body f-500 vl-black">Location details</p>
+						<p className="vl-body f-500 vl-black">Assign the Role Here</p>
 						<div className="input-two-column-space">
 							<Controller
 								name="role"
@@ -173,43 +137,13 @@ export default function AddUsers(props) {
 								)}
 							/>
 						</div>
-						{/* <p className="vl-small f-500 vl-blue">
-						If not in the list, Please fill the Location Details
-					</p>
-					<div className="input-full-space">
-						<TextField disabled fullWidth variant="outlined" label="Organization Name" />
-					</div>
-					<div className="input-three-column-space">
-						<Autocomplete
-							disabled
-							fullWidth
-							id="combo-box-demo"
-							options={options}
-							renderInput={(params) => <TextField {...params} label="Region" />}
-						/>
-						<Autocomplete
-							disabled
-							fullWidth
-							id="combo-box-demo"
-							options={options}
-							renderInput={(params) => <TextField {...params} label="Country" />}
-						/>
-						<Autocomplete
-							disabled
-							fullWidth
-							id="combo-box-demo"
-							options={options}
-							renderInput={(params) => <TextField {...params} label="City" />}
-						/>
-					</div>
-					<div className="input-add-column-space">
-						<TextField disabled fullWidth variant="outlined" label="Pin" />
-						<TextField disabled fullWidth multiline variant="outlined" label="Address" />
-					</div> */}
 					</div>
 				</div>
+
 				<div className="addorganization-actions">
-					<button className="vl-btn vl-btn-sm vl-btn-primary">Register</button>
+					<button type="submit" className="vl-btn vl-btn-sm vl-btn-primary">
+						Approve User
+					</button>
 				</div>
 			</form>
 		</div>
