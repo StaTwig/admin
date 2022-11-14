@@ -629,7 +629,7 @@ exports.verifyOtp = [
 							role: "",
 							email: req.body.emailId,
 						};
-						await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");

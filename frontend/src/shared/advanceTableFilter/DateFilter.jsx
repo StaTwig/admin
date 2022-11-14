@@ -18,6 +18,7 @@ export default function DateFilter({ t, onSelectionDateFilter }) {
         <div className='groupFlex fromData'>
           <label htmlFor='from'>{t("from")}</label>
           <input
+            readOnly
             type='text'
             value={fweek[0] ? new Date(fweek[0]) : ""}
             placeholder='DD/MM/YYYY'
@@ -27,6 +28,7 @@ export default function DateFilter({ t, onSelectionDateFilter }) {
           <div className='groupFlex toData'>
             <label htmlFor='to'>{t("to")}</label>
             <input
+              readOnly
               type='text'
               value={fweek[1] ? new Date(fweek[1]) : ""}
               placeholder='DD/MM/YYYY'

@@ -10,12 +10,18 @@ import Switch from "@mui/material/Switch";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-export default function Roles({ list, permissions, refresh, flag, updatePermissions }) {
+export default function Roles({
+  list,
+  permissions,
+  refresh,
+  flag,
+  updatePermissions,
+}) {
   const [expanded, setExpanded] = useState("");
   const [permission, setPermission] = useState({});
   useEffect(() => {
     setPermission(permissions);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     // setPermission(permission);
@@ -40,7 +46,7 @@ export default function Roles({ list, permissions, refresh, flag, updatePermissi
   }));
 
   const AccordionSummary = styled((props) => (
-    <MuiAccordionSummary  key={props.key} {...props} />
+    <MuiAccordionSummary key={props.key} {...props} />
   ))(({ theme }) => ({
     flexDirection: "row-reverse",
     "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
@@ -70,47 +76,50 @@ export default function Roles({ list, permissions, refresh, flag, updatePermissi
   }));
 
   return (
-    <div className="collapse-container">
+    <div className='collapse-container'>
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
         key={permission}
       >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" key={JSON.stringify(permission)}>
-          <div className="role-header-space">
-            <div className="role-header-text-space">
-              <h1 className="vl-subheading vl-black f-700">{list}</h1>
+        <AccordionSummary
+          aria-controls='panel1d-content'
+          id='panel1d-header'
+          key={JSON.stringify(permission)}
+        >
+          <div className='role-header-space'>
+            <div className='role-header-text-space'>
+              <h1 className='vl-subheading vl-black f-700'>{list}</h1>
             </div>
-            <div className="indication-icon">
+            <div className='indication-icon'>
               {expanded === "panel1" ? (
-                <i class="fa-solid fa-chevron-up"></i>
+                <i className='fa-solid fa-chevron-up'></i>
               ) : (
-                <i class="fa-solid fa-chevron-down"></i>
+                <i className='fa-solid fa-chevron-down'></i>
               )}
             </div>
           </div>
         </AccordionSummary>
-        {
-        Object.keys(permission).map((key, index) => 
-
-        <AccordionDetails key={key + permission[`${key}`]}>
-         <div className="permission-role-body">
-            <div className="roles-card">
-              <p className="vl-body vl-grey-md f-500">{key}</p>
-              <Switch {...label} 
-              onChange={() => {
-                let obj = permission;
-                obj[`${key}`] = !obj[`${key}`];
-                setPermission(obj);
-                updatePermissions(obj);
-                refresh(!flag);
-              }}
-              checked={permission[`${key}`]} 
-              />
+        {Object.keys(permission).map((key, index) => (
+          <AccordionDetails key={key + permission[`${key}`]}>
+            <div className='permission-role-body'>
+              <div className='roles-card'>
+                <p className='vl-body vl-grey-md f-500'>{key}</p>
+                <Switch
+                  {...label}
+                  onChange={() => {
+                    let obj = permission;
+                    obj[`${key}`] = !obj[`${key}`];
+                    setPermission(obj);
+                    updatePermissions(obj);
+                    refresh(!flag);
+                  }}
+                  checked={permission[`${key}`]}
+                />
+              </div>
             </div>
-          </div>
-        </AccordionDetails>
-        )}
+          </AccordionDetails>
+        ))}
       </Accordion>
     </div>
   );

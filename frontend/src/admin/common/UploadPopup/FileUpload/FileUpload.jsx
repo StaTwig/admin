@@ -11,17 +11,17 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
 
   return (
     <>
-      <div className="file-card">
-        <div className="file-inputs">
-          <input type="file" onChange={uploadHandler} />
+      <div className='file-card'>
+        <div className='file-inputs'>
+          <input type='file' onChange={uploadHandler} />
           <button>
-            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <i className='fa-solid fa-cloud-arrow-up'></i>
             Upload Files
           </button>
         </div>
 
-        <p className="main">Supported files</p>
-        <p className="info">Excel, CSV</p>
+        <p className='main'>Supported files</p>
+        <p className='info'>Excel, CSV</p>
       </div>
     </>
   );
