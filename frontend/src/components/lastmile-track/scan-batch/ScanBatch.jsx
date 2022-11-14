@@ -28,7 +28,7 @@ export default function ScanBatch(props) {
 			// Fetch batch details
 			const data = {
 				batchNumber: values.batchNumber,
-				warehouseId: userLocation ? userLocation.id : props.user.warehouseId[0],
+				warehouseId: userLocation?.id ? userLocation.id : props.user.warehouseId[0],
 			};
 			const result = await fetchBatch(data);
 			if (result?.data?.success === true) {
