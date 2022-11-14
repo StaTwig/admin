@@ -15,7 +15,8 @@ export default function AdminProductList() {
   const [productCategory, setProductCategory] = useState();
   const [UOM, setUOM] = useState();
   const [manufacturer, setManufacturer] = useState();
-  const [openSuccessPopup, setOpenSuccessPopup] = useState(true);
+  const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
+  const [openFailurePopup, setOpenFailurePopup] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getOrgAnalytics());
@@ -23,6 +24,7 @@ export default function AdminProductList() {
   const { orgAnalytics } = useSelector((state) => state.organisationReducer);
   const { totalCount, activeCount, inactiveCount } = orgAnalytics;
   async function addProduct() {
+    try{
     const formData = new FormData();
     formData.append("name", productName);
     formData.append("shortName", productName);
@@ -37,12 +39,19 @@ export default function AdminProductList() {
     );
     formData.append("manufacturer", manufacturer);
     const res = await addNewProduct(formData);
-    console.log(res);
-    setOpenSuccessPopup(true);
+    if(res.success)
+      setOpenSuccessPopup(true);
+    else
+      setOpenFailurePopup(true)
+    }catch(Err){
+      setOpenFailurePopup(true);
+      console.log(Err);
+    }
   }
 
   const closeModal = () => {
     setOpenSuccessPopup(false);
+    setOpenFailurePopup(false);
   };
   return (
     <>
@@ -77,7 +86,7 @@ export default function AdminProductList() {
               />
             </div>
             <div className="product-list-two-column">
-              <ProductTable />
+              <ProductTable productAdded={openSuccessPopup}/>
               <div className="add-product-container">
                 <div className="add-product-card">
                   {/* <button className="vl-btn vl-btn-md vl-btn-full vl-btn-secondary">
@@ -134,8 +143,20 @@ export default function AdminProductList() {
         >
           <SuccessPopup
             onHide={closeModal}
-            successMessage="Add the Success Message Here"
+            successMessage="Product added succesfully"
             // errorMessage="Put the Error Message Here"
+          />
+        </Modal>
+      )}
+      {openFailurePopup && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModal}
+            // successMessage="Product added succesfully"
+            errorMessage="Unable to Add product, please try again"
           />
         </Modal>
       )}
