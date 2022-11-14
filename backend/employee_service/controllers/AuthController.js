@@ -565,10 +565,16 @@ exports.verifyOtp = [
 							$and: [
 								{ id: { $in: user.warehouseId } },
 								{
-									$or: [{ status: "ACTIVE" }, { status: "PENDING" }, { status: { $exists: false } }],
+									$or: [
+										{ status: "ACTIVE" },
+										{ status: "PENDING" },
+										{ status: { $exists: false } },
+									],
 								},
 							],
 						});
+
+						const org = await OrganisationModel.findOne({ id: user.organisationId });
 
 						let userData;
 						if (activeWarehouse.length > 0) {
@@ -588,6 +594,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
+								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
 							};
 						} else {
 							userData = {
@@ -602,6 +609,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
+								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
 							};
 						}
 						//Prepare JWT token for authentication
@@ -627,7 +635,7 @@ exports.verifyOtp = [
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");
 					}
 				} else {
-					return apiResponse.ErrorResponse(req, res, "account_not_found")
+					return apiResponse.ErrorResponse(req, res, "account_not_found");
 				}
 			}
 		} catch (err) {
@@ -1068,8 +1076,8 @@ exports.deleteProfilePicture = [
 				err.message,
 			);
 		}
-	}
-]
+	},
+];
 
 exports.deleteProfile = [
 	auth,
@@ -1078,6 +1086,7 @@ exports.deleteProfile = [
 			await EmployeeModel.updateOne(
 				{ id: req.user.id },
 				{ $set: { accountStatus: "DELETED" } },
+				{ new: true },
 			);
 
 			return apiResponse.successResponse(req, res, "User account deleted successfully!");
@@ -1085,8 +1094,8 @@ exports.deleteProfile = [
 			console.log(err);
 			return apiResponse.ErrorResponse(req, res, err.message);
 		}
-	}
-]
+	},
+];
 
 exports.getAllUsers = [
 	auth,
@@ -1256,7 +1265,7 @@ exports.addWarehouse = [
 				},
 				{
 					$set: {
-						role: "powerUser"
+						role: "powerUser",
 					},
 					$push: {
 						pendingWarehouseId: warehouseId,
@@ -1908,7 +1917,7 @@ exports.emailverify = [
 					req,
 					res,
 					"Account with the same email or phone already exists!",
-					[]
+					[],
 				);
 			}
 			return apiResponse.successResponseWithData(req, res, "Valid Email/Phone");

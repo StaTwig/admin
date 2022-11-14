@@ -25,7 +25,7 @@ const [products, setProducts] = useState([]);
       setProducts(products)
     }
     fetchProducts()
-  }, [page, rowsPerPage, user.organisationId])
+  }, [page, rowsPerPage, user.organisationId, props.productAdded])
 
 
 

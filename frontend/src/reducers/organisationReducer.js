@@ -1,21 +1,22 @@
 import {
-  GET_FAILURE,
-  SET_AFFILIATED_PENDING_REQUESTS,
-  SET_PERMISSIONS,
-  SET_ORGANISATION_ADDRESSES,
-  SET_ORGANISATION_USERS,
-  SET_ORGANISATION_REQ_SENT,
-  SET_AFFILATED_PENDING_REQ,
-  SET_AFFILATED_ORGS,
-  SET_ORGANISATIONS,
-  SET_ORGANISATION_TYPES,
-  SET_COUNTRY_TYPES,
-  SET_REGION_TYPES,
-  SET_ALL_ORGANISATIONS,
-  SET_ALL_ORGANISATION_ACTIVE_USERS,
-  SET_WAREHOUSE_USERS,
-  SET_ORG_ANALYTICS,
-  SET_USER_ANALYTICS,
+	GET_FAILURE,
+	SET_AFFILIATED_PENDING_REQUESTS,
+	SET_PERMISSIONS,
+	SET_ORGANISATION_ADDRESSES,
+	SET_ORGANISATION_USERS,
+	SET_ORGANISATION_REQ_SENT,
+	SET_AFFILATED_PENDING_REQ,
+	SET_AFFILATED_ORGS,
+	SET_ORGANISATIONS,
+	SET_ORGANISATION_TYPES,
+	SET_COUNTRY_TYPES,
+	SET_REGION_TYPES,
+	SET_ALL_ORGANISATIONS,
+	SET_ALL_ORGANISATION_ACTIVE_USERS,
+	SET_WAREHOUSE_USERS,
+	SET_ORG_ANALYTICS,
+	SET_USER_ANALYTICS,
+	SET_PENDING_ORGS,
 } from "../admin/constants/organisationConstants";
 
 export const initialState = {
@@ -26,6 +27,7 @@ export const initialState = {
   requestsSent: [],
   affilatedPendingReq: [],
   affiliatedOrgs: [],
+  pendingOrgs: [],
   list: [],
   countries: [],
   regions: [],
@@ -68,6 +70,8 @@ export const organisationReducer = (state = initialState, action) => {
       };
     case SET_AFFILATED_ORGS:
       return { ...state, affiliatedOrgs: action.payload.data };
+    case SET_PENDING_ORGS:
+      return { ...state, pendingOrgs: action.payload.data };
     case SET_ORGANISATIONS:
       return { ...state, list: action.payload.data };
     case SET_ALL_ORGANISATIONS:

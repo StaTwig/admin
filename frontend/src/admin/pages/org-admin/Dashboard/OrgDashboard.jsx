@@ -19,6 +19,10 @@ export default function OrgDashboard(props) {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
+  if(props.user.role !== "admin") {
+    history.push("/overview");
+  }
+
 	const permissions = useSelector((state) => state?.organisationReducer?.permissions);
 	const addresses = useSelector((state) => state?.organisationReducer?.addresses);
 
@@ -47,10 +51,6 @@ export default function OrgDashboard(props) {
 		// loadData();
 	}, []);
 
-	const redirectToConfigurationPage = () => {
-		history.push(`/configuration`);
-	};
-
 	return (
 		<>
 			<OrgHeader />
@@ -64,7 +64,6 @@ export default function OrgDashboard(props) {
 							<Pendings
 								permissions={permissions}
 								addresses={addresses}
-                redirectToConfigurationPage={redirectToConfigurationPage}
                 {...props}
 							/>
 						</div>

@@ -1,12 +1,13 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Checkbox } from "@mui/material";
+import { Checkbox, Switch } from "@mui/material";
 import { useState } from "react";
 import { getUserInfo } from "../../../../../actions/userActions";
 
 export default function UserRow({ rows }) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
+  const [AccStatus, setAccStatus] = useState(rows.accountStatus);
   // getUserInfo
   return (
     <>
@@ -30,16 +31,16 @@ export default function UserRow({ rows }) {
         <TableCell>
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
-            {`${rows.firstName} ${rows.lastName}`} 
+            {`${rows.firstName} ${rows.lastName}`}
           </p>
         </TableCell>
         <TableCell>
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.emailId}
@@ -48,7 +49,7 @@ export default function UserRow({ rows }) {
         <TableCell>
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.role}
@@ -58,28 +59,49 @@ export default function UserRow({ rows }) {
           {rows.status === "ACTIVE" ? (
             <div className="label-status-btn status-accept-bg">
               <div className="status-dot status-accept-dot"></div>
-              <p className="vl-small f-500 vl-black">Active</p>
+              <p className="vl-small f-400 vl-black">Active</p>
             </div>
           ) : (
             <div className="label-status-btn status-reject-bg">
               <div className="status-dot status-reject-dot"></div>
-              <p className="vl-small f-500 vl-black">InActive</p>
+              <p className="vl-small f-400 vl-black">InActive</p>
             </div>
           )}
+          {/* <div className="status-switch-button">
+            <Switch
+              color="warning"
+              checked={AccStatus === "ACTIVE"}
+              onChange={(e) => setAccStatus(e.target.checked)}
+            />
+            {AccStatus === "ACTIVE" ? (
+              <div className="label-status-btn status-accept-bg">
+                <div className="status-dot status-accept-dot"></div>
+                <p className="vl-small f-400 vl-black">Active</p>
+              </div>
+            ) : (
+              <div className="label-status-btn status-reject-bg">
+                <div className="status-dot status-reject-dot"></div>
+                <p className="vl-small f-400 vl-black">InActive</p>
+              </div>
+            )}
+          </div> */}
         </TableCell>
         <TableCell>
           <div className="created-date">
             <p
-              className={`vl-note f-500 ${checked ? "vl-black" : "vl-grey-sm"}`}
+              className={`vl-note f-400 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
               {new Date(rows.createdAt).toLocaleDateString()}
             </p>
             <p
-              className={`vl-small f-500 ${
+              className={`vl-small f-400 ${
                 checked ? "vl-black" : "vl-grey-sm"
               }`}
             >
-              {new Date(rows.createdAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
+              {new Date(rows.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </p>
           </div>
         </TableCell>

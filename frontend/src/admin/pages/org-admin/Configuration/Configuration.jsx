@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import Modal from "../../../../shared/modal";
 import {
   getAllRoles,
@@ -17,12 +18,17 @@ import {
 } from "../../../actions/organisationActions";
 import AddRole from "../../../components/AddRole/AddRole";
 import AssignRole from "../../../components/AssignRole/AssignRole";
-import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
+import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
 
 export default function Configuration(props) {
+  const history = useHistory();
+  if(props.user.role !== "admin") {
+    history.push("/overview");
+  }
+
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("admin");
   const [permissions, setPermissions] = useState({});
@@ -90,7 +96,8 @@ export default function Configuration(props) {
   };
   return (
     <>
-      <OrgHeader />
+    
+      <StatwigHeader />
       <section className="admin-page-layout">
         <div className="admin-container">
           <div className="admin-role-container admin-section-space">

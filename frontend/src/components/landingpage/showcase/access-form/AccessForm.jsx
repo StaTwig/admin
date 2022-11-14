@@ -89,7 +89,7 @@ export default function AccessForm() {
 					history.push(`/verify?emailId=${data.emailId}`);
 				} else {
 					console.log("Error - ", result.data.message);
-					throw new Error(result.data.message);
+					throw new Error(result?.data?.message);
 				}
 				dispatch(turnOff());
 			}

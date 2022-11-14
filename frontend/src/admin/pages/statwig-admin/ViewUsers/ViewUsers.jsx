@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import LocationCard from "../../../common/LocationCard/LocationCard";
 import TileCard from "../../../common/TileCard/TileCard";
 import "./ViewUsers.css";
@@ -9,7 +9,12 @@ import { useParams } from "react-router-dom";
 import { getWarehouseUsers } from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function ViewUsers() {  
+export default function ViewUsers(props) {  
+  const history = useHistory();
+  if(props.user.type !== "CENTRAL_AUTHORITY") {
+    history.push("/overview");
+  }
+
   const params = useParams();
   const org = JSON.parse(params.org);
   const product = JSON.parse(params.product);

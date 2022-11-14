@@ -8,23 +8,24 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import OrganizationRow from "./OrganizationRow";
 import { TablePagination } from "@mui/material";
-import { getOrgs } from "../../../../actions/organisationActions";
+import { getOrgs, updateOrg } from "../../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function OrganizationTable() {
-  const Data = [
-    {
-      id: "1",
-      status: true,
-    }
-  ];
+
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   useEffect(() => {dispatch(getOrgs(`skip=${page * 10}&limit=${rowsPerPage}`))}, [dispatch, page, rowsPerPage]);
   const { list }= useSelector((state) => state.organisationReducer);
-  console.log(list);
-
+  const modifyOrg = async (data) => {
+    const result = await updateOrg(data.org ? data.org : data);
+    if (result.status === 200) {
+      console.log("This organisation " + data.org ? data.status : data.status.toLowerCase() + "!");
+    } else {
+      console.log(result.data.data.message);
+    }
+  };
 
 
   const handleChangePage = (event, newPage) => {
@@ -82,7 +83,7 @@ export default function OrganizationTable() {
         </TableHead>
         <TableBody className="organization-tbody">
           {list.map((rows, index) => (
-            <OrganizationRow key={rows.id} rows={rows} index={index} />
+            <OrganizationRow modifyOrg={modifyOrg} key={rows.id} rows={rows} index={index} />
           ))}
         </TableBody>
       </Table>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import LocationCard from "../../../common/LocationCard/LocationCard";
 import TileCard from "../../../common/TileCard/TileCard";
 import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
@@ -10,7 +10,13 @@ import LocationTable from "./LocationTable/LocationTable";
 import { getWareHouses } from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-export default function Locations() {
+
+export default function Locations(props) {
+  const history = useHistory();
+  if(props.user.type !== "CENTRAL_AUTHORITY") {
+    history.push("/overview");
+  }
+
   const [Map, setMap] = useState(false);
   const params = useParams();
   const dispatch = useDispatch();

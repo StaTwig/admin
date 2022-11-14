@@ -17,7 +17,8 @@ import {
 	SET_ALL_ORGANISATION_ACTIVE_USERS,
   SET_ORG_ANALYTICS,
 	SET_USER_ANALYTICS,
-	SET_WAREHOUSE_USERS
+	SET_WAREHOUSE_USERS,
+	SET_PENDING_ORGS
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -234,8 +235,9 @@ export const getRecentReqSent = () => {
 };
 
 export const getOrgUsers = (params) => {
-	try {
+
 		return async (dispatch) => {
+			try {
 			dispatch(turnOn());
 			const url = params ? `${config().getOrgUsersUrl}?${params}` : config().getOrgUsersUrl;
 			const result = await axios.get(url);
@@ -245,10 +247,11 @@ export const getOrgUsers = (params) => {
 			});
 			dispatch(turnOff());
 			return result.data.data;
+		} catch (e) {
+			console.log(e.message);
+		}
 		};
-	} catch (e) {
-		throw Error(e.message);
-	}
+
 };
 
 export const getWarehouseUsers = (params) => {
@@ -647,5 +650,22 @@ export const getAllRolesForTPL = async (organisationId) => {
     return result.data.data;
   } catch (error) {
     return [];
+  }
+};
+
+export const getPendingOrgs = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getPendingOrgs);
+      dispatch({
+				type: SET_PENDING_ORGS,
+				payload: result.data,
+			});
+      dispatch(turnOff());
+      return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
   }
 };

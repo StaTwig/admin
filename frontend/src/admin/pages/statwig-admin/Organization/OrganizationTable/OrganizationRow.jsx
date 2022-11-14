@@ -4,16 +4,38 @@ import TableRow from "@mui/material/TableRow";
 import { Checkbox } from "@mui/material";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import Switch from "@mui/material/Switch";
 
-export default function OrganizationRow({ rows }) {
-  const [checked, setChecked] = useState(false);
+export default function OrganizationRow({ rows, modifyOrg }) {
+  const [checked, setChecked] = useState(true);
+  const [AccStatus, setAccStatus] = useState(rows.status);
   const history = useHistory();
+  const changeBtnStatus = (status) => {
+    if (status === "ACTIVE") {
+      setAccStatus("DEACTIVATED");
+      modifyOrg({
+        id: rows?.id,
+        status: "DEACTIVATED",
+        index: rows?.ridex,
+        type: rows.type,
+        typeId: "",
+      });
+    } else {
+      setAccStatus("ACTIVE");
+      modifyOrg({
+        id: rows?.id,
+        status: "ACTIVE",
+        index: rows?.ridex,
+        type: rows.type,
+        typeId: "",
+      });
+    }
+  };
   return (
     <>
       <TableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         className={`organization-tr ${checked && "organization-bar-added"}`}
-        onClick={() => history.push("/statwig/view-locations/" + JSON.stringify(rows))}
       >
         {/* <TableCell>
           <Checkbox
@@ -28,77 +50,116 @@ export default function OrganizationRow({ rows }) {
             }}
           />
         </TableCell> */}
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.name + " "}
           </p>
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.type}
           </p>
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             12800
           </p>
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.warehouses.length}
           </p>
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <p
             className={`vl-body ${
-              checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
+              checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
             {rows.country}
           </p>
         </TableCell>
         <TableCell>
-          {rows.status ? (
-            <div className="label-status-btn status-accept-bg">
-              <div className="status-dot status-accept-dot"></div>
-              <p className="vl-small f-500 vl-black">Active</p>
-            </div>
-          ) : (
-            <div className="label-status-btn status-reject-bg">
-              <div className="status-dot status-reject-dot"></div>
-              <p className="vl-small f-500 vl-black">InActive</p>
-            </div>
-          )}
+          <div className="status-switch-button">
+            <Switch
+              color="warning"
+              checked={AccStatus === "ACTIVE"}
+              onChange={(e) => {
+                e.preventDefault();
+                changeBtnStatus(
+                  AccStatus !== "ACTIVE" ? "DEACTIVATED" : "ACTIVE"
+                );
+              }}
+            />
+            {AccStatus === "ACTIVE" ? (
+              <div className="label-status-btn status-accept-bg">
+                <div className="status-dot status-accept-dot"></div>
+                <p className="vl-small f-400 vl-black">Active</p>
+              </div>
+            ) : (
+              <div className="label-status-btn status-reject-bg">
+                <div className="status-dot status-reject-dot"></div>
+                <p className="vl-small f-400 vl-black">InActive</p>
+              </div>
+            )}
+          </div>
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={() =>
+            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+          }
+        >
           <div className="created-date">
             <p
-              className={`vl-note f-500 ${checked ? "vl-black" : "vl-grey-sm"}`}
+              className={`vl-note f-400 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
               {new Date(rows.createdAt).toLocaleDateString()}
             </p>
             <p
-              className={`vl-small f-500 ${
+              className={`vl-small f-400 ${
                 checked ? "vl-black" : "vl-grey-sm"
               }`}
             >
-              {new Date(rows.createdAt).toLocaleTimeString([], {hour: "2-digit" , minute: "2-digit"})}
+              {new Date(rows.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </p>
           </div>
         </TableCell>

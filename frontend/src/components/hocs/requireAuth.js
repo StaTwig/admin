@@ -19,7 +19,8 @@ export default (ComposedComponent, isAdminComponent) => {
 
       if(isAdminComponent){
           const userRole = user?.role || userDetails?.role;
-          if(userRole === "powerUser")
+          const userType = user?.type || userDetails?.type;
+          if(userRole === "admin" || userType === "CENTRAL_AUTHORITY")
             check = true;
           else
             check = null; 
