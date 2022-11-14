@@ -13,7 +13,12 @@ import {
 } from "../../../actions/userActions";
 import { turnOff, turnOn } from "../../../actions/spinnerActions";
 
-export default function Contact({ handleClose, handleAlertClick, setAlertDetails }) {
+export default function Contact({
+  handleClose,
+  handleAlertClick,
+  setAlertDetails,
+  t,
+}) {
   const dispatch = useDispatch();
 
   const {
@@ -100,7 +105,10 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
 
         const result = await newDemoRequest(data);
         if (result.status === 200) {
-          setAlertDetails({type: "success", message: "Your request is received!"});
+          setAlertDetails({
+            type: "success",
+            message: "Your request is received!",
+          });
           handleAlertClick();
           dispatch(turnOff());
           handleClose();
@@ -109,7 +117,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
         }
       });
     } catch (err) {
-      setAlertDetails({type: "error", message: err.message});
+      setAlertDetails({ type: "error", message: err.message });
       handleAlertClick();
       dispatch(turnOff());
       console.log(err);
@@ -122,9 +130,9 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
         <i className="fa-solid fa-times vl-body"></i>
       </div>
       <hgroup className="form-headers-popup ">
-        <h1 className="vl-subtitle f-700 vl-black">Let's Connect</h1>
+        <h1 className="vl-subtitle f-700 vl-black">{t("let_connect")}</h1>
         <h2 className="vl-body f-400 vl-grey-xs vl-line-sm">
-          Our team will contact you very soon, Thankyou
+          {t("let_sub_connect")}
         </h2>
       </hgroup>
       <form onSubmit={handleSubmit(requestDemo)}>
@@ -138,7 +146,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Name"
+                  label={t("name")}
                   {...field}
                   error={Boolean(errors.name)}
                   helperText={Boolean(errors.name) && "Name is required!"}
@@ -155,7 +163,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Business Email"
+                  label={t("bussiness_email")}
                   {...field}
                   error={Boolean(errors.email)}
                   helperText={
@@ -203,7 +211,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Company Name"
+                  label={t("company")}
                   {...field}
                   error={Boolean(errors.companyName)}
                   helperText={
@@ -222,7 +230,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Designation"
+                  label={t("des")}
                   {...field}
                   error={Boolean(errors.designation)}
                   helperText={
@@ -240,7 +248,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Software Application (Optional)"
+                  label={t("software")}
                   {...field}
                   error={Boolean(errors.softwareApplication)}
                   helperText={
@@ -259,7 +267,7 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Number of employees (Optional)"
+                  label={t("no_of_work")}
                   type="number"
                   InputProps={{ inputProps: { min: 1 } }}
                   {...field}
@@ -273,10 +281,8 @@ export default function Contact({ handleClose, handleAlertClick, setAlertDetails
             />
           </div>
           <section className="call-by-action">
-            <button
-              className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
-            >
-              Submit
+            <button className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
+              {t("submit")}
             </button>
           </section>
         </article>

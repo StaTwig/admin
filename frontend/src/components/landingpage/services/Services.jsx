@@ -4,16 +4,21 @@ import "./Services.css";
 
 import service from "./data/service";
 
-export default function Services({serviceRef}) {
+export default function Services({ serviceRef, t }) {
   return (
-    <section className="service-section section-space" ref={serviceRef} style={{scrollMargin: "70px"}}>
+    <section
+      className="service-section section-space"
+      ref={serviceRef}
+      style={{ scrollMargin: "70px" }}
+    >
       <div className="vl-page-container">
         <div className="section-headers">
-          <h1 className="vl-heading f-500 vl-black">Our Services</h1>
+          <h1 className="vl-heading f-500 vl-black">{t("our_service")}</h1>
         </div>
         <div className="service-card-container">
           {service.map((card) => (
             <ServiceCard
+              t={t}
               key={card.id}
               Image={card.image}
               title={card.title}

@@ -25,6 +25,7 @@ import { createFilterOptions } from "@material-ui/lab";
 const filter = createFilterOptions();
 
 export default function Account(props) {
+  const { t } = props;
   const location = useLocation();
   const [authData, setAuthData] = useState({
     firstName: location?.state?.firstName,
@@ -243,50 +244,52 @@ export default function Account(props) {
   };
 
   return (
-    <section className='account-section'>
-      <div className='vl-connection-container'>
+    <section className="account-section">
+      <div className="vl-connection-container">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className='account-form-container'
+          className="account-form-container"
         >
-          <hgroup className='form-headers'>
-            <h1 className='vl-heading f-700 vl-black'>Create your Account</h1>
-            <h2 className='vl-subheading f-400 vl-grey-xs vl-line-sm'>
+          <hgroup className="form-headers">
+            <h1 className="vl-heading f-700 vl-black">Create your Account</h1>
+            <h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm">
               Join VaccineLedger to ensure quality and safety of your Vaccines
               using Blockchain
             </h2>
           </hgroup>
-          <section className='vl-input-group form-auto-fill-section'>
-            <div className='input-two-auto-column'>
+          <section className="vl-input-group form-auto-fill-section">
+            <div className="input-two-auto-column">
               <GoogleAuth
+                t={t}
                 register={true}
                 onAuthSuccess={onAuthSuccess}
                 onFailure={onFailure}
               />
               <TorusAuth
+                t={t}
                 register={true}
                 onAuthSuccess={onAuthSuccess}
                 onFailure={onFailure}
               />
             </div>
-            <div className='option-divider'>
-              <div className='divider-bar'></div>
-              <p className='vl-subheading vl-grey-xs'>OR</p>
-              <div className='divider-bar'></div>
+            <div className="option-divider">
+              <div className="divider-bar"></div>
+              <p className="vl-subheading vl-grey-xs">OR</p>
+              <div className="divider-bar"></div>
             </div>
           </section>
 
-          <section className='vl-input-group form-auto-fill-section'>
-            <div className='input-two-column'>
+          <section className="vl-input-group form-auto-fill-section">
+            <div className="input-two-column">
               <Controller
-                name='firstName'
+                name="firstName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <TextField
                     fullWidth
-                    variant='outlined'
-                    label='First Name'
+                    variant="outlined"
+                    label="First Name"
                     {...field}
                     error={Boolean(errors.firstName)}
                     helperText={errors.firstName && "First Name is required!"}
@@ -294,14 +297,14 @@ export default function Account(props) {
                 )}
               />
               <Controller
-                name='lastName'
+                name="lastName"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <TextField
                     fullWidth
-                    variant='outlined'
-                    label='Last Name'
+                    variant="outlined"
+                    label="Last Name"
                     {...field}
                     error={Boolean(errors.lastName)}
                     helperText={errors.lastName && "Last Name is required!"}
@@ -309,16 +312,16 @@ export default function Account(props) {
                 )}
               />
             </div>
-            <div className='input-single-column'>
+            <div className="input-single-column">
               <Controller
-                name='email'
+                name="email"
                 control={control}
                 rules={{ required: watchPhone === "" }}
                 render={({ field }) => (
                   <TextField
                     fullWidth
-                    variant='outlined'
-                    label='Email Address'
+                    variant="outlined"
+                    label="Email Address"
                     {...field}
                     error={Boolean(errors.email)}
                     helperText={
@@ -330,9 +333,9 @@ export default function Account(props) {
                 )}
               />
             </div>
-            <div className='input-single-column'>
+            <div className="input-single-column">
               <Controller
-                name='phone'
+                name="phone"
                 control={control}
                 rules={{ required: watchEmail === "" }}
                 render={({ field }) => (
@@ -340,7 +343,7 @@ export default function Account(props) {
                     international
                     countryCallingCodeEditable={false}
                     defaultCountry={COUNTRY_CODE}
-                    className='vl-custom-phone-input'
+                    className="vl-custom-phone-input"
                     {...field}
                     maxLength={15}
                     style={{
@@ -350,39 +353,39 @@ export default function Account(props) {
                 )}
               />
               {errors.phone?.type === "custom" ? (
-                <span className='error-msg text-dangerS'>
+                <span className="error-msg text-dangerS">
                   {errors.phone?.message}
                 </span>
               ) : null}
             </div>
-            <div className='radio-btn-group'>
+            <div className="radio-btn-group">
               <FormControl>
                 <Controller
-                  name='organizationExists'
+                  name="organizationExists"
                   control={control}
                   render={({ field }) => (
                     <RadioGroup
                       row
-                      aria-labelledby='demo-radio-buttons-group-label'
-                      defaultValue='female'
-                      name='radio-buttons-group'
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      defaultValue="female"
+                      name="radio-buttons-group"
                       {...field}
                     >
-                      <div className='vl-radio-btn vl-align-center'>
+                      <div className="vl-radio-btn vl-align-center">
                         <Radio
                           value={"existing"}
                           inputProps={{ "aria-label": "A" }}
                         />
-                        <p className='vl-body f-400 vl-grey-md vl-line-sm'>
+                        <p className="vl-body f-400 vl-grey-md vl-line-sm">
                           Existing Organization
                         </p>
                       </div>
-                      <div className='vl-radio-btn vl-align-center'>
+                      <div className="vl-radio-btn vl-align-center">
                         <Radio
                           value={"new"}
                           inputProps={{ "aria-label": "B" }}
                         />
-                        <p className='vl-body f-400 vl-grey-md vl-line-sm'>
+                        <p className="vl-body f-400 vl-grey-md vl-line-sm">
                           New Organization
                         </p>
                       </div>
@@ -392,9 +395,9 @@ export default function Account(props) {
               </FormControl>
             </div>
             {organizationExists === "existing" ? (
-              <div className='input-two-column'>
+              <div className="input-two-column">
                 <Controller
-                  name='organizationType'
+                  name="organizationType"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -405,7 +408,7 @@ export default function Account(props) {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label='Organization Type'
+                          label="Organization Type"
                           error={Boolean(errors.organizationType)}
                           helperText={
                             errors.organizationType &&
@@ -421,7 +424,7 @@ export default function Account(props) {
                   )}
                 />
                 <Controller
-                  name='organization'
+                  name="organization"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -432,7 +435,7 @@ export default function Account(props) {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label='Organization Name'
+                          label="Organization Name"
                           error={Boolean(errors.organization)}
                           helperText={
                             errors.organization &&
@@ -449,10 +452,10 @@ export default function Account(props) {
                 />
               </div>
             ) : (
-              <div className='vl-input-groups'>
-                <div className='input-two-column'>
+              <div className="vl-input-groups">
+                <div className="input-two-column">
                   <Controller
-                    name='organizationType'
+                    name="organizationType"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
@@ -463,7 +466,7 @@ export default function Account(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label='Organization Type'
+                            label="Organization Type"
                             error={Boolean(errors.organizationType)}
                             helperText={
                               errors.organizationType &&
@@ -479,7 +482,7 @@ export default function Account(props) {
                     )}
                   />
                   <Controller
-                    name='organizationName'
+                    name="organizationName"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
@@ -506,7 +509,7 @@ export default function Account(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label='Organization Name'
+                            label="Organization Name"
                             error={Boolean(errors.organizationName)}
                             helperText={
                               errors.organizationName?.type === "required"
@@ -519,13 +522,13 @@ export default function Account(props) {
                     )}
                   />
                 </div>
-                <div className='verify-terms-card-sm'>
+                <div className="verify-terms-card-sm">
                   <Controller
-                    name='skipOrgRegistration'
+                    name="skipOrgRegistration"
                     control={control}
                     render={({ field }) => <Checkbox {...field} />}
                   />
-                  <h2 className='vl-subheading f-400 vl-grey-xs'>
+                  <h2 className="vl-subheading f-400 vl-grey-xs">
                     Skip the Organization Registration
                   </h2>
                 </div>
@@ -538,8 +541,8 @@ export default function Account(props) {
             } `}
           >
             <button
-              type='submit'
-              className='vl-btn vl-btn-md vl-btn-full vl-btn-primary'
+              type="submit"
+              className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
             >
               Continue
             </button>
