@@ -4,8 +4,10 @@ import AnalyticsCard from "../../../common/AnalyticsCard/AnalyticsCard";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./ProductList.css";
 import ProductTable from "./ProductTable/ProductTable";
+import Modal from "../../../../shared/modal";
+import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
 import { addNewProduct } from "../../../../actions/poActions";
 export default function AdminProductList() {
@@ -13,11 +15,14 @@ export default function AdminProductList() {
   const [productCategory, setProductCategory] = useState();
   const [UOM, setUOM] = useState();
   const [manufacturer, setManufacturer] = useState();
+  const [openSuccessPopup, setOpenSuccessPopup] = useState(true);
   const dispatch = useDispatch();
-  useEffect(() => {dispatch(getOrgAnalytics())}, [dispatch]);
+  useEffect(() => {
+    dispatch(getOrgAnalytics());
+  }, [dispatch]);
   const { orgAnalytics } = useSelector((state) => state.organisationReducer);
   const { totalCount, activeCount, inactiveCount } = orgAnalytics;
-  async function addProduct(){
+  async function addProduct() {
     const formData = new FormData();
     formData.append("name", productName);
     formData.append("shortName", productName);
@@ -30,10 +35,15 @@ export default function AdminProductList() {
         name: UOM,
       })
     );
-    formData.append("manufacturer", manufacturer)
+    formData.append("manufacturer", manufacturer);
     const res = await addNewProduct(formData);
     console.log(res);
+    setOpenSuccessPopup(true);
   }
+
+  const closeModal = () => {
+    setOpenSuccessPopup(false);
+  };
   return (
     <>
       <OrgHeader />
@@ -105,7 +115,10 @@ export default function AdminProductList() {
                     label="Unit of Measure"
                     onChange={(e) => setUOM(e.target.value)}
                   />
-                  <button onClick={() => addProduct()} className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
+                  <button
+                    onClick={() => addProduct()}
+                    className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
+                  >
                     Add Product
                   </button>
                 </div>
@@ -114,6 +127,18 @@ export default function AdminProductList() {
           </div>
         </div>
       </section>
+      {openSuccessPopup && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModal}
+            successMessage="Add the Success Message Here"
+            // errorMessage="Put the Error Message Here"
+          />
+        </Modal>
+      )}
     </>
   );
 }
