@@ -145,6 +145,9 @@
   cursor: pointer;
 }
 
+.result-variant-0 {
+  background-color: #fcfeee;
+}
 .result-variant-1 {
   background-color: #eefdfe;
 }
@@ -167,4 +170,17 @@
 
 .result-variant-6 {
   background-color: #ffccc7;
+}
+
+.result-variant-7 {
+  background-color: #c7ffd0;
+}
+.result-variant-8 {
+  background-color: #e0c7ff;
+}
+.result-variant-9 {
+  background-color: #c7fbff;
+}
+.result-variant-10 {
+  background-color: #f8ffc7;
 }
