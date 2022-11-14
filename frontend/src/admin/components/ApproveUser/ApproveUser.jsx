@@ -24,7 +24,7 @@ export default function ApproveUser(props) {
     const reqData = {
 			id: data.id,
 			role: values.role,
-			warehouse: values.warehouse.id,
+			warehouse: [values.warehouse.id],
 			phoneNumber: values.phoneNumber,
     };
     

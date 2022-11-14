@@ -16,7 +16,8 @@ import {
 	SET_ALL_ORGANISATIONS,
 	SET_ALL_ORGANISATION_ACTIVE_USERS,
   SET_ORG_ANALYTICS,
-  SET_USER_ANALYTICS
+	SET_USER_ANALYTICS,
+	SET_WAREHOUSE_USERS
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
