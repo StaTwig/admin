@@ -37,6 +37,7 @@ export default function StatwigHeader() {
 
   console.log(location.pathname);
   return (
+<<<<<<< HEAD
 		<header className="admin-header">
 			<div className="admin-container">
 				<nav className="admin-nav">
@@ -82,6 +83,66 @@ export default function StatwigHeader() {
 								</div>
 							</li>
 							{/* <li className="admin-nav-item">
+=======
+    <header className="admin-header">
+      <div className="admin-container">
+        <nav className="admin-nav">
+          <article className="admin-nav-left">
+            <figure className="admin-logo">
+              <img src={vaccineledger} alt="vaccineledger" />
+            </figure>
+            <ul className="admin-nav-list">
+              <li className="admin-nav-item">
+                <Link
+                  to="/statwig/dashboard"
+                  className={`admin-nav-link ${
+                    location.pathname === "/" && "active"
+                  }`}
+                >
+                  <p className="vl-note">Dashboard</p>
+                </Link>
+              </li>
+              <li className="admin-nav-item">
+                <Link
+                  to="/statwig/manage-organization"
+                  className={`admin-nav-link ${
+                    location.pathname === "/organization" && "active"
+                  } ${location.pathname === "/locations" && "active"} ${
+                    location.pathname === "/users" && "active"
+                  }`}
+                >
+                  <p className="vl-note">Manage Organization</p>
+                </Link>
+              </li>
+              <li className="admin-nav-item">
+                <Link
+                  to="/statwig/roles"
+                  className={`admin-nav-link ${
+                    location.pathname === "/organization" && "active"
+                  } ${location.pathname === "/locations" && "active"} ${
+                    location.pathname === "/users" && "active"
+                  }`}
+                >
+                  <p className="vl-note">Configuration</p>
+                </Link>
+              </li>
+            </ul>
+          </article>
+          <article className="admin-nav-right">
+            <ul className="admin-nav-list switch-button-container">
+              <li className="admin-nav-item configure-link">
+                <div className="switch-button">
+                  <p className="vl-note">Admin</p>
+                  <i class="fa-solid fa-caret-down"></i>
+                </div>
+                <div className={`configure-list active `}>
+                  <button className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary">
+                    Switch to User
+                  </button>
+                </div>
+              </li>
+              <li className="admin-nav-item">
+>>>>>>> 73c156d7b6a647ba965425b122acf8716be02cd2
                 <Link className="admin-nav-link">
                   <Badge color="error" variant="dot">
                     <i className="fa-solid fa-bell"></i>

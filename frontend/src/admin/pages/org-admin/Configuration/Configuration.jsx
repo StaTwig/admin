@@ -18,7 +18,7 @@ import {
 } from "../../../actions/organisationActions";
 import AddRole from "../../../components/AddRole/AddRole";
 import AssignRole from "../../../components/AssignRole/AssignRole";
-import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
+import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
@@ -96,7 +96,8 @@ export default function Configuration(props) {
   };
   return (
     <>
-      <OrgHeader />
+    
+      <StatwigHeader />
       <section className="admin-page-layout">
         <div className="admin-container">
           <div className="admin-role-container admin-section-space">

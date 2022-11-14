@@ -561,17 +561,23 @@ exports.verifyOtp = [
 					query.emailId = req.body.emailId;
 				}
 				const user = await EmployeeModel.findOne(query);
-				if(user) {
+				if (user) {
 					if (user.otp == req.body.otp) {
 						const activeWarehouse = await WarehouseModel.find({
 							$and: [
 								{ id: { $in: user.warehouseId } },
 								{
-									$or: [{ status: "ACTIVE" }, { status: "PENDING" }, { status: { $exists: false } }],
+									$or: [
+										{ status: "ACTIVE" },
+										{ status: "PENDING" },
+										{ status: { $exists: false } },
+									],
 								},
 							],
 						});
-	
+
+						const org = await OrganisationModel.findOne({ id: user.organisationId });
+
 						let userData;
 						if (activeWarehouse.length > 0) {
 							let activeWarehouseId = 0;
@@ -590,6 +596,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
+								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
 							};
 						} else {
 							userData = {
@@ -604,6 +611,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
+								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
 							};
 						}
 						//Prepare JWT token for authentication
@@ -615,7 +623,7 @@ exports.verifyOtp = [
 						//Generated JWT token with Payload and secret.
 						userData.permissions = await RbacModel.findOne({ role: user.role });
 						userData.token = jwt.sign(jwtPayload, secret, jwtData);
-	
+
 						const bc_data = {
 							username: req.body.emailId,
 							password: "",
@@ -629,7 +637,7 @@ exports.verifyOtp = [
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");
 					}
 				} else {
-					return apiResponse.ErrorResponse(req, res, "account_not_found")
+					return apiResponse.ErrorResponse(req, res, "account_not_found");
 				}
 			}
 		} catch (err) {
@@ -989,7 +997,7 @@ exports.updateProfile = [
 			employee.organisationId = organisationId;
 			employee.warehouseId = warehouseId;
 			employee.preferredLanguage = preferredLanguage;
-			if(phoneNumber) {
+			if (phoneNumber) {
 				employee.phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
 			} else {
 				employee.phoneNumber = phoneNumber;
@@ -1070,8 +1078,8 @@ exports.deleteProfilePicture = [
 				err.message,
 			);
 		}
-	}
-]
+	},
+];
 
 exports.deleteProfile = [
 	auth,
@@ -1080,16 +1088,16 @@ exports.deleteProfile = [
 			const employee = await EmployeeModel.updateOne(
 				{ id: req.user.id },
 				{ $set: { accountStatus: "DELETED" } },
-				{new: true}
+				{ new: true },
 			);
 
 			return apiResponse.successResponse(req, res, "User account deleted successfully!");
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(req, res, err.message);
 		}
-	}
-]
+	},
+];
 
 exports.getAllUsers = [
 	auth,
@@ -1259,7 +1267,7 @@ exports.addWarehouse = [
 				},
 				{
 					$set: {
-						role: "powerUser"
+						role: "powerUser",
 					},
 					$push: {
 						pendingWarehouseId: warehouseId,
@@ -1906,12 +1914,12 @@ exports.emailverify = [
 				},
 				"emailId phoneNumber",
 			);
-			if(email && email.length) {
+			if (email && email.length) {
 				return apiResponse.validationErrorWithData(
 					req,
 					res,
 					"Account with the same email or phone already exists!",
-					[]
+					[],
 				);
 			}
 			return apiResponse.successResponseWithData(req, res, "Valid Email/Phone");

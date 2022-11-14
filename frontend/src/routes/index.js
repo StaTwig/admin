@@ -167,7 +167,7 @@ const routes = (
     {/* Admin Organization */}
     <Route path='/org/dashboard' component={requireAuth(OrgDashboard, true)} />
     <Route path='/org/manage-users' component={requireAuth(Users, true)} />
-    <Route path='/org/roles' component={requireAuth(Configuration, true)} />
+    <Route path='/statwig/roles' component={requireAuth(Configuration, true)} />
     <Route path='/org/product-list' component={requireAuth(AdminProductList, true)} />
 
     <Route component={ErrorPageContainer} />
