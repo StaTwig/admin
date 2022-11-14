@@ -48,11 +48,38 @@ export const getVaccinationDetailsByVial = async (vaccineVialId) => {
 	}
 };
 
+export const getVialsUtilised = async () => {
+	try {
+		const result = await axios.get(`${config().getVialsUtilised}`);
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};
+
+export const getVaccinationsList = async () => {
+	try {
+		const result = await axios.get(`${config().getVaccinationsList}`);
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};
+
 export const getCitiesAndOrgsForFilters = async () => {
 	try {
-		const result = await axios.get(
-			`${config().getCitiesAndOrgsForFilters}`,
-		);
+		const result = await axios.get(`${config().getCitiesAndOrgsForFilters}`);
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};
+
+export const exportVaccinationList = async (data) => {
+	try {
+		const result = await axios.post(`${config().exportVaccinationList}`, data, {
+			responseType: "blob",
+		});
 		return result;
 	} catch (err) {
 		throw err;

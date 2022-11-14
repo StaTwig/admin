@@ -179,6 +179,9 @@ export function config() {
       getVaccinationDetailsByVial: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVaccinationDetailsByVial`,
       getVaccineAnalytics: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getAnalytics`,
       getCitiesAndOrgsForFilters: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
+      getVialsUtilised: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVialsUtilised`,
+      getVaccinationsList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVaccinationsList`,
+      exportVaccinationList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/exportVaccinationList`,
     },
     prod: {
       getOrganizationsUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -341,7 +344,10 @@ export function config() {
       getAllVaccinationDetails: `${SERVER_URL}/lastmilemanagement/api/vaccination/getAllVaccinationDetails`,
       getVaccinationDetailsByVial: `${SERVER_URL}/lastmilemanagement/api/vaccination/getVaccinationDetailsByVial`,
       getVaccineAnalytics: `${SERVER_URL}/lastmilemanagement/api/vaccination/getAnalytics`,
+      getVialsUtilised: `${SERVER_URL}/lastmilemanagement/api/vaccination/getVialsUtilised`,
+      getVaccinationsList: `${SERVER_URL}/lastmilemanagement/api/vaccination/getVaccinationsList`,
       getCitiesAndOrgsForFilters: `${SERVER_URL}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
+      exportVaccinationList: `${SERVER_URL}/lastmilemanagement/api/vaccination/exportVaccinationList`,
     },
   };
 

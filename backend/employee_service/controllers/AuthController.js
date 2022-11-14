@@ -2,7 +2,6 @@ require("dotenv").config();
 const EmployeeModel = require("../models/EmployeeModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const logEvent = require("../../../utils/event_logger");
-const ConsumerModel = require("../models/ConsumerModel");
 const InventoryModel = require("../models/InventoryModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
@@ -19,7 +18,6 @@ const axios = require("axios");
 const cuid = require("cuid");
 const { OAuth2Client } = require("google-auth-library");
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
-const stream_name = process.env.INV_STREAM;
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRegex = /^[\+]\d{11,12}$/;
 
@@ -1085,7 +1083,7 @@ exports.deleteProfile = [
 	auth,
 	async (req, res) => {
 		try {
-			const employee = await EmployeeModel.updateOne(
+			await EmployeeModel.updateOne(
 				{ id: req.user.id },
 				{ $set: { accountStatus: "DELETED" } },
 				{ new: true },
@@ -1248,11 +1246,11 @@ exports.addWarehouse = [
 					$set: {
 						...(skipOrgRegistration
 							? {
-									postalAddress: addr,
-									country: warehouseAddress.country,
-									region: warehouseAddress.region,
-									status: "NOTVERIFIED",
-							  }
+								postalAddress: addr,
+								country: warehouseAddress.country,
+								region: warehouseAddress.region,
+								status: "NOTVERIFIED",
+							}
 							: {}),
 					},
 					$push: {
@@ -1528,8 +1526,8 @@ exports.getAllRegisteredUsers = [
 			const page = req.query.page || 1; // Page
 			const totalRecords = await EmployeeModel.count({});
 			/* 
-      Performance Bottleneck 
-      */
+	  Performance Bottleneck 
+	  */
 			const users = await EmployeeModel.find({ accountStatus: { $ne: "DELETED" } })
 				.skip(resPerPage * page - resPerPage)
 				.limit(resPerPage);

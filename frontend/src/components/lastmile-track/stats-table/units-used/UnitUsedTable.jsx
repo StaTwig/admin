@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import UnitUsedRow from "./UnitUsedRow";
+import EmptyIcon from "../../../../assets/files/designs/empty-table.jpg";
 
-export default function UnitUsedTable() {
-  const rows = [{}, {}, {}, {}, {}, {}, {}];
+export default function UnitUsedTable({ unitsUtilized }) {
   return (
     <>
       <TableContainer className="vl-mui-custom-tablecontainer">
@@ -19,37 +19,51 @@ export default function UnitUsedTable() {
             Total No. of Units Utilized
           </h1>
         </div>
-        <Table sx={{ minWidth: 650 }} className="vl-mui-custom-table">
-          <TableHead className="vl-mui-custom-tablehead">
-            <TableRow className="vl-mui-custom-tr">
-              <TableCell align="center">
-                <div className="vl-table-column">
-                  <p className="vl-body f-500 vl-blue">S. No</p>
-                </div>
-              </TableCell>
-              <TableCell align="center">
-                <div className="vl-table-column">
-                  <p className="vl-body f-500 vl-blue">Batch Number</p>
-                </div>
-              </TableCell>
-              <TableCell align="center">
-                <div className="vl-table-column">
-                  <p className="vl-body f-500 vl-blue">No. of Vaccinated</p>
-                </div>
-              </TableCell>
-              <TableCell align="center">
-                <div className="vl-table-column">
-                  <p className="vl-body f-500 vl-blue">Date</p>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className="vl-mui-custom-tablebody">
-            {rows.map((row) => (
-              <UnitUsedRow />
-            ))}
-          </TableBody>
-        </Table>
+        {unitsUtilized && unitsUtilized.length ? (
+          <Table sx={{ minWidth: 650 }} className="vl-mui-custom-table">
+            <TableHead className="vl-mui-custom-tablehead">
+              <TableRow className="vl-mui-custom-tr">
+                <TableCell align="center">
+                  <div className="vl-table-column">
+                    <p className="vl-body f-500 vl-blue">S. No</p>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="vl-table-column">
+                    <p className="vl-body f-500 vl-blue">Batch Number</p>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="vl-table-column">
+                    <p className="vl-body f-500 vl-blue">No. of Vaccinated</p>
+                  </div>
+                </TableCell>
+                <TableCell align="center">
+                  <div className="vl-table-column">
+                    <p className="vl-body f-500 vl-blue">Date</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody className="vl-mui-custom-tablebody">
+              {unitsUtilized &&
+                unitsUtilized.length &&
+                unitsUtilized.map((vial, i) => (
+                  <UnitUsedRow vial={vial} index={i} />
+                ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="Table--Empty-container">
+            <div className="Table--empty-illustartion">
+              <img src={EmptyIcon} alt="EmptyIcon" />
+              <h1 className="vl-subheading f-500 vl-black">
+                Sorry, No Records
+              </h1>
+            </div>
+          </div>
+        )}
         <div className="padding-space"></div>
       </TableContainer>
     </>

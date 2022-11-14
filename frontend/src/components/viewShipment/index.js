@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import ShipmentSummary from "./shipmentsummary";
-import ShipmentDetails from "./shipmentdetails";
-import ProductList from "./productlist";
 import Map from "./map";
 import returnShipment from "../../assets/icons/returnShipment.svg";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
@@ -15,6 +12,9 @@ import { getAddress } from "../../utils/commonHelper";
 import { isAuthenticated } from "../../utils/commonHelper";
 import ViewShippingModal from "../shipments/shippingOrder/viewShippingModal";
 import { t } from "i18next";
+import ShipmentInfo from "./ShipmentInfo";
+import ProductInfo from "./ProductInfo";
+import ShipmentOverview from "./ShipmentOverview";
 
 const Tracing = (props) => {
   const [menuShip, setMenuShip] = useState(false);
@@ -97,25 +97,21 @@ const Tracing = (props) => {
       <div className='row'>
         <div className='col-sm-4'>
           <h6 className='heading mb-3'>{t("shipment_summary")}</h6>
-          <ShipmentSummary shipments={tracking} t={t} />
+          <ShipmentOverview shipments={tracking} t={t} />
           <h6 className='heading mt-4 mb-3'>{t("shipment_details")}</h6>
-          <ShipmentDetails
-            shipments={tracking}
+          <ShipmentInfo shipments={tracking}
             setMenuShip={setMenuShip}
             menuShip={menuShip}
             highLight={highLight}
             setHighLight={setHighLight}
-            t={t}
-          />
+            t={t} />
           <h6 className='heading mt-4 mb-3'>{t("product_list")}</h6>
-          <ProductList
-            shipments={tracking}
+          <ProductInfo shipments={tracking}
             productHighLight={productHighLight}
             setProductHighLight={setProductHighLight}
             menuProduct={menuProduct}
             setMenuProduct={setMenuProduct}
-            t={t}
-          />
+            t={t} />
           {props.imagesData.length > 0 && (
             <>
               <h6 className='heading mt-4 mb-3'>{t("images")}</h6>
@@ -132,7 +128,7 @@ const Tracing = (props) => {
         <div className='col-sm-8'>
           <div className='row mb-4 mt-0'>
             <div className='col' style={{ height: "350px" }}>
-              <p className='heading'>{t("geographical_tracking")}</p>
+              <p className='heading mb-3'>{t("geographical_tracking")}</p>
               <Map data={shippmentChainOfCustodyData} t={t} />{" "}
             </div>
           </div>

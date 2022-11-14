@@ -9,6 +9,20 @@ const InventoryModel = require("../models/InventoryModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const VaccineVialModel = require("../models/VaccineVialModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const excel = require("node-excel-export");
+const PdfPrinter = require("pdfmake");
+const { resolve } = require("path");
+const fs = require("fs");
+
+const fontDescriptors = {
+  Roboto: {
+    normal: resolve("./controllers/Roboto-Regular.ttf"),
+    bold: resolve("./controllers/Roboto-Medium.ttf"),
+    italics: resolve("./controllers/Roboto-Italic.ttf"),
+    bolditalics: resolve("./controllers/Roboto-MediumItalic.ttf"),
+  },
+};
+const printer = new PdfPrinter(fontDescriptors);
 
 exports.fetchBatchById = [
 	auth,
@@ -220,7 +234,7 @@ exports.vaccinateMultiple = [
 				warehouseId: warehouseId,
 				productId: productId,
 				batchNumber: batchNumber,
-				numberOfDoses: 0,
+				numberOfDoses: doses.length,
 			});
 			await vaccineVial.save();
 
@@ -268,12 +282,6 @@ exports.vaccinateMultiple = [
 					gender: doses[i].gender,
 				});
 				await dose.save();
-
-				// Increment number of doses in VaccineVial model
-				await VaccineVialModel.findOneAndUpdate(
-					{ id: vaccineVialId },
-					{ $inc: { numberOfDoses: 1 } },
-				);
 			}
 
 			return apiResponse.successResponseWithData(res, "Dose added successfully!", {
@@ -455,6 +463,103 @@ const buildDoseQuery = async (gender, minAge, maxAge) => {
 	}
 };
 
+const generateVaccinationsList = async (filters) => {
+	try {
+		const { user, city, organisation, gender, minAge, maxAge } = filters;
+		const warehouseQuery = await buildWarehouseQuery(user, city, organisation);
+		const doseQuery = await buildDoseQuery(gender, minAge, maxAge);
+
+		const warehouses = await WarehouseModel.aggregate([
+			{ $match: warehouseQuery },
+			{
+				$lookup: {
+					from: "vaccinevials",
+					let: { warehouseId: "$id" },
+					pipeline: [
+						{ $match: { $expr: { $eq: ["$warehouseId", "$$warehouseId"] } } },
+						{
+							$lookup: {
+								from: "products",
+								localField: "productId",
+								foreignField: "id",
+								as: "product",
+							},
+						},
+						{ $unwind: "$product" },
+						{
+							$lookup: {
+								from: "doses",
+								let: { vaccineVialId: "$id" },
+								pipeline: [
+									{
+										$match: doseQuery,
+									},
+								],
+								as: "doses",
+							},
+						},
+					],
+					as: "vaccinations",
+				},
+			},
+		]);
+		if (!warehouses) {
+			return apiResponse.validationErrorWithData(res, "VaccineVialId invalid!", {
+				vaccineVialId: vaccineVialId,
+			});
+		}
+
+		let totalVaccinations = 0;
+		let todaysVaccinations = 0;
+		let vialsUtilized = 0;
+		let now = new Date();
+		now.setHours(0, 0, 0, 0);
+
+		const vaccinationDetails = [];
+		for (let i = 0; i < warehouses.length; ++i) {
+			const vaccineVials = warehouses[i].vaccinations;
+			for (let j = 0; j < vaccineVials.length; ++j) {
+				let createdAt = new Date(vaccineVials[j].createdAt);
+				createdAt.setHours(0, 0, 0, 0);
+
+				const doses = vaccineVials[j].doses;
+
+				if (doses.length) {
+					vialsUtilized++;
+					totalVaccinations += doses.length;
+
+					if (now.toDateString() === createdAt.toDateString()) {
+						todaysVaccinations += doses.length;
+					}
+				}
+				for (let k = 0; k < doses.length; ++k) {
+					const data = {
+						batchNumber: vaccineVials[j].batchNumber,
+						organisationName: vaccineVials[j]?.product?.manufacturer,
+						location: warehouses[i].warehouseAddress.city,
+						gender: doses[k].gender,
+						age: doses[k].age,
+					};
+					vaccinationDetails.push(data);
+				}
+			}
+		}
+
+		const result = {
+			analytics: {
+				todaysVaccinations: todaysVaccinations,
+				totalVaccinations: totalVaccinations,
+				unitsUtilized: vialsUtilized,
+			},
+			vaccinationDetails: vaccinationDetails,
+		};
+
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};
+
 exports.getAllVaccinationDetails = [
 	auth,
 	async (req, res) => {
@@ -462,97 +567,16 @@ exports.getAllVaccinationDetails = [
 			const { gender, city, organisation, minAge, maxAge } = req.body;
 			const user = req.user;
 
-			const warehouseQuery = await buildWarehouseQuery(user, city, organisation);
-			const doseQuery = await buildDoseQuery(gender, minAge, maxAge);
-
-			console.log(JSON.stringify(doseQuery));
-
-			const warehouses = await WarehouseModel.aggregate([
-				{ $match: warehouseQuery },
-				{
-					$lookup: {
-						from: "vaccinevials",
-						let: { warehouseId: "$id" },
-						pipeline: [
-							{ $match: { $expr: { $eq: ["$warehouseId", "$$warehouseId"] } } },
-							{
-								$lookup: {
-									from: "products",
-									localField: "productId",
-									foreignField: "id",
-									as: "product",
-								},
-							},
-							{ $unwind: "$product" },
-							{
-								$lookup: {
-									from: "doses",
-									let: { vaccineVialId: "$id" },
-									pipeline: [
-										{
-											$match: doseQuery,
-										},
-									],
-									as: "doses",
-								},
-							},
-						],
-						as: "vaccinations",
-					},
-				},
-			]);
-			if (!warehouses) {
-				return apiResponse.validationErrorWithData(res, "VaccineVialId invalid!", {
-					vaccineVialId: vaccineVialId,
-				});
-			}
-
-			let totalVaccinations = 0;
-			let todaysVaccinations = 0;
-			let vialsUtilized = 0;
-			let now = new Date();
-			let today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-
-			const vaccinationDetails = [];
-			for (let i = 0; i < warehouses.length; ++i) {
-				const vaccineVials = warehouses[i].vaccinations;
-				for (let j = 0; j < vaccineVials.length; ++j) {
-					let createdAt = new Date(vaccineVials[j].createdAt);
-					let filterDate = new Date(
-						Date.UTC(createdAt.getUTCFullYear(), createdAt.getUTCMonth(), createdAt.getUTCDate()),
-					);
-
-					const doses = vaccineVials[j].doses;
-
-					if (doses.length) {
-						vialsUtilized++;
-						totalVaccinations += doses.length;
-
-						if (today === filterDate) {
-							todaysVaccinations += doses.length;
-						}
-					}
-					for (let k = 0; k < doses.length; ++k) {
-						const data = {
-							batchNumber: vaccineVials[j].batchNumber,
-							organisationName: vaccineVials[j]?.product?.manufacturer,
-							location: warehouses[i].warehouseAddress.city,
-							gender: doses[k].gender,
-							age: doses[k].age,
-						};
-						vaccinationDetails.push(data);
-					}
-				}
-			}
-
-			const result = {
-				analytics: {
-					todaysVaccinations: todaysVaccinations,
-					totalVaccinations: totalVaccinations,
-					unitsUtilized: vialsUtilized,
-				},
-				vaccinationDetails: vaccinationDetails,
+			const filters = {
+				user: user,
+				gender: gender,
+				city: city,
+				organisation: organisation,
+				minAge: minAge,
+				maxAge: maxAge,
 			};
+
+			const result = await generateVaccinationsList(filters);
 
 			return apiResponse.successResponseWithData(res, "Fetched doses successfully!", result);
 		} catch (err) {
@@ -586,17 +610,15 @@ exports.getAnalytics = [
 			let totalVaccinations = 0;
 			let todaysVaccinations = 0;
 			let now = new Date();
-			let today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+			now.setHours(0, 0, 0, 0);
 
 			for (let i = 0; i < analytics.length; ++i) {
 				let createdAt = new Date(analytics[i].createdAt);
-				let filterDate = new Date(
-					Date.UTC(createdAt.getUTCFullYear(), createdAt.getUTCMonth(), createdAt.getUTCDate()),
-				);
+				createdAt.setHours(0, 0, 0, 0);
 
 				totalVaccinations += analytics[i].numberOfDoses;
 
-				if (today === filterDate) {
+				if (now.toDateString() === createdAt.toDateString()) {
 					todaysVaccinations += analytics[i].numberOfDoses;
 				}
 			}
@@ -669,13 +691,11 @@ exports.getVaccinationsList = [
 			const todaysVaccinationsList = [];
 
 			let now = new Date();
-			let today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+			now.setHours(0, 0, 0, 0);
 
 			for (let i = 0; i < vialsUtilized.length; ++i) {
 				let createdAt = new Date(vialsUtilized[i].createdAt);
-				let filterDate = new Date(
-					Date.UTC(createdAt.getUTCFullYear(), createdAt.getUTCMonth(), createdAt.getUTCDate()),
-				);
+				createdAt.setHours(0, 0, 0, 0);
 
 				let currDoses = await DoseModel.aggregate([
 					{ $match: { vaccineVialId: vialsUtilized[i].id } },
@@ -683,7 +703,7 @@ exports.getVaccinationsList = [
 				]);
 
 				vaccinationsList.push(...currDoses);
-				if (today === filterDate) {
+				if (now.toDateString() === createdAt.toDateString()) {
 					todaysVaccinationsList.push(...currDoses);
 				}
 			}
@@ -732,13 +752,18 @@ exports.getCitiesAndOrgsForFilters = [
 
 			warehouseIds = vaccinationCenters.map((warehouse) => warehouse._id);
 
-			const warehouses = await WarehouseModel.find({ id: { $in: warehouseIds } });
+			const warehouses = await WarehouseModel.aggregate([
+				{ $match: { id: { $in: warehouseIds } } },
+				{ $group: { _id: "$warehouseAddress.city", orgs: { $addToSet: "$organisationId" } } },
+			]);
 
-			const cities = warehouses.map((warehouse) => warehouse.warehouseAddress.city);
+			const cities = warehouses.map((warehouse) => warehouse._id);
 
 			let orgs;
 			if (userDetails.role === "GoverningBody") {
-				let orgIds = warehouses.map((warehouse) => warehouse.organisationId);
+				let orgIds = warehouses.map((warehouse) => warehouse.orgs);
+				orgIds = orgIds.flat();
+
 				orgs = await OrganisationModel.find({ id: { $in: orgIds } });
 				orgs = orgs.map((org) => org.name);
 			}
@@ -749,6 +774,165 @@ exports.getCitiesAndOrgsForFilters = [
 			};
 
 			return apiResponse.successResponseWithData(res, "Cities and orgs for filters", result);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err.message);
+		}
+	},
+];
+
+function buildExcelReport(req, res, dataForExcel) {
+	const styles = {
+		headerDark: {
+			fill: {
+				fgColor: {
+					rgb: "FF000000",
+				},
+			},
+			font: {
+				color: {
+					rgb: "FFFFFFFF",
+				},
+				sz: 14,
+				bold: true,
+				underline: true,
+			},
+		},
+		cellGreen: {
+			fill: {
+				fgColor: {
+					rgb: "FF00FF00",
+				},
+			},
+		},
+	};
+
+	const specification = {
+		batchNumber: {
+			displayName: "Batch Number",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 120,
+		},
+		organisationName: {
+			displayName: "Organisation Name",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 220,
+		},
+		location: {
+			displayName: "Location",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 220,
+		},
+		gender: {
+			displayName: "Gender",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 120,
+		},
+		age: {
+			displayName: "Age",
+			headerStyle: styles.headerDark,
+			cellStyle: styles.cellGreen,
+			width: 60,
+		},
+	};
+
+	const report = excel.buildExport([
+		{
+			name: "Report Shipment",
+			specification: specification,
+			data: dataForExcel,
+		},
+	]);
+
+	res.attachment("report.xlsx");
+	return res.send(report);
+}
+
+function buildPdfReport(req, res, data, orderType) {
+	var rows = [];
+	rows.push([
+		{ text: "Batch Number", bold: true },
+		{ text: "Organisation Name", bold: true },
+		{ text: "Location", bold: true },
+		{ text: "Gender", bold: true },
+		{ text: "Age", bold: true },
+	]);
+	for (var i = 0; i < data.length; i++) {
+		rows.push([
+			data[i].batchNumber || "N/A",
+			data[i].organisationName || "N/A",
+			data[i].location || "N/A",
+			data[i].gender || "N/A",
+			data[i].age || "N/A",
+		]);
+	}
+
+	var docDefinition = {
+		pageSize: "A4",
+		pageOrientation: "portrait",
+		pageMargins: [30, 30, 2, 2],
+		content: [
+			{ text: "Vaccinations List", fontSize: 34, style: "header" },
+			{
+				table: {
+					margin: [1, 1, 1, 1],
+					headerRows: 1,
+					headerStyle: "header",
+					widths: [100, 200, 100, 60, 30],
+					body: rows,
+				},
+			},
+		],
+		styles: {
+			header: {
+				bold: true,
+				margin: [10, 10, 10, 10],
+			},
+		},
+	};
+
+	var options = { fontLayoutCache: true };
+	var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+	var temp123;
+	var pdfFile = pdfDoc.pipe((temp123 = fs.createWriteStream("./report.pdf")));
+	var path = pdfFile.path;
+	pdfDoc.end();
+	temp123.on("finish", async function () {
+		// do send PDF file
+		return res.sendFile(resolve(path));
+	});
+	return;
+}
+
+exports.exportVaccinationList = [
+	auth,
+	async (req, res) => {
+		try {
+			const { gender, city, organisation, minAge, maxAge, reportType } = req.body;
+			const user = req.user;
+
+			const filters = {
+				user: user,
+				gender: gender,
+				city: city,
+				organisation: organisation,
+				minAge: minAge,
+				maxAge: maxAge,
+			};
+
+			const result = await generateVaccinationsList(filters);
+
+			if (reportType === "excel") res = buildExcelReport(req, res, result.vaccinationDetails);
+			else res = buildPdfReport(req, res, result.vaccinationDetails);
+
+			// return apiResponse.successResponseWithMultipleData(
+			// 	res,
+			// 	"Outbound Shipment Records"
+			// );
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(res, err.message);

@@ -15,5 +15,3 @@ const InventoryAnalytics = new mongoose.Schema(
   { timestamps: true }
 );
 module.exports = mongoose.model("inventory_analytics", InventoryAnalytics);
-
-// add inventory, create shipment , receive shipment
