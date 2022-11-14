@@ -1187,10 +1187,10 @@ exports.inStockReport = [
       let matchQuery1 = {};
       let matchQuery2 = {};
       let matchQuery3 = {};
-      const {type, id} = req.query;
-      if(id)
+      const { type, id } = req.query;
+      if (id)
         matchQuery3[`_id`] = id;
-      if(type)
+      if (type)
         matchQuery3[`productCategory`] = type;
       if (!isDist) {
         matchQuery2[`manufacturerId`] = req.user.organisationId;
@@ -1377,16 +1377,14 @@ exports.outOfStockReport = [
         id: req.user.organisationId,
       });
       const isDist = organisation.type === "DISTRIBUTORS";
-
-
       let matchQuery = {};
       let matchQuery1 = {};
       let matchQuery2 = {};
       let matchQuery3 = {};
-      const {type, id} = req.query;
-      if(id)
+      const { type, id } = req.query;
+      if (id)
         matchQuery3[`_id`] = id;
-      if(type)
+      if (type)
         matchQuery3[`productCategory`] = type;
 
       if (!isDist) {
@@ -1728,7 +1726,7 @@ exports.inStockFilterOptions = [
         {
           $group: {
             _id: "productFilters",
-            products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
+            products: { $addToSet: { productId: "$_id", productName: "$productName", productCategory: "$productCategory" } },
           },
         },
       ]);
@@ -1902,14 +1900,14 @@ exports.outOfStockFilterOptions = [
         {
           $group: {
             _id: "productFilters",
-            products: { $addToSet: {productId: "$_id", productName: "$productName", productCategory: "$productCategory"} },
+            products: { $addToSet: { productId: "$_id", productName: "$productName", productCategory: "$productCategory" } },
           },
         }
-       
+
       ]);
       const Filters = outOfStockReport.length > 0 ? outOfStockReport[0].products : [];
       return apiResponse.successResponseWithData(res, "Out of stock Report", {
-        filters:  Filters,
+        filters: Filters,
         warehouseId: warehouse,
       });
     } catch (err) {
