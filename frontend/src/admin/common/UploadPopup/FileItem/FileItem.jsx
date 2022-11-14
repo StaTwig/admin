@@ -10,8 +10,8 @@ import "./FileItem.scss";
 const FileItem = ({ file }) => {
   return (
     <>
-      <li className="file-item" key={file.name}>
-        <i class="fa-solid fa-file-lines"></i>
+      <li className='file-item' key={file.name}>
+        <i className='fa-solid fa-file-lines'></i>
         <p>{file.name}</p>
       </li>
     </>

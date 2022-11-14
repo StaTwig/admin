@@ -75,31 +75,31 @@ export default function LastmileTrack(props) {
 
   return (
     <>
-      <div className="Lastmile--mainPage-layout">
-        <div className="Lastmile--pageHeader">
+      <div className='Lastmile--mainPage-layout'>
+        <div className='Lastmile--pageHeader'>
           <h1
             style={{ paddingBottom: "10px" }}
-            className="vl-heading-bdr black f-700 mi-reset"
+            className='vl-heading-bdr black f-700 mi-reset'
           >
             LastMile
           </h1>
           {tableView && (
-            <div className="back-link-button-space">
+            <div className='back-link-button-space'>
               <button
-                className="back-action-btn"
+                className='back-action-btn'
                 onClick={() => setTableView(false)}
               >
-                <i class="fa-solid fa-arrow-left"></i>
+                <i className='fa-solid fa-arrow-left'></i>
                 <span>Back to Batch Details </span>
               </button>
             </div>
           )}
         </div>
-        <div className="Lastmile--gridLayout-wrapper">
+        <div className='Lastmile--gridLayout-wrapper'>
           {tableView ? (
-            <div className="Lastmile--Interaction-space">{tableComp}</div>
+            <div className='Lastmile--Interaction-space'>{tableComp}</div>
           ) : (
-            <div className="Lastmile--Interaction-space">
+            <div className='Lastmile--Interaction-space'>
               {Steps === 1 ? (
                 <ScanBatch
                   setBatchDetails={setBatchDetails}
@@ -115,33 +115,33 @@ export default function LastmileTrack(props) {
               )}
             </div>
           )}
-          <div className="Lastmile--Analytics-space">
+          <div className='Lastmile--Analytics-space'>
             <AnalyticTiles
-              layout="1"
-              variant="1"
-              title="Total Number of Units Utilized"
+              layout='1'
+              variant='1'
+              title='Total Number of Units Utilized'
               stat={analytics?.unitsUtilized ? analytics.unitsUtilized : 0}
-              name="unitsUtilized"
+              name='unitsUtilized'
               onClick={handleAnalyticsClicked}
             />
             <AnalyticTiles
-              layout="1"
-              variant="2"
-              title="No. of Beneficiaries Vaccinated so far"
+              layout='1'
+              variant='2'
+              title='No. of Beneficiaries Vaccinated so far'
               stat={
                 analytics?.totalVaccinations ? analytics.totalVaccinations : 0
               }
-              name="totalVaccinations"
+              name='totalVaccinations'
               onClick={handleAnalyticsClicked}
             />
             <AnalyticTiles
-              layout="1"
-              variant="3"
-              title="No. of Beneficaries Vaccinated today"
+              layout='1'
+              variant='3'
+              title='No. of Beneficaries Vaccinated today'
               stat={
                 analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0
               }
-              name="todaysVaccinations"
+              name='todaysVaccinations'
               onClick={handleAnalyticsClicked}
             />
           </div>
