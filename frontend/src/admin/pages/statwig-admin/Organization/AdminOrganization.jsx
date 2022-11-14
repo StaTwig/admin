@@ -8,6 +8,7 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
 import { useHistory } from "react-router";
+import UploadPopup from "../../../common/UploadPopup/UploadPopup";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -37,7 +38,9 @@ export default function AdminOrganization(props) {
 
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();
-  useEffect(() => {dispatch(getOrgAnalytics())}, [dispatch]);
+  useEffect(() => {
+    dispatch(getOrgAnalytics());
+  }, [dispatch]);
   const { orgAnalytics } = useSelector((state) => state.organisationReducer);
   const { totalCount, activeCount, inactiveCount } = orgAnalytics;
   let domNode = useClickOutside(() => {
@@ -45,8 +48,10 @@ export default function AdminOrganization(props) {
   });
 
   const [open, setOpen] = React.useState(false);
+  const [Importopen, setImportOpen] = React.useState(false);
   const [fullWidth] = React.useState(true);
   const [maxWidth] = React.useState("md");
+  const [smallWidth] = React.useState("sm");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,6 +59,14 @@ export default function AdminOrganization(props) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleImportClickOpen = () => {
+    setImportOpen(true);
+  };
+
+  const handleImportClose = () => {
+    setImportOpen(false);
   };
   return (
     <>
@@ -112,7 +125,10 @@ export default function AdminOrganization(props) {
                     <div
                       className={`button-dropdown ${ButtonOpen && "active"}`}
                     >
-                      <div className="btn-dropdown-card">
+                      <div
+                        className="btn-dropdown-card"
+                        onClick={handleImportClickOpen}
+                      >
                         <i className="fa-solid fa-upload"></i>
                         <p className="vl-note f-500">Import Organization</p>
                       </div>
@@ -139,6 +155,17 @@ export default function AdminOrganization(props) {
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
             <AddOrganization handleClose={handleClose} />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          fullWidth={fullWidth}
+          maxWidth={smallWidth}
+          open={Importopen}
+          onClose={handleImportClose}
+        >
+          <DialogContent sx={{ padding: "0rem !important" }}>
+            <UploadPopup handleClose={handleImportClose} />
           </DialogContent>
         </Dialog>
       </section>

@@ -44,18 +44,6 @@ export default function UsersTable(props) {
         <TableHead className="organization-thead">
           <TableRow className="organization-tr">
             <TableCell>
-              <Checkbox
-                className="vl-checkbox"
-                name="allCheck"
-                sx={{
-                  color: "#7e858f",
-                  "&.Mui-checked": {
-                    color: "#221ecc",
-                  },
-                }}
-              />
-            </TableCell>
-            <TableCell>
               <h1 className="vl-note f-500 vl-blue">User Name</h1>
             </TableCell>
             <TableCell>

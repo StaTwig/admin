@@ -4,7 +4,7 @@ import TableRow from "@mui/material/TableRow";
 import { Checkbox } from "@mui/material";
 import { useState } from "react";
 
-export default function ProductRow() {
+export default function ProductRow({rows}) {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ export default function ProductRow() {
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         className={`organization-tr ${checked && "organization-bar-added"}`}
       >
-        <TableCell>
+        {/* <TableCell>
           <Checkbox
             className="vl-checkbox"
             value={checked}
@@ -25,14 +25,14 @@ export default function ProductRow() {
               },
             }}
           />
-        </TableCell>
+        </TableCell> */}
         <TableCell>
           <p
             className={`vl-body ${
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Vaccine
+            {rows.type}
           </p>
         </TableCell>
         <TableCell>
@@ -41,7 +41,7 @@ export default function ProductRow() {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Covishield
+            {rows.name}
           </p>
         </TableCell>
         <TableCell>
@@ -50,7 +50,7 @@ export default function ProductRow() {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Bharath Biotech
+            {rows.manufacturer}
           </p>
         </TableCell>
         <TableCell>
@@ -59,7 +59,7 @@ export default function ProductRow() {
               checked ? "f-500 vl-black" : "f-500 vl-grey-sm"
             }`}
           >
-            Mg
+            {rows.unitofMeasure?.name}
           </p>
         </TableCell>
       </TableRow>
