@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,45 +8,26 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import ProductRow from "./ProductRow";
+import { getProducts } from "../../../../../actions/poActions"
+import { useSelector } from "react-redux";
+export default function ProductTable(props) {
 
-export default function ProductTable() {
-  const Data = [
-    {
-      id: "1",
-      status: true,
-    },
-    {
-      id: "2",
-      status: true,
-    },
-    {
-      id: "3",
-      status: false,
-    },
-    {
-      id: "4",
-      status: true,
-    },
-    {
-      id: "5",
-      status: true,
-    },
-    {
-      id: "6",
-      status: false,
-    },
-    {
-      id: "7",
-      status: false,
-    },
-    {
-      id: "8",
-      status: true,
-    },
-  ];
+const { user } = useSelector((state) => state)
+console.log(user.organisationId)
+const [page, setPage] = React.useState(0);
+const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const [products, setProducts] = useState([]);
+  useEffect(() => {
+    async function fetchProducts(){
+      const products = await getProducts(`orgId=${"" 
+      // ||user.organisationId
+    }&skip=${page * 10}&limit=${rowsPerPage}`);
+      setProducts(products)
+    }
+    fetchProducts()
+  }, [page, rowsPerPage, user.organisationId])
 
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -82,7 +63,7 @@ export default function ProductTable() {
       >
         <TableHead className="organization-thead">
           <TableRow className="organization-tr">
-            <TableCell>
+            {/* <TableCell>
               <Checkbox
                 className="vl-checkbox"
                 name="allCheck"
@@ -93,7 +74,7 @@ export default function ProductTable() {
                   },
                 }}
               />
-            </TableCell>
+            </TableCell> */}
             <TableCell>
               <h1 className="vl-note f-500 vl-blue">Product Category</h1>
             </TableCell>
@@ -109,14 +90,14 @@ export default function ProductTable() {
           </TableRow>
         </TableHead>
         <TableBody className="organization-tbody">
-          {Data.map((rows, index) => (
+          {products.map((rows, index) => (
             <ProductRow key={rows.id} rows={rows} index={index} />
           ))}
         </TableBody>
       </Table>
       <TablePagination
         component="div"
-        count={100}
+        count={1000}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

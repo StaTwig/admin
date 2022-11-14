@@ -1,11 +1,18 @@
 import { TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import AnalyticsCard from "../../../common/AnalyticsCard/AnalyticsCard";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import "./ProductList.css";
 import ProductTable from "./ProductTable/ProductTable";
 
+import {useSelector, useDispatch} from "react-redux";
+import { getOrgAnalytics } from "../../../actions/organisationActions";
 export default function AdminProductList() {
+
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(getOrgAnalytics())}, [dispatch]);
+  const { orgAnalytics } = useSelector((state) => state.organisationReducer);
+  const { totalCount, activeCount, inactiveCount } = orgAnalytics;
   return (
     <>
       <OrgHeader />
@@ -16,7 +23,7 @@ export default function AdminProductList() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="436"
+                value={totalCount}
                 valueTitle="Total Number of Organization"
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
@@ -24,7 +31,7 @@ export default function AdminProductList() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="316"
+                value={activeCount}
                 valueTitle="Active Organization"
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
@@ -32,7 +39,7 @@ export default function AdminProductList() {
               <AnalyticsCard
                 layout="type4"
                 icon="fa-building"
-                value="120"
+                value={inactiveCount}
                 valueTitle="In Active Organization"
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"

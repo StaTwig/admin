@@ -36,7 +36,10 @@ exports.getProducts = [
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
-          const products = await ProductModel.find({});
+          let matchQuery = {}
+          if(req.query.orgId)
+            matchQuery[`manufacturerId`] = req.query.orgId
+          const products = await ProductModel.find(matchQuery).skip(parseInt(req.query.skip) || 0).limit(parseInt(req.query.limit) || 0);
           return apiResponse.successResponseWithData(res, "Products", products);
         } else {
           return apiResponse.forbiddenResponse(
