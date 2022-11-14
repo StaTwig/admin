@@ -4,7 +4,7 @@ import TableRow from "@mui/material/TableRow";
 import { Autocomplete, Checkbox, TextField } from "@mui/material";
 import { useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import { updateUserRole } from "../../../../actions/organisationActions";
+import { activateOrgUser, deactivateOrgUser, updateUserRole } from "../../../../actions/organisationActions";
 import Switch from "@mui/material/Switch";
 
 export default function UsersRow({ rows, defaultRoles }) {
@@ -12,12 +12,12 @@ export default function UsersRow({ rows, defaultRoles }) {
   const [Edit, setEdit] = React.useState(false);
   const [checked, setChecked] = useState(true);
   const [userRole, setUserRole] = useState(rows.role);
-  const [AccStatus, setAccStatus] = useState(false);
+  const [AccStatus, setAccStatus] = useState(rows.accountStatus);
 
   const handleRoleChange = (event, value) => {
     setUserRole(value);
   };
-
+  
   const handleEditRole = async () => {
     try {
       if (Edit) {
@@ -133,10 +133,23 @@ export default function UsersRow({ rows, defaultRoles }) {
           <div className="status-switch-button">
             <Switch
               color="warning"
-              value={AccStatus}
-              onChange={(e) => setAccStatus(e.target.checked)}
+              checked={AccStatus === "ACTIVE"}
+              onChange={(e) => {
+                if (AccStatus === "ACTIVE") {
+                  deactivateOrgUser({ id: rows?.id, index: rows?.ridex });
+                  setAccStatus("INACTIVE");
+                } else {
+                  activateOrgUser({
+                    id: rows?.id,
+                    role: rows?.role,
+                    index: rows?.ridex,
+                  });
+                  setAccStatus("ACTIVE");
+                }
+              }}
+              // onChange={(e) => setAccStatus(e.target.checked)}
             />
-            {AccStatus ? (
+            {AccStatus === "ACTIVE" ? (
               <div className="label-status-btn status-accept-bg">
                 <div className="status-dot status-accept-dot"></div>
                 <p className="vl-small f-400 vl-black">Active</p>
