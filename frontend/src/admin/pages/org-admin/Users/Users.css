@@ -224,6 +224,28 @@
   pointer-events: none !important;
 }
 
+.col-width-xl {
+  width: 15rem !important;
+}
+
+.col-width-md {
+  width: 12.5rem !important;
+}
+.col-width-sm {
+  width: 10rem !important;
+}
+
+.status-switch-button {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.switch-result {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 /* .vl-edit-false {
   position: relative !important;
   isolation: isolate !important;
