@@ -19,7 +19,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function Verify() {
+export default function Verify({ t }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -160,10 +160,9 @@ export default function Verify() {
           className="account-form-container"
         >
           <hgroup className="form-headers">
-            <h1 className="vl-heading f-700 vl-black">Verify your Account</h1>
+            <h1 className="vl-heading f-700 vl-black">{t("verify_head")}</h1>
             <h2 className="vl-subheading f-400 vl-grey-xs vl-line-sm f-500-sm">
-              We have sent the access code to your Email/ Phone Number, please
-              check and verify
+              {t("verify_msg")}
             </h2>
           </hgroup>
           <section className="vl-input-group form-auto-fill-section">
@@ -207,14 +206,14 @@ export default function Verify() {
               type="submit"
               className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
             >
-              Verify
+              {t("verify")}
             </button>
           </section>
           <section className="further-links vl-justify-auto">
             <p className="vl-note vl-grey-xs f-400">
-              Didn’t recieve the access code ?{" "}
+              {t("no_access_code")}{" "}
               <span onClick={resendOtp} className="vl-blue vl-link">
-                Resend
+                {t("resend")}
               </span>
             </p>
           </section>

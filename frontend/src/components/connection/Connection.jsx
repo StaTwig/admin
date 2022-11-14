@@ -137,53 +137,56 @@ export default function Connection(props) {
                 <article className="benefit-card">
                   <img src={check} alt="check" className="check-icon" />
                   <p className="vl-subheading f-500 vl-white">
-                    Maintain your Orders
+                    {t("side_point-1")}
                   </p>
                   <div className="straight-line"></div>
                 </article>
                 <article className="benefit-card">
                   <img src={check} alt="check" className="check-icon" />
                   <p className="vl-subheading f-500 vl-white">
-                    Real Time shipment details
-                  </p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">Track & Trace</p>
-                  <div className="straight-line"></div>
-                </article>
-                <article className="benefit-card">
-                  <img src={check} alt="check" className="check-icon" />
-                  <p className="vl-subheading f-500 vl-white">
-                    View your Partner Locations
+                    {t("side_point-2")}
                   </p>
                   <div className="straight-line"></div>
                 </article>
                 <article className="benefit-card">
                   <img src={check} alt="check" className="check-icon" />
                   <p className="vl-subheading f-500 vl-white">
-                    Alerts and Notifications
+                    {" "}
+                    {t("side_point-3")}
                   </p>
                   <div className="straight-line"></div>
                 </article>
                 <article className="benefit-card">
                   <img src={check} alt="check" className="check-icon" />
                   <p className="vl-subheading f-500 vl-white">
-                    Monitor Cold chain conditions
+                    {t("side_point-4")}
                   </p>
                   <div className="straight-line"></div>
                 </article>
                 <article className="benefit-card">
                   <img src={check} alt="check" className="check-icon" />
                   <p className="vl-subheading f-500 vl-white">
-                    Efficiently manage your inventory
+                    {t("side_point-5")}
+                  </p>
+                  <div className="straight-line"></div>
+                </article>
+                <article className="benefit-card">
+                  <img src={check} alt="check" className="check-icon" />
+                  <p className="vl-subheading f-500 vl-white">
+                    {t("side_point-6")}
+                  </p>
+                  <div className="straight-line"></div>
+                </article>
+                <article className="benefit-card">
+                  <img src={check} alt="check" className="check-icon" />
+                  <p className="vl-subheading f-500 vl-white">
+                    {t("side_point-7")}
                   </p>
                 </article>
               </section>
             </div>
             <div className="powerby">
-              <p className="vl-small f-700 vl-white">Powered by</p>
+              <p className="vl-small f-700 vl-white"> {t("power_by")}</p>
               <img src={statwig} alt="statwig" className="statwig-power-logo" />
             </div>
             <img
@@ -209,7 +212,7 @@ export default function Connection(props) {
               onClick={handleBack}
             >
               <i className="fa-solid fa-arrow-left"></i>
-              <p className="vl-subheading f-400">Back</p>
+              <p className="vl-subheading f-400">{t("back")}</p>
             </section>
             <div className="login-system-layout">
               {connection === "account" && (
