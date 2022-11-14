@@ -15,7 +15,7 @@
   align-items: center;
   gap: 1rem;
   border: 1px solid var(--border-color);
-  padding: 0.95rem 2rem;
+  padding: 0.95rem 1rem;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;

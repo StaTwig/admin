@@ -9,12 +9,12 @@ import Client6 from "../../../assets/files/images/client/client6.jpg";
 import Client7 from "../../../assets/files/images/client/client7.png";
 import Client8 from "../../../assets/files/images/client/client8.jpg";
 
-export default function Client() {
+export default function Client({ t }) {
   return (
     <section className="client-section section-space">
       <div className="vl-page-container">
         <div className="section-headers">
-          <h1 className="vl-heading f-500 vl-black">Our Partners</h1>
+          <h1 className="vl-heading f-500 vl-black">{t("our_partner")}</h1>
         </div>
         <div className="client-container">
           <figure className="client-card">

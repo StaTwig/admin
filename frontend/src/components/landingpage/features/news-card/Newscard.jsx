@@ -1,7 +1,7 @@
 import React from "react";
 import "./Newscard.css";
 
-export default function Newscard({ Image, title, content, url }) {
+export default function Newscard({ Image, title, content, url, t }) {
   return (
     <section className="newscard-section">
       <figure className="newscard-logo">
@@ -10,10 +10,12 @@ export default function Newscard({ Image, title, content, url }) {
       <div className="newscard-content">
         <p className="vl-subheading vl-line-md vl-grey-md">
           <span className="f-500 vl-black">{title}</span>
-          {content}
+          {t(content)}
         </p>
         <div className="call-to-action">
-          <div className="vl-btn vl-btn-sm vl-btn-secondary">Explore More</div>
+          <div className="vl-btn vl-btn-sm vl-btn-secondary">
+            {t("explore")}
+          </div>
         </div>
       </div>
     </section>

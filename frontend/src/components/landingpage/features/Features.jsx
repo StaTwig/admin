@@ -5,7 +5,7 @@ import Bar from "../../../assets/files/images/features/bars.png";
 
 import feature from "./data/feature";
 
-export default function Features() {
+export default function Features({ t }) {
   return (
     <section className="features-section section-space bg-grey">
       <div className="vl-page-container">
@@ -13,11 +13,10 @@ export default function Features() {
           <div className="feature-left-container">
             <hgroup className="feature-heading-groups">
               <h1 className="vl-heading f-700 vl-white vl-line-xl">
-                Connecting various stakeholders on VaccineLedger to give
-                continous visibility in your Extended Supply Chain
+                {t("news_header")}
               </h1>
               <h2 className="vl-subtitle f-500 vl-white vl-line-md">
-                Built on the foundation of Trust, Transaparency and Authenticity
+                {t("news_subheader")}
               </h2>
             </hgroup>
 
@@ -26,6 +25,7 @@ export default function Features() {
           <div className="feature-right-container">
             {feature.map((card) => (
               <Newscard
+                t={t}
                 key={card.id}
                 Image={card.image}
                 title={card.title}
