@@ -77,7 +77,9 @@ export default function Landingfooter({ contactRef, t }) {
                   <article className="contact-card">
                     <div className="contact-heading">
                       <i className="fa-solid fa-phone vl-grey-sm vl-icon-xs"></i>
-                      <p className="vl-body f-400 vl-grey-sm">{t("phone")} :</p>
+                      <p className="vl-body f-400 vl-grey-sm">
+                        {t("phone_no")} :
+                      </p>
                     </div>
                     <p className="vl-body f-400 vl-grey-sm">
                       (+91) 939 059 0319

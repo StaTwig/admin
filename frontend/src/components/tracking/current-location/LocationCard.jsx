@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const TrackLocationCard = ({ currentLocation }) => {
+const TrackLocationCard = ({ currentLocation, t }) => {
 
 	const warehouse = currentLocation[0];
 
@@ -31,7 +31,7 @@ const TrackLocationCard = ({ currentLocation }) => {
 					</div>
 				</div>
 				<div className="current-location-body">
-					<p className="mi-body-md f-700 mi-reset black">Product List</p>
+					<p className="mi-body-md f-700 mi-reset black">{t("product_list")}</p>
 					{currentLocation?.map((warehouse) => (
 						<div className="product-list-area">
 							<ProductCard warehouse={warehouse} />

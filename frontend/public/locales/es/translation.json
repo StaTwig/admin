@@ -468,6 +468,7 @@
   "terms&con":"Términos y condiciones",
   "copy_rights":"© 2022 StaTwig. Reservados todos los derechos.",
   "email":"Correo",
+  "phone_no":"Teléfono",
   "let_connect":"Vamos a conectar",
   "let_sub_connect":"Nuestro equipo se pondrá en contacto con usted muy pronto, gracias",
   "bussiness_email":"Email de negocios",
@@ -500,5 +501,9 @@
   "side_point-4":"Ver las ubicaciones de sus socios",
   "side_point-5":"Alertas y Notificaciones",
   "side_point-6":"Supervisar las condiciones de la cadena de frío",
-  "side_point-7":"Administre eficientemente su inventario"
+  "side_point-7":"Administre eficientemente su inventario",
+  "current_loc":"Ubicación actual",
+  "chainofcustody":"Cadena de custodia",
+  "no_track_msg":"Intente buscar usando su ID de seguimiento para rastrear sus productos/envío",
+  "search_track":"Buscar por ID de seguimiento"
 }
