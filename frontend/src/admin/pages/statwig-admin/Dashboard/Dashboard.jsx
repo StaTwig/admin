@@ -10,9 +10,9 @@ import Pendings from "./Pendings/Pendings";
 
 export default function Dashboard(props) {
   const history = useHistory();
-  if(props.user.type !== "CENTRAL_AUTHORITY") {
-    history.push("/overview");
-  }
+  // if(props.user.type !== "CENTRAL_AUTHORITY") {
+  //   history.push("/overview");
+  // }
 
   const dispatch = useDispatch();
 

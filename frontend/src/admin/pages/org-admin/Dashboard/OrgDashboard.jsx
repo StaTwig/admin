@@ -23,7 +23,6 @@ export default function OrgDashboard(props) {
     history.push("/overview");
   }
 
-
 	const permissions = useSelector((state) => state?.organisationReducer?.permissions);
 	const addresses = useSelector((state) => state?.organisationReducer?.addresses);
 

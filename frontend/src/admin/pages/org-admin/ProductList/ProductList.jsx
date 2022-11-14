@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
 import { addNewProduct } from "../../../../actions/poActions";
 
-export default function AdminProductList() {
+export default function AdminProductList(props) {
   const history = useHistory();
   if(props.user.role !== "admin") {
     history.push("/overview");
