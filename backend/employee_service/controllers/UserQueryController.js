@@ -49,8 +49,7 @@ exports.newUserQuery = [
         `<p><i>${req.body.queryDescription}</i></p>` +
         `<p>Please revert back to the user:</p>` +
         `<p>EmailID - ${req.user?.emailId ? req.user?.emailId : "N/A"}</p>` +
-        `<p>Phone Number - ${
-          req.user?.phoneNumber ? req.user?.phoneNumber : "N/A"
+        `<p>Phone Number - ${req.user?.phoneNumber ? req.user?.phoneNumber : "N/A"
         }</p>`;
 
       await axios.post(process.env.SEND_MESSAGE, {

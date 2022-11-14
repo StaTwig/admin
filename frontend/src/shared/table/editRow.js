@@ -104,47 +104,42 @@ const EditRow = (props) => {
         <div className='row mb-2'>
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
             <div
-              className={`col-3 theader  ml-5 ${
-                addMore
-                  ? "product-cat-add-inventory"
-                  : "Bproduct-cat-add-inventory"
-              }`}
+              className={`col-3 theader  ml-5 ${addMore
+                ? "product-cat-add-inventory"
+                : "Bproduct-cat-add-inventory"
+                }`}
             >
               <img src={Package} width='16' height='16' alt='ProductCategory' />
               <span className='pl-2 text-muted'>{t("product_category")}*</span>
             </div>
             <div
-              className={` theader ${
-                addMore
-                  ? "col-3 product-add-inventory"
-                  : " col-2 Bproduct-add-inventory"
-              }`}
+              className={` theader ${addMore
+                ? "col-3 product-add-inventory"
+                : " col-2 Bproduct-add-inventory"
+                }`}
             >
               <img src={Package} width='16' height='16' alt='product' />
               <span className='pl-2 text-muted'>{t("product")}*</span>
             </div>
             <div
-              className={`col-2 theader ${
-                addMore
-                  ? "manufacturer-add-inventory"
-                  : "Bmanufacturer-add-inventory"
-              }`}
+              className={`col-2 theader ${addMore
+                ? "manufacturer-add-inventory"
+                : "Bmanufacturer-add-inventory"
+                }`}
             >
               <img src={mon} width='16' height='16' alt='manufacturer' />
               <span className='pl-2 text-muted'>{t("manufacturer")}</span>
             </div>
             <div
-              className={`col-2 theader ${
-                addMore ? "batch-add-inventory" : "Bbatch-add-inventory"
-              }`}
+              className={`col-2 theader ${addMore ? "batch-add-inventory" : "Bbatch-add-inventory"
+                }`}
             >
               <img src={Batch} width='16' height='16' alt='Batch' />
               <span className='pl-2 text-muted'>{t("batch_no")}</span>
             </div>
             <div
-              className={`col theader text-center ${
-                addMore ? "quantity-add-inventory" : "Bquantity-add-inventory"
-              }`}
+              className={`col theader text-center ${addMore ? "quantity-add-inventory" : "Bquantity-add-inventory"
+                }`}
             >
               <img src={qty} width='25' height='16' alt='quantity' />
               <span className='pl-2 text-muted'>{t("quantity")}*</span>
@@ -154,7 +149,7 @@ const EditRow = (props) => {
         <div className='row rTable'>
           <div
             className='rTableRow inp-grp mb-3 col row bg-white p-1'
-            // style={{ height: "56px" }}
+          // style={{ height: "56px" }}
           >
             <div className='col-3 align-self-center pt-1 pb-1 border-right bg-white ml-1'>
               <div className='square-box' />
@@ -363,8 +358,10 @@ const EditRow = (props) => {
                       mfgLocale === "Fecha de fabricación" ? locale : "en"
                     }
                     className='form-control text-center manufacturingPlaceholder'
-                    onChange={(date) =>
+                    onChange={(date) => {
+                      date.setDate(date.getDate() + 15)
                       handleInventoryChange(idx, "manufacturingDate", date)
+                    }
                     }
                     selected={
                       manufacturingDate
@@ -387,6 +384,7 @@ const EditRow = (props) => {
                     placeholderText={t("enter") + " " + t("exp_date")}
                     dateFormat='MM/yyyy'
                     onChange={(date) => {
+                      date.setDate(date.getDate() + 15)
                       if (isBefore(date, new Date())) {
                         setInventoryError(t("past_expiry"));
                         setOpenFailInventory(true);

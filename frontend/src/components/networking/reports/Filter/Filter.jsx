@@ -64,7 +64,7 @@ export default function Filter({
       <Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components'>
         <div className='table-header-with-filter'>
           <p className='mi-body-sm mi-reset grey-400'>{title}</p>
-          <i class='fa-solid fa-sort'></i>
+          <i className='fa-solid fa-sort'></i>
         </div>
       </Dropdown.Toggle>
 

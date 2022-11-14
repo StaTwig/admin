@@ -29,38 +29,38 @@ exports.newDemoRequest = [
         { new: true }
       );
 
-      const requestId = 
-        requestCounter.counters[12].format + 
+      const requestId =
+        requestCounter.counters[12].format +
         requestCounter.counters[12].value;
 
       const newDemoReq = new DemoRequestModel({
-				id: requestId,
-				name: req.body.name,
-				emailId: req.body.emailId,
-				phoneNumber: req.body.phoneNumber,
-				companyName: req.body.companyName,
-				designation: req.body.designation,
-				softwareAppication: req.body.softwareApplication,
-				numberOfEmployees: req.body.numberOfEmployees,
-			});
-			await newDemoReq.save();
+        id: requestId,
+        name: req.body.name,
+        emailId: req.body.emailId,
+        phoneNumber: req.body.phoneNumber,
+        companyName: req.body.companyName,
+        designation: req.body.designation,
+        softwareAppication: req.body.softwareApplication,
+        numberOfEmployees: req.body.numberOfEmployees,
+      });
+      await newDemoReq.save();
 
-			let demoReqContent =
+      let demoReqContent =
         `<p>Hey, you've received a demo request for Vaccine Ledger by</p>` +
         `<p><b>${req.body.name}</b> who is a <b>${req.body.designation}</b> at the organization <b>${req.body.companyName}</b> with <b>${req.body.numberOfEmployees}</b> employees.</p>` +
-				`<p>Please revert back to ${req.body.name}:</p>` +
-				`<p>EmailID - ${req.body.emailId}</p>` +
-				`<p>Phone Number - ${req.body.phoneNumber}</p>`;
+        `<p>Please revert back to ${req.body.name}:</p>` +
+        `<p>EmailID - ${req.body.emailId}</p>` +
+        `<p>Phone Number - ${req.body.phoneNumber}</p>`;
 
-			await axios.post(sendMessageUrl, {
-				email: "dev@statwig.com",
-				subject: `Demo Request from organization - ${req.body.companyName}`,
-				content: demoReqContent,
-			});
+      await axios.post(sendMessageUrl, {
+        email: "dev@statwig.com",
+        subject: `Demo Request from organization - ${req.body.companyName}`,
+        content: demoReqContent,
+      });
 
-			return apiResponse.successResponse(req, res, "Your query was submitted successfully!");
-  
-    } catch(err) {
+      return apiResponse.successResponse(req, res, "Your query was submitted successfully!");
+
+    } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(req, res, err.message);
     }
@@ -73,15 +73,15 @@ exports.validateRequest = [
       let emailId = req.body.emailId;
 
       const existingRequests = await DemoRequestModel.findOne({
-				emailId: emailId,
-			});
-      
-      if(existingRequests) {
+        emailId: emailId,
+      });
+
+      if (existingRequests) {
         return apiResponse.ErrorResponse(req, res, "Duplicate request!");
       }
 
       return apiResponse.successResponse(req, res, "Valid email!");
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(req, res, err.message);
     }

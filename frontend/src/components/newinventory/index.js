@@ -24,6 +24,7 @@ const NewInventory = (props) => {
     return state.reviewInventory;
   });
   const [category, setCategory] = useState([]);
+  const dispatch = useDispatch();
   if (!isAuthenticated("addInventory")) props.history.push(`/profile`);
   useEffect(() => {
     async function fetchData() {
@@ -62,7 +63,7 @@ const NewInventory = (props) => {
     }
     fetchData();
     dispatch(resetReviewInventories([]));
-  }, []);
+  }, [dispatch]);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);
@@ -96,9 +97,6 @@ const NewInventory = (props) => {
     "quantity",
     "unitofMeasure",
   ];
-
-  const dispatch = useDispatch();
-
   const closeModal = () => {
     setOpenCreatedInventory(false);
   };
