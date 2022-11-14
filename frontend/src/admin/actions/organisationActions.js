@@ -234,8 +234,9 @@ export const getRecentReqSent = () => {
 };
 
 export const getOrgUsers = (params) => {
-	try {
+
 		return async (dispatch) => {
+			try {
 			dispatch(turnOn());
 			const url = params ? `${config().getOrgUsersUrl}?${params}` : config().getOrgUsersUrl;
 			const result = await axios.get(url);
@@ -245,10 +246,11 @@ export const getOrgUsers = (params) => {
 			});
 			dispatch(turnOff());
 			return result.data.data;
+		} catch (e) {
+			console.log(e.message);
+		}
 		};
-	} catch (e) {
-		throw Error(e.message);
-	}
+
 };
 
 export const getWarehouseUsers = (params) => {
