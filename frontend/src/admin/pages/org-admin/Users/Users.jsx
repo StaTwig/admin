@@ -119,7 +119,7 @@ export default function Users(props) {
                 layout="type4"
                 icon="fa-building"
                 value={totalCount}
-                valueTitle="Total Number of Organization"
+                valueTitle="Total Number of Users"
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
               />
@@ -127,7 +127,7 @@ export default function Users(props) {
                 layout="type4"
                 icon="fa-building"
                 value={activeCount}
-                valueTitle="Active Organization"
+                valueTitle="Active Users"
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
               />
@@ -135,7 +135,7 @@ export default function Users(props) {
                 layout="type4"
                 icon="fa-building"
                 value={inactiveCount}
-                valueTitle="In Active Organization"
+                valueTitle="Inactive Users"
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"
               />

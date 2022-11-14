@@ -39,28 +39,15 @@ export default function OrgHeader() {
                   <p className="vl-note">Manage Users</p>
                 </Link>
               </li>
-              <li className="admin-nav-item configure-link">
-                <div
+              <li className="admin-nav-item">
+                <Link
+                  to="/org/product-list"
                   className={`admin-nav-link ${
-                    location.pathname === "/org/roles" && "active"
-                  } ${location.pathname === "/org/product-list" && "active"}`}
+                    location.pathname === "/org/manage-users" && "active"
+                  }`}
                 >
-                  <p className="vl-note">
-                    <span className="link-right-space">Configuration</span>
-                    <i class="fa-solid fa-caret-down"></i>
-                  </p>
-                </div>
-                <div className={`configure-list active `}>
-                  <Link to="/org/roles" className="btn-dropdown-card vl-link">
-                    <p className="vl-note f-500">Roles & Permission</p>
-                  </Link>
-                  <Link
-                    to="/org/product-list"
-                    className="btn-dropdown-card vl-link"
-                  >
-                    <p className="vl-note f-500">Product List</p>
-                  </Link>
-                </div>
+                  <p className="vl-note">Products List</p>
+                </Link>
               </li>
             </ul>
           </article>

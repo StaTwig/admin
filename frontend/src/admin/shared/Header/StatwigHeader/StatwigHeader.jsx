@@ -41,6 +41,18 @@ export default function StatwigHeader() {
                   <p className="vl-note">Manage Organization</p>
                 </Link>
               </li>
+              <li className="admin-nav-item">
+                <Link
+                  to="/statwig/roles"
+                  className={`admin-nav-link ${
+                    location.pathname === "/organization" && "active"
+                  } ${location.pathname === "/locations" && "active"} ${
+                    location.pathname === "/users" && "active"
+                  }`}
+                >
+                  <p className="vl-note">Configuration</p>
+                </Link>
+              </li>
             </ul>
           </article>
           <article className="admin-nav-right">
