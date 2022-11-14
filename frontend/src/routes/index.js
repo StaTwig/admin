@@ -54,6 +54,15 @@ import LandingContainer from "../containers/landingpage/LandingContainer";
 import ConnectionContainer from "../containers/connection/ConnectionContainer";
 import LastmileTrackingContainer from "../containers/lastmile-track/LastmileTrackingContainer";
 import LastmileCenteralContainer from "../containers/lastmile-centeral/LastmileCenteralContainer";
+import OrgDashboard from "../admin/pages/org-admin/Dashboard/OrgDashboard";
+import Dashboard from "../admin/pages/statwig-admin/Dashboard/Dashboard";
+import AdminOrganization from "../admin/pages/statwig-admin/Organization/AdminOrganization";
+import Locations from "../admin/pages/statwig-admin/Locations/Locations";
+import ViewUsers from "../admin/pages/statwig-admin/ViewUsers/ViewUsers";
+import Users from "../admin/pages/org-admin/Users/Users";
+import Configuration from "../admin/pages/org-admin/Configuration/Configuration";
+import AdminProductList from "../admin/pages/org-admin/ProductList/ProductList";
+
 
 const routes = (
   <Switch>
@@ -71,7 +80,7 @@ const routes = (
     <Route exact path='/success'>
       <ConnectionContainer connection="success" />
     </Route>
-    {/* <Route exact path='/login' component={Login} />
+   {/* <Route exact path='/login' component={Login} />
     <Route path='/verify' component={Verify} />
     <Route path='/signup' component={Signup} /> */}
     <Route path='/overview' component={requireAuth(OverView)} />
@@ -148,6 +157,18 @@ const routes = (
     <Route path='/addNewProduct' component={requireAuth(AddProductContainer)} />
     <Route path='/network' component={requireAuth(NetworkingContainer)} />
     <Route path='/tracking/:id' component={requireAuth(TrackingContainer)} />
+
+    {/* Admin Statwig */}
+    <Route path='/statwig/dashboard' component={requireAuth(Dashboard, true)} />
+    <Route path='/statwig/manage-organization' component={requireAuth(AdminOrganization, true)} />
+    <Route path='/statwig/view-locations/:org' component={requireAuth(Locations, true)} />
+    <Route path='/statwig/view-users/:product/:org' component={requireAuth(ViewUsers, true)} />
+
+    {/* Admin Organization */}
+    <Route path='/org/dashboard' component={requireAuth(OrgDashboard, true)} />
+    <Route path='/org/manage-users' component={requireAuth(Users, true)} />
+    <Route path='/org/roles' component={requireAuth(Configuration, true)} />
+    <Route path='/org/product-list' component={requireAuth(AdminProductList, true)} />
 
     <Route component={ErrorPageContainer} />
   </Switch>

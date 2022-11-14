@@ -1,0 +1,123 @@
+.admin-location-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  grid-template-areas: "location-left location-right";
+  gap: 2rem;
+}
+.admin-locations-left {
+  grid-area: location-left;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.admin-locations-right {
+  grid-area: location-right;
+  width: 100% !important;
+}
+.link-card {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 2rem 1fr;
+}
+
+.previous-link-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.breadcumb-links {
+  padding-left: 2rem;
+}
+
+.location-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Table Class */
+.vl-custom-table {
+  border-collapse: separate !important;
+  border-spacing: 0 1.5rem !important;
+}
+
+.vl-custom-tableHead {
+  padding: 0 16px !important;
+  border: none !important;
+}
+.vl-custom-tableRow {
+  border-radius: 0.6rem !important;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.vl-custom-tableRow:hover > td {
+  background-color: var(--brand-table) !important;
+}
+.vl-custom-tableRow > td {
+  background-color: #fff !important;
+  padding: 1.5rem !important;
+  transition: all 0.2s ease-in-out;
+}
+.vl-custom-tableRow > td:nth-child(1) {
+  border-radius: 0.6rem 0 0 0.6rem !important;
+}
+.vl-custom-tableRow > td:nth-child(5) {
+  border-radius: 0 0.6rem 0.6rem 0 !important;
+}
+.vl-radius-first {
+  border-radius: 0.6rem 0 0 0.6rem !important;
+}
+.vl-radius-last {
+  border-radius: 0.6rem !important;
+}
+
+.map-view-button > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 992px) {
+  .admin-location-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "location-left" "location-right";
+    gap: 2rem;
+  }
+  .location-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .map-view-button > button {
+    width: initial;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 586px) {
+  .location-details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .map-view-button > button {
+    width: initial;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+.Locationmap-container{
+  width: 100%;
+  height: 82vh;
+  background-color: beige;
+}

@@ -198,3 +198,13 @@
 .MuiList-root {
   padding: 1rem !important;
 }
+
+.user-switch-btn {
+  margin-right: 2rem !important;
+}
+.btn-dropdown-card-alt {
+  padding: 0.4rem 1rem;
+  width: 100%;
+  background-color: #0466c8;
+  color: #fff !important;
+}

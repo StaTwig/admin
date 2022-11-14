@@ -1,0 +1,105 @@
+/* Type 1 & 2 */
+.Analyticstype1-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.type1-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: 0.4rem;
+  box-shadow: var(--shadow);
+}
+
+.color-variant-1 {
+  background-color: rgba(132, 64, 238) !important;
+  color: var(--white);
+}
+.color-variant-2 {
+  background-color: #fc412a !important;
+  color: var(--white);
+}
+.color-variant-3 {
+  background-color: #007ae4 !important;
+  color: var(--white);
+}
+.color-variant-4 {
+  background-color: #004fd8 !important;
+  color: var(--white);
+}
+.color-variant-5 {
+  background-color: #07b14e !important;
+  color: var(--white);
+}
+
+.icon-total-number {
+  font-size: 0.8rem !important;
+}
+.analytic-icon-space {
+  position: relative;
+  isolation: isolate;
+}
+.analytic-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icon-position-1 {
+  left: 0;
+}
+
+.icon-position-2 {
+  left: 1.8rem;
+}
+
+.icon-position-3 {
+  left: 3.6rem;
+}
+.icon-position-4 {
+  left: 5.4rem;
+}
+
+.icon-position-5 {
+  left: 7.2rem;
+}
+
+/* Type 3 */
+.Analyticstype3-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: 0.4rem;
+  box-shadow: var(--shadow);
+}
+
+.type3-icon-space {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.6rem;
+  display: grid;
+  place-content: center;
+}
+
+.type3-icon-space > i {
+  font-size: 1.8rem;
+}
+.type3-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.type3-body {
+  padding: 2rem 0;
+}
+
+.type3-values {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}

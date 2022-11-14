@@ -3,17 +3,28 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-export default (ComposedComponent) => {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (ComposedComponent, isAdminComponent) => {
   class RequireAuth extends Component {
     render() {
       const { user } = this.props;
+
       let token = localStorage?.theLedgerToken;
       let userDetails = jwt_decode(token);
       const demoLogin = userDetails?.partialRegistration;
-
       let check = user;
+      
       if (!user)
         check = localStorage.theLedgerToken;
+
+      if(isAdminComponent){
+          const userRole = user?.role || userDetails?.role;
+          if(userRole === "powerUser")
+            check = true;
+          else
+            check = null; 
+          console.log(check)
+        }
       switch (check) {
         case null:
           return <Redirect to='/' />;

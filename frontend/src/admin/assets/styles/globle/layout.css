@@ -1,0 +1,41 @@
+.vl-flex {
+  display: flex;
+  align-items: center;
+}
+.vl-flex-sm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.vl-flex-md {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.vl-flex-xl {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.vl-flex-col-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.vl-flex-col-md {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.vl-flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.vl-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

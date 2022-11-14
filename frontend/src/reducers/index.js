@@ -20,6 +20,7 @@ import { poReducer } from "./poReducer";
 import { lastMileReducer } from "./lastMileReducer";
 import { lastMileCountReducer } from "./lastMileCountReducer";
 import { userLocationReducer } from "./userLocationReducer";
+import { organisationReducer } from "./organisationReducer";
 
 const rootReducer = (history) =>
   combineReducers({
@@ -43,6 +44,7 @@ const rootReducer = (history) =>
     inventoryDetails: inventoryDetailsReducer,
     lastMile: lastMileReducer,
     lastMileCount: lastMileCountReducer,
+    organisationReducer: organisationReducer,
     router: connectRouter(history),
   });
 
