@@ -271,7 +271,7 @@ export function config() {
       getWarehouseByOrgId: `${SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,
       getAllWarehouses: `${SERVER_URL}/productmanagement/api/organisation/allWarehouses`,
       addNewProduct: `${SERVER_URL}/productmanagement/api/products/addProduct`,
-      getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProducts`,
+      getProducts: `${SERVER_URL}/productmanagement/api/products/getProducts`,
       getProductsByCategoryUrl: `${SERVER_URL}/productmanagement/api/products/getProductsByCategory?type=`,
       getProductsByInventoryUrl: `${SERVER_URL}/shipmentmanagement/api/shipment/getProductsByInventory?invId=`,
       generateCodes: `${SERVER_URL}/productmanagement/api/products/generateCodes`,
