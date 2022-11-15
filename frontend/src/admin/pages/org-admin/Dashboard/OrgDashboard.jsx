@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	getAllOrganisations,
 	getOrgActiveUsers,
+	getOrgUserAnalytics,
 	getPermissions,
 	getRecentReqSent,
 	getRequestsPending,
@@ -19,12 +20,14 @@ export default function OrgDashboard(props) {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-  if(props.user.role !== "admin") {
-    history.push("/overview");
-  }
+	if (props.user.role !== "admin") {
+		history.push("/overview");
+	}
 
+	const user = useSelector((state) => state.user);
 	const permissions = useSelector((state) => state?.organisationReducer?.permissions);
 	const addresses = useSelector((state) => state?.organisationReducer?.addresses);
+	const { userAnalytics } = useSelector((state) => state.organisationReducer);
 
 	useEffect(() => {
 		dispatch(getRequestsPending());
@@ -35,6 +38,7 @@ export default function OrgDashboard(props) {
 		dispatch(getAllOrganisations());
 		dispatch(getOrgActiveUsers());
 		dispatch(getWareHouses());
+		dispatch(getOrgUserAnalytics(user.organisationId));
 		// async function loadData() {
 		// 	try {
 		// 		const result = await getLocationApproval();
@@ -58,14 +62,10 @@ export default function OrgDashboard(props) {
 				<div className="admin-container">
 					<div className="admin-dashboard-container admin-section-space">
 						<div className="dashboard-left-space">
-							<Analytics />
+							<Analytics userAnalytics={userAnalytics} />
 						</div>
 						<div className="dashboard-right-space">
-							<Pendings
-								permissions={permissions}
-								addresses={addresses}
-                {...props}
-							/>
+							<Pendings permissions={permissions} addresses={addresses} {...props} />
 						</div>
 					</div>
 				</div>
