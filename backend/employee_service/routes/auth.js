@@ -1,6 +1,7 @@
 const express = require("express");
 const AuthController = require("../controllers/AuthController");
 const ApprovalController = require("../controllers/ApprovalController")
+const OrganisationController = require("../controllers/OrganisationController")
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const router = express.Router();
@@ -21,5 +22,10 @@ router.post(
     "/addUsersFromExcel",
     upload.single("excel"),
     ApprovalController.addUsersFromExcel
+  );
+  router.post(
+    "/addOrgsFromExcel",
+    upload.single("excel"),
+    OrganisationController.addOrgsFromExcel
   );
 module.exports = router;

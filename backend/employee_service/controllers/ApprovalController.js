@@ -403,10 +403,9 @@ exports.deactivateUser = [
 
 exports.addUsersFromExcel = [
   auth,
-  (req, res) => {
+  async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+
           try {
           const { organisationId, organisationName } = req.user;
             const dir = `uploads`;
@@ -492,15 +491,13 @@ exports.addUsersFromExcel = [
               return apiResponse.successResponseWithData(
                 res,
                 "success",
-                result
+                formatedData
               );
             }
            catch (err) {
             console.log(err);
             return apiResponse.ErrorResponse(res, err);
           }
-        }
-      });
     } catch (err) {
       console.log(err);
     }
