@@ -43,6 +43,18 @@ export const registerUser = async (data) => {
   }
 };
 
+export const addUsersFromExcel = async (data) => {
+	try {
+	  const url = config().addUsersFromExcel;
+	  const result = await axios.post(url, data, {
+		headers: { "Content-Type": "multipart/form-data" },
+	  });
+	  return result;
+	} catch (e) {
+	  return e.response;
+	}
+  };
+
 export const sendOtp = async (data) => {
   try {
     const result = await axios.post(config().sendOtpUrl, data);
