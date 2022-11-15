@@ -1,7 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./AnalyticTiles.css";
 
 export default function AnalyticTiles({ variant, title, stat, layout, onClick, name }) {
+  const { t, i18n } = useTranslation();
+
   const handleClick = () => {
     if(name) {
       onClick(name);
@@ -19,7 +22,7 @@ export default function AnalyticTiles({ variant, title, stat, layout, onClick, n
             </div>
             <div className="action-content-wrapper">
               <button onClick={handleClick} className={`Analytic-btn tile-btn-variant-${variant}`}>
-                View
+                {t("view")}
               </button>
             </div>
           </div>

@@ -6,16 +6,19 @@ import { useEffect } from "react";
 import NewDose from "./NewDose";
 import { getVaccinationDetailsByVial } from "../../../actions/lastMileActions";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 function ResultCard({ age, gender, variant }) {
+  const { t, i18n } = useTranslation();
+
   return (
     <div className={`Result-single-card result-variant-${variant}`}>
       <div className="more-action-btn">
         <i className="fa-solid fa-ellipsis-vertical"></i>
       </div>
       <div className="result-stats">
-        <h1 className="vl-title f-700 vl-black">Age: {age}</h1>
-        <h2 className="vl-subheading f-500 vl-black">Gender : {gender}</h2>
+        <h1 className="vl-title f-700 vl-black">{t("age")}: {age}</h1>
+        <h2 className="vl-subheading f-500 vl-black">{t("gender")} : {gender}</h2>
       </div>
     </div>
   );
@@ -23,6 +26,7 @@ function ResultCard({ age, gender, variant }) {
 
 export default function Beneficiary(props) {
   const { batchDetails } = props;
+  const { t, i18n } = useTranslation();
 
   const [LayoutType, setLayoutType] = useState(1);
 
@@ -54,7 +58,7 @@ export default function Beneficiary(props) {
       <div className="Beneficiary--inner-wrapper">
         <div className="Beneficiary--header">
           <h1 className="vl-subtitle f-700 vl-black">
-            Register your Vaccination Details
+            {t("register_vaccination_details")}
           </h1>
           <button
             className="vl-btn vl-btn-sm vl-btn-primary"
@@ -63,7 +67,7 @@ export default function Beneficiary(props) {
             <span>
               <i className="fa-solid fa-plus"></i>
             </span>{" "}
-            Add Beneficiary Detail
+            {t("add_beneficiary_details")}
           </button>
         </div>
         <div className="Beneficiary--product">
@@ -71,7 +75,7 @@ export default function Beneficiary(props) {
             <div className="Product-field-grid">
               <div className="field-header">
                 <i className="fa-solid fa-vial-circle-check"></i>
-                <p className="vl-body f-500 vl-blue">Product Name :</p>
+                <p className="vl-body f-500 vl-blue">{t("product_name")} :</p>
               </div>
               <p className="vl-body f-500 vl-blue">
                 {batchDetails.product.name}
@@ -80,7 +84,7 @@ export default function Beneficiary(props) {
             <div className="Product-field-grid">
               <div className="field-header">
                 <i className="fa-solid fa-building"></i>
-                <p className="vl-body f-500 vl-blue">Manufacturer Name :</p>
+                <p className="vl-body f-500 vl-blue">{t("manufacturer_name")} :</p>
               </div>
               <p className="vl-body f-500 vl-blue">
                 {batchDetails.product.manufacturer}
@@ -88,7 +92,7 @@ export default function Beneficiary(props) {
             </div>
             <div className="batch-number">
               <p className="vl-note batch-number-label f-500">
-                Batch No : {batchDetails?.batchNumber}
+                {t("batchNumber")} : {batchDetails?.batchNumber}
               </p>
             </div>
           </div>
@@ -101,8 +105,7 @@ export default function Beneficiary(props) {
                   <img src={AddImage} alt="ScanImage" />
                 </div>
                 <h1 className="vl-note f-500 vl-black">
-                  Vaccinated List is Empty, Please Click Add button to Add the
-                  Details
+                  {t("vaccinated_list_empty_click_add")}
                 </h1>
               </section>
             ) : (
@@ -111,7 +114,7 @@ export default function Beneficiary(props) {
                   <div className="Result-header">
                     <div className="Result-title-space">
                       <h1 className="vl-subheading f-700 vl-grey-md">
-                        Vaccinated Overview
+                        {t("vaccinated_overview")}
                       </h1>
                       <p className="vl-body card-number-label f-700">
                         {doses?.length ? doses.length : 0}
@@ -121,7 +124,7 @@ export default function Beneficiary(props) {
                       className="vl-btn vl-btn-sm vl-btn-primary"
                       onClick={props.completeVaccination}
                     >
-                      Complete
+                      {t("complete")}
                     </button>
                   </div>
                   <div className="Result-body">

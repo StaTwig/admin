@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   fetchAnalytics,
   getVaccinationsList,
@@ -24,7 +25,10 @@ export default function LastmileTrack(props) {
   const [todaysVaccinations, setTodaysVaccinations] = useState();
   const [batchDetails, setBatchDetails] = useState();
 
+  const { t, i18n } = useTranslation();
+
   useEffect(async () => {
+
     // Fetch analytics
     const analytics = await fetchAnalytics();
     if (analytics?.data?.success) {
@@ -81,7 +85,7 @@ export default function LastmileTrack(props) {
             style={{ paddingBottom: "10px" }}
             className='vl-heading-bdr black f-700 mi-reset'
           >
-            LastMile
+            {t("lastmile")}
           </h1>
           {tableView && (
             <div className='back-link-button-space'>
@@ -90,7 +94,7 @@ export default function LastmileTrack(props) {
                 onClick={() => setTableView(false)}
               >
                 <i className='fa-solid fa-arrow-left'></i>
-                <span>Back to Batch Details </span>
+                <span>{t("back_to_batch_details")}</span>
               </button>
             </div>
           )}
@@ -119,7 +123,7 @@ export default function LastmileTrack(props) {
             <AnalyticTiles
               layout='1'
               variant='1'
-              title='Total Number of Units Utilized'
+              title={t("total_units_utilized")}
               stat={analytics?.unitsUtilized ? analytics.unitsUtilized : 0}
               name='unitsUtilized'
               onClick={handleAnalyticsClicked}
@@ -127,7 +131,7 @@ export default function LastmileTrack(props) {
             <AnalyticTiles
               layout='1'
               variant='2'
-              title='No. of Beneficiaries Vaccinated so far'
+              title={t("no_beneficiaries_vaccinated_so_far")}
               stat={
                 analytics?.totalVaccinations ? analytics.totalVaccinations : 0
               }
@@ -137,7 +141,7 @@ export default function LastmileTrack(props) {
             <AnalyticTiles
               layout='1'
               variant='3'
-              title='No. of Beneficaries Vaccinated today'
+              title={t("no_beneficiaries_vaccinated_today")}
               stat={
                 analytics?.todaysVaccinations ? analytics.todaysVaccinations : 0
               }
