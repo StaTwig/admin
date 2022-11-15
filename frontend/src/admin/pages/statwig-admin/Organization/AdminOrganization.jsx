@@ -31,9 +31,9 @@ let useClickOutside = (handler) => {
 
 export default function AdminOrganization(props) {
   const history = useHistory();
-  if (props.user.type !== "CENTRAL_AUTHORITY") {
-    history.push("/overview");
-  }
+  // if (props.user.type !== "CENTRAL_AUTHORITY") {
+  //   history.push("/overview");
+  // }
 
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();

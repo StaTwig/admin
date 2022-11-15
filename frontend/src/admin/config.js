@@ -86,7 +86,7 @@ export function config() {
       getOrgActiveUsers: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgActiveUsers`,
       addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${TEST_SERVER_URL}/api/employee_service/updateUserRole`,
-      addNewOrganisation: `${TEST_SERVER_URL}/api/employee_service/addNewOrganisation`,
+      addNewOrganisation: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/addNewOrganisation`,
       getPendingOrgs: `${TEST_SERVER_URL}/api/employee_service/getPendingOrgs`, 
       recentRequestsSentUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${TEST_SERVER_URL}/api/employee_service/auth/userInfo`,
