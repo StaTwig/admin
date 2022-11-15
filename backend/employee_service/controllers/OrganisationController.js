@@ -77,6 +77,7 @@ exports.getPendingOrgs = [
 		try {
 			const pendingOrgs = await OrganisationModel.find({
 				status: "NOTVERIFIED",
+				isRegistered: true
 			});
 
 			return apiResponse.successResponseWithData(res, "Organisation list", pendingOrgs);
@@ -97,6 +98,18 @@ exports.getOrgs = [
 				{
 					$match: getOrgCondition(req.query),
 				},
+				{
+					$lookup: {
+						from: "employees",
+						let: { orgId: "$id" },
+						pipeline: [
+							{ $match: { $expr: { $eq: ["$$orgId", "$organisationId"] } } },
+							{ $count: "total" },
+						],
+						as: "employeeCount",
+					},
+				},
+				{ $unwind: "$employeeCount" },
 				{
 					$sort: {
 						createdAt: -1,
@@ -381,7 +394,7 @@ exports.addNewOrganisation = [
 					countryId: "001",
 					countryName: country,
 				},
-				status: "NOTVERIFIED",
+				status: "ACTIVE",
 			});
 			await warehouse.save();
 
@@ -400,7 +413,7 @@ exports.addNewOrganisation = [
 				postalAddress: addr,
 				accountStatus: "ACTIVE",
 				warehouseId: warehouseId == "NA" ? [] : [warehouseId],
-				role: "powerUser"
+				role: "admin"
 			});
 			await user.save();
 
