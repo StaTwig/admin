@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { updateOrg } from "../../../../actions/organisationActions";
 import "./Pendings.css";
 
@@ -24,16 +25,16 @@ function PendingCard({ organisation, updateOrgStatus }) {
 				<div className="pc-body-two-space">
 					<div className="pc-body-grid">
 						<p className="vl-body f-500 vl-black">Region:</p>
-						<p className="vl-body f-500 vl-grey-sm">{organisation.region}</p>
+						<p className="vl-body f-500 vl-grey-sm">{organisation?.region}</p>
 					</div>
 					<div className="pc-body-grid">
 						<p className="vl-body f-500 vl-black">Country:</p>
-						<p className="vl-body f-500 vl-grey-sm">{organisation.country}</p>
+						<p className="vl-body f-500 vl-grey-sm">{organisation?.country}</p>
 					</div>
 				</div>
 				<div className="pc-body-col-space">
 					<p className="vl-body f-500 vl-black">Organization Address :</p>
-					<p className="vl-body f-500 vl-grey-sm">{organisation.postalAddress}</p>
+					<p className="vl-body f-500 vl-grey-sm">{organisation?.postalAddress}</p>
 				</div>
 			</div>
 			<div className="pendingcard-action vl-flex vl-gap-sm">
@@ -56,6 +57,13 @@ function PendingCard({ organisation, updateOrgStatus }) {
 
 export default function Pendings(props) {
 	const { pendingOrgs, refetchOrgs } = props;
+
+	const [pendingOrgsList, setPendingOrgsList] = useState();
+
+	useEffect(() => {
+		let temp = pendingOrgs.filter((org) => org.isRegistered === true);
+		setPendingOrgsList(temp);
+	}, [pendingOrgs]);
 
 	const updateOrgStatus = async (data, approve) => {
     try {
@@ -84,7 +92,7 @@ export default function Pendings(props) {
 				<div className="number-label">16</div>
 			</div>
 			<div className="pending-body">
-				{pendingOrgs.map((pendingOrg) => (
+				{pendingOrgsList?.map((pendingOrg) => (
 					<PendingCard organisation={pendingOrg} updateOrgStatus={updateOrgStatus} />
 				))}
 			</div>
