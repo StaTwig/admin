@@ -458,67 +458,78 @@ exports.getOrgUserAnalytics = [
   auth,
   async (req, res) => {
     try{
+      const {orgId} = req.query;
+      let matchQuery = orgId ? {organisationId: orgId} : {};
       const analytics = await EmployeeModel.aggregate([
-        {
-          $facet: {
-            total: [
-              { $match: {} },
-              {
-                $group: {
-                  _id: null,
-                  employees: {
-                    $addToSet: {
-                      employeeId: "$id",
-                    },
+				{ $match: matchQuery },
+				{
+					$facet: {
+						total: [
+							{ $match: {} },
+							{
+								$group: {
+									_id: null,
+									employees: {
+										$addToSet: {
+											employeeId: "$id",
+										},
+									},
+									userInitials: {
+										$firstN: {
+											input: "$firstName",
+											n: 5,
+										},
+									},
+								},
+							},
+							{
+								$project: {
+									count: {
+										$cond: {
+											if: { $isArray: "$employees" },
+											then: { $size: "$employees" },
+											else: "NA",
+										},
                   },
-                },
-              },
-              {
-                $project: {
-                  count: {
-                    $cond: {
-                      if: { $isArray: "$employees" },
-                      then: { $size: "$employees" },
-                      else: "NA",
-                    },
-                  },
-                },
-              },
-            ],
-            active: [
-              { $match: { accountStatus: "ACTIVE" } },
-              {
-                $group: {
-                  _id: null,
-                  employees: {
-                    $addToSet: {
-                      employeeId: "$id",
-                    },
-                  },
-                },
-              },
-              {
-                $project: {
-                  count: {
-                    $cond: {
-                      if: { $isArray: "$employees" },
-                      then: { $size: "$employees" },
-                      else: "NA",
-                    },
-                  },
-                },
-              },
-            ],
-          },
-        },
-        {$unwind: "$total"},
-        {$unwind: "$active"},
-      ]);
+                  userInitials: 1
+								},
+							},
+						],
+						active: [
+							{ $match: { accountStatus: "ACTIVE" } },
+							{
+								$group: {
+									_id: null,
+									employees: {
+										$addToSet: {
+											employeeId: "$id",
+										},
+									},
+								},
+							},
+							{
+								$project: {
+									count: {
+										$cond: {
+											if: { $isArray: "$employees" },
+											then: { $size: "$employees" },
+											else: "NA",
+										},
+									},
+								},
+							},
+						],
+					},
+				},
+				{ $unwind: "$total" },
+				{ $unwind: "$active" },
+			]);
       console.log(analytics);
       const analyticsObject = {
         totalCount: analytics[0].total.count,
         activeCount: analytics[0].active.count,
         inactiveCount:  analytics[0].total.count - analytics[0].active.count,
+        userInitials: analytics[0].total.userInitials
       }
       return apiResponse.successResponseWithData(
         res,
