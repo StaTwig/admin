@@ -4,7 +4,11 @@ import TableRow from "@mui/material/TableRow";
 import { Autocomplete, Checkbox, TextField } from "@mui/material";
 import { useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import { activateOrgUser, deactivateOrgUser, updateUserRole } from "../../../../actions/organisationActions";
+import {
+  activateOrgUser,
+  deactivateOrgUser,
+  updateUserRole,
+} from "../../../../actions/organisationActions";
 import Switch from "@mui/material/Switch";
 
 export default function UsersRow({ rows, defaultRoles }) {
@@ -17,7 +21,7 @@ export default function UsersRow({ rows, defaultRoles }) {
   const handleRoleChange = (event, value) => {
     setUserRole(value);
   };
-  
+
   const handleEditRole = async () => {
     try {
       if (Edit) {
@@ -57,6 +61,33 @@ export default function UsersRow({ rows, defaultRoles }) {
         </TableCell>
         <TableCell>
           <div className="table-actions-space col-width-md">
+            {Edit ? (
+              <Autocomplete
+                fullWidth
+                disabled={Edit ? false : true}
+                size="small"
+                id="combo-box-demo"
+                className={`${Edit ? "vl-edit-true" : "vl-edit-false"}`}
+                options={defaultRoles}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    className="vl-edit-input"
+                    placeholder={rows.role}
+                  />
+                )}
+                onChange={handleRoleChange}
+              />
+            ) : (
+              <p
+                className={`vl-body ${
+                  checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
+                }`}
+              >
+                {rows.role}
+              </p>
+            )}
+
             <div className="vl-table-icon" onClick={handleEditRole}>
               {!Edit ? (
                 <i class="fa-solid fa-pen"></i>
@@ -64,22 +95,6 @@ export default function UsersRow({ rows, defaultRoles }) {
                 <i class="fa-solid fa-check"></i>
               )}
             </div>
-            <Autocomplete
-              fullWidth
-              disabled={Edit ? false : true}
-              size="small"
-              id="combo-box-demo"
-              className={`${Edit ? "vl-edit-true" : "vl-edit-false"}`}
-              options={defaultRoles}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  className="vl-edit-input"
-                  placeholder={rows.role}
-                />
-              )}
-              onChange={handleRoleChange}
-            />
           </div>
         </TableCell>
         <TableCell>
@@ -102,13 +117,6 @@ export default function UsersRow({ rows, defaultRoles }) {
         </TableCell>
         <TableCell>
           <div className="table-actions-space col-width-xl">
-            <div className="vl-table-icon" onClick={() => setOpen(!open)}>
-              {open ? (
-                <i class="fa-solid fa-caret-up"></i>
-              ) : (
-                <i class="fa-solid fa-caret-down"></i>
-              )}
-            </div>
             <p
               className={`vl-note ${
                 checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
@@ -116,6 +124,13 @@ export default function UsersRow({ rows, defaultRoles }) {
             >
               {rows.location}
             </p>
+            <div className="vl-table-icon" onClick={() => setOpen(!open)}>
+              {open ? (
+                <i class="fa-solid fa-caret-up"></i>
+              ) : (
+                <i class="fa-solid fa-caret-down"></i>
+              )}
+            </div>
           </div>
         </TableCell>
         <TableCell>

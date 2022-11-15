@@ -9,6 +9,9 @@
 .vl-blue {
   color: var(--blue) !important;
 }
+.vl-royal {
+  color: #00203fff !important;
+}
 .vl-light {
   color: var(--light) !important;
 }
