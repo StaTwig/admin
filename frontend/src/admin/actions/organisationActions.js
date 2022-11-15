@@ -143,6 +143,18 @@ export const updateOrg = async (data) => {
 	}
 };
 
+export const addOrgsFromExcel = async (data) => {
+	try {
+	  const url = config().addOrgsFromExcel;
+	  const result = await axios.post(url, data, {
+		headers: { "Content-Type": "multipart/form-data" },
+	  });
+	  return result;
+	} catch (e) {
+	  return e.response;
+	}
+  };
+
 export const deactivateOrgUser = async (data) => {
 	try {
 		const result = await axios.get(`${config().deactivateOrgUserUrl}?id=${data.id}`);

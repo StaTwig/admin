@@ -5,6 +5,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import UsersTable from "./UsersTable/UsersTable";
 import AddUsers from "../../../components/AddUsers/AddUsers";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
+import UploadPopup from "../../../common/UploadPopup/UploadPopup";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	addOrgUser,
@@ -41,7 +42,8 @@ let useClickOutside = (handler) => {
 
 export default function Users(props) {
 	const dispatch = useDispatch();
-  
+    const [tableFlag, setTableFlag] = useState(false);
+
 	const user = useSelector((state) => state.user);
 	const permissions = useSelector((state) => state?.organisationReducer?.permissions);
 	const addresses = useSelector((state) => state?.organisationReducer?.addresses);
@@ -56,9 +58,10 @@ export default function Users(props) {
 
 	const [open, setOpen] = React.useState(false);
 	const [defaultRoles, setDefaultRoles] = useState([]);
-
+	const [smallWidth] = React.useState("sm");
 	const [fullWidth] = React.useState(true);
 	const [maxWidth] = React.useState("md");
+	const [Importopen, setImportOpen] = React.useState(false);
 
 	useEffect(() => {
 		dispatch(getRequestsPending());
@@ -105,6 +108,12 @@ export default function Users(props) {
 	const handleClose = () => {
 		setOpen(false);
 	};
+	const handleImportClose = () => {
+		setImportOpen(false);
+	  };
+	  const handleImportClickOpen = () => {
+		setImportOpen(true);
+	  };
 	return (
 		<>
 			<OrgHeader />
@@ -154,13 +163,13 @@ export default function Users(props) {
 										<button
 											className="vl-btn vl-btn-alt vl-btn-primary"
 											// onClick={() => setButtonOpen(!ButtonOpen)}
-											onClick={handleClickOpen}
+											onClick={() => setButtonOpen(true)}
 										>
 											Add Users
 										</button>
 
 										<div className={`button-dropdown ${ButtonOpen && "active"}`}>
-											<div className="btn-dropdown-card">
+											<div className="btn-dropdown-card" onClick={handleImportClickOpen}>
 												<i className="fa-solid fa-upload"></i>
 												<p className="vl-note f-500">Import Users</p>
 											</div>
@@ -172,7 +181,7 @@ export default function Users(props) {
 									</div>
 								</div>
 							</div>
-							<UsersTable defaultRoles={defaultRoles} />
+							<UsersTable defaultRoles={defaultRoles} tableFlag={tableFlag} />
 						</div>
 					</div>
 				</div>
@@ -186,6 +195,17 @@ export default function Users(props) {
 						/>
 					</DialogContent>
 				</Dialog>
+				<Dialog
+          fullWidth={fullWidth}
+          maxWidth={smallWidth}
+          open={Importopen}
+          onClose={handleImportClose}
+        >
+          <DialogContent sx={{ padding: "0rem !important" }}>
+            <UploadPopup orgUpload={false} resetFlag={() => {setTableFlag(!tableFlag)}} handleImportClose={handleImportClose} />
+          </DialogContent>
+        </Dialog>
+		
 			</section>
 		</>
 	);
