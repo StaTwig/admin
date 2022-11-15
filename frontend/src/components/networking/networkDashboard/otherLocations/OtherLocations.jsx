@@ -5,7 +5,7 @@ import SearchCountry from "./searchCountry/SearchCountry";
 import SearchOrganization from "./searchOrganization/SearchOrganization";
 import { getManufacturerFilterOptions } from "../../../../actions/networkActions";
 
-const OtherLocations = ({ user, setReportWarehouse }) => {
+const OtherLocations = ({ user, setReportWarehouse, t }) => {
   const [LocationTab, setLocationTab] = useState("ORGANIZATION");
   const [LocationTab1, setLocationTab1] = useState("ORGANIZATION");
   const [nManufacturer, setNManufacturer] = useState([]);
@@ -24,9 +24,11 @@ const OtherLocations = ({ user, setReportWarehouse }) => {
   return (
     <div className="other-locations-container">
       <div className="other-location-header">
-        <h1 className="mi-body-sl dark f-600  mi-reset">Other Locations</h1>
+        <h1 className="mi-body-sl dark f-600  mi-reset">
+          {t("other_locations")}
+        </h1>
         <p className="mi-body-sm f-400 grey  mi-reset">
-          Search by Organizations or Countries
+          {t("search_by_organizations_or_countries")}
         </p>
       </div>
       <div className="tab-area">
@@ -35,6 +37,7 @@ const OtherLocations = ({ user, setReportWarehouse }) => {
           LocationTab={LocationTab}
           setLocationTab={setLocationTab}
           emptyRegex={() => setRegExp("")}
+          t={t}
         />
       </div>
       <div className="location-search-bar">
@@ -42,8 +45,10 @@ const OtherLocations = ({ user, setReportWarehouse }) => {
           <input
             type="search"
             value={regExp}
-            placeholder={`Search by ${
-              LocationTab === "ORGANIZATION" ? "Organization" : "Country"
+            placeholder={`${t("search_by")} ${
+              LocationTab === "ORGANIZATION"
+                ? `${t("organisation")}`
+                : `${t("country")}`
             }`}
             className="searchOrganization"
             onChange={(e) => setRegExp(e.target.value)}
@@ -56,12 +61,14 @@ const OtherLocations = ({ user, setReportWarehouse }) => {
           setReportWarehouse={(param) => setReportWarehouse(param)}
           nManufacturer={nManufacturer}
           user={user}
+          t={t}
         />
       ) : (
         <SearchOrganization
           setReportWarehouse={(param) => setReportWarehouse(param)}
           nManufacturer={nManufacturer}
           user={user}
+          t={t}
         />
       )}
     </div>

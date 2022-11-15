@@ -17,6 +17,7 @@ const NetworkDashboard = (props) => {
     TopBestseller,
     setPartnerLocation,
     executeScroll,
+    t,
   } = props;
 
   return (
@@ -31,16 +32,18 @@ const NetworkDashboard = (props) => {
           oManufacturer={oManufacturer}
           setMobileDashboard={setMobileDashboard}
           setPartnerLocation={setPartnerLocation}
+          t={t}
         />
       </div>
       <div className='dashboard-card'>
-        <TopSeller bestseller={TopBestseller} executeScroll={executeScroll} />
+        <TopSeller bestseller={TopBestseller} executeScroll={executeScroll} t={t} />
       </div>
       <div className='dashboard-card'>
         <OtherLocations
           setReportWarehouse={(param) => setReportWarehouse(param)}
           oManufacturer={oManufacturer}
           user={user}
+          t={t}
         />
       </div>
     </div>

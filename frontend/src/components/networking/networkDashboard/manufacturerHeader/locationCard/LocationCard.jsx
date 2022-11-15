@@ -8,6 +8,7 @@ export default function LocationCard({
   partnerLocation,
   MylocationFilter,
   setMylocationFilter,
+  t,
 }) {
   // const [PartnerlocationFilter, setPartnerlocationFilter] = useState(false);
   return (
@@ -23,8 +24,8 @@ export default function LocationCard({
           <div className='location-icon-space'>
             <i className='fa-solid fa-location-crosshairs'></i>
           </div>
-          <p className='mi-body-xl f-700 mi-reset'>My</p>
-          <p className='mi-body-sm mi-reset'>Location</p>
+          <p className='mi-body-xl f-700 mi-reset'>{t("my")}</p>
+          <p className='mi-body-sm mi-reset'>{t("location")}</p>
         </div>
         <div className='location-card-bottom'>
           <h1 className='mi-title-sm f-700 mi-reset'>
@@ -49,8 +50,8 @@ export default function LocationCard({
           <div className='location-icon-space'>
             <i className='fa-solid fa-map-location-dot'></i>
           </div>
-          <p className='mi-body-xl f-700 mi-reset'>Partner</p>
-          <p className='mi-body-sm  mi-reset'>Location</p>
+          <p className='mi-body-xl f-700 mi-reset'>{t("partner")}</p>
+          <p className='mi-body-sm  mi-reset'>{t("location")}</p>
         </div>
         <div className='location-card-bottom'>
           <h1 className='mi-title-sm f-700 mi-reset'>

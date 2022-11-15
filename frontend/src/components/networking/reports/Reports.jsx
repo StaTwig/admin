@@ -24,7 +24,8 @@ export default function Reports(props) {
     setInstockId,
     setOutstockType,
     setOutstockId,
-    outStockFilters
+    outStockFilters,
+    t,
   } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -58,7 +59,7 @@ export default function Reports(props) {
     <div className='reports-main-container'>
       <div className='reports-header'>
         <div className='heading-text-holder' ref={myRef}>
-          <h1 className='mi-body-lg dark f-500 mi-reset'>REPORTS</h1>
+          <h1 className='mi-body-lg dark f-500 mi-reset'>{t("reports")}</h1>
         </div>
         <div className='header-actions-group'>
           {/* <input
@@ -85,7 +86,7 @@ export default function Reports(props) {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
-            Export
+            {t("export")}
           </button>
           <Menu
             id='basic-menu'
@@ -107,20 +108,21 @@ export default function Reports(props) {
       </div>
       <div className='reports-body'>
         <div className='tab-area'>
-          <Tab layout='main' MainTab={MainTab} setMainTab={setMainTab} />
+          <Tab layout='main' MainTab={MainTab} setMainTab={setMainTab} t={t}/>
         </div>
 
         <div className='report-table-container'>
           {MainTab === "INSTOCK" && (
-            <Instock inStock={inStock} inStockFilters={inStockFilters} setInstockType={setInstockType} setInstockId={setInstockId} reportWarehouse={reportWarehouse} />
+            <Instock inStock={inStock} inStockFilters={inStockFilters} setInstockType={setInstockType} setInstockId={setInstockId} reportWarehouse={reportWarehouse} t={t} />
           )}
           {MainTab === "OUTSTOCK" && (
-            <Outstock setOutstockType={setOutstockType} outStockFilters={outStockFilters} setOutstockId={setOutstockId} outStock={outStock} reportWarehouse={reportWarehouse} />
+            <Outstock setOutstockType={setOutstockType} outStockFilters={outStockFilters} setOutstockId={setOutstockId} outStock={outStock} reportWarehouse={reportWarehouse} t={t} />
           )}
           {MainTab === "BESTSELLER" && (
             <BestSeller
               bestseller={bestseller}
               reportWarehouse={reportWarehouse}
+              t={t}
             />
           )}
         </div>

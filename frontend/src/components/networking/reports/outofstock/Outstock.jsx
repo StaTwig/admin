@@ -9,7 +9,7 @@ import OutstockRow from "./OutstockRow";
 import { useSelector } from "react-redux";
 import Filter from "../Filter/Filter";
 
-export default function Outstock({outStock, outStockFilters, setOutstockType,setOutstockId}) {
+export default function Outstock({outStock, outStockFilters, setOutstockType,setOutstockId, t}) {
   const {user} = useSelector((state) => state);
   const Distributor = user.type === "DISTRIBUTORS"
   return (
@@ -25,7 +25,7 @@ export default function Outstock({outStock, outStockFilters, setOutstockType,set
               <TableCell className="mi-custom-tableHead mi-first-cell-padding">
                 <Filter
                     filters={outStockFilters}
-                    title="Product Category"
+                    title={t("product_category")}
                     filterKey="productCategory"
                     setStockType={setOutstockType}
                     setStockId={setOutstockId}
@@ -34,18 +34,18 @@ export default function Outstock({outStock, outStockFilters, setOutstockType,set
               <TableCell className="mi-custom-tableHead">
               <Filter
                     filters={outStockFilters}
-                    title="Product Name"
+                    title={t("product_name")}
                     filterKey="productName"
                     setStockType={setOutstockType}
                     setStockId={setOutstockId}
                   />
               </TableCell>
              {Distributor && <TableCell className="mi-custom-tableHead">
-                <p className="mi-body-sm mi-reset grey-400">Product Manufacturer</p>
+                <p className="mi-body-sm mi-reset grey-400">{t("product_manufacturer")}</p>
               </TableCell>}
               <TableCell className="mi-custom-tableHead">
                 <p className="mi-body-sm mi-reset grey-400">
-                  Product out of stock
+                {t("product_out_of_stock")}
                 </p>
               </TableCell>
               <TableCell className="mi-custom-tableHead"></TableCell>

@@ -1,7 +1,7 @@
 import React from "react";
 import TopSellerProduct from "./TopSellerProduct";
 
-const TopSeller = ({ bestseller, executeScroll }) => {
+const TopSeller = ({ bestseller, executeScroll, t }) => {
   const smallBoxColorsArray = [
     "#FDCD42",
     "#FE8E68",
@@ -19,13 +19,13 @@ const TopSeller = ({ bestseller, executeScroll }) => {
   return (
     <div className='bestSeller-container'>
       <div className='mi-flex-sb'>
-        <h1 className='mi-body-sl dark f-600  mi-reset'>Best Seller</h1>
+        <h1 className='mi-body-sl dark f-600  mi-reset'>{t("best_seller")}</h1>
         <button
           className='nt-btn nt-btn-xs nt-btn-blue-alt'
           onClick={executeScroll}
         >
           <i className='fa-solid fa-table-list'></i>
-          <span>View Reports</span>
+          <span>{t("view_reports")}</span>
         </button>
       </div>
       <div className='product-seller-list'>
