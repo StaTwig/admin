@@ -248,8 +248,8 @@ services:
     #     - "SERVER_URL=https://vaccineledger.com"
     #     - "GOOGLE_CLIENT_ID="
     build:
-      context: .
-      Dockerfile: "./frontend/Dockerfile.prebuilt"
+      context: "./frontend"
+      dockerfile: "Dockerfile.prebuilt"
     image: "frontend2.0"
     container_name: "cra-frontend"
     restart: always
