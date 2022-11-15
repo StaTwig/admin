@@ -7,8 +7,8 @@ const OrganizationSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    region: { type: String, required: true },
-    country: { type: String, required: true },
+    region: { type: String, required: false },
+    country: { type: String, required: false },
     isRegistered: {
       type: Boolean,
       default: true,
