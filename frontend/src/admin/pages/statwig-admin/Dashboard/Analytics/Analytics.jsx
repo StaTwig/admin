@@ -6,9 +6,8 @@ import Graphs from "../../../../components/Graphs/Graphs";
 export default function Analytics() {
   return (
     <section className="Analytics-area">
-      <div className="analytics-two-column-layout">
-        <AnalyticsCard layout="type1" />
-        <AnalyticsCard layout="type2" />
+      <div className="analytics-one-column-layout">
+        <AnalyticsCard layout="type1" name="orgs" />
       </div>
       <div className="analytics-two-column-layout">
         <AnalyticsCard
