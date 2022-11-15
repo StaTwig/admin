@@ -60,3 +60,33 @@
   outline: none !important;
   border: none !important;
 }
+
+.vl-custom-phone-input-2 {
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+}
+
+.vl-custom-phone-input-2 > input {
+  outline: none !important;
+  border: none !important;
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+}
+
+.vl-custom-phone-input-2 > input:focus {
+  outline: none !important;
+  border: none !important;
+}
