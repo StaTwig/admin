@@ -2,9 +2,11 @@ import React from "react";
 import { Select, MenuItem, TextField, Autocomplete } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { vaccinateIndividual } from "../../../actions/lastMileActions";
+import { useTranslation } from "react-i18next";
 
 export default function NewDose(props) {
   const { vaccineVialId, warehouseId, productId, batchNumber } = props;
+  const { t, i18n } = useTranslation();
 
   const {
     control,
@@ -57,7 +59,7 @@ export default function NewDose(props) {
                   options={options}
                   getOptionLabel={(option) => option || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Gender" />
+                    <TextField {...params} label={t("gender")} />
                   )}
                   {...field}
                   onChange={(event, value) => {
@@ -74,7 +76,7 @@ export default function NewDose(props) {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Age"
+                  label={t("age")}
                   {...field}
                 />
               )}
@@ -82,7 +84,7 @@ export default function NewDose(props) {
           </div>
           <div className="Beneficiary--action">
             <button type="submit" className="vl-btn vl-btn-md vl-btn-primary">
-              Save
+              {t("save")}
             </button>
           </div>
         </div>

@@ -522,5 +522,19 @@
   "opening_balance": "Saldo de apertura",
   "opening_current_in_stock_(qty)": "Apertura actual en stock (cantidad)",
   "countries":"Países",
-  "search_by":"Búsqueda por"
+  "search_by":"Búsqueda por",
+  "back_to_batch_details": "Volver a los detalles del lote",
+  "batch_not_found": "Batch not found!",
+  "batch_number_required": "Lote no encontrado!",
+  "age": "Años",
+  "gender": "Género",
+  "register_vaccination_details": "Regístrese, Detalles de vacunación",
+  "add_beneficiary_details": "Agregar detalle de beneficiario",
+  "manufacturer_name": "Nombre del Fabricante",
+  "vaccinated_list_empty_click_add": "La lista de vacunados está vacía, haga clic en el botón Agregar para agregar los detalles",
+  "vaccinated_overview": "Descripción general de vacunados",
+  "complete": "Completo",
+  "total_units_utilized": "Número total de unidades utilizadas",
+  "no_beneficiaries_vaccinated_so_far": "Número de beneficiarias vacunadas hasta ahora",
+  "no_beneficiaries_vaccinated_today": "Número de beneficiarios vacunados hoy"
 }

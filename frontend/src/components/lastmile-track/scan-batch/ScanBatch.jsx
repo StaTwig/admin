@@ -5,11 +5,13 @@ import ScanImage from "../../../assets/files/designs/scan.jpg";
 import { fetchBatch } from "../../../actions/lastMileActions";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function ScanBatch(props) {
 	const { setBatchDetails, setSteps } = props;
 	const [openAlert, setOpenAlert] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+  const { t, i18n } = useTranslation();
 
 	const userLocation = useSelector((store) => store.userLocation);
 
@@ -40,7 +42,7 @@ export default function ScanBatch(props) {
 			}
 		} catch (err) {
 			console.log(err);
-			setErrorMessage("Batch not found!");
+			setErrorMessage(t("batch_not_found"));
 			setOpenAlert(true);
 		}
 	};
@@ -73,13 +75,13 @@ export default function ScanBatch(props) {
 									placeholder="XXXX XXXX XXXX"
 									{...field}
 									error={Boolean(errors.batchNumber)}
-									helperText={errors.batchNumber && "Batch number is required!"}
+									helperText={errors.batchNumber && t("batch_number_required")}
 								/>
 							)}
 						/>
 						<div className="ScanBatch--action">
 							<button type="submit" className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
-								Continue
+								{t("continue")}
 							</button>
 						</div>
 					</div>

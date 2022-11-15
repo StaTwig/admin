@@ -499,7 +499,19 @@
   "opening_current_in_stock_(qty)": "Opening Current In Stock (Qty)",
   "product_manufacturer": "Product Manufacturer",
   "countries":"Countries",
-  "search_by":"Search by"
-  
-
+  "search_by":"Search by",
+  "back_to_batch_details": "Back to Batch Details",
+  "batch_not_found": "Batch not found!",
+  "batch_number_required": "Batch number is required!",
+  "age": "Age",
+  "gender": "Gender",
+  "register_vaccination_details": "Register you, Vaccination Details",
+  "add_beneficiary_details": "Add Beneficiary Detail",
+  "manufacturer_name": "Manufacturer Name",
+  "vaccinated_list_empty_click_add": "Vaccinated List is Empty, Please Click Add button to Add the Details",
+  "vaccinated_overview": "Vaccinated Overview",
+  "complete": "Complete",
+  "total_units_utilized": "Total Number of Units Utilized",
+  "no_beneficiaries_vaccinated_so_far": "No. of Beneficiaries Vaccinated so far",
+  "no_beneficiaries_vaccinated_today": "No. of Beneficaries Vaccinated today"
 }
