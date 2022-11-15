@@ -308,11 +308,11 @@ export const getOrgAnalytics = () => {
   }
 };
 
-export const getOrgUserAnalytics = () => {
+export const getOrgUserAnalytics = (organisationId) => {
   return async (dispatch) => {
     try{
     dispatch(turnOn());
-    const url =  config().getOrgUserAnalytics;
+    const url =  config().getOrgUserAnalytics + `?orgId=${organisationId}`;
     const result = await axios.get(url);
     dispatch({
       type: SET_USER_ANALYTICS,

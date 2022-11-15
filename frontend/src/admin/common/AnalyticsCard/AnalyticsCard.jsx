@@ -10,7 +10,8 @@ export default function AnalyticsCard({
 	value,
 	textColor,
 	valueTitle,
-	name,
+  name,
+  analytics
 }) {
 	const history = useHistory();
 
@@ -54,7 +55,9 @@ export default function AnalyticsCard({
 								<Avatar className="color-variant-5 icon-total-number">+200</Avatar>
 							</div>
 						</div>
-						<p className="vl-note f-400 vl-blue vl-link" onClick={handleClick} >View Organization</p>
+						<p className="vl-note f-400 vl-blue vl-link" onClick={handleClick}>
+							View Organization
+						</p>
 					</div>
 				</div>
 			)}
@@ -65,23 +68,18 @@ export default function AnalyticsCard({
 					</div>
 					<div className="type1-body">
 						<div className="analytic-icon-space">
-							<div className="analytic-icon icon-position-1">
-								<Avatar className="color-variant-1">R</Avatar>
-							</div>
-							<div className="analytic-icon icon-position-2">
-								<Avatar className="color-variant-2">T</Avatar>
-							</div>
-							<div className="analytic-icon icon-position-3">
-								<Avatar className="color-variant-3">B</Avatar>
-							</div>
-							<div className="analytic-icon icon-position-4">
-								<Avatar className="color-variant-4">L</Avatar>
-							</div>
+							{analytics?.userInitials?.map((initial, index) => (
+								<div key={index} className={`analytic-icon icon-position-${index+1}`}>
+									<Avatar className={`color-variant-${index+1}`}>{initial?.charAt(0).toUpperCase()}</Avatar>
+								</div>
+							))}
 							<div className="analytic-icon icon-position-5 ">
-								<Avatar className="color-variant-5 icon-total-number">+200</Avatar>
+								<Avatar className="color-variant-5 icon-total-number">{analytics?.totalCount}</Avatar>
 							</div>
 						</div>
-						<p className="vl-note f-400 vl-blue vl-link" onClick={handleClick} >View Users</p>
+						<p className="vl-note f-400 vl-blue vl-link" onClick={handleClick}>
+							View Users
+						</p>
 					</div>
 				</div>
 			)}
