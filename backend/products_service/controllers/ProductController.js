@@ -249,6 +249,8 @@ exports.addProduct = [
             const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
             const newManufacturer = new OrganisationModel({
               id: organisationId,
+              region: 'Americas',
+              country: 'Costa Rica',
               name: req.body.manufacturer,
               type: "VENDOR",
               isRegistered: false

@@ -35,7 +35,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
     <>
       <TableRow
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-        className={`organization-tr ${checked && "organization-bar-added"}`}
+        className={`organization-tr`}
       >
         {/* <TableCell>
           <Checkbox

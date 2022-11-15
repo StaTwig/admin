@@ -203,8 +203,6 @@
   margin: 10px 0px;
 }
 .quantity-received {
-  position: relative;
-  bottom: 15px;
   height: 3.5vh;
   width: max-content;
   font-size: 12px;
@@ -237,4 +235,10 @@
 .modal-image {
   height: 170px;
   width: 190px;
+}
+
+.edit-action-div{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

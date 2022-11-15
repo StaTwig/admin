@@ -9,25 +9,62 @@
   background-color: var(--white);
   box-shadow: var(--shadow);
   border-radius: 0.6rem;
-  padding: 0.6rem;
   margin: 2rem 0;
 }
 
 .organization-thead > .organization-tr > th {
   border-bottom: none !important;
-  background-color: var(--brand-table);
-  padding: 6px !important;
+  /* background-color: #00203fff; */
+  background-color: rgb(249, 229, 207);
+  padding: 16px 10px !important;
 }
 .organization-tbody > .organization-tr > td {
   border-bottom: none !important;
-  padding: 6px !important;
+  padding: 10px !important;
 }
-.organization-thead > .organization-tr > th:nth-child(1),
 .organization-tbody > .organization-tr > td:nth-child(1) {
-  padding: 6px 6px 6px 1rem !important;
+  padding: 10px 10px 10px 2rem !important;
 }
-.organization-tbody > .organization-tr:nth-child(even) > td {
+.organization-thead > .organization-tr > th:nth-child(1) {
+  padding: 10px 10px 10px 2rem !important;
+}
+/* .organization-tbody > .organization-tr {
+  border-bottom: 1px solid #eee;
+} */
+
+.organization-tbody > .organization-tr:nth-child(even) {
   background-color: var(--brand-table);
+}
+.organization-tbody > .organization-tr {
+  position: relative;
+}
+.organization-tbody > .organization-tr::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.4rem;
+  border-radius: 0 0.4rem 0.4rem 0;
+  height: 100%;
+  background: #221ecc;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.organization-tbody > .organization-tr:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.4rem;
+  border-radius: 0 0.4rem 0.4rem 0;
+  height: 100%;
+  background: #221ecc;
+  opacity: 1;
+  visibility: visible;
+}
+.organization-tbody > .organization-tr:hover {
+  cursor: pointer;
 }
 
 .organization-bar-added {
@@ -53,7 +90,7 @@
   align-items: center;
   gap: 0.6rem;
   border: 1px solid #c4c4c4;
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 2rem;
 }
 .table-search-bar > i {
@@ -66,7 +103,7 @@
 }
 
 .organization-table-header-area {
-  padding: 1rem 0;
+  padding: 1rem 0.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -130,7 +167,7 @@
 .table-actions-space {
   display: grid;
   align-items: center;
-  grid-template-columns: 1.5rem 1fr;
+  grid-template-columns: 1fr 1.5rem;
   gap: 1rem;
   margin-right: 1rem;
 }
@@ -138,14 +175,14 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 0.2rem;
-  background-color: #fce1bc;
-  color: #ef711d;
+  background-color: #ffdec8;
+  color: #390194;
   cursor: pointer;
   display: grid;
   place-content: center;
 }
 .vl-table-icon > i {
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 @media screen and (max-width: 786px) {
   .table-search-bar {
@@ -215,8 +252,8 @@
   > div
   > div
   > .css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
-  opacity: 1;
-  -webkit-text-fill-color: #333;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #000 !important;
 }
 
 .vl-edit-false > .MuiFormControl-root > .MuiOutlinedInput-root > input {
