@@ -76,13 +76,13 @@ export default function Tracking() {
               style={{ paddingBottom: "10px" }}
               className="vl-heading-bdr black f-700 mi-reset"
             >
-              Track & Trace
+              {t("trackntrace")}
             </h1>
             <div className="tracking-search-bar">
               <div className="mi-flex-ac">
                 <input
                   type="search"
-                  placeholder="Search by Tracking ID"
+                  placeholder={t("search_track")}
                   className="track-search"
                   onKeyUp={handleKeyPress}
                   onChange={(event) => setTrackingID(event.target.value)}
@@ -97,16 +97,18 @@ export default function Tracking() {
           </div>
           <div className="tab-buttons">
             <Tab
+              t={t}
               layout="button"
               LocationTab={LocationTab}
               setLocationTab={setLocationTab}
             />
           </div>
           {LocationTab === "CHAIN" && (
-            <ChainofCustody trackingData={trackingData} />
+            <ChainofCustody t={t} trackingData={trackingData} />
           )}
           {LocationTab === "LOCATION" && (
             <CurrentLocation
+              t={t}
               currentLocationData={trackingData?.currentLocationData}
             />
           )}
