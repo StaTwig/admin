@@ -8,10 +8,19 @@ const RejectedApproval = require("../components/RejectedApproval");
 const AddUserEmail = require("../components/AddUser");
 const checkToken = require("../middlewares/middleware").checkToken;
 const apiResponse = require("../helpers/apiResponse");
+const fs = require("fs");
+const moveFile = require("move-file");
+const XLSX = require("xlsx");
+
 const axios = require("axios");
 require("dotenv").config();
 const blockchain_service_url = process.env.URL;
-
+const excludeExpireuseruct = (data) => {
+  return data.filter((useruct) => {
+    if (Date.parse(useruct?.expiryDate) > Date.parse(new Date())) return true
+    return false
+  })
+}
 exports.getApprovals = [
   auth,
   async (req, res) => {
@@ -445,6 +454,112 @@ exports.deactivateUser = [
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.addUsersFromExcel = [
+  auth,
+  (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          try {
+          const { organisationId, organisationName } = req.user;
+            const dir = `uploads`;
+            if (!fs.existsSync(dir)) 
+                      fs.mkdirSync(dir);
+              await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+              const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+              const sheet_name_list = workbook.SheetNames;
+              let data = XLSX.utils.sheet_to_json(
+                workbook.Sheets[sheet_name_list[0]],
+                { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
+              );
+
+              console.log(data.entries());
+
+              const formatedData = new Array();
+              for (const [index, user] of data.entries()) {
+                const firstName =
+                  user?.["FIRST NAME"] || user?.["NOMBRE"];
+                const phoneNumber =
+                  user?.["PHONE"] || user?.["TEL CELULAR"];
+                const lastName = user?.["LAST NAME"] || user?.["APELLIDO"];
+                const emailId =
+                  user?.["EMAIL"] || user?.["EMAIL"];
+                const role =
+                  user?.["ROLE"] || user?.["UNIDAD DE MEDIDA"];
+                const accountStatus = "ACTIVE"
+                const warehouseId =
+                  user?.["WAREHOUSE"] || user?.["FECHA DE VENCIMIENTO"];
+                  const { organisationId } = req.user;
+                  formatedData[index] = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    emailId: emailId,
+                    phoneNumber: phoneNumber,
+                    organisationId: organisationId,
+                    role: role,
+                    accountStatus: accountStatus,
+                    warehouseId: warehouseId,
+                    isConfirmed: true,
+                    // id: id,
+                  };
+                }
+              
+              for(const user of formatedData){
+                const incrementCounterEmployee = await CounterModel.updateOne(
+                {
+                  "counters.name": "employeeId",
+                },
+                {
+                  $inc: {
+                    "counters.$.value": 1,
+                  },
+                }
+              );
+
+              const employeeCounter = await CounterModel.findOne(
+                { "counters.name": "employeeId" },
+                { "counters.$": 1 }
+              );
+              var employeeId =
+                employeeCounter.counters[0].format +
+                employeeCounter.counters[0].value;
+                console.log(user)
+            const User = new EmployeeModel({...user, id: employeeId
+              });
+              await User.save();
+              let emailBody = AddUserEmail({
+                name: user.firstName,
+                organisation: organisationName,
+              });
+              mailer
+                .send(
+                  constants.addUser.from,
+                  user.emailId,
+                  constants.addUser.subject,
+                  emailBody
+                )
+                .catch((err) => {
+                  console.log("Error in mailing user!", err);
+                });
+              }
+              return apiResponse.successResponseWithData(
+                res,
+                "success",
+                result
+              );
+            }
+           catch (err) {
+            console.log(err);
+            return apiResponse.ErrorResponse(res, err);
+          }
+        }
+      });
+    } catch (err) {
+      console.log(err);
     }
   },
 ];
