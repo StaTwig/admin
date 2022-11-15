@@ -100,7 +100,7 @@ const ExcelPopUp = (props) => {
           >
             {t("import")}
           </button>
-        </div>s
+        </div>
       </div>
     </div>
   );
