@@ -86,7 +86,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
               checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
             }`}
           >
-            12800
+            {rows?.employeeCount?.total ? rows?.employeeCount?.total : "N/A"}
           </p>
         </TableCell>
         <TableCell

@@ -145,7 +145,7 @@ export default function Beneficiary(props) {
             <NewDose
               vaccineVialId={vialId}
               warehouseId={
-                userLocation ? userLocation.id : props?.user?.warehouseId[0]
+                userLocation?.id ? userLocation.id : props.user.warehouseId[0]
               }
               productId={batchDetails.product.id}
               batchNumber={batchDetails?.batchNumber}

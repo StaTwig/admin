@@ -14,6 +14,8 @@ import "./AddOrganization.css";
 import { useDispatch } from "react-redux";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import { addNewOrganisation } from "../../actions/userActions";
+import Modal from "../../../shared/modal";
+import SuccessPopup from "../../shared/Popup/SuccessPopup";
 
 export default function AddOrganization({ handleClose }) {
 	const dispatch = useDispatch();
@@ -23,6 +25,8 @@ export default function AddOrganization({ handleClose }) {
 	const [allStates, setAllStates] = useState([]);
 	const [allCities, setAllCities] = useState([]);
 	const [organisationTypes, setOrganisationTypes] = useState([""]);
+  const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
+  const [openFailurePopup, setOpenFailurePopup] = useState(false);
 
 	useEffect(() => {
 		// Get org types
@@ -108,17 +112,27 @@ export default function AddOrganization({ handleClose }) {
 			const result = await addNewOrganisation(payload);
 			if (result.status === 200) {
 				console.log("Organisation added successfully!");
+				setOpenSuccessPopup(true);
 			} else {
 				console.log("Error - ", result.data);
+				setOpenFailurePopup(true);
 			}
 			dispatch(turnOff());
 		} catch (err) {
 			console.log(err);
+			setOpenFailurePopup(true);
 			dispatch(turnOff());
 		}
 	};
 
-	const options = [{ label: "1" }, { label: "2" }, { label: "3" }, { label: "4" }];
+	const closeModal = () => {
+		if(openSuccessPopup) {
+			setOpenSuccessPopup(false);
+			handleClose();
+		}
+    setOpenFailurePopup(false);
+  };
+
 	return (
 		<div className="addOrganization-container">
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -398,6 +412,31 @@ export default function AddOrganization({ handleClose }) {
 					<button className="vl-btn vl-btn-sm vl-btn-primary">Register</button>
 				</div>
 			</form>
+			{openSuccessPopup && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModal}
+            successMessage="Organisation added succesfully"
+            // errorMessage="Put the Error Message Here"
+          />
+        </Modal>
+      )}
+      {openFailurePopup && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModal}
+            // successMessage="Product added succesfully"
+            errorMessage="Unable to Add Organisation, please try again"
+          />
+        </Modal>
+      )}
+
 		</div>
 	);
 }
