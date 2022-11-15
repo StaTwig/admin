@@ -929,7 +929,7 @@ const NewOrder = (props) => {
 								<button className="btn btn-orange fontSize20 font-bold mt-3" type="submit">
 									<img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" alt="Order" />
 									<span>
-										<b>Review Order</b>
+										<b>{t("review_order")}</b>
 									</span>
 								</button>
 							</div>

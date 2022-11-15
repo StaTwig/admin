@@ -34,8 +34,11 @@ import shipmentIcon from "../../assets/icons/TotalShipmentsCompleted.png";
 import alertIcon from "../../assets/icons/alert.png";
 import orderIcon from "../../assets/icons/Orders.png";
 import { formatDistanceToNow } from "date-fns";
+import { useTranslation } from "react-i18next";
+
 const Header = (props) => {
 	const { t } = props;
+	const { i18n } = useTranslation();
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const [openModal, setOpenModal] = useState(false);
@@ -338,6 +341,17 @@ const Header = (props) => {
 		}
 	};
 
+	const [LangOption, setLangOption] = React.useState(i18n.language);
+
+  console.log(LangOption);
+
+  
+
+  const changeLanguage = (option) => {
+    setLangOption(option);
+    i18n.changeLanguage(option);
+  };
+
 	return (
 		<div className="navBar">
 			{/* Container */}
@@ -397,15 +411,15 @@ const Header = (props) => {
 						{(profile.role === "admin" || profile.type === "CENTRAL_AUTHORITY") && (
 							<li className="admin-nav-item configure-link user-switch-btn">
 								<div className="switch-button">
-									<p className="vl-note">User</p>
+									<p className="vl-note">{t("user")}</p>
 									<i class="fa-solid fa-caret-down"></i>
 								</div>
-								<div className={`configure-list active `}>
+								<div className={`configure-list width-change active `}>
 									<button
 										onClick={handleUiSwitch}
 										className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary"
 									>
-										Switch to Admin
+										{t("switch_to_admin")}
 									</button>
 								</div>
 							</li>
@@ -724,6 +738,23 @@ const Header = (props) => {
 								>
 									{t("settings")}
 								</MenuItem>
+								<Divider />
+								{LangOption === "en" ? (<MenuItem
+									style={{ fontSize: "13px" }}
+									onClick={() => {
+										changeLanguage("es");
+									  }}
+								>
+									Change to Spanish
+								</MenuItem>) : (<MenuItem
+									style={{ fontSize: "13px" }}
+									onClick={() => {
+										changeLanguage("en");
+									  }}
+								>
+									{t("change_to_english")}
+								</MenuItem>)}
+								
 								<Divider />
 								<MenuItem style={{ fontSize: "13px" }} onClick={() => dispatch(logoutUser())}>
 									{t("logout")}

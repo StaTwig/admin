@@ -41,7 +41,7 @@ export default function NewDose(props) {
     }
   };
 
-  const options = ["MALE", "FEMALE", "GENERAL"];
+  const options = ["MALE", "FEMALE", "OTHERS"];
 
   return (
     <section className="Beneficiary--Add-wrapper">

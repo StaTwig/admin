@@ -114,7 +114,11 @@ export default function Tracking() {
           )}
         </div>
         <div className="tracking-map-area">
-          <TrackingMap LocationTab={LocationTab} trackingData={trackingData} />
+          <TrackingMap
+            t={t}
+            LocationTab={LocationTab}
+            trackingData={trackingData}
+          />
         </div>
       </div>
 
