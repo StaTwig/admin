@@ -862,18 +862,18 @@ exports.addInventoriesFromExcel = [
             const mfgDate = prod?.['MFG DATE'] || prod?.['FECHA DE FABRICACION'];
             const expDate = prod?.['EXP DATE'] || prod?.['FECHA DE VENCIMIENTO'];
             const product = await ProductModel.findOne({
-              name: productName.trim()
+              name: productName?.trim()
             });
             if (product) {
               formatedData[index] = {
                 productId: product.id,
                 type: product.type,
-                productCategory: productCategory,
+                categories: productCategory,
                 productName: productName,
                 batchNumber: batchNumber,
-                manufacturerName: manufacturerName,
+                manufacturer: manufacturerName,
                 quantity: quantity,
-                unitOfMeasure: unitOfMeasure,
+                unitofMeasure: { id: unitOfMeasure, name: unitOfMeasure },
                 manufacturingDate: mfgDate,
                 expiryDate: expDate,
               }
