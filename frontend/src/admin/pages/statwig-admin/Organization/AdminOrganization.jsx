@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./AdminOrganization.css";
 import AnalyticsCard from "../../../common/AnalyticsCard/AnalyticsCard";
 import OrganizationTable from "./OrganizationTable/OrganizationTable";
 import AddOrganization from "../../../components/AddOrganization/AddOrganization";
@@ -32,7 +31,7 @@ let useClickOutside = (handler) => {
 
 export default function AdminOrganization(props) {
   const history = useHistory();
-  if(props.user.type !== "CENTRAL_AUTHORITY") {
+  if (props.user.type !== "CENTRAL_AUTHORITY") {
     history.push("/overview");
   }
 
@@ -107,12 +106,12 @@ export default function AdminOrganization(props) {
                   <input type="text" placeholder="Search" />
                 </div>
                 <div className="table-actions-area">
-                  <div className="table-action-icon">
+                  {/* <div className="table-action-icon">
                     <i className={`fa-solid fa-power-off vl-disabled`}></i>
                   </div>
                   <div className="table-action-icon">
                     <i className={`fa-solid fa-trash-can vl-disabled`}></i>
-                  </div>
+                  </div> */}
                   <div className="table-dropdown-button" ref={domNode}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"

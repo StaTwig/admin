@@ -46,17 +46,17 @@
   font-size: 1rem;
 }
 
-.vl-btn-primary {
+.vl-ad-btn-primary {
   background-color: var(--admin-brand-secondary);
   border: 2px solid var(--admin-brand-secondary);
   color: var(--white);
 }
-.vl-btn-secondary {
+.vl-ad-btn-secondary {
   background-color: var(--white);
   border: 2px solid var(--admin-brand-secondary);
   color: var(--admin-brand-secondary);
 }
-.vl-btn-secondary:hover {
+.vl-ad-btn-secondary:hover {
   background-color: var(--admin-brand-secondary);
   border: 2px solid var(--admin-brand-secondary);
   color: var(--white);

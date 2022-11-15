@@ -44,25 +44,25 @@ export default function UsersTable(props) {
         <TableHead className="organization-thead">
           <TableRow className="organization-tr">
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">User Name</h1>
+              <h1 className="vl-note f-500 vl-royal">User Name</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Role</h1>
+              <h1 className="vl-note f-500 vl-royal">Role</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Email ID</h1>
+              <h1 className="vl-note f-500 vl-royal">Email ID</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Phone Number</h1>
+              <h1 className="vl-note f-500 vl-royal">Phone Number</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Location</h1>
+              <h1 className="vl-note f-500 vl-royal">Location</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Status</h1>
+              <h1 className="vl-note f-500 vl-royal">Status</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Created On</h1>
+              <h1 className="vl-note f-500 vl-royal">Created On</h1>
             </TableCell>
           </TableRow>
         </TableHead>
