@@ -208,3 +208,7 @@
   background-color: #0466c8;
   color: #fff !important;
 }
+
+.width-change {
+  width: 12rem !important;
+}

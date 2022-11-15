@@ -209,6 +209,7 @@ export default function InstockRow({ product, reportWarehouse, t }) {
                 isNearExpiry={isNearExpiry}
                 warehouseId={reportWarehouse}
                 uom={product?.unitofMeasure?.name}
+                t={t}
               />
             </div>
             <div className="nt-modal-actions">
@@ -220,7 +221,7 @@ export default function InstockRow({ product, reportWarehouse, t }) {
                 className="nt-btn nt-btn-sm nt-btn-blue"
                 onClick={handleClose}
               >
-                Close
+                {t("close")}
               </button>
             </div>
           </div>

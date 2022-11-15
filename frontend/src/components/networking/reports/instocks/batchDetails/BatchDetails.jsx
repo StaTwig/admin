@@ -71,6 +71,7 @@ export default function BatchDetails({
   warehouseId,
   isNearExpiry,
   uom,
+  t
 }) {
   const [Data, setData] = useState([]);
   useEffect(() => {
@@ -91,16 +92,16 @@ export default function BatchDetails({
           <TableHead>
             <TableRow>
               <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
-                <p className='mi-body-sm mi-reset grey-400'>Batch Number</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("batch_no")}</p>
               </TableCell>
               <TableCell className='mi-custom-tableHead'>
-                <p className='mi-body-sm mi-reset grey-400'>Quantity</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("quantity")}</p>
               </TableCell>
               <TableCell className='mi-custom-tableHead'>
-                <p className='mi-body-sm mi-reset grey-400'>Mfg Date</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("mfg_date")}</p>
               </TableCell>
               <TableCell className='mi-custom-tableHead'>
-                <p className='mi-body-sm mi-reset grey-400'>Exp Date</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("exp_date")}</p>
               </TableCell>
             </TableRow>
           </TableHead>

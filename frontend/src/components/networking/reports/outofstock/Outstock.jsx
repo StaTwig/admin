@@ -53,7 +53,7 @@ export default function Outstock({outStock, outStockFilters, setOutstockType,set
           </TableHead>
           <TableBody>
             {outStock.map((product, index) => (
-              <OutstockRow product={product} key={index} />
+              <OutstockRow t={t} product={product} key={index} />
             ))}
           </TableBody>
         </Table>

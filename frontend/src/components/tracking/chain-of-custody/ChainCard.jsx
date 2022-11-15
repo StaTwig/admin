@@ -63,6 +63,36 @@ export default function ChainCard({ shipmentData, t }) {
     displayDate = shipmentData?.updatedAt;
   }
 
+  let statusStyle = "bg-primary";
+  let status = shipmentData?.status;
+  if (shipmentData?.status === "CREATED") {
+    status = t("created");
+  } else if (shipmentData?.status === "ACCEPTED") {
+    statusStyle = "bg-success";
+    status = t("accepted");
+  } else if (shipmentData?.status === "REJECTED") {
+    statusStyle = "bg-secondary";
+    status = t("rejected");
+  } else if (shipmentData?.status === "TRANSIT&FULLYFULFILLED") {
+    statusStyle = "bg-info";
+    status = t("transitfullyfilled");
+  } else if (shipmentData?.status === "FULLYFULFILLED") {
+    statusStyle = "bg-info";
+    status = t("fullyfilled");
+  } else if (shipmentData?.status === "TRANSIT&PARTIALLYFULFILLED") {
+    statusStyle = "bg-warning";
+    status = t("transitpartiallyfilled");
+  } else if (shipmentData?.status === "PARTIALLYFULFILLED") {
+    statusStyle = "bg-warning";
+    status = t("partiallyfilled");
+  } else if (shipmentData?.status === "CANCELLED") {
+    statusStyle = "bg-primary";
+    status = t("cancelled");
+  } else if (shipmentData?.status === "RECEIVED") {
+    statusStyle = "bg-primary";
+    status = t("received");
+  }
+
   return (
     <div className="chain-card-container">
       <div className="location-address-header">
@@ -104,7 +134,7 @@ export default function ChainCard({ shipmentData, t }) {
                     style={{ width: "100%" }}
                     disabled
                   >
-                    {shipmentData?.status}
+                    {status}
                   </button>
                 </div>
                 <div className="collapse-icon">
