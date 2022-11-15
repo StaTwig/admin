@@ -9,8 +9,6 @@ export default function Permission({
   permissionUpdate,
 }) {
   const [flag, setFlag] = useState(false);
-  console.log(permissions);
-  console.log(updatedPermissions);
   const List = permissions ? Object.keys(permissions) : [];
   return (
     <section className="permission-container">
@@ -44,6 +42,7 @@ export default function Permission({
               flag={flag}
               refresh={(f) => setFlag(f)}
               list={list}
+              permissionType = {list?.toLowerCase()}
               permissions={
                 permissions ? permissions[`${list.toLowerCase()}`] : null
               }

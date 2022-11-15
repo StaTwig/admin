@@ -625,9 +625,9 @@ export const getAllRoles = async () => {
 	}
 };
 
-export const getPermissionByRole = async (role) => {
+export const getPermissionByRoleAndOrg = async (role, orgId) => {
 	try {
-		const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}`);
+		const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}&orgId=${orgId}`);
 		return result.data.data;
 	} catch (error) {
 		return [];
