@@ -42,7 +42,7 @@ const EmployeeSchema = new mongoose.Schema(
       type: Array,
       required: false,
     },
-    role: { type: String, required: false, default: "powerUser" },
+    role: { type: String, required: false, default: "admin" },
     postalAddress: {
       type: String,
       required: false,
