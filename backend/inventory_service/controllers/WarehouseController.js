@@ -805,8 +805,8 @@ exports.getManufacturerFilterOptions = [
       });
       const isGoverningBody = organisation?.type === "GOVERNING_BODY";
       if (isGoverningBody) {
-        // orgs = await GoverningBodyFilterList(type, regExp)
-        orgs = []
+        orgs = await GoverningBodyFilterList(type, regExp)
+        // orgs = []
       } else {
         const isDist = organisation?.type === "DISTRIBUTORS";
         if (isDist) {
