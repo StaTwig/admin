@@ -19,6 +19,7 @@ export const updateProfile = async (data) => {
 export const addNewOrganisation = async (data) => {
   try {
     const result = await axios.post(config().addNewOrganisation, data);
+    return result;
   } catch(err) {
     return err.response;
   }

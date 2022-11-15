@@ -38,11 +38,14 @@ export default function AdminOrganization(props) {
 
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getOrgAnalytics());
   }, [dispatch]);
+
   const { orgAnalytics } = useSelector((state) => state.organisationReducer);
   const { totalCount, activeCount, inactiveCount } = orgAnalytics;
+
   let domNode = useClickOutside(() => {
     setButtonOpen(false);
   });

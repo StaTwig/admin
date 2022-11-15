@@ -44,7 +44,7 @@ export default function AddUsers(props) {
 		<div className="addOrganization-container">
 			<form onSubmit={handleSubmit(addUser)}>
 				<div className="addorganization-header">
-					<p className="vl-subheading f-500 vl-blue">Add Organization</p>
+					<p className="vl-subheading f-500 vl-blue">Add User</p>
 					<i className="fa-solid fa-xmark" onClick={handleClose}></i>
 				</div>
 				<div className="addorganization-body">
