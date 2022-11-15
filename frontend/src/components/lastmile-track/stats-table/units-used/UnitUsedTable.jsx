@@ -10,14 +10,12 @@ import React from "react";
 import UnitUsedRow from "./UnitUsedRow";
 import EmptyIcon from "../../../../assets/files/designs/empty-table.jpg";
 
-export default function UnitUsedTable({ unitsUtilized }) {
+export default function UnitUsedTable({ unitsUtilized, t }) {
   return (
     <>
       <TableContainer className="vl-mui-custom-tablecontainer">
         <div className="Beneficiary--header">
-          <h1 className="vl-subtitle f-700 vl-black">
-            Total No. of Units Utilized
-          </h1>
+          <h1 className="vl-subtitle f-700 vl-black">{t("total_util")}</h1>
         </div>
         {unitsUtilized && unitsUtilized.length ? (
           <Table sx={{ minWidth: 650 }} className="vl-mui-custom-table">
@@ -25,22 +23,24 @@ export default function UnitUsedTable({ unitsUtilized }) {
               <TableRow className="vl-mui-custom-tr">
                 <TableCell align="center">
                   <div className="vl-table-column">
-                    <p className="vl-body f-500 vl-blue">S. No</p>
+                    <p className="vl-body f-500 vl-blue">{t("s_no")}</p>
                   </div>
                 </TableCell>
                 <TableCell align="center">
                   <div className="vl-table-column">
-                    <p className="vl-body f-500 vl-blue">Batch Number</p>
+                    <p className="vl-body f-500 vl-blue">{t("batch_no")}</p>
                   </div>
                 </TableCell>
                 <TableCell align="center">
                   <div className="vl-table-column">
-                    <p className="vl-body f-500 vl-blue">No. of Vaccinated</p>
+                    <p className="vl-body f-500 vl-blue">
+                      {t("no_of_vaccine")}
+                    </p>
                   </div>
                 </TableCell>
                 <TableCell align="center">
                   <div className="vl-table-column">
-                    <p className="vl-body f-500 vl-blue">Date</p>
+                    <p className="vl-body f-500 vl-blue">{t("date")}</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -58,9 +58,7 @@ export default function UnitUsedTable({ unitsUtilized }) {
           <div className="Table--Empty-container">
             <div className="Table--empty-illustartion">
               <img src={EmptyIcon} alt="EmptyIcon" />
-              <h1 className="vl-subheading f-500 vl-black">
-                Sorry, No Records
-              </h1>
+              <h1 className="vl-subheading f-500 vl-black">{t("no_rec")}</h1>
             </div>
           </div>
         )}

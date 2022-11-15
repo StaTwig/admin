@@ -187,14 +187,18 @@ const ProductCard = ({ warehouse }) => {
           <div className="date-container">
             <div className="date-header mi-flex-ac gap-1">
               <i className="fa-solid fa-calendar-days calender-icon white"></i>
-              <p className="mi-body-xs f-500 mi-reset white ">{t("mfg_date")}</p>
+              <p className="mi-body-xs f-500 mi-reset white ">
+                {t("mfg_date")}
+              </p>
             </div>
             <p className="mi-body-xs f-500 mi-reset white">{mfgDate}</p>
           </div>
           <div className="date-container">
             <div className="date-header mi-flex-ac gap-1">
               <i className="fa-solid fa-calendar-days calender-icon white"></i>
-              <p className="mi-body-xs f-500 mi-reset white ">{t("exp_date")}</p>
+              <p className="mi-body-xs f-500 mi-reset white ">
+                {t("exp_date")}
+              </p>
             </div>
             <p className="mi-body-xs f-500 mi-reset white">{expDate}</p>
           </div>
