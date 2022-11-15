@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = "https://test.admin.vaccineledger.com";
+export const TEST_SERVER_URL = process.env.REACT_APP_ADMIN_SERVER_URL || "https://test.admin.vaccineledger.com";
 export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
 export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io:9001";
 export const ABINBEV_TEST_SERVER_URL =
@@ -33,7 +33,7 @@ export function config() {
       addOrgUserUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/addUser`,
       updateUserRole: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/addNewOrganisation`,
-      getPendingOrgs: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getPendingOrgs`, 
+      getPendingOrgs: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getPendingOrgs`,
       recentRequestsSentUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/fetchPendingRequests`,
@@ -50,22 +50,22 @@ export function config() {
       addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
       modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
       getOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=CONF000`,
-      
+
       getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -87,7 +87,7 @@ export function config() {
       addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${TEST_SERVER_URL}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${TEST_SERVER_URL}/api/employee_service/addNewOrganisation`,
-      getPendingOrgs: `${TEST_SERVER_URL}/api/employee_service/getPendingOrgs`, 
+      getPendingOrgs: `${TEST_SERVER_URL}/api/employee_service/getPendingOrgs`,
       recentRequestsSentUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${TEST_SERVER_URL}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchPendingRequests`,
@@ -110,15 +110,15 @@ export function config() {
       imgDomainUrl: `${TEST_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     prod: {
       sendOtpUrl: `${PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -140,7 +140,7 @@ export function config() {
       addOrgUserUrl: `${PROD_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${PROD_SERVER_URL}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${PROD_SERVER_URL}/api/employee_service/addNewOrganisation`,
-      getPendingOrgs: `${PROD_SERVER_URL}/api/employee_service/getPendingOrgs`, 
+      getPendingOrgs: `${PROD_SERVER_URL}/api/employee_service/getPendingOrgs`,
       recentRequestsSentUrl: `${PROD_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${PROD_SERVER_URL}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${PROD_SERVER_URL}/api/affliation_service/fetchPendingRequests`,
@@ -163,15 +163,15 @@ export function config() {
       imgDomainUrl: `${PROD_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-      fetchAllRoles:`${TEST_SERVER_URL}/api/rbac_service/getRoles`,
-      fetchPermissionsByRole :`${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
+      fetchAllRoles: `${TEST_SERVER_URL}/api/rbac_service/getRoles`,
+      fetchPermissionsByRole: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       updatePermissions: `${TEST_SERVER_URL}/api/rbac_service/updatePermissions`,
 
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -192,7 +192,7 @@ export function config() {
       addOrgUserUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/addNewOrganisation`,
-      getPendingOrgs: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/getPendingOrgs`, 
+      getPendingOrgs: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/getPendingOrgs`,
       recentRequestsSentUrl: `${ABINBEV_TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${ABINBEV_TEST_SERVER_URL}/api/affliation_service/fetchPendingRequests`,
@@ -216,10 +216,10 @@ export function config() {
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -240,7 +240,7 @@ export function config() {
       addOrgUserUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/addNewOrganisation`,
-      getPendingOrgs: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/getPendingOrgs`, 
+      getPendingOrgs: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/getPendingOrgs`,
       recentRequestsSentUrl: `${ABINBEV_PROD_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${ABINBEV_PROD_SERVER_URL}/api/affliation_service/fetchPendingRequests`,
@@ -263,12 +263,12 @@ export function config() {
       imgDomainUrl: `${ABINBEV_PROD_SERVER_URL}`,
       getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
-     
+
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
-      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
-      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
-      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
+      fetchAllRegions: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion: `${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry: `${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState: `${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
   };
 
