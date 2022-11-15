@@ -482,7 +482,24 @@
   "current_loc":"Current Location",
   "chainofcustody":"Chain of custody",
   "no_track_msg":"Try search using your Tracking ID to track your Products/Shipment",
-  "search_track":"Search by Tracking ID"
+  "search_track":"Search by Tracking ID",
+  "my": "My",
+  "partner": "Partner",
+  "other_locations": "Other Locations",
+  "best_seller": "Best Seller",
+  "view_reports": "View Reports",
+  "search_by_organizations_or_countries": "Search by Organizations or Countries",
+  "country_list": "Country List",
+  "out_of_stock": "Out of Stock",
+  "in_stock": "In - Stock",
+  "organization_list": "Organization List",
+  "reports": "Reports",
+  "no_of_units_solds": "No. of Units Sold",
+  "opening_balance": "Opening Balance",
+  "opening_current_in_stock_(qty)": "Opening Current In Stock (Qty)",
+  "product_manufacturer": "Product Manufacturer",
+  "countries":"Countries",
+  "search_by":"Search by"
   
 
 }

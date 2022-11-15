@@ -10,6 +10,7 @@ export default function Tab({
   LocationTab,
   setLocationTab,
   emptyRegex,
+  t,
 }) {
   return (
     <>
@@ -22,7 +23,7 @@ export default function Tab({
             onClick={() => setMainTab("INSTOCK")}
           >
             <i className='fa-solid fa-box-archive mi-icon-xl'></i>
-            <p className='mi-body-sm f-500 mi-reset'>In - Stock</p>
+            <p className='mi-body-sm f-500 mi-reset'>{t("in_stock")}</p>
           </div>
           <div
             className={`tab-button tab-left-border ${
@@ -31,7 +32,7 @@ export default function Tab({
             onClick={() => setMainTab("OUTSTOCK")}
           >
             <i className='fa-solid fa-box-archive'></i>
-            <p className='mi-body-sm f-500 mi-reset'>Out of Stock</p>
+            <p className='mi-body-sm f-500 mi-reset'>{t("out_of_stock")}</p>
           </div>
           <div
             className={`tab-button tab-last-child tab-left-border ${
@@ -40,7 +41,7 @@ export default function Tab({
             onClick={() => setMainTab("BESTSELLER")}
           >
             <i className='fa-solid fa-ranking-star'></i>
-            <p className='mi-body-sm  f-500 mi-reset'>Best Seller</p>
+            <p className='mi-body-sm  f-500 mi-reset'>{t("best_seller")}</p>
           </div>
         </div>
       )}
@@ -57,7 +58,7 @@ export default function Tab({
             }}
           >
             <i className='fa-solid fa-building '></i>
-            <p className='mi-body-sm f-500 mi-reset'>Organization</p>
+            <p className='mi-body-sm f-500 mi-reset'>{t("organisation")}</p>
           </div>
           <div
             className={`tab-button-grid tab-last-child tab-left-border ${
@@ -69,7 +70,7 @@ export default function Tab({
             }}
           >
             <i className='fa-solid fa-earth-africa'></i>
-            <p className='mi-body-sm  f-500 mi-reset'>Countries</p>
+            <p className='mi-body-sm  f-500 mi-reset'>{t("countries")}</p>
           </div>
         </div>
       )}

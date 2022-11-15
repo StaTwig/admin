@@ -12,6 +12,7 @@ export default function Networking(props) {
     setReportWarehouse,
     MainTab,
     setMainTab,
+    t,
   } = props;
 
   const [MobileDashboard, setMobileDashboard] = useState(false);
@@ -31,6 +32,7 @@ export default function Networking(props) {
             oManufacturer={oManufacturer}
             setMobileDashboard={setMobileDashboard}
             executeScroll={executeScroll}
+            t = {t}
           />
         </div>
         <div className='network-workspace'>
@@ -62,6 +64,7 @@ export default function Networking(props) {
               MainTab={MainTab}
               setMainTab={setMainTab}
               myRef={myRef}
+              t={t}
             />
           </div>
         </div>

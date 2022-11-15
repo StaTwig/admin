@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import BestSellerRow from "./BestSellerRow";
 import { useSelector } from "react-redux";
 
-export default function BestSeller({ bestseller }) {
+export default function BestSeller({ bestseller, t }) {
   const {user} = useSelector((state) => state);
   const Distributor = user.type === "DISTRIBUTORS"
   return (
@@ -22,17 +22,17 @@ export default function BestSeller({ bestseller }) {
           <TableHead>
             <TableRow>
               <TableCell className='mi-custom-tableHead mi-first-cell-padding'>
-                <p className='mi-body-sm mi-reset grey-400'>Product Category</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("product_category")}</p>
               </TableCell>
               <TableCell className='mi-custom-tableHead'>
-                <p className='mi-body-sm mi-reset grey-400'>Product Name</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("product_name")}</p>
               </TableCell>
             {Distributor &&  <TableCell className='mi-custom-tableHead'>
-                <p className='mi-body-sm mi-reset grey-400'>Product Manufacturer</p>
+                <p className='mi-body-sm mi-reset grey-400'>{t("product_manufacturer")}</p>
               </TableCell>}
               <TableCell className='mi-custom-tableHead'>
                 <p className='mi-body-sm mi-reset grey-400'>
-                  No. of units sold
+                {t("no_of_units_solds")}
                 </p>
               </TableCell>
               <TableCell className='mi-custom-tableHead'></TableCell>

@@ -505,5 +505,22 @@
   "current_loc":"Ubicación actual",
   "chainofcustody":"Cadena de custodia",
   "no_track_msg":"Intente buscar usando su ID de seguimiento para rastrear sus productos/envío",
-  "search_track":"Buscar por ID de seguimiento"
+  "search_track":"Buscar por ID de seguimiento",
+  "my": "Mi",
+  "reports": "Informes",
+  "partner": "Socio",
+  "best_seller": "Mejor vendedor",
+  "view_reports": "Ver informes",
+  "other_locations": "Otras ubicaciones",
+  "search_by_organizations_or_countries": "Buscar por organizaciones o países",
+  "country_list": "Lista de países",
+  "out_of_stock": "Agotado",
+  "in_stock": "En stock",
+  "organization_list": "Lista de organizaciones",
+  "product_manufacturer": "Fabricante de productos",
+  "no_of_units_solds": "Número de unidades vendidas",
+  "opening_balance": "Saldo de apertura",
+  "opening_current_in_stock_(qty)": "Apertura actual en stock (cantidad)",
+  "countries":"Países",
+  "search_by":"Búsqueda por"
 }

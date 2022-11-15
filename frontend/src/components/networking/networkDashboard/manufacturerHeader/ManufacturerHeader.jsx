@@ -10,6 +10,7 @@ export default function ManufacturerHeader({
   manufacturer,
   user,
   setPartnerLocation,
+  t,
 }) {
   return (
     <div className='manufacturer-header'>
@@ -34,6 +35,7 @@ export default function ManufacturerHeader({
         oManufacturer={oManufacturer}
         manufacturer={manufacturer}
         setPartnerLocation={setPartnerLocation}
+        t={t}
       />
     </div>
   );
