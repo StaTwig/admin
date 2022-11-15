@@ -6,14 +6,14 @@ import Modal from "../../shared/modal";
 import returnShipment from "../../assets/icons/returnShipment.svg";
 import crossIcon from "../../assets/icons/crossRed.svg";
 import "./style.scss";
-import ProductList from "./productlist";
-import ShipmentDetails from "./shipmentdetails";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import SuccessPopup from "./successPopup";
 import FailedPopup from "./failPopup";
 import { fetchairwayBillNumber } from "../../actions/shipmentActions";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import ModalImage from "react-modal-image";
+import ShipmentInfo from "./ShipmentInfo";
+import ProductInfo from "./ProductInfo";
 
 const ReceiveShipment = (props) => {
   const { t } = props;
@@ -209,14 +209,12 @@ const ReceiveShipment = (props) => {
       <div className='row'>
         <div className='col-sm-4'>
           <h6 className='heading mt-3 mb-3 ml-3'>{t("shipment_details")}</h6>
-          <ShipmentDetails
-            shipments={tracking}
+          <ShipmentInfo shipments={tracking}
             setMenuShip={setMenuShip}
             menuShip={menuShip}
             highLight={highLight}
             setHighLight={setHighLight}
-            t={t}
-          />
+            t={t} />
         </div>
         <div className='col-sm-4'>
           <h6 className='heading mt-3 mb-3 ml-3'>{t("comment")}</h6>
@@ -385,8 +383,7 @@ const ReceiveShipment = (props) => {
         </div>
       </div>
       <div className='row'>
-        <ProductList
-          shipments={tracking}
+        <ProductInfo shipments={tracking}
           productHighLight={productHighLight}
           setProductHighLight={setProductHighLight}
           menuProduct={menuProduct}
@@ -394,8 +391,7 @@ const ReceiveShipment = (props) => {
           setDelivered={setDelivered}
           setIndex={setIndex}
           onQuantityChange={(index, value) => qtyChange(index, value)}
-          t={t}
-        />
+          t={t}/>
       </div>
       {receiveShipmentModal && (
         <Modal close={() => closeModalShipment()} size='modal-sm'>
