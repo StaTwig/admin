@@ -275,7 +275,31 @@ export default function AddUsers(props) {
 						) : (
 							<>
 								<p className="vl-body f-500 vl-black">Warehouse details</p>
-								<div className="input-full-space">
+								<div className="input-two-column-space">
+								<Controller
+										name="role"
+										control={control}
+										rules={{ required: true }}
+										render={({ field }) => (
+											<Autocomplete
+												fullWidth
+												id="combo-box-demo"
+												options={defaultRoles}
+												renderInput={(params) => (
+													<TextField
+														{...params}
+														label="Assign Role"
+														error={Boolean(errors.role)}
+														helperText={errors.role && "Role is required!"}
+													/>
+												)}
+												{...field}
+												onChange={(event, value) => {
+													field.onChange(value);
+												}}
+											/>
+										)}
+									/>
 									<Controller
 										name="warehouseTitle"
 										control={control}
