@@ -9,7 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import UserRow from "./UserRow";
 
-export default function UserTable({employees}) {
+export default function UserTable({ employees }) {
   // const [page, setPage] = React.useState(2);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -24,20 +24,22 @@ export default function UserTable({employees}) {
 
   return (
     <>
-      <TableContainer sx={{ background: "#fff", padding: "0.6rem", borderRadius:"0.6rem" }}>
+      <TableContainer
+        sx={{ background: "#fff", padding: "0.6rem", borderRadius: "0.6rem" }}
+      >
         <div className="organization-table-header-area">
           <div className="table-search-bar">
             <i className="fa-solid fa-magnifying-glass"></i>
             <input type="text" placeholder="Search" />
           </div>
-          <div className="table-actions-area table-action-space">
+          {/* <div className="table-actions-area table-action-space">
             <div className="table-action-icon">
               <i className={`fa-solid fa-power-off vl-disabled`}></i>
             </div>
             <div className="table-action-icon">
               <i className={`fa-solid fa-trash-can vl-disabled`}></i>
             </div>
-          </div>
+          </div> */}
         </div>
         <Table
           sx={{ minWidth: 685 }}
