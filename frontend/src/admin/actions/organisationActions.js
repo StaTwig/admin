@@ -675,7 +675,7 @@ export const getPendingOrgs = () => {
 				payload: result.data,
 			});
       dispatch(turnOff());
-      return result.data.data.length;
+      return result;
     };
   } catch (e) {
     throw Error(e.message);
