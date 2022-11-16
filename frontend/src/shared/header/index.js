@@ -907,6 +907,7 @@ const Header = (props) => {
                   className="header__profile_icon_btn"
                   onClick={() => setProfileClickBtn(!ProfileClickBtn)}
                 >
+                  <div className="green__active_sm"></div>
                   <img src={image} alt="image" />
                 </div>
                 <div

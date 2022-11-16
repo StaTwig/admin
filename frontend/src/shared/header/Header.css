@@ -220,6 +220,7 @@
   width: 2.65rem;
   height: 2.65rem;
   border-radius: 0.3rem;
+  position: relative;
 }
 
 .header__profile_icon_btn > img {
@@ -279,6 +280,17 @@
   position: absolute;
   top: -0.4rem;
   right: -0.4rem;
+}
+
+.green__active_sm {
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: rgb(3, 200, 85);
+  border-radius: 0.8rem;
+  border: 3px solid #eee;
+  position: absolute;
+  top: -0.3rem;
+  right: -0.3rem;
 }
 
 .header__inner_profile_content {
