@@ -212,3 +212,136 @@
 .width-change {
   width: 12rem !important;
 }
+.header__profile_menu {
+  position: relative;
+  margin-left: 1rem;
+}
+.header__profile_icon_btn {
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 0.3rem;
+}
+
+.header__profile_icon_btn > img {
+  width: 2.65rem;
+  height: 2.65rem;
+  object-fit: cover;
+  border-radius: 0.3rem;
+}
+.header__profile_dropdown {
+  position: absolute;
+  top: 4rem;
+  right: 0;
+  min-width: 20rem;
+  z-index: 1;
+  border-radius: 0.4rem;
+  background-color: #fff;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.header__profile_dropdown.active {
+  position: absolute;
+  top: 3.3rem;
+  opacity: 1;
+  visibility: visible;
+}
+
+.header__inner_profile_icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+  position: relative;
+}
+
+.header__inner_profile_icon > img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 0.4rem;
+}
+
+.header__profile_top {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+.green__active {
+  width: 1rem;
+  height: 1rem;
+  background-color: rgb(3, 200, 85);
+  border-radius: 1rem;
+  border: 3px solid #eee;
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+}
+
+.header__inner_profile_content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.header__link__card {
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #fff;
+  border-radius: 0.3rem;
+  color: #3f4254;
+}
+.header__link__card > i {
+  font-size: 1rem;
+}
+
+.profile__black {
+  color: #181c32;
+}
+
+.header__profile_middle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.header__link__card:hover {
+  transition: color 0.2s ease;
+  color: #009ef7;
+  background-color: #f4f6fa;
+}
+
+.header__profile_bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 1rem;
+}
+
+.lang__flag {
+  width: 1.2rem;
+  object-fit: contain;
+}
+
+.lang__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.15rem;
+  background-color: #f4f6fa;
+}
+
+.langugae__option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

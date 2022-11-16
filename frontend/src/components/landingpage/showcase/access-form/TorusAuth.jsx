@@ -119,6 +119,7 @@ export default function TorusAuth(props) {
       </div>
       <p className="vl-subheading f-500 no-space">
         {t("sign")} {props.register ? t("up") : t("in")} {t("with_wallet")}
+        {/* Sign {props.register ? "up" : "in"} with Wallet */}
       </p>
     </div>
   );

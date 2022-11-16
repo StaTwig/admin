@@ -246,7 +246,8 @@ export default function AccessForm() {
             type="submit"
             className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
           >
-            {t("sign")} {t("in")}
+            {/* {t("sign")} {t("in")} */}
+            Sign In
           </button>
         </div>
       </form>

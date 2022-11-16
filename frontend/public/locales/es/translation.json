@@ -554,5 +554,9 @@
   "age_msh":"Buscar los resultados por edad",
   "user":"Usuario",
   "switch_to_admin":"Cambiar a administrador",
-  "change_to_english":"Cambiar a Inglés"
+  "change_to_english":"Cambiar a Inglés",
+  "my_profiles":"Mi perfil",
+  "account_setting":"Configuración de cuenta",
+  "switch_lang":"Cambiar Idioma a",
+  "sign_out":"Desconectar"
 }
