@@ -12,6 +12,9 @@ const moveFile = require("move-file");
 const XLSX = require("xlsx");
 
 const axios = require("axios");
+const { getLatLongByCity } = require("../helpers/getLatLong");
+const InventoryModel = require("../models/InventoryModel");
+const WarehouseModel = require("../models/WarehouseModel");
 require("dotenv").config();
 const blockchain_service_url = process.env.URL;
 const excludeExpireuseruct = (data) => {
@@ -172,12 +175,12 @@ exports.addUser = [
 	async (req, res) => {
 		try {
 			const { organisationId, organisationName } = req.user;
-			const email = !req.body.emailId || req.body.emailId == "null" ? null : req.body.emailId;
-			const warehouse = req.body.warehouse;
+			const warehouseExists = req.body.warehouseExists;
 			const firstName = req.body.firstName;
 			const lastName = req.body.lastName;
-			// const firstName = email?.split("@")[0];
-			const phoneNumber = req.body.phoneNumber ? "+" + req.body.phoneNumber : null;
+			let email = !req.body.emailId || req.body.emailId == "null" ? null : req.body.emailId;
+			let phoneNumber = req.body.phoneNumber ? "+" + req.body.phoneNumber : null;
+
 			const incrementCounterEmployee = await CounterModel.updateOne(
 				{
 					"counters.name": "employeeId",
@@ -195,15 +198,84 @@ exports.addUser = [
 			);
 			var employeeId = employeeCounter.counters[0].format + employeeCounter.counters[0].value;
 
+			let warehouseId;
+			let role;
+
+			if (warehouseExists === "new") {
+				const { warehouseTitle, address } = req.body;
+				role = "admin";
+
+				const warehouseCounter = await CounterModel.findOneAndUpdate(
+					{ "counters.name": "warehouseId" },
+					{
+						$inc: {
+							"counters.$.value": 1,
+						},
+					},
+					{ new: true },
+				);
+				warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+				const invCounter = await CounterModel.findOneAndUpdate(
+					{ "counters.name": "inventoryId" },
+					{
+						$inc: {
+							"counters.$.value": 1,
+						},
+					},
+					{
+						new: true,
+					},
+				);
+				const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+				const inventoryResult = new InventoryModel({ id: inventoryId });
+				await inventoryResult.save();
+				const loc = await getLatLongByCity(address.city + "," + address.country);
+
+				const warehouse = new WarehouseModel({
+					title: warehouseTitle,
+					id: warehouseId,
+					warehouseInventory: inventoryId,
+					organisationId: organisationId,
+					location: loc,
+					warehouseAddress: {
+						firstLine: address.line1,
+						secondLine: "",
+						region: address.region,
+						city: address.city,
+						state: address.state,
+						country: address.country,
+						landmark: "",
+						zipCode: address.pincode,
+					},
+					region: {
+						regionName: address.region,
+					},
+					country: {
+						countryId: "001",
+						countryName: address.country,
+					},
+					status: "ACTIVE",
+				});
+				await warehouse.save();
+			} else {
+				(role = req.body.role), (warehouseId = req.body.warehouseId);
+			}
+
+			if (email) email = email.toLowerCase().replace(" ", "");
+			if (phoneNumber) {
+				phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+			}
+
 			const user = new EmployeeModel({
 				firstName: firstName,
 				lastName: lastName,
 				emailId: email,
 				phoneNumber: phoneNumber,
 				organisationId: organisationId,
-				role: req.body.role,
+				role: role,
 				accountStatus: "ACTIVE",
-				warehouseId: warehouse,
+				warehouseId: [warehouseId],
 				isConfirmed: true,
 				id: employeeId,
 			});
@@ -219,6 +291,7 @@ exports.addUser = [
 				});
 			return apiResponse.successResponse(res, "User Added");
 		} catch (err) {
+			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
 		}
 	},
