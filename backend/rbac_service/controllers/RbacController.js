@@ -1,9 +1,10 @@
+require("dotenv").config();
+const LEDGER_SOURCE = process.env.LEDGER_SOURCE;
 const RbacModel = require("../models/RbacModel");
 const { body, validationResult } = require("express-validator");
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 const { default: axios } = require("axios");
-const dotenv = require("dotenv").config();
 const utility = require("../helpers/utility");
 
 function getAllPermissions(permissions) {
@@ -127,7 +128,7 @@ exports.updatePermissions = [
 					{ new: true, upsert: true },
 				);
 
-				const result = await axios.get(process.env.SOURCE + "/rbacmanagement/api/rbacCache");
+				const result = await axios.get(LEDGER_SOURCE + "/rbacmanagement/api/rbacCache");
 				if (result.data == undefined) {
 					return apiResponse.errorResponse(res, result.data);
 				}
