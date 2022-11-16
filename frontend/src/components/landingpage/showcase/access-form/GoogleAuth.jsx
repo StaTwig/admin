@@ -52,6 +52,7 @@ export default function GoogleAuth(props) {
           </div>
           <p className="vl-subheading f-500 no-space">
             {t("sign")} {props.register ? t("up") : t("in")} {t("with_google")}
+            {/* Sign {props.register ? "up" : "in"} with Google */}
           </p>
         </div>
       )}
