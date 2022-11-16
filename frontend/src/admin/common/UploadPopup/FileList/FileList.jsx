@@ -6,7 +6,7 @@ const FileList = ({ files }) => {
   return (
     <ul className="file-list">
       {files &&
-        files.map((f) => (
+        [files].map((f) => (
           <FileItem key={f.name} file={f} />
         ))}
     </ul>

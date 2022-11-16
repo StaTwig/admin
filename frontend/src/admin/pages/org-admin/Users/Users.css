@@ -136,6 +136,7 @@
   box-shadow: var(--shadow);
   visibility: hidden;
   opacity: 0;
+  z-index: 1;
   transition: all 0.2s ease-in-out;
 }
 .button-dropdown.active {
@@ -146,6 +147,7 @@
   background-color: var(--white);
   box-shadow: var(--shadow);
   visibility: visible;
+  z-index: 1;
   opacity: 1;
 }
 .btn-dropdown-card {

@@ -6,7 +6,8 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
     const file = event.target.files[0];
     if (!file) return;
     file.isUploading = true;
-    setFiles([...files, file]);
+    setFiles(file);
+    // setFiles([...files, file]);
   };
 
   return (

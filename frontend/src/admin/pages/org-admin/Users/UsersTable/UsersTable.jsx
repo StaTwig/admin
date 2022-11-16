@@ -15,16 +15,16 @@ export default function UsersTable(props) {
   const dispatch = useDispatch();
   const { defaultRoles } = props;
 
-  useEffect(() => {
-    dispatch(getOrgUsers());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getOrgUsers());
+  // }, [dispatch]);
   const { users } = useSelector((state) => state.organisationReducer);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   useEffect(() => {
     dispatch(getOrgUsers(`skip=${page * 10}&limit=${rowsPerPage}`));
-  }, [dispatch, page, rowsPerPage]);
+  }, [dispatch, page, rowsPerPage, props.tableFlag]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

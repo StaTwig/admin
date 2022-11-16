@@ -31,13 +31,13 @@ let useClickOutside = (handler) => {
 
 export default function AdminOrganization(props) {
   const history = useHistory();
-  if (props.user.type !== "CENTRAL_AUTHORITY") {
-    history.push("/overview");
-  }
+  // if (props.user.type !== "CENTRAL_AUTHORITY") {
+  //   history.push("/overview");
+  // }
 
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const [tableFlag, setTableFlag] = useState(false);
   useEffect(() => {
     dispatch(getOrgAnalytics());
   }, [dispatch]);
@@ -56,7 +56,7 @@ export default function AdminOrganization(props) {
   const [smallWidth] = React.useState("sm");
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setButtonOpen(true);
   };
 
   const handleClose = () => {
@@ -136,7 +136,7 @@ export default function AdminOrganization(props) {
                       </div>
                       <div
                         className="btn-dropdown-card"
-                        onClick={handleClickOpen}
+                        onClick={() => setOpen(true)}
                       >
                         <i className="fa-solid fa-plus"></i>
                         <p className="vl-note f-500">Add Organization</p>
@@ -145,7 +145,7 @@ export default function AdminOrganization(props) {
                   </div>
                 </div>
               </div>
-              <OrganizationTable />
+              <OrganizationTable tableFlag={tableFlag} />
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function AdminOrganization(props) {
           onClose={handleImportClose}
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
-            <UploadPopup handleClose={handleImportClose} />
+            <UploadPopup orgUpload={true} resetFlag={() => {setTableFlag(!tableFlag)}} handleImportClose={handleImportClose} />
           </DialogContent>
         </Dialog>
       </section>
