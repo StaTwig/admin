@@ -178,6 +178,7 @@ exports.addUser = [
 			const warehouseExists = req.body.warehouseExists;
 			const firstName = req.body.firstName;
 			const lastName = req.body.lastName;
+			const role = req.body.role;
 			let email = !req.body.emailId || req.body.emailId == "null" ? null : req.body.emailId;
 			let phoneNumber = req.body.phoneNumber ? "+" + req.body.phoneNumber : null;
 
@@ -199,11 +200,9 @@ exports.addUser = [
 			var employeeId = employeeCounter.counters[0].format + employeeCounter.counters[0].value;
 
 			let warehouseId;
-			let role;
 
 			if (warehouseExists === "new") {
 				const { warehouseTitle, address } = req.body;
-				role = "admin";
 
 				const warehouseCounter = await CounterModel.findOneAndUpdate(
 					{ "counters.name": "warehouseId" },
