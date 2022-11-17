@@ -144,7 +144,7 @@ export default function Landingheader({
                 onClick={handleSignup}
                 className='vl-btn vl-btn-sm vl-btn-secondary'
               >
-                {t("sign")} {t("up")}
+                {t("signup")}
               </button>
             </li>
 
