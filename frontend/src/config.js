@@ -1,5 +1,5 @@
 export const SERVER_URL =
-  process.env.REACT_APP_SERVER_URL || "https://vaccineledger.com";
+  process.env.REACT_APP_SERVER_URL || "https://test.vaccineledger.com";
 export const SERVER_URL_FOR_ROAMBEE = "https://integrations.vaccineledger.com";
 export const LOCAL_SERVER_URL_USER = "http://localhost:3001";
 export const LOCAL_SERVER_URL_SHIPPINGORDER = "http://localhost:3013";
@@ -249,7 +249,7 @@ export function config() {
       productListUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getProductListCounts`,
       getProductDetailsByWarehouseIdUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warehouseId=`,
       getRegionsUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
-      getCountryByRegionUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getCountryByRegionUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getWareHousesByCountryUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWarehouseDetailsByCountryUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,

@@ -7,42 +7,38 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import LocationRow from "./LocationRow";
 
-export default function LocationTable({Locations, org}) {
-  
-  return (
-    <>
-      <TableContainer>
-        <Table
-          sx={{ minWidth: 665 }}
-          className="vl-custom-table"
-          aria-label="collapsible table"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell className="vl-custom-tableHead" align="center">
-                <h1 className="vl-note f-500 vl-blue">Location Name</h1>
-              </TableCell>
-              <TableCell className="vl-custom-tableHead" align="center">
-                <h1 className="vl-note f-500 vl-blue">City</h1>
-              </TableCell>
-              <TableCell className="vl-custom-tableHead" align="center">
-                <h1 className="vl-note f-500 vl-blue">Address</h1>
-              </TableCell>
-              <TableCell className="vl-custom-tableHead" align="center">
-                <h1 className="vl-note f-500 vl-blue">Users</h1>
-              </TableCell>
-              <TableCell className="vl-custom-tableHead" align="center">
-                <h1 className="vl-note f-500 vl-blue">Status</h1>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Locations.map((product) => (
-              <LocationRow key={product.id} product={product} org={org} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
-  );
+export default function LocationTable({ Locations, orgDetails }) {
+	return (
+		<>
+			<TableContainer>
+				<Table sx={{ minWidth: 665 }} className="vl-custom-table" aria-label="collapsible table">
+					<TableHead>
+						<TableRow>
+							<TableCell className="vl-custom-tableHead" align="center">
+								<h1 className="vl-note f-500 vl-blue">Location Name</h1>
+							</TableCell>
+							<TableCell className="vl-custom-tableHead" align="center">
+								<h1 className="vl-note f-500 vl-blue">Country</h1>
+							</TableCell>
+							<TableCell className="vl-custom-tableHead" align="center">
+								<h1 className="vl-note f-500 vl-blue">Address</h1>
+							</TableCell>
+							<TableCell className="vl-custom-tableHead" align="center">
+								<h1 className="vl-note f-500 vl-blue">Users</h1>
+							</TableCell>
+							<TableCell className="vl-custom-tableHead" align="center">
+								<h1 className="vl-note f-500 vl-blue">Status</h1>
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{Locations &&
+							Locations.map((warehouse) => (
+								<LocationRow key={warehouse.id} warehouse={warehouse} orgDetails={orgDetails} />
+							))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</>
+	);
 }
