@@ -88,7 +88,7 @@ export function config() {
       getOrgUserAnalytics: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgUserAnalytics`,
       getWarehouseUsers: `${TEST_SERVER_URL}/api/employee_service/auth/getWarehouseUsers`,
       getOrgActiveUsers: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgActiveUsers`,
-      addOrgUserUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/addUser`,
+      addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       updateUserRole: `${TEST_SERVER_URL}/api/employee_service/updateUserRole`,
       addNewOrganisation: `${TEST_SERVER_URL}/api/employee_service/addNewOrganisation`,
       getPendingOrgs: `${TEST_SERVER_URL}/api/employee_service/getPendingOrgs`,
