@@ -16,190 +16,201 @@ const moveFile = require("move-file");
 const XLSX = require("xlsx");
 
 let EmployeeIdMap = new Map();
-async function createOrg({req, firstName, lastName, emailId, phoneNumber, organisationName, type, address}){
-  let organisationExists = await OrganisationModel.findOne({
-    name: new RegExp("^" + organisationName + "$", "i"),
-  });
 
-  if (organisationExists) {
-    return "Organisation name exists!";
-  }
+async function createOrg({
+	req,
+	firstName,
+	lastName,
+	emailId,
+	phoneNumber,
+	organisationName,
+	type,
+	address,
+}) {
+	let organisationExists = await OrganisationModel.findOne({
+		name: new RegExp("^" + organisationName + "$", "i"),
+	});
 
-  const country = address?.country ? address?.country : "India";
-  const region = address?.region ? address?.region : "Asia";
-  const addr =
-    address?.line1 + ", " + address?.city + ", " + address?.state + ", " + address?.pincode;
-  const empCounter = await CounterModel.findOneAndUpdate(
-    {
-      "counters.name": "employeeId",
-    },
-    {
-      $inc: {
-        "counters.$.value": 1,
-      },
-    },
-    { new: true },
-  );
-  const employeeId = empCounter.counters[4].format + empCounter.counters[4].value;
+	if (organisationExists) {
+		return "Organisation name exists!";
+	}
 
-  const warehouseCounter = await CounterModel.findOneAndUpdate(
-    { "counters.name": "warehouseId" },
-    {
-      $inc: {
-        "counters.$.value": 1,
-      },
-    },
-    { new: true },
-  );
-  const warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+	const country = address?.country ? address?.country : "India";
+	const region = address?.region ? address?.region : "Asia";
+	const addr =
+		address?.line1 + ", " + address?.city + ", " + address?.state + ", " + address?.pincode;
+	const empCounter = await CounterModel.findOneAndUpdate(
+		{
+			"counters.name": "employeeId",
+		},
+		{
+			$inc: {
+				"counters.$.value": 1,
+			},
+		},
+		{ new: true },
+	);
+	const employeeId = empCounter.counters[4].format + empCounter.counters[4].value;
 
-  const orgCounter = await CounterModel.findOneAndUpdate(
-    { "counters.name": "orgId" },
-    {
-      $inc: {
-        "counters.$.value": 1,
-      },
-    },
-    { new: true },
-  );
-  const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
+	const warehouseCounter = await CounterModel.findOneAndUpdate(
+		{ "counters.name": "warehouseId" },
+		{
+			$inc: {
+				"counters.$.value": 1,
+			},
+		},
+		{ new: true },
+	);
+	const warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
 
-  const organisation = new OrganisationModel({
-    primaryContactId: employeeId,
-    name: organisationName,
-    id: organisationId,
-    type: type,
-    status: "ACTIVE",
-    isRegistered: true,
-    postalAddress: addr,
-    warehouses: [warehouseId],
-    warehouseEmployees: [employeeId],
-    region: region,
-    country: country,
-    configuration_id: "CONF000",
-    authority: req.body?.authority,
-  });
-  await organisation.save();
+	const orgCounter = await CounterModel.findOneAndUpdate(
+		{ "counters.name": "orgId" },
+		{
+			$inc: {
+				"counters.$.value": 1,
+			},
+		},
+		{ new: true },
+	);
+	const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
 
-  const invCounter = await CounterModel.findOneAndUpdate(
-    { "counters.name": "inventoryId" },
-    {
-      $inc: {
-        "counters.$.value": 1,
-      },
-    },
-    {
-      new: true,
-    },
-  );
-  const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
-  const inventoryResult = new InventoryModel({ id: inventoryId });
-  await inventoryResult.save();
-  const loc = await getLatLongByCity(address.city + "," + address.country);
-  const warehouse = new WarehouseModel({
-    title: "Office",
-    id: warehouseId,
-    warehouseInventory: inventoryId,
-    organisationId: organisationId,
-    location: loc,
-    warehouseAddress: {
-      firstLine: address.line1,
-      secondLine: "",
-      region: address.region,
-      city: address.city,
-      state: address.state,
-      country: address.country,
-      landmark: "",
-      zipCode: address.pincode,
-    },
-    region: {
-      regionName: region,
-    },
-    country: {
-      countryId: "001",
-      countryName: country,
-    },
-    status: "ACTIVE",
-  });
-  await warehouse.save();
+	const organisation = new OrganisationModel({
+		primaryContactId: employeeId,
+		name: organisationName,
+		id: organisationId,
+		type: type,
+		status: "ACTIVE",
+		isRegistered: true,
+		postalAddress: addr,
+		warehouses: [warehouseId],
+		warehouseEmployees: [employeeId],
+		region: region,
+		country: country,
+		configuration_id: "CONF000",
+		authority: req.body?.authority,
+	});
+	await organisation.save();
 
-  if (emailId) emailId = emailId.toLowerCase().replace(" ", "");
-  if (phoneNumber) {
-    phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
-  }
+	const invCounter = await CounterModel.findOneAndUpdate(
+		{ "counters.name": "inventoryId" },
+		{
+			$inc: {
+				"counters.$.value": 1,
+			},
+		},
+		{
+			new: true,
+		},
+	);
+	const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+	const inventoryResult = new InventoryModel({ id: inventoryId });
+	await inventoryResult.save();
+	const loc = await getLatLongByCity(address.city + "," + address.country);
+	const warehouse = new WarehouseModel({
+		title: "Office",
+		id: warehouseId,
+		warehouseInventory: inventoryId,
+		organisationId: organisationId,
+		location: loc,
+		warehouseAddress: {
+			firstLine: address.line1,
+			secondLine: "",
+			region: address.region,
+			city: address.city,
+			state: address.state,
+			country: address.country,
+			landmark: "",
+			zipCode: address.pincode,
+		},
+		region: {
+			regionName: region,
+		},
+		country: {
+			countryId: "001",
+			countryName: country,
+		},
+		status: "ACTIVE",
+	});
+	await warehouse.save();
 
-  const user = new EmployeeModel({
-    firstName: firstName,
-    lastName: lastName,
-    emailId: emailId,
-    phoneNumber: phoneNumber,
-    organisationId: organisationId,
-    id: employeeId,
-    postalAddress: addr,
-    accountStatus: "ACTIVE",
-    warehouseId: warehouseId == "NA" ? [] : [warehouseId],
-    role: "admin"
-  });
-  await user.save();
+	if (emailId) emailId = emailId.toLowerCase().replace(" ", "");
+	if (phoneNumber) {
+		phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+	}
 
-  let bc_data;
+	const user = new EmployeeModel({
+		firstName: firstName,
+		lastName: lastName,
+		emailId: emailId,
+		phoneNumber: phoneNumber,
+		organisationId: organisationId,
+		id: employeeId,
+		postalAddress: addr,
+		accountStatus: "ACTIVE",
+		warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+		role: "admin",
+	});
+	await user.save();
 
-  if (emailId != null) {
-    bc_data = {
-      username: emailId,
-      password: "",
-      orgName: "org1MSP",
-      role: "",
-      email: emailId,
-    };
-  } else if (phoneNumber != null) {
-    bc_data = {
-      username: phoneNumber,
-      password: "",
-      orgName: "org1MSP",
-      role: "",
-      email: phoneNumber,
-    };
-  }
+	let bc_data;
 
-  await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+	if (emailId != null) {
+		bc_data = {
+			username: emailId,
+			password: "",
+			orgName: "org1MSP",
+			role: "",
+			email: emailId,
+		};
+	} else if (phoneNumber != null) {
+		bc_data = {
+			username: phoneNumber,
+			password: "",
+			orgName: "org1MSP",
+			role: "",
+			email: phoneNumber,
+		};
+	}
 
-  const event_data = {
-    eventID: cuid(),
-    eventTime: new Date().toISOString(),
-    actorWarehouseId: "null",
-    transactionId: employeeId,
-    eventType: {
-      primary: "CREATE",
-      description: "USER",
-    },
-    actor: {
-      actorid: employeeId,
-      actoruserid: employeeId,
-    },
-    stackholders: {
-      ca: {
-        id: "null",
-        name: "null",
-        address: "null",
-      },
-      actororg: {
-        id: organisationId ? organisationId : "null",
-        name: "null",
-        address: "null",
-      },
-      secondorg: {
-        id: "null",
-        name: "null",
-        address: "null",
-      },
-    },
-    payload: {
-      data: "CREATED ORG WITH EXCEL",
-    },
-  };
-  await logEvent(event_data);
+	await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+
+	const event_data = {
+		eventID: cuid(),
+		eventTime: new Date().toISOString(),
+		actorWarehouseId: "null",
+		transactionId: employeeId,
+		eventType: {
+			primary: "CREATE",
+			description: "USER",
+		},
+		actor: {
+			actorid: employeeId,
+			actoruserid: employeeId,
+		},
+		stackholders: {
+			ca: {
+				id: "null",
+				name: "null",
+				address: "null",
+			},
+			actororg: {
+				id: organisationId ? organisationId : "null",
+				name: "null",
+				address: "null",
+			},
+			secondorg: {
+				id: "null",
+				name: "null",
+				address: "null",
+			},
+		},
+		payload: {
+			data: "CREATED ORG WITH EXCEL",
+		},
+	};
+	await logEvent(event_data);
 }
+
 function getOrgCondition(query) {
 	let matchCondition = {};
 	if (query.orgType && query.orgType != "") {
@@ -263,7 +274,7 @@ exports.getPendingOrgs = [
 		try {
 			const pendingOrgs = await OrganisationModel.find({
 				status: "NOTVERIFIED",
-				isRegistered: true
+				isRegistered: true,
 			});
 
 			return apiResponse.successResponseWithData(res, "Organisation list", pendingOrgs);
@@ -326,6 +337,75 @@ exports.getOrgs = [
 			}
 			// console.log("Users", users);
 			return apiResponse.successResponseWithData(res, "Organisation list", users);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	},
+];
+
+exports.getOrgDetails = [
+	auth,
+	async (req, res) => {
+		try {
+			const orgId = req.query?.orgId;
+
+			if (!orgId) {
+				return apiResponse.validationErrorWithData(res, "Org Id not provided", { orgId: orgId });
+			}
+
+			const organisation = await OrganisationModel.findOne({ id: orgId });
+			if (!organisation) {
+				throw new Error("Organisation not found!");
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Organisation details fetched!",
+				organisation,
+			);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	},
+];
+
+exports.getWarehouseAndUsersById = [
+	auth,
+	async (req, res) => {
+		try {
+			const warehouseId = req.query?.warehouseId;
+
+			if (!warehouseId) {
+				return apiResponse.validationErrorWithData(res, "Warehouse Id not provided", {
+					warehouseId: warehouseId,
+				});
+			}
+
+			const warehouseDetails = await WarehouseModel.aggregate([
+				{ $match: { id: warehouseId } },
+				{
+					$lookup: {
+						from: "employees",
+						let: { warehouseId: "$id" },
+						pipeline: [
+							{ $match: { $expr: { $and: [{ $in: ["$$warehouseId", "$warehouseId"] }] } } },
+						],
+						as: "employees",
+					},
+				},
+			]);
+
+			if (!warehouseDetails) {
+				throw new Error("Warehouse not found!");
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Warehouse details fetched!",
+				warehouseDetails[0],
+			);
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
@@ -599,7 +679,7 @@ exports.addNewOrganisation = [
 				postalAddress: addr,
 				accountStatus: "ACTIVE",
 				warehouseId: warehouseId == "NA" ? [] : [warehouseId],
-				role: "admin"
+				role: "admin",
 			});
 			await user.save();
 
@@ -674,68 +754,61 @@ exports.addNewOrganisation = [
 ];
 
 exports.addOrgsFromExcel = [
-  auth,
-  async (req, res) => {
-    try {
+	auth,
+	async (req, res) => {
+		try {
+			try {
+				const dir = `uploads`;
+				if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+				await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+				const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+				const sheet_name_list = workbook.SheetNames;
+				let data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], {
+					dateNF: "dd/mm/yyyy;@",
+					cellDates: true,
+					raw: false,
+				});
 
-          try {
-            const dir = `uploads`;
-            if (!fs.existsSync(dir)) 
-                      fs.mkdirSync(dir);
-              await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
-              const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
-              const sheet_name_list = workbook.SheetNames;
-              let data = XLSX.utils.sheet_to_json(
-                workbook.Sheets[sheet_name_list[0]],
-                { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
-              );
+				console.log(data.entries());
+				const formatedData = new Array();
+				for (const [index, user] of data.entries()) {
+					const firstName = user["FIRST NAME"];
+					const lastName = user["LAST NAME"];
+					const emailId = user["EMAIL"];
+					const phoneNumber = user["PHONE"];
+					const organisationName = user["ORG NAME"];
+					const type = user["ORG TYPE"];
+					const address = {
+						city: user["CITY"],
+						country: user["COUNTRY"],
+						line1: user["ADDRESS LINE"],
+						pincode: user["PINCODE"],
+						region: user["REGION"],
+						state: user["STATE"],
+					};
 
-              console.log(data.entries());
-              const formatedData = new Array();
-              for (const [index, user] of data.entries()) {
-                const firstName = user["FIRST NAME"]
-                const lastName = user["LAST NAME"]
-                const emailId = user["EMAIL"]
-                const phoneNumber = user["PHONE"]
-                const organisationName = user["ORG NAME"]
-                const type = user["ORG TYPE"]
-                const address = {
-                    city: user["CITY"],
-                    country: user["COUNTRY"],
-                    line1: user["ADDRESS LINE"],
-                    pincode: user["PINCODE"],
-                    region: user["REGION"],
-                    state: user["STATE"]
-                }
-                
-                
-                  formatedData[index] = {
-                    firstName: firstName,
-                    lastName: lastName,
-                    emailId: emailId,
-                    phoneNumber: phoneNumber,
-                    organisationName: organisationName,
-                    type: type,
-                    address: address
-                  };
-                }
-              const promises = [];
-              for(const org of formatedData){
-                 promises.push(createOrg({req, res, ...org}));
-              }
-              await Promise.all(promises);
-              return apiResponse.successResponseWithData(
-                res,
-                "success",
-                formatedData
-              );
-            }
-           catch (err) {
-            console.log(err);
-            return apiResponse.ErrorResponse(res, err);
-          }
-    } catch (err) {
-      console.log(err);
-    }
-  },
+					formatedData[index] = {
+						firstName: firstName,
+						lastName: lastName,
+						emailId: emailId,
+						phoneNumber: phoneNumber,
+						organisationName: organisationName,
+						type: type,
+						address: address,
+					};
+				}
+				const promises = [];
+				for (const org of formatedData) {
+					promises.push(createOrg({ req, res, ...org }));
+				}
+				await Promise.all(promises);
+				return apiResponse.successResponseWithData(res, "success", formatedData);
+			} catch (err) {
+				console.log(err);
+				return apiResponse.ErrorResponse(res, err);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	},
 ];
