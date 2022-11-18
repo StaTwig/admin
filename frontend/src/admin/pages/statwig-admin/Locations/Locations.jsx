@@ -13,9 +13,9 @@ import { useParams } from "react-router-dom";
 
 export default function Locations(props) {
   const history = useHistory();
-  if(props.user.type !== "CENTRAL_AUTHORITY") {
-    history.push("/overview");
-  }
+  // if(props.user.type !== "CENTRAL_AUTHORITY") {
+  //   history.push("/overview");
+  // }
 
   const [Map, setMap] = useState(false);
   const params = useParams();

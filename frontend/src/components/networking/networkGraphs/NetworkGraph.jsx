@@ -23,12 +23,12 @@ export default function NetworkGraph({ onClose, graph, data, name, cat }) {
         </div>
       </div>
       <div className='nt-modal-actions'>
-        <div className='modal-heading-space'>
+        {/* <div className='modal-heading-space'>
           <select name='' id='' className='date-select-ui'>
             <option value='July'>July</option>
             <option value='August'>August</option>
           </select>
-        </div>
+        </div> */}
         <button className='nt-btn nt-btn-sm nt-btn-blue' onClick={onClose}>
           Close
         </button>
