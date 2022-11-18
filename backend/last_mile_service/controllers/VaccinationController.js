@@ -180,7 +180,7 @@ exports.vaccinateIndividual = [
 				id: doseId,
 				vaccineVialId: vaccineVialId,
 				age: age,
-				gender: gender,
+				gender: gender === "GENERAL" ? "OTHERS" : gender,
 			});
 			await dose.save();
 
@@ -279,7 +279,7 @@ exports.vaccinateMultiple = [
 					id: doseId,
 					vaccineVialId: vaccineVialId,
 					age: doses[i].age,
-					gender: doses[i].gender,
+					gender: doses[i].gender === "GENERAL" ? "OTHERS" : doses[i].gender,
 				});
 				await dose.save();
 			}

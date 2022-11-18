@@ -33,6 +33,10 @@
   color: var(--grey-light) !important;
 }
 
+.vl-dark-grey {
+  color: rgb(88, 88, 88);
+}
+
 .bg-blue {
   background-color: var(--brand-blue) !important;
 }

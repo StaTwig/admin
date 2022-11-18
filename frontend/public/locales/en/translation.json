@@ -1,7 +1,7 @@
 {
   "statwig": "STATWIG",
   "login": "Login",
-  "signup": "Signup",
+  "signup": "Sign Up",
   "title": "Vaccine Ledger",
   "description": "VaccineLedger is a Blockchain based platform to track and trace vaccine's journey across the supply chain",
   "our_solution": "Our Solution",
@@ -531,5 +531,9 @@
   "age_msh":"Search the results by age",
   "user":"User",
   "switch_to_admin":"Switch to Admin",
-  "change_to_english":"Change to English"
+  "change_to_english":"Change to English",
+  "my_profiles":"My Profile",
+  "account_setting":"Account Setting",
+  "switch_lang":"Switch Language to",
+  "sign_out":"Sign Out"
 }
