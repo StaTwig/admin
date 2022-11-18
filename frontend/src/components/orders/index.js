@@ -142,8 +142,8 @@ const Orders = (props) => {
 				dispatch(turnOn());
 				const outboundRes = await getSentPOs("", "", "", "", "", "", 0, limit, "", ""); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
 				dispatch(turnOff());
-				setOutboundRecords(outboundRes.data.outboundPOs);
-				setCount(outboundRes.data.count);
+				setOutboundRecords(outboundRes?.data?.outboundPOs ? outboundRes?.data?.outboundPOs : []);
+				setCount(outboundRes?.data?.count ? outboundRes?.data?.count : 0);
 			} else if (visible === "one" && alerts === true) {
 				const statusFilterSelected = "REJECTED";
 				setStatusFilter(statusFilterSelected);

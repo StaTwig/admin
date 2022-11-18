@@ -25,8 +25,8 @@ export default function AddOrganization({ handleClose }) {
 	const [allStates, setAllStates] = useState([]);
 	const [allCities, setAllCities] = useState([]);
 	const [organisationTypes, setOrganisationTypes] = useState([""]);
-  const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
-  const [openFailurePopup, setOpenFailurePopup] = useState(false);
+	const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
+	const [openFailurePopup, setOpenFailurePopup] = useState(false);
 
 	useEffect(() => {
 		// Get org types
@@ -45,6 +45,15 @@ export default function AddOrganization({ handleClose }) {
 			setAllRegions(regions.data);
 		}
 		getAllRegions();
+
+		async function getCountriesForAmericas() {
+			let countries = await fetchCountriesByRegion("Americas");
+			setAllCountries(countries.data);
+			const costarica = countries.data.filter((country) => country.name === "Costa Rica");
+			let states = await fetchStateByCountry(costarica[0].id);
+			setAllStates(states.data);
+		}
+		getCountriesForAmericas();
 	}, []);
 
 	async function getAllCountries(region) {
@@ -76,8 +85,8 @@ export default function AddOrganization({ handleClose }) {
 		phone: "",
 		organizationType: "",
 		organizationName: "",
-		region: "",
-		country: "",
+		region: "Americas",
+		country: "Costa Rica",
 		state: "",
 		city: "",
 		pincode: "",
@@ -126,12 +135,12 @@ export default function AddOrganization({ handleClose }) {
 	};
 
 	const closeModal = () => {
-		if(openSuccessPopup) {
+		if (openSuccessPopup) {
 			setOpenSuccessPopup(false);
 			handleClose();
 		}
-    setOpenFailurePopup(false);
-  };
+		setOpenFailurePopup(false);
+	};
 
 	return (
 		<div className="addOrganization-container">
@@ -256,7 +265,7 @@ export default function AddOrganization({ handleClose }) {
 								)}
 							/>
 						</div>
-						<div className="input-two-column-space">
+						{/* <div className="input-two-column-space">
 							<Controller
 								name="region"
 								control={control}
@@ -314,7 +323,27 @@ export default function AddOrganization({ handleClose }) {
 									/>
 								)}
 							/>
+						</div> */}
+
+						<div className="input-two-column">
+							<TextField
+								value="Americas"
+								fullWidth
+								variant="outlined"
+								label={"Region"}
+								disabled
+								style={{ textAlign: "left" }}
+							/>
+							<TextField
+								value="Costa Rica"
+								fullWidth
+								variant="outlined"
+								label={"Country"}
+								disabled
+								style={{ textAlign: "left" }}
+							/>
 						</div>
+
 						<div className="input-two-column-space">
 							<Controller
 								name="state"
@@ -413,30 +442,29 @@ export default function AddOrganization({ handleClose }) {
 				</div>
 			</form>
 			{openSuccessPopup && (
-        <Modal
-          close={() => closeModal()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <SuccessPopup
-            onHide={closeModal}
-            successMessage="Organisation added succesfully"
-            // errorMessage="Put the Error Message Here"
-          />
-        </Modal>
-      )}
-      {openFailurePopup && (
-        <Modal
-          close={() => closeModal()}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <SuccessPopup
-            onHide={closeModal}
-            // successMessage="Product added succesfully"
-            errorMessage="Unable to Add Organisation, please try again"
-          />
-        </Modal>
-      )}
-
+				<Modal
+					close={() => closeModal()}
+					size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+				>
+					<SuccessPopup
+						onHide={closeModal}
+						successMessage="Organisation added succesfully"
+						// errorMessage="Put the Error Message Here"
+					/>
+				</Modal>
+			)}
+			{openFailurePopup && (
+				<Modal
+					close={() => closeModal()}
+					size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+				>
+					<SuccessPopup
+						onHide={closeModal}
+						// successMessage="Product added succesfully"
+						errorMessage="Unable to Add Organisation, please try again"
+					/>
+				</Modal>
+			)}
 		</div>
 	);
 }

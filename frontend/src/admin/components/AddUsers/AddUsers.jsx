@@ -28,6 +28,15 @@ export default function AddUsers(props) {
 			setAllRegions(regions.data);
 		}
 		getAllRegions();
+
+		async function getCountriesForAmericas() {
+			let countries = await fetchCountriesByRegion("Americas");
+			setAllCountries(countries.data);
+			const costarica = countries.data.filter((country) => country.name === "Costa Rica");
+			let states = await fetchStateByCountry(costarica[0].id);
+			setAllStates(states.data);
+		}
+		getCountriesForAmericas();
 	}, []);
 
 	async function getAllCountries(region) {
@@ -61,8 +70,8 @@ export default function AddUsers(props) {
 			warehouseExists: "existing",
 			warehouse: null,
 			warehouseTitle: "",
-			// region: "",
-			// country: "",
+			region: "Americas",
+			country: "Costa Rica",
 			// state: "",
 			// city: "",
 			// pincode: "",
@@ -74,7 +83,7 @@ export default function AddUsers(props) {
 	const watchPhone = watch("phoneNumber");
 	const warehouseExists = watch("warehouseExists");
 
-	console.log(watch())
+	console.log(watch());
 
 	useEffect(() => {
 		if (warehouseExists === "new") {
@@ -109,7 +118,7 @@ export default function AddUsers(props) {
 		<div className="addOrganization-container">
 			<form onSubmit={handleSubmit(addUser)}>
 				<div className="addorganization-header">
-					<p className="vl-subheading f-500 vl-blue">Add Users</p>
+					<p className="vl-subheading f-500 vl-blue">Add User</p>
 					<i className="fa-solid fa-xmark" onClick={handleClose}></i>
 				</div>
 				<div className="addorganization-body">
@@ -276,7 +285,7 @@ export default function AddUsers(props) {
 							<>
 								<p className="vl-body f-500 vl-black">Warehouse details</p>
 								<div className="input-two-column-space">
-								<Controller
+									<Controller
 										name="role"
 										control={control}
 										rules={{ required: true }}
@@ -316,7 +325,7 @@ export default function AddUsers(props) {
 										)}
 									/>
 								</div>
-								<div className="input-two-column-space">
+								{/* <div className="input-two-column-space">
 									<Controller
 										name="region"
 										control={control}
@@ -374,7 +383,26 @@ export default function AddUsers(props) {
 											/>
 										)}
 									/>
+								</div> */}
+								<div className="input-two-column">
+									<TextField
+										value="Americas"
+										fullWidth
+										variant="outlined"
+										label={"Region"}
+										disabled
+										style={{ textAlign: "left" }}
+									/>
+									<TextField
+										value="Costa Rica"
+										fullWidth
+										variant="outlined"
+										label={"Country"}
+										disabled
+										style={{ textAlign: "left" }}
+									/>
 								</div>
+
 								<div className="input-two-column-space">
 									<Controller
 										name="state"
