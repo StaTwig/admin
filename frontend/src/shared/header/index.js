@@ -7,7 +7,14 @@ import Location from "../../assets/icons/location_blue.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link, useHistory } from "react-router-dom";
 import "./Header.css";
-import { Avatar, Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { MenuOutlined } from "@mui/icons-material";
 import {
   getActiveWareHouses,
@@ -809,7 +816,7 @@ const Header = (props) => {
             </li>
 
             {/* Location */}
-            
+
             {/* <li className="navItems">
               <IconButton
                 onClick={handleClick}
@@ -907,8 +914,14 @@ const Header = (props) => {
                   className="header__profile_icon_btn"
                   onClick={() => setProfileClickBtn(!ProfileClickBtn)}
                 >
-                  <div className="green__active_sm"></div>
-                  <img src={image} alt="image" />
+                  {image ? (
+                    <>
+                      <div className="green__active_sm"></div>
+                      <img src={image} alt="image" />
+                    </>
+                  ) : (
+                    <CircularProgress className="progress__bar" />
+                  )}
                 </div>
                 <div
                   className={`header__profile_dropdown ${
@@ -922,9 +935,13 @@ const Header = (props) => {
                     </div>
                     <div className="header__inner_profile_content">
                       <h1 className="vl-name-header f-500 profile__black">
-                      {profile?.firstName}  {profile?.lastName && profile?.lastName}
+                        {profile?.firstName}{" "}
+                        {profile?.lastName && profile?.lastName}
                       </h1>
-                      <p className="vl-note f-400 vl-grey-sm"> {profile?.organisation?.split("/")[0]}</p>
+                      <p className="vl-note f-400 vl-grey-sm">
+                        {" "}
+                        {profile?.organisation?.split("/")[0]}
+                      </p>
                     </div>
                   </div>
                   <div className="header__profile_middle">
