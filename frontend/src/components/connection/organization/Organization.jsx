@@ -25,6 +25,17 @@ export default function Organization(props) {
       setAllRegions(regions.data);
     }
     getAllRegions();
+
+    async function getCountriesForAmericas() {
+      let countries = await fetchCountriesByRegion("Americas");
+      setAllCountries(countries.data);
+      const costarica = countries.data.filter(
+        (country) => country.name === "Costa Rica"
+      );
+      let states = await fetchStateByCountry(costarica[0].id);
+      setAllStates(states.data);
+    }
+    getCountriesForAmericas();
   }, []);
 
   async function getAllCountries(region) {
@@ -33,7 +44,6 @@ export default function Organization(props) {
   }
 
   async function getAllStates(country) {
-    console.log(country);
     let states = await fetchStateByCountry(country.id);
     setAllStates(states.data);
   }
@@ -50,8 +60,8 @@ export default function Organization(props) {
     formState: { errors },
     handleSubmit,
   } = useForm({
-    region: "",
-    country: "",
+    region: "Americas",
+    country: "Costa Rica",
     state: "",
     city: "",
     pincode: "",
@@ -76,63 +86,90 @@ export default function Organization(props) {
             </h2>
           </hgroup>
           <section className="vl-input-group form-auto-fill-section">
+            {/* <div className="input-two-column">
+							<Controller
+								name="region"
+								control={control}
+								rules={{ required: true }}
+								render={({ field }) => (
+									<Autocomplete
+										fullWidth
+										options={allRegions}
+										getOptionLabel={(option) => option || ""}
+										{...field}
+										onChange={(event, value) => {
+											field.onChange(value);
+											getAllCountries(value);
+											setValue("country", "");
+											setValue("state", "");
+											setValue("city", "");
+											setValue("address", "");
+										}}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label={t("region")}
+												error={Boolean(errors.region)}
+												helperText={errors.region && "Region is required!"}
+											/>
+										)}
+									/>
+								)}
+							/>
+							<Controller
+								name="country"
+								control={control}
+								rules={{ required: true }}
+								render={({ field }) => (
+									<Autocomplete
+										fullWidth
+										options={allCountries}
+										getOptionLabel={(option) => option.name || ""}
+										{...field}
+										onChange={(event, value) => {
+											field.onChange(value.name);
+											getAllStates(value);
+											setValue("state", "");
+											setValue("city", "");
+											setValue("address", "");
+										}}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												label={t("country")}
+												error={Boolean(errors.country)}
+												helperText={errors.country && "Country is required!"}
+											/>
+										)}
+									/>
+								)}
+							/>
+						</div> */}
             <div className="input-two-column">
-              <Controller
-                name="region"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Autocomplete
-                    fullWidth
-                    options={allRegions}
-                    getOptionLabel={(option) => option || ""}
-                    {...field}
-                    onChange={(event, value) => {
-                      field.onChange(value);
-                      getAllCountries(value);
-                      setValue("country", "");
-                      setValue("state", "");
-                      setValue("city", "");
-                      setValue("address", "");
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t("region")}
-                        error={Boolean(errors.region)}
-                        helperText={errors.region && "Region is required!"}
-                      />
-                    )}
-                  />
-                )}
+              <TextField
+                value="Americas"
+                fullWidth
+                variant="outlined"
+                label={t("region")}
+                error={Boolean(errors.firstName)}
+                helperText={errors.firstName && "First Name is required!"}
+                // disabled
+                InputProps={{
+                  readOnly: true,
+                }}
+                style={{ textAlign: "left" }}
               />
-              <Controller
-                name="country"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Autocomplete
-                    fullWidth
-                    options={allCountries}
-                    getOptionLabel={(option) => option.name || ""}
-                    {...field}
-                    onChange={(event, value) => {
-                      field.onChange(value.name);
-                      getAllStates(value);
-                      setValue("state", "");
-                      setValue("city", "");
-                      setValue("address", "");
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t("country")}
-                        error={Boolean(errors.country)}
-                        helperText={errors.country && "Country is required!"}
-                      />
-                    )}
-                  />
-                )}
+              <TextField
+                value="Costa Rica"
+                fullWidth
+                variant="outlined"
+                label={t("country")}
+                error={Boolean(errors.lastName)}
+                helperText={errors.lastName && "Last Name is required!"}
+                InputProps={{
+                  readOnly: true,
+                }}
+                style={{ textAlign: "left" }}
               />
             </div>
             <div className="input-two-column">
