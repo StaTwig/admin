@@ -249,7 +249,7 @@ export function config() {
       productListUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getProductListCounts`,
       getProductDetailsByWarehouseIdUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warehouseId=`,
       getRegionsUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
-      getCountryByRegionUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getCountryByRegionUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getWareHousesByCountryUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWarehouseDetailsByCountryUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
