@@ -258,7 +258,7 @@ exports.addUser = [
 				});
 				await warehouse.save();
 			} else {
-				(role = req.body.role), (warehouseId = req.body.warehouseId);
+				warehouseId = req.body.warehouseId;
 			}
 
 			if (email) email = email.toLowerCase().replace(" ", "");
