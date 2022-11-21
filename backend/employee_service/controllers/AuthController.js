@@ -443,7 +443,7 @@ exports.register = [
 				const secret = process.env.JWT_SECRET;
 				//Generated JWT token with Payload and secret.
 				// Is RBAC needed for one time login?
-				userData.permissions = await RbacModel.findOne({ role: user.role });
+				userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 				userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 				return apiResponse.successResponseWithData(req, res, "user_registered_success", userData);
@@ -619,7 +619,7 @@ exports.verifyOtp = [
 						};
 						const secret = process.env.JWT_SECRET;
 						//Generated JWT token with Payload and secret.
-						userData.permissions = await RbacModel.findOne({ role: user.role });
+						userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 						userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 						const bc_data = {
@@ -629,7 +629,9 @@ exports.verifyOtp = [
 							role: "",
 							email: req.body.emailId,
 						};
-						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
+						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => {
+							console.log(err);
+						});
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");
@@ -740,7 +742,7 @@ exports.verifyAuthentication = [
 					};
 					const secret = process.env.JWT_SECRET;
 					//Generated JWT token with Payload and secret.
-					userData.permissions = await RbacModel.findOne({ role: user.role });
+					userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 					userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 					const bc_data = {
@@ -860,7 +862,7 @@ exports.googleLogIn = [
 			};
 			const secret = process.env.JWT_SECRET;
 			//Generated JWT token with Payload and secret.
-			userData.permissions = await RbacModel.findOne({ role: user.role });
+			userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 			userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 			const bc_data = {
@@ -902,7 +904,7 @@ exports.userInfo = [
 					postalAddress,
 					createdAt,
 				} = user;
-				const permissions = await RbacModel.findOne({ role });
+				const permissions = await RbacModel.findOne({ orgId: "ORG100001", role: role });
 				const org = await OrganisationModel.findOne(
 					{ id: organisationId },
 					"name configuration_id type",
@@ -1246,11 +1248,11 @@ exports.addWarehouse = [
 					$set: {
 						...(skipOrgRegistration
 							? {
-								postalAddress: addr,
-								country: warehouseAddress.country,
-								region: warehouseAddress.region,
-								status: "NOTVERIFIED",
-							}
+									postalAddress: addr,
+									country: warehouseAddress.country,
+									region: warehouseAddress.region,
+									status: "NOTVERIFIED",
+							  }
 							: {}),
 					},
 					$push: {

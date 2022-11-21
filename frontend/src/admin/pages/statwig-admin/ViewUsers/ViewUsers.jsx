@@ -42,7 +42,7 @@ export default function ViewUsers(props) {
 			try {
 				const result = await getWarehouseAndUsersById(warehouseId);
 				if (result.status === 200) {
-          setWarehouseDetails(result.data.data);
+					setWarehouseDetails(result.data.data);
 				} else {
 					console.log("Warehouse details request failed!");
 				}
@@ -61,16 +61,16 @@ export default function ViewUsers(props) {
 					<div className="admin-location-container admin-section-space">
 						<div className="admin-locations-left">
 							<div className="previous-link-tabs">
-								<Link to="/statwig/view-locations" className="link-card vl-link">
+								<Link to={`/statwig/view-locations/${orgId}`} className="link-card vl-link">
 									<i className="fa-solid fa-arrow-left"></i>
 									<p className="vl-subheading f-500">Manage Users</p>
 								</Link>
 								<div className="breadcumb-links vl-flex-sm">
-									<Link to="/statwig/view-locations" className="vl-link">
+									<Link to={`/statwig/view-locations/${orgId}`} className="vl-link">
 										<p className="vl-small f-500 vl-grey-sm">Manage Locations</p>
 									</Link>
 									<p className="vl-note f-500 vl-grey-sm">/</p>
-									<Link to="/statwig/view-users" className="vl-link">
+									<Link to={`/statwig/view-locations/${orgId}`} className="vl-link">
 										<p className="vl-small f-500 vl-grey-sm">Users</p>
 									</Link>
 								</div>

@@ -16,7 +16,7 @@ export default function LocationCard({ layout, orgDetails, warehouseDetails }) {
 					<div className="admin-location-body">
 						<div className="admin-location-card-grid">
 							<i className="fa-solid fa-user vl-blue"></i>
-							<p className="vl-body f-400 vl-grey-sm">Manufacterer</p>
+							<p className="vl-body f-400 vl-grey-sm">{orgDetails?.type ? orgDetails.type : "N/A"}</p>
 						</div>
 					</div>
 				</div>
