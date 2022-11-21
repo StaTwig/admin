@@ -17,7 +17,7 @@ import { addNewOrganisation } from "../../actions/userActions";
 import Modal from "../../../shared/modal";
 import SuccessPopup from "../../shared/Popup/SuccessPopup";
 
-export default function AddOrganization({ handleClose }) {
+export default function AddOrganization({ handleClose, t }) {
   const dispatch = useDispatch();
 
   const [allRegions, setAllRegions] = useState([]);
@@ -148,12 +148,12 @@ export default function AddOrganization({ handleClose }) {
     <div className="addOrganization-container">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="addorganization-header">
-          <p className="vl-subheading f-500 vl-blue">Add Organization</p>
+          <p className="vl-subheading f-500 vl-blue">{t("add_org")}</p>
           <i className="fa-solid fa-xmark" onClick={handleClose}></i>
         </div>
         <div className="addorganization-body">
           <div className="input-set">
-            <p className="vl-body f-500 vl-black">Personal detail</p>
+            <p className="vl-body f-500 vl-black">{t("personal_detail")}</p>
             <div className="input-two-column-space">
               <Controller
                 name="firstName"
@@ -163,7 +163,7 @@ export default function AddOrganization({ handleClose }) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="First Name"
+                    label={t("first_name")}
                     {...field}
                     error={Boolean(errors.firstName)}
                     helperText={errors.firstName && "First Name is required!"}
@@ -178,7 +178,7 @@ export default function AddOrganization({ handleClose }) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Last Name"
+                    label={t("last_name")}
                     {...field}
                     error={Boolean(errors.lastName)}
                     helperText={errors.lastName && "Last Name is required!"}
@@ -195,7 +195,7 @@ export default function AddOrganization({ handleClose }) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Email Address"
+                    label={t("email_address")}
                     {...field}
                     error={Boolean(errors.email)}
                     helperText={
@@ -227,7 +227,7 @@ export default function AddOrganization({ handleClose }) {
             </div>
           </div>
           <div className="input-set">
-            <p className="vl-body f-500 vl-black">Organization details</p>
+            <p className="vl-body f-500 vl-black">{t("org_detail")}</p>
             <div className="input-two-column-space">
               <Controller
                 name="organizationType"
@@ -241,7 +241,7 @@ export default function AddOrganization({ handleClose }) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Organization Type"
+                        label={t("organization_type")}
                         error={Boolean(errors.organizationType)}
                         helperText={
                           errors.organizationType &&
@@ -264,7 +264,7 @@ export default function AddOrganization({ handleClose }) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Organisation Name"
+                    label={t("organization_name")}
                     {...field}
                     error={Boolean(errors.organizationName)}
                     helperText={
@@ -340,7 +340,7 @@ export default function AddOrganization({ handleClose }) {
                 value="Americas"
                 fullWidth
                 variant="outlined"
-                label={"Region"}
+                label={t("region")}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -350,7 +350,7 @@ export default function AddOrganization({ handleClose }) {
                 value="Costa Rica"
                 fullWidth
                 variant="outlined"
-                label={"Country"}
+                label={t("country")}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -378,7 +378,7 @@ export default function AddOrganization({ handleClose }) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="State"
+                        label={t("state")}
                         error={Boolean(errors.state)}
                         helperText={errors.state && "State is required!"}
                       />
@@ -403,7 +403,7 @@ export default function AddOrganization({ handleClose }) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="City"
+                        label={t("city")}
                         error={Boolean(errors.city)}
                         helperText={errors.city && "City is required!"}
                       />
@@ -422,7 +422,7 @@ export default function AddOrganization({ handleClose }) {
                     type="number"
                     fullWidth
                     variant="outlined"
-                    label="Pincode"
+                    label={t("pincode")}
                     {...field}
                     error={Boolean(errors.pincode)}
                     helperText={errors.pincode && "Pincode is required!"}
@@ -440,7 +440,7 @@ export default function AddOrganization({ handleClose }) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Address"
+                    label={t("address")}
                     multiline
                     {...field}
                     error={Boolean(errors.address)}
@@ -452,7 +452,9 @@ export default function AddOrganization({ handleClose }) {
           </div>
         </div>
         <div className="addorganization-actions">
-          <button className="vl-btn vl-btn-sm vl-btn-primary">Register</button>
+          <button className="vl-btn vl-btn-sm vl-btn-primary">
+            {t("register")}
+          </button>
         </div>
       </form>
       {openSuccessPopup && (
