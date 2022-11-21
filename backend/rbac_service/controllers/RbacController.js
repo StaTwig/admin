@@ -128,7 +128,7 @@ exports.updatePermissions = [
 					{ new: true, upsert: true },
 				);
 
-				const result = await axios.get(LEDGER_SOURCE + "/rbacmanagement/api/rbacCache");
+				const result = await axios.get(REDIS_HOST + "/rbacmanagement/api/rbacCache");
 				if (result.data == undefined) {
 					return apiResponse.errorResponse(res, result.data);
 				}

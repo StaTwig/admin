@@ -58,9 +58,21 @@ exports.fetchWarehousesByOrgId = [
 				return apiResponse.validationErrorWithData(res, "Org Id not provided", { orgId: orgId });
 			}
 
-			const warehouses = await Warehouse.find({
-				$and: [{ organisationId: req.query.orgId }, { status: "ACTIVE" }],
-			});
+			const warehouses = await Warehouse.aggregate([
+				{ $match: { $and: [{ organisationId: req.query.orgId }, { status: "ACTIVE" }] } },
+				{
+					$lookup: {
+						from: "employees",
+						let: { warehouseId: "$id" },
+						pipeline: [
+							{ $match: { $expr: { $in: ["$$warehouseId", "$warehouseId"] } } },
+							{ $count: "total" },
+						],
+						as: "employeeCount",
+					},
+				},
+				{ $unwind: "$employeeCount" },
+			])
 
 			return apiResponse.successResponseWithData(res, "Warehouses Addresses", warehouses);
 		} catch (err) {
