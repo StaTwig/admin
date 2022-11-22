@@ -6,6 +6,6 @@ COPY . /src
 
 RUN yarn install
 
-EXPOSE 3001
+EXPOSE 3019
 
 CMD yarn run start
