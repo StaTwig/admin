@@ -10,10 +10,12 @@ import LocationTable from "./LocationTable/LocationTable";
 import { getWareHouses } from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Locations(props) {
   const history = useHistory();
-  if(props.user.type !== "CENTRAL_AUTHORITY") {
+  const { t } = useTranslation();
+  if (props.user.type !== "CENTRAL_AUTHORITY") {
     history.push("/overview");
   }
 
@@ -21,8 +23,10 @@ export default function Locations(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const org = JSON.parse(params.org);
-  useEffect(() => {dispatch(getWareHouses(`orgId=${org.id}`))}, [dispatch, org.id])
-  const { addresses } = useSelector((state) => state.organisationReducer)
+  useEffect(() => {
+    dispatch(getWareHouses(`orgId=${org.id}`));
+  }, [dispatch, org.id]);
+  const { addresses } = useSelector((state) => state.organisationReducer);
   return (
     <>
       <StatwigHeader />
@@ -36,23 +40,25 @@ export default function Locations(props) {
                   className="link-card vl-link"
                 >
                   <i className="fa-solid fa-arrow-left"></i>
-                  <p className="vl-subheading f-500">Manage Locations</p>
+                  <p className="vl-subheading f-500">
+                    {t("manage")} {t("location")}
+                  </p>
                 </Link>
                 <div className="breadcumb-links vl-flex-sm">
                   <Link to="/statwig/manage-organization" className="vl-link">
                     <p className="vl-small f-500 vl-grey-sm">
-                      Manage Organization
+                      {t("manage")} {t("organisation")}
                     </p>
                   </Link>
                   <p className="vl-note f-500 vl-grey-sm">/</p>
                   <Link to="/statwig/view-locations" className="vl-link">
-                    <p className="vl-small f-500 vl-grey-sm">Locations</p>
+                    <p className="vl-small f-500 vl-grey-sm">{t("location")}</p>
                   </Link>
                 </div>
               </div>
               <div className="location-details-grid">
-                <LocationCard layout="location" org={org} />
-                <TileCard layout="location" />
+                <LocationCard t={t} layout="location" org={org} />
+                <TileCard t={t} layout="location" />
               </div>
 
               <div className="map-view-button" onClick={() => setMap(!Map)}>
@@ -62,14 +68,14 @@ export default function Locations(props) {
                       <span>
                         <i className="fa-solid fa-table"></i>
                       </span>
-                      View Table
+                      {t("view_table")}
                     </>
                   ) : (
                     <>
                       <span>
                         <i className="fa-solid fa-map-location-dot"></i>
                       </span>
-                      View Map
+                      {t("view_map")}
                     </>
                   )}
                 </button>
@@ -80,7 +86,7 @@ export default function Locations(props) {
                 <LocationMap />
               </div>
             ) : (
-              <LocationTable Locations={addresses} org={org} />
+              <LocationTable t={t} Locations={addresses} org={org} />
             )}
           </div>
         </div>

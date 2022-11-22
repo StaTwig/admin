@@ -565,6 +565,12 @@
   "import_file":"Import File",
   "supported_file":"Supported File",
   "upload_file":"Upload File",
-  "personal_detail":"Personal detail"
+  "personal_detail":"Personal detail",
+  "total":"Total",
+  "active":"Active",
+  "inactive":"In-Active",
+  "view_map":"View Map",
+  "view_table":"View Table",
+  "users":"Users"
 
 }

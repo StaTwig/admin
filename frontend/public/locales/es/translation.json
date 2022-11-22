@@ -588,5 +588,11 @@
   "import_file":"Importar archivo",
   "supported_file":"Archivo compatible",
   "upload_file":"Subir archivo",
-  "personal_detail":"Detalle personal"
+  "personal_detail":"Detalle personal",
+  "total":"Total",
+  "active":"Activo",
+  "inactive":"In-Activo",
+  "view_map":"Ver el mapa",
+  "view_table":"Ver tabla",
+  "users":"Usuarios"
 }

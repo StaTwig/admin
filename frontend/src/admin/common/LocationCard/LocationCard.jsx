@@ -4,23 +4,21 @@ import "./LocationCard.css";
 import { productDetailsByShipmentId } from "../../../actions/shipmentActions";
 import Product from "../../../shared/dashbar/product";
 
-export default function LocationCard({ layout, org, product }) {
+export default function LocationCard({ layout, org, product, t }) {
   return (
     <>
       {layout === "location" && (
         <div className="admin-location-card-container">
           <div className="admin-location-header">
             <Avatar className="location-avatar">{org.name[0]}</Avatar>
-            <h1 className="vl-subheading f-700">
-              {org.name}
-            </h1>
+            <h1 className="vl-subheading f-700">{org.name}</h1>
           </div>
-          <div className="admin-location-body">
+          {/* <div className="admin-location-body">
             <div className="admin-location-card-grid">
               <i className="fa-solid fa-user vl-blue"></i>
               <p className="vl-body f-400 vl-grey-sm">Manufacterer</p>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
 
@@ -28,9 +26,7 @@ export default function LocationCard({ layout, org, product }) {
         <div className="admin-location-card-container">
           <div className="admin-location-header">
             <Avatar className="location-avatar">R</Avatar>
-            <h1 className="vl-subheading f-700">
-              {org.name}
-            </h1>
+            <h1 className="vl-subheading f-700">{org.name}</h1>
           </div>
           <div className="admin-location-body">
             <div className="admin-location-card-grid">
@@ -45,7 +41,9 @@ export default function LocationCard({ layout, org, product }) {
             </div>
             <div className="admin-location-card-grid">
               <i className="fa-solid fa-city vl-blue"></i>
-              <p className="vl-body f-400 vl-grey-sm">{product.warehouseAddress.city}</p>
+              <p className="vl-body f-400 vl-grey-sm">
+                {product.warehouseAddress.city}
+              </p>
             </div>
           </div>
         </div>
