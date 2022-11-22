@@ -18,6 +18,7 @@ export const LOCAL_SERVER_URL_ALERTS = "http://localhost:3004";
 export const LOCAL_SERVER_URL_LASTMILE = "http://localhost:3016";
 export const LOCAL_SERVER_URL_AFFILIATION = "http://localhost:3018"
 export const LOCAL_SERVER_URL_ADDRESS = "http://localhost:3019"
+export const LOCAL_SERVER_URL_CONFIGURATION = "http://localhost:3020"
 export function config() {
   const confs = {
     local: {
@@ -219,11 +220,10 @@ export function config() {
       updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
       modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
-      getOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=CONF000`,
-
-      getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=`,
-      updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
-      addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
+      getOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/getOrganizationsByType?id=CONF000`,
+      getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/addNewOrgType`,
       imgDomainUrl: `${SERVER_URL}`,
       getCountryDataUrl: `${SERVER_URL}/api/address_service/getCountries`,
       getRegionDataUrl: `${SERVER_URL}/api/address_service/getRegions`,
