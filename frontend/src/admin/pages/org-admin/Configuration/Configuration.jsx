@@ -41,15 +41,15 @@ export default function Configuration(props) {
 		const allPermissions = await dispatch(getPermissions());
 		setPermissions(permissions);
 		let updates = {
-			admin: permissions[0].admin,
-			inventory: permissions[0].inventory,
-			iot: permissions[0].iot,
-			network: permissions[0].network,
-			order: permissions[0].order,
-			overview: permissions[0].overview,
-			search: permissions[0].search,
-			shipment: permissions[0].shipment,
-			track: permissions[0].track,
+			admin: permissions[0]?.admin,
+			inventory: permissions[0]?.inventory,
+			iot: permissions[0]?.iot,
+			network: permissions[0]?.network,
+			order: permissions[0]?.order,
+			overview: permissions[0]?.overview,
+			search: permissions[0]?.search,
+			shipment: permissions[0]?.shipment,
+			track: permissions[0]?.track,
 		};
 		setUpdatedPermissions(updates);
 	}
