@@ -66,7 +66,7 @@ const ProductCategory = (props) => {
     <div className="productcategory">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">{t("product_category")}</h1>
-        <div
+        {/* <div
           className="d-flex mr-5"
           style={{ position: "relative", left: "-30px" }}
         >
@@ -84,7 +84,7 @@ const ProductCategory = (props) => {
               </span>
             </button>
           </Link>
-        </div>
+        </div> */}
       </div>
       <div className="product-categories mb-4">
         {categoryArray.map((cat, it) => {
@@ -137,13 +137,13 @@ const ProductCategory = (props) => {
             </div>
           );
         })}
-        <div className="panel bg-grey align-items-center justify-content-center">
+        {/* <div className="panel bg-grey align-items-center justify-content-center">
           <div className="flex flex-column">
             <div className=" pt-2 pb-2 d-flex row text-light">
               <Link to="/addNewCategory">+ {t("add_new_category")}</Link>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
