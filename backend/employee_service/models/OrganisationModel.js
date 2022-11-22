@@ -7,6 +7,9 @@ const OrganisationSchema = new mongoose.Schema(
       type: String,
       default: "JNIBF, Gachibowli, Hyderabad, Telanagana, India",
     },
+    parentOrgId: {
+      type: String,
+    },
     region: {
       type: Object,
       default: {

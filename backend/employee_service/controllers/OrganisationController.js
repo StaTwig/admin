@@ -20,7 +20,12 @@ async function createOrg({req, firstName, lastName, emailId, phoneNumber, organi
   let organisationExists = await OrganisationModel.findOne({
     name: new RegExp("^" + organisationName + "$", "i"),
   });
-
+  const orgId = req.user.organisationId;
+  const creatorOrg = await OrganisationModel.findOne({id: orgId});
+  let parentOrg = null;
+  if(creatorOrg.type === "DISTRIBUTORS"){
+	parentOrg = orgId;
+  }
   if (organisationExists) {
     return "Organisation name exists!";
   }
@@ -64,7 +69,7 @@ async function createOrg({req, firstName, lastName, emailId, phoneNumber, organi
   );
   const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
 
-  const organisation = new OrganisationModel({
+  let orgObject = {
     primaryContactId: employeeId,
     name: organisationName,
     id: organisationId,
@@ -78,7 +83,11 @@ async function createOrg({req, firstName, lastName, emailId, phoneNumber, organi
     country: country,
     configuration_id: "CONF000",
     authority: req.body?.authority,
-  });
+  }
+  if(parentOrg){
+	orgObject.parentOrgId = parentOrg;
+  }
+  const organisation = new OrganisationModel(orgObject);
   await organisation.save();
 
   const invCounter = await CounterModel.findOneAndUpdate(
@@ -484,6 +493,12 @@ exports.addNewOrganisation = [
 					organisationName,
 				);
 			}
+			const orgId = req.user.organisationId;
+			const creatorOrg = await OrganisationModel.findOne({id: orgId});
+			let parentOrg = null;
+			if(creatorOrg.type === "DISTRIBUTORS"){
+			  parentOrg = orgId;
+			}
 
 			const country = req.body?.address?.country ? req.body.address?.country : "India";
 			const region = req.body?.address?.region ? req.body.address?.region : "Asia";
@@ -525,7 +540,7 @@ exports.addNewOrganisation = [
 			);
 			const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
 
-			const organisation = new OrganisationModel({
+			let orgObject = {
 				primaryContactId: employeeId,
 				name: organisationName,
 				id: organisationId,
@@ -539,7 +554,11 @@ exports.addNewOrganisation = [
 				country: country,
 				configuration_id: "CONF000",
 				authority: req.body?.authority,
-			});
+			};
+			if (parentOrg) {
+				orgObject.parentOrgId = parentOrg;
+			}
+			const organisation = new OrganisationModel(orgObject);
 			await organisation.save();
 
 			const invCounter = await CounterModel.findOneAndUpdate(
