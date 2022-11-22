@@ -15,14 +15,16 @@ import {
   getWareHouses,
 } from "../../../actions/organisationActions";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function OrgDashboard(props) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const history = useHistory();
 
-  if (props.user.role !== "admin") {
-    history.push("/overview");
-  }
+  // if (props.user.role !== "admin") {
+  //   history.push("/overview");
+  // }
 
   const user = useSelector((state) => state.user);
   const permissions = useSelector(
@@ -66,10 +68,11 @@ export default function OrgDashboard(props) {
         <div className="admin-container">
           <div className="admin-dashboard-container admin-section-space">
             <div className="dashboard-left-space">
-              <Analytics userAnalytics={userAnalytics} />
+              <Analytics t={t} userAnalytics={userAnalytics} />
             </div>
             <div className="dashboard-right-space">
               <Pendings
+                t={t}
                 permissions={permissions}
                 addresses={addresses}
                 {...props}

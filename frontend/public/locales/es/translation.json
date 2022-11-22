@@ -578,6 +578,7 @@
   "reject":"Rechazar",
   "org_address":"Dirección de la organización",
   "to_no_of_org":"Número total de organizaciones",
+  "to_no_of_user":"Número total de Usuarios",
   "active_org":"Organización activa",
   "inactive_org":"En Organización Activa",
   "total_user":"Total de usuarios",
@@ -585,6 +586,8 @@
   "created_on":"Creado en",
   "add_org":"Agregar organización",
   "import_org":"Organización de importación",
+  "add_users":"Agregar Usuarios",
+  "import_users":"Usuarios de importación",
   "import_file":"Importar archivo",
   "supported_file":"Archivo compatible",
   "upload_file":"Subir archivo",
@@ -594,5 +597,18 @@
   "inactive":"In-Activo",
   "view_map":"Ver el mapa",
   "view_table":"Ver tabla",
-  "users":"Usuarios"
+  "users":"Usuarios",
+  "assign_header":"Asignar Rol y Almacén",
+  "user_details":"Detalles de usuario",
+  "assign_here":"Asigne el rol aquí",
+  "approve_user":"Aprobar usuario",
+  "assign_role":"Asignar rol",
+  "assign_warehouse":"Asignar Almacén",
+  "role":"Role",
+  "warehouse_details":"Detalles del almacén",
+  "warehouse_title":"Título del almacén",
+  "loc_detail":"Detalles de ubicación",
+  "existing":"Existente",
+  "warehouse":"Depósito"
+
 }

@@ -15,7 +15,7 @@ import {
 } from "../../actions/organisationActions";
 
 export default function AddUsers(props) {
-  const { addresses, onSuccess, defaultRoles, handleClose } = props;
+  const { addresses, onSuccess, defaultRoles, handleClose, t } = props;
 
   const [allRegions, setAllRegions] = useState([]);
   const [allCountries, setAllCountries] = useState([]);
@@ -120,12 +120,12 @@ export default function AddUsers(props) {
     <div className="addOrganization-container">
       <form onSubmit={handleSubmit(addUser)}>
         <div className="addorganization-header">
-          <p className="vl-subheading f-500 vl-blue">Add User</p>
+          <p className="vl-subheading f-500 vl-blue"> {t("add_users")}</p>
           <i className="fa-solid fa-xmark" onClick={handleClose}></i>
         </div>
         <div className="addorganization-body">
           <div className="input-set">
-            <p className="vl-body f-500 vl-black">Personal detail</p>
+            <p className="vl-body f-500 vl-black">{t("personal_detail")}</p>
             <div className="input-two-column-space">
               <Controller
                 name="firstName"
@@ -135,7 +135,7 @@ export default function AddUsers(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="First Name"
+                    label={t("first_name")}
                     {...field}
                     error={Boolean(errors.firstName)}
                     helperText={errors.firstName && "First Name is required!"}
@@ -150,7 +150,7 @@ export default function AddUsers(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Last Name"
+                    label={t("last_name")}
                     {...field}
                     error={Boolean(errors.lastName)}
                     helperText={errors.lastName && "Last Name is required!"}
@@ -167,7 +167,7 @@ export default function AddUsers(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Email Address"
+                    label={t("email_address")}
                     {...field}
                     inputProps={{ style: { textAlign: "left" } }}
                     error={Boolean(errors.emailId)}
@@ -220,7 +220,7 @@ export default function AddUsers(props) {
                           inputProps={{ "aria-label": "A" }}
                         />
                         <p className="vl-body f-400 vl-grey-md vl-line-sm">
-                          Existing Warehouse
+                          {t("existing")} {t("warehouse")}
                         </p>
                       </div>
                       <div className="vl-radio-btn vl-align-center">
@@ -229,7 +229,7 @@ export default function AddUsers(props) {
                           inputProps={{ "aria-label": "B" }}
                         />
                         <p className="vl-body f-400 vl-grey-md vl-line-sm">
-                          New Warehouse
+                          {t("new")} {t("warehouse")}
                         </p>
                       </div>
                     </RadioGroup>
@@ -242,7 +242,7 @@ export default function AddUsers(props) {
           <div className="input-set">
             {warehouseExists === "existing" ? (
               <>
-                <p className="vl-body f-500 vl-black">Location details</p>
+                <p className="vl-body f-500 vl-black">{t("loc_detail")}</p>
                 <div className="input-two-column-space">
                   <Controller
                     name="role"
@@ -256,7 +256,7 @@ export default function AddUsers(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Assign Role"
+                            label={t("assign_role")}
                             error={Boolean(errors.role)}
                             helperText={errors.role && "Role is required!"}
                           />
@@ -283,7 +283,7 @@ export default function AddUsers(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Assign Warehouse"
+                            label={t("assign_warehouse")}
                             error={Boolean(errors.warehouse)}
                             helperText={
                               errors.warehouse && "Warehouse is required!"
@@ -301,7 +301,9 @@ export default function AddUsers(props) {
               </>
             ) : (
               <>
-                <p className="vl-body f-500 vl-black">Warehouse details</p>
+                <p className="vl-body f-500 vl-black">
+                  {t("warehouse_details")}
+                </p>
                 <div className="input-two-column-space">
                   <Controller
                     name="role"
@@ -315,7 +317,7 @@ export default function AddUsers(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Assign Role"
+                            label={t("assign_role")}
                             error={Boolean(errors.role)}
                             helperText={errors.role && "Role is required!"}
                           />
@@ -335,7 +337,7 @@ export default function AddUsers(props) {
                       <TextField
                         fullWidth
                         variant="outlined"
-                        label="Warehouse Title"
+                        label={t("warehouse_title")}
                         {...field}
                         error={Boolean(errors.warehouseTitle)}
                         helperText={
@@ -410,7 +412,7 @@ export default function AddUsers(props) {
                     value="Americas"
                     fullWidth
                     variant="outlined"
-                    label={"Region"}
+                    label={t("region")}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -420,7 +422,7 @@ export default function AddUsers(props) {
                     value="Costa Rica"
                     fullWidth
                     variant="outlined"
-                    label={"Country"}
+                    label={t("country")}
                     InputProps={{
                       readOnly: true,
                     }}
@@ -448,7 +450,7 @@ export default function AddUsers(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="State"
+                            label={t("state")}
                             error={Boolean(errors.state)}
                             helperText={errors.state && "State is required!"}
                           />
@@ -473,7 +475,7 @@ export default function AddUsers(props) {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="City"
+                            label={t("city")}
                             error={Boolean(errors.city)}
                             helperText={errors.city && "City is required!"}
                           />
@@ -492,7 +494,7 @@ export default function AddUsers(props) {
                         type="number"
                         fullWidth
                         variant="outlined"
-                        label="Pincode"
+                        label={t("pincode")}
                         {...field}
                         error={Boolean(errors.pincode)}
                         helperText={errors.pincode && "Pincode is required!"}
@@ -507,7 +509,7 @@ export default function AddUsers(props) {
                       <TextField
                         fullWidth
                         variant="outlined"
-                        label="Address"
+                        label={t("address")}
                         multiline
                         {...field}
                         error={Boolean(errors.address)}
@@ -521,7 +523,9 @@ export default function AddUsers(props) {
           </div>
         </div>
         <div className="addorganization-actions">
-          <button className="vl-btn vl-btn-sm vl-btn-primary">Register</button>
+          <button className="vl-btn vl-btn-sm vl-btn-primary">
+            {t("register")}
+          </button>
         </div>
       </form>
     </div>
