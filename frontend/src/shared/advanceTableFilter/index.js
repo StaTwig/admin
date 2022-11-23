@@ -394,7 +394,7 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
-            // onBlur={handleInventoryStatusClose}
+          // onBlur={handleInventoryStatusClose}
           >
             <div className='d-flex flex-column align-items-center'>
               <StyledMenuItem>
@@ -579,11 +579,11 @@ const AdvanceTableFilter = (props) => {
                     getOptionLabel={(options) =>
                       options.title
                         ? options?.title +
-                          " (" +
-                          options?.warehouseAddress?.city +
-                          " ," +
-                          options?.warehouseAddress?.country +
-                          ")"
+                        " (" +
+                        options?.warehouseAddress?.city +
+                        " ," +
+                        options?.warehouseAddress?.country +
+                        ")"
                         : " (" + options.id + " )"
                     }
                     onChange={(event, newValue) => {
@@ -820,7 +820,7 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(inventoryStatusAnchorEl)}
             onClose={handleInventoryStatusClose}
-            //
+          //
           >
             <div
               className='d-flex flex-column align-items-center'
@@ -1197,7 +1197,7 @@ const AdvanceTableFilter = (props) => {
                 keepMounted
                 open={Boolean(inventoryProductCategoryAnchorEl)}
                 onClose={handleInventoryProductCategoryClose}
-                //
+              //
               >
                 <div
                   className='d-flex flex-column align-items-center'
@@ -1373,7 +1373,7 @@ const AdvanceTableFilter = (props) => {
     props.setFromToFilterOnSelect(selectedVal);
     handlePoFromClose();
   };
-  
+
   const renderColumn1 = (columnData) => {
     if (columnData === "Shipment ID") {
       return (
@@ -1456,7 +1456,7 @@ const AdvanceTableFilter = (props) => {
             keepMounted
             open={Boolean(poToAnchorEl)}
             onClose={handlePoToClose}
-            //
+          //
           >
             <div
               className='d-flex flex-column align-items-center'
@@ -1783,7 +1783,7 @@ const AdvanceTableFilter = (props) => {
                   keepMounted
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
-                  //
+                //
                 >
                   <div
                     className='d-flex flex-column align-items-center'

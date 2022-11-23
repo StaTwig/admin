@@ -29,6 +29,7 @@ const NewOrder = (props) => {
 	const editPo = useSelector((state) => {
 		return state?.reviewPo;
 	});
+	const UserOrgId = useSelector((state) => state.user.organisationId)
 
 	const customStyles = {
 		option: (provided, state) => ({
@@ -48,7 +49,7 @@ const NewOrder = (props) => {
 		},
 	};
 
-	const closeModal = () => {};
+	const closeModal = () => { };
 
 	const [allOrganisations, setAllOrganisations] = useState([]);
 	const [receiverWarehouses, setReceiverWarehouses] = useState([]);
@@ -61,15 +62,15 @@ const NewOrder = (props) => {
 		editPo !== null
 			? editPo.products
 			: [
-					{
-						productId: "",
-						id: "",
-						productQuantity: "",
-						name: "",
-						manufacturer: " ",
-						type: "",
-					},
-			  ],
+				{
+					productId: "",
+					id: "",
+					productQuantity: "",
+					name: "",
+					manufacturer: " ",
+					type: "",
+				},
+			],
 	);
 	const dispatch = useDispatch();
 	// const [senderOrgId, setSenderOrgId] = useState(
@@ -92,15 +93,11 @@ const NewOrder = (props) => {
 	const [shipmentError, setOrderError] = useState("");
 	const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
 	const [orgTypes, setOrgTypes] = useState([]);
-	const [country, setCountry] = useState("");
 	const [orgType, setOrgType] = useState("");
-  const [orgDetails, setOrgDetails] = useState([]);
-  const [blinkRow, setBlinkRow] = useState();
+	const [blinkRow, setBlinkRow] = useState();
 
 	useEffect(() => {
 		async function fetchData() {
-			// onCountryChange('Costa Rica');
-
 			const orgs = await getAllOrganisations();
 			setAllOrganisations(
 				orgs.data.map((item) => {
@@ -108,6 +105,7 @@ const NewOrder = (props) => {
 						value: item.id,
 						label: item.name,
 						type: item.type,
+						parentOrg: item.parentOrgId
 					};
 				}),
 			);
@@ -115,11 +113,11 @@ const NewOrder = (props) => {
 			setOrgTypes(
 				orgType.data.length > 0
 					? orgType.data[0].organisationTypes.map((item) => {
-							return {
-								value: item.id,
-								label: item.name,
-							};
-					  })
+						return {
+							value: item.id,
+							label: item.name,
+						};
+					})
 					: [],
 			);
 			// if (orgSplit?.length > 0) {
@@ -185,18 +183,14 @@ const NewOrder = (props) => {
 
 	const onOrgTypeChange = async (value) => {
 		try {
-			console.log("Values from Organisation Type change:", value);
 			const region = await getRegions(value);
-			console.log("Regions:", region);
 			const rr = region.data.map((v) => {
 				return {
 					value: v,
 					label: v,
 				};
 			});
-			console.log("rr");
 			setReceiverWarehousesRegion(rr);
-			// onCountryChange(value, 'Costa Rica');
 		} catch (err) {
 			setErrorMessage(err);
 		}
@@ -220,10 +214,7 @@ const NewOrder = (props) => {
 
 	const onCountryChange = async (type, idd) => {
 		try {
-			console.log("from function:", orgType);
-			console.log("id from function:", idd);
 			const org = await getOrganizations(type, idd);
-			setOrgDetails(org.data);
 			const oo = org.data.map((v) => {
 				return {
 					value: v.id,
@@ -268,13 +259,13 @@ const NewOrder = (props) => {
 	};
 
 	const onProductChange = (index, item, setFieldValue) => {
-    // Check whether product already added
-    let temp = [...addProducts];
-    let duplicateIndex = temp.findIndex((product) => product._id === item._id);
-    if(duplicateIndex !== -1) {
-      setBlinkRow(duplicateIndex);
-      return;
-    }
+		// Check whether product already added
+		let temp = [...addProducts];
+		let duplicateIndex = temp.findIndex((product) => product._id === item._id);
+		if (duplicateIndex !== -1) {
+			setBlinkRow(duplicateIndex);
+			return;
+		}
 
 		addProducts.splice(index, 1, item);
 		let newArr = [...addProducts];
@@ -324,10 +315,8 @@ const NewOrder = (props) => {
 	};
 
 	const onQuantityChange = (v, i, setFieldValue) => {
-		console.log("index - ", i);
 		let newArr = [...addProducts];
 		newArr[i].productQuantity = parseInt(v);
-		console.log(JSON.stringify(newArr));
 		setFieldValue(
 			"products",
 			newArr.map((row) => ({
@@ -404,7 +393,6 @@ const NewOrder = (props) => {
 			setFailedPop(true);
 		}
 	};
-
 	return (
 		<div className="NewOrder m-3">
 			<div className="d-flex justify-content-between mb-3">
@@ -419,12 +407,12 @@ const NewOrder = (props) => {
 					rtype: editPo !== null ? editPo.rtype : "",
 					rtypeName: editPo !== null ? editPo.rtypeName : "",
 					fromOrgId: editPo !== null ? editPo.fromOrgId : "",
-					toOrgCountry: editPo !== null ? editPo.toOrgCountry : "",
-					toOrgRegion: editPo !== null ? editPo.toOrgRegion : "",
+					toOrgCountry: editPo !== null ? editPo.toOrgCountry : "Costa Rica",
+					toOrgRegion: editPo !== null ? editPo.toOrgRegion : "Americas",
 					toOrg: editPo !== null ? editPo.toOrg : "",
 					toOrgName: editPo !== null ? editPo.toOrgName : "",
 					toOrgLoc: editPo !== null ? editPo.toOrgLoc : "",
-					toOrgLocRegion: editPo !== null ? editPo.toOrgLocRegion : "",
+					toOrgLocRegion: editPo !== null ? editPo.toOrgLocRegion : "Americas",
 					toOrgLocName: editPo !== null ? editPo.toOrgLocName : "",
 					toOrgLocCountry: editPo !== null ? editPo.toOrgLocCountry : "",
 					products: editPo !== null ? editPo.products : [],
@@ -468,14 +456,11 @@ const NewOrder = (props) => {
 					values,
 					errors,
 					touched,
-					handleChange,
 					handleBlur,
 					handleSubmit,
-					isSubmitting,
 					setFieldValue,
-					dirty,
 				}) => (
-					<form onSubmit={handleSubmit} className="">
+					<form onSubmit={handleSubmit}>
 						<div className="row mb-3">
 							<label htmlFor="productDetails" className="headsup1">
 								{t("product_details")}
@@ -487,9 +472,9 @@ const NewOrder = (props) => {
 								handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
 								onRemoveRow={(index) => onRemoveProduct(index, setFieldValue)}
 								handleProductChange={(index, item) => onProductChange(index, item, setFieldValue)}
-                handleCategoryChange={(index, item) => onCategoryChange(index, item, setFieldValue)}
-                blinkRow={blinkRow}
-                setBlinkRow={setBlinkRow}
+								handleCategoryChange={(index, item) => onCategoryChange(index, item, setFieldValue)}
+								blinkRow={blinkRow}
+								setBlinkRow={setBlinkRow}
 								t={t}
 							/>
 							<div className="d-flex justify-content-between">
@@ -581,9 +566,8 @@ const NewOrder = (props) => {
 												{t("organisation_name")}*
 											</label>
 											<div
-												className={`line ${
-													errors.fromOrg && touched.fromOrg ? "border-danger" : ""
-												}`}
+												className={`line ${errors.fromOrg && touched.fromOrg ? "border-danger" : ""
+													}`}
 											>
 												{/* <DropdownButton
                           isText={true}
@@ -609,9 +593,9 @@ const NewOrder = (props) => {
 														values.fromOrg === ""
 															? t("select_organisation_name")
 															: {
-																	value: values.fromOrg,
-																	label: values.fromOrgId,
-															  }
+																value: values.fromOrg,
+																label: values.fromOrgId,
+															}
 													}
 													defaultInputValue={values.fromOrgId}
 													onBlur={handleBlur}
@@ -620,7 +604,7 @@ const NewOrder = (props) => {
 														setFieldValue("fromOrgId", v.label);
 													}}
 													isDisabled={values.typeName === ""}
-													options={allOrganisations.filter((a) => a.type === values.typeName)}
+													options={allOrganisations.filter((a) => a.type === values.typeName && a.parentOrg === UserOrgId)}
 													noOptionsMessage={() => t("no_options")}
 												/>
 												{/* {errors.fromOrg && touched.fromOrg && (
@@ -668,21 +652,19 @@ const NewOrder = (props) => {
 													}
 													defaultInputValue={values.rtypeName}
 													onBlur={handleBlur}
-													onChange={(v) => {
-														console.log(v);
+													onChange={async (v) => {
+														setOrgType(v.label);
+														onOrgTypeChange(v.label);
+														onCountryChange(v.label, "Costa Rica");
 														setFieldValue("rtype", v.value);
 														setFieldValue("rtypeName", v.label);
 														setFieldValue("toOrg", "");
 														setFieldValue("toOrgName", "");
-														setFieldValue("toOrgCountry", "");
-														setFieldValue("toOrgRegion", "");
+														setFieldValue("toOrgCountry", "Costa Rica");
+														setFieldValue("toOrgRegion", "Americas");
 														setFieldValue("toOrgLoc", "");
 														setFieldValue("toOrgLocRegion", "");
 														setFieldValue("toOrgLocCountry", "");
-														setOrgType("");
-														setOrgType(v.label);
-														onOrgTypeChange(v.label);
-														console.log("OrgType from dropdown:", v.label);
 													}}
 													options={orgTypes}
 													noOptionsMessage={() => t("no_options")}
@@ -698,9 +680,8 @@ const NewOrder = (props) => {
 												{t("region")}*
 											</label>
 											<div
-												className={`line ${
-													errors.toOrgRegion && touched.toOrgRegion ? "border-danger" : ""
-												}`}
+												className={`line ${errors.toOrgRegion && touched.toOrgRegion ? "border-danger" : ""
+													}`}
 											>
 												<Select
 													labelId="demo-simple-select-label"
@@ -709,12 +690,12 @@ const NewOrder = (props) => {
 													placeholder={
 														<div className="select-placeholder-text">{t("Select_Region")}</div>
 													}
-													defaultInputValue={values.toOrgRegion}
+													defaultValue={{ value: 'Americas', label: 'Americas' }}
+													// defaultInputValue={values.toOrgRegion}
 													onBlur={handleBlur}
 													onChange={(v) => {
-														console.log(v);
 														setFieldValue("toOrgName", "");
-														setFieldValue("toOrgCountry", "");
+														// setFieldValue("toOrgCountry", "");
 														setFieldValue("toOrgRegion", v.label);
 														setFieldValue("toOrgLoc", "");
 														// setFieldValue("toOrgLocRegion", v.label);
@@ -723,9 +704,8 @@ const NewOrder = (props) => {
 														// setOrgType(v.label);
 														// onOrgTypeChange(v.label);
 														onRegionChange(v.label);
-														// console.log("OrgType from dropdown:", v.label);
 													}}
-													isDisabled={values.rtypeName === ""}
+													isDisabled={true}
 													options={receiverWarehousesRegion}
 													noOptionsMessage={() => t("no_options")}
 												/>
@@ -740,9 +720,8 @@ const NewOrder = (props) => {
 												{t("country")}*
 											</label>
 											<div
-												className={`line ${
-													errors.toOrgCountry && touched.toOrgCountry ? "border-danger" : ""
-												}`}
+												className={`line ${errors.toOrgCountry && touched.toOrgCountry ? "border-danger" : ""
+													}`}
 											>
 												<Select
 													labelId="demo-simple-select-label"
@@ -751,10 +730,10 @@ const NewOrder = (props) => {
 													placeholder={
 														<div className="select-placeholder-text">{t("Select_Country")}</div>
 													}
-													defaultInputValue={values.toOrgCountry}
+													// defaultInputValue={values.toOrgCountry}
+													defaultValue={{ value: 'Costa Rica', label: 'Costa Rica' }}
 													onBlur={handleBlur}
 													onChange={(v) => {
-														console.log({ country: v });
 														setFieldValue("toOrgName", "");
 														setFieldValue("toOrgCountry", v.label);
 														// setFieldValue("toOrgRegion", v.label);
@@ -764,11 +743,9 @@ const NewOrder = (props) => {
 														// setOrgType("");
 														// setOrgType(v.label);
 														// onOrgTypeChange(v.label);
-														setCountry(v.label);
 														onCountryChange(orgType, v.label);
-														// console.log("OrgType from dropdown:", v.label);
 													}}
-													isDisabled={values.toOrgRegion === ""}
+													isDisabled={true}
 													options={receiverWarehousesCountry}
 													noOptionsMessage={() => t("no_options")}
 												/>
@@ -820,7 +797,6 @@ const NewOrder = (props) => {
 														//   const selOrg = orgDetails.filter((value) => {
 														//     return value.name==v.label;
 														// });
-														console.log("Organisation Name:", v);
 														setFieldValue("toOrg", v.value);
 														setFieldValue("toOrgName", v.label);
 														onOrgChange(v.value);
@@ -854,9 +830,8 @@ const NewOrder = (props) => {
 												{t("delivery_location")}*
 											</label>
 											<div
-												className={`line ${
-													errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : ""
-												}`}
+												className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : ""
+													}`}
 											>
 												{/* <DropdownButton
                           isText={true}
@@ -893,9 +868,9 @@ const NewOrder = (props) => {
 														values.toOrgLoc === ""
 															? t("select_delivery_location")
 															: {
-																	value: values.toOrgLoc,
-																	label: values.toOrgLocName,
-															  }
+																value: values.toOrgLoc,
+																label: values.toOrgLocName,
+															}
 													}
 													defaultInputValue={values.toOrgLocName}
 													onBlur={handleBlur}

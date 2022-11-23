@@ -246,133 +246,133 @@ const NewShipment = (props) => {
   };
 
   const onAssign = async (values) => {
-		let error = false;
-		// dates.forEach(date => { if (!error) dateValidation(date) });
-		const {
-			toOrg,
-			airWayBillNo,
-			reset,
-			labelCode,
-			shipmentDate,
-			estimateDeliveryDate,
-			toOrgLoc,
-			fromOrgLoc,
-			shipmentID,
-			products,
-		} = values;
-		let errorMsg = "";
-		products.forEach((p) => {
-			if (p.productQuantity < 1) {
-				error = true;
-				errorMsg = `${t("product")}${t("quantity")}`;
-			} else if (!p.batchNumber) {
-				error = true;
-				errorMsg = t("batch_number");
-			}
-		});
-		if (!error) {
-			const data = {
-				airWayBillNo,
-				poId: reset && reset != "Select Order ID" ? reset : null,
-				label: {
-					labelId: labelCode,
-					labelType: "QR_2DBAR",
-				},
-				taggedShipments: shipmentID,
-				externalShipmentId: "",
-				supplier: {
-					id: user.organisationId,
-					locationId: fromOrgLoc,
-				},
-				receiver: {
-					id: toOrg.split("/")[0],
-					locationId: toOrgLoc.split("/")[0],
-				},
-				shippingDate: new Date(
-					shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000,
-				).toISOString(),
-				expectedDeliveryDate:
-					estimateDeliveryDate !== ""
-						? new Date(
-								estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
-						  ).toISOString()
-						: "",
-				actualDeliveryDate:
-					estimateDeliveryDate !== ""
-						? new Date(
-								estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
-						  ).toISOString()
-						: "",
-				status: "CREATED",
-				products: products,
-				// poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
-			};
+    let error = false;
+    // dates.forEach(date => { if (!error) dateValidation(date) });
+    const {
+      toOrg,
+      airWayBillNo,
+      reset,
+      labelCode,
+      shipmentDate,
+      estimateDeliveryDate,
+      toOrgLoc,
+      fromOrgLoc,
+      shipmentID,
+      products,
+    } = values;
+    let errorMsg = "";
+    products.forEach((p) => {
+      if (p.productQuantity < 1) {
+        error = true;
+        errorMsg = `${t("product")}${t("quantity")}`;
+      } else if (!p.batchNumber) {
+        error = true;
+        errorMsg = t("batch_number");
+      }
+    });
+    if (!error) {
+      const data = {
+        airWayBillNo,
+        poId: reset && reset !== "Select Order ID" ? reset : null,
+        label: {
+          labelId: labelCode,
+          labelType: "QR_2DBAR",
+        },
+        taggedShipments: shipmentID,
+        externalShipmentId: "",
+        supplier: {
+          id: user.organisationId,
+          locationId: fromOrgLoc,
+        },
+        receiver: {
+          id: toOrg.split("/")[0],
+          locationId: toOrgLoc.split("/")[0],
+        },
+        shippingDate: new Date(
+          shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000,
+        ).toISOString(),
+        expectedDeliveryDate:
+          estimateDeliveryDate !== ""
+            ? new Date(
+              estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
+            ).toISOString()
+            : "",
+        actualDeliveryDate:
+          estimateDeliveryDate !== ""
+            ? new Date(
+              estimateDeliveryDate.getTime() - estimateDeliveryDate.getTimezoneOffset() * 60000,
+            ).toISOString()
+            : "",
+        status: "CREATED",
+        products: products,
+        // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
+      };
 
-			var check = 0;
+      var check = 0;
 
-			for (var i = 0; i < data.products.length; i++) {
-				if (typeof data.products[i].productQuantity === "undefined") {
-					check = 1;
-					break;
-				}
-				if (typeof data.products[i].batchNumber === "undefined") {
-					check = 2;
-					break;
-				}
-			}
-			if (check === 1) {
-				setShipmentError(t("check_product_quantity"));
-				setOpenShipmentFail(true);
-			} else if (check === 2) {
-				setShipmentError(t("check_batch_numberssssssssssss"));
-				setOpenShipmentFail(true);
-			} else {
-				let i, j;
-				let nn = data.products.length;
-				for (i = 0; i < data.products.length; i++) {
-					let prdctName = data.products[i].productName;
-					let flag = false;
+      for (var i = 0; i < data.products.length; i++) {
+        if (typeof data.products[i].productQuantity === "undefined") {
+          check = 1;
+          break;
+        }
+        if (typeof data.products[i].batchNumber === "undefined") {
+          check = 2;
+          break;
+        }
+      }
+      if (check === 1) {
+        setShipmentError(t("check_product_quantity"));
+        setOpenShipmentFail(true);
+      } else if (check === 2) {
+        setShipmentError(t("check_batch_numberssssssssssss"));
+        setOpenShipmentFail(true);
+      } else {
+        let i, j;
+        let nn = data.products.length;
+        for (i = 0; i < data.products.length; i++) {
+          let prdctName = data.products[i].productName;
+          let flag = false;
 
-					for (j = 0; j < productsList.length; j++) {
-						if (productsList[j].productName === prdctName) {
-							flag = true;
-							break;
-						} else {
-							flag = false;
-						}
-					}
+          for (j = 0; j < productsList.length; j++) {
+            if (productsList[j].productName === prdctName) {
+              flag = true;
+              break;
+            } else {
+              flag = false;
+            }
+          }
 
-					if (!flag) {
-						setShipmentError(t("product_not_exist_inventory"));
-						setOpenShipmentFail(true);
-						break;
-					}
-				}
-				if (i >= nn) {
-					dispatch(turnOn());
-					const result = await createShipment(data);
-					dispatch(turnOff());
-					if (result?.id) {
-						setMessage("Created Shipment Success");
-						setOpenCreatedInventory(true);
-						setModalProps({
-							message: "Created Successfully!",
-							id: result?.id,
-							type: "Success",
-							t: t,
-						});
-					} else {
-						setShipmentError(result?.data?.message);
-						setOpenShipmentFail(true);
-						setErrorMessage("Create Shipment Failed");
-					}
-				}
-			}
-		} else {
-			setShipmentError(t("check") + " " + errorMsg);
-			setOpenShipmentFail(true);
-		}
-	};
+          if (!flag) {
+            setShipmentError(t("product_not_exist_inventory"));
+            setOpenShipmentFail(true);
+            break;
+          }
+        }
+        if (i >= nn) {
+          dispatch(turnOn());
+          const result = await createShipment(data);
+          dispatch(turnOff());
+          if (result?.id) {
+            setMessage("Created Shipment Success");
+            setOpenCreatedInventory(true);
+            setModalProps({
+              message: "Created Successfully!",
+              id: result?.id,
+              type: "Success",
+              t: t,
+            });
+          } else {
+            setShipmentError(result?.data?.message);
+            setOpenShipmentFail(true);
+            setErrorMessage("Create Shipment Failed");
+          }
+        }
+      }
+    } else {
+      setShipmentError(t("check") + " " + errorMsg);
+      setOpenShipmentFail(true);
+    }
+  };
 
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -452,7 +452,6 @@ const NewShipment = (props) => {
       setValidShipmentID(value);
     });
   }
-
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
@@ -519,9 +518,7 @@ const NewShipment = (props) => {
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmitting,
           setFieldValue,
-          dirty,
         }) => (
           <form onSubmit={handleSubmit} className='mb-3'>
             <div className='row mb-3'>
@@ -639,29 +636,29 @@ const NewShipment = (props) => {
                             );
 
                             let products_temp = result.poDetails[0].products.filter(
-															(item) => item.productQuantity > 0,
-														);
-														if (result.poDetails[0].products && result.poDetails[0].products.length)
-															for (let i = 0; i < products_temp.length; i++) {
-																if (result.poDetails[0].products[i].productQuantity === 0) {
-																	products_temp.splice(i, 1);
-																	i--;
-																}
-																products_temp[i].manufacturer =
-																	result.poDetails[0]?.products[i]?.manufacturer;
-																products_temp[i].productName = result.poDetails[0].products[i].name;
-																products_temp[i].productQuantity =
-																	result.poDetails[0].products[i].productQuantity;
-																products_temp[i].productCategory =
-																	result.poDetails[0].products[i].type;
-																products_temp[i].productID =
-																	result.poDetails[0].products[i].productId;
-																products_temp[i].batchNumber = "";
-																products_temp[i].productQuantityDelivered =
-																	result.poDetails[0].products[i].productQuantityDelivered;
-																products_temp[i].productQuantityShipped =
-																	result.poDetails[0].products[i].productQuantityShipped;
-															}
+                              (item) => item.productQuantity > 0,
+                            );
+                            if (result.poDetails[0].products && result.poDetails[0].products.length)
+                              for (let i = 0; i < products_temp.length; i++) {
+                                if (result.poDetails[0].products[i].productQuantity === 0) {
+                                  products_temp.splice(i, 1);
+                                  i--;
+                                }
+                                products_temp[i].manufacturer =
+                                  result.poDetails[0]?.products[i]?.manufacturer;
+                                products_temp[i].productName = result.poDetails[0].products[i].name;
+                                products_temp[i].productQuantity =
+                                  result.poDetails[0].products[i].productQuantity;
+                                products_temp[i].productCategory =
+                                  result.poDetails[0].products[i].type;
+                                products_temp[i].productID =
+                                  result.poDetails[0].products[i].productId;
+                                products_temp[i].batchNumber = "";
+                                products_temp[i].productQuantityDelivered =
+                                  result.poDetails[0].products[i].productQuantityDelivered;
+                                products_temp[i].productQuantityShipped =
+                                  result.poDetails[0].products[i].productQuantityShipped;
+                              }
                             if (result.poDetails[0].products.length > 0) {
                               setProducts((p) => []);
                               setAddProducts((p) => []);
@@ -710,7 +707,7 @@ const NewShipment = (props) => {
                       onClick={async () => {
                         // setpofetchdisabled(true);
                         setAddProducts((p) => []);
-                        setOrderIdSelected(true); 
+                        setOrderIdSelected(true);
                         setProducts((p) => []);
                         dispatch(turnOn());
                         setDisabled(false);
@@ -721,13 +718,13 @@ const NewShipment = (props) => {
                         } else {
                           if (validShipmentID) {
                             let result = await getViewShipment(values.shipmentID);
-                            if(!result.success) {
+                            if (!result.success) {
                               setShipmentError(t("check_shipment_reference_id"));
                               setOpenShipmentFail(true);
                               dispatch(turnOff());
                             } else {
                               // Check whether the shipment is an outbound shipment
-                              if(user.warehouseId.includes(result.data.supplier.locationId)) {
+                              if (user.warehouseId.includes(result.data.supplier.locationId)) {
                                 setShipmentError(t("The shipment is an outbound shipment!"));
                                 setOpenShipmentFail(true);
                                 dispatch(turnOff());
@@ -761,23 +758,23 @@ const NewShipment = (props) => {
                                   for (let i = 0; i < products_temp.length; i++) {
                                     products_temp[i].manufacturer = result.products[i].manufacturer;
                                     products_temp[i].name = result.products[i].productName;
-                                    if(result?.poDetails && result?.poDetails?.length) {
+                                    if (result?.poDetails && result?.poDetails?.length) {
                                       products_temp[i].productQuantity =
-																				parseInt(
-																					result?.poDetails[0]?.products[i]
-																						.productQuantityDelivered || 0,
-																				) -
-																				parseInt(
-																					result?.products[i].productQuantityTaggedSent || 0,
-																				);
+                                        parseInt(
+                                          result?.poDetails[0]?.products[i]
+                                            .productQuantityDelivered || 0,
+                                        ) -
+                                        parseInt(
+                                          result?.products[i].productQuantityTaggedSent || 0,
+                                        );
                                     } else {
                                       products_temp[i].productQuantity =
-																				parseInt(
-																					result?.products[i].productQuantityDelivered || 0,
-																				) -
-																				parseInt(
-																					result?.products[i].productQuantityTaggedSent || 0,
-																				);
+                                        parseInt(
+                                          result?.products[i].productQuantityDelivered || 0,
+                                        ) -
+                                        parseInt(
+                                          result?.products[i].productQuantityTaggedSent || 0,
+                                        );
                                     }
                                     products_temp[i].productCategory =
                                       result.products[i].productCategory;
@@ -1020,8 +1017,6 @@ const NewShipment = (props) => {
                             setFieldValue("toOrg", "");
                             setFieldValue("toOrgLoc", "");
                           }}
-                          // defaultInputValue={values.rtypeName}
-                          defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
                         {/* {errors.rtype && touched.rtype && (
@@ -1057,13 +1052,12 @@ const NewShipment = (props) => {
                         <Select
                           noOptionsMessage={() => t("no_options")}
                           styles={customStyles}
-                          //isDisabled={disabled}
+                          isDisabled={disabled}
                           placeholder={
                             disabled
                               ? values.toOrg.split("/")[1]
                               : t("select") + " " + t("organisation_name")
                           }
-                          //placeholder={"Select Organisation Name"}
                           value={
                             values.toOrg === ""
                               ? t("select") + " " + t("organisation_name")
@@ -1077,7 +1071,7 @@ const NewShipment = (props) => {
                           }}
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(
-                            (a) => a.type === values.rtypeName
+                            (a) => a.type === values.rtypeName && a.parentOrgId === user.organisationId
                           )}
                         />
                         {/* {errors.toOrg && touched.toOrg && (

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import user from "../../assets/icons/brand.svg";
-import Add from "../../assets/icons/add.svg";
 
 const ProductCategory = (props) => {
   const { products, t } = props;
@@ -127,7 +126,7 @@ const ProductCategory = (props) => {
                           className="txt-line text-muted category-string"
                           style={{ border: `2px solid ${colors[i]}` }}
                         >
-                          {product.name} 
+                          {product.name}
                         </span>
                       );
                     })}
