@@ -594,7 +594,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						} else {
 							userData = {
@@ -609,7 +609,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						}
 						//Prepare JWT token for authentication
@@ -673,7 +673,7 @@ exports.verifyAuthentication = [
 						`User with mail id ${req.body.emailId} does not exist, please register and try again`,
 					);
 				}
-				let signingAddress = await verifyAuth(req.body.message, req.body.signature);
+				const signingAddress = await verifyAuth(req.body.message, req.body.signature);
 				if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()) {
 					return apiResponse.unauthorizedResponse(
 						req,
@@ -681,15 +681,6 @@ exports.verifyAuthentication = [
 						"The wallet id doesn't match signature",
 					);
 				} else {
-					let query = {};
-					if (req.body.emailId.indexOf("@") === -1) {
-						let phone = "+" + req.body.emailId;
-						query = { phoneNumber: phone };
-					} else {
-						query = { emailId: req.body.emailId };
-					}
-					// const userDetails = await EmployeeModel.findOne(query);
-					// console.log(userDetails)
 					const activeWarehouse = await WarehouseModel.find({
 						$and: [
 							{ id: { $in: user.warehouseId } },
@@ -698,7 +689,7 @@ exports.verifyAuthentication = [
 							},
 						],
 					});
-
+					const org = await OrganisationModel.findOne({ id: user.organisationId });
 					let userData;
 					if (activeWarehouse.length > 0) {
 						let activeWarehouseId = 0;
@@ -717,6 +708,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					} else {
 						userData = {
@@ -731,6 +723,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					}
 					//Prepare JWT token for authentication
@@ -750,8 +743,7 @@ exports.verifyAuthentication = [
 						role: "",
 						email: req.body.emailId,
 					};
-					console.log(bc_data);
-					await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+					axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
 					if (user.accountStatus === "ACTIVE") {
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
