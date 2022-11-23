@@ -10,10 +10,12 @@ import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 import { useSelector, useDispatch } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
 import { addNewProduct } from "../../../../actions/poActions";
+import { useTranslation } from "react-i18next";
 
 export default function AdminProductList(props) {
   const history = useHistory();
-  if(props.user.role !== "admin") {
+  const { t } = useTranslation();
+  if (props.user.role !== "admin") {
     history.push("/overview");
   }
   const [productName, setProductName] = useState();
@@ -29,26 +31,24 @@ export default function AdminProductList(props) {
   const { orgAnalytics } = useSelector((state) => state.organisationReducer);
   const { totalCount, activeCount, inactiveCount } = orgAnalytics;
   async function addProduct() {
-    try{
-    const formData = new FormData();
-    formData.append("name", productName);
-    formData.append("shortName", productName);
-    formData.append("type", productCategory);
-    formData.append("externalId", Math.random().toString(36).substr(2, 7));
-    formData.append(
-      "unitofMeasure",
-      JSON.stringify({
-        id: UOM,
-        name: UOM,
-      })
-    );
-    formData.append("manufacturer", manufacturer);
-    const res = await addNewProduct(formData);
-    if(res.success)
-      setOpenSuccessPopup(true);
-    else
-      setOpenFailurePopup(true)
-    }catch(Err){
+    try {
+      const formData = new FormData();
+      formData.append("name", productName);
+      formData.append("shortName", productName);
+      formData.append("type", productCategory);
+      formData.append("externalId", Math.random().toString(36).substr(2, 7));
+      formData.append(
+        "unitofMeasure",
+        JSON.stringify({
+          id: UOM,
+          name: UOM,
+        })
+      );
+      formData.append("manufacturer", manufacturer);
+      const res = await addNewProduct(formData);
+      if (res.success) setOpenSuccessPopup(true);
+      else setOpenFailurePopup(true);
+    } catch (Err) {
       setOpenFailurePopup(true);
       console.log(Err);
     }
@@ -69,7 +69,7 @@ export default function AdminProductList(props) {
                 layout="type4"
                 icon="fa-building"
                 value={totalCount}
-                valueTitle="Total Number of Organization"
+                valueTitle={t("to_no_of_org")}
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
               />
@@ -77,7 +77,7 @@ export default function AdminProductList(props) {
                 layout="type4"
                 icon="fa-building"
                 value={activeCount}
-                valueTitle="Active Organization"
+                valueTitle={t("active_org")}
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
               />
@@ -85,13 +85,13 @@ export default function AdminProductList(props) {
                 layout="type4"
                 icon="fa-building"
                 value={inactiveCount}
-                valueTitle="In Active Organization"
+                valueTitle={t("inactive_org")}
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"
               />
             </div>
             <div className="product-list-two-column">
-              <ProductTable productAdded={openSuccessPopup}/>
+              <ProductTable t={t} productAdded={openSuccessPopup} />
               <div className="add-product-container">
                 <div className="add-product-card">
                   {/* <button className="vl-btn vl-btn-md vl-btn-full vl-btn-secondary">
@@ -108,32 +108,32 @@ export default function AdminProductList(props) {
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Product Category"
+                    label={t("product_category")}
                     onChange={(e) => setProductCategory(e.target.value)}
                   />
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Product Name"
+                    label={t("product_name")}
                     onChange={(e) => setProductName(e.target.value)}
                   />
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Manufacturer"
+                    label={t("manufacturer")}
                     onChange={(e) => setManufacturer(e.target.value)}
                   />
                   <TextField
                     fullWidth
                     variant="outlined"
-                    label="Unit of Measure"
+                    label={t("unit_of_measure")}
                     onChange={(e) => setUOM(e.target.value)}
                   />
                   <button
                     onClick={() => addProduct()}
                     className="vl-btn vl-btn-md vl-btn-full vl-btn-primary"
                   >
-                    Add Product
+                    {t("add_new_product")}
                   </button>
                 </div>
               </div>

@@ -8,12 +8,12 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import UsersRow from "./UsersRow";
-import {getOrgUsers} from "../../../../actions/organisationActions"
+import { getOrgUsers } from "../../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function UsersTable(props) {
   const dispatch = useDispatch();
-  const { defaultRoles } = props;
+  const { defaultRoles, t } = props;
 
   // useEffect(() => {
   //   dispatch(getOrgUsers());
@@ -44,31 +44,37 @@ export default function UsersTable(props) {
         <TableHead className="organization-thead">
           <TableRow className="organization-tr">
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">User Name</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("user_name")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Role</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("role")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Email ID</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("email")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Phone Number</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("phone_no")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Location</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("location")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Status</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("status")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-royal">Created On</h1>
+              <h1 className="vl-note f-500 vl-royal">{t("created_on")}</h1>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody className="organization-tbody">
           {users.map((rows, index) => (
-            <UsersRow key={rows.id} rows={rows} index={index} defaultRoles={defaultRoles} />
+            <UsersRow
+              t={t}
+              key={rows.id}
+              rows={rows}
+              index={index}
+              defaultRoles={defaultRoles}
+            />
           ))}
         </TableBody>
       </Table>
