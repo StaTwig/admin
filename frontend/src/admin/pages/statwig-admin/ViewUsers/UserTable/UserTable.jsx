@@ -10,29 +10,27 @@ import { TablePagination } from "@mui/material";
 import UserRow from "./UserRow";
 
 export default function UserTable({ employees }) {
-  // const [page, setPage] = React.useState(2);
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	// const [page, setPage] = React.useState(2);
+	// const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
+	// const handleChangePage = (event, newPage) => {
+	//   setPage(newPage);
+	// };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
+	// const handleChangeRowsPerPage = (event) => {
+	//   setRowsPerPage(parseInt(event.target.value, 10));
+	//   setPage(0);
+	// };
 
-  return (
-    <>
-      <TableContainer
-        sx={{ background: "#fff", padding: "0.6rem", borderRadius: "0.6rem" }}
-      >
-        <div className="organization-table-header-area">
-          <div className="table-search-bar">
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search" />
-          </div>
-          {/* <div className="table-actions-area table-action-space">
+	return (
+		<>
+			<TableContainer sx={{ background: "#fff", padding: "0.6rem", borderRadius: "0.6rem" }}>
+				<div className="organization-table-header-area">
+					<div className="table-search-bar">
+						<i className="fa-solid fa-magnifying-glass"></i>
+						<input type="text" placeholder="Search" />
+					</div>
+					{/* <div className="table-actions-area table-action-space">
             <div className="table-action-icon">
               <i className={`fa-solid fa-power-off vl-disabled`}></i>
             </div>
@@ -40,15 +38,11 @@ export default function UserTable({ employees }) {
               <i className={`fa-solid fa-trash-can vl-disabled`}></i>
             </div>
           </div> */}
-        </div>
-        <Table
-          sx={{ minWidth: 685 }}
-          aria-label="simple table"
-          className="organization-table"
-        >
-          <TableHead className="organization-thead">
-            <TableRow className="organization-tr">
-              {/* <TableCell>
+				</div>
+				<Table sx={{ minWidth: 685 }} aria-label="simple table" className="organization-table">
+					<TableHead className="organization-thead">
+						<TableRow className="organization-tr">
+							{/* <TableCell>
                 <Checkbox
                   className="vl-checkbox"
                   name="allCheck"
@@ -60,30 +54,30 @@ export default function UserTable({ employees }) {
                   }}
                 />
               </TableCell> */}
-              <TableCell>
-                <h1 className="vl-note f-500 vl-blue">User Name</h1>
-              </TableCell>
-              <TableCell>
-                <h1 className="vl-note f-500 vl-blue">Email Id</h1>
-              </TableCell>
-              <TableCell>
-                <h1 className="vl-note f-500 vl-blue">Role</h1>
-              </TableCell>
-              <TableCell>
-                <h1 className="vl-note f-500 vl-blue">Status</h1>
-              </TableCell>
-              <TableCell>
-                <h1 className="vl-note f-500 vl-blue">Created On</h1>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className="organization-tbody">
-            {employees.map((rows, index) => (
-              <UserRow key={rows} rows={rows} index={index} />
-            ))}
-          </TableBody>
-        </Table>
-        {/* <TablePagination
+							<TableCell>
+								<h1 className="vl-note f-500 vl-blue">User Name</h1>
+							</TableCell>
+							<TableCell>
+								<h1 className="vl-note f-500 vl-blue">Email Id</h1>
+							</TableCell>
+							<TableCell>
+								<h1 className="vl-note f-500 vl-blue">Role</h1>
+							</TableCell>
+							<TableCell>
+								<h1 className="vl-note f-500 vl-blue">Status</h1>
+							</TableCell>
+							<TableCell>
+								<h1 className="vl-note f-500 vl-blue">Created On</h1>
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody className="organization-tbody">
+						{employees &&
+							employees.length &&
+							employees.map((rows, index) => <UserRow key={rows} rows={rows} index={index} />)}
+					</TableBody>
+				</Table>
+				{/* <TablePagination
           component="div"
           count={100}
           page={page}
@@ -91,7 +85,7 @@ export default function UserTable({ employees }) {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         /> */}
-      </TableContainer>
-    </>
-  );
+			</TableContainer>
+		</>
+	);
 }

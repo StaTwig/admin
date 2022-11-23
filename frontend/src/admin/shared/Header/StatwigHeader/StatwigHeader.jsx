@@ -10,8 +10,6 @@ export default function StatwigHeader() {
   let location = useLocation();
   const history = useHistory();
 
-  console.log(location.pathname);
-
   const user = useSelector((state) => state.user);
 
   const [name, setName] = useState("");
