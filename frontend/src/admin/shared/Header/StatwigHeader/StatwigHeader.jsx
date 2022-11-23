@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import vaccineledger from "../../../assets/files/brands/vaccineledger.svg";
-import profile from "../../../assets/files/profile/profile.jpg";
 import { Link, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Badge from "@mui/material/Badge";
 import "../Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getImage } from "../../../../actions/notificationActions";
@@ -42,8 +40,6 @@ export default function StatwigHeader() {
     setProfileClickBtn(false);
   });
 
-  console.log(location.pathname);
-
   const user = useSelector((state) => state.user);
 
   const [name, setName] = useState("");
@@ -81,17 +77,17 @@ export default function StatwigHeader() {
   };
 
   return (
-    <header className="admin-header">
-      <div className="admin-container">
-        <nav className="admin-nav">
-          <article className="admin-nav-left">
-            <figure className="admin-logo">
-              <img src={vaccineledger} alt="vaccineledger" />
+    <header className='admin-header'>
+      <div className='admin-container'>
+        <nav className='admin-nav'>
+          <article className='admin-nav-left'>
+            <figure className='admin-logo'>
+              <img src={vaccineledger} alt='vaccineledger' />
             </figure>
-            <ul className="admin-nav-list">
-              <li className="admin-nav-item">
+            <ul className='admin-nav-list'>
+              <li className='admin-nav-item'>
                 <Link
-                  to="/statwig/dashboard"
+                  to='/statwig/dashboard'
                   className={`admin-nav-link ${
                     location.pathname === "/statwig/dashboard" && "active"
                   }`}
@@ -99,9 +95,9 @@ export default function StatwigHeader() {
                   <p className="vl-note">{t("dashboard")}</p>
                 </Link>
               </li>
-              <li className="admin-nav-item">
+              <li className='admin-nav-item'>
                 <Link
-                  to="/statwig/manage-organization"
+                  to='/statwig/manage-organization'
                   className={`admin-nav-link ${
                     location.pathname === "/statwig/manage-organization" &&
                     "active"
@@ -116,9 +112,9 @@ export default function StatwigHeader() {
                   <p className="vl-note">{t("manage_org")}</p>
                 </Link>
               </li>
-              <li className="admin-nav-item">
+              <li className='admin-nav-item'>
                 <Link
-                  to="/statwig/roles"
+                  to='/statwig/roles'
                   className={`admin-nav-link ${
                     location.pathname === "/statwig/roles" && "active"
                   }`}
@@ -138,7 +134,7 @@ export default function StatwigHeader() {
                 <div className={`configure-list active `}>
                   <button
                     onClick={handleUiSwitch}
-                    className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary"
+                    className='vl-btn vl-btn-sm vl-btn-full vl-btn-primary'
                   >
                     {t("switch_to_user")}
                   </button>
@@ -158,13 +154,13 @@ export default function StatwigHeader() {
                 onClick={() => setProfileClickBtn(!ProfileClickBtn)}
               >
                 {image && (
-                  <figure className="profile-space">
-                    <img src={image} alt="profile" />
+                  <figure className='profile-space'>
+                    <img src={image} alt='profile' />
                   </figure>
                 )}
-                <hgroup className="profile-name-card">
-                  <h1 className="vl-note vl-light f-700">{name}</h1>
-                  <h2 className="vl-small vl-light f-400">{orgName}</h2>
+                <hgroup className='profile-name-card'>
+                  <h1 className='vl-note vl-light f-700'>{name}</h1>
+                  <h2 className='vl-small vl-light f-400'>{orgName}</h2>
                 </hgroup>
               </div>
               <div
@@ -221,8 +217,8 @@ export default function StatwigHeader() {
                 </div>
               </div>
             </div>
-            <div className="mobile-menu-icon">
-              <i className="fa-solid fa-bars vl-light"></i>
+            <div className='mobile-menu-icon'>
+              <i className='fa-solid fa-bars vl-light'></i>
             </div>
           </article>
         </nav>

@@ -3,7 +3,6 @@ import vaccineledger from "../../../assets/files/brands/vaccineledger.svg";
 import profile from "../../../assets/files/profile/profile.jpg";
 import { Link, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Badge from "@mui/material/Badge";
 import "../Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -80,17 +79,17 @@ export default function OrgHeader() {
   };
 
   return (
-    <header className="admin-header">
-      <div className="admin-container">
-        <nav className="admin-nav">
-          <article className="admin-nav-left">
-            <figure className="admin-logo">
-              <img src={vaccineledger} alt="vaccineledger" />
+    <header className='admin-header'>
+      <div className='admin-container'>
+        <nav className='admin-nav'>
+          <article className='admin-nav-left'>
+            <figure className='admin-logo'>
+              <img src={vaccineledger} alt='vaccineledger' />
             </figure>
-            <ul className="admin-nav-list">
-              <li className="admin-nav-item">
+            <ul className='admin-nav-list'>
+              <li className='admin-nav-item'>
                 <Link
-                  to="/org/dashboard"
+                  to='/org/dashboard'
                   className={`admin-nav-link ${
                     location.pathname === "/org/dashboard" && "active"
                   }`}
@@ -98,9 +97,9 @@ export default function OrgHeader() {
                   <p className="vl-note">{t("dashboard")}</p>
                 </Link>
               </li>
-              <li className="admin-nav-item">
+              <li className='admin-nav-item'>
                 <Link
-                  to="/org/manage-users"
+                  to='/org/manage-users'
                   className={`admin-nav-link ${
                     location.pathname === "/org/manage-users" && "active"
                   }`}
@@ -108,9 +107,9 @@ export default function OrgHeader() {
                   <p className="vl-note">{t("manage_user")}</p>
                 </Link>
               </li>
-              <li className="admin-nav-item">
+              <li className='admin-nav-item'>
                 <Link
-                  to="/org/product-list"
+                  to='/org/product-list'
                   className={`admin-nav-link ${
                     location.pathname === "/org/product-list" && "active"
                   }`}
@@ -130,7 +129,7 @@ export default function OrgHeader() {
                 <div className={`configure-list active `}>
                   <button
                     onClick={handleUiSwitch}
-                    className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary"
+                    className='vl-btn vl-btn-sm vl-btn-full vl-btn-primary'
                   >
                     {t("switch_to_user")}
                   </button>
@@ -150,8 +149,8 @@ export default function OrgHeader() {
                 onClick={() => setProfileClickBtn(!ProfileClickBtn)}
               >
                 {image && (
-                  <figure className="profile-space">
-                    <img src={image} alt="profile" />
+                  <figure className='profile-space'>
+                    <img src={image} alt='profile' />
                   </figure>
                 )}
                 <hgroup className="profile-name-card">
@@ -213,8 +212,8 @@ export default function OrgHeader() {
                 </div>
               </div>
             </div>
-            <div className="mobile-menu-icon">
-              <i className="fa-solid fa-bars vl-light"></i>
+            <div className='mobile-menu-icon'>
+              <i className='fa-solid fa-bars vl-light'></i>
             </div>
           </article>
         </nav>

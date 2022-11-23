@@ -7,7 +7,11 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import LocationMap from "./LocationMap/Map";
 import "./Locations.css";
 import LocationTable from "./LocationTable/LocationTable";
-import { getWareHouses } from "../../../actions/organisationActions";
+import {
+  fetchWarehousesByOrgId,
+  getOrgDetails,
+  getWareHouses,
+} from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -20,13 +24,41 @@ export default function Locations(props) {
   }
 
   const [Map, setMap] = useState(false);
+  const [orgDetails, setOrgDetails] = useState();
+  const [addresses, setAddresses] = useState();
+
   const params = useParams();
-  const dispatch = useDispatch();
-  const org = JSON.parse(params.org);
+  const orgId = params.orgId;
+
   useEffect(() => {
-    dispatch(getWareHouses(`orgId=${org.id}`));
-  }, [dispatch, org.id]);
-  const { addresses } = useSelector((state) => state.organisationReducer);
+    async function getWarehousesForOrg() {
+      try {
+        const result = await fetchWarehousesByOrgId(orgId);
+        if (result.status === 200) {
+          setAddresses(result.data.data);
+        } else {
+          console.log("Warehouses request failed!");
+        }
+      } catch (err) {
+        console.log("Error - ", err);
+      }
+    }
+    getWarehousesForOrg();
+
+    async function getOrganisationDetails() {
+      try {
+        const result = await getOrgDetails(orgId);
+        if (result.status === 200) {
+          setOrgDetails(result.data.data);
+        } else {
+          console.log("Org details request failed!");
+        }
+      } catch (err) {
+        console.log("Error - ", err);
+      }
+    }
+    getOrganisationDetails();
+  }, [orgId]);
   return (
     <>
       <StatwigHeader />
@@ -86,7 +118,7 @@ export default function Locations(props) {
                 <LocationMap />
               </div>
             ) : (
-              <LocationTable t={t} Locations={addresses} org={org} />
+              <LocationTable Locations={addresses} orgDetails={orgDetails} />
             )}
           </div>
         </div>

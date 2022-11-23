@@ -17,7 +17,7 @@ import { addNewOrganisation } from "../../actions/userActions";
 import Modal from "../../../shared/modal";
 import SuccessPopup from "../../shared/Popup/SuccessPopup";
 
-export default function AddOrganization({ handleClose, t }) {
+export default function AddOrganization({ resetFlag , handleClose, t }) {
   const dispatch = useDispatch();
 
   const [allRegions, setAllRegions] = useState([]);
@@ -64,7 +64,6 @@ export default function AddOrganization({ handleClose, t }) {
   }
 
   async function getAllStates(country) {
-    console.log(country);
     let states = await fetchStateByCountry(country.id);
     setAllStates(states.data);
   }
@@ -124,6 +123,7 @@ export default function AddOrganization({ handleClose, t }) {
       if (result.status === 200) {
         console.log("Organisation added successfully!");
         setOpenSuccessPopup(true);
+        resetFlag();
       } else {
         console.log("Error - ", result.data);
         setOpenFailurePopup(true);

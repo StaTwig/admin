@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import LocationRow from "./LocationRow";
 
-export default function LocationTable({ Locations, org, t }) {
+export default function LocationTable({ Locations, orgDetails, t }) {
   return (
     <>
       <TableContainer>
@@ -38,10 +38,11 @@ export default function LocationTable({ Locations, org, t }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Locations.map((product) => (
-              <LocationRow key={product.id} product={product} org={org} />
-            ))}
-          </TableBody>
+						{Locations &&
+							Locations.map((warehouse) => (
+								<LocationRow key={warehouse.id} warehouse={warehouse} orgDetails={orgDetails} />
+							))}
+					</TableBody>
         </Table>
       </TableContainer>
     </>

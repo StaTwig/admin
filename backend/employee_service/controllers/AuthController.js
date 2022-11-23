@@ -443,7 +443,7 @@ exports.register = [
 				const secret = process.env.JWT_SECRET;
 				//Generated JWT token with Payload and secret.
 				// Is RBAC needed for one time login?
-				userData.permissions = await RbacModel.findOne({ role: user.role });
+				userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 				userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 				return apiResponse.successResponseWithData(req, res, "user_registered_success", userData);
@@ -594,7 +594,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						} else {
 							userData = {
@@ -609,7 +609,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						}
 						//Prepare JWT token for authentication
@@ -619,7 +619,7 @@ exports.verifyOtp = [
 						};
 						const secret = process.env.JWT_SECRET;
 						//Generated JWT token with Payload and secret.
-						userData.permissions = await RbacModel.findOne({ role: user.role });
+						userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 						userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 						const bc_data = {
@@ -629,7 +629,9 @@ exports.verifyOtp = [
 							role: "",
 							email: req.body.emailId,
 						};
-						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
+						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => {
+							console.log(err);
+						});
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");
@@ -673,7 +675,7 @@ exports.verifyAuthentication = [
 						`User with mail id ${req.body.emailId} does not exist, please register and try again`,
 					);
 				}
-				let signingAddress = await verifyAuth(req.body.message, req.body.signature);
+				const signingAddress = await verifyAuth(req.body.message, req.body.signature);
 				if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()) {
 					return apiResponse.unauthorizedResponse(
 						req,
@@ -681,15 +683,6 @@ exports.verifyAuthentication = [
 						"The wallet id doesn't match signature",
 					);
 				} else {
-					let query = {};
-					if (req.body.emailId.indexOf("@") === -1) {
-						let phone = "+" + req.body.emailId;
-						query = { phoneNumber: phone };
-					} else {
-						query = { emailId: req.body.emailId };
-					}
-					// const userDetails = await EmployeeModel.findOne(query);
-					// console.log(userDetails)
 					const activeWarehouse = await WarehouseModel.find({
 						$and: [
 							{ id: { $in: user.warehouseId } },
@@ -698,7 +691,7 @@ exports.verifyAuthentication = [
 							},
 						],
 					});
-
+					const org = await OrganisationModel.findOne({ id: user.organisationId });
 					let userData;
 					if (activeWarehouse.length > 0) {
 						let activeWarehouseId = 0;
@@ -717,6 +710,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					} else {
 						userData = {
@@ -731,6 +725,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					}
 					//Prepare JWT token for authentication
@@ -740,7 +735,7 @@ exports.verifyAuthentication = [
 					};
 					const secret = process.env.JWT_SECRET;
 					//Generated JWT token with Payload and secret.
-					userData.permissions = await RbacModel.findOne({ role: user.role });
+					userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 					userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 					const bc_data = {
@@ -750,8 +745,7 @@ exports.verifyAuthentication = [
 						role: "",
 						email: req.body.emailId,
 					};
-					console.log(bc_data);
-					await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+					axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
 					if (user.accountStatus === "ACTIVE") {
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
@@ -860,7 +854,7 @@ exports.googleLogIn = [
 			};
 			const secret = process.env.JWT_SECRET;
 			//Generated JWT token with Payload and secret.
-			userData.permissions = await RbacModel.findOne({ role: user.role });
+			userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 			userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 			const bc_data = {
@@ -902,7 +896,7 @@ exports.userInfo = [
 					postalAddress,
 					createdAt,
 				} = user;
-				const permissions = await RbacModel.findOne({ role });
+				const permissions = await RbacModel.findOne({ orgId: "ORG100001", role: role });
 				const org = await OrganisationModel.findOne(
 					{ id: organisationId },
 					"name configuration_id type",
@@ -1246,11 +1240,11 @@ exports.addWarehouse = [
 					$set: {
 						...(skipOrgRegistration
 							? {
-								postalAddress: addr,
-								country: warehouseAddress.country,
-								region: warehouseAddress.region,
-								status: "NOTVERIFIED",
-							}
+									postalAddress: addr,
+									country: warehouseAddress.country,
+									region: warehouseAddress.region,
+									status: "NOTVERIFIED",
+							  }
 							: {}),
 					},
 					$push: {

@@ -56,7 +56,7 @@ export default function UserRow({ rows }) {
           </p>
         </TableCell>
         <TableCell>
-          {rows.status === "ACTIVE" ? (
+          {rows.accountStatus === "ACTIVE" ? (
             <div className="label-status-btn status-accept-bg">
               <div className="status-dot status-accept-dot"></div>
               <p className="vl-small f-400 vl-black">Active</p>

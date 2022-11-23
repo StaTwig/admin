@@ -158,7 +158,7 @@ export default function AdminOrganization(props) {
           onClose={handleClose}
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
-            <AddOrganization t={t} handleClose={handleClose} />
+            <AddOrganization t={t} resetFlag={() => {setTableFlag(!tableFlag)}} handleClose={handleClose} />
           </DialogContent>
         </Dialog>
 
