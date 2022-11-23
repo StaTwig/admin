@@ -89,7 +89,7 @@ export default function Locations(props) {
                 </div>
               </div>
               <div className="location-details-grid">
-                <LocationCard t={t} layout="location" org={org} />
+                <LocationCard t={t} layout="location" orgDetails={orgDetails} />
                 <TileCard t={t} layout="location" />
               </div>
 
@@ -118,7 +118,11 @@ export default function Locations(props) {
                 <LocationMap />
               </div>
             ) : (
-              <LocationTable Locations={addresses} orgDetails={orgDetails} />
+              <LocationTable
+                t={t}
+                Locations={addresses}
+                orgDetails={orgDetails}
+              />
             )}
           </div>
         </div>
