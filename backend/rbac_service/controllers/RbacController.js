@@ -47,7 +47,7 @@ exports.getRoles = [
 	async (req, res) => {
 		try {
 			var roles = [];
-			const results = await RbacModel.find({}, { _id: 0, role: 1 });
+			const results = await RbacModel.find({orgId: "ORG100001"}, { _id: 0, role: 1 });
 			results.map((element) => {
 				roles.push(element.role);
 			});
