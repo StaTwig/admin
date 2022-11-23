@@ -393,7 +393,6 @@ const NewOrder = (props) => {
 			setFailedPop(true);
 		}
 	};
-	console.log(allOrganisations.filter((a) => a))
 	return (
 		<div className="NewOrder m-3">
 			<div className="d-flex justify-content-between mb-3">
