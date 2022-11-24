@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Analytics from "./Analytics/Analytics";
 import "./OrgDashboard.css";
-import Pendings from "./Pendings/Pendings";
 import "../../../assets/styles/index.css";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +14,8 @@ import {
   getWareHouses,
 } from "../../../actions/organisationActions";
 import { useHistory } from "react-router";
+import PendingUsers from "./Pendings/PendingUsers";
+import PendingWarehouses from "./Pendings/PendingWarehouses";
 
 export default function OrgDashboard(props) {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default function OrgDashboard(props) {
               <Analytics userAnalytics={userAnalytics} />
             </div>
             <div className="dashboard-right-space">
-              <Pendings
+              <PendingUsers
                 heading={"Users Approvals"}
                 permissions={permissions}
                 addresses={addresses}
@@ -77,7 +78,7 @@ export default function OrgDashboard(props) {
               />
             </div>
             <div className="dashboard-right-space">
-              <Pendings
+              <PendingWarehouses
                 heading={"Location Approvals"}
                 permissions={permissions}
                 addresses={addresses}

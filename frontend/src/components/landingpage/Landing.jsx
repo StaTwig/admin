@@ -60,11 +60,8 @@ export default function Landing() {
 
   const [LangOption, setLangOption] = React.useState(i18n.language);
 
-  console.log(LangOption);
-
   const changeLanguage = (option) => {
     setLangOption(option);
-    console.log(option);
     setLanguage(option);
     setLanguageOpen(false);
     i18n.changeLanguage(option);

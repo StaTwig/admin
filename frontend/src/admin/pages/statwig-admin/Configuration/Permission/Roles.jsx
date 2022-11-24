@@ -59,13 +59,10 @@ export default function Roles({ list, permissionType, permissions, refresh, flag
   const [permission, setPermission] = useState({});
   
   useEffect(() => {
-		setPermission(permissions);
+		let temp = permissions;
+		setPermission(temp);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-  useEffect(() => {
-		// setPermission(permission);
-	}, [permission]);
+	}, [permissions]);
 
   const handleChange = (panel) => (event, newExpanded) => {
 		setExpanded(newExpanded ? panel : false);
@@ -110,7 +107,7 @@ export default function Roles({ list, permissionType, permissions, refresh, flag
 										updatePermissions(permissionType, obj);
 										refresh(!flag);
 									}}
-									checked={permission[`${key}`]}
+									checked={permission[`${key}`] ? true : false}
 								/>
 							</div>
 						</div>

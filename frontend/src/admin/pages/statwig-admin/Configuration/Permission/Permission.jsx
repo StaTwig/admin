@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Permission.css";
 import Roles from "./Roles";
 
@@ -9,7 +9,15 @@ export default function Permission({
 	permissionUpdate,
 }) {
 	const [flag, setFlag] = useState(false);
-	const List = permissions ? Object.keys(permissions) : [];
+	const [List, setList] = useState([]);
+	// const List = permissions ? Object.keys(permissions) : [];
+
+	useEffect(() => {
+		if (permissions) {
+			setList(Object.keys(permissions));
+		}
+	}, [permissions]);
+	
 	return (
 		<section className="permission-container">
 			<div className="permission-container-header">

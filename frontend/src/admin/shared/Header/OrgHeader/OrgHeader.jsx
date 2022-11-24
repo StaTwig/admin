@@ -35,7 +35,6 @@ export default function OrgHeader() {
     history.push("/overview");
   };
 
-  console.log(location.pathname);
   return (
     <header className='admin-header'>
       <div className='admin-container'>

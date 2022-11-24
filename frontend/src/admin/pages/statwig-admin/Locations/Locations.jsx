@@ -104,7 +104,7 @@ export default function Locations(props) {
 						{
 							Map ? (
 								<div className="Locationmap-container">
-									<LocationMap />
+									<LocationMap warehouses={addresses} />
 								</div>
 							) :
 							<LocationTable Locations={addresses} orgDetails={orgDetails} />
