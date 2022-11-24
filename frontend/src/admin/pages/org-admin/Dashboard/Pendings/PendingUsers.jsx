@@ -88,7 +88,7 @@ function PendingCard({
 }
 
 export default function PendingUsers(props) {
-	const { permissions, addresses, heading } = props;
+	const { t, permissions, addresses, heading } = props;
 	const dispatch = useDispatch();
 	const { requestPending } = useSelector((state) => state.organisationReducer);
 
