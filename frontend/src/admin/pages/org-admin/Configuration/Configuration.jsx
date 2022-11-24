@@ -7,6 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import Modal from "../../../../shared/modal";
@@ -25,6 +26,7 @@ import Permission from "./Permission/Permission";
 
 export default function Configuration(props) {
   const history = useHistory();
+  const { t } = useTranslation();
   if (props.user.type !== "CENTRAL_AUTHORITY") {
     history.push("/overview");
   }
@@ -122,27 +124,29 @@ export default function Configuration(props) {
           <div className="admin-role-container admin-section-space">
             <div className="role-headers">
               <div className="role-page-link">
-                <p className="vl-subheading f-700">Configuration</p>
-                <p className="vl-body f-400 vl-grey-sm">Roles & Permissions</p>
+                <p className="vl-subheading f-700">{t("configuration")}</p>
+                <p className="vl-body f-400 vl-grey-sm">
+                  {t("roles_permissions")}
+                </p>
               </div>
               <div className="config-btn-group">
                 <button
                   className="vl-btn vl-btn-md vl-btn-secondary"
                   onClick={handleClickOpen2}
                 >
-                  Assign Role to User
+                  {t("assign_role")}
                 </button>
                 <button
                   className="vl-btn vl-btn-md vl-btn-primary"
                   onClick={handleClickOpen}
                 >
-                  Add Roles
+                  {t("add_role")}
                 </button>
               </div>
             </div>
 
             <div className="input-set">
-              <p className="vl-body f-500 vl-black">Select Role</p>
+              <p className="vl-body f-500 vl-black"> {t("select_role")}</p>
               <div className="input-full-column-space">
                 <Select
                   fullWidth
@@ -162,17 +166,18 @@ export default function Configuration(props) {
 
             <div className="permission-tab-ribbon">
               <div className="ribbon-tab active ">
-                <p className="vl-body">User Role</p>
+                <p className="vl-body"> {t("user_role")}</p>
               </div>
               <div className="ribbon-tab">
-                <p className="vl-body">Analytics</p>
+                <p className="vl-body"> {t("analytics")}</p>
               </div>
               <div className="ribbon-tab">
-                <p className="vl-body">Payments</p>
+                <p className="vl-body"> {t("payments")}</p>
               </div>
             </div>
 
             <Permission
+              t={t}
               permissions={permissions[0]}
               updatePermissions={updatePermissions}
               permissionUpdate={permissionUpdate}

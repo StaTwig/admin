@@ -41,3 +41,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.text_uppercase {
+  text-transform: capitalize !important;
+}
