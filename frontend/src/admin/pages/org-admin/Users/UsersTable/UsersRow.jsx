@@ -11,7 +11,7 @@ import {
 } from "../../../../actions/organisationActions";
 import Switch from "@mui/material/Switch";
 
-export default function UsersRow({ rows, defaultRoles }) {
+export default function UsersRow({ rows, defaultRoles, t }) {
   const [open, setOpen] = React.useState(false);
   const [Edit, setEdit] = React.useState(false);
   const [checked, setChecked] = useState(true);
@@ -167,14 +167,14 @@ export default function UsersRow({ rows, defaultRoles }) {
               // onChange={(e) => setAccStatus(e.target.checked)}
             />
             {AccStatus === "ACTIVE" ? (
-              <div className='label-status-btn status-accept-bg'>
-                <div className='status-dot status-accept-dot'></div>
-                <p className='vl-small f-400 vl-black'>Active</p>
+              <div className="label-status-btn status-accept-bg">
+                <div className="status-dot status-accept-dot"></div>
+                <p className="vl-small f-400 vl-black">{t("active")}</p>
               </div>
             ) : (
-              <div className='label-status-btn status-reject-bg'>
-                <div className='status-dot status-reject-dot'></div>
-                <p className='vl-small f-400 vl-black'>InActive</p>
+              <div className="label-status-btn status-reject-bg">
+                <div className="status-dot status-reject-dot"></div>
+                <p className="vl-small f-400 vl-black">{t("inactive")}</p>
               </div>
             )}
           </div>
@@ -207,19 +207,19 @@ export default function UsersRow({ rows, defaultRoles }) {
           }}
           colSpan={8}
         >
-          <Collapse in={open} timeout='auto' unmountOnExit>
-            <div className='user-location-detail-container'>
-              <div className='location-detail-grid'>
-                <p className='vl-note vl-black f-400'>Address :</p>
-                <p className='vl-body vl-grey-md'>{rows.location}</p>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <div className="user-location-detail-container">
+              <div className="location-detail-grid">
+                <p className="vl-note vl-black f-400">{t("address")} :</p>
+                <p className="vl-body vl-grey-md">{rows.location}</p>
               </div>
-              <div className='location-detail-grid'>
-                <p className='vl-note vl-black f-400'>Region :</p>
-                <p className='vl-body vl-grey-md'>{rows.region}</p>
+              <div className="location-detail-grid">
+                <p className="vl-note vl-black f-400">{t("region")} :</p>
+                <p className="vl-body vl-grey-md">{rows.region}</p>
               </div>
-              <div className='location-detail-grid'>
-                <p className='vl-note vl-black f-400'>Country :</p>
-                <p className='vl-body vl-grey-md'>{rows.country}</p>
+              <div className="location-detail-grid">
+                <p className="vl-note vl-black f-400">{t("country")} :</p>
+                <p className="vl-body vl-grey-md">{rows.country}</p>
               </div>
               {/* <div className="location-detail-grid">
                 <p className="vl-note vl-black f-400">Pin :</p>

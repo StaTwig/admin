@@ -13,6 +13,7 @@ import { Dialog } from "@mui/material";
 import { turnOff, turnOn } from "../../../../../actions/spinnerActions";
 
 function PendingCard({
+	t,
 	userName,
 	orgName,
 	createdAt,
@@ -53,33 +54,33 @@ function PendingCard({
 			</div>
 			<div className="pendingcard-body">
 				<div className="pc-body-grid">
-					<p className="vl-body f-500 vl-black">Email:</p>
+					<p className="vl-body f-500 vl-black">{t("email")}:</p>
 					<p className="vl-body f-500 vl-grey-sm">{emailId}</p>
 				</div>
 				<div className="pc-body-two-space">
 					<div className="pc-body-grid">
-						<p className="vl-body f-500 vl-black">Region:</p>
+						<p className="vl-body f-500 vl-black">{t("region")}:</p>
 						<p className="vl-body f-500 vl-grey-sm">{region}</p>
 					</div>
 					<div className="pc-body-grid">
-						<p className="vl-body f-500 vl-black">Country:</p>
+						<p className="vl-body f-500 vl-black">{t("country")}:</p>
 						<p className="vl-body f-500 vl-grey-sm">{country}</p>
 					</div>
 				</div>
 				<div className="pc-body-col-space">
-					<p className="vl-body f-500 vl-black">Organization Address :</p>
+					<p className="vl-body f-500 vl-black">{t("org_address")}:</p>
 					<p className="vl-body f-500 vl-grey-sm">{postalAddress}</p>
 				</div>
 			</div>
 			<div className="pendingcard-action vl-flex vl-gap-sm">
 				<button onClick={approveUser} className="vl-btn vl-btn-sm vl-btn-accept">
-					Accept
+					{t("accept")}
 				</button>
 				<button
 					onClick={() => rejectUser({ id: userId })}
 					className="vl-btn vl-btn-sm vl-btn-reject"
 				>
-					Reject
+					{t("reject")}
 				</button>
 			</div>
 		</div>
@@ -157,12 +158,13 @@ export default function PendingUsers(props) {
 	return (
 		<section className="pending-container">
 			<div className="pending-header">
-				<h1 className="vl-subheading f-700 vl-black">{heading}</h1>
+				<h1 className="vl-subheading f-700 vl-black">{t("pending")}</h1>
 				<div className="number-label">{requestPending.length || 0}</div>
 			</div>
 			<div className="pending-body">
 				{requestPending.map((request, index) => (
 					<PendingCard
+						t={t}
 						emailId={request.emailId}
 						region={request?.orgDetails?.region}
 						country={request?.orgDetails?.country}
@@ -185,6 +187,7 @@ export default function PendingUsers(props) {
 			{showModal && (
 				<Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={showModal} onClose={closeModal}>
 					<ApproveUser
+						t={t}
 						data={userData}
 						permissions={permissions}
 						addresses={addresses}

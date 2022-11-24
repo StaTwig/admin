@@ -18,7 +18,7 @@ const filter = createFilterOptions();
 
 export default function AdminProductList(props) {
 	const { t } = useTranslation();
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const history = useHistory();
 	if (props.user.role !== "admin") {
 		history.push("/overview");
@@ -28,13 +28,13 @@ export default function AdminProductList(props) {
 	const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
 	const [openFailurePopup, setOpenFailurePopup] = useState(false);
 
-  const { orgAnalytics } = useSelector((state) => state.organisationReducer);
+	const { orgAnalytics } = useSelector((state) => state.organisationReducer);
 	const { totalCount, activeCount, inactiveCount } = orgAnalytics;
 
-  const {
+	const {
 		control,
-    reset,
-    watch,
+		reset,
+		watch,
 		formState: { errors },
 		handleSubmit,
 	} = useForm({
@@ -43,9 +43,8 @@ export default function AdminProductList(props) {
 		manufacturer: "",
 		unitOfMeasure: "",
 	});
-  
 
-  useEffect(() => {
+	useEffect(() => {
 		dispatch(getOrgAnalytics());
 	}, [dispatch]);
 
@@ -83,15 +82,14 @@ export default function AdminProductList(props) {
 			formData.append("manufacturer", values.manufacturer);
 			const res = await addNewProduct(formData);
 			if (res.success) {
-        setOpenSuccessPopup(true);
-        console.log("Calling reset!");
-        reset({
-          productName: "",
-          unitOfMeasure: "",
-        });
-        console.log("watch - ", watch())
-      }
-			else setOpenFailurePopup(true);
+				setOpenSuccessPopup(true);
+				console.log("Calling reset!");
+				reset({
+					productName: "",
+					unitOfMeasure: "",
+				});
+				console.log("watch - ", watch());
+			} else setOpenFailurePopup(true);
 		} catch (Err) {
 			setOpenFailurePopup(true);
 			console.log(Err);
@@ -101,8 +99,8 @@ export default function AdminProductList(props) {
 	const closeModal = () => {
 		setOpenSuccessPopup(false);
 		setOpenFailurePopup(false);
-  };
-  
+	};
+
 	return (
 		<>
 			<OrgHeader />
@@ -114,7 +112,7 @@ export default function AdminProductList(props) {
 								layout="type4"
 								icon="fa-building"
 								value={totalCount}
-								valueTitle="Total Number of Organization"
+								valueTitle={t("to_no_of_org")}
 								bgColor="analytic-bg-1"
 								textColor="analytic-text-1"
 							/>
@@ -122,7 +120,7 @@ export default function AdminProductList(props) {
 								layout="type4"
 								icon="fa-building"
 								value={activeCount}
-								valueTitle="Active Organization"
+								valueTitle={t("active_org")}
 								bgColor="analytic-bg-2"
 								textColor="analytic-text-2"
 							/>
@@ -130,13 +128,13 @@ export default function AdminProductList(props) {
 								layout="type4"
 								icon="fa-building"
 								value={inactiveCount}
-								valueTitle="In Active Organization"
+								valueTitle={t("inactive_org")}
 								bgColor="analytic-bg-3"
 								textColor="analytic-text-3"
 							/>
 						</div>
 						<div className="product-list-two-column">
-							<ProductTable productAdded={openSuccessPopup} />
+							<ProductTable t={t} productAdded={openSuccessPopup} />
 							<div className="add-product-container">
 								<form onSubmit={handleSubmit(addProduct)}>
 									<div className="add-product-card">
@@ -165,7 +163,7 @@ export default function AdminProductList(props) {
 													renderInput={(params) => (
 														<TextField
 															{...params}
-															label={t("Product Category")}
+															label={t("product_category")}
 															error={Boolean(errors.productCategory)}
 															helperText={errors.productCategory && "Product Category is required!"}
 														/>
@@ -181,7 +179,7 @@ export default function AdminProductList(props) {
 												<TextField
 													fullWidth
 													variant="outlined"
-													label={t("Product Name")}
+													label={t("product_name")}
 													multiline
 													{...field}
 													error={Boolean(errors.productName)}
@@ -204,7 +202,7 @@ export default function AdminProductList(props) {
 													renderInput={(params) => (
 														<TextField
 															{...params}
-															label={t("Manufacturer")}
+															label={t("manufacturer")}
 															error={Boolean(errors.manufacturer)}
 															helperText={errors.manufacturer && "Manufacturer is required!"}
 														/>
@@ -220,7 +218,7 @@ export default function AdminProductList(props) {
 												<TextField
 													fullWidth
 													variant="outlined"
-													label={t("Unit of Measure")}
+													label={t("unit_of_measure")}
 													multiline
 													{...field}
 													error={Boolean(errors.unitOfMeasure)}
@@ -229,7 +227,7 @@ export default function AdminProductList(props) {
 											)}
 										/>
 										<button type="submit" className="vl-btn vl-btn-md vl-btn-full vl-btn-primary">
-											Add Product
+											{t("add_new_product")}
 										</button>
 									</div>
 								</form>

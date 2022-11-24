@@ -16,9 +16,11 @@ import {
 import { useHistory } from "react-router";
 import PendingUsers from "./Pendings/PendingUsers";
 import PendingWarehouses from "./Pendings/PendingWarehouses";
+import { useTranslation } from "react-i18next";
 
 export default function OrgDashboard(props) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const history = useHistory();
 
   if (props.user.role !== "admin") {
@@ -67,10 +69,11 @@ export default function OrgDashboard(props) {
         <div className="admin-container">
           <div className="admin-dashboard-container-alt admin-section-space">
             <div className="dashboard-left-space">
-              <Analytics userAnalytics={userAnalytics} />
+              <Analytics t={t} userAnalytics={userAnalytics} />
             </div>
             <div className="dashboard-right-space">
               <PendingUsers
+                t={t}
                 heading={"Users Approvals"}
                 permissions={permissions}
                 addresses={addresses}
@@ -79,6 +82,7 @@ export default function OrgDashboard(props) {
             </div>
             <div className="dashboard-right-space">
               <PendingWarehouses
+                t={t}
                 heading={"Location Approvals"}
                 permissions={permissions}
                 addresses={addresses}

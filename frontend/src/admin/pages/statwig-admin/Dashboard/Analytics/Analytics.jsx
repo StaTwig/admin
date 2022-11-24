@@ -3,43 +3,47 @@ import "./Analytics.css";
 import AnalyticsCard from "../../../../common/AnalyticsCard/AnalyticsCard";
 import Graphs from "../../../../components/Graphs/Graphs";
 
-export default function Analytics() {
+export default function Analytics({ t }) {
   return (
     <section className="Analytics-area">
       <div className="analytics-one-column-layout">
-        <AnalyticsCard layout="type1" name="orgs" />
+        <AnalyticsCard t={t} layout="type1" name="orgs" />
       </div>
       <div className="analytics-two-column-layout">
         <AnalyticsCard
+          t={t}
           layout="type3"
           icon="fa-thumbs-up"
           value="500"
-          valueTitle="No. Units Tracked"
+          valueTitle={t("no_of_track")}
           bgColor="analytic-bg-1"
           textColor="analytic-text-1"
         />
         <AnalyticsCard
+          t={t}
           layout="type3"
           icon="fa-rocket"
           value="$ 102.5M"
-          valueTitle="Total Revenue"
+          valueTitle={t("total_revenue")}
           bgColor="analytic-bg-2"
           textColor="analytic-text-2"
         />
       </div>
       <div className="analytics-full-column-layout">
         <Graphs
+          t={t}
           role="statwig"
           type="column"
-          title="Orders Received VS Shipments Delivered"
+          title={t("org_receive_graph")}
           color="1"
         />
       </div>
       <div className="analytics-full-column-layout">
         <Graphs
+          t={t}
           role="statwig"
           type="column"
-          title="Orders Received VS Shipments Delivered"
+          title={t("org_receive_graph")}
           color="2"
         />
       </div>
