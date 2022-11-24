@@ -59,7 +59,7 @@ exports.fetchWarehousesByOrgId = [
 			}
 
 			const warehouses = await Warehouse.aggregate([
-				{ $match: { $and: [{ organisationId: req.query.orgId }, { status: "ACTIVE" }] } },
+				{ $match: { $and: [{ organisationId: req.query.orgId }] } },
 				{
 					$lookup: {
 						from: "employees",
