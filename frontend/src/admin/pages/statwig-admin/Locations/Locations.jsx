@@ -7,17 +7,23 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import LocationMap from "./LocationMap/Map";
 import "./Locations.css";
 import LocationTable from "./LocationTable/LocationTable";
-import { fetchWarehousesByOrgId, getOrgDetails, getWareHouses } from "../../../actions/organisationActions";
+import {
+	fetchWarehousesByOrgId,
+	getOrgDetails,
+	getWareHouses,
+} from "../../../actions/organisationActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Locations(props) {
 	const history = useHistory();
+	const { t } = useTranslation();
 	if (props.user.type !== "CENTRAL_AUTHORITY") {
 		history.push("/overview");
 	}
 
-  const [Map, setMap] = useState(false);
+	const [Map, setMap] = useState(false);
 	const [orgDetails, setOrgDetails] = useState();
 	const [addresses, setAddresses] = useState();
 
@@ -28,12 +34,12 @@ export default function Locations(props) {
 		async function getWarehousesForOrg() {
 			try {
 				const result = await fetchWarehousesByOrgId(orgId);
-				if(result.status === 200) {
+				if (result.status === 200) {
 					setAddresses(result.data.data);
 				} else {
 					console.log("Warehouses request failed!");
 				}
-			} catch(err) {
+			} catch (err) {
 				console.log("Error - ", err);
 			}
 		}
@@ -43,17 +49,16 @@ export default function Locations(props) {
 			try {
 				const result = await getOrgDetails(orgId);
 				if (result.status === 200) {
-          setOrgDetails(result.data.data);
+					setOrgDetails(result.data.data);
 				} else {
 					console.log("Org details request failed!");
 				}
 			} catch (err) {
 				console.log("Error - ", err);
 			}
-    }
-    getOrganisationDetails();
+		}
+		getOrganisationDetails();
 	}, [orgId]);
-
 	return (
 		<>
 			<StatwigHeader />
@@ -64,22 +69,26 @@ export default function Locations(props) {
 							<div className="previous-link-tabs">
 								<Link to="/statwig/manage-organization" className="link-card vl-link">
 									<i className="fa-solid fa-arrow-left"></i>
-									<p className="vl-subheading f-500">Manage Locations</p>
+									<p className="vl-subheading f-500">
+										{t("manage")} {t("location")}
+									</p>
 								</Link>
 								<div className="breadcumb-links vl-flex-sm">
 									<Link to="/statwig/manage-organization" className="vl-link">
-										<p className="vl-small f-500 vl-grey-sm">Manage Organization</p>
+										<p className="vl-small f-500 vl-grey-sm">
+											{t("manage")} {t("organisation")}
+										</p>
 									</Link>
 									<p className="vl-note f-500 vl-grey-sm">/</p>
 									<Link to="/statwig/view-locations" className="vl-link">
-										<p className="vl-small f-500 vl-grey-sm">Locations</p>
+										<p className="vl-small f-500 vl-grey-sm">{t("location")}</p>
 									</Link>
 								</div>
 							</div>
 							<div className="location-details-grid">
-                <LocationCard layout="location" orgDetails={orgDetails} />
-                <TileCard layout="location" />
-              </div>
+								<LocationCard t={t} layout="location" orgDetails={orgDetails} />
+								<TileCard t={t} layout="location" />
+							</div>
 
 							<div className="map-view-button" onClick={() => setMap(!Map)}>
 								<button className="vl-btn vl-btn-md vl-btn-secondary">
@@ -88,27 +97,26 @@ export default function Locations(props) {
 											<span>
 												<i className="fa-solid fa-table"></i>
 											</span>
-											View Table
+											{t("view_table")}
 										</>
 									) : (
 										<>
 											<span>
 												<i className="fa-solid fa-map-location-dot"></i>
 											</span>
-											View Map
+											{t("view_map")}
 										</>
 									)}
 								</button>
 							</div>
 						</div>
-						{
-							Map ? (
-								<div className="Locationmap-container">
-									<LocationMap />
-								</div>
-							) :
-							<LocationTable Locations={addresses} orgDetails={orgDetails} />
-						}
+						{Map ? (
+							<div className="Locationmap-container">
+								<LocationMap warehouses={addresses} />
+							</div>
+						) : (
+							<LocationTable t={t} Locations={addresses} orgDetails={orgDetails} />
+						)}
 					</div>
 				</div>
 			</section>

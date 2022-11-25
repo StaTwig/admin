@@ -69,6 +69,7 @@ const NewShipment = (props) => {
   const [productsList, setProductsList] = useState([]);
   const ref1 = useRef(null);
   const ref2 = useRef(null);
+  const formRef = useRef();
 
   const customStyles = {
     // placeholder: (provided, state) => ({
@@ -452,11 +453,29 @@ const NewShipment = (props) => {
       setValidShipmentID(value);
     });
   }
+
+  function getOrgsByType(org) {
+    if(org.type === formRef.current.values.rtypeName) {
+      if(user.type === "DISTRIBUTOR") {
+        if(org.parentOrgId === user.organisationId) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
       <Formik
         enableReinitialize={true}
+        innerRef={formRef}
         initialValues={{
           poId: "",
           type: "",
@@ -1070,9 +1089,7 @@ const NewShipment = (props) => {
                             onOrgChange(v.value);
                           }}
                           defaultInputValue={values.toOrg}
-                          options={allOrganisations.filter(
-                            (a) => a.type === values.rtypeName && a.parentOrgId === user.organisationId
-                          )}
+                          options={allOrganisations.filter(getOrgsByType)}
                         />
                         {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">

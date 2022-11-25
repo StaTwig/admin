@@ -1259,7 +1259,7 @@ exports.addWarehouse = [
 				},
 				{
 					$set: {
-						role: "powerUser",
+						role: "admin",
 					},
 					$push: {
 						pendingWarehouseId: warehouseId,

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrgAnalytics } from "../../../actions/organisationActions";
 import { useHistory } from "react-router";
 import UploadPopup from "../../../common/UploadPopup/UploadPopup";
+import { useTranslation } from "react-i18next";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -37,6 +38,7 @@ export default function AdminOrganization(props) {
 
   const [ButtonOpen, setButtonOpen] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [tableFlag, setTableFlag] = useState(false);
   useEffect(() => {
     dispatch(getOrgAnalytics());
@@ -81,7 +83,7 @@ export default function AdminOrganization(props) {
                 layout="type4"
                 icon="fa-building"
                 value={totalCount}
-                valueTitle="Total Number of Organization"
+                valueTitle={t("to_no_of_org")}
                 bgColor="analytic-bg-1"
                 textColor="analytic-text-1"
               />
@@ -89,7 +91,7 @@ export default function AdminOrganization(props) {
                 layout="type4"
                 icon="fa-building"
                 value={activeCount}
-                valueTitle="Active Organization"
+                valueTitle={t("active_org")}
                 bgColor="analytic-bg-2"
                 textColor="analytic-text-2"
               />
@@ -97,7 +99,7 @@ export default function AdminOrganization(props) {
                 layout="type4"
                 icon="fa-building"
                 value={inactiveCount}
-                valueTitle="In Active Organization"
+                valueTitle={t("inactive_org")}
                 bgColor="analytic-bg-3"
                 textColor="analytic-text-3"
               />
@@ -106,7 +108,7 @@ export default function AdminOrganization(props) {
               <div className="organization-table-header-area">
                 <div className="table-search-bar">
                   <i className="fa-solid fa-magnifying-glass"></i>
-                  <input type="text" placeholder="Search" />
+                  <input type="text" placeholder={t("search")} />
                 </div>
                 <div className="table-actions-area">
                   {/* <div className="table-action-icon">
@@ -121,7 +123,7 @@ export default function AdminOrganization(props) {
                       // onClick={() => setButtonOpen(!ButtonOpen)}
                       onClick={handleClickOpen}
                     >
-                      Add Organization
+                      {t("add_org")}
                     </button>
 
                     <div
@@ -132,20 +134,20 @@ export default function AdminOrganization(props) {
                         onClick={handleImportClickOpen}
                       >
                         <i className="fa-solid fa-upload"></i>
-                        <p className="vl-note f-500">Import Organization</p>
+                        <p className="vl-note f-500">{t("import_org")}</p>
                       </div>
                       <div
                         className="btn-dropdown-card"
                         onClick={() => setOpen(true)}
                       >
                         <i className="fa-solid fa-plus"></i>
-                        <p className="vl-note f-500">Add Organization</p>
+                        <p className="vl-note f-500">{t("add_org")}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <OrganizationTable tableFlag={tableFlag} />
+              <OrganizationTable t={t} tableFlag={tableFlag} />
             </div>
           </div>
         </div>
@@ -156,7 +158,7 @@ export default function AdminOrganization(props) {
           onClose={handleClose}
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
-            <AddOrganization resetFlag={() => {setTableFlag(!tableFlag)}} handleClose={handleClose} />
+            <AddOrganization t={t} resetFlag={() => {setTableFlag(!tableFlag)}} handleClose={handleClose} />
           </DialogContent>
         </Dialog>
 
@@ -167,7 +169,14 @@ export default function AdminOrganization(props) {
           onClose={handleImportClose}
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
-            <UploadPopup orgUpload={true} resetFlag={() => {setTableFlag(!tableFlag)}} handleImportClose={handleImportClose} />
+            <UploadPopup
+              t={t}
+              orgUpload={true}
+              resetFlag={() => {
+                setTableFlag(!tableFlag);
+              }}
+              handleImportClose={handleImportClose}
+            />
           </DialogContent>
         </Dialog>
       </section>

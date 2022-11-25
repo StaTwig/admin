@@ -1,7 +1,7 @@
 import React from "react";
 import "./FileUpload.scss";
 
-const FileUpload = ({ files, setFiles, removeFile }) => {
+const FileUpload = ({ files, setFiles, removeFile, t }) => {
   const uploadHandler = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -12,17 +12,17 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
 
   return (
     <>
-      <div className='file-card'>
-        <div className='file-inputs'>
-          <input type='file' onChange={uploadHandler} />
+      <div className="file-card">
+        <div className="file-inputs">
+          <input type="file" onChange={uploadHandler} />
           <button>
-            <i className='fa-solid fa-cloud-arrow-up'></i>
-            Upload Files
+            <i className="fa-solid fa-cloud-arrow-up"></i>
+            {t("upload_file")}
           </button>
         </div>
 
-        <p className='main'>Supported files</p>
-        <p className='info'>Excel, CSV</p>
+        <p className="main">{t("supported_file")}</p>
+        <p className="info">Excel, CSV</p>
       </div>
     </>
   );

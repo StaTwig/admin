@@ -14,7 +14,7 @@ client.on("error", (err) => {
 });
 
 exports.RbacCache = function () {
-  RbacModel.find({})
+  RbacModel.find({orgId: "ORG100001"})
     .then((permissions) => {
       if (permissions.length > 0) {
         permissions.forEach((role) => {
@@ -22,13 +22,15 @@ exports.RbacCache = function () {
             if (err) console.log(err);
             console.log("DELETE", res, role.role);
           });
-          if (role.permissions.length > 0) {
+          if (role?.permissions?.length && role?.permissions?.length > 0) {
             client.sadd(role.role, role.permissions, (err, data) => {
               if (err) {
                 console.log(err);
               }
               console.log("Cache Loaded " + data + " --- " + role.role + "\n");
             });
+          } else {
+            console.log("No permissions for this role - ", role);
           }
         });
       } else {
