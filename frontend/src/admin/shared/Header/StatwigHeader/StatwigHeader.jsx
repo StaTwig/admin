@@ -63,12 +63,8 @@ export default function StatwigHeader() {
 		history.push("/overview");
 	};
 
-	console.log(location.pathname);
-
 	const [ProfileClickBtn, setProfileClickBtn] = useState(false);
 	const [LangOption, setLangOption] = React.useState(i18n.language);
-
-	console.log(LangOption);
 
 	const changeLanguage = (option) => {
 		setLangOption(option);
