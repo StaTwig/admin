@@ -3,10 +3,11 @@ import "./Permission.css";
 import Roles from "./Roles";
 
 export default function Permission({
-	permissions,
-	updatePermissions,
-	updatedPermissions,
-	permissionUpdate,
+  t,
+  permissions,
+  updatePermissions,
+  updatedPermissions,
+  permissionUpdate,
 }) {
 	const [flag, setFlag] = useState(false);
 	const [List, setList] = useState([]);
@@ -21,7 +22,7 @@ export default function Permission({
 	return (
 		<section className="permission-container">
 			<div className="permission-container-header">
-				<p className="vl-body f-500 vl-black">Permission Details</p>
+				<p className="vl-body f-500 vl-black">{t("permission_details")}</p>
 				<button
 					disabled={updatedPermissions === null ? true : false}
 					className={`vl-btn vl-btn-sm ${
@@ -29,7 +30,7 @@ export default function Permission({
 					}`}
 					onClick={permissionUpdate}
 				>
-					Save the Changes
+					{t("save_changes")}
 				</button>
 				{/* <button
           className="vl-btn vl-btn-sm vl-btn-primary"
@@ -37,23 +38,25 @@ export default function Permission({
         >
           Save the Changes
         </button> */}
-			</div>
-			{List.map((list) =>
-				Boolean(permissions) &&
-				list !== "_id" &&
-				list !== "role" &&
-				list !== "permissions" &&
-				permissions[`${list.toLowerCase()}`] ? (
-					<Roles
-						updatePermissions={updatePermissions}
-						flag={flag}
-						refresh={(f) => setFlag(f)}
-						list={list}
-						permissionType={list?.toLowerCase()}
-						permissions={permissions ? permissions[`${list.toLowerCase()}`] : null}
-					/>
-				) : null,
-			)}
-		</section>
-	);
+      </div>
+      {List.map((list) =>
+        Boolean(permissions) &&
+        list !== "_id" &&
+        list !== "role" &&
+        list !== "permissions" &&
+        permissions[`${list.toLowerCase()}`] ? (
+          <Roles
+            updatePermissions={updatePermissions}
+            flag={flag}
+            refresh={(f) => setFlag(f)}
+            list={list}
+            permissionType={list?.toLowerCase()}
+            permissions={
+              permissions ? permissions[`${list.toLowerCase()}`] : null
+            }
+          />
+        ) : null
+      )}
+    </section>
+  );
 }

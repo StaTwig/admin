@@ -586,6 +586,13 @@
   "warehouse_title":"Warehouse Title",
   "loc_detail":"Location Details",
   "existing":"Existing",
-  "warehouse":"Warehouse"
-
+  "warehouse":"Warehouse",
+  "roles_permissions":"Roles & Permissions",
+  "add_role":"Add Role",
+  "select_role":"Select Role",
+  "user_role":"User Role",
+  "analytics":"Analytics",
+  "payments":"Payments",
+  "permission_details":"Permission Details",
+  "save_changes":"Save Changes"
 }
