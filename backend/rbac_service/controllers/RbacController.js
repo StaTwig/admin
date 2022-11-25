@@ -26,7 +26,30 @@ exports.getPermissions = [
 	auth,
 	async (req, res) => {
 		try {
-			const { role, orgId } = req.query;
+			const { role, orgId, new_role } = req.query;
+
+			if (new_role) {
+				const result = await RbacModel.findOne({ role: "admin" });
+				const permissions = result.toJSON();
+
+				let defaultPermissions = {};
+				Object.keys(permissions).map((key) => {
+					if (key === "permissions") {
+						defaultPermissions.permissions = [];
+					} else if (typeof permissions[key] === "object") {
+						let currPerm = permissions[key];
+						Object.keys(currPerm).map((subPerm) => {
+							if (typeof currPerm[subPerm] === "boolean") {
+								currPerm[subPerm] = false;
+							}
+						});
+						defaultPermissions[key] = currPerm;
+					}
+				});
+
+				return apiResponse.successResponseWithData(res, "Empty permissions!", [defaultPermissions]);
+			}
+
 			let query = {};
 			if (role) {
 				query.role = role;
@@ -37,6 +60,7 @@ exports.getPermissions = [
 			const permissions = await RbacModel.find(query);
 			return apiResponse.successResponseWithData(res, `Permissions - `, permissions);
 		} catch (err) {
+			console.log(err);
 			return apiResponse.ErrorResponse(res, err.message);
 		}
 	},
@@ -47,7 +71,7 @@ exports.getRoles = [
 	async (req, res) => {
 		try {
 			var roles = [];
-			const results = await RbacModel.find({}, { _id: 0, role: 1 });
+			const results = await RbacModel.find({ orgId: "ORG100001" }, { _id: 0, role: 1 });
 			results.map((element) => {
 				roles.push(element.role);
 			});
@@ -128,7 +152,7 @@ exports.updatePermissions = [
 					{ new: true, upsert: true },
 				);
 
-				const result = await axios.get(LEDGER_SOURCE + "/rbacmanagement/api/rbacCache");
+				const result = await axios.get(REDIS_HOST + "/rbacmanagement/api/rbacCache");
 				if (result.data == undefined) {
 					return apiResponse.errorResponse(res, result.data);
 				}

@@ -191,6 +191,7 @@ async function createOrg({ firstName, lastName, emailId, phoneNumber, organisati
 	};
 	//   await logEvent(event_data);
 }
+
 function getOrgCondition(query) {
 	let matchCondition = {};
 	if (query.orgType && query.orgType != "") {
@@ -254,7 +255,7 @@ exports.getPendingOrgs = [
 		try {
 			const pendingOrgs = await OrganisationModel.find({
 				status: "NOTVERIFIED",
-				isRegistered: true
+				isRegistered: true,
 			});
 
 			return apiResponse.successResponseWithData(res, "Organisation list", pendingOrgs);
@@ -317,6 +318,75 @@ exports.getOrgs = [
 			}
 			// console.log("Users", users);
 			return apiResponse.successResponseWithData(res, "Organisation list", users);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	},
+];
+
+exports.getOrgDetails = [
+	auth,
+	async (req, res) => {
+		try {
+			const orgId = req.query?.orgId;
+
+			if (!orgId) {
+				return apiResponse.validationErrorWithData(res, "Org Id not provided", { orgId: orgId });
+			}
+
+			const organisation = await OrganisationModel.findOne({ id: orgId });
+			if (!organisation) {
+				throw new Error("Organisation not found!");
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Organisation details fetched!",
+				organisation,
+			);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	},
+];
+
+exports.getWarehouseAndUsersById = [
+	auth,
+	async (req, res) => {
+		try {
+			const warehouseId = req.query?.warehouseId;
+
+			if (!warehouseId) {
+				return apiResponse.validationErrorWithData(res, "Warehouse Id not provided", {
+					warehouseId: warehouseId,
+				});
+			}
+
+			const warehouseDetails = await WarehouseModel.aggregate([
+				{ $match: { id: warehouseId } },
+				{
+					$lookup: {
+						from: "employees",
+						let: { warehouseId: "$id" },
+						pipeline: [
+							{ $match: { $expr: { $and: [{ $in: ["$$warehouseId", "$warehouseId"] }] } } },
+						],
+						as: "employees",
+					},
+				},
+			]);
+
+			if (!warehouseDetails) {
+				throw new Error("Warehouse not found!");
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Warehouse details fetched!",
+				warehouseDetails[0],
+			);
 		} catch (err) {
 			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
@@ -447,7 +517,7 @@ exports.updateOrg = [
 				{
 					$set: {
 						accountStatus: status,
-						role: "powerUser",
+						role: "admin",
 					},
 				},
 			);
@@ -590,7 +660,7 @@ exports.addNewOrganisation = [
 				postalAddress: addr,
 				accountStatus: "ACTIVE",
 				warehouseId: warehouseId == "NA" ? [] : [warehouseId],
-				role: "admin"
+				role: "admin",
 			});
 			await user.save();
 
@@ -665,8 +735,6 @@ exports.addOrgsFromExcel = [
 				workbook.Sheets[sheet_name_list[0]],
 				{ dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
 			);
-
-			console.log(data.entries());
 			const formatedData = new Array();
 			for (const [index, user] of data.entries()) {
 				const firstName = user["FIRST NAME"]
