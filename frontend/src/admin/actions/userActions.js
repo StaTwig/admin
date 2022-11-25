@@ -4,7 +4,7 @@ import {
   PROFILE_SUCCESS,
   GET_ALL_USERS_SUCCESS,
 } from "../constants/userConstants";
-import { config } from "../../config;
+import { config } from "../../config";
 import axios from "axios";
 
 export const updateProfile = async (data) => {
