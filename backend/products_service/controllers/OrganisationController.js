@@ -12,14 +12,14 @@ exports.getOrganisations = [
   auth,
   async (req, res) => {
     try {
-      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
-      let organisations =  orgDetails.type=="Third Party Logistics" ? await TplOrgModel.find({}) 
-      : await OrganisationModel.find({
-        $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
-      })
+      const orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId }).lean()
+      const organisations = orgDetails?.type == "Third Party Logistics" ? await TplOrgModel.find({})
+        : await OrganisationModel.find({
+          $or: [{ status: "ACTIVE" }, { status: { $exists: false } }],
+        })
       return apiResponse.successResponseWithData(
         res,
-        "Organisations",
+        "Organizations",
         organisations
       );
     } catch (err) {
@@ -130,7 +130,7 @@ exports.addNewOrgNWarehouse = [
       warehouse['organisationId'] = organisationId;
       let newWarehouse = new TplWarehouseModel(warehouse);
       await newWarehouse.save();
-      return apiResponse.successResponseWithData(res, "Added warehouse successfully", [newOrg, newWarehouse]);  
+      return apiResponse.successResponseWithData(res, "Added warehouse successfully", [newOrg, newWarehouse]);
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err.message)
@@ -179,11 +179,11 @@ exports.getWarehouses = [
         existingWarehouses = user.warehouseId;
         existingWarehouses = existingWarehouses.concat(user.pendingWarehouseId);
       }
-      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId})
-      let organisations = orgDetails.type=="Third Party Logistics" ? 
-          await TplWarehouseModel.find({
+      let orgDetails = await OrganisationModel.findOne({ id: req.user.organisationId })
+      let organisations = orgDetails.type == "Third Party Logistics" ?
+        await TplWarehouseModel.find({
           organisationId: req.query.id,
-        })  :  await WarehouseModel.find({
+        }) : await WarehouseModel.find({
           organisationId: req.query.id,
           status: "ACTIVE",
           id: { $nin: existingWarehouses }

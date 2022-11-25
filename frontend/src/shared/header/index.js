@@ -8,12 +8,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Link, useHistory } from "react-router-dom";
 import "./Header.css";
 import {
-  Avatar,
   CircularProgress,
   Divider,
-  IconButton,
-  Menu,
-  MenuItem,
+
 } from "@mui/material";
 import { MenuOutlined } from "@mui/icons-material";
 import {
@@ -403,8 +400,6 @@ const Header = (props) => {
 
   const [LangOption, setLangOption] = React.useState(i18n.language);
 
-  console.log(LangOption);
-
   const changeLanguage = (option) => {
     setLangOption(option);
     i18n.changeLanguage(option);
@@ -475,21 +470,21 @@ const Header = (props) => {
 
             {(profile.role === "admin" ||
               profile.type === "CENTRAL_AUTHORITY") && (
-              <li className="admin-nav-item configure-link user-switch-btn">
-                <div className="switch-button">
-                  <p className="vl-note">{t("user")}</p>
-                  <i class="fa-solid fa-caret-down"></i>
-                </div>
-                <div className={`configure-list width-change active `}>
-                  <button
-                    onClick={handleUiSwitch}
-                    className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary"
-                  >
-                    {t("switch_to_admin")}
-                  </button>
-                </div>
-              </li>
-            )}
+                <li className="admin-nav-item configure-link user-switch-btn">
+                  <div className="switch-button">
+                    <p className="vl-note">{t("user")}</p>
+                    <i className="fa-solid fa-caret-down"></i>
+                  </div>
+                  <div className={`configure-list width-change active `}>
+                    <button
+                      onClick={handleUiSwitch}
+                      className="vl-btn vl-btn-sm vl-btn-full vl-btn-primary"
+                    >
+                      {t("switch_to_admin")}
+                    </button>
+                  </div>
+                </li>
+              )}
 
             <li className="navItems notifyList">
               <div className="notifications cursorP">
@@ -917,21 +912,20 @@ const Header = (props) => {
                   {image ? (
                     <>
                       <div className="green__active_sm"></div>
-                      <img src={image} alt="image" />
+                      <img src={image} alt="Profile" />
                     </>
                   ) : (
                     <CircularProgress className="progress__bar" />
                   )}
                 </div>
                 <div
-                  className={`header__profile_dropdown ${
-                    ProfileClickBtn && "active"
-                  }`}
+                  className={`header__profile_dropdown ${ProfileClickBtn && "active"
+                    }`}
                 >
                   <div className="header__profile_top">
                     <div className="header__inner_profile_icon">
                       <div className="green__active"></div>
-                      <img src={image} alt="image" />
+                      <img src={image} alt="Profile" />
                     </div>
                     <div className="header__inner_profile_content">
                       <h1 className="vl-name-header f-500 profile__black">
@@ -949,14 +943,14 @@ const Header = (props) => {
                       className="header__link__card"
                       onClick={() => props.history.push("/profile")}
                     >
-                      <i class="fa-solid fa-user"></i>
+                      <i className="fa-solid fa-user"></i>
                       <p className="vl-body f-400">{t("my_profiles")}</p>
                     </div>
                     <div
                       className="header__link__card"
                       onClick={() => props.history.push("/settings")}
                     >
-                      <i class="fa-solid fa-gear"></i>
+                      <i className="fa-solid fa-gear"></i>
                       <p className="vl-body f-400">{t("account_setting")}</p>
                     </div>
                     <div
@@ -969,7 +963,7 @@ const Header = (props) => {
                         }
                       }}
                     >
-                      <i class="fa-solid fa-earth-americas"></i>
+                      <i className="fa-solid fa-earth-americas"></i>
                       <div className="langugae__option">
                         <p className="vl-body f-400">{t("switch_lang")}</p>
                         <div className="lang__logo">
@@ -991,7 +985,7 @@ const Header = (props) => {
                       className="header__link__card"
                       onClick={() => dispatch(logoutUser())}
                     >
-                      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                      <i className="fa-solid fa-arrow-right-from-bracket"></i>
                       <p className="vl-body f-400">{t("sign_out")}</p>
                     </div>
                   </div>

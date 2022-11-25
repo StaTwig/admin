@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import Modal from "../../../../shared/modal";
 import {
+	getAllPermissions,
 	getAllRoles,
 	getPermissionByRoleAndOrg,
 	getPermissions,
@@ -15,9 +16,15 @@ import StatwigHeader from "../../../shared/Header/StatwigHeader/StatwigHeader";
 import SuccessPopup from "../../../shared/Popup/SuccessPopup";
 import "./Configuration.css";
 import Permission from "./Permission/Permission";
+import { createFilterOptions } from "@material-ui/lab";
+import { turnOff, turnOn } from "../../../../actions/spinnerActions";
+import { useTranslation } from "react-i18next";
+
+const filter = createFilterOptions();
 
 export default function Configuration(props) {
 	const history = useHistory();
+  const { t } = useTranslation();
 	if (props.user.type !== "CENTRAL_AUTHORITY") {
 		history.push("/overview");
 	}
@@ -32,14 +39,24 @@ export default function Configuration(props) {
 		const roles = await getAllRoles();
 		setRoles(roles);
 	}
+
 	useEffect(() => {
 		getUserRoles();
 	}, []);
+
+	const uniq = [...new Set(roles)];
+
 	const dispatch = useDispatch();
-	async function getRolePermissions() {
-		const permissions = await getPermissionByRoleAndOrg(selectedRole, props.user.organisationId);
-		const allPermissions = await dispatch(getPermissions());
-		setPermissions(permissions);
+
+	async function getRolePermissions(flag) {
+    dispatch(turnOn());
+		let permissions;
+		if (flag) {
+			permissions = await getAllPermissions();
+		} else {
+			permissions = await getPermissionByRoleAndOrg(selectedRole, props.user.organisationId);
+		}
+		setPermissions(permissions[0]);
 		let updates = {
 			admin: permissions[0]?.admin,
 			inventory: permissions[0]?.inventory,
@@ -51,13 +68,16 @@ export default function Configuration(props) {
 			shipment: permissions[0]?.shipment,
 			track: permissions[0]?.track,
 		};
-		setUpdatedPermissions(updates);
+    setUpdatedPermissions(updates);
+    dispatch(turnOff());
 	}
 
 	useEffect(() => {
-		getRolePermissions();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedRole]);
+		if (roles) {
+			const res = roles.find((role) => role === selectedRole);
+			getRolePermissions(res ? false : true);
+		}
+	}, [roles, selectedRole]);
 
 	async function permissionUpdate() {
 		if (updatedPermissions) {
@@ -70,12 +90,10 @@ export default function Configuration(props) {
 		}
 	}
 
-	const uniq = [...new Set(roles)];
-
 	async function updatePermissions(permissionType, data) {
 		let updates = updatedPermissions;
-    updates[permissionType] = data;
-    console.log(updates, updatedPermissions);
+		updates[permissionType] = data;
+		console.log(updates, updatedPermissions);
 		setUpdatedPermissions(updates);
 	}
 
@@ -112,8 +130,8 @@ export default function Configuration(props) {
 					<div className="admin-role-container admin-section-space">
 						<div className="role-headers">
 							<div className="role-page-link">
-								<p className="vl-subheading f-700">Configuration</p>
-								<p className="vl-body f-400 vl-grey-sm">Roles & Permissions</p>
+								<p className="vl-subheading f-700">{t("configuration")}</p>
+								<p className="vl-body f-400 vl-grey-sm">{t("roles_permissions")}</p>
 							</div>
 							{/* <div className="config-btn-group">
                 <button
@@ -132,9 +150,26 @@ export default function Configuration(props) {
 						</div>
 
 						<div className="input-set">
-							<p className="vl-body f-500 vl-black">Select Role</p>
+							<p className="vl-body f-500 vl-black">{t("select_role")}</p>
 							<div className="input-full-column-space">
-								<Select
+								<Autocomplete
+									fullWidth
+									options={uniq}
+									onChange={(event, value) => setSelectedRole(value)}
+									value={selectedRole}
+									freeSolo={true}
+									filterOptions={(options, params) => {
+										const filtered = filter(options, params);
+										const { inputValue } = params;
+										const isExisting = options.some((option) => inputValue === option);
+										if (inputValue !== "" || !isExisting) {
+											filtered.push(inputValue);
+										}
+										return filtered;
+									}}
+									renderInput={(params) => <TextField {...params} label="Role" />}
+								/>
+								{/* <Select
 									fullWidth
 									id="combo-box-demo"
 									className="vl-role-select"
@@ -146,24 +181,24 @@ export default function Configuration(props) {
 											{role}
 										</MenuItem>
 									))}
-								</Select>
+								</Select> */}
 							</div>
 						</div>
 
 						<div className="permission-tab-ribbon">
 							<div className="ribbon-tab active ">
-								<p className="vl-body">User Role</p>
+								<p className="vl-body">{t("user_role")}</p>
 							</div>
-							<div className="ribbon-tab">
-								<p className="vl-body">Analytics</p>
-							</div>
-							<div className="ribbon-tab">
-								<p className="vl-body">Payments</p>
-							</div>
+							{/* <div className="ribbon-tab">
+                <p className="vl-body">{t("analytics")}</p>
+              </div>
+              <div className="ribbon-tab">
+                <p className="vl-body">{t("payments")}</p>
+              </div> */}
 						</div>
 
 						<Permission
-							permissions={permissions[0]}
+							permissions={permissions}
 							updatePermissions={updatePermissions}
 							permissionUpdate={permissionUpdate}
 							updatedPermissions={updatedPermissions}
@@ -191,7 +226,7 @@ export default function Configuration(props) {
 
 			<Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open2} onClose={handleClose2}>
 				<DialogContent sx={{ padding: "0rem !important" }}>
-					<AssignRole handleClose={handleClose2} />
+					<AssignRole handleClose2={handleClose2} />
 				</DialogContent>
 			</Dialog>
 		</>

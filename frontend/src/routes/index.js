@@ -59,8 +59,8 @@ import Dashboard from "../admin/pages/statwig-admin/Dashboard/Dashboard";
 import AdminOrganization from "../admin/pages/statwig-admin/Organization/AdminOrganization";
 import Locations from "../admin/pages/statwig-admin/Locations/Locations";
 import ViewUsers from "../admin/pages/statwig-admin/ViewUsers/ViewUsers";
+import Configuration from "../admin/pages/statwig-admin/Configuration/Configuration";
 import Users from "../admin/pages/org-admin/Users/Users";
-import Configuration from "../admin/pages/org-admin/Configuration/Configuration";
 import AdminProductList from "../admin/pages/org-admin/ProductList/ProductList";
 
 
@@ -161,13 +161,13 @@ const routes = (
     {/* Admin Statwig */}
     <Route path='/statwig/dashboard' component={requireAuth(Dashboard, true)} />
     <Route path='/statwig/manage-organization' component={requireAuth(AdminOrganization, true)} />
-    <Route path='/statwig/view-locations/:org' component={requireAuth(Locations, true)} />
-    <Route path='/statwig/view-users/:product/:org' component={requireAuth(ViewUsers, true)} />
+    <Route path='/statwig/view-locations/:orgId' component={requireAuth(Locations, true)} />
+    <Route path='/statwig/view-users/:warehouseId/:orgId' component={requireAuth(ViewUsers, true)} />
+    <Route path='/statwig/roles' component={requireAuth(Configuration, true)} />
 
     {/* Admin Organization */}
     <Route path='/org/dashboard' component={requireAuth(OrgDashboard, true)} />
     <Route path='/org/manage-users' component={requireAuth(Users, true)} />
-    <Route path='/statwig/roles' component={requireAuth(Configuration, true)} />
     <Route path='/org/product-list' component={requireAuth(AdminProductList, true)} />
 
     <Route component={ErrorPageContainer} />

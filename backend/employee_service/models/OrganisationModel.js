@@ -27,6 +27,7 @@ const OrganizationSchema = new mongoose.Schema(
     primaryContactId: { type: String, default: null },
     logoId: { type: String, default: null },
     type: String,
+    parentOrgId: String,
     status: {
       type: String,
       enum: ["ACTIVE", "DEACTIVATED", "NOTVERIFIED", "INCOMPLETE"],
