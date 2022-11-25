@@ -609,6 +609,13 @@
   "warehouse_title":"Título del almacén",
   "loc_detail":"Detalles de ubicación",
   "existing":"Existente",
-  "warehouse":"Depósito"
-
+  "warehouse":"Depósito",
+  "roles_permissions":"Roles y permisos",
+  "add_role":"Agregar rol",
+  "select_role":"Seleccionar Rol",
+  "user_role":"Rol del usuario",
+  "analytics":"Analítica",
+  "payments":"Pagos",
+  "permission_details":"Detalles del permiso",
+  "save_changes":"Guardar cambios"
 }
