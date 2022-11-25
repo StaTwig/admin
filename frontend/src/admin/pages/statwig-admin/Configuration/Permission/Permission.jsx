@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Permission.css";
 import Roles from "./Roles";
 
@@ -9,22 +9,30 @@ export default function Permission({
   updatedPermissions,
   permissionUpdate,
 }) {
-  const [flag, setFlag] = useState(false);
-  const List = permissions ? Object.keys(permissions) : [];
-  return (
-    <section className="permission-container">
-      <div className="permission-container-header">
-        <p className="vl-body f-500 vl-black">{t("permission_details")}</p>
-        <button
-          disabled={updatedPermissions === null ? true : false}
-          className={`vl-btn vl-btn-sm ${
-            updatedPermissions ? "vl-btn-primary" : "vl-btn-disabled"
-          }`}
-          onClick={permissionUpdate}
-        >
-          {t("save_changes")}
-        </button>
-        {/* <button
+	const [flag, setFlag] = useState(false);
+	const [List, setList] = useState([]);
+	// const List = permissions ? Object.keys(permissions) : [];
+
+	useEffect(() => {
+		if (permissions) {
+			setList(Object.keys(permissions));
+		}
+	}, [permissions]);
+	
+	return (
+		<section className="permission-container">
+			<div className="permission-container-header">
+				<p className="vl-body f-500 vl-black">{t("permission_details")}</p>
+				<button
+					disabled={updatedPermissions === null ? true : false}
+					className={`vl-btn vl-btn-sm ${
+						updatedPermissions ? "vl-btn-primary" : "vl-btn-disabled"
+					}`}
+					onClick={permissionUpdate}
+				>
+					{t("save_changes")}
+				</button>
+				{/* <button
           className="vl-btn vl-btn-sm vl-btn-primary"
           onClick={permissionUpdate}
         >

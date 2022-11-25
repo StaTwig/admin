@@ -72,6 +72,15 @@ export const getRequestsPending = (skip = 0, limit = 5) => {
 	};
 };
 
+export const getAllPermissions = async () => {
+	try {
+		const result = await axios.get(`${config().getPermissionsUrl}?new_role=${true}`);
+		return result.data.data;
+	} catch (e) {
+		throw Error(e.message);
+	}
+};
+
 export const getPermissions = () => {
 	try {
 		return async (dispatch) => {
@@ -309,7 +318,7 @@ export const getWarehouseAndUsersById = async (warehouseId) => {
 	} catch (err) {
 		throw err;
 	}
-}
+};
 
 export const getOrgs = (params) => {
 	try {

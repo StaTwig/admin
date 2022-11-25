@@ -400,8 +400,6 @@ const Header = (props) => {
 
   const [LangOption, setLangOption] = React.useState(i18n.language);
 
-  console.log(LangOption);
-
   const changeLanguage = (option) => {
     setLangOption(option);
     i18n.changeLanguage(option);

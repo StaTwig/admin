@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Analytics from "./Analytics/Analytics";
 import "./OrgDashboard.css";
-import Pendings from "./Pendings/Pendings";
 import "../../../assets/styles/index.css";
 import OrgHeader from "../../../shared/Header/OrgHeader/OrgHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +14,8 @@ import {
   getWareHouses,
 } from "../../../actions/organisationActions";
 import { useHistory } from "react-router";
+import PendingUsers from "./Pendings/PendingUsers";
+import PendingWarehouses from "./Pendings/PendingWarehouses";
 import { useTranslation } from "react-i18next";
 
 export default function OrgDashboard(props) {
@@ -22,9 +23,9 @@ export default function OrgDashboard(props) {
   const { t } = useTranslation();
   const history = useHistory();
 
-  // if (props.user.role !== "admin") {
-  //   history.push("/overview");
-  // }
+  if (props.user.role !== "admin") {
+    history.push("/overview");
+  }
 
   const user = useSelector((state) => state.user);
   const permissions = useSelector(
@@ -66,13 +67,23 @@ export default function OrgDashboard(props) {
       <OrgHeader />
       <section className="admin-page-layout">
         <div className="admin-container">
-          <div className="admin-dashboard-container admin-section-space">
+          <div className="admin-dashboard-container-alt admin-section-space">
             <div className="dashboard-left-space">
               <Analytics t={t} userAnalytics={userAnalytics} />
             </div>
             <div className="dashboard-right-space">
-              <Pendings
+              <PendingUsers
                 t={t}
+                heading={"Users Approvals"}
+                permissions={permissions}
+                addresses={addresses}
+                {...props}
+              />
+            </div>
+            <div className="dashboard-right-space">
+              <PendingWarehouses
+                t={t}
+                heading={"Location Approvals"}
                 permissions={permissions}
                 addresses={addresses}
                 {...props}

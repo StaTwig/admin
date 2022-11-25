@@ -68,13 +68,10 @@ export default function Roles({
   const [permission, setPermission] = useState({});
 
   useEffect(() => {
-    setPermission(permissions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    // setPermission(permission);
-  }, [permission]);
+		let temp = permissions;
+		setPermission(temp);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [permissions]);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -117,17 +114,17 @@ export default function Roles({
                   onChange={() => {
                     let obj = permission;
                     obj[`${key}`] = !obj[`${key}`];
-                    setPermission(obj);
-                    updatePermissions(permissionType, obj);
-                    refresh(!flag);
-                  }}
-                  checked={permission[`${key}`]}
-                />
-              </div>
-            </div>
-          </AccordionDetails>
-        ))}
-      </Accordion>
-    </div>
-  );
+										setPermission(obj);
+										updatePermissions(permissionType, obj);
+										refresh(!flag);
+									}}
+									checked={permission[`${key}`] ? true : false}
+								/>
+							</div>
+						</div>
+					</AccordionDetails>
+				))}
+			</Accordion>
+		</div>
+	);
 }
