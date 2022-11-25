@@ -49,12 +49,13 @@ exports.getApprovals = [
         }
       ])
       return apiResponse.successResponseWithData(
+        req,
         res,
         "List of Users Not verified / get Approval List",
         employees
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];

@@ -2749,7 +2749,8 @@ exports.getAllUsers = [
       );
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "Users Retrieved Success",
         confirmedUsers
       );
@@ -2767,7 +2768,8 @@ exports.getWarehouseUsers = [
         warehouseId: req.query.warehouseId,
       });
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "Users Retrieved Success",
         users
       );
@@ -2819,7 +2821,8 @@ exports.getOrgUsers = [
       ]);
 
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "Organisation Users",
         users
       );
@@ -2908,7 +2911,8 @@ exports.getOrgUserAnalytics = [
         userInitials: analytics[0].total.userInitials,
       };
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "User Analytics",
         analyticsObject
       );
@@ -2928,7 +2932,8 @@ exports.getUsers = [
       });
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "Organisation Users",
         confirmedUsers
       );
@@ -2947,12 +2952,13 @@ exports.getOrgActiveUsers = [
         accountStatus: "ACTIVE",
       }).select("firstName lastName emailId id");
       return apiResponse.successResponseWithData(
-        res,
+        req,
+		res,
         "Organisation active users",
         users
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2965,7 +2971,7 @@ exports.Image = [
       return apiResponse.successResponseWithData(res, "Image URL", signedUrl);
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err.message);
+      return apiResponse.ErrorResponse(req, res, err.message);
     }
   },
 ];

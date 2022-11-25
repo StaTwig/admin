@@ -23,12 +23,8 @@ app.get("/getOrgs", getOrgs);
 app.get("/getPendingOrgs", getPendingOrgs);
 app.get("/getOrgAnalytics", getOrgAnalytics);
 app.post("/addNewOrganisation", addNewOrganisation);
-app.get("/getApprovals", authController.getApprovals);
-app.get("/acceptApproval", authController.acceptApproval); // /approveApproval?id=123
-app.get("/rejectApproval", authController.rejectApproval); // /rejectApproval?id=123
-app.post("/addUser", authController.addUser);
 app.get("/updateUserRole", authController.updateUserRole);
-app.post("/updateOrg", authController.updateOrg);
+app.post("/updateOrg", updateOrg);
 app.get("/activateUser", authController.activateUser); // /activateUser?id=123
 app.get("/deactivateUser", authController.deactivateUser); // /deactivateUser?id=123
 app.get("/getImage/:key", authController.Image);
