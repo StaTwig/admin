@@ -445,7 +445,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.REACT_APP_ENVIRONMENT || `local`; // change for respective environments
+  const environment = process.env.REACT_APP_ENVIRONMENT || `prod`; // change for respective environments
   const conf = confs[environment];
   return conf;
 }
