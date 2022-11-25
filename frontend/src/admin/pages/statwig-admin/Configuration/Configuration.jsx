@@ -198,6 +198,7 @@ export default function Configuration(props) {
 						</div>
 
 						<Permission
+							t={t}
 							permissions={permissions}
 							updatePermissions={updatePermissions}
 							permissionUpdate={permissionUpdate}
