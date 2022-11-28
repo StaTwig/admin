@@ -6,7 +6,7 @@ export const fetchBatch = async (data) => {
 		const result = await axios.post(`${config().fetchBatchDetails}`, data);
 		return result;
 	} catch (err) {
-		throw err;
+		return err.response;
 	}
 };
 
