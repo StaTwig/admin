@@ -10,7 +10,7 @@ const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile, getSignedUrl } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
@@ -383,6 +383,24 @@ exports.getAllUsers = [
   },
 ];
 
+exports.getWarehouseUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find(
+        {warehouseId: req.query.warehouseId}
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Users Retrieved Success",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getOrgUsers = [
   auth,
   async (req, res) => {
@@ -413,9 +431,15 @@ exports.getOrgUsers = [
             role: 1,
             emailId: 1,
             postalAddress: 1,
+            createdAt: 1,
             location: "$orgs.postalAddress",
+            city: "$orgs.city",
+            region: "$orgs.region",
+            country: "$orgs.country"
           },
         },
+        {$skip: parseInt(req.query.skip) || 0},
+        {$limit: parseInt(req.query.limit) || 0}
       ]);
 
       return apiResponse.successResponseWithData(
@@ -429,6 +453,95 @@ exports.getOrgUsers = [
     }
   },
 ];
+
+exports.getOrgUserAnalytics = [
+  auth,
+  async (req, res) => {
+    try{
+      const {orgId} = req.query;
+      let matchQuery = orgId ? {organisationId: orgId} : {};
+      const analytics = await EmployeeModel.aggregate([
+				{ $match: matchQuery },
+				{
+					$facet: {
+						total: [
+							{ $match: {} },
+							{
+								$group: {
+									_id: null,
+									employees: {
+										$addToSet: {
+											employeeId: "$id",
+										},
+									},
+									userInitials: {
+										$firstN: {
+											input: "$firstName",
+											n: 5,
+										},
+									},
+								},
+							},
+							{
+								$project: {
+									count: {
+										$cond: {
+											if: { $isArray: "$employees" },
+											then: { $size: "$employees" },
+											else: "NA",
+										},
+                  },
+                  userInitials: 1
+								},
+							},
+						],
+						active: [
+							{ $match: { accountStatus: "ACTIVE" } },
+							{
+								$group: {
+									_id: null,
+									employees: {
+										$addToSet: {
+											employeeId: "$id",
+										},
+									},
+								},
+							},
+							{
+								$project: {
+									count: {
+										$cond: {
+											if: { $isArray: "$employees" },
+											then: { $size: "$employees" },
+											else: "NA",
+										},
+									},
+								},
+							},
+						],
+					},
+				},
+				{ $unwind: "$total" },
+				{ $unwind: "$active" },
+			]);
+      console.log(analytics);
+      const analyticsObject = {
+        totalCount: analytics[0].total.count,
+        activeCount: analytics[0].active.count,
+        inactiveCount:  analytics[0].total.count - analytics[0].active.count,
+        userInitials: analytics[0].total.userInitials
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "User Analytics",
+        analyticsObject
+      );
+    }catch(err){
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
 
 exports.getUsers = [
   auth,
@@ -467,3 +580,17 @@ exports.getOrgActiveUsers = [
     }
   },
 ];
+
+exports.Image = [
+  auth,
+  async (req, res) => {
+    try {
+      const signedUrl = await getSignedUrl(req.params.key);
+      return apiResponse.successResponseWithData(res, "Image URL", signedUrl);
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+

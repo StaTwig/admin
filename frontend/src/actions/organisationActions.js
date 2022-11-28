@@ -67,18 +67,19 @@ export const getRequestsPending = (skip = 0, limit = 5) => {
         payload: result.data,
       });
       dispatch(turnOff());
-      return result.data.data.length;
+      return result?.data?.data?.length;
     };
   } catch (e) {
     throw Error(e.message);
   }
 };
 
-export const getPermissions = () => {
+export const getPermissions = (orgId) => {
   try {
     return async (dispatch) => {
       dispatch(turnOn());
-      const result = await axios.get(config().getPermissionsUrl);
+      console.log("ORG ID IS",orgId);
+      const result = orgId ? await axios.get(`${config().getPermissionsUrl}/${orgId}`) : await axios.get(config().getPermissionsUrl);
       dispatch({
         type: SET_PERMISSIONS,
         payload: result.data,
@@ -160,7 +161,7 @@ export const verifyOrgUser = async (data) => {
   try {
     const result = await axios.get(
       `${config().verifyOrgUserUrl}?id=${data.id}&role=${data.role
-      }&warehouseId=${data.warehouse}`
+      }&warehouseId=${data.warehouse}&phoneNumber=${data.phoneNumber}`
     );
     return result;
   } catch (e) {
@@ -371,7 +372,7 @@ export const getOrgActiveUsers = () => {
         payload: result.data,
       });
       dispatch(turnOff());
-      return result.data.data.length;
+      return result?.data?.data?.length;
     };
   } catch (e) {
     throw Error(e.message);
@@ -577,6 +578,15 @@ export const getAllRoles = async () => {
   }
 };
 
+export const getAllRolesForTPL = async (organisationId) => {
+  try {
+    const result = await axios.get(`${config().fetchTPLRoles}/${organisationId}`);
+    return result.data.data;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getPermissionByRole = async (role) => {
   try {
     const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}`);
@@ -588,7 +598,6 @@ export const getPermissionByRole = async (role) => {
 
 export const updatePermissionsByRole = async (data) => {
   try {
-    console.log('url:', config().updatePermissions);
     const result = await axios.post(
       `${config().updatePermissions}`,
       data

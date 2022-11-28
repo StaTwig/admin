@@ -7,6 +7,9 @@ const OrganisationSchema = new mongoose.Schema(
       type: String,
       default: "JNIBF, Gachibowli, Hyderabad, Telanagana, India",
     },
+    parentOrgId: {
+      type: String,
+    },
     region: {
       type: Object,
       default: {
@@ -22,7 +25,7 @@ const OrganisationSchema = new mongoose.Schema(
       },
     },
     location: {
-      type: String,
+      type: Object,
       required: false,
       default: {
         longitude: 12.12323453534,
@@ -48,7 +51,7 @@ const OrganisationSchema = new mongoose.Schema(
       default: ["user_id 1", "user_id 2"],
     },
     warehouseEmployees: {
-      type: String,
+      type: Array,
       default: ["em12345", "em12346", "em12347"],
     },
   },

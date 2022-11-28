@@ -75,7 +75,7 @@ const Role = (props) => {
           selectedValue != value ? " d-none" : " bg-light mb-2"
         }`}
       >
-        {listPermission.map((permissionType, index) => (
+        {props?.per.permissions?.map((permissionType, index) => (
           <Permission
             key={index}
             permissionTitle={permissionType}

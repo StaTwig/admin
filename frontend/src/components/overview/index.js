@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import NewRequests from "./newrequests";
 import LocationRequests from "./locationrequests";
@@ -8,6 +8,7 @@ import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
 import NoRecordsFound from "../NoRecordsFound";
 import { t } from "i18next";
+import { getAllRoles, getAllRolesForTPL } from "../../actions/organisationActions";
 
 const DashBoard = (props) => {
   const [data, setData] = useState([]);
@@ -15,9 +16,44 @@ const DashBoard = (props) => {
   const [btnTxt, setBtnTxt] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isAddNewUser, toggleAddNewUser] = useState(false);
+  const [autoPopUp, setAutoPopUp] = props.popupUser;
+
+  const [defaultRoles, setDefaultRoles] = useState([]);
+
+  React.useEffect(() => {
+    if (autoPopUp) {
+      setShowModal(true)
+      toggleAddNewUser(true);
+    };
+  }, [autoPopUp])
+  
+
+  useEffect(() => {
+    //getRoles
+    async function getRoles() {
+      var roles = [];
+      if(props.user.organisationType == "Third Party Logistics"){
+         roles = await getAllRolesForTPL(props.user.organisationId)
+      }
+      else roles = await getAllRoles();
+      let role = [];
+     for (let i = 0; i < permissions.length; i++) {
+       for (let j = 0; j < roles.length; j++) {
+         if (permissions[i].role === roles[j]) {
+           role.push(permissions[i]);
+           continue;
+        }
+       }
+      }
+      setDefaultRoles(role);
+    }
+    getRoles();
+  }, []);
+
   const closeModal = () => {
     setShowModal(false);
     toggleAddNewUser(false);
+    setAutoPopUp(false);
   }
   const {
     requestsPending,
@@ -33,10 +69,10 @@ const DashBoard = (props) => {
     locationApprovals,
     redirectToConfigurationPage
   } = props;
-  requestsPending.sort(function (a, b) {
+  requestsPending?.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
-  locationApprovals.sort(function (a, b) {
+  locationApprovals?.sort(function (a, b) {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   });
   return (
@@ -58,9 +94,9 @@ const DashBoard = (props) => {
               closeModal();
             }}
             onHide={closeModal}
-
             setData={setData}
             redirectToConfigurationPage={redirectToConfigurationPage}
+            defaultRoles={defaultRoles}
           />
         </Modal>
       )}
@@ -86,7 +122,7 @@ const DashBoard = (props) => {
       <div className="d-flex flex-row ">
         <div className="panel w-50 mr-3 mt-3">
           <h5 className="sub-header" style={{ fontWeight: "bold" }}>{t('request_pending')}</h5>
-          {requestsPending.map((row, index) => (
+          {requestsPending?.map((row, index) => (
             <NewRequests
               requestRow={row}
               key={index}
@@ -98,7 +134,7 @@ const DashBoard = (props) => {
               setBtnTxt={setBtnTxt}
             />
           ))}
-          {requestsPending.length == 0 && <NoRecordsFound />}
+          {requestsPending?.length == 0 && <NoRecordsFound />}
         </div>
         <div className="panel w-50 mt-3">
           {/* <div>
@@ -125,7 +161,7 @@ const DashBoard = (props) => {
           </div> */}
           <div className="">
             <h5 className="sub-header" style={{ fontWeight: "bold" }}>{t('location_approvals')}</h5>
-            {locationApprovals.map((row, index) => (
+            {locationApprovals?.map((row, index) => (
               <LocationRequests
                 row={row}
                 key={index}
@@ -138,7 +174,7 @@ const DashBoard = (props) => {
                 modifyLocations={modifyLocations}
               />
             ))}
-            {locationApprovals.length == 0 && <NoRecordsFound />}
+            {locationApprovals?.length == 0 && <NoRecordsFound />}
           </div>
         </div>
       </div>

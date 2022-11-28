@@ -12,7 +12,8 @@ const {
   modifyLocation,
   getCountries,
   getStatesByCountry,
-  getCitiesByState
+  getCitiesByState,
+  fetchWarehousesByOrgId
 } = require("../controllers/AddressController");
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -27,6 +28,7 @@ const router = express.Router();
 
 router.get("/fetchOrganisation", addressOfOrg); // -->/fetchOrganisations
 router.get("/fetchWarehouses", addressesOfOrgWarehouses); // --> /fetchWarehouses
+router.get("/fetchWarehousesByOrgId", fetchWarehousesByOrgId); // --> /fetchWarehouses
 router.post("/updateOrganisation", updateAddressOrg); // --> /updateOrganisation
 router.post("/updateWarehouse", updateWarehouseAddress); // --> /updateWarehouse?warehouseId=war-123
 router.post("/addWarehouse", AddWarehouse); // --> /addWarehouse

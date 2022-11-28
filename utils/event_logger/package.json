@@ -1,0 +1,29 @@
+{
+  "name": "statwig-event-logger",
+  "version": "1.0.0",
+  "description": "A utility to log Events @ TheLedger",
+  "main": "eventLogger.js",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "joi": "^17.6.0",
+    "mongoose": "^6.4.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanath1599/StaTwig-Event-Logger.git"
+  },
+  "keywords": [
+    "Logger",
+    "Events",
+    "StaTwig"
+  ],
+  "author": "Sanath Swaroop",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanath1599/StaTwig-Event-Logger/issues"
+  },
+  "homepage": "https://github.com/sanath1599/StaTwig-Event-Logger#readme"
+}

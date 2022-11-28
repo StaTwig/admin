@@ -77,7 +77,6 @@ const Details = (props) => {
     }
 
     const clickOnType = (value) => {
-      debugger
       org.type = value
       modifyOrg({
         org
@@ -140,7 +139,7 @@ const Details = (props) => {
                   marginRight: `${org?.type === 'CUSTOMER_SUPPLIER' || 'IMPLEMENTATION PARTNER' ? `` : `3rem`}`,
                   display:"flex",
                   flexDirection:"row",
-                  whiteSpace:"nowrap",
+                  // whiteSpace:"nowrap",
                   overflow:"hidden",
                   textOverflow:"ellipsis",
                   maxWidth:"90%"}}>
@@ -161,11 +160,11 @@ const Details = (props) => {
           </span>
           
           <span className="colum txt1 mocoun" style={{position:"relative"}}>
-            {org?.country?.countryName}
+            {org?.country}
           </span>
           
           <span className="colum txt1 " style={{position:"relative", left:"0.8rem"}}>
-            {org?.region?.name}
+            {org?.region}
           </span>
           
           <span className="colum txt1 font-weight-bold text-secondory text-center switchBar">
