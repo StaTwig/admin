@@ -15,7 +15,8 @@ const fs = require("fs");
 const moveFile = require("move-file");
 const XLSX = require("xlsx");
 
-let EmployeeIdMap = new Map();
+const EmployeeIdMap = new Map();
+
 async function createOrg({ firstName, lastName, emailId, phoneNumber, organisationName, type, address, parentOrgName }) {
 	const organisationExists = await OrganisationModel.findOne({
 		name: new RegExp("^" + organisationName + "$", "i"),
@@ -270,8 +271,6 @@ exports.getOrgs = [
 	auth,
 	async (req, res) => {
 		try {
-			console.log(req.query.skip);
-
 			const users = await OrganisationModel.aggregate([
 				{
 					$match: getOrgCondition(req.query),
@@ -645,16 +644,13 @@ exports.addNewOrganisation = [
 			});
 			await warehouse.save();
 
-			if (emailId) emailId = req.body.emailId.toLowerCase().replace(" ", "");
-			if (phoneNumber) {
-				phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
-			}
-
+			const formatedEmail = emailId?.toLowerCase().replace(" ", "") || null;
+			const formatedPhone = phoneNumber?.startsWith("+") ? phoneNumber : `+${phoneNumber}` || null;
 			const user = new EmployeeModel({
 				firstName: firstName,
 				lastName: lastName,
-				emailId: emailId,
-				phoneNumber: phoneNumber,
+				emailId: formatedEmail,
+				phoneNumber: formatedPhone,
 				organisationId: organisationId,
 				id: employeeId,
 				postalAddress: addr,
@@ -665,11 +661,11 @@ exports.addNewOrganisation = [
 			await user.save();
 
 			const bc_data = {
-				username: emailId ? emailId : phoneNumber,
+				username: emailId ? formatedEmail : formatedPhone,
 				password: "",
 				orgName: "org1MSP",
 				role: "",
-				email: emailId ? emailId : phoneNumber,
+				email: emailId ? formatedEmail : formatedPhone
 			};
 			await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
 
@@ -765,7 +761,7 @@ exports.addOrgsFromExcel = [
 			}
 			const promises = [];
 			for (const orgData of formatedData) {
-				promises.push(createOrg(...orgData));
+				promises.push(createOrg(orgData));
 			}
 			await Promise.all(promises);
 			return apiResponse.successResponseWithData(

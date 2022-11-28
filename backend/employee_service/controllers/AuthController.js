@@ -407,40 +407,49 @@ exports.getOrgUsers = [
     try {
       console.log(getUserCondition(req.query, req.user.organisationId));
       const users = await EmployeeModel.aggregate([
-        {
-          $match: getUserCondition(req.query, req.user.organisationId),
-        },
-        {
-          $lookup: {
-            from: "organisations",
-            localField: "organisationId",
-            foreignField: "id",
-            as: "orgs",
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            id: 1,
-            walletAddress: 1,
-            accountStatus: 1,
-            firstName: 1,
-            lastName: 1,
-            photoId: 1,
-            phoneNumber: 1,
-            role: 1,
-            emailId: 1,
-            postalAddress: 1,
-            createdAt: 1,
-            location: "$orgs.postalAddress",
-            city: "$orgs.city",
-            region: "$orgs.region",
-            country: "$orgs.country"
-          },
-        },
-        {$skip: parseInt(req.query.skip) || 0},
-        {$limit: parseInt(req.query.limit) || 0}
-      ]);
+				{
+					$match: getUserCondition(req.query, req.user.organisationId),
+				},
+				{
+					$lookup: {
+						from: "warehouses",
+						let: { warehouseId: "$warehouseId" },
+						pipeline: [
+							{
+								$match: {
+									$expr: {
+										$and: [{ $in: ["$id", "$$warehouseId"] }, { $eq: ["$status", "ACTIVE"] }],
+									},
+								},
+							},
+						],
+						as: "warehouses",
+					},
+				},
+				{ $unwind: "$warehouses" },
+				{
+					$project: {
+						_id: 0,
+						id: 1,
+						walletAddress: 1,
+						accountStatus: 1,
+						firstName: 1,
+						lastName: 1,
+						photoId: 1,
+						phoneNumber: 1,
+						role: 1,
+						emailId: 1,
+						postalAddress: 1,
+						createdAt: 1,
+						location: "$warehouses.warehouseAddress.firstLine",
+						city: "$warehouses.warehouseAddress.city",
+						region: "$warehouses.warehouseAddress.region",
+						country: "$warehouses.warehouseAddress.country",
+					},
+				},
+				{ $skip: parseInt(req.query.skip) || 0 },
+				{ $limit: parseInt(req.query.limit) || 0 },
+			]);
 
       return apiResponse.successResponseWithData(
         res,
