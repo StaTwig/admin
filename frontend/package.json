@@ -30,6 +30,7 @@
     "mapbox-gl": "^2.10.0",
     "moment": "^2.29.4",
     "npm-overlapping-marker-spiderfier": "^1.0.3",
+    "overlapping-marker-spiderfier": "^1.1.4",
     "prop-types": "^15.8.1",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
