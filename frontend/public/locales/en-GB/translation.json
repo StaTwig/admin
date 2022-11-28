@@ -288,5 +288,7 @@
     "enter_first_name": "Enter First Name",
     "enter_last_name": "Enter Last Name",
     "phoneNumber_has_already_been_taken": "Phone Number has already been taken",
+    "permission":"Permission",
+    "functionality":"Functionality"
     "add_new_role": "Add new role"
 }
