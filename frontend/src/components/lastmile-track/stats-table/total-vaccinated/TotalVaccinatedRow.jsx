@@ -27,7 +27,7 @@ export default function TotalVaccinatedRow({dose, index}) {
       </TableCell>
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
-          <p className="vl-body f-500 ">{format(new Date(dose.createdAt), 'dd/mm/yyyy')}</p>
+          <p className="vl-body f-500 ">{new Date(dose.createdAt).toLocaleDateString()}</p>
         </div>
       </TableCell>
     </TableRow>

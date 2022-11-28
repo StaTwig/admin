@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { config } from "../config";
+import { config } from "../../config";
 import {
 	SET_AFFILIATED_PENDING_REQUESTS,
 	SET_PERMISSIONS,

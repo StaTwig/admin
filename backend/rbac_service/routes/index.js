@@ -9,5 +9,6 @@ router.get("/getPermissions", RbacController.getPermissions);
 router.get("/getRoles", RbacController.getRoles);
 router.get("/rbacCache", RbacController.rbacCache);
 router.post("/updatePermissions", RbacController.updatePermissions);
+router.get("/getRolesForTPL/:orgId", RbacController.getRolesForTPL);
 
 module.exports = router;
