@@ -109,12 +109,12 @@ const BatchExpiry = (props) => {
               </div>
               <div style={{ width: "12%" }} className="fieldVals ">
                 {exp.attributeSet.mfgDate
-                  ? formatDate(exp.attributeSet.mfgDate, "mmyyyy")
+                  ? formatDate(exp.attributeSet.mfgDate)
                   : ""}
               </div>
               <div style={{ width: "8%" }} className="fieldVals ">
                 {exp.attributeSet.expDate
-                  ? formatDate(exp.attributeSet.expDate, "mmyyyy")
+                  ? formatDate(exp.attributeSet.expDate)
                   : ""}
               </div>
               <div style={{ width: "9%" }} className="txt mt-2">

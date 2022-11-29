@@ -428,10 +428,7 @@ const EditRow = (props) => {
                               >
                                 {product.attributeSet.mfgDate &&
                                 product.attributeSet.mfgDate.length > 0
-                                  ? formatDate(
-                                      product.attributeSet.mfgDate,
-                                      "mmyyyy"
-                                    )
+                                  ? formatDate(product.attributeSet.mfgDate)
                                   : "-"}
                               </div>
                               <div
@@ -440,10 +437,7 @@ const EditRow = (props) => {
                               >
                                 {product.attributeSet.expDate &&
                                 product.attributeSet.expDate.length > 0
-                                  ? formatDate(
-                                      product.attributeSet.expDate,
-                                      "mmyyyy"
-                                    )
+                                  ? formatDate(product.attributeSet.expDate)
                                   : "-"}
                               </div>
                               <div

@@ -1223,7 +1223,7 @@ const NewShipment = (props) => {
                 <div className='row'>
                   <div className='col-md-6 com-sm-12'>
                     <label className='name' htmlFor='organizationName'>
-                      {t("label_code")}
+                      {t("label_code")}*
                     </label>
                     <input
                       className={`input refship`}

@@ -324,7 +324,7 @@ export const getOrgs = (params) => {
 	try {
 		return async (dispatch) => {
 			dispatch(turnOn());
-			const url = params ? `${config().getOrgsUrl}?${params}` : config().getOrgsUrl;
+			const url = params ? `${config().getOrgUrl}?${params}` : config().getOrgUrl;
 			const result = await axios.get(url);
 			dispatch({
 				type: SET_ORGANISATIONS,
