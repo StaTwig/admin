@@ -21,7 +21,7 @@ import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from "react-select";
 import { getOrganizationsTypewithauth } from "../../actions/userActions";
-import { getProducts, searchProduct } from "../../actions/poActions";
+import { searchProduct } from "../../actions/poActions";
 import { getProductList } from "../../actions/productActions";
 import { config } from "../../config";
 import axios from "axios";
@@ -138,7 +138,6 @@ const NewShipment = (props) => {
           };
         })
       );
-      const result1 = await getProducts();
       setCategory(
         categoryArray
           .filter((value, index, self) => self.indexOf(value) === index)
@@ -437,45 +436,17 @@ const NewShipment = (props) => {
     }
   };
 
-  const onRemoveRow = (index) => {
-    const inventoryStateClone = JSON.parse(
-      JSON.stringify(OrderDetails?.products)
-    );
-    inventoryStateClone.splice(index, 1);
-    const cloneOrder = OrderDetails;
-    cloneOrder.products = inventoryStateClone;
-    setOrderDetails(cloneOrder);
-  };
-
   function onSearchChange(e) {
     axios.get(`${config().getSuggestions}?searchString=${e}`).then((resp) => {
       const value = resp.data.data.length > 0 ? true : false;
       setValidShipmentID(value);
     });
   }
-
-  function getOrgsByType(org) {
-    if(org.type === formRef.current.values.rtypeName) {
-      if(user.type === "DISTRIBUTOR") {
-        if(org.parentOrgId === user.organisationId) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
-
   return (
     <div className='NewShipment'>
       <h1 className='breadcrumb'>{t("create_shipment")}</h1>
       <Formik
         enableReinitialize={true}
-        innerRef={formRef}
         initialValues={{
           poId: "",
           type: "",
@@ -1088,14 +1059,13 @@ const NewShipment = (props) => {
                             setFieldValue("toOrg", v.value);
                             onOrgChange(v.value);
                           }}
-                          defaultInputValue={values.toOrg}
-                          options={allOrganisations.filter(getOrgsByType)}
+                          options={allOrganisations.filter((org) => {
+                            if (user.type === "DISTRIBUTORS" && (values.rtypeName === "PHARMACY" || values.rtypeName === "FARMACIA")) {
+                              return org.type === values.rtypeName && org.parentOrgId === user.organisationId
+                            }
+                            return org.type === values.rtypeName
+                          })}
                         />
-                        {/* {errors.toOrg && touched.toOrg && (
-                          <span className="error-msg text-danger">
-                            {errors.toOrg}
-                          </span>
-                        )} */}
                       </div>
                     </div>
                   </div>

@@ -1,5 +1,8 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
+const InventoryModel = require("../models/InventoryModel");
+const OrganisationModel = require("../models/OrganisationModel");
+const WarehouseModel = require("../models/WarehouseModel");
 const auth = require("../middlewares/jwt");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
@@ -9,6 +12,7 @@ const AddUserEmail = require("../components/AddUser");
 const apiResponse = require("../helpers/apiResponse");
 const fs = require("fs");
 const moveFile = require("move-file");
+const { getLatLongByCity } = require("../helpers/getLatLong");
 const XLSX = require("xlsx");
 
 const axios = require("axios");
@@ -21,6 +25,112 @@ const excludeExpireuseruct = (data) => {
   })
 }
 
+async function createWarehouse(warehouseExists, wareId, payload, employeeId){
+  if (warehouseExists) {
+    await EmployeeModel.findOneAndUpdate(
+      { id: wareId },
+      { $push: { warehouseId: wareId } },
+    );
+  }
+
+
+
+  const invCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "inventoryId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true },
+  );
+  const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+  const inventoryResult = new InventoryModel({ id: inventoryId });
+  await inventoryResult.save();
+  const {
+    organisationId,
+    postalAddress,
+    title,
+    region,
+    country,
+    warehouseAddress,
+    supervisors,
+    employees,
+  } = payload;
+  const warehouseCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "warehouseId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+  const warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+  const loc = await getLatLongByCity(warehouseAddress.city + "," + warehouseAddress.country);
+  const warehouse = new WarehouseModel({
+    id: warehouseId,
+    organisationId,
+    postalAddress,
+    title,
+    region: {
+      regionName: region,
+    },
+    country: {
+      countryId: "001",
+      countryName: country,
+    },
+    location: loc,
+    bottleCapacity: 0,
+    sqft: 0,
+    supervisors,
+    employees,
+    warehouseAddress,
+    warehouseInventory: inventoryResult.id,
+    status: "NOTVERIFIED",
+  });
+  await warehouse.save();
+
+  const addr = `${warehouseAddress?.firstLine}, ${warehouseAddress?.city}, ${warehouseAddress?.state}, ${warehouseAddress?.zipCode}`;
+  const skipOrgRegistration = false;
+  await OrganisationModel.findOneAndUpdate(
+    {
+      id: organisationId,
+    },
+    {
+      $set: {
+        ...(skipOrgRegistration
+          ? {
+            postalAddress: addr,
+            country: warehouseAddress.country,
+            region: warehouseAddress.region,
+            status: "NOTVERIFIED",
+          }
+          : {}),
+      },
+      $push: {
+        warehouses: warehouseId,
+      },
+    },
+  );
+
+  await EmployeeModel.findOneAndUpdate(
+    {
+      id: employeeId,
+    },
+    {
+      $set: {
+        role: "powerUser",
+      },
+      $push: {
+        pendingWarehouseId: warehouseId,
+      },
+    },
+  );
+}
 exports.getApprovals = [
   auth,
   async (req, res) => {
@@ -105,6 +215,7 @@ exports.acceptApproval = [
             emailBody
           );
         return apiResponse.successResponseWithData(
+          req,
           res,
           `User Verified`,
           emp
@@ -166,6 +277,7 @@ exports.rejectApproval = [
                   return apiResponse.ErrorResponse(req, res, err);
                 }
                 return apiResponse.successResponseWithData(
+                  req,
                   res,
                   "User Rejected",
                   emp
@@ -235,6 +347,18 @@ exports.addUser = [
         id: employeeId,
       });
       await user.save();
+
+      const payload = {
+        organisationId: organisationId,
+        postalAddress: req.body.address.line1,
+        title: req.body.warehouseTitle,
+        region: req.body.address.region,
+        country: req.body.address.country,
+        warehouseAddress: req.body.address,
+        supervisors: [],
+        employees: [employeeId],
+      }
+      await createWarehouse(req.body.warehouseExists !== "new", warehouse || null, payload, employeeId)
       let emailBody = AddUserEmail({
         name: firstName,
         organisation: organisationName,
@@ -292,6 +416,7 @@ exports.activateUser = [
               employee.accountStatus == "ACTIVE"
             ) {
               return apiResponse.successResponseWithData(
+                req,
                 res,
                 " User is already Active",
                 employee
@@ -340,6 +465,7 @@ exports.activateUser = [
                         console.log(mailError);
                       }
                       return apiResponse.successResponseWithData(
+                        req,
                         res,
                         `User Activated`,
                         emp
@@ -389,6 +515,7 @@ exports.deactivateUser = [
             console.log(err);
           }
           return apiResponse.successResponseWithData(
+            req,
             res,
             "User Rejected",
             emp
@@ -491,6 +618,7 @@ exports.addUsersFromExcel = [
                 });
               }
               return apiResponse.successResponseWithData(
+                req,
                 res,
                 "success",
                 formatedData

@@ -36,7 +36,111 @@ const moment = require("moment");
 
 // const phoneRgex = /^\d{10}$/;
 
+async function createWarehouse(warehouseExists, wareId, payload, employeeId) {
+  if (warehouseExists) {
+    await EmployeeModel.findOneAndUpdate(
+      { id: wareId },
+      { $push: { warehouseId: wareId } }
+    );
+  }
 
+  const invCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "inventoryId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true }
+  );
+  const inventoryId =
+    invCounter.counters[7].format + invCounter.counters[7].value;
+  const inventoryResult = new InventoryModel({ id: inventoryId });
+  await inventoryResult.save();
+  const {
+    organisationId,
+    postalAddress,
+    title,
+    region,
+    country,
+    warehouseAddress,
+    supervisors,
+    employees,
+  } = payload;
+  const warehouseCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "warehouseId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  const warehouseId =
+    warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+  const loc = await getLatLongByCity(
+    warehouseAddress.city + "," + warehouseAddress.country
+  );
+  const warehouse = new WarehouseModel({
+    id: warehouseId,
+    organisationId,
+    postalAddress,
+    title,
+    region: {
+      regionName: region,
+    },
+    country: {
+      countryId: "001",
+      countryName: country,
+    },
+    location: loc,
+    bottleCapacity: 0,
+    sqft: 0,
+    supervisors,
+    employees,
+    warehouseAddress,
+    warehouseInventory: inventoryResult.id,
+    status: "NOTVERIFIED",
+  });
+  await warehouse.save();
+
+  const addr = `${warehouseAddress?.firstLine}, ${warehouseAddress?.city}, ${warehouseAddress?.state}, ${warehouseAddress?.zipCode}`;
+  const skipOrgRegistration = false;
+  await OrganisationModel.findOneAndUpdate(
+    {
+      id: organisationId,
+    },
+    {
+      $set: {
+        ...(skipOrgRegistration
+          ? {
+              postalAddress: addr,
+              country: warehouseAddress.country,
+              region: warehouseAddress.region,
+              status: "NOTVERIFIED",
+            }
+          : {}),
+      },
+      $push: {
+        warehouses: warehouseId,
+      },
+    }
+  );
+
+  await EmployeeModel.findOneAndUpdate(
+    {
+      id: employeeId,
+    },
+    {
+      $push: {
+        warehouseId: warehouseId,
+      },
+    }
+  );
+}
 function getUserCondition(query, orgId) {
   let matchCondition = {};
   matchCondition.organisationId = orgId;
@@ -2456,19 +2560,48 @@ exports.addUsersFromExcel = [
           { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
         );
 
-        console.log(data.entries());
 
         const formatedData = new Array();
         for (const [index, user] of data.entries()) {
-          const firstName = user?.["FIRST NAME"] || user?.["NOMBRE"];
-          const phoneNumber = user?.["PHONE"] || user?.["TEL CELULAR"];
-          const lastName = user?.["LAST NAME"] || user?.["APELLIDO"];
-          const emailId = user?.["EMAIL"] || user?.["EMAIL"];
-          const role = user?.["ROLE"] || user?.["UNIDAD DE MEDIDA"];
+			const firstName = user?.["NAME"] || user?.["NOMBRE"];
+			const phoneNumber = user?.["PHONE"] || user?.["CEL NUMBER"];
+			const lastName = user?.["LAST NAME"] || user?.["APELLIDO"];
+			const emailId = user?.["EMAIL"] || user?.["EMAIL"];
+			const role = user?.["ROLE"] || user?.["ROL"];
+			const city = user?.["CITY"]
+			const zip = user?.["POSTAL CODE"];
+			const province = user?.["PROVINCE"];
+			const warehouseTitle = user?.["NAME OF LOCATION"];
+			const district = user?.["DISTRICT"];
+			const postalAddress = user?.["ADDRESS"];
+			const warehouseAddress = {
+				city: city,
+				zip: zip,
+				province: province,
+				warehouseTitle: warehouseTitle,
+				district: district,
+				postalAddress: postalAddress
+		}
+
           const accountStatus = "ACTIVE";
           const warehouseId =
             user?.["WAREHOUSE"] || user?.["FECHA DE VENCIMIENTO"];
           const { organisationId } = req.user;
+			const payload = {
+			organisationId: organisationId,
+			postalAddress: postalAddress,
+			title: warehouseTitle,
+			region: {
+				regionId : "reg123",
+				regionName : "Americas"
+			},
+			country:{
+				countryId : "001",
+				countryName : "Costa Rica"
+			},
+			warehouseAddress: warehouseAddress,
+			supervisors: [],
+			}
           formatedData[index] = {
             firstName: firstName,
             lastName: lastName,
@@ -2477,8 +2610,9 @@ exports.addUsersFromExcel = [
             organisationId: organisationId,
             role: role,
             accountStatus: accountStatus,
-            warehouseId: warehouseId,
+            warehouseId: warehouseId ? warehouseId : [],
             isConfirmed: true,
+			payload: payload
             // id: id,
           };
         }
@@ -2503,7 +2637,8 @@ exports.addUsersFromExcel = [
           var employeeId =
             employeeCounter.counters[0].format +
             employeeCounter.counters[0].value;
-          console.log(user);
+			createWarehouse(user.warehouseId, user.warehouseId, {...user.payload, employees: [employeeId]}, employeeId);
+
           const User = new EmployeeModel({ ...user, id: employeeId });
           await User.save();
           let emailBody = AddUserEmail({
@@ -2522,7 +2657,8 @@ exports.addUsersFromExcel = [
             });
         }
         return apiResponse.successResponseWithData(
-          res,
+          req,
+		  res,
           "success",
           formatedData
         );
@@ -2585,7 +2721,8 @@ exports.addOrgsFromExcel = [
         }
         await Promise.all(promises);
         return apiResponse.successResponseWithData(
-          res,
+          req,
+		  res,
           "success",
           formatedData
         );
@@ -2727,6 +2864,7 @@ exports.updateUserRole = [
 
       if (result) {
         return apiResponse.successResponse(
+          req,
           res,
           "User role updated successfully!"
         );
