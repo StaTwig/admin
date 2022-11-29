@@ -638,6 +638,7 @@ exports.addProductsToInventory = [
                 { "inventoryDetails.productId": product.productId },
               ],
             });
+            // Updating inventory
             if (checkProduct && checkProduct?.length) {
               const exist_quantity = await InventoryModel.find(
                 { id: inventoryId },
@@ -733,23 +734,45 @@ exports.addProductsToInventory = [
               };
               atomsArray.push(atom);
             }
+            // ==================================================
+            // LOOP TO CHECK DUPLICATE
+
+            // for (let i = 0; i < atomsArray.length; i++) {
+            //   let batchDup = await AtomModel.findOne({
+            //     batchNumbers: atomsArray[i].batchNumbers[0],
+            //     currentInventory: warehouse.warehouseInventory,
+            //   });
+            //   if (!batchDup) {
+            //     continue;
+            //   }
+            //   if (process.env.PROD != "ABINBEV") {
+            //     if (batchDup) {
+            //       duplicateBatch = true;
+            //       duplicateBatchNo = batchDup.batchNumbers[0];
+            //       break;
+            //     }
+            //   }
+            // }
+            // ===================================================
+
+            const insertAtomsArray = [];
             for (let i = 0; i < atomsArray.length; i++) {
               let batchDup = await AtomModel.findOne({
+                productId: atomsArray[i].productId,
                 batchNumbers: atomsArray[i].batchNumbers[0],
                 currentInventory: warehouse.warehouseInventory,
               });
-              if (!batchDup) {
-                continue;
-              }
-              if (process.env.PROD != "ABINBEV") {
-                if (batchDup) {
-                  duplicateBatch = true;
-                  duplicateBatchNo = batchDup.batchNumbers[0];
-                  break;
-                }
+              if (batchDup) {
+                await AtomModel.updateOne(
+									{ id: batchDup.id },
+									{ quantity: batchDup.quantity + atomsArray[i].quantity },
+								);
+              } else {
+                insertAtomsArray.push(atomsArray[i]);
               }
             }
-            if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
+
+            if (insertAtomsArray.length > 0) await AtomModel.insertMany(insertAtomsArray);
             await inventory.save();
             await InventoryAnalyticsModel.updateOne(
               {
@@ -770,14 +793,14 @@ exports.addProductsToInventory = [
               }
             );
           });
-          if (duplicateBatch) {
-            return apiResponse.ErrorResponse(
-              res,
-              responses(req.user.preferredLanguage).batchExists(
-                duplicateBatchNo
-              )
-            );
-          }
+          // if (duplicateBatch) {
+          //   return apiResponse.ErrorResponse(
+          //     res,
+          //     responses(req.user.preferredLanguage).batchExists(
+          //       duplicateBatchNo
+          //     )
+          //   );
+          // }
           const event_data = {
             eventID: cuid(),
             eventTime: new Date().toISOString(),
