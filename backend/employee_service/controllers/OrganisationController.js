@@ -200,6 +200,7 @@ async function createOrg({req, firstName, lastName, emailId, phoneNumber, organi
   };
   await logEvent(event_data);
 }
+
 function getOrgCondition(query) {
 	let matchCondition = {};
 	if (query.orgType && query.orgType != "") {
@@ -266,10 +267,10 @@ exports.getPendingOrgs = [
 				isRegistered: true
 			});
 
-			return apiResponse.successResponseWithData(res, "Organisation list", pendingOrgs);
+			return apiResponse.successResponseWithData(req, res, "Organisation list", pendingOrgs);
 		} catch (err) {
 			console.log(err);
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -325,10 +326,10 @@ exports.getOrgs = [
 				}
 			}
 			// console.log("Users", users);
-			return apiResponse.successResponseWithData(res, "Organisation list", users);
+			return apiResponse.successResponseWithData(req, res, "Organisation list", users);
 		} catch (err) {
 			console.log(err);
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -401,10 +402,10 @@ exports.getOrgAnalytics = [
 				activeCount: analytics[0].active.count,
 				inactiveCount: analytics[0].total.count - analytics[0].active.count,
 			};
-			return apiResponse.successResponseWithData(res, "Organisation list", analyticsObject);
+			return apiResponse.successResponseWithData(req, res, "Organisation list", analyticsObject);
 		} catch (err) {
 			console.log(err);
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -437,10 +438,10 @@ exports.updateOrg = [
 					await WarehouseModel.findOneAndDelete({
 						id: org.warehouses[0],
 					});
-					return apiResponse.successResponseWithData(res, "Organisation REJECTED", org);
+					return apiResponse.successResponseWithData(req, res, "Organisation REJECTED", org);
 				} catch (err) {
 					console.log(err);
-					return apiResponse.ErrorResponse(res, err);
+					return apiResponse.ErrorResponse(req, res, err);
 				}
 			}
 			if (status === "ACTIVE") {
@@ -460,9 +461,9 @@ exports.updateOrg = [
 					},
 				},
 			);
-			return apiResponse.successResponseWithData(res, "Organisation updated", org);
+			return apiResponse.successResponseWithData(req, res, "Organisation updated", org);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -668,7 +669,7 @@ exports.addNewOrganisation = [
 			);
 		} catch (err) {
 			console.log(err);
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -732,7 +733,7 @@ exports.addOrgsFromExcel = [
             }
            catch (err) {
             console.log(err);
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(req, res, err);
           }
     } catch (err) {
       console.log(err);
