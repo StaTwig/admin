@@ -20,6 +20,7 @@ import {
   getOrgUserAnalytics,
 } from "../../../actions/organisationActions";
 import { useTranslation } from "react-i18next";
+import AddOrganization from "../../../components/AddOrganization/AddOrganization";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -57,17 +58,24 @@ export default function Users(props) {
   const { totalCount, activeCount, inactiveCount } = userAnalytics;
 
   const [ButtonOpen, setButtonOpen] = useState(false);
+  const [ButtonOpen2, setButtonOpen2] = useState(false);
 
   let domNode = useClickOutside(() => {
     setButtonOpen(false);
   });
 
+  let domNode2 = useClickOutside(() => {
+    setButtonOpen2(false);
+  });
+
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
   const [defaultRoles, setDefaultRoles] = useState([]);
   const [smallWidth] = React.useState("sm");
   const [fullWidth] = React.useState(true);
   const [maxWidth] = React.useState("md");
   const [Importopen, setImportOpen] = React.useState(false);
+  const [Importopen2, setImportOpen2] = React.useState(false);
 
   useEffect(() => {
     dispatch(getRequestsPending());
@@ -120,6 +128,20 @@ export default function Users(props) {
   const handleImportClickOpen = () => {
     setImportOpen(true);
   };
+
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+  const handleImportClose2 = () => {
+    setImportOpen2(false);
+  };
+  const handleImportClickOpen2 = () => {
+    setImportOpen2(true);
+  };
   return (
     <>
       <OrgHeader />
@@ -159,12 +181,34 @@ export default function Users(props) {
                   <input type="text" placeholder={t("search")} />
                 </div>
                 <div className="table-actions-area">
-                  {/* <div className="table-action-icon">
-										<i className={`fa-solid fa-power-off vl-disabled`}></i>
-									</div>
-									<div className="table-action-icon">
-										<i className={`fa-solid fa-trash-can vl-disabled`}></i>
-									</div> */}
+                  <div className="table-dropdown-button" ref={domNode2}>
+                    <button
+                      className="vl-btn vl-btn-alt vl-btn-primary"
+                      // onClick={() => setButtonOpen(!ButtonOpen)}
+                      onClick={() => setButtonOpen2(true)}
+                    >
+                      {t("add_org")}
+                    </button>
+
+                    <div
+                      className={`button-dropdown ${ButtonOpen2 && "active"}`}
+                    >
+                      <div
+                        className="btn-dropdown-card"
+                        onClick={handleImportClickOpen2}
+                      >
+                        <i className="fa-solid fa-upload"></i>
+                        <p className="vl-note f-500">{t("import_org")}</p>
+                      </div>
+                      <div
+                        className="btn-dropdown-card"
+                        onClick={handleClickOpen2}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                        <p className="vl-note f-500">{t("add_org")}</p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="table-dropdown-button" ref={domNode}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"
@@ -228,11 +272,48 @@ export default function Users(props) {
           <DialogContent sx={{ padding: "0rem !important" }}>
             <UploadPopup
               t={t}
+              type="user"
               orgUpload={false}
               resetFlag={() => {
                 setTableFlag(!tableFlag);
               }}
               handleImportClose={handleImportClose}
+            />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
+          open={open2}
+          onClose={handleClose2}
+        >
+          <DialogContent sx={{ padding: "0rem !important" }}>
+            <AddOrganization
+              t={t}
+              resetFlag={() => {
+                setTableFlag(!tableFlag);
+              }}
+              handleClose={handleClose2}
+            />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          fullWidth={fullWidth}
+          maxWidth={smallWidth}
+          open={Importopen2}
+          onClose={handleImportClose2}
+        >
+          <DialogContent sx={{ padding: "0rem !important" }}>
+            <UploadPopup
+              t={t}
+              type="org"
+              orgUpload={true}
+              resetFlag={() => {
+                setTableFlag(!tableFlag);
+              }}
+              handleImportClose={handleImportClose2}
             />
           </DialogContent>
         </Dialog>

@@ -10,6 +10,7 @@ import FileList from "./FileList/FileList";
 import FileUpload from "./FileUpload/FileUpload";
 
 export default function UploadPopup({
+  type,
   handleImportClose,
   orgUpload,
   resetFlag,
@@ -54,7 +55,9 @@ export default function UploadPopup({
   return (
     <div className="addOrganization-container">
       <div className="addorganization-header">
-        <p className="vl-subheading f-500 vl-blue">{t("import_org")}</p>
+        <p className="vl-subheading f-500 vl-blue">
+          {type === "org" ? t("import_org") : t("import_users")}
+        </p>
         <i className="fa-solid fa-xmark" onClick={handleImportClose}></i>
       </div>
       <div className="addorganization-body">
