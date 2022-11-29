@@ -56,8 +56,6 @@ async function createWarehouse(warehouseExists, wareId, payload, employeeId){
     warehouseAddress,
     supervisors,
     employees,
-    bottleCapacity,
-    sqft,
   } = payload;
   const warehouseCounter = await CounterModel.findOneAndUpdate(
     { "counters.name": "warehouseId" },
@@ -86,8 +84,8 @@ async function createWarehouse(warehouseExists, wareId, payload, employeeId){
       countryName: country,
     },
     location: loc,
-    bottleCapacity,
-    sqft,
+    bottleCapacity: 0,
+    sqft: 0,
     supervisors,
     employees,
     warehouseAddress,
@@ -217,17 +215,18 @@ exports.acceptApproval = [
             emailBody
           );
         return apiResponse.successResponseWithData(
+          req,
           res,
           `User Verified`,
           emp
         );
 
       } else {
-        return apiResponse.notFoundResponse(res, "User Not Found");
+        return apiResponse.notFoundResponse(req, res, "User Not Found");
       }
     } catch (err) {
       errorList.push(err);
-      return apiResponse.ErrorResponse(res, errorList);
+      return apiResponse.ErrorResponse(req, res, errorList);
     }
   },
 ];
@@ -275,26 +274,27 @@ exports.rejectApproval = [
                   );
                 } catch (err) {
                   console.log(err);
-                  return apiResponse.ErrorResponse(res, err);
+                  return apiResponse.ErrorResponse(req, res, err);
                 }
                 return apiResponse.successResponseWithData(
+                  req,
                   res,
                   "User Rejected",
                   emp
                 );
               })
               .catch((err) => {
-                return apiResponse.ErrorResponse(res, err);
+                return apiResponse.ErrorResponse(req, res, err);
               });
           } else {
-            return apiResponse.notFoundResponse(res, "User not Found");
+            return apiResponse.notFoundResponse(req, res, "User not Found");
           }
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -347,17 +347,18 @@ exports.addUser = [
         id: employeeId,
       });
       await user.save();
+
       const payload = {
         organisationId: organisationId,
-        postalAddress: req.body.postalAddress,
-        title: req.body.title,
-        region: req.body.region,
-        country: req.body.country,
-        warehouseAddress: req.body.warehouseAddress,
+        postalAddress: req.body.address.line1,
+        title: req.body.warehouseTitle,
+        region: req.body.address.region,
+        country: req.body.address.country,
+        warehouseAddress: req.body.address,
         supervisors: [],
         employees: [employeeId],
-      } = payload;
-      await createWarehouse(req.body.warehouseExists, warehouse || null, payload, employeeId)
+      }
+      await createWarehouse(req.body.warehouseExists !== "new", warehouse || null, payload, employeeId)
       let emailBody = AddUserEmail({
         name: firstName,
         organisation: organisationName,
@@ -372,9 +373,9 @@ exports.addUser = [
         .catch((err) => {
           console.log("Error in mailing user!");
         });
-      return apiResponse.successResponse(res, "User Added");
+      return apiResponse.successResponse(req, res, "User Added");
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -391,12 +392,12 @@ exports.updateUserRole = [
       );
 
       if (result) {
-        return apiResponse.successResponse(res, "User role updated successfully!");
+        return apiResponse.successResponse(req, res, "User role updated successfully!");
       } else {
         throw new Error("Error in updating user role!");
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   }
 ]
@@ -415,6 +416,7 @@ exports.activateUser = [
               employee.accountStatus == "ACTIVE"
             ) {
               return apiResponse.successResponseWithData(
+                req,
                 res,
                 " User is already Active",
                 employee
@@ -463,6 +465,7 @@ exports.activateUser = [
                         console.log(mailError);
                       }
                       return apiResponse.successResponseWithData(
+                        req,
                         res,
                         `User Activated`,
                         emp
@@ -471,14 +474,14 @@ exports.activateUser = [
                 });
             }
           } else {
-            return apiResponse.notFoundResponse(res, "User Not Found");
+            return apiResponse.notFoundResponse(req, res, "User Not Found");
           }
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -512,16 +515,17 @@ exports.deactivateUser = [
             console.log(err);
           }
           return apiResponse.successResponseWithData(
+            req,
             res,
             "User Rejected",
             emp
           );
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -614,6 +618,7 @@ exports.addUsersFromExcel = [
                 });
               }
               return apiResponse.successResponseWithData(
+                req,
                 res,
                 "success",
                 formatedData
@@ -621,7 +626,7 @@ exports.addUsersFromExcel = [
             }
            catch (err) {
             console.log(err);
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(req, res, err);
           }
     } catch (err) {
       console.log(err);
