@@ -390,7 +390,7 @@ exports.getOrganizations = [
       let orgs = new Array();
       const { orgType, country } = req.query;
       if (orgType && country) {
-        if (req.user.type === "DISTRIBUTORS") {
+        if (req.user.type === "DISTRIBUTORS" && (orgType === "PHARMACY" || orgType === "FARMACIA")) {
           orgs = await OrganisationModel.find({
             $and: [
               { type: orgType },
