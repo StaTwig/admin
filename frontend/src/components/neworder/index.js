@@ -29,7 +29,7 @@ const NewOrder = (props) => {
 	const editPo = useSelector((state) => {
 		return state?.reviewPo;
 	});
-	const UserOrgId = useSelector((state) => state.user.organisationId)
+	const User = useSelector((state) => state.user)
 
 	const customStyles = {
 		option: (provided, state) => ({
@@ -604,7 +604,12 @@ const NewOrder = (props) => {
 														setFieldValue("fromOrgId", v.label);
 													}}
 													isDisabled={values.typeName === ""}
-													options={allOrganisations.filter((a) => a.type === values.typeName && a.parentOrg === UserOrgId)}
+													options={allOrganisations.filter((a) => {
+														if (User.type === "DISTRIBUTOR" && (values.typeName === "PHARMACY" || values.typeName === "FARMACIA")) {
+															return a.type === values.typeName && a.parentOrg === User.organisationId
+														}
+														return a.type === values.typeName
+													})}
 													noOptionsMessage={() => t("no_options")}
 												/>
 												{/* {errors.fromOrg && touched.fromOrg && (
