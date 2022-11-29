@@ -181,7 +181,7 @@ export default function Users(props) {
                   <input type="text" placeholder={t("search")} />
                 </div>
                 <div className="table-actions-area">
-                  <div className="table-dropdown-button" ref={domNode2}>
+                  {user.type === "DISTRIBUTORS" && <div className="table-dropdown-button" ref={domNode2}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"
                       // onClick={() => setButtonOpen(!ButtonOpen)}
@@ -208,7 +208,7 @@ export default function Users(props) {
                         <p className="vl-note f-500">{t("add_pharmacy")}</p>
                       </div>
                     </div>
-                  </div>
+                  </div>}
                   <div className="table-dropdown-button" ref={domNode}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"
