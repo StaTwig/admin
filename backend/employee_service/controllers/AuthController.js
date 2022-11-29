@@ -2192,7 +2192,7 @@ exports.Image = [
 	auth,
 	async (req, res) => {
 		const FileStream = getFileStream(req.params.key);
-		FileStream.pipe(res);
+		FileStream.pipe(req, res);
 	},
 ];
 
@@ -2435,7 +2435,7 @@ exports.addNewOrganisation = [
 			);
 		} catch (err) {
 			console.log(err);
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(req, res, err);
 		}
 	},
 ];
@@ -2528,7 +2528,7 @@ exports.addUsersFromExcel = [
         );
       } catch (err) {
         console.log(err);
-        return apiResponse.ErrorResponse(res, err);
+        return apiResponse.ErrorResponse(req, res, err);
       }
     } catch (err) {
       console.log(err);
@@ -2591,7 +2591,7 @@ exports.addOrgsFromExcel = [
         );
       } catch (err) {
         console.log(err);
-        return apiResponse.ErrorResponse(res, err);
+        return apiResponse.ErrorResponse(req, res, err);
       }
     } catch (err) {
       console.log(err);
@@ -2663,14 +2663,14 @@ exports.activateUser = [
                 });
             }
           } else {
-            return apiResponse.notFoundResponse(res, "User Not Found");
+            return apiResponse.notFoundResponse(req, res, "User Not Found");
           }
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2703,13 +2703,13 @@ exports.deactivateUser = [
           } catch (err) {
             console.log(err);
           }
-          return apiResponse.successResponseWithData(res, "User Rejected", emp);
+          return apiResponse.successResponseWithData(req, res, "User Rejected", emp);
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2734,7 +2734,7 @@ exports.updateUserRole = [
         throw new Error("Error in updating user role!");
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2755,7 +2755,7 @@ exports.getAllUsers = [
         confirmedUsers
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2774,7 +2774,7 @@ exports.getWarehouseUsers = [
         users
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2828,7 +2828,7 @@ exports.getOrgUsers = [
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2918,7 +2918,7 @@ exports.getOrgUserAnalytics = [
       );
     } catch (err) {
       console.log(err);
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2938,7 +2938,7 @@ exports.getUsers = [
         confirmedUsers
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -2968,7 +2968,7 @@ exports.Image = [
   async (req, res) => {
     try {
       const signedUrl = await getSignedUrl(req.params.key);
-      return apiResponse.successResponseWithData(res, "Image URL", signedUrl);
+      return apiResponse.successResponseWithData(req, res, "Image URL", signedUrl);
     } catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(req, res, err.message);

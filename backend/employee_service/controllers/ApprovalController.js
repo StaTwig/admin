@@ -20,6 +20,7 @@ const excludeExpireuseruct = (data) => {
     return false
   })
 }
+
 exports.getApprovals = [
   auth,
   async (req, res) => {
@@ -110,11 +111,11 @@ exports.acceptApproval = [
         );
 
       } else {
-        return apiResponse.notFoundResponse(res, "User Not Found");
+        return apiResponse.notFoundResponse(req, res, "User Not Found");
       }
     } catch (err) {
       errorList.push(err);
-      return apiResponse.ErrorResponse(res, errorList);
+      return apiResponse.ErrorResponse(req, res, errorList);
     }
   },
 ];
@@ -162,7 +163,7 @@ exports.rejectApproval = [
                   );
                 } catch (err) {
                   console.log(err);
-                  return apiResponse.ErrorResponse(res, err);
+                  return apiResponse.ErrorResponse(req, res, err);
                 }
                 return apiResponse.successResponseWithData(
                   res,
@@ -171,17 +172,17 @@ exports.rejectApproval = [
                 );
               })
               .catch((err) => {
-                return apiResponse.ErrorResponse(res, err);
+                return apiResponse.ErrorResponse(req, res, err);
               });
           } else {
-            return apiResponse.notFoundResponse(res, "User not Found");
+            return apiResponse.notFoundResponse(req, res, "User not Found");
           }
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -248,9 +249,9 @@ exports.addUser = [
         .catch((err) => {
           console.log("Error in mailing user!");
         });
-      return apiResponse.successResponse(res, "User Added");
+      return apiResponse.successResponse(req, res, "User Added");
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -267,12 +268,12 @@ exports.updateUserRole = [
       );
 
       if (result) {
-        return apiResponse.successResponse(res, "User role updated successfully!");
+        return apiResponse.successResponse(req, res, "User role updated successfully!");
       } else {
         throw new Error("Error in updating user role!");
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   }
 ]
@@ -347,14 +348,14 @@ exports.activateUser = [
                 });
             }
           } else {
-            return apiResponse.notFoundResponse(res, "User Not Found");
+            return apiResponse.notFoundResponse(req, res, "User Not Found");
           }
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -394,10 +395,10 @@ exports.deactivateUser = [
           );
         })
         .catch((err) => {
-          return apiResponse.ErrorResponse(res, err);
+          return apiResponse.ErrorResponse(req, res, err);
         });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(req, res, err);
     }
   },
 ];
@@ -497,7 +498,7 @@ exports.addUsersFromExcel = [
             }
            catch (err) {
             console.log(err);
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(req, res, err);
           }
     } catch (err) {
       console.log(err);
