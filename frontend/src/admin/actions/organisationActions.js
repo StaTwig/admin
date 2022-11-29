@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { config } from "../config";
+import { config } from "../../config";
 import {
 	SET_AFFILIATED_PENDING_REQUESTS,
 	SET_PERMISSIONS,
@@ -15,10 +15,10 @@ import {
 	SET_REGION_TYPES,
 	SET_ALL_ORGANISATIONS,
 	SET_ALL_ORGANISATION_ACTIVE_USERS,
-  SET_ORG_ANALYTICS,
+	SET_ORG_ANALYTICS,
 	SET_USER_ANALYTICS,
 	SET_WAREHOUSE_USERS,
-	SET_PENDING_ORGS
+	SET_PENDING_ORGS,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -72,6 +72,15 @@ export const getRequestsPending = (skip = 0, limit = 5) => {
 	};
 };
 
+export const getAllPermissions = async () => {
+	try {
+		const result = await axios.get(`${config().getPermissionsUrl}?new_role=${true}`);
+		return result.data.data;
+	} catch (e) {
+		throw Error(e.message);
+	}
+};
+
 export const getPermissions = () => {
 	try {
 		return async (dispatch) => {
@@ -90,20 +99,29 @@ export const getPermissions = () => {
 };
 
 export const getWareHouses = (params) => {
-  try {
-    return async (dispatch) => {
-      dispatch(turnOn());
-      const result = await axios.get(config().getWareHousesUrl + (params ? `?${params}` : ''));
-      dispatch({
-        type: SET_ORGANISATION_ADDRESSES,
-        payload: result.data,
-      });
-      dispatch(turnOff());
-      return result.data.data.length;
-    };
-  } catch (e) {
-    throw Error(e.message);
-  }
+	try {
+		return async (dispatch) => {
+			dispatch(turnOn());
+			const result = await axios.get(config().getWareHousesUrl + (params ? `?${params}` : ""));
+			dispatch({
+				type: SET_ORGANISATION_ADDRESSES,
+				payload: result.data,
+			});
+			dispatch(turnOff());
+			return result.data.data.length;
+		};
+	} catch (e) {
+		throw Error(e.message);
+	}
+};
+
+export const fetchWarehousesByOrgId = async (orgId) => {
+	try {
+		const result = await axios.get(`${config().fetchWarehousesByOrgId}?orgId=${orgId}`);
+		return result;
+	} catch (e) {
+		throw Error(e.message);
+	}
 };
 
 export const getAllOrganisations = () => {
@@ -120,6 +138,15 @@ export const getAllOrganisations = () => {
 		};
 	} catch (e) {
 		throw Error(e.message);
+	}
+};
+
+export const getOrgDetails = async (orgId) => {
+	try {
+		const result = await axios.get(`${config().getOrgDetails}?orgId=${orgId}`);
+		return result;
+	} catch (err) {
+		return err.response;
 	}
 };
 
@@ -145,15 +172,15 @@ export const updateOrg = async (data) => {
 
 export const addOrgsFromExcel = async (data) => {
 	try {
-	  const url = config().addOrgsFromExcel;
-	  const result = await axios.post(url, data, {
-		headers: { "Content-Type": "multipart/form-data" },
-	  });
-	  return result;
+		const url = config().addOrgsFromExcel;
+		const result = await axios.post(url, data, {
+			headers: { "Content-Type": "multipart/form-data" },
+		});
+		return result;
 	} catch (e) {
-	  return e.response;
+		return e.response;
 	}
-  };
+};
 
 export const deactivateOrgUser = async (data) => {
 	try {
@@ -247,9 +274,8 @@ export const getRecentReqSent = () => {
 };
 
 export const getOrgUsers = (params) => {
-
-		return async (dispatch) => {
-			try {
+	return async (dispatch) => {
+		try {
 			dispatch(turnOn());
 			const url = params ? `${config().getOrgUsersUrl}?${params}` : config().getOrgUsersUrl;
 			const result = await axios.get(url);
@@ -262,33 +288,43 @@ export const getOrgUsers = (params) => {
 		} catch (e) {
 			console.log(e.message);
 		}
-		};
-
+	};
 };
 
 export const getWarehouseUsers = (params) => {
-  try {
-    return async (dispatch) => {
-      dispatch(turnOn());
-      const url = params ? `${config().getWarehouseUsers}?${params}` : config().getWarehouseUsers;
-      const result = await axios.get(url);
-      dispatch({
-        type: SET_WAREHOUSE_USERS,
-        payload: result.data,
-      });
-      dispatch(turnOff());
-      return result.data.data;
-    };
-  } catch (e) {
-    throw Error(e.message);
-  }
+	try {
+		return async (dispatch) => {
+			dispatch(turnOn());
+			const url = params ? `${config().getWarehouseUsers}?${params}` : config().getWarehouseUsers;
+			const result = await axios.get(url);
+			dispatch({
+				type: SET_WAREHOUSE_USERS,
+				payload: result.data,
+			});
+			dispatch(turnOff());
+			return result;
+		};
+	} catch (e) {
+		throw Error(e.message);
+	}
+};
+
+export const getWarehouseAndUsersById = async (warehouseId) => {
+	try {
+		const result = await axios.get(
+			`${config().getWarehouseAndUsersById}?warehouseId=${warehouseId}`,
+		);
+		return result;
+	} catch (err) {
+		throw err;
+	}
 };
 
 export const getOrgs = (params) => {
 	try {
 		return async (dispatch) => {
 			dispatch(turnOn());
-			const url = params ? `${config().getOrgUrl}?${params}` : config().getOrgUrl;
+			const url = params ? `${config().getOrgsUrl}?${params}` : config().getOrgsUrl;
 			const result = await axios.get(url);
 			dispatch({
 				type: SET_ORGANISATIONS,
@@ -303,39 +339,39 @@ export const getOrgs = (params) => {
 };
 
 export const getOrgAnalytics = () => {
-    return async (dispatch) => {
-      try{
-      dispatch(turnOn());
-      const url =  config().getOrgAnalytics;
-      const result = await axios.get(url);
-      dispatch({
-        type: SET_ORG_ANALYTICS,
-        payload: result.data,
-      });
-      dispatch(turnOff());
-      return result.data.data;
-    }catch(err){
-      console.log(err);
-    };
-  }
+	return async (dispatch) => {
+		try {
+			dispatch(turnOn());
+			const url = config().getOrgAnalytics;
+			const result = await axios.get(url);
+			dispatch({
+				type: SET_ORG_ANALYTICS,
+				payload: result.data,
+			});
+			dispatch(turnOff());
+			return result.data.data;
+		} catch (err) {
+			console.log(err);
+		}
+	};
 };
 
 export const getOrgUserAnalytics = (organisationId) => {
-  return async (dispatch) => {
-    try{
-    dispatch(turnOn());
-    const url =  config().getOrgUserAnalytics + `?orgId=${organisationId}`;
-    const result = await axios.get(url);
-    dispatch({
-      type: SET_USER_ANALYTICS,
-      payload: result.data,
-    });
-    dispatch(turnOff());
-    return result.data.data;
-  }catch(err){
-    console.log(err);
-  };
-}
+	return async (dispatch) => {
+		try {
+			dispatch(turnOn());
+			const url = config().getOrgUserAnalytics + `?orgId=${organisationId}`;
+			const result = await axios.get(url);
+			dispatch({
+				type: SET_USER_ANALYTICS,
+				payload: result.data,
+			});
+			dispatch(turnOff());
+			return result.data.data;
+		} catch (err) {
+			console.log(err);
+		}
+	};
 };
 
 export const getTypes = () => {
@@ -482,10 +518,10 @@ export const updateUserRole = async (data) => {
 			`${config().updateUserRole}?userId=${data.userId}&role=${data.role}`,
 		);
 		return result;
-	} catch(err) {
+	} catch (err) {
 		return err.response;
 	}
-}
+};
 
 export const getLocationApproval = async () => {
 	try {
@@ -639,7 +675,9 @@ export const getAllRoles = async () => {
 
 export const getPermissionByRoleAndOrg = async (role, orgId) => {
 	try {
-		const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}&orgId=${orgId}`);
+		const result = await axios.get(
+			`${config().fetchPermissionsByRole}?role=${role}&orgId=${orgId}`,
+		);
 		return result.data.data;
 	} catch (error) {
 		return [];
@@ -657,27 +695,27 @@ export const updatePermissionsByRole = async (data) => {
 };
 
 export const getAllRolesForTPL = async (organisationId) => {
-  try {
-    const result = await axios.get(`${config().fetchTPLRoles}/${organisationId}`);
-    return result.data.data;
-  } catch (error) {
-    return [];
-  }
+	try {
+		const result = await axios.get(`${config().fetchTPLRoles}/${organisationId}`);
+		return result.data.data;
+	} catch (error) {
+		return [];
+	}
 };
 
 export const getPendingOrgs = () => {
-  try {
-    return async (dispatch) => {
-      dispatch(turnOn());
-      const result = await axios.get(config().getPendingOrgs);
-      dispatch({
+	try {
+		return async (dispatch) => {
+			dispatch(turnOn());
+			const result = await axios.get(config().getPendingOrgs);
+			dispatch({
 				type: SET_PENDING_ORGS,
 				payload: result.data,
 			});
-      dispatch(turnOff());
-      return result;
-    };
-  } catch (e) {
-    throw Error(e.message);
-  }
+			dispatch(turnOff());
+			return result;
+		};
+	} catch (e) {
+		throw Error(e.message);
+	}
 };

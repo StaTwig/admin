@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
-import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { useSelector } from "react-redux";
 import crossIcon from "../../assets/icons/crossRed.svg";
 import SuccessPopup from "./successPopup";
@@ -40,7 +39,7 @@ const UpdateStatus = (props) => {
 	const [loader, setLoader] = useState(false);
 	const [loaderC, setLoaderC] = useState(false);
 	const [loaderL, setLoaderL] = useState(false);
-  const [commentEnabled, setCommentEnabled] = useState(false);
+	const [commentEnabled, setCommentEnabled] = useState(false);
 	const setFile = (evt) => {
 		setPhotoUrl(URL.createObjectURL(evt.target.files[0]));
 		setPhoto(evt.target.files[0]);
@@ -61,8 +60,8 @@ const UpdateStatus = (props) => {
 			}
 		}
 		fetchData();
-  }, [dispatch, props.match.params.id]);
-  
+	}, [dispatch, props.match.params.id]);
+
 	useEffect(() => {
 		const acceptanceArr = shipmentData.shipmentUpdates?.filter(
 			(u) => u.updateComment === "Acceptance Date",
@@ -93,8 +92,8 @@ const UpdateStatus = (props) => {
 			value.target.id === "toggle1"
 				? "Acceptance Date"
 				: value.target.id === "toggle2"
-				? "Customs clearance Date"
-				: "Last Status";
+					? "Customs clearance Date"
+					: "Last Status";
 		const formData = new FormData();
 		formData.append("photo", photo, photo.name);
 		formData.append("id", id);
@@ -155,14 +154,14 @@ const UpdateStatus = (props) => {
 				setOpenShipmentFail(true);
 				return;
 			}
-	
+
 			const { shipmentId, updateStatusLocation } = values;
-	
+
 			if (updateStatusLocation === "") {
 				setErrorMessage("Require Update Status Location");
 			}
 			const formData = new FormData();
-	
+
 			if (photo) {
 				const uploadRes = await uploadPhoto();
 				formData.append("imageId", uploadRes.imageId);
@@ -174,7 +173,7 @@ const UpdateStatus = (props) => {
 			formData.append("orgLocation", profile.location);
 			formData.append("updatedAt", updateStatusLocation);
 			formData.append("isAlertTrue", true);
-	
+
 			for (var pair of formData.entries()) {
 				console.log(pair[0] + " : ", pair[1]);
 			}
@@ -186,7 +185,7 @@ const UpdateStatus = (props) => {
 				setOpenShipmentFail(true);
 				setErrorMessage("Failed to Update");
 			}
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 		}
 	};
@@ -194,13 +193,13 @@ const UpdateStatus = (props) => {
 	const closeModal = () => {
 		setOpenUpdatedStatus(false);
 		props.history.push(`/${intelEnabled === true ? `viewgmrshipment` : `viewshipment`}/${id}`);
-  };
-  
+	};
+
 	const closeModalFail = () => {
 		setOpenShipmentFail(false);
 		if (shipmentData.status === "RECEIVED") props.history.push(`/shipments`);
-  };
-  
+	};
+
 	return (
 		<div className="updateStatus">
 			<h1 className="breadcrumb m-3">{t("update_status")}</h1>
@@ -313,16 +312,14 @@ const UpdateStatus = (props) => {
 												</label>
 												<input
 													type="text"
-													className={`form-control mb-2 ${
-														values.updateStatusLocation === "" ? "border-danger" : ""
-													}`}
+													className={`form-control mb-2 ${values.updateStatusLocation === "" ? "border-danger" : ""
+														}`}
 													name="updateStatusLocation"
 													onBlur={handleBlur}
 													onChange={handleChange}
 													value={values.updateStatusLocation}
-													placeholder={` ${
-														values.updateStatusLocation === "" ? t("Required") : ""
-													}`}
+													placeholder={` ${values.updateStatusLocation === "" ? t("Required") : ""
+														}`}
 												/>
 											</div>
 										</div>
@@ -330,9 +327,8 @@ const UpdateStatus = (props) => {
 											<div>
 												<h6 className="poheads potext m-4">Shipment Cargo Status</h6>
 												<div
-													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${
-														loader && "fade-color"
-													}`}
+													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loader && "fade-color"
+														}`}
 												>
 													<div className="cargoLabels">
 														<label className="mb-1 text-secondary">Acceptance Date</label>
@@ -377,9 +373,8 @@ const UpdateStatus = (props) => {
 													/>
 												</div>
 												<div
-													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${
-														loaderC && "fade-color"
-													}`}
+													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderC && "fade-color"
+														}`}
 												>
 													<div className="cargoLabels">
 														<label className="mb-1 text-secondary">Customs clearance Date</label>
@@ -413,9 +408,8 @@ const UpdateStatus = (props) => {
 													/>
 												</div>
 												<div
-													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${
-														loaderL && "fade-color"
-													}`}
+													className={`col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow justify-content-between ${loaderL && "fade-color"
+														}`}
 												>
 													<div className="cargoLabels">
 														<label className="mb-1 text-secondary">Last Status</label>

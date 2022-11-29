@@ -31,6 +31,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
       });
     }
   };
+
   return (
     <>
       <TableRow
@@ -52,7 +53,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell> */}
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <p
@@ -65,7 +66,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell>
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <p
@@ -78,7 +79,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell>
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <p
@@ -91,7 +92,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell>
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <p
@@ -104,7 +105,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell>
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <p
@@ -142,7 +143,7 @@ export default function OrganizationRow({ rows, modifyOrg }) {
         </TableCell>
         <TableCell
           onClick={() =>
-            history.push("/statwig/view-locations/" + JSON.stringify(rows))
+            history.push("/statwig/view-locations/" + rows.id)
           }
         >
           <div className="created-date">

@@ -26,6 +26,7 @@ const printer = new PdfPrinter(fonts);
 const { uploadFile } = require("../helpers/s3");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+
 exports.getProducts = [
   auth,
   async (req, res) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Autocomplete, Checkbox, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import {
@@ -11,14 +11,14 @@ import {
 } from "../../../../actions/organisationActions";
 import Switch from "@mui/material/Switch";
 
-export default function UsersRow({ rows, defaultRoles }) {
+export default function UsersRow({ rows, defaultRoles, t }) {
   const [open, setOpen] = React.useState(false);
   const [Edit, setEdit] = React.useState(false);
   const [checked, setChecked] = useState(true);
   const [userRole, setUserRole] = useState(rows.role);
   const [AccStatus, setAccStatus] = useState(rows.accountStatus);
 
-  console.log(rows)
+  console.log(rows);
 
   const handleRoleChange = (event, value) => {
     setUserRole(value);
@@ -46,6 +46,7 @@ export default function UsersRow({ rows, defaultRoles }) {
       console.log(err);
     }
   };
+  
   return (
     <>
       <TableRow
@@ -62,19 +63,19 @@ export default function UsersRow({ rows, defaultRoles }) {
           </p>
         </TableCell>
         <TableCell>
-          <div className="table-actions-space col-width-md">
+          <div className='table-actions-space col-width-md'>
             {Edit ? (
               <Autocomplete
                 fullWidth
                 disabled={Edit ? false : true}
-                size="small"
-                id="combo-box-demo"
+                size='small'
+                id='combo-box-demo'
                 className={`${Edit ? "vl-edit-true" : "vl-edit-false"}`}
                 options={defaultRoles}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    className="vl-edit-input"
+                    className='vl-edit-input'
                     placeholder={rows.role}
                   />
                 )}
@@ -90,11 +91,11 @@ export default function UsersRow({ rows, defaultRoles }) {
               </p>
             )}
 
-            <div className="vl-table-icon" onClick={handleEditRole}>
+            <div className='vl-table-icon' onClick={handleEditRole}>
               {!Edit ? (
-                <i class="fa-solid fa-pen"></i>
+                <i className='fa-solid fa-pen'></i>
               ) : (
-                <i class="fa-solid fa-check"></i>
+                <i className='fa-solid fa-check'></i>
               )}
             </div>
           </div>
@@ -118,19 +119,19 @@ export default function UsersRow({ rows, defaultRoles }) {
           </p>
         </TableCell>
         <TableCell>
-          <div className="table-actions-space col-width-xl">
+          <div className='table-actions-space col-width-xl'>
             <p
               className={`vl-note ${
                 checked ? "f-400 vl-black" : "f-400 vl-grey-sm"
               }`}
             >
-              {rows.location}
+              {`${rows.location}, ${rows.city}, ${rows.country}, ${rows.region}`}
             </p>
-            <div className="vl-table-icon" onClick={() => setOpen(!open)}>
+            <div className='vl-table-icon' onClick={() => setOpen(!open)}>
               {open ? (
-                <i class="fa-solid fa-caret-up"></i>
+                <i className='fa-solid fa-caret-up'></i>
               ) : (
-                <i class="fa-solid fa-caret-down"></i>
+                <i className='fa-solid fa-caret-down'></i>
               )}
             </div>
           </div>
@@ -147,9 +148,9 @@ export default function UsersRow({ rows, defaultRoles }) {
               <p className="vl-small f-400 vl-black">InActive</p>
             </div>
           )} */}
-          <div className="status-switch-button">
+          <div className='status-switch-button'>
             <Switch
-              color="warning"
+              color='warning'
               checked={AccStatus === "ACTIVE"}
               onChange={(e) => {
                 if (AccStatus === "ACTIVE") {
@@ -169,18 +170,18 @@ export default function UsersRow({ rows, defaultRoles }) {
             {AccStatus === "ACTIVE" ? (
               <div className="label-status-btn status-accept-bg">
                 <div className="status-dot status-accept-dot"></div>
-                <p className="vl-small f-400 vl-black">Active</p>
+                <p className="vl-small f-400 vl-black">{t("active")}</p>
               </div>
             ) : (
               <div className="label-status-btn status-reject-bg">
                 <div className="status-dot status-reject-dot"></div>
-                <p className="vl-small f-400 vl-black">InActive</p>
+                <p className="vl-small f-400 vl-black">{t("inactive")}</p>
               </div>
             )}
           </div>
         </TableCell>
         <TableCell>
-          <div className="created-date">
+          <div className='created-date'>
             <p
               className={`vl-note f-400 ${checked ? "vl-black" : "vl-grey-sm"}`}
             >
@@ -210,15 +211,15 @@ export default function UsersRow({ rows, defaultRoles }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <div className="user-location-detail-container">
               <div className="location-detail-grid">
-                <p className="vl-note vl-black f-400">Address :</p>
+                <p className="vl-note vl-black f-400">{t("address")} :</p>
                 <p className="vl-body vl-grey-md">{rows.location}</p>
               </div>
               <div className="location-detail-grid">
-                <p className="vl-note vl-black f-400">Region :</p>
+                <p className="vl-note vl-black f-400">{t("region")} :</p>
                 <p className="vl-body vl-grey-md">{rows.region}</p>
               </div>
               <div className="location-detail-grid">
-                <p className="vl-note vl-black f-400">Country :</p>
+                <p className="vl-note vl-black f-400">{t("country")} :</p>
                 <p className="vl-body vl-grey-md">{rows.country}</p>
               </div>
               {/* <div className="location-detail-grid">
