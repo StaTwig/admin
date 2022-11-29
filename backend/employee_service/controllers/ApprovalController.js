@@ -1,5 +1,8 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
+const InventoryModel = require("../models/InventoryModel");
+const OrganisationModel = require("../models/OrganisationModel");
+const WarehouseModel = require("../models/WarehouseModel");
 const auth = require("../middlewares/jwt");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
@@ -9,6 +12,7 @@ const AddUserEmail = require("../components/AddUser");
 const apiResponse = require("../helpers/apiResponse");
 const fs = require("fs");
 const moveFile = require("move-file");
+const { getLatLongByCity } = require("../helpers/getLatLong");
 const XLSX = require("xlsx");
 
 const axios = require("axios");
@@ -19,6 +23,115 @@ const excludeExpireuseruct = (data) => {
     if (Date.parse(useruct?.expiryDate) > Date.parse(new Date())) return true
     return false
   })
+}
+
+async function createWarehouse(warehouseExists, wareId, payload, employeeId){
+  if (warehouseExists) {
+    await EmployeeModel.findOneAndUpdate(
+      { id: wareId },
+      { $push: { warehouseId: wareId } },
+    );
+  }
+
+
+
+  const invCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "inventoryId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true },
+  );
+  const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+  const inventoryResult = new InventoryModel({ id: inventoryId });
+  await inventoryResult.save();
+  const {
+    organisationId,
+    postalAddress,
+    title,
+    region,
+    country,
+    warehouseAddress,
+    supervisors,
+    employees,
+    bottleCapacity,
+    sqft,
+  } = payload;
+  const warehouseCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "warehouseId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+  const warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+  const loc = await getLatLongByCity(warehouseAddress.city + "," + warehouseAddress.country);
+  const warehouse = new WarehouseModel({
+    id: warehouseId,
+    organisationId,
+    postalAddress,
+    title,
+    region: {
+      regionName: region,
+    },
+    country: {
+      countryId: "001",
+      countryName: country,
+    },
+    location: loc,
+    bottleCapacity,
+    sqft,
+    supervisors,
+    employees,
+    warehouseAddress,
+    warehouseInventory: inventoryResult.id,
+    status: "NOTVERIFIED",
+  });
+  await warehouse.save();
+
+  const addr = `${warehouseAddress?.firstLine}, ${warehouseAddress?.city}, ${warehouseAddress?.state}, ${warehouseAddress?.zipCode}`;
+  const skipOrgRegistration = false;
+  await OrganisationModel.findOneAndUpdate(
+    {
+      id: organisationId,
+    },
+    {
+      $set: {
+        ...(skipOrgRegistration
+          ? {
+            postalAddress: addr,
+            country: warehouseAddress.country,
+            region: warehouseAddress.region,
+            status: "NOTVERIFIED",
+          }
+          : {}),
+      },
+      $push: {
+        warehouses: warehouseId,
+      },
+    },
+  );
+
+  await EmployeeModel.findOneAndUpdate(
+    {
+      id: employeeId,
+    },
+    {
+      $set: {
+        role: "powerUser",
+      },
+      $push: {
+        pendingWarehouseId: warehouseId,
+      },
+    },
+  );
 }
 exports.getApprovals = [
   auth,
@@ -233,6 +346,17 @@ exports.addUser = [
         id: employeeId,
       });
       await user.save();
+      const payload = {
+        organisationId: organisationId,
+        postalAddress: req.body.postalAddress,
+        title: req.body.title,
+        region: req.body.region,
+        country: req.body.country,
+        warehouseAddress: req.body.warehouseAddress,
+        supervisors: [],
+        employees: [employeeId],
+      } = payload;
+      await createWarehouse(req.body.warehouseExists, warehouse || null, payload, employeeId)
       let emailBody = AddUserEmail({
         name: firstName,
         organisation: organisationName,
