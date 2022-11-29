@@ -594,5 +594,8 @@
   "analytics":"Analytics",
   "payments":"Payments",
   "permission_details":"Permission Details",
-  "save_changes":"Save Changes"
+  "save_changes":"Save Changes",
+  "add_pharmacies": "Add Pharmacies",
+  "import_pharmacy": "Import Pharmacies",
+  "add_pharmacy": "Add Pharamcy"
 }

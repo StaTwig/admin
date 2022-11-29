@@ -187,7 +187,7 @@ export default function Users(props) {
                       // onClick={() => setButtonOpen(!ButtonOpen)}
                       onClick={() => setButtonOpen2(true)}
                     >
-                      {t("add_org")}
+                      {t("add_pharmacies")}
                     </button>
 
                     <div
@@ -198,14 +198,14 @@ export default function Users(props) {
                         onClick={handleImportClickOpen2}
                       >
                         <i className="fa-solid fa-upload"></i>
-                        <p className="vl-note f-500">{t("import_org")}</p>
+                        <p className="vl-note f-500">{t("import_pharmacy")}</p>
                       </div>
                       <div
                         className="btn-dropdown-card"
                         onClick={handleClickOpen2}
                       >
                         <i className="fa-solid fa-plus"></i>
-                        <p className="vl-note f-500">{t("add_org")}</p>
+                        <p className="vl-note f-500">{t("add_pharmacy")}</p>
                       </div>
                     </div>
                   </div>
