@@ -337,9 +337,6 @@ const EditRow = (props) => {
 												? new Date(Date.parse(manufacturingDate))
 												: manufacturingDate
 										}
-										onChange={(date) => {
-											handleInventoryChange(idx, "manufacturingDate", date);
-										}}
 										placeholderText={t("enter") + " " + t("mfg_date")}
 									/>
 									{/* <DatePicker
@@ -365,12 +362,9 @@ const EditRow = (props) => {
 								<div className="">
                 <DatePicker
 										className="form-control text-center manufacturingPlaceholder"
-										onChange={(date) => {
-											handleInventoryChange(idx, "manufacturingDate", date);
-										}}
 										selected={expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate}
 										onChange={(date) => {
-											if (isBefore(date, new Date())) {
+											if (isBefore(date, new Date(manufacturingDate))) {
 												setInventoryError(t("past_expiry"));
 												setOpenFailInventory(true);
 												return;

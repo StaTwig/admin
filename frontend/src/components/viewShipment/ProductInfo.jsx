@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDate } from "../../utils/dateHelper";
 
 function GridRow({ heading, context }) {
   return (
@@ -15,13 +16,6 @@ function GridRow({ heading, context }) {
 
 export default function ProductInfo(props) {
   const { t } = props;
-
-  const getVisibleDate = (dateString) => {
-    let date = new Date(dateString);
-    if (date.toLocaleDateString() === "Invalid Date") return "N/A";
-    console.log(`${date.getMonth() + 1}/${date.getFullYear()}`);
-    return `${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
 
   return Object.keys(props.shipments).length === 0 ? (
     <div className="row panel justify-content-between">N/A</div>
@@ -65,11 +59,11 @@ export default function ProductInfo(props) {
             />
             <GridRow
               heading={t("mfg_date")}
-              context={getVisibleDate(product.mfgDate)}
+              context={formatDate(product.mfgDate)}
             />
             <GridRow
               heading={t("exp_date")}
-              context={getVisibleDate(product.expDate)}
+              context={formatDate(product.expDate)}
             />
           </div>
         </div>
