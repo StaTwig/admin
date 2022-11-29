@@ -158,7 +158,13 @@ export default function AdminOrganization(props) {
           onClose={handleClose}
         >
           <DialogContent sx={{ padding: "0rem !important" }}>
-            <AddOrganization t={t} resetFlag={() => {setTableFlag(!tableFlag)}} handleClose={handleClose} />
+            <AddOrganization
+              t={t}
+              resetFlag={() => {
+                setTableFlag(!tableFlag);
+              }}
+              handleClose={handleClose}
+            />
           </DialogContent>
         </Dialog>
 
@@ -171,6 +177,7 @@ export default function AdminOrganization(props) {
           <DialogContent sx={{ padding: "0rem !important" }}>
             <UploadPopup
               t={t}
+              type="org"
               orgUpload={true}
               resetFlag={() => {
                 setTableFlag(!tableFlag);

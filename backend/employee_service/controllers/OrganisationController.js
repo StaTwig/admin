@@ -480,6 +480,7 @@ exports.addNewOrganisation = [
 
 			if (organisationExists) {
 				return apiResponse.validationErrorWithData(
+					req,
 					res,
 					"Organisation name exists!",
 					organisationName,
@@ -663,6 +664,7 @@ exports.addNewOrganisation = [
 			await logEvent(event_data);
 
 			return apiResponse.successResponseWithData(
+				req,
 				res,
 				"Organisation added successfully!",
 				organisation,
@@ -726,6 +728,7 @@ exports.addOrgsFromExcel = [
               }
               await Promise.all(promises);
               return apiResponse.successResponseWithData(
+				req,
                 res,
                 "success",
                 formatedData

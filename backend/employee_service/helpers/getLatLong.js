@@ -14,7 +14,7 @@ const getLatLongByCity = async (param) => {
         type: [Number],
       }
     */
-    return result.data.items.length
+    return result.data.items?.length
       ? {
         type: "Point",
         coordinates: [
