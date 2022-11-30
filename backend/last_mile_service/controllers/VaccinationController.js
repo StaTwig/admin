@@ -228,6 +228,8 @@ exports.vaccinateMultiple = [
 		try {
 			const { warehouseId, productId, batchNumber, doses } = req.body;
 
+			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
 			const existingInventory = await InventoryModel.findOne(
 				{ id: warehouse.warehouseInventory },
 				{ _id: 1, id: 1, inventoryDetails: { $elemMatch: { productId: productId } } },
@@ -282,7 +284,6 @@ exports.vaccinateMultiple = [
 			await vaccineVial.save();
 
 			// Reduce inventory in InventoryModel and AtomModel
-			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 			const atom = await AtomModel.findOneAndUpdate(
 				{
 					currentInventory: warehouse.warehouseInventory,
