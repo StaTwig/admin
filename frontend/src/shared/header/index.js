@@ -390,10 +390,10 @@ const Header = (props) => {
 
   const handleUiSwitch = () => {
     // Check whether user has enough rights
-    if (profile.type === "CENTRAL_AUTHORITY") {
+    if (profile.type === "CENTRAL_AUTHORITY"|| profile.role === "GoverningBody") {
       history.push("/statwig/dashboard");
     }
-    if (profile.role === "admin") {
+    if (profile.role === "admin" ) {
       history.push("/org/dashboard");
     }
   };
@@ -469,7 +469,7 @@ const Header = (props) => {
             {/* Notification Icons */}
 
             {(profile.role === "admin" ||
-              profile.type === "CENTRAL_AUTHORITY") && (
+              profile.type === "CENTRAL_AUTHORITY" || profile.role === "GoverningBody") && (
                 <li className="admin-nav-item configure-link user-switch-btn">
                   <div className="switch-button">
                     <p className="vl-note">{t("user")}</p>
