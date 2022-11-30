@@ -393,7 +393,7 @@ const Header = (props) => {
     if (profile.type === "CENTRAL_AUTHORITY"|| profile.role === "GoverningBody") {
       history.push("/statwig/dashboard");
     }
-    if (profile.role === "admin" ) {
+    else if (profile.role === "admin" ) {
       history.push("/org/dashboard");
     }
   };
