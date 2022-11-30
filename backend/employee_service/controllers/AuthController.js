@@ -212,8 +212,8 @@ async function createOrg({
     return "Organisation name exists!";
   }
 
-  const country = address?.country ? address?.country : "India";
-  const region = address?.region ? address?.region : "Asia";
+  const country = address?.country ? address?.country : "Costa Rica";
+  const region = address?.region ? address?.region : "Americas";
   const addr =
     address?.line1 +
     ", " +
@@ -592,8 +592,8 @@ exports.register = [
 				if (organisation && organisation.isRegistered) {
 					organisationId = organisation.id;
 				} else {
-					const country = req.body?.address?.country ? req.body.address?.country : "India";
-					const region = req.body?.address?.region ? req.body.address?.region : "Asia";
+					const country = req.body?.address?.country ? req.body.address?.country : "Costa Rica";
+					const region = req.body?.address?.region ? req.body.address?.region : "Americas";
 					const address = req.body?.address ? req.body.address : {};
 					if (!skipOrgRegistration) {
 						addr =
@@ -2357,8 +2357,8 @@ exports.addNewOrganisation = [
 				);
 			}
 
-			const country = req.body?.address?.country ? req.body.address?.country : "India";
-			const region = req.body?.address?.region ? req.body.address?.region : "Asia";
+			const country = req.body?.address?.country ? req.body.address?.country : "Costa Rica";
+			const region = req.body?.address?.region ? req.body.address?.region : "Americas";
 			const addr =
 				address?.line1 + ", " + address?.city + ", " + address?.state + ", " + address?.pincode;
 
