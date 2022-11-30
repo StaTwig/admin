@@ -23,7 +23,7 @@ export default function UnitUsedRow({ vial, index }) {
       <TableCell component="th" scope="row" align="center">
         <div className="vl-table-body-column">
           <p className="vl-body f-500 ">
-            {format(new Date(vial.createdAt), "dd/mm/yyyy")}
+            {format(new Date(vial.createdAt), "dd/MM/yyyy")}
           </p>
         </div>
       </TableCell>

@@ -8,26 +8,27 @@ import TableRow from "@mui/material/TableRow";
 import Checkbox from "@mui/material/Checkbox";
 import { TablePagination } from "@mui/material";
 import ProductRow from "./ProductRow";
-import { getProducts } from "../../../../../actions/poActions"
+import { getProducts } from "../../../../../actions/poActions";
 import { useSelector } from "react-redux";
 export default function ProductTable(props) {
-
-const { user } = useSelector((state) => state)
-console.log(user.organisationId)
-const [page, setPage] = React.useState(0);
-const [rowsPerPage, setRowsPerPage] = React.useState(10);
-const [products, setProducts] = useState([]);
+  const { user } = useSelector((state) => state);
+  const { t } = props;
+  console.log(user.organisationId);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    async function fetchProducts(){
-      const products = await getProducts(`orgId=${"" 
-      // ||user.organisationId
-    }&skip=${page * 10}&limit=${rowsPerPage}`);
-      setProducts(products)
+    async function fetchProducts() {
+      const products = await getProducts(
+        `orgId=${
+          ""
+          // ||user.organisationId
+        }&skip=${page * 10}&limit=${rowsPerPage}`
+      );
+      setProducts(products);
     }
-    fetchProducts()
-  }, [page, rowsPerPage, user.organisationId, props.productAdded])
-
-
+    fetchProducts();
+  }, [page, rowsPerPage, user.organisationId, props.productAdded]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -76,16 +77,16 @@ const [products, setProducts] = useState([]);
               />
             </TableCell> */}
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Product Category</h1>
+              <h1 className="vl-note f-500 vl-blue">{t("product_category")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Product Name</h1>
+              <h1 className="vl-note f-500 vl-blue">{t("product_name")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Manufacturer</h1>
+              <h1 className="vl-note f-500 vl-blue">{t("manufacturer")}</h1>
             </TableCell>
             <TableCell>
-              <h1 className="vl-note f-500 vl-blue">Unit of Measure</h1>
+              <h1 className="vl-note f-500 vl-blue">{t("unit_of_measure")}</h1>
             </TableCell>
           </TableRow>
         </TableHead>

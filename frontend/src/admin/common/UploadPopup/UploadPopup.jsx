@@ -10,9 +10,11 @@ import FileList from "./FileList/FileList";
 import FileUpload from "./FileUpload/FileUpload";
 
 export default function UploadPopup({
+  type,
   handleImportClose,
   orgUpload,
   resetFlag,
+  t,
 }) {
   const [excel, setExcel] = useState([]);
   const dispatch = useDispatch();
@@ -53,12 +55,14 @@ export default function UploadPopup({
   return (
     <div className="addOrganization-container">
       <div className="addorganization-header">
-        <p className="vl-subheading f-500 vl-blue">Import Organization</p>
+        <p className="vl-subheading f-500 vl-blue">
+          {type === "org" ? t("import_org") : t("import_users")}
+        </p>
         <i className="fa-solid fa-xmark" onClick={handleImportClose}></i>
       </div>
       <div className="addorganization-body">
         <div className="Popup-wrapper">
-          <FileUpload files={excel} setFiles={setExcel} />
+          <FileUpload t={t} files={excel} setFiles={setExcel} />
           <FileList files={excel} />
         </div>
       </div>
@@ -67,7 +71,7 @@ export default function UploadPopup({
           onClick={uploadExcel}
           className="vl-btn vl-btn-sm vl-btn-primary"
         >
-          Import File
+          {t("import_file")}
         </button>
       </div>
       {openSuccessPopup && (

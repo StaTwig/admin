@@ -29,6 +29,7 @@ const NewOrder = (props) => {
 	const editPo = useSelector((state) => {
 		return state?.reviewPo;
 	});
+	const User = useSelector((state) => state.user)
 
 	const customStyles = {
 		option: (provided, state) => ({
@@ -104,6 +105,7 @@ const NewOrder = (props) => {
 						value: item.id,
 						label: item.name,
 						type: item.type,
+						parentOrg: item.parentOrgId
 					};
 				}),
 			);
@@ -391,7 +393,6 @@ const NewOrder = (props) => {
 			setFailedPop(true);
 		}
 	};
-
 	return (
 		<div className="NewOrder m-3">
 			<div className="d-flex justify-content-between mb-3">
@@ -455,14 +456,11 @@ const NewOrder = (props) => {
 					values,
 					errors,
 					touched,
-					handleChange,
 					handleBlur,
 					handleSubmit,
-					isSubmitting,
 					setFieldValue,
-					dirty,
 				}) => (
-					<form onSubmit={handleSubmit} className="">
+					<form onSubmit={handleSubmit}>
 						<div className="row mb-3">
 							<label htmlFor="productDetails" className="headsup1">
 								{t("product_details")}
@@ -606,7 +604,12 @@ const NewOrder = (props) => {
 														setFieldValue("fromOrgId", v.label);
 													}}
 													isDisabled={values.typeName === ""}
-													options={allOrganisations.filter((a) => a.type === values.typeName)}
+													options={allOrganisations.filter((a) => {
+														if (User.type === "DISTRIBUTORS" && (values.typeName === "PHARMACY" || values.typeName === "FARMACIA")) {
+															return a.type === values.typeName && a.parentOrg === User.organisationId
+														}
+														return a.type === values.typeName
+													})}
 													noOptionsMessage={() => t("no_options")}
 												/>
 												{/* {errors.fromOrg && touched.fromOrg && (

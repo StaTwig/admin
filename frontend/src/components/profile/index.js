@@ -379,7 +379,7 @@ class Profile extends React.Component {
 												}}
 											/>
 										</div>
-										{this.state.phoneNumberErrorMsg != "" && (
+										{this.state.phoneNumberErrorMsg !== "" && (
 											<div
 												style={{
 													color: "red",
@@ -608,7 +608,7 @@ class Profile extends React.Component {
 													<span>
 														{t("joined_on")}{" "}
 														{moment(this.state.signup_date).format("Do MMMM YYYY") ===
-														"Invalid date"
+															"Invalid date"
 															? this.state.signup_date
 															: moment(this.state.signup_date).format("Do MMMM YYYY")}
 													</span>

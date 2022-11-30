@@ -20,13 +20,384 @@ const { OAuth2Client } = require("google-auth-library");
 const hf_blockchain_url = process.env.HF_BLOCKCHAIN_URL;
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRegex = /^[\+]\d{11,12}$/;
-
-const { uploadFile, getFileStream } = require("../helpers/s3");
+const blockchain_service_url = process.env.URL;
+const { uploadFile, getFileStream, getSignedUrl } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
 const utils = require("ethereumjs-util");
+const moveFile = require("move-file");
+const XLSX = require("xlsx");
+const { constants } = require("../helpers/constants");
+const RequestApproved = require("../components/RequestApproved");
+const RejectedApproval = require("../components/RejectedApproval");
+const AddUserEmail = require("../components/AddUser");
+const moment = require("moment");
 
+// const phoneRgex = /^\d{10}$/;
+
+async function createWarehouse(warehouseExists, wareId, payload, employeeId) {
+  if (warehouseExists) {
+    await EmployeeModel.findOneAndUpdate(
+      { id: wareId },
+      { $push: { warehouseId: wareId } }
+    );
+  }
+
+  const invCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "inventoryId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true }
+  );
+  const inventoryId =
+    invCounter.counters[7].format + invCounter.counters[7].value;
+  const inventoryResult = new InventoryModel({ id: inventoryId });
+  await inventoryResult.save();
+  const {
+    organisationId,
+    postalAddress,
+    title,
+    region,
+    country,
+    warehouseAddress,
+    supervisors,
+    employees,
+  } = payload;
+  const warehouseCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "warehouseId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  const warehouseId =
+    warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+  const loc = await getLatLongByCity(
+    warehouseAddress.city + "," + warehouseAddress.country
+  );
+  const warehouse = new WarehouseModel({
+    id: warehouseId,
+    organisationId,
+    postalAddress,
+    title,
+    region: {
+      regionName: region,
+    },
+    country: {
+      countryId: "001",
+      countryName: country,
+    },
+    location: loc,
+    bottleCapacity: 0,
+    sqft: 0,
+    supervisors,
+    employees,
+    warehouseAddress,
+    warehouseInventory: inventoryResult.id,
+    status: "NOTVERIFIED",
+  });
+  await warehouse.save();
+
+  const addr = `${warehouseAddress?.firstLine}, ${warehouseAddress?.city}, ${warehouseAddress?.state}, ${warehouseAddress?.zipCode}`;
+  const skipOrgRegistration = false;
+  await OrganisationModel.findOneAndUpdate(
+    {
+      id: organisationId,
+    },
+    {
+      $set: {
+        ...(skipOrgRegistration
+          ? {
+              postalAddress: addr,
+              country: warehouseAddress.country,
+              region: warehouseAddress.region,
+              status: "NOTVERIFIED",
+            }
+          : {}),
+      },
+      $push: {
+        warehouses: warehouseId,
+      },
+    }
+  );
+
+  await EmployeeModel.findOneAndUpdate(
+    {
+      id: employeeId,
+    },
+    {
+      $push: {
+        warehouseId: warehouseId,
+      },
+    }
+  );
+}
+function getUserCondition(query, orgId) {
+  let matchCondition = {};
+  matchCondition.organisationId = orgId;
+  matchCondition.accountStatus = { $ne: "NOTAPPROVED" };
+  if (query.role && query.role != "") {
+    matchCondition.role = query.role;
+  }
+  if (query.status && query.status != "") {
+    matchCondition.accountStatus = query.status;
+  }
+  if (query.creationFilter && query.creationFilter == "true") {
+    let now = moment();
+    let oneDayAgo = moment().subtract(1, "day");
+    let oneMonthAgo = moment().subtract(1, "months");
+    let threeMonthsAgo = moment().subtract(3, "months");
+    let oneYearAgo = moment().subtract(1, "years");
+    let oneWeek = moment().subtract(1, "weeks");
+    let sixMonths = moment().subtract(6, "months");
+    if (query.dateRange == "today") {
+      matchCondition.createdAt = {
+        $gte: new Date(oneDayAgo),
+        $lte: new Date(now),
+      };
+    } else if (query.dateRange == "thisMonth") {
+      matchCondition.createdAt = {
+        $gte: new Date(oneMonthAgo),
+        $lte: new Date(now),
+      };
+    } else if (query.dateRange == "threeMonths") {
+      matchCondition.createdAt = {
+        $gte: new Date(threeMonthsAgo),
+        $lte: new Date(now),
+      };
+    } else if (query.dateRange == "thisYear") {
+      matchCondition.createdAt = {
+        $gte: new Date(oneYearAgo),
+        $lte: new Date(now),
+      };
+    } else if (query.dateRange == "thisWeek") {
+      matchCondition.createdAt = {
+        $gte: new Date(oneWeek),
+        $lte: new Date(now),
+      };
+    } else if (query.dateRange == "sixMonths") {
+      matchCondition.createdAt = {
+        $gte: new Date(sixMonths),
+        $lte: new Date(now),
+      };
+    }
+  }
+  return matchCondition;
+}
+
+async function createOrg({
+  req,
+  firstName,
+  lastName,
+  emailId,
+  phoneNumber,
+  organisationName,
+  type,
+  address,
+}) {
+  let organisationExists = await OrganisationModel.findOne({
+    name: new RegExp("^" + organisationName + "$", "i"),
+  });
+
+  if (organisationExists) {
+    return "Organisation name exists!";
+  }
+
+  const country = address?.country ? address?.country : "Costa Rica";
+  const region = address?.region ? address?.region : "Americas";
+  const addr =
+    address?.line1 +
+    ", " +
+    address?.city +
+    ", " +
+    address?.state +
+    ", " +
+    address?.pincode;
+  const empCounter = await CounterModel.findOneAndUpdate(
+    {
+      "counters.name": "employeeId",
+    },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true }
+  );
+  const employeeId =
+    empCounter.counters[4].format + empCounter.counters[4].value;
+
+  const warehouseCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "warehouseId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true }
+  );
+  const warehouseId =
+    warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+  const orgCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "orgId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    { new: true }
+  );
+  const organisationId =
+    orgCounter.counters[2].format + orgCounter.counters[2].value;
+
+  const organisation = new OrganisationModel({
+    primaryContactId: employeeId,
+    name: organisationName,
+    id: organisationId,
+    type: type,
+    status: "ACTIVE",
+    isRegistered: true,
+    postalAddress: addr,
+    warehouses: [warehouseId],
+    warehouseEmployees: [employeeId],
+    region: region,
+    country: country,
+    configuration_id: "CONF000",
+	authority: req.body?.authority,
+	parentOrgId: req.user.organisationId 
+  });
+  await organisation.save();
+
+  const invCounter = await CounterModel.findOneAndUpdate(
+    { "counters.name": "inventoryId" },
+    {
+      $inc: {
+        "counters.$.value": 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  const inventoryId =
+    invCounter.counters[7].format + invCounter.counters[7].value;
+  const inventoryResult = new InventoryModel({ id: inventoryId });
+  await inventoryResult.save();
+  const loc = await getLatLongByCity(address.city + "," + address.country);
+  const warehouse = new WarehouseModel({
+    title: "Office",
+    id: warehouseId,
+    warehouseInventory: inventoryId,
+    organisationId: organisationId,
+    location: loc,
+    warehouseAddress: {
+      firstLine: address.line1,
+      secondLine: "",
+      region: address.region,
+      city: address.city,
+      state: address.state,
+      country: address.country,
+      landmark: "",
+      zipCode: address.pincode,
+    },
+    region: {
+      regionName: region,
+    },
+    country: {
+      countryId: "001",
+      countryName: country,
+    },
+    status: "ACTIVE",
+  });
+  await warehouse.save();
+
+  if (emailId) emailId = emailId.toLowerCase().replace(" ", "");
+  if (phoneNumber) {
+    phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+  }
+
+  const user = new EmployeeModel({
+    firstName: firstName,
+    lastName: lastName,
+    emailId: emailId,
+    phoneNumber: phoneNumber,
+    organisationId: organisationId,
+    id: employeeId,
+    postalAddress: addr,
+    accountStatus: "ACTIVE",
+    warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+    role: "admin",
+  });
+  await user.save();
+
+  let bc_data;
+
+  if (emailId != null) {
+    bc_data = {
+      username: emailId,
+      password: "",
+      orgName: "org1MSP",
+      role: "",
+      email: emailId,
+    };
+  } else if (phoneNumber != null) {
+    bc_data = {
+      username: phoneNumber,
+      password: "",
+      orgName: "org1MSP",
+      role: "",
+      email: phoneNumber,
+    };
+  }
+
+  await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+
+  const event_data = {
+    eventID: cuid(),
+    eventTime: new Date().toISOString(),
+    actorWarehouseId: "null",
+    transactionId: employeeId,
+    eventType: {
+      primary: "CREATE",
+      description: "USER",
+    },
+    actor: {
+      actorid: employeeId,
+      actoruserid: employeeId,
+    },
+    stackholders: {
+      ca: {
+        id: "null",
+        name: "null",
+        address: "null",
+      },
+      actororg: {
+        id: organisationId ? organisationId : "null",
+        name: "null",
+        address: "null",
+      },
+      secondorg: {
+        id: "null",
+        name: "null",
+        address: "null",
+      },
+    },
+    payload: {
+      data: "CREATED ORG WITH EXCEL",
+    },
+  };
+  await logEvent(event_data);
+}
 async function verifyAuth(nonce, signature) {
 	try {
 		nonce = "\x19Ethereum Signed Message:\n" + nonce.length + nonce;
@@ -221,8 +592,8 @@ exports.register = [
 				if (organisation && organisation.isRegistered) {
 					organisationId = organisation.id;
 				} else {
-					const country = req.body?.address?.country ? req.body.address?.country : "India";
-					const region = req.body?.address?.region ? req.body.address?.region : "Asia";
+					const country = req.body?.address?.country ? req.body.address?.country : "Costa Rica";
+					const region = req.body?.address?.region ? req.body.address?.region : "Americas";
 					const address = req.body?.address ? req.body.address : {};
 					if (!skipOrgRegistration) {
 						addr =
@@ -443,7 +814,7 @@ exports.register = [
 				const secret = process.env.JWT_SECRET;
 				//Generated JWT token with Payload and secret.
 				// Is RBAC needed for one time login?
-				userData.permissions = await RbacModel.findOne({ role: user.role });
+				userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 				userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 				return apiResponse.successResponseWithData(req, res, "user_registered_success", userData);
@@ -594,7 +965,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						} else {
 							userData = {
@@ -609,7 +980,7 @@ exports.verifyOtp = [
 								userName: user.emailId,
 								preferredLanguage: user.preferredLanguage,
 								isCustom: user.isCustom,
-								...(org.type === "CENTRAL_AUTHORITY" ? { type: "CENTRAL_AUTHORITY" } : {}),
+								type: org.type
 							};
 						}
 						//Prepare JWT token for authentication
@@ -619,7 +990,7 @@ exports.verifyOtp = [
 						};
 						const secret = process.env.JWT_SECRET;
 						//Generated JWT token with Payload and secret.
-						userData.permissions = await RbacModel.findOne({ role: user.role });
+						userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 						userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 						const bc_data = {
@@ -629,7 +1000,9 @@ exports.verifyOtp = [
 							role: "",
 							email: req.body.emailId,
 						};
-						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
+						axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => {
+							console.log(err);
+						});
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
 						return apiResponse.ErrorResponse(req, res, "otp_not_match");
@@ -673,7 +1046,7 @@ exports.verifyAuthentication = [
 						`User with mail id ${req.body.emailId} does not exist, please register and try again`,
 					);
 				}
-				let signingAddress = await verifyAuth(req.body.message, req.body.signature);
+				const signingAddress = await verifyAuth(req.body.message, req.body.signature);
 				if (signingAddress.toLowerCase() !== req.body.walletId.toLowerCase()) {
 					return apiResponse.unauthorizedResponse(
 						req,
@@ -681,15 +1054,6 @@ exports.verifyAuthentication = [
 						"The wallet id doesn't match signature",
 					);
 				} else {
-					let query = {};
-					if (req.body.emailId.indexOf("@") === -1) {
-						let phone = "+" + req.body.emailId;
-						query = { phoneNumber: phone };
-					} else {
-						query = { emailId: req.body.emailId };
-					}
-					// const userDetails = await EmployeeModel.findOne(query);
-					// console.log(userDetails)
 					const activeWarehouse = await WarehouseModel.find({
 						$and: [
 							{ id: { $in: user.warehouseId } },
@@ -698,7 +1062,7 @@ exports.verifyAuthentication = [
 							},
 						],
 					});
-
+					const org = await OrganisationModel.findOne({ id: user.organisationId });
 					let userData;
 					if (activeWarehouse.length > 0) {
 						let activeWarehouseId = 0;
@@ -717,6 +1081,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					} else {
 						userData = {
@@ -731,6 +1096,7 @@ exports.verifyAuthentication = [
 							userName: user.emailId,
 							preferredLanguage: user.preferredLanguage,
 							isCustom: user.isCustom,
+							type : org.type
 						};
 					}
 					//Prepare JWT token for authentication
@@ -740,7 +1106,7 @@ exports.verifyAuthentication = [
 					};
 					const secret = process.env.JWT_SECRET;
 					//Generated JWT token with Payload and secret.
-					userData.permissions = await RbacModel.findOne({ role: user.role });
+					userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 					userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 					const bc_data = {
@@ -750,8 +1116,7 @@ exports.verifyAuthentication = [
 						role: "",
 						email: req.body.emailId,
 					};
-					console.log(bc_data);
-					await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+					axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data).catch((err) => { console.log(err) })
 					if (user.accountStatus === "ACTIVE") {
 						return apiResponse.successResponseWithData(req, res, "login_success", userData);
 					} else {
@@ -860,7 +1225,7 @@ exports.googleLogIn = [
 			};
 			const secret = process.env.JWT_SECRET;
 			//Generated JWT token with Payload and secret.
-			userData.permissions = await RbacModel.findOne({ role: user.role });
+			userData.permissions = await RbacModel.findOne({ orgId: "ORG100001", role: user.role });
 			userData.token = jwt.sign(jwtPayload, secret, jwtData);
 
 			const bc_data = {
@@ -902,7 +1267,7 @@ exports.userInfo = [
 					postalAddress,
 					createdAt,
 				} = user;
-				const permissions = await RbacModel.findOne({ role });
+				const permissions = await RbacModel.findOne({ orgId: "ORG100001", role: role });
 				const org = await OrganisationModel.findOne(
 					{ id: organisationId },
 					"name configuration_id type",
@@ -1246,11 +1611,11 @@ exports.addWarehouse = [
 					$set: {
 						...(skipOrgRegistration
 							? {
-								postalAddress: addr,
-								country: warehouseAddress.country,
-								region: warehouseAddress.region,
-								status: "NOTVERIFIED",
-							}
+									postalAddress: addr,
+									country: warehouseAddress.country,
+									region: warehouseAddress.region,
+									status: "NOTVERIFIED",
+							  }
 							: {}),
 					},
 					$push: {
@@ -1265,7 +1630,7 @@ exports.addWarehouse = [
 				},
 				{
 					$set: {
-						role: "powerUser",
+						role: "admin",
 					},
 					$push: {
 						pendingWarehouseId: warehouseId,
@@ -1932,7 +2297,7 @@ exports.Image = [
 	auth,
 	async (req, res) => {
 		const FileStream = getFileStream(req.params.key);
-		FileStream.pipe(res);
+		FileStream.pipe(req, res);
 	},
 ];
 
@@ -1973,3 +2338,780 @@ exports.switchLocation = [
 		}
 	},
 ];
+
+exports.addNewOrganisation = [
+	auth,
+	async (req, res) => {
+		try {
+			let { firstName, lastName, emailId, phoneNumber, organisationName, type, address } = req.body;
+
+			let organisationExists = await OrganisationModel.findOne({
+				name: new RegExp("^" + organisationName + "$", "i"),
+			});
+
+			if (organisationExists) {
+				return apiResponse.validationErrorWithData(
+					res,
+					"Organisation name exists!",
+					organisationName,
+				);
+			}
+
+			const country = req.body?.address?.country ? req.body.address?.country : "Costa Rica";
+			const region = req.body?.address?.region ? req.body.address?.region : "Americas";
+			const addr =
+				address?.line1 + ", " + address?.city + ", " + address?.state + ", " + address?.pincode;
+
+			const empCounter = await CounterModel.findOneAndUpdate(
+				{
+					"counters.name": "employeeId",
+				},
+				{
+					$inc: {
+						"counters.$.value": 1,
+					},
+				},
+				{ new: true },
+			);
+			const employeeId = empCounter.counters[4].format + empCounter.counters[4].value;
+
+			const warehouseCounter = await CounterModel.findOneAndUpdate(
+				{ "counters.name": "warehouseId" },
+				{
+					$inc: {
+						"counters.$.value": 1,
+					},
+				},
+				{ new: true },
+			);
+			const warehouseId = warehouseCounter.counters[3].format + warehouseCounter.counters[3].value;
+
+			const orgCounter = await CounterModel.findOneAndUpdate(
+				{ "counters.name": "orgId" },
+				{
+					$inc: {
+						"counters.$.value": 1,
+					},
+				},
+				{ new: true },
+			);
+			const organisationId = orgCounter.counters[2].format + orgCounter.counters[2].value;
+
+			const organisation = new OrganisationModel({
+				primaryContactId: employeeId,
+				name: organisationName,
+				id: organisationId,
+				type: type,
+				status: "ACTIVE",
+				isRegistered: true,
+				postalAddress: addr,
+				warehouses: [warehouseId],
+				warehouseEmployees: [employeeId],
+				region: region,
+				country: country,
+				configuration_id: "CONF000",
+				authority: req.body?.authority,
+			});
+			await organisation.save();
+
+			const invCounter = await CounterModel.findOneAndUpdate(
+				{ "counters.name": "inventoryId" },
+				{
+					$inc: {
+						"counters.$.value": 1,
+					},
+				},
+				{
+					new: true,
+				},
+			);
+			const inventoryId = invCounter.counters[7].format + invCounter.counters[7].value;
+			const inventoryResult = new InventoryModel({ id: inventoryId });
+			await inventoryResult.save();
+			const loc = await getLatLongByCity(address.city + "," + address.country);
+			const warehouse = new WarehouseModel({
+				title: "Office",
+				id: warehouseId,
+				warehouseInventory: inventoryId,
+				organisationId: organisationId,
+				location: loc,
+				warehouseAddress: {
+					firstLine: address.line1,
+					secondLine: "",
+					region: address.region,
+					city: address.city,
+					state: address.state,
+					country: address.country,
+					landmark: "",
+					zipCode: address.pincode,
+				},
+				region: {
+					regionName: region,
+				},
+				country: {
+					countryId: "001",
+					countryName: country,
+				},
+				status: "ACTIVE",
+			});
+			await warehouse.save();
+
+			if (emailId) emailId = req.body.emailId.toLowerCase().replace(" ", "");
+			if (phoneNumber) {
+				phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+			}
+
+			const user = new EmployeeModel({
+				firstName: firstName,
+				lastName: lastName,
+				emailId: emailId,
+				phoneNumber: phoneNumber,
+				organisationId: organisationId,
+				id: employeeId,
+				postalAddress: addr,
+				accountStatus: "ACTIVE",
+				warehouseId: warehouseId == "NA" ? [] : [warehouseId],
+				role: "admin"
+			});
+			await user.save();
+
+			let bc_data;
+
+			if (emailId != null) {
+				bc_data = {
+					username: emailId,
+					password: "",
+					orgName: "org1MSP",
+					role: "",
+					email: emailId,
+				};
+			} else if (phoneNumber != null) {
+				bc_data = {
+					username: phoneNumber,
+					password: "",
+					orgName: "org1MSP",
+					role: "",
+					email: phoneNumber,
+				};
+			}
+
+			await axios.post(`${hf_blockchain_url}/api/v1/register`, bc_data);
+
+			const event_data = {
+				eventID: cuid(),
+				eventTime: new Date().toISOString(),
+				actorWarehouseId: "null",
+				transactionId: employeeId,
+				eventType: {
+					primary: "CREATE",
+					description: "USER",
+				},
+				actor: {
+					actorid: employeeId,
+					actoruserid: employeeId,
+				},
+				stackholders: {
+					ca: {
+						id: "null",
+						name: "null",
+						address: "null",
+					},
+					actororg: {
+						id: req.body.organisationId ? req.body.organisationId : "null",
+						name: "null",
+						address: "null",
+					},
+					secondorg: {
+						id: "null",
+						name: "null",
+						address: "null",
+					},
+				},
+				payload: {
+					data: req.body,
+				},
+			};
+			await logEvent(event_data);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Organisation added successfully!",
+				organisation,
+			);
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(req, res, err);
+		}
+	},
+];
+
+exports.addUsersFromExcel = [
+  auth,
+  async (req, res) => {
+    try {
+      try {
+        const { organisationName } = req.user;
+        const dir = `uploads`;
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+        await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+        const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+        const sheet_name_list = workbook.SheetNames;
+        let data = XLSX.utils.sheet_to_json(
+          workbook.Sheets[sheet_name_list[0]],
+          { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
+        );
+
+
+        const formatedData = new Array();
+        for (const [index, user] of data.entries()) {
+			const firstName = user?.["NAME"] || user?.["NOMBRE"];
+			const phoneNumber = user?.["PHONE"] || user?.["CEL NUMBER"];
+			const lastName = user?.["LAST NAME"] || user?.["APELLIDO"];
+			const emailId = user?.["EMAIL"] || user?.["EMAIL"];
+			const role = user?.["ROLE"] || user?.["ROL"];
+			const city = user?.["CITY"]
+			const zip = user?.["POSTAL CODE"];
+			const province = user?.["PROVINCE"];
+			const warehouseTitle = user?.["NAME OF LOCATION"];
+			const district = user?.["DISTRICT"];
+			const postalAddress = user?.["ADDRESS"];
+			const warehouseAddress = {
+				city: city,
+				zip: zip,
+				province: province,
+				warehouseTitle: warehouseTitle,
+				district: district,
+				postalAddress: postalAddress
+		}
+
+          const accountStatus = "ACTIVE";
+          const warehouseId =
+            user?.["WAREHOUSE"] || user?.["FECHA DE VENCIMIENTO"];
+          const { organisationId } = req.user;
+			const payload = {
+			organisationId: organisationId,
+			postalAddress: postalAddress,
+			title: warehouseTitle,
+			region: {
+				regionId : "reg123",
+				regionName : "Americas"
+			},
+			country:{
+				countryId : "001",
+				countryName : "Costa Rica"
+			},
+			warehouseAddress: warehouseAddress,
+			supervisors: [],
+			}
+          formatedData[index] = {
+            firstName: firstName,
+            lastName: lastName,
+            emailId: emailId,
+            phoneNumber: phoneNumber,
+            organisationId: organisationId,
+            role: role,
+            accountStatus: accountStatus,
+            warehouseId: warehouseId ? warehouseId : [],
+            isConfirmed: true,
+			payload: payload
+            // id: id,
+          };
+        }
+
+        for (const user of formatedData) {
+          //   const incrementCounterEmployee =
+          await CounterModel.updateOne(
+            {
+              "counters.name": "employeeId",
+            },
+            {
+              $inc: {
+                "counters.$.value": 1,
+              },
+            }
+          );
+
+          const employeeCounter = await CounterModel.findOne(
+            { "counters.name": "employeeId" },
+            { "counters.$": 1 }
+          );
+          var employeeId =
+            employeeCounter.counters[0].format +
+            employeeCounter.counters[0].value;
+			createWarehouse(user.warehouseId, user.warehouseId, {...user.payload, employees: [employeeId]}, employeeId);
+
+          const User = new EmployeeModel({ ...user, id: employeeId });
+          await User.save();
+          let emailBody = AddUserEmail({
+            name: user.firstName,
+            organisation: organisationName,
+          });
+          mailer
+            .send(
+              constants.addUser.from,
+              user.emailId,
+              constants.addUser.subject,
+              emailBody
+            )
+            .catch((err) => {
+              console.log("Error in mailing user!", err);
+            });
+        }
+        return apiResponse.successResponseWithData(
+          req,
+		  res,
+          "success",
+          formatedData
+        );
+      } catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(req, res, err);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+];
+
+exports.addOrgsFromExcel = [
+  auth,
+  async (req, res) => {
+    try {
+      try {
+        const dir = `uploads`;
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+        await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+        const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+        const sheet_name_list = workbook.SheetNames;
+        let data = XLSX.utils.sheet_to_json(
+          workbook.Sheets[sheet_name_list[0]],
+          { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
+        );
+
+        console.log(data.entries());
+        const formatedData = new Array();
+        for (const [index, user] of data.entries()) {
+          const firstName = user["NAME"];
+          const lastName = user["LAST NAME"];
+          const emailId = user["EMAIL"];
+          const phoneNumber = user["TELEPHONE"];
+          const organisationName = user["ORGANIZATION'S NAME"];
+          const type = user["ORGANIZATION TYPE"];
+          const address = {
+            city: user["CITY"],
+            country: user["COUNTRY"],
+            line1: user["CANTON"],
+            pincode: user["POSTAL CODE"],
+            region: user["DISTRICT"],
+            state: user["PROVINCE"],
+          };
+
+          formatedData[index] = {
+            firstName: firstName,
+            lastName: lastName,
+            emailId: emailId,
+            phoneNumber: phoneNumber,
+            organisationName: organisationName,
+            type: type,
+            address: address,
+          };
+        }
+        const promises = [];
+        for (const org of formatedData) {
+          promises.push(createOrg({ req, res, ...org }));
+        }
+        await Promise.all(promises);
+        return apiResponse.successResponseWithData(
+          req,
+		  res,
+          "success",
+          formatedData
+        );
+      } catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(req, res, err);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+];
+
+exports.activateUser = [
+  auth,
+  (req, res) => {
+    try {
+      const { organisationName } = req.user;
+      const { id, role } = req.query;
+      EmployeeModel.findOne({ id: id })
+        .then((employee) => {
+          if (employee) {
+            if (employee.isConfirmed && employee.accountStatus == "ACTIVE") {
+              return apiResponse.successResponseWithData(
+                res,
+                " User is already Active",
+                employee
+              );
+            } else {
+              axios
+                .get(`${blockchain_service_url}/createUserAddress`)
+                .then((response) => {
+                  const walletAddress = response.data.items;
+                  const userData = {
+                    walletAddress,
+                  };
+                  axios
+                    .post(`${blockchain_service_url}/grantPermission`, userData)
+                    .then(() => console.log("posted"));
+                  EmployeeModel.findOneAndUpdate(
+                    { id: id },
+                    {
+                      $set: {
+                        accountStatus: "ACTIVE",
+                        isConfirmed: true,
+                        walletAddress,
+                        role,
+                      },
+                    },
+                    { new: true }
+                  )
+                    .exec()
+                    .then((emp) => {
+                      let emailBody = RequestApproved({
+                        name: emp.firstName,
+                        organisation: organisationName,
+                      });
+                      // Send confirmation email
+                      try {
+                        mailer.send(
+                          constants.appovalEmail.from,
+                          emp.emailId,
+                          constants.appovalEmail.subject,
+                          emailBody
+                        );
+                      } catch (mailError) {
+                        console.log(mailError);
+                      }
+                      return apiResponse.successResponseWithData(
+                        res,
+                        `User Activated`,
+                        emp
+                      );
+                    });
+                });
+            }
+          } else {
+            return apiResponse.notFoundResponse(req, res, "User Not Found");
+          }
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(req, res, err);
+        });
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.deactivateUser = [
+  auth,
+  (req, res) => {
+    try {
+      const { organisationName } = req.user;
+      const { id } = req.query;
+      EmployeeModel.findOneAndUpdate(
+        { id },
+        { $set: { accountStatus: "REJECTED" } },
+        { new: true }
+      )
+        .exec()
+        .then((emp) => {
+          console.log("REJECTED");
+          let emailBody = RejectedApproval({
+            name: emp.firstName,
+            organisationName,
+          });
+          try {
+            mailer.send(
+              constants.rejectEmail.from,
+              emp.emailId,
+              constants.rejectEmail.subject,
+              emailBody
+            );
+          } catch (err) {
+            console.log(err);
+          }
+          return apiResponse.successResponseWithData(req, res, "User Rejected", emp);
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(req, res, err);
+        });
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.updateUserRole = [
+  auth,
+  async (req, res) => {
+    try {
+      const { userId, role } = req.query;
+      const result = await EmployeeModel.findOneAndUpdate(
+        { id: userId },
+        { $set: { role: role } },
+        { new: true }
+      );
+
+      if (result) {
+        return apiResponse.successResponse(
+          req,
+          res,
+          "User role updated successfully!"
+        );
+      } else {
+        throw new Error("Error in updating user role!");
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getAllUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find(
+        {},
+        "firstName walletAddress emailId"
+      );
+      const confirmedUsers = users.filter((user) => user.walletAddress !== "");
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "Users Retrieved Success",
+        confirmedUsers
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getWarehouseUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find({
+        warehouseId: req.query.warehouseId,
+      });
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "Users Retrieved Success",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getOrgUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      console.log(getUserCondition(req.query, req.user.organisationId));
+      const users = await EmployeeModel.aggregate([
+        {
+          $match: getUserCondition(req.query, req.user.organisationId),
+        },
+        {
+          $lookup: {
+            from: "organisations",
+            localField: "organisationId",
+            foreignField: "id",
+            as: "orgs",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            walletAddress: 1,
+            accountStatus: 1,
+            firstName: 1,
+            lastName: 1,
+            photoId: 1,
+            phoneNumber: 1,
+            role: 1,
+            emailId: 1,
+            postalAddress: 1,
+            createdAt: 1,
+            location: "$orgs.postalAddress",
+            city: "$orgs.city",
+            region: "$orgs.region",
+            country: "$orgs.country",
+          },
+        },
+        { $skip: parseInt(req.query.skip) || 0 },
+        { $limit: parseInt(req.query.limit) || 0 },
+      ]);
+
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "Organisation Users",
+        users
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getOrgUserAnalytics = [
+  auth,
+  async (req, res) => {
+    try {
+      const { orgId } = req.query;
+      let matchQuery = orgId ? { organisationId: orgId } : {};
+      const analytics = await EmployeeModel.aggregate([
+        { $match: matchQuery },
+        {
+          $facet: {
+            total: [
+              { $match: {} },
+              {
+                $group: {
+                  _id: null,
+                  employees: {
+                    $addToSet: {
+                      employeeId: "$id",
+                    },
+                  },
+                  userInitials: {
+                    $firstN: {
+                      input: "$firstName",
+                      n: 5,
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$employees" },
+                      then: { $size: "$employees" },
+                      else: "NA",
+                    },
+                  },
+                  userInitials: 1,
+                },
+              },
+            ],
+            active: [
+              { $match: { accountStatus: "ACTIVE" } },
+              {
+                $group: {
+                  _id: null,
+                  employees: {
+                    $addToSet: {
+                      employeeId: "$id",
+                    },
+                  },
+                },
+              },
+              {
+                $project: {
+                  count: {
+                    $cond: {
+                      if: { $isArray: "$employees" },
+                      then: { $size: "$employees" },
+                      else: "NA",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+        { $unwind: "$total" },
+        { $unwind: "$active" },
+      ]);
+      console.log(analytics);
+      const analyticsObject = {
+        totalCount: analytics[0].total.count,
+        activeCount: analytics[0].active.count,
+        inactiveCount: analytics[0].total.count - analytics[0].active.count,
+        userInitials: analytics[0].total.userInitials,
+      };
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "User Analytics",
+        analyticsObject
+      );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find({
+        organisationId: req.query.orgId,
+      });
+      const confirmedUsers = users.filter((user) => user.walletAddress !== "");
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "Organisation Users",
+        confirmedUsers
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.getOrgActiveUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find({
+        organisationId: req.user.organisationId,
+        accountStatus: "ACTIVE",
+      }).select("firstName lastName emailId id");
+      return apiResponse.successResponseWithData(
+        req,
+		res,
+        "Organisation active users",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(req, res, err);
+    }
+  },
+];
+
+exports.Image = [
+  auth,
+  async (req, res) => {
+    try {
+      const signedUrl = await getSignedUrl(req.params.key);
+      return apiResponse.successResponseWithData(req, res, "Image URL", signedUrl);
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(req, res, err.message);
+    }
+  },
+];
+

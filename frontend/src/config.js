@@ -1,3 +1,4 @@
+
 export const SERVER_URL =
   process.env.REACT_APP_SERVER_URL || "https://vaccineledger.com";
 export const SERVER_URL_FOR_ROAMBEE = "https://integrations.vaccineledger.com";
@@ -14,7 +15,10 @@ export const LOCAL_SERVER_URL_EVENT = "http://localhost:3013";
 export const LOCAL_SERVER_URL_PRODUCTS = "http://localhost:3010";
 export const LOCAL_SERVER_URL_ALERTS = "http://localhost:3004";
 export const LOCAL_SERVER_URL_LASTMILE = "http://localhost:3016";
-
+export const LOCAL_SERVER_URL_AFFILIATION = "http://localhost:3018"
+export const LOCAL_SERVER_URL_ADDRESS = "http://localhost:3019"
+export const LOCAL_SERVER_URL_CONFIGURATION = "http://localhost:3020"
+export const LOCAL_SERVER_URL_RBAC = "http://localhost:3011"
 export function config() {
   const confs = {
     local: {
@@ -182,6 +186,52 @@ export function config() {
       getVialsUtilised: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVialsUtilised`,
       getVaccinationsList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/getVaccinationsList`,
       exportVaccinationList: `${LOCAL_SERVER_URL_LASTMILE}/lastmilemanagement/api/vaccination/exportVaccinationList`,
+      getApprovalsUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/getApprovals`,
+      getPermissionsUrl: `${LOCAL_SERVER_URL_RBAC}/rbacmanagement/api/getPermissions`,
+      getWareHousesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/fetchWarehouses`,
+      verifyOrgUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/acceptApproval`,
+      updateOrgUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/updateOrg`,
+      rejectOrgUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/rejectApproval`,
+      activateOrgUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/activateUser`,
+      deactivateOrgUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/deactivateUser`,
+      getOrgUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrgUsers`,
+      addOrgsFromExcel: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/addOrgsFromExcel`,
+      addUsersFromExcel: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/addUsersFromExcel`,
+      getWarehouseUsers: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getWarehouseUsers`,
+      getOrgUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/getOrgs`,
+      getOrgAnalytics: `${LOCAL_SERVER_URL_USER}/usermanagement/api/getOrgAnalytics`,
+      getOrgUserAnalytics: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrgUserAnalytics`,
+      getOrgActiveUsers: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrgActiveUsers`,
+      addOrgUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/addUser`,
+      updateUserRole: `${LOCAL_SERVER_URL_USER}/usermanagement/api/updateUserRole`,
+      addNewOrganisation: `${LOCAL_SERVER_URL_USER}/usermanagement/api/addNewOrganisation`,
+      getPendingOrgs: `${LOCAL_SERVER_URL_USER}/usermanagement/api/getPendingOrgs`,
+      recentRequestsSentUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/fetchSentRequests`,
+      pendingAffiliatedReqUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/fetchPendingRequests`,
+      affiliatedOrgUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/fetchAffiliates`,
+      getAllOrgUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/getAllOrg`,
+      unaffiliateUserUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/unAffiliate`,
+      unaffiliateOrgUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/unAffiliateOrg`,
+      acceptAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/acceptAffiliate`,
+      rejectAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/rejectAffiliate`,
+      addAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/addAffiliate`,
+      addOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addWarehouse`,
+      getLocationApprovalUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/getLocationApprovals`,
+      updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
+      modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
+      getOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/getOrganizationsByType?id=CONF000`,
+      getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${LOCAL_SERVER_URL_CONFIGURATION}/api/configuration_service/addNewOrgType`,
+      imgDomainUrl: `${SERVER_URL}`,
+      getCountryDataUrl: `${SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${SERVER_URL}/api/address_service/getRegions`,
+      fetchAllRoles: `${LOCAL_SERVER_URL_RBAC}/rbacmanagement/api/getRoles`,
+      fetchPermissionsByRole: `${LOCAL_SERVER_URL_RBAC}/rbacmanagement/api/getPermissions`,
+      updatePermissions: `${LOCAL_SERVER_URL_RBAC}/rbacmanagement/api/updatePermissions`,
+
+
     },
     prod: {
       getOrganizationsUrl: `${SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -348,6 +398,50 @@ export function config() {
       getVaccinationsList: `${SERVER_URL}/lastmilemanagement/api/vaccination/getVaccinationsList`,
       getCitiesAndOrgsForFilters: `${SERVER_URL}/lastmilemanagement/api/vaccination/getCitiesAndOrgsForFilters`,
       exportVaccinationList: `${SERVER_URL}/lastmilemanagement/api/vaccination/exportVaccinationList`,
+      getApprovalsUrl: `${SERVER_URL}/usermanagement/api/getApprovals`,
+      getPermissionsUrl: `${SERVER_URL}/rbacmanagement/api/getPermissions`,
+      getWareHousesUrl: `${SERVER_URL}/api/address_service/fetchWarehouses`,
+      verifyOrgUserUrl: `${SERVER_URL}/usermanagement/api/acceptApproval`,
+      updateOrgUrl: `${SERVER_URL}/usermanagement/api/updateOrg`,
+      rejectOrgUserUrl: `${SERVER_URL}/usermanagement/api/rejectApproval`,
+      activateOrgUserUrl: `${SERVER_URL}/usermanagement/api/activateUser`,
+      deactivateOrgUserUrl: `${SERVER_URL}/usermanagement/api/deactivateUser`,
+      getOrgUsersUrl: `${SERVER_URL}/usermanagement/api/auth/getOrgUsers`,
+      addOrgsFromExcel: `${SERVER_URL}/usermanagement/api/auth/addOrgsFromExcel`,
+      addUsersFromExcel: `${SERVER_URL}/usermanagement/api/auth/addUsersFromExcel`,
+      getWarehouseUsers: `${SERVER_URL}/usermanagement/api/auth/getWarehouseUsers`,
+      getOrgUrl: `${SERVER_URL}/usermanagement/api/getOrgs`,
+      getOrgAnalytics: `${SERVER_URL}/usermanagement/api/getOrgAnalytics`,
+      getOrgUserAnalytics: `${SERVER_URL}/usermanagement/api/auth/getOrgUserAnalytics`,
+      getOrgActiveUsers: `${SERVER_URL}/usermanagement/api/auth/getOrgActiveUsers`,
+      addOrgUserUrl: `${SERVER_URL}/usermanagement/api/addUser`,
+      updateUserRole: `${SERVER_URL}/usermanagement/api/updateUserRole`,
+      addNewOrganisation: `${SERVER_URL}/usermanagement/api/addNewOrganisation`,
+      getPendingOrgs: `${SERVER_URL}/usermanagement/api/getPendingOrgs`,
+      recentRequestsSentUrl: `${SERVER_URL}/api/affliation_service/fetchSentRequests`,
+      pendingAffiliatedReqUrl: `${SERVER_URL}/api/affliation_service/fetchPendingRequests`,
+      affiliatedOrgUrl: `${SERVER_URL}/api/affliation_service/fetchAffiliates`,
+      getAllOrgUrl: `${SERVER_URL}/api/affliation_service/getAllOrg`,
+      unaffiliateUserUrl: `${SERVER_URL}/api/affliation_service/unAffiliate`,
+      unaffiliateOrgUrl: `${SERVER_URL}/api/affliation_service/unAffiliateOrg`,
+      acceptAffiliateUrl: `${SERVER_URL}/api/affliation_service/acceptAffiliate`,
+      rejectAffiliateUrl: `${SERVER_URL}/api/affliation_service/rejectAffiliate`,
+      addAffiliateUrl: `${SERVER_URL}/api/affliation_service/addAffiliate`,
+      addOrgAddressrUrl: `${SERVER_URL}/api/address_service/addWarehouse`,
+      getLocationApprovalUrl: `${SERVER_URL}/api/address_service/getLocationApprovals`,
+      updateOrgAddressrUrl: `${SERVER_URL}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${SERVER_URL}/api/address_service/addAddressesFromExcel`,
+      modifyLocationUrl: `${SERVER_URL}/api/address_service/modifyLocation`,
+      getOrgTypesUrl: `${SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF000`,
+      getOrgTypeiIdsUrl: `${SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${SERVER_URL}/api/configuration_service/addNewOrgType`,
+      imgDomainUrl: `${SERVER_URL}`,
+      getCountryDataUrl: `${SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${SERVER_URL}/api/address_service/getRegions`,
+      fetchAllRoles: `${SERVER_URL}/rbacmanagement/api/getRoles`,
+      fetchPermissionsByRole: `${SERVER_URL}/rbacmanagement/api/getPermissions`,
+      updatePermissions: `${SERVER_URL}/rbacmanagement/api/updatePermissions`,
     },
   };
 

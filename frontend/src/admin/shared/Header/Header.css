@@ -68,6 +68,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative;
 }
 
 .profile-space {
@@ -78,7 +79,7 @@
 .profile-space > img {
   width: 2.6rem;
   height: 2.6rem;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 0.4rem;
 }
 .profile-name-card {

@@ -9,6 +9,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import { getBatchesofWarehouse } from "../../../../../actions/inventoryActions";
 import moment from "moment";
+import { formatDate } from "../../../../../utils/dateHelper";
+
 function BatchRow({ row, isNearExpiry, uom }) {
   return (
     <>
@@ -50,14 +52,14 @@ function BatchRow({ row, isNearExpiry, uom }) {
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {moment(row.attributeSet?.mfgDate).format("MM-yyyy") || "N/A"}
+              {formatDate(row.attributeSet?.mfgDate) || "N/A"}
             </p>
           </div>
         </TableCell>
         <TableCell className='mi-custom-cell'>
           <div className='mi-table-data'>
             <p className='mi-body-md black f-700 mi-reset'>
-              {moment(row.attributeSet?.expDate).format("MM-yyyy") || "N/A"}
+              {formatDate(row.attributeSet?.expDate) || "N/A"}
             </p>
           </div>
         </TableCell>

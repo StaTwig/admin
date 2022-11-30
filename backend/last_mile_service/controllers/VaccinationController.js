@@ -104,6 +104,29 @@ exports.vaccinateIndividual = [
 			let vaccineVialId = req.body?.vaccineVialId;
 			let vaccineVial;
 
+			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
+			const existingInventory = await InventoryModel.findOne(
+				{ id: warehouse.warehouseInventory },
+				{ _id: 1, id: 1, inventoryDetails: { $elemMatch: { productId: productId } } },
+			);
+
+			if(existingInventory?.inventoryDetails?.length) {
+				if(existingInventory.inventoryDetails[0].quantity < 1) {
+					return apiResponse.ErrorResponse(res, "Inventory exhausted!");
+				}
+			}
+
+			const existingAtom = await AtomModel.findOne({
+				currentInventory: warehouse.warehouseInventory,
+				batchNumbers: batchNumber,
+				status: "HEALTHY",
+			});
+
+			if(!existingAtom?.quantity) {
+				return apiResponse.ErrorResponse(res, "Batch Exhausted!");
+			}
+
 			// Open a new bottle if first dose
 			if (!vaccineVialId) {
 				const vaccineVialCounter = await CounterModel.findOneAndUpdate(
@@ -135,7 +158,6 @@ exports.vaccinateIndividual = [
 				await vaccineVial.save();
 
 				// Reduce inventory in InventoryModel and AtomModel
-				const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 				const atom = await AtomModel.findOneAndUpdate(
 					{
 						currentInventory: warehouse.warehouseInventory,
@@ -206,6 +228,29 @@ exports.vaccinateMultiple = [
 		try {
 			const { warehouseId, productId, batchNumber, doses } = req.body;
 
+			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
+			const existingInventory = await InventoryModel.findOne(
+				{ id: warehouse.warehouseInventory },
+				{ _id: 1, id: 1, inventoryDetails: { $elemMatch: { productId: productId } } },
+			);
+
+			if(existingInventory?.inventoryDetails?.length) {
+				if(existingInventory.inventoryDetails[0].quantity < 1) {
+					return apiResponse.ErrorResponse(res, "Inventory exhausted!");
+				}
+			}
+
+			const existingAtom = await AtomModel.findOne({
+				currentInventory: warehouse.warehouseInventory,
+				batchNumbers: batchNumber,
+				status: "HEALTHY",
+			});
+
+			if(!existingAtom?.quantity) {
+				return apiResponse.ErrorResponse(res, "Batch Exhausted!");
+			}
+
 			if (doses?.length && doses.length > 10) {
 				throw new Error("Cannot vaccinate more than 10 people with a single vial!");
 			}
@@ -239,7 +284,6 @@ exports.vaccinateMultiple = [
 			await vaccineVial.save();
 
 			// Reduce inventory in InventoryModel and AtomModel
-			const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 			const atom = await AtomModel.findOneAndUpdate(
 				{
 					currentInventory: warehouse.warehouseInventory,

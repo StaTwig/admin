@@ -238,6 +238,48 @@ services:
       - "traefik.http.routers.track.rule=Host(`vaccineledger.com`) && PathPrefix(`/tracktracemanagement/`)"
       - "traefik.http.routers.track.tls=true"
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
+  address:
+    build: "./backend/address_service"
+    image: "address_service2.0"
+    container_name: "address_service"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.address.entrypoints=websecure"
+      - "traefik.http.routers.address.rule=Host(`vaccineledger.com`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.address.tls=true"
+      - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
+  affliate:
+    build: "./backend/affliation_service"
+    image: "affliation_service2.0"
+    container_name: "affliate_service"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.affliate.entrypoints=websecure"
+      - "traefik.http.routers.affliate.rule=Host(`vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
+      - "traefik.http.routers.affliate.tls=true"
+      - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
+  configuration:
+    build: "./backend/configuration_service"
+    image: "configuration_service1.0"
+    container_name: "configuration_service"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.configuration.entrypoints=websecure"
+      - "traefik.http.routers.configuration.rule=Host(`vaccineledger.com`) && PathPrefix(`/api/configuration_service`)"
+      - "traefik.http.routers.configuration.tls=true"
+      - "traefik.http.routers.configuration.tls.certresolver=lets-encrypt"
 
   frontend:
     # build:

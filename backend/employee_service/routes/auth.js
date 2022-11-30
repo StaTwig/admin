@@ -59,5 +59,21 @@ router.get("/images/:key", AuthController.Image);
 router.post("/googleLogin", AuthController.googleLogIn);
 
 router.delete("/deleteProfile", AuthController.deleteProfile);
+router.post(
+  "/addUsersFromExcel",
+  upload.single("excel"),
+  AuthController.addUsersFromExcel
+);
+router.post(
+  "/addOrgsFromExcel",
+  upload.single("excel"),
+  AuthController.addOrgsFromExcel
+);
+router.get("/getAllUsers", AuthController.getAllUsers);
+router.get("/getOrgUsers", AuthController.getOrgUsers);
+router.get("/getWarehouseUsers", AuthController.getWarehouseUsers);
+router.get("/getOrgUserAnalytics", AuthController.getOrgUserAnalytics);
 
+router.get("/getOrgActiveUsers", AuthController.getOrgActiveUsers);
+router.get("/getUsers", AuthController.getUsers);
 module.exports = router;
