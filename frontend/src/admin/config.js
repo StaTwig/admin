@@ -1,4 +1,4 @@
-export const SERVER_URL = process.env.REACT_APP_ADMIN_SERVER_URL || "https://test.admin.vaccineledger.com";
+export const SERVER_URL = process.env.REACT_APP_ADMIN_SERVER_URL || "https://vaccineledger.com";
 export const SERVER_URL_VL = process.env.REACT_APP_SERVER_URL || 'https://vaccineledger.com';
 export const LOCAL_SERVER_URL_USER = "//localhost:3001";
 export const LOCAL_SERVER_URL_ADDRESS = "//localhost:3001";
