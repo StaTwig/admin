@@ -29,7 +29,7 @@ const SideBar = (props) => {
 		}
 	};
 
-	const lastMilePath = user?.role === "GoverningBody" ? "/lastMile-Centeral" : "/lastMile-Track";
+	const lastMilePath = user?.type === "GoverningBody" ? "/lastMile-Centeral" : "/lastMile-Track";
 
 	return (
 		<div className="sidebar">
