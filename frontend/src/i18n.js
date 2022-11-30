@@ -18,7 +18,7 @@ i18n
   .init({
     fallbackLng: "en",
     debug: true,
-    lng: "es",
+    lng: localStorage.getItem('i18nextLng') || 'es',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
