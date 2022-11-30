@@ -273,7 +273,8 @@ async function createOrg({
     region: region,
     country: country,
     configuration_id: "CONF000",
-    authority: req.body?.authority,
+	authority: req.body?.authority,
+	parentOrgId: req.user.organisationId 
   });
   await organisation.save();
 
