@@ -566,7 +566,7 @@ exports.getManufacturerWarehouses = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         const warehouses = await GoverningBodyMapLocations(
           organisationId,
@@ -803,7 +803,7 @@ exports.getManufacturerFilterOptions = [
       const organisation = await OrganisationModel.findOne({
         id: organisationId,
       });
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         orgs = await GoverningBodyFilterList(type, regExp)
         // orgs = []

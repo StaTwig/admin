@@ -1142,7 +1142,7 @@ exports.bestSellers = [
       });
       const reportType = req.query?.reportType || null;
       const isDist = organisation?.type === "DISTRIBUTORS";
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       let matchQuery = {};
       if (!isDist) {
         matchQuery[`manufacturerId`] = req.user.organisationId;
@@ -1322,7 +1322,7 @@ exports.bestSellerSummary = [
         id: req.user.organisationId,
       });
       const isDist = organisation?.type === "DISTRIBUTORS";
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       let warehouseQuery = {
         id: req.query.warehouseId || req.user.warehouseId
       };
@@ -1445,7 +1445,7 @@ exports.inStockReport = [
         id: req.user.organisationId,
       });
       let inStockReport;
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         // Default warehouseId 
         inStockReport = await GovtBodyInstock(warehouse, date)
@@ -1645,7 +1645,7 @@ exports.outOfStockReport = [
         id: req.user.organisationId,
       });
       let outOfStockReport
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         outOfStockReport = await GovtBodyOutstock(warehouse, date)
       } else {
