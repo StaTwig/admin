@@ -1443,7 +1443,7 @@ exports.receiveShipment = [
           shipmentProducts.forEach((product) => {
             productNumber = productNumber + 1;
             receivedProducts.forEach((reqProduct) => {
-              if (product.productID === reqProduct.productID) {
+              if (product.productID === reqProduct.productID && (product?.batchNumber == reqProduct?.batchNumber || !product?.batchNumber)) {
                 actuallyShippedQuantity = product.productQuantity;
                 var receivedQuantity = reqProduct.productQuantity;
 
