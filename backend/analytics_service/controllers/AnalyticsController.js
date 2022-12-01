@@ -1141,7 +1141,7 @@ exports.bestSellers = [
         id: req.user.organisationId,
       });
       const reportType = req.query?.reportType || null;
-      const isDist = organisation?.type === "DISTRIBUTORS";
+      const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
       const isGoverningBody = organisation?.type === "GoverningBody";
       let matchQuery = {};
       if (!isDist) {
@@ -1321,7 +1321,7 @@ exports.bestSellerSummary = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
-      const isDist = organisation?.type === "DISTRIBUTORS";
+      const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
       const isGoverningBody = organisation?.type === "GoverningBody";
       let warehouseQuery = {
         id: req.query.warehouseId || req.user.warehouseId
@@ -1450,7 +1450,7 @@ exports.inStockReport = [
         // Default warehouseId 
         inStockReport = await GovtBodyInstock(warehouse, date)
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         let matchQuery1 = {};
         let matchQuery2 = {};
         let matchQuery3 = {};
@@ -1649,7 +1649,7 @@ exports.outOfStockReport = [
       if (isGoverningBody) {
         outOfStockReport = await GovtBodyOutstock(warehouse, date)
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         let matchQuery = {};
         let matchQuery1 = {};
         let matchQuery2 = {};
@@ -1856,7 +1856,7 @@ exports.inStockFilterOptions = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
-      const isDist = organisation?.type === "DISTRIBUTORS";
+      const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
       let matchQuery1 = {};
       let matchQuery2 = {};
       if (!isDist) {
@@ -2026,7 +2026,7 @@ exports.outOfStockFilterOptions = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
-      const isDist = organisation?.type === "DISTRIBUTORS";
+      const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
       let matchQuery = {};
       let matchQuery1 = {};
       let matchQuery2 = {};

@@ -7,7 +7,7 @@ const SearchCountry = ({nManufacturer, user, setReportWarehouse, t}) => {
       <p className="mi-body-md f-400 grey mi-reset">{t("country_list")}</p>
       <div className="search-result-container">
       {nManufacturer.filter((c) => c.country).map((country, index) =>
-         { return <CountryList setReportWarehouse={setReportWarehouse} country={country.country } user={user} />}
+         { return <CountryList key={index} setReportWarehouse={setReportWarehouse} country={country.country } user={user} />}
         )}
       </div>
     </div>

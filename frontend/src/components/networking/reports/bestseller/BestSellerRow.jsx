@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 export default function BestSellerRow({ product }) {
   const [openGraph, setOpenGraph] = React.useState(false);
   const {user} = useSelector((state) => state);
-  const Distributor = user.type === "DISTRIBUTORS"
+  const Distributor = user.type === "DISTRIBUTORS" || user.type === "DROGUERIA" ? true : false;
   const handleGraphOpen = () => {
     setOpenGraph(true);
   };

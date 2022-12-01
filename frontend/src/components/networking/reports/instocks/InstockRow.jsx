@@ -24,7 +24,7 @@ import { useSelector } from "react-redux";
 export default function InstockRow({ product, reportWarehouse, t }) {
   const [open, setOpen] = React.useState(false);
   const { user } = useSelector((state) => state);
-  const Distributor = user.type === "DISTRIBUTORS";
+  const Distributor = user.type === "DISTRIBUTORS" || user.type === "DROGUERIA" ? true : false;
   const isNearExpiry = (givenDate) => {
     try {
       if (givenDate)

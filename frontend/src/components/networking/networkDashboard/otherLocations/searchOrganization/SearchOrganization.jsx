@@ -14,7 +14,7 @@ const SearchOrganization = ({ user, nManufacturer, setReportWarehouse, t }) => {
     <div className='search-location-results'>
       <p className='mi-body-md f-400 grey mi-reset'>{t("organization_list")}</p>
       <div className='search-result-container'>
-        {nManufacturer.map((org, index) => {
+        {nManufacturer?.map((org, index) => {
           return (
             <OrganizationList
               setReportWarehouse={setReportWarehouse}

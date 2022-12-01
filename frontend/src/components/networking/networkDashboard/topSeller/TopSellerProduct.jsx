@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const TopSellerProduct = ({ bs, bigBoxColor, smallBoxColor }) => {
   const {user} = useSelector((state) => state);
-  const Distributor = user.type === "DISTRIBUTORS"
+  const Distributor = user.type === "DISTRIBUTORS" || user.type === "DROGUERIA" ? true : false;
   return (
     <>
       <div

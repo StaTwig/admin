@@ -590,7 +590,7 @@ exports.getManufacturerWarehouses = [
           response
         );
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         if (isDist) {
           const warehouses = await DistributorMapLocations(
             organisationId,
@@ -808,7 +808,7 @@ exports.getManufacturerFilterOptions = [
         orgs = await GoverningBodyFilterList(type, regExp)
         // orgs = []
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         if (isDist) {
           orgs = await DistributorFilterList(organisationId, type, regExp);
         } else {
