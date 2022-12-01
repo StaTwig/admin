@@ -429,6 +429,9 @@ exports.getVaccinationDetailsByBatch = [
 const buildWarehouseQuery = async (user, city, organisationName) => {
 	try {
 		const userDetails = await EmployeeModel.findOne({ id: user.id });
+		const organisation = await OrganisationModel.findOne({
+			id: userDetails.organisationId,
+		});
 
 		let warehouseIds = userDetails.warehouseId;
 
@@ -444,11 +447,11 @@ const buildWarehouseQuery = async (user, city, organisationName) => {
 		let warehouseQuery = {};
 		let queryExprs = [];
 
-		if (userDetails && userDetails.role !== "GoverningBody") {
+		if (userDetails && organisation.type !== "GoverningBody") {
 			queryExprs.push({ id: { $in: warehouseIds } });
 		}
 
-		if (userDetails.role === "GoverningBody" && organisationName) {
+		if (organisation.type === "GoverningBody" && organisationName) {
 			let organisation = await OrganisationModel.findOne({
 				status: "ACTIVE",
 				name: organisationName,
@@ -645,7 +648,10 @@ exports.getAnalytics = [
 				});
 				warehouseIds = warehouses.map((warehouse) => warehouse.id);
 			}
-			if (userDetails.role !== "GoverningBody") {
+			const organisation = await OrganisationModel.findOne({
+				id: userDetails.organisationId,
+			});
+			if (organisation.type !== "GoverningBody") {
 				query = { warehouseId: { $in: warehouseIds } };
 			}
 
@@ -696,7 +702,10 @@ exports.getVialsUtilised = [
 				});
 				warehouseIds = warehouses.map((warehouse) => warehouse.id);
 			}
-			if (userDetails.role !== "GoverningBody") {
+			const organisation = await OrganisationModel.findOne({
+				id: userDetails.organisationId,
+			});
+			if (organisation.type !== "GoverningBody") {
 				query = { warehouseId: { $in: warehouseIds } };
 			}
 
@@ -725,7 +734,10 @@ exports.getVaccinationsList = [
 				});
 				warehouseIds = warehouses.map((warehouse) => warehouse.id);
 			}
-			if (userDetails.role !== "GoverningBody") {
+			const organisation = await OrganisationModel.findOne({
+				id: userDetails.organisationId,
+			});
+			if (organisation.type !== "GoverningBody") {
 				query = { warehouseId: { $in: warehouseIds } };
 			}
 
@@ -785,7 +797,10 @@ exports.getCitiesAndOrgsForFilters = [
 				});
 				warehouseIds = warehouses.map((warehouse) => warehouse.id);
 			}
-			if (userDetails.role !== "GoverningBody") {
+			const organisation = await OrganisationModel.findOne({
+				id: userDetails.organisationId,
+			});
+			if (organisation.type !== "GoverningBody") {
 				query = { warehouseId: { $in: warehouseIds } };
 			}
 
@@ -804,7 +819,7 @@ exports.getCitiesAndOrgsForFilters = [
 			const cities = warehouses.map((warehouse) => warehouse._id);
 
 			let orgs;
-			if (userDetails.role === "GoverningBody") {
+			if (organisation.type === "GoverningBody") {
 				let orgIds = warehouses.map((warehouse) => warehouse.orgs);
 				orgIds = orgIds.flat();
 
