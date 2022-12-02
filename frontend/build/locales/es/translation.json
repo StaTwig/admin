@@ -551,6 +551,7 @@
   "as":"como",
   "gender_msg":"Elige el género para ver los resultados",
   "city_msg":"Buscar los resultados por ciudad sabia",
+  "org_msg":"Buscar los resultados por Organización",
   "age_msh":"Buscar los resultados por edad",
   "user":"Usuario",
   "switch_to_admin":"Cambiar a administrador",
@@ -620,5 +621,7 @@
   "save_changes":"Guardar cambios",
   "add_pharmacies": "Agregar farmacias",
   "import_pharmacy": "Importar farmacias",
-  "add_pharmacy": "AD Formasya"
+  "add_pharmacy": "AD Formasya",
+  "no_access_receiveshipment":"Sin acceso para recibir el envío",
+  "please_try_again":"Inténtalo de nuevo"
 }
