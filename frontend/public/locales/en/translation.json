@@ -597,5 +597,7 @@
   "save_changes":"Save Changes",
   "add_pharmacies": "Add Pharmacies",
   "import_pharmacy": "Import Pharmacies",
-  "add_pharmacy": "Add Pharamcy"
+  "add_pharmacy": "Add Pharamcy",
+  "no_access_receiveshipment":"No Access to Receive the shipment",
+  "please_try_again":"Please Try Again"
 }
