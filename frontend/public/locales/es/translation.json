@@ -551,6 +551,7 @@
   "as":"como",
   "gender_msg":"Elige el género para ver los resultados",
   "city_msg":"Buscar los resultados por ciudad sabia",
+  "org_msg":"Buscar los resultados por Organización",
   "age_msh":"Buscar los resultados por edad",
   "user":"Usuario",
   "switch_to_admin":"Cambiar a administrador",

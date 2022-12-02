@@ -528,6 +528,7 @@
   "as":"as",
   "gender_msg":"Choose the Gender to see the results",
   "city_msg":"Search the results by City wise",
+  "org_msg":"Search the results by Organisation",
   "age_msh":"Search the results by age",
   "user":"User",
   "switch_to_admin":"Switch to Admin",
