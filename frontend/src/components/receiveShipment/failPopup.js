@@ -10,10 +10,10 @@ const FailPopup = (props) => {
         <img src={Cancel} width="60" height="60" className="mb-3" alt="Fail" />
         <div className="alert font-weight-bolder">{t('fail')}!</div>
         <div className="data mb-3">
-          {props.ErrorMsg && "No Access to Receive the shipment"}
+          {props.ErrorMsg && `${t("no_access_receiveshipment")}`}
         </div>
         <div className="data mb-3">
-          {props?.message ? props.message : "Please Try Again"}{" "}
+          {props?.message ? props.message : `${t("please_try_again")}`}
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>
         {t('try_again')}
