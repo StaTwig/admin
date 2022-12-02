@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.99c11b1c.chunk.css",
-    "main.js": "/static/js/main.121f31cd.chunk.js",
+    "main.js": "/static/js/main.9ba4f046.chunk.js",
     "runtime-main.js": "/static/js/runtime-main.c07df220.js",
     "static/css/2.26f76c59.chunk.css": "/static/css/2.26f76c59.chunk.css",
     "static/js/2.6dc61976.chunk.js": "/static/js/2.6dc61976.chunk.js",
@@ -35,6 +35,7 @@
     "static/media/Mt-Shipment-Es.18a24c06.webp": "/static/media/Mt-Shipment-Es.18a24c06.webp",
     "static/media/Mt-Shipment.5d3acf96.webp": "/static/media/Mt-Shipment.5d3acf96.webp",
     "static/media/NetworkBG.fccfbfc5.png": "/static/media/NetworkBG.fccfbfc5.png",
+    "static/media/OrderSelected.a2a1a77b.png": "/static/media/OrderSelected.a2a1a77b.png",
     "static/media/Orders.d77e1fe7.png": "/static/media/Orders.d77e1fe7.png",
     "static/media/Outbound_alert.8cd903de.png": "/static/media/Outbound_alert.8cd903de.png",
     "static/media/Overviewselected.4866b179.svg": "/static/media/Overviewselected.4866b179.svg",
@@ -139,7 +140,6 @@
     "static/media/news3.add20196.png": "/static/media/news3.add20196.png",
     "static/media/notification_blue.8b5abc32.png": "/static/media/notification_blue.8b5abc32.png",
     "static/media/order.83ae200d.svg": "/static/media/order.83ae200d.svg",
-    "static/media/orderSelected.a2a1a77b.png": "/static/media/orderSelected.a2a1a77b.png",
     "static/media/orders.42cc7c14.svg": "/static/media/orders.42cc7c14.svg",
     "static/media/org.3dc79d2e.png": "/static/media/org.3dc79d2e.png",
     "static/media/organisationType.38006c5f.png": "/static/media/organisationType.38006c5f.png",
@@ -185,6 +185,6 @@
     "static/css/2.26f76c59.chunk.css",
     "static/js/2.6dc61976.chunk.js",
     "static/css/main.99c11b1c.chunk.css",
-    "static/js/main.121f31cd.chunk.js"
+    "static/js/main.9ba4f046.chunk.js"
   ]
 }

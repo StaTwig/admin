@@ -566,7 +566,7 @@ exports.getManufacturerWarehouses = [
       const organisation = await OrganisationModel.findOne({
         id: req.user.organisationId,
       });
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         const warehouses = await GoverningBodyMapLocations(
           organisationId,
@@ -590,7 +590,7 @@ exports.getManufacturerWarehouses = [
           response
         );
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         if (isDist) {
           const warehouses = await DistributorMapLocations(
             organisationId,
@@ -803,12 +803,12 @@ exports.getManufacturerFilterOptions = [
       const organisation = await OrganisationModel.findOne({
         id: organisationId,
       });
-      const isGoverningBody = organisation?.type === "GOVERNING_BODY";
+      const isGoverningBody = organisation?.type === "GoverningBody";
       if (isGoverningBody) {
         orgs = await GoverningBodyFilterList(type, regExp)
         // orgs = []
       } else {
-        const isDist = organisation?.type === "DISTRIBUTORS";
+        const isDist = organisation?.type === "DISTRIBUTORS" || organisation?.type === "DROGUERIA" ? true : false;
         if (isDist) {
           orgs = await DistributorFilterList(organisationId, type, regExp);
         } else {

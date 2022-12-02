@@ -181,7 +181,7 @@ export default function Users(props) {
                   <input type="text" placeholder={t("search")} />
                 </div>
                 <div className="table-actions-area">
-                  {user.type === "DISTRIBUTORS" && <div className="table-dropdown-button" ref={domNode2}>
+                  {(user.type === "DISTRIBUTORS" || user.type === "DROGUERIA") && <div className="table-dropdown-button" ref={domNode2}>
                     <button
                       className="vl-btn vl-btn-alt vl-btn-primary"
                       // onClick={() => setButtonOpen(!ButtonOpen)}

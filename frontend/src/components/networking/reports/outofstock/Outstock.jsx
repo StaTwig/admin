@@ -11,7 +11,7 @@ import Filter from "../Filter/Filter";
 
 export default function Outstock({outStock, outStockFilters, setOutstockType,setOutstockId, t}) {
   const {user} = useSelector((state) => state);
-  const Distributor = user.type === "DISTRIBUTORS"
+  const Distributor = user.type === "DISTRIBUTORS" || user.type === "DROGUERIA" ? true : false;
   return (
     <>
       <TableContainer>

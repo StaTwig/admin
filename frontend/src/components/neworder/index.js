@@ -605,7 +605,7 @@ const NewOrder = (props) => {
 													}}
 													isDisabled={values.typeName === ""}
 													options={allOrganisations.filter((a) => {
-														if (User.type === "DISTRIBUTORS" && (values.typeName === "PHARMACY" || values.typeName === "FARMACIA")) {
+														if ((User.type === "DISTRIBUTORS" || User.type === "DROGUERIA") && (values.typeName === "PHARMACY" || values.typeName === "Farmacia")) {
 															return a.type === values.typeName && a.parentOrg === User.organisationId
 														}
 														return a.type === values.typeName

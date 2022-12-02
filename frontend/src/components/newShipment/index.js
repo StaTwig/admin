@@ -1060,7 +1060,7 @@ const NewShipment = (props) => {
                             onOrgChange(v.value);
                           }}
                           options={allOrganisations.filter((org) => {
-                            if (user.type === "DISTRIBUTORS" && (values.rtypeName === "PHARMACY" || values.rtypeName === "FARMACIA")) {
+                            if ((user.type === "DISTRIBUTORS" || user.type === "DROGUERIA") && (values.rtypeName === "PHARMACY" || values.rtypeName === "Farmacia")) {
                               return org.type === values.rtypeName && org.parentOrgId === user.organisationId
                             }
                             return org.type === values.rtypeName
