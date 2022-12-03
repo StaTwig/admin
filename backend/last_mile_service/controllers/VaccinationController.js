@@ -804,12 +804,12 @@ exports.getCitiesAndOrgsForFilters = [
 				query = { warehouseId: { $in: warehouseIds } };
 			}
 
-			// const vaccinationCenters = await VaccineVialModel.aggregate([
-			// 	{ $match: query },
-			// 	{ $group: { _id: "$warehouseId" } },
-			// ]);
+			const vaccinationCenters = await VaccineVialModel.aggregate([
+				{ $match: query },
+				{ $group: { _id: "$warehouseId" } },
+			]);
 
-			// warehouseIds = vaccinationCenters.map((warehouse) => warehouse._id);
+			warehouseIds = vaccinationCenters.map((warehouse) => warehouse._id);
 
 			const warehouses = await WarehouseModel.aggregate([
 				{ $match: { id: { $in: warehouseIds } } },

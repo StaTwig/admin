@@ -113,6 +113,7 @@ export default function Filterbar(props) {
                   name="gender"
 									checked={gender === "MALE"}
 									value="MALE"
+									id="male"
 									control={<Radio />}
 									label={t("male")}
 								/>
@@ -120,6 +121,7 @@ export default function Filterbar(props) {
                   name="gender"
 									checked={gender === "FEMALE"}
 									value="FEMALE"
+									id="female"
 									control={<Radio />}
 									label={t("female")}
 								/>
@@ -127,6 +129,7 @@ export default function Filterbar(props) {
                   name="gender"
 									checked={gender === "GENERAL"}
 									value="GENERAL"
+									id="general"
 									control={<Radio />}
 									label={t("others")}
 								/>

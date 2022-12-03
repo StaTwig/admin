@@ -18,7 +18,7 @@ export default function CenteralStatsTable({ vaccinationList, t }) {
 								</TableCell>
 								<TableCell align="center">
 									<div className="vl-table-column">
-										<p className="vl-body f-500 vl-blue">{t("organization_name")}</p>
+										<p className="vl-body f-500 vl-blue">{t("manufacturer_name")}</p>
 									</div>
 								</TableCell>
 								<TableCell align="center">

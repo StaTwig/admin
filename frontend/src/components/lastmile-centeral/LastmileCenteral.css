@@ -18,7 +18,7 @@
 }
 .LastmileCenteral--filter-wrapper {
   grid-area: Filterbar;
-  width: 26rem;
+  width: 25rem;
   position: fixed;
   top: 85px;
   right: 0;
