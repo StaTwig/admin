@@ -1,0 +1,114 @@
+{
+  "info": {
+    "_postman_id": "7291371d-b459-4377-b61b-85a65ab6333f",
+    "name": "shippingOrder_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "createShippingOrder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shippingordermanagement/api/shipping/createShippingOrder?id=PO10200",
+          "host": ["{{url}}"],
+          "path": [
+            "shippingordermanagement",
+            "api",
+            "shipping",
+            "createShippingOrder"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "PO10200"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getShippingOrders",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shippingordermanagement/api/shipping/getShippingOrders",
+          "host": ["{{url}}"],
+          "path": [
+            "shippingordermanagement",
+            "api",
+            "shipping",
+            "getShippingOrders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "viewShippingOrder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shippingordermanagement/api/shipping/viewShippingOrder?soId=so-1jpv35eekm6tvg1p",
+          "host": ["{{url}}"],
+          "path": [
+            "shippingordermanagement",
+            "api",
+            "shipping",
+            "viewShippingOrder"
+          ],
+          "query": [
+            {
+              "key": "soId",
+              "value": "so-1jpv35eekm6tvg1p"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getShippingOrderIds",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": null
+      },
+      "response": []
+    }
+  ]
+}

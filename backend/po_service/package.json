@@ -1,0 +1,32 @@
+{
+  "name": "po_service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node po_server.js",
+    "dev": "nodemon po_server.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "date-and-time": "^2.0.1",
+    "dotenv": "^10.0.0",
+    "express": "~4.17.1",
+    "helmet": "^5.0.2",
+    "i18next": "^21.6.11",
+    "i18next-fs-backend": "^1.1.4",
+    "i18next-http-middleware": "^3.1.6",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^6.2.1",
+    "morgan": "~1.10.0",
+    "multer": "^1.4.3",
+    "node-excel-export": "^1.4.4",
+    "pdfmake": "^0.2.4",
+    "redis": "3.1.2",
+    "xlsx": "^0.17.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.8.0"
+  }
+}

@@ -1,0 +1,282 @@
+/* Flex Boxes */
+.mi-flex {
+  display: flex;
+}
+.mi-flex-ac {
+  display: flex;
+  align-items: center;
+}
+.mi-flex-jc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mi-flex-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mi-flex-sa {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.mi-flex-se {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.f-col {
+  flex-direction: column;
+}
+.f-row {
+  flex-direction: row;
+}
+.f-wrap {
+  flex-wrap: wrap;
+}
+.white-space {
+  white-space: nowrap;
+}
+.inline-flex {
+  display: inline-flex !important;
+}
+
+/* Gaps */
+.gap-0 {
+  gap: 0 !important;
+}
+.gap-1 {
+  gap: 0.5rem;
+}
+.gap-2 {
+  gap: 1rem;
+}
+.gap-3 {
+  gap: 1.5rem;
+}
+.gap-4 {
+  gap: 2rem;
+}
+.gap-5 {
+  gap: 2.5rem;
+}
+.gap-5 {
+  gap: 3rem;
+}
+.gap-6 {
+  gap: 5rem;
+}
+
+/* padding */
+.mi-p-0 {
+  padding: 0 !important;
+}
+.mi-p-1 {
+  padding: 0.5rem;
+}
+.mi-p-2 {
+  padding: 1rem;
+}
+.mi-p-3 {
+  padding: 1.5rem;
+}
+.mi-p-4 {
+  padding: 2rem;
+}
+.mi-p-5 {
+  padding: 2.5rem;
+}
+.mi-p-6 {
+  padding: 3rem;
+}
+.mi-p-7 {
+  padding: 5rem;
+}
+
+.mi-py-1 {
+  padding: 0.5rem 0;
+}
+.mi-py-2 {
+  padding: 1rem 0;
+}
+.mi-py-3 {
+  padding: 1.5rem 0;
+}
+.mi-py-4 {
+  padding: 2rem 0;
+}
+.mi-py-5 {
+  padding: 2.5rem 0;
+}
+.mi-py-6 {
+  padding: 3rem 0;
+}
+.mi-py-7 {
+  padding: 5rem 0;
+}
+
+.mi-px-1 {
+  padding: 0 0.5rem;
+}
+.mi-px-2 {
+  padding: 0 1rem;
+}
+.mi-px-3 {
+  padding: 0 1.5rem;
+}
+.mi-px-4 {
+  padding: 0 2rem;
+}
+.mi-px-5 {
+  padding: 0 2.5rem;
+}
+.mi-px-6 {
+  padding: 0 3rem;
+}
+.mi-px-7 {
+  padding: 0 5rem;
+}
+
+/* Margin */
+.mi-m-0 {
+  margin: 0 !important;
+}
+.mi-m-1 {
+  margin: 0.5rem;
+}
+.mi-m-2 {
+  margin: 1rem;
+}
+.mi-m-3 {
+  margin: 1.5rem;
+}
+.mi-m-4 {
+  margin: 2rem;
+}
+.mi-m-5 {
+  margin: 2.5rem;
+}
+.mi-m-6 {
+  margin: 3rem;
+}
+.mi-m-7 {
+  margin: 5rem;
+}
+
+.mi-my-1 {
+  margin: 0.5rem 0;
+}
+.mi-my-2 {
+  margin: 1rem 0;
+}
+.mi-my-3 {
+  margin: 1.5rem 0;
+}
+.mi-my-4 {
+  margin: 2rem 0;
+}
+.mi-my-5 {
+  margin: 2.5rem 0;
+}
+.mi-my-6 {
+  margin: 3rem 0;
+}
+.mi-my-7 {
+  margin: 5rem 0;
+}
+
+.mi-mx-1 {
+  margin: 0 0.5rem;
+}
+.mi-mx-2 {
+  margin: 0 1rem;
+}
+.mi-mx-3 {
+  margin: 0 1.5rem;
+}
+.mi-mx-4 {
+  margin: 0 2rem;
+}
+.mi-mx-5 {
+  margin: 0 2.5rem;
+}
+.mi-mx-6 {
+  margin: 0 3rem;
+}
+.mi-mx-7 {
+  margin: 0 5rem;
+}
+
+/* Text Align */
+.text-c {
+  text-align: center;
+}
+.text-l {
+  text-align: left;
+}
+.text-r {
+  text-align: right;
+}
+.text-j {
+  text-align: justify;
+}
+
+.mi-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+}
+.mi-link:hover {
+  opacity: 0.8;
+}
+
+@media screen and (max-width: 586px) {
+  /* Gaps */
+  .gap-0 {
+    gap: 0 !important;
+  }
+  .gap-1 {
+    gap: 0.3rem;
+  }
+  .gap-2 {
+    gap: 0.8rem;
+  }
+  .gap-3 {
+    gap: 1.3rem;
+  }
+  .gap-4 {
+    gap: 1.8rem;
+  }
+  .gap-5 {
+    gap: 2.3rem;
+  }
+  .gap-5 {
+    gap: 2.8rem;
+  }
+  .gap-6 {
+    gap: 4.6rem;
+  }
+
+  .mi-my-1 {
+    margin: 0.3rem 0;
+  }
+  .mi-my-2 {
+    margin: 0.8rem 0;
+  }
+  .mi-my-3 {
+    margin: 1.3rem 0;
+  }
+  .mi-my-4 {
+    margin: 1.8rem 0;
+  }
+  .mi-my-5 {
+    margin: 2.3rem 0;
+  }
+  .mi-my-6 {
+    margin: 2.8rem 0;
+  }
+  .mi-my-7 {
+    margin: 4.6rem 0;
+  }
+}

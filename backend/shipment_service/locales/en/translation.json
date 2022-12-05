@@ -1,0 +1,21 @@
+{
+    "Shipment_ID": "Shipment ID",
+    "Reference_Order_ID": "Reference Order ID",
+    "Product_Category": "Product Category",
+    "Product_Name": "Product Name",
+    "Product_ID": "Product ID",
+    "Quantity": "Quantity",
+    "Batch_Number": "Batch Number",
+    "Expiry_Date": "Expiry Date",
+    "Manufacturer": "Manufacturer",
+    "From_Organization_Name": "From Organization Name",
+    "Delivery_Organization_Name": "Delivery Organization Name",
+    "Delivery_Organization_ID": "Delivery Organization ID",
+    "Delivery_Organization_Location_Details": "Delivery Organization Location Details",
+    "Transit_Number": "Transit Number",
+    "Label_Code": "Label Code",
+    "Shipment_Date": "Shipment Date",
+    "Shipment_Estimate_Date": "Shipment Estimate Date",
+    "Inbound shipments": "Inbound shipments",
+    "Outbound shipments": "Outbound shipments"
+}

@@ -1,0 +1,46 @@
+.vl-black {
+  color: var(--black) !important;
+}
+
+.vl-white {
+  color: var(--white) !important;
+}
+
+.vl-blue {
+  color: var(--blue) !important;
+}
+.vl-light {
+  color: var(--light) !important;
+}
+
+.vl-green {
+  color: var(--brand-secondary) !important;
+}
+
+.vl-red {
+  color: var(--error-red) !important;
+}
+
+.vl-grey-md {
+  color: var(--grey-bold) !important;
+}
+
+.vl-grey-sm {
+  color: var(--grey-medium) !important;
+}
+
+.vl-grey-xs {
+  color: var(--grey-light) !important;
+}
+
+.vl-dark-grey {
+  color: rgb(88, 88, 88);
+}
+
+.bg-blue {
+  background-color: var(--brand-blue) !important;
+}
+
+.bg-grey {
+  background-color: var(--brand-grey) !important;
+}

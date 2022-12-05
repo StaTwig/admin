@@ -1,0 +1,20 @@
+{
+  "name": "theledgerlastmileservice",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node last_mile_server.js",
+    "dev": "nodemon last_mile_server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "helmet": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.7",
+    "morgan": "^1.10.0",
+    "node-excel-export": "^1.4.4",
+    "pdfmake": "^0.2.6"
+  }
+}

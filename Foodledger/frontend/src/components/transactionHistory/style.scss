@@ -1,0 +1,215 @@
+@import "../../assets/styles/colors.scss";
+
+.mainButtonFilter{
+  background: #BCE0FD  0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #54265E2E;
+  border-radius: 30px;
+  color: #707070;
+  opacity: 1;
+  margin-bottom: 50px;
+  .active{
+    background: #0B65C1 0% 0% no-repeat padding-box;
+    border-radius: 30px !important;
+    color: $white;
+    font-weight: 500;
+    min-width: 80px;
+    outline:none !important;
+  }
+  a{
+    outline:none; 
+    padding: 8px 20px;
+  }
+  a:focus{
+    outline:none !important;
+  }
+}
+.dontshow{
+  display: none;
+}
+.productList{
+  color: #707070;
+  .transactionListDate{
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .transactionListContainer{
+    margin-top: 15px;
+  }
+  .productContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productItem{
+    flex-grow: 1;
+    height: 100px;
+  }
+  .productItem + .productItem{
+    margin-left: 2%;
+  }
+  .productIcon{
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productStatus{
+    font-weight: bold;
+    color: #000;
+  }
+  .productQuantity{
+    font-weight: bold;
+    color: #000;
+  }
+  .statusbadge{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;   
+  }
+  .transitBadge{
+    background: #FDAB0F;
+  }
+  .sentBadge{
+    background: #FF6A6A;
+  }
+  .addedBadge{
+    background: #20BECB;
+  }
+  .receivedBadge{
+    background: #3CB76C;
+  }
+  .inTransit{
+    background: #FFEED7 0% 0% no-repeat padding-box;   
+  }
+  .sent{
+    background: #FFE6E6 0% 0% no-repeat padding-box;    
+  }
+  .received{
+    background: #EAFFE2 0% 0% no-repeat padding-box;
+  }
+  .added{
+    background: #C9FBFF 0% 0% no-repeat padding-box;
+  }
+  .iconGroup{
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    line-height: 20px;
+    .transactionTitle{
+      font-size: 14px;
+      color: #000;
+      font-weight: bold;
+    }
+    .transactionDate{
+      color: #414141 !important;
+      font-size: 10px;
+      font-weight: lighter;
+      margin-bottom: 10px;
+    }
+    .icon-thumbnail-img {
+      width: 27px;
+      height: 20px;
+  }
+  }
+  .transactionsDetails{
+    height: 650px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+    background: #FFF;
+    border-radius: 25px;
+    padding: 12px;
+    .inventorytable{
+        width:100%;
+        thead{
+            border-bottom: 1px solid #DCDFF1 ;
+        }
+        .inventoryHeader{
+            padding:10px;
+            font-size:16px;
+            font-weight: 600;
+            .tableHeadersubtitle{
+                font-size: 12px;
+                font-weight: 500;     
+            }
+  
+        } 
+        .inventorydesc{
+            padding:10px;
+            font-size:13px;
+            font-weight: 600;
+            .inventorydescsubtitle{
+                font-size: 12px;
+                font-weight: 500;         
+            }
+  
+        }  
+    }
+  }
+}
+
+.filterSection{
+  .filterHeader{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size:  20px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    color: #707070;
+    .filterIcon{
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  .filterSubHeading{
+    font: normal normal bold 16px/27px Open Sans;
+    letter-spacing: 0px;
+    color: #707070;
+    display: flex;
+  }
+  .SearchButton{
+    background: #54265E 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 8px #54265E26;
+    border-radius: 24px;
+    color: $white;
+    margin: 20px auto;
+    display: flex;
+    padding: 10px 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .filterSelect{
+    padding: 9px 17px;
+    border: none;
+    box-shadow: 0px 4px 8px #54265e26;
+    border-radius: 10px;
+  }
+  .filterButton{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #154EA3;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    width: 100%;
+    .active{
+      background: #154EA3;
+      border-radius: 24px !important;
+      color: $white;
+      font-weight: 500;
+      outline:none !important;
+    }
+    a{
+      font-size: 12px;
+      outline:none; 
+      padding: 14px 11px;
+    }
+    a:focus{
+      outline:none !important;
+    }
+  }
+}
+

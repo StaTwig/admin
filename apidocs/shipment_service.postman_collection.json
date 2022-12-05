@@ -1,0 +1,384 @@
+{
+  "info": {
+    "_postman_id": "6bfe6f05-1d11-4e0a-8c49-869af0401c03",
+    "name": "shipment_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "CreateShipment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/createShipment",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "createShipment"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "recieveShipment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"label\": {\r\n    \"labelType\": \"QR_2DBAR\",\r\n    \"labelId\": \"878\"\r\n  },\r\n  \"transactionIds\": [],\r\n  \"airWayBillNo\": \"858\",\r\n  \"externalShipmentId\": \"\",\r\n  \"supplier\": {\r\n    \"id\": \"emp-1jpv23xtklyqrjz8\",\r\n    \"locationId\": \"war-ap-1\"\r\n  },\r\n  \"receiver\": {\r\n    \"id\": \"emp-18gpp20egkkf54n59\",\r\n    \"locationId\": \"war-bh-1\"\r\n  },\r\n  \"shippingDate\": \"2021-03-11T20:00:00.000Z\",\r\n  \"expectedDeliveryDate\": \"2021-03-29T20:00:00.000Z\",\r\n  \"actualDeliveryDate\": \"2021-03-29T20:00:00.000Z\",\r\n  \"status\": \"CREATED\",\r\n  \"products\": [\r\n    {\r\n      \"_id\": \"6045d1773d05c280bb54bfa1\",\r\n      \"productQuantity\": 100,\r\n      \"productId\":\"COM3\",\r\n      \"productName\": \"Comvac 3\",\r\n      \"manufacturer\": \"Bharath Biotech\",\r\n      \"labelId\": \"436\"\r\n    },\r\n    {\r\n      \"_id\": \"6045d1773d05c280bb54bfa1\",\r\n      \"productQuantity\": 100,\r\n      \"productId\":\"COM4\",\r\n      \"productName\": \"Comvac 4\",\r\n      \"manufacturer\": \"Bharath Biotech\",\r\n      \"labelId\": \"436\"\r\n    }\r\n  ],\r\n  \"poId\": null,\r\n  \"shippingOrderId\": null,\r\n  \"id\": \"SH100221\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/receiveShipment",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "receiveShipment"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "FetchShipments",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment//fetchShipments?skip=0&limit=5",
+          "host": ["{{url}}"],
+          "path": [
+            "shipmentmanagement",
+            "api",
+            "shipment",
+            "",
+            "fetchShipments"
+          ],
+          "query": [
+            {
+              "key": "skip",
+              "value": "0"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ViewShipment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDEyMTkzNSwiZXhwIjoxNjIwMTI5MTM1fQ.aWUWY6mim_c2X7KXIU4W88CBXnBt2IePjm8v8OjvN4Q",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/viewShipment?shipmentId=SH100034",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "viewShipment"],
+          "query": [
+            {
+              "key": "shipmentId",
+              "value": "SH100034"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updateTrackingStatus",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/updateTrackingStatus",
+          "host": ["{{url}}"],
+          "path": [
+            "shipmentmanagement",
+            "api",
+            "shipment",
+            "updateTrackingStatus"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "chainOfCustody",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDEyMTkzNSwiZXhwIjoxNjIwMTI5MTM1fQ.aWUWY6mim_c2X7KXIU4W88CBXnBt2IePjm8v8OjvN4Q",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=SH100424",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "chainOfCustody"],
+          "query": [
+            {
+              "key": "shipmentId",
+              "value": "SH100424"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Upload Image - Shipment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/uploadImage?id=SH100220",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "uploadImage"],
+          "query": [
+            {
+              "key": "id",
+              "value": "SH100220"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "FetchImage - Shipment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/fetchImage?id=SH100034",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "fetchImage"],
+          "query": [
+            {
+              "key": "id",
+              "value": "SH100034"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updateShipmentStatus",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/updateShipmentStatus?id=SH100021",
+          "host": ["{{url}}"],
+          "path": [
+            "shipmentmanagement",
+            "api",
+            "shipment",
+            "updateShipmentStatus"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "SH100021"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getProductsByInventory",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/getProductsByInventory",
+          "host": ["{{url}}"],
+          "path": [
+            "shipmentmanagement",
+            "api",
+            "shipment",
+            "getProductsByInventory"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetchAllShipments",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/fetchAllShipments",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "fetchAllShipments"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "viewPoShipments",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/viewPoShipments?poId=po-g7kn51ef6klnqk02v",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "viewPoShipments"],
+          "query": [
+            {
+              "key": "poId",
+              "value": "po-g7kn51ef6klnqk02v"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetchShipmentIds",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/shipmentmanagement/api/shipment/fetchShipmentIds",
+          "host": ["{{url}}"],
+          "path": ["shipmentmanagement", "api", "shipment", "fetchShipmentIds"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

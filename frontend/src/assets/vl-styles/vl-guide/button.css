@@ -1,0 +1,87 @@
+.vl-btn {
+  display: inline-flex;
+  text-align: center !important;
+  gap: 0.6rem;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+
+.vl-btn-full {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.vl-btn-lg {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  transition: all 0.3s ease-in- !important;
+}
+
+.vl-btn-md {
+  padding: 0.575rem 0.875rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.vl-btn-sm {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.vl-btn-primary {
+  background-color: var(--brand-secondary);
+  border: 2px solid var(--brand-secondary);
+  color: var(--white);
+}
+.vl-btn-secondary {
+  background-color: var(--white);
+  border: 2px solid var(--brand-secondary);
+  color: var(--brand-secondary);
+}
+.vl-btn-secondary:hover {
+  background-color: var(--brand-secondary);
+  border: 2px solid var(--brand-secondary);
+  color: var(--white);
+}
+.vl-btn-grey {
+  background-color: var(--white);
+  border: 2px solid var(--grey-light);
+  color: var(--grey-light);
+}
+
+.vl-btn-disabled {
+  background-color: var(--white);
+  border: 2px solid var(--disabled);
+  color: var(--disabled);
+  cursor: default;
+}
+
+@media screen and (min-width: 586px) {
+  .vl-btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+
+  .vl-btn-md {
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+  }
+
+  .vl-btn-sm {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.875rem;
+  }
+}

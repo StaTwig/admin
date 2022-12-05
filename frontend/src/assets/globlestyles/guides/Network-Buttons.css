@@ -1,0 +1,57 @@
+.nt-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  outline: none;
+  border-radius: 0.4rem;
+  font-weight: 500 !important;
+  transition: all 0.3s ease 0s;
+  text-decoration: none !important;
+  opacity: 1;
+  cursor: pointer;
+}
+.nt-btn:hover {
+  opacity: 0.8;
+  text-decoration: none !important;
+  box-shadow: rgb(0 0 0 / 10%) 0px 2px 14px 0px;
+}
+
+.nt-btn-md {
+  font-size: 0.95rem;
+  padding: 0.75rem 2.15rem;
+}
+.nt-btn-sm {
+  font-size: 0.875rem;
+  padding: 0.55rem 1.5rem;
+}
+.nt-btn-xs {
+  font-size: 0.875rem;
+  padding: 0.45rem 0.9rem;
+}
+
+.nt-btn-blue {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--white) !important;
+}
+
+.nt-btn-blue-alt {
+  background-color: var(--white);
+  border: 1px solid var(--primary);
+  color: var(--primary) !important;
+}
+.nt-btn-blue-alt:hover {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--white) !important;
+}
+.nt-btn-orange {
+  background-color: var(--white);
+  border: 1px solid var(--orange);
+  color: var(--orange) !important;
+}
+.nt-btn-orange:hover {
+  background-color: var(--orange);
+  border: 1px solid var(--orange);
+  color: var(--white) !important;
+}

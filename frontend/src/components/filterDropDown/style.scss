@@ -1,0 +1,57 @@
+.filter-card-container {
+  width: 151px;
+  height: 385px;
+  padding: 16px;
+  z-index: 1;
+  position: absolute;
+  top: 74px;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid;
+}
+
+.ul-element {
+  list-style-type: none;
+  position: relative;
+}
+
+.filter-card-container ul li {
+  text-align: center;
+}
+
+.li-element {
+  border: 1px solid #89d1f0;
+  border-radius: 12px;
+  height: 40px;
+  width: 119px;
+  line-height: 38px;
+  margin-bottom: 15px;
+  color: #0093e9;
+}
+
+.li-element:hover {
+  background-color: #0093e9;
+  color: white;
+  cursor: pointer;
+}
+
+.li-element-selected {
+  @extend .li-element;
+  background-color: #f6f6f6;
+}
+
+.filter-card-container ul {
+  list-style-type: none;
+  margin: 15px 0px 15px 0px;
+  position: relative;
+  right: 40px;
+  overflow: "";
+}
+
+.filter-card-export-container {
+  width: 151px;
+  padding: 16px;
+  z-index: 1;
+  position: absolute;
+  top: 345px !important;
+  right: 54px !important;
+}

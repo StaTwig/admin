@@ -1,0 +1,85 @@
+.info-header-text {
+  font: 13px "Roboto", sans-serif;
+  color: black;
+  font-weight: bold;
+}
+
+.info-content-text {
+  font: 13px "Roboto", sans-serif;
+  text-align: left;
+}
+
+.ShipmentInfo--main-container {
+  width: 100%;
+  box-shadow: 0px 3px 10px rgb(0 0 0 / 16%);
+  border-radius: 10px;
+  padding: 17px 10px 10px 10px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 10px;
+  
+}
+.ShipmentInfo--main-container-alt {
+  width: 100%;
+  box-shadow: 0px 3px 10px rgb(0 0 0 / 16%);
+  border-radius: 10px;
+  padding: 1rem;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ShipmentInfo--grid-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 0.2rem;
+}
+.ShipmentInfo--grid-column-alt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 0.2rem 0;
+}
+
+.ShipmentInfo--content-space {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+.ShipmentInfo--content-space-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.ShipmentInfo--content-space-alt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.2rem;
+}
+
+.context-wrapper-space {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 992px) {
+  .ShipmentInfo--grid-column {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .ShipmentInfo--grid-column-alt {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

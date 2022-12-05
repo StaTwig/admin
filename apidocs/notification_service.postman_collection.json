@@ -1,0 +1,222 @@
+{
+  "info": {
+    "_postman_id": "4d330ea3-2ee1-45e9-bc2a-7ab7b9603ee9",
+    "name": "notification_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "getNotifications Alerts",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwMSIsImZpcnN0TmFtZSI6IkRldiIsImVtYWlsSWQiOiJkZXZAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJXQVIxMDAzMDQiLCJvcmdhbmlzYXRpb25JZCI6Ik9SRzEwMDAwMSIsIndhbGxldEFkZHJlc3MiOiIxTVd0WHRxS1d2VVZGNFFTZGp6MWJHSGtBa3I0dEpaZDNNUFpFVCIsInBob25lTnVtYmVyIjoiKzkxODg1NTIyMzY5MSIsIm9yZyI6Im9yZzFNU1AiLCJ1c2VyTmFtZSI6ImRldkBzdGF0d2lnLmNvbSIsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiJdLCJfaWQiOiI1ZjRiZjI3ZjBjYzZmYjE3ZmVjMTg1MWQiLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0xNlQxMTowMjo0Ni42ODhaIiwiX192IjowfSwiaWF0IjoxNjMxODkxMDg2LCJleHAiOjE2MzE5MzQyODZ9.dK9FMyjCE-EE7zfy1L7pObYZLcLes8uDTvu8vzal9Q0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/getNotifications?type=ALERT",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": [
+            "notificationmanagement",
+            "api",
+            "notification",
+            "getNotifications"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "ALERT"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getNotifications Transactions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/getNotifications?type=TRANSACTION",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": [
+            "notificationmanagement",
+            "api",
+            "notification",
+            "getNotifications"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "TRANSACTION"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "read Notification",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwMSIsImZpcnN0TmFtZSI6IkRldiIsImVtYWlsSWQiOiJkZXZAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJXQVIxMDAzMDQiLCJvcmdhbmlzYXRpb25JZCI6Ik9SRzEwMDAwMSIsIndhbGxldEFkZHJlc3MiOiIxTVd0WHRxS1d2VVZGNFFTZGp6MWJHSGtBa3I0dEpaZDNNUFpFVCIsInBob25lTnVtYmVyIjoiKzkxODg1NTIyMzY5MSIsIm9yZyI6Im9yZzFNU1AiLCJ1c2VyTmFtZSI6ImRldkBzdGF0d2lnLmNvbSIsInBlcm1pc3Npb25zIjp7Im92ZXJ2aWV3Ijp7Im92ZXJ2aWV3Ijp0cnVlfSwic2VhcmNoIjp7InNlYXJjaEJ5T3JkZXJJZCI6dHJ1ZSwic2VhcmNoQnlTaGlwbWVudElkIjp0cnVlLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSI6dHJ1ZSwic2VhcmNoQnlUcmFuc2l0Tm8iOnRydWUsInNlYXJjaEJ5UHJvZHVjdE5hbWUiOnRydWUsInNlYXJjaEJ5UHJvZHVjdElkIjp0cnVlfSwiaW52ZW50b3J5Ijp7InZpZXdJbnZlbnRvcnkiOnRydWUsImFkZEludmVudG9yeSI6dHJ1ZSwiaW1wb3J0SW52ZW50b3J5Ijp0cnVlLCJpbnZlbnRvcnlBbmFseXRpY3MiOnRydWUsInZpZXdQcm9kdWN0TGlzdCI6dHJ1ZSwidmlld1Byb2R1Y3RJbmZvIjp0cnVlLCJhZGROZXdQcm9kdWN0Ijp0cnVlLCJpbnZlbnRvcnlGaWx0ZXJzIjp0cnVlLCJpbnZlbnRvcnlFeHBvcnRSZXBvcnQiOnRydWV9LCJzaGlwbWVudCI6eyJjcmVhdGVTaGlwbWVudCI6dHJ1ZSwic2hpcG1lbnRBbmFseXRpY3MiOnRydWUsInVwZGF0ZVNoaXBtZW50Ijp0cnVlLCJyZWNlaXZlU2hpcG1lbnQiOnRydWUsInJlY2VpdmVTaGlwbWVudFNjYW4iOnRydWUsImluYm91bmRTaGlwbWVudHMiOnRydWUsIm91dGJvdW5kU2hpcG1lbnRzIjp0cnVlLCJ2aWV3U2hpcG1lbnQiOnRydWUsInNoaXBtZW50RmlsdGVycyI6dHJ1ZSwic2hpcG1lbnRFeHBvcnRSZXBvcnQiOnRydWV9LCJvcmRlciI6eyJjcmVhdGVPcmRlciI6dHJ1ZSwiaW1wb3J0T3JkZXIiOnRydWUsIm9yZGVyQW5hbHl0aWNzIjp0cnVlLCJyZWNlaXZlT3JkZXIiOnRydWUsImFjY2VwdFJlamVjdE9yZGVyIjp0cnVlLCJ2aWV3SW5ib3VuZE9yZGVycyI6dHJ1ZSwidmlld091dGJvdW5kT3JkZXJzIjp0cnVlLCJvcmRlckZpbHRlcnMiOnRydWUsIm9yZGVyRXhwb3J0UmVwb3J0Ijp0cnVlLCJ2aWV3UE8iOnRydWV9LCJuZXR3b3JrIjp7Im5ldHdvcmsiOnRydWV9LCJ0cmFjayI6eyJ0cmFja0FuZFRyYWNlIjp0cnVlfSwiYWRtaW4iOnsiZ2V0VXNlclJlcXVlc3QiOnRydWUsImFjY2VwdFVzZXIiOnRydWUsImFkZFVzZXIiOnRydWUsInJlbW92ZVVzZXIiOnRydWUsImRlYWN0aXZhdGVVc2VyIjp0cnVlLCJhZGRSb2xlIjp0cnVlLCJkZWxldGVSb2xlIjp0cnVlLCJhZmZsaWF0ZVVzZXIiOnRydWUsInVuYWZmbGlhdGVVc2VyIjp0cnVlLCJ2aWV3QWZmbGlhdGlvbiI6dHJ1ZSwiYWNjZXB0QWZmaWxpYXRpb24iOnRydWUsInJlbW92ZUFmZmlsaWF0aW9uIjp0cnVlfSwicGVybWlzc2lvbnMiOlsib3ZlcnZpZXciLCJzZWFyY2hCeU9yZGVySWQiLCJzZWFyY2hCeVNoaXBtZW50SWQiLCJzZWFyY2hCeVByb2R1Y3RDYXRlZ29yeSIsInNlYXJjaEJ5VHJhbnNpdE5vIiwic2VhcmNoQnlQcm9kdWN0TmFtZSIsInNlYXJjaEJ5UHJvZHVjdElkIiwidmlld0ludmVudG9yeSIsImFkZEludmVudG9yeSIsImltcG9ydEludmVudG9yeSIsImludmVudG9yeUFuYWx5dGljcyIsInZpZXdQcm9kdWN0TGlzdCIsInZpZXdQcm9kdWN0SW5mbyIsImFkZE5ld1Byb2R1Y3QiLCJpbnZlbnRvcnlGaWx0ZXJzIiwiaW52ZW50b3J5RXhwb3J0UmVwb3J0IiwiY3JlYXRlU2hpcG1lbnQiLCJzaGlwbWVudEFuYWx5dGljcyIsInVwZGF0ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50IiwicmVjZWl2ZVNoaXBtZW50U2NhbiIsImluYm91bmRTaGlwbWVudHMiLCJvdXRib3VuZFNoaXBtZW50cyIsInZpZXdTaGlwbWVudCIsInNoaXBtZW50RmlsdGVycyIsInNoaXBtZW50RXhwb3J0UmVwb3J0IiwiY3JlYXRlT3JkZXIiLCJpbXBvcnRPcmRlciIsIm9yZGVyQW5hbHl0aWNzIiwicmVjZWl2ZU9yZGVyIiwiYWNjZXB0UmVqZWN0T3JkZXIiLCJ2aWV3SW5ib3VuZE9yZGVycyIsInZpZXdPdXRib3VuZE9yZGVycyIsIm9yZGVyRmlsdGVycyIsIm9yZGVyRXhwb3J0UmVwb3J0Iiwidmlld1BPIiwibmV0d29yayIsInRyYWNrQW5kVHJhY2UiLCJnZXRVc2VyUmVxdWVzdCIsImFjY2VwdFVzZXIiLCJhZGRVc2VyIiwicmVtb3ZlVXNlciIsImRlYWN0aXZhdGVVc2VyIiwiYWRkUm9sZSIsImRlbGV0ZVJvbGUiLCJhZmZsaWF0ZVVzZXIiLCJ1bmFmZmxpYXRlVXNlciIsInZpZXdBZmZsaWF0aW9uIiwiYWNjZXB0QWZmaWxpYXRpb24iLCJyZW1vdmVBZmZpbGlhdGlvbiJdLCJfaWQiOiI1ZjRiZjI3ZjBjYzZmYjE3ZmVjMTg1MWQiLCJyb2xlIjoicG93ZXJVc2VyIiwiY3JlYXRlZEF0IjoiMjAyMC0wOC0zMFQxODozOTo1OS4zOTBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0xNlQxMTowMjo0Ni42ODhaIiwiX192IjowfSwiaWF0IjoxNjMyMTA3OTE5LCJleHAiOjE2MzIxNTExMTl9.1zYc3BwzXCG8mzw_rQ9jrwkJHxH8rqt5AsU4yZg-sL0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/readNotification?id=dbaeee8c-d6ba-4ef0-879e-121f236176a8",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": [
+            "notificationmanagement",
+            "api",
+            "notification",
+            "readNotification"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "dbaeee8c-d6ba-4ef0-879e-121f236176a8"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "push Notification",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"whatsapp\":true,\n    \"content\":\"HII TEST 2\",\n    \"mobile\":\"+917901051813\",\n    \"user\":\"EMP100001\",\n    \"type\":\"ALERT\",\n    \"eventType\":\"REQUEST\",\n    \"transactionId\":\"0457774154\",\n    \"subject\":\"TEST SUBJECT\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/pushNotification",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": [
+            "notificationmanagement",
+            "api",
+            "notification",
+            "pushNotification"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send Message",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"whatsapp\":true,\n    \"content\":\"HII TEST 2\",\n    \"mobile\":\"+917901051813\",\n    \"subject\":\"TEST SUBJECT\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/sendMessage",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": [
+            "notificationmanagement",
+            "api",
+            "notification",
+            "sendMessage"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send OTP",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"whatsapp\":true,\n    \"mobile\":\"+917901051813\",\n    \"email\":\"ravilochan2000@gmail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3006/notificationmanagement/api/notification/sendOTP",
+          "host": ["localhost"],
+          "port": "3006",
+          "path": ["notificationmanagement", "api", "notification", "sendOTP"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}

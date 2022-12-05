@@ -1,0 +1,30 @@
+{
+  "name": "theledgeruserservice",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node inventory_server.js",
+    "dev": "nodemon inventory_server.js"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
+    "cuid": "^2.1.8",
+    "date-fns": "^2.29.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.5",
+    "morgan": "^1.10.0",
+    "move-file": "2.0.0",
+    "multer": "^1.4.4",
+    "redis": "3.1.2",
+    "swagger-ui-express": "^4.3.0",
+    "xlsx": "^0.17.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.5.0"
+  }
+}

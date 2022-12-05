@@ -1,0 +1,220 @@
+{
+  "info": {
+    "_postman_id": "a0114f7f-c2ad-4941-bf93-e024a3b9c8b1",
+    "name": "products_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "getOrganisations",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/organisation/getOrganisations",
+          "host": ["{{url}}"],
+          "path": [
+            "productmanagement",
+            "api",
+            "organisation",
+            "getOrganisations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "warehouses",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/organisation/warehouses?id=org-12345",
+          "host": ["{{url}}"],
+          "path": ["productmanagement", "api", "organisation", "warehouses"],
+          "query": [
+            {
+              "key": "id",
+              "value": "org-12345"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getProducts",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/getProducts",
+          "host": ["{{url}}"],
+          "path": ["productmanagement", "api", "products", "getProducts"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getProductsByCategory",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/getProductsByCategory?type=Vaccine",
+          "host": ["{{url}}"],
+          "path": [
+            "productmanagement",
+            "api",
+            "products",
+            "getProductsByCategory"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "Vaccine"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "generateCodes",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/generateCodes",
+          "host": ["{{url}}"],
+          "path": ["productmanagement", "api", "products", "generateCodes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "productInfo",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/getProductInfo",
+          "host": ["{{url}}"],
+          "path": ["productmanagement", "api", "products", "getProductInfo"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addNewProduct",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/addProductName",
+          "host": ["{{url}}"],
+          "path": ["productmanagement", "api", "products", "addProductName"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addMultipleProducts",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc5NDYxNiwiZXhwIjoxNjE5ODAxODE2fQ.aNcpuQFhdDHPiH8FEKP3P0yjdKcLs_NLtGKGjvZch2Y",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/productmanagement/api/products/addMultipleProducts",
+          "host": ["{{url}}"],
+          "path": [
+            "productmanagement",
+            "api",
+            "products",
+            "addMultipleProducts"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

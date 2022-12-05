@@ -1,0 +1,435 @@
+@import "../../assets/styles/global.scss";
+
+.profile {
+  position: relative;
+  top: -22px;
+  padding-right: 20px;
+  padding-left: 55px;
+  overflow: hidden;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .custom-dropdown .btn-custom-dropdown {
+    font-size: 16px;
+    color: black;
+    @media (max-width: 1250px) {
+      font-size: 18px;
+      color: black;
+    }
+  }
+  .divider {
+    border: 1px solid $d6Grey;
+    display: flex;
+    align-self: center;
+  }
+
+  .btn {
+    border-radius: 15px;
+  }
+  .btn-S {
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }
+
+  .form-group-2{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 35%;
+      flex-grow: inherit;
+      font-size: 16px;
+      width: 65%;
+    }
+    .form-controll {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 43%;
+      margin-right: 55px;
+      margin-top: 10px;
+    }
+    .lineP {
+      border-bottom: 2px solid #d6d6d6;
+      padding: 0;
+      color: $black;
+      flex-basis: 35%;
+      font-size: 14px;
+    }
+    .wallet {
+      border-bottom: none;
+    }
+  }
+
+  .form-group2{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      // flex-basis: 35%;
+      // flex-grow: inherit;
+      font-size: 16px;
+      width:100% !important;
+    }
+  }
+  .form-group,
+  .input-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    label {
+      color: #707070;
+      font-size: 17px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 35%;
+      flex-grow: inherit;
+      font-size: 16px;
+      width: 65%;
+    }
+    .form-controll {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 43%;
+      margin-right: 55px;
+      margin-top: 10px;
+    }
+    .lineP {
+      border-bottom: 2px solid #d6d6d6;
+      padding: 0;
+      color: $black;
+      flex-basis: 35%;
+      font-size: 14px;
+    }
+    .wallet {
+      border-bottom: none;
+    }
+  }
+  ul {
+    padding: 0.8rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 0.3rem 0.3rem;
+      margin: 0.4rem;
+      list-style: none;
+
+      .wallet {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .userPic {
+    img {
+      height: 160px;
+      width: 160px;
+    }
+    .pincode {
+      //text-security: disc;
+      -webkit-text-security: disc;
+      -moz-text-security: disc;
+    }
+  }
+  .label {
+    margin-bottom: 20px;
+    margin-right: 30px;
+  }
+  .btn span.icon {
+    float: left;
+    width: 10px;
+    height: 40px;
+  }
+}
+
+.addloc1 {
+  padding: 25px;
+  padding-right: 80px;
+  padding-top: 10px;
+  padding-left: 100px;
+}
+.close-image img {
+  display: block;
+  height: 30px;
+  width: 18px;
+  padding: 10;
+}
+.wrapper1 {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.slectloc1 {
+  padding: 50px;
+  top: 10px;
+  width: 180%;
+  text-align: center;
+  margin-right: 5px;
+}
+.modal-lg {
+  max-width: 400%;
+  // height: 100%;
+  // padding: 0;
+  // margin: 0;
+}
+.location-cards {
+  padding-right: 0%;
+  .Addimage {
+    height: 32px;
+    padding-left: 36px;
+    padding-right: 10px;
+    border: 1px solid #000000;
+    background-color: blue no-repeat 10px center;
+  }
+  .custom-card {
+    padding: 2vh;
+    width: 22vw;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 4vh;
+    display: flex;
+    flex-direction: column;
+    .card-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0093e9;
+      margin-bottom: 0%;
+      padding-bottom: 0%;
+    }
+    .card-header,
+    .card-footer {
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      padding-bottom: 0%;
+    }
+    @media screen and (max-width: $sm) {
+      margin: 0;
+    }
+    @media (min-width: $lg) {
+      height: 220px;
+    }
+
+    @media (min-width: $xl) {
+      height: 220px;
+    }
+
+    .card-body {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: 0% !important;
+      margin-top: 5px;
+      height: max-content;
+
+      .total {
+        font-size: 15px;
+        font-weight: bold;
+        padding-bottom: 2vh;
+      }
+      .total-input {
+        font-size: 15px;
+        font-weight: bold;
+        border: 0vh;
+      }
+      .full-address {
+        font-size: 13px;
+        color: #707070;
+        padding-bottom: 2vh;
+      }
+      .full-address-input {
+        width: 30vh;
+        font-size: 14px;
+        color: #707070;
+        border: 0vh;
+      }
+      .pin-code {
+        position: relative;
+        width: 30vh;
+        font-size: 14px;
+        color: #707070;
+        margin-top: auto;
+        padding-bottom: 2vh;
+      }
+      .pin-code-input {
+        width: 30vh;
+        font-size: 13px;
+        color: #707070;
+        border: 0vh;
+      }
+    }
+  }
+}
+
+.edit-button {
+  height: 5vh !important;
+}
+.continueDisabled {
+  border: none;
+  background-color: #a6a6a6 !important;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.role {
+  font-size: 16px;
+  color: #707070;
+}
+
+.name {
+  white-space: pre-wrap;
+  font-size: 35px;
+  font-weight: bold;
+  padding-bottom: 3vh;
+}
+
+.row-list {
+  font-size: 16px;
+  padding-bottom: 1vh;
+}
+.date-joined {
+  font-size: 15px;
+  margin-bottom: 30px;
+  margin-top: -10px;
+  color: #a8a8a8;
+}
+
+.location {
+  color: #707070;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.addLocationText {
+  text-align: center;
+  font-size: 30px;
+  margin-top: -30px;
+  margin-bottom: 50px;
+}
+.line {
+  color: #707070;
+}
+.form-controlAddLoc {
+  ::after {
+    border-radius: 0;
+  }
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid #d6d6d6;
+  border-radius: 0;
+  color: $black;
+  flex-basis: 60%;
+  margin-right: 0px;
+  margin-top: 70px;
+}
+.addLocModal {
+  position: relative;
+  left: -10px;
+  top: 30px;
+  white-space: nowrap;
+}
+.addLocModalImg {
+  position: relative;
+  left: 0px;
+  top: 29px;
+  height: 30px;
+  width: 16px;
+  margin-right: 18px;
+}
+.buttonA {
+  width: 120px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.text-red {
+  color: #dc3545;
+  font-size: 12px;
+}
+.btn-edit {
+  border: 1px solid #0093e9;
+  color: #0093e9;
+  border-radius: 10px;
+  background-color: #fff;
+}
+.btn-edit:hover {
+  border: 1.4px solid #006dac;
+}
+.btn-space{
+  white-space: nowrap !important;
+}
+.center-display{
+  display: block;
+  margin: 0 auto !important;
+  text-decoration: none !important;
+}
+.css-2613qy-menu{
+  width:20rem !important;
+}
+.my-form-width{
+  flex-basis: 34% !important;
+  width: 65% !important;
+  white-space: nowrap !important;
+  border-bottom: 2px solid #d6d6d6;
+}
+.phone-Input-new-profile{
+  width: 64% !important;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+.phone-Input-new-profile > input{
+  border: none;
+  outline: none;
+}
+
+
+.react-tel-input .flag-dropdown {
+  border:none !important;
+  background-color: transparent !important;
+}
+.react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus{
+  background-color: transparent !important;
+}

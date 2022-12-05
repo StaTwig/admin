@@ -1,0 +1,279 @@
+@import "../../assets/styles/global.scss";
+
+.Homecontainer {
+  background-color: $white;
+  section {
+    padding: 70px;
+    min-height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+
+    @media (max-width: 1024px) {
+      min-height: unset;
+    }
+  }
+  h2 {
+    color: $primaryBlue;
+    font-size: 31px;
+    font-weight: 600;
+  }
+  p {
+    padding-left: 5px;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: $black;
+  }
+  .navbar {
+    background-color: $white;
+    height: 64px;
+    @media (max-width: 1024px) {
+      display: none;
+    }
+    a {
+      color: $primaryBlue;
+    }
+    .divider {
+      border-right: 1.2px solid $Grey70;
+      height: 35px;
+      margin: 0 1rem;
+    }
+
+    .nav-item {
+      .nav-link {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+    }
+  }
+  .Herobanner {
+    background: url(../../assets/brands/banner-pattern.webp);
+    background-size: cover;
+    .hero {
+      height: 70vh;
+      position: relative;
+      @media (max-width: 1024px) {
+        height: 400px;
+      }
+      @media (max-width: 768px) {
+        justify-content: center;
+        text-align: center;
+        height: 200px;
+      }
+      .hero-image {
+        background: url(../../assets/brands/web_mob.webp);
+        width: 100%;
+        height: 175%;
+        position: absolute;
+        left: 410px;
+        top: -200px;
+        //transform: rotate(-8.5deg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        //background-position: top right;
+        @media (max-width: 1024px) {
+          height: 100%;
+          background-position: center right;
+        }
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+      .hero-paragraph {
+        text-align: left;
+        font: 20px Roboto;
+        letter-spacing: 0;
+        color: #000000;
+        margin-top: 1rem;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+    }
+  }
+  .OurSolution {
+    background: url(../../assets/brands/banner_white1.png);
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: 110%;
+
+    @media (max-width: 1024px) {
+      background: #fafafa;
+      height: 100%;
+      min-height: 100%;
+      padding: 5rem 3rem !important;
+    }
+
+    h2 {
+      margin-top: 0px;
+      margin-bottom: 50px;
+      position: relative;
+      top: -45px;
+    }
+
+    .rounded-images {
+      border-radius: 100%;
+      background: #fff;
+      padding: 1rem;
+      box-shadow: 0px 3px 6px #00000029;
+      margin-bottom: 30px;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      top: -45px;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      position: relative;
+      top: -45px;
+      left: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .col {
+        .d-flex {
+          align-items: center;
+        }
+      }
+
+      h2 {
+        margin-bottom: 30px;
+        font-size: 12px;
+        text-align: center;
+      }
+    }
+  }
+  .what_we_do {
+    //margin-top:0%;
+    margin-left: -3%;
+
+    @media (max-width: 768px) {
+      padding-top: 3rem !important;
+    }
+
+    @media (max-width: 767px) {
+      padding-top: 3rem !important;
+      .hide-sm {
+        display: none;
+      }
+    }
+
+    h2 {
+      margin-bottom: 35px;
+    }
+    p {
+      font-size: 20px;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+  .How_it_works {
+    margin-top: -10%;
+    margin-left: -3%;
+    margin-bottom: 12%;
+
+    padding: 0;
+    @media (max-width: 1024px) {
+      padding-bottom: 3rem;
+    }
+    h2 {
+      margin-bottom: 0;
+    }
+
+    .bg-work-flow {
+      width: 100%;
+      height: 100vh;
+      background-repeat: no-repeat !important;
+      background-size: 100% !important;
+      background-position: center !important;
+      margin-bottom: 50px;
+
+      @media (max-width: 1024px) {
+        height: 400px;
+        margin-top: 3rem;
+      }
+
+      @media (max-width: 737px) {
+        height: 230px;
+        margin-top: 0;
+      }
+    }
+  }
+  .contact_us {
+    background: url(../../assets/brands/banner-white-down1.png);
+    background-size: cover;
+    height: 90vh;
+    background-position: top;
+    display: flex;
+    align-items: flex-end;
+    margin-top: -25%;
+
+    @media (max-width: 1024px) {
+      background: #fafafa;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    @media (max-width: 767px) {
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+    .form {
+      .form-control {
+        min-width: 210px;
+      }
+      .btn {
+        height: 40px;
+      }
+    }
+  }
+
+  footer {
+    position: relative;
+    margin-top: 20px;
+    border-top: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 20px;
+    background-color: #fafafa;
+    flex-direction: row;
+    bottom: 0;
+    margin: 0;
+
+    img {
+      width: 180px;
+    }
+
+    .copywrite {
+      text-align: center;
+      font: Bold 9px/10px Roboto;
+      letter-spacing: 0.9px;
+      color: #000000;
+    }
+
+    .poweredby {
+      font-size: 13px;
+      color: #a8a8a8;
+      .language {
+        padding: 5px;
+        color: #0497e6;
+        border-radius: 10px;
+        border-color: #0098e6;
+      }
+    }
+  }
+}

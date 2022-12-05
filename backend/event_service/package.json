@@ -1,0 +1,20 @@
+{
+  "name": "statwig-event-logging-service",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node event_server.js",
+    "dev": "nodemon event_server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-jwt": "^6.1.0",
+    "express-validator": "^6.14.0",
+    "mongoose": "^6.1.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {}
+}

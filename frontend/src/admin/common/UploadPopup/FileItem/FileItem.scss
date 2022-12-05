@@ -1,0 +1,23 @@
+.file-item {
+    list-style: none;
+    margin: 1.2em 0;
+    background-color: #12eb9838;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+
+    i {
+        color: #037c3b;
+        &:first-child {
+            font-size: 1.2em;
+            margin-right: 0.8em;
+        }
+    }
+
+    p {
+        flex: 1;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+}

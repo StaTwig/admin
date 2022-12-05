@@ -1,0 +1,36 @@
+@import "../assets/styles/global.scss";
+.content {
+  padding: 110px 0 0 0;
+  margin-left: 6rem;
+  width: 100%;
+
+  @media screen and (max-width: 768px) {
+    margin-left: 0;
+    padding: 100px 30px;
+  }
+}
+.profile-content{
+  padding: 110px 0 0 0;
+  margin-left: 6rem;
+  width: 92%;
+
+  @media screen and (max-width: 768px) {
+    margin-left: 0;
+    padding: 100px 30px;
+  }
+
+}
+
+.Network-content {
+  margin-top: 85px;
+  margin-left: 130px;
+  width: calc(100% - 130px);
+  overflow-x: hidden !important;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    margin-left: 0;
+    padding: 0 0;
+  }
+
+}

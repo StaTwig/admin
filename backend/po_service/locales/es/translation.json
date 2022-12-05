@@ -1,0 +1,20 @@
+{
+    "Order_ID": "Solicitar ID",
+    "Order_Created_By": "Pedido creado por",
+    "ORG_ID_-_Creator": "ORG ID - Creadora",
+    "Creator_Org_Id": "Id. de organización del creador",
+    "Creator_Org_Name": "Nombre de la organización del creador",
+    "Order_Receive_Incharge": "Pedido recibido por",
+    "ORG_ID_-_Receiver": "ORG ID - Receptor",
+    "Product_Category": "categoria de producto",
+    "Product_Name": "nombre del producto",
+    "Product_ID": "ID del Producto",
+    "Quantity": "Cantidad",
+    "Manufacturer": "Fabricante",
+    "Delivery_Organization_Name": "Nombre de la organización de entrega",
+    "Delivery_Organization_ID": "ID de la organización de entrega",
+    "Delivery_Organization_Location_Details": "Detalles de la ubicación de la organización de entrega",
+    "Status": "Estado",
+    "Inbound_Purchase_order": "Orden de compra entrante",
+    "Outbound_Purchase_order": "Orden de compra saliente"
+}

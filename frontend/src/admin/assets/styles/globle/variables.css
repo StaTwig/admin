@@ -1,0 +1,29 @@
+:root {
+  --admin-brand-primary: #1975e3;
+  --admin-brand-secondary: #5fa2f2;
+  --brand-bg: #f9f9f9;
+  --brand-table: #f3f6f8;
+  --black: #1f1f1f;
+  --white: #ffffff;
+  --light: #fafafa;
+  --blue: #098bfe;
+  --grey-bold: #4b5564;
+  --grey-medium: #7e858f;
+  --grey-light: #b0b5bb;
+  --disabled: #eee;
+  --btn-reject: #f13f3f;
+  --btn-accept: #04ba72;
+  --label-reject: #ffe9ed;
+  --label-accept: #ceffde;
+  --shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+
+  /* Analytics Color */
+  --analytic-base-1: #b9fff7;
+  --analytic-active-1: #10abc0;
+
+  --analytic-base-2: #fed7bb;
+  --analytic-active-2: #f57e28;
+
+  --analytic-base-3: #ffd2da;
+  --analytic-active-3: #fd5f7c;
+}

@@ -1,0 +1,67 @@
+.vl-title {
+  font-size: 2.3rem;
+}
+
+.vl-subtitle {
+  font-size: 1.15rem;
+}
+
+.vl-heading {
+  font-size: 1.85rem;
+}
+
+.vl-subheading {
+  font-size: 1.1rem;
+}
+
+.vl-body {
+  font-size: 1rem;
+}
+
+.vl-note {
+  font-size: 0.875rem;
+}
+
+.vl-small {
+  font-size: 0.75rem;
+}
+
+.vl-line-xl {
+  line-height: 3rem;
+}
+
+.vl-line-md {
+  line-height: 2rem;
+}
+.vl-line-sm {
+  line-height: 1.6rem;
+}
+@media screen and (max-width: 586px) {
+  .vl-title {
+    font-size: 1.85rem;
+  }
+
+  .vl-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .vl-heading {
+    font-size: 1.6rem;
+  }
+
+  .vl-subheading {
+    font-size: 1.1rem;
+  }
+
+  .vl-body {
+    font-size: 1rem;
+  }
+
+  .vl-note {
+    font-size: 0.875rem;
+  }
+
+  .vl-small {
+    font-size: 0.75rem;
+  }
+}

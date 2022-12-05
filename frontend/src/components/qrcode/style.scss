@@ -1,0 +1,101 @@
+@import "../../assets/styles/global.scss";
+
+.qrcode {
+  padding-right: 3rem;
+  padding-left: 5rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .outline {
+    box-shadow: 0px 3px 10px #00000029;
+  }
+  .caption {
+    color: #000000;
+    font-size: 13px roboto;
+  }
+  .scan {
+    height: 250px;
+    width: 300px;
+    padding: 25px 50px;
+    align-items: center;
+    border: 1px solid #707070;
+    border-radius: 8px;
+  }
+
+  .barcodecommon {
+    box-shadow: 0px 3px 6px $grey;
+    border-radius: 8px;
+    flex-basis: auto;
+    padding: 20px 10px 20px 10px;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .barcode {
+    background: $white;
+    color: $OBBlue;
+    border: 1px solid #2a66bb;
+  }
+  .barcode:hover,
+  .barcodehighlight {
+    background: transparent linear-gradient(180deg, #0093e9 0%, #0053a8 100%) 0%
+      0% no-repeat padding-box;
+    color: $white;
+  }
+  .qr {
+    background: $white;
+    color: #2cb2be;
+    border: 1px solid #4f9da8;
+    width: 81px;
+  }
+
+  .qr:hover,
+  .qrhighlight {
+    background: transparent linear-gradient(0deg, #0092a0 0%, #33e6f7 100%) 0%
+      0% no-repeat padding-box;
+    width: 81px;
+    color: $white;
+  }
+  .downloadc {
+    border-radius: 20px;
+    height: 30px;
+    font-size: 12px;
+    color: white;
+    box-shadow: 0px 3px 6px $grey;
+  }
+  .downloadhi {
+    background: $white;
+    color: #fa7923;
+    border: 1px solid #fa7923;
+  }
+  .pdhi {
+    background: $white;
+    border: 1px solid #feb100;
+    color: #feb100;
+  }
+  .form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      color: #000000;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: #707070;
+      flex-basis: 55%;
+      flex-grow: inherit;
+      font-size: 14px;
+    }
+  }
+}

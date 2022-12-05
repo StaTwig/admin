@@ -1,0 +1,944 @@
+@import "../../assets/styles/global.scss";
+@import "../../assets/styles/colors.scss";
+
+.Homecontainer {
+  width: auto;
+  color: $white;
+  .bg-image {
+    background: url(../../assets/blue_bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol,
+ul {
+    list-style: none;
+}
+blockquote,
+q {
+    quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: "";
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.grid {
+    display: grid;
+}
+.grid-side {
+    display: grid;
+    padding: 10px;
+    row-gap: 20px;
+}
+.gcol3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.gafc {
+    grid-auto-flow: column;
+}
+.acc {
+    align-content: center;
+}
+.acs {
+    align-content: flex-start;
+}
+.aic {
+    align-items: center;
+}
+.jic {
+    justify-items: center;
+}
+.jis {
+    justify-items: start;
+}
+.jsc {
+    justify-self: center;
+}
+.gap3 {
+    column-gap: 20px;
+}
+.gapc3 {
+    column-gap: 20px;
+}
+.stoct-count {
+    font-size: 22px !important;
+}
+.small-txt-1 {
+    font-size: 10px;
+}
+
+.component1 {
+    grid-template-columns: 18% 60% 22%;
+    height: 100vh;
+}
+.component1-transaction {
+    grid-template-columns: 227px 800px 227px;
+    height: 100vh;
+}
+.gdash-sidebar {
+    height: 100%;
+    padding-right: 10px;
+    padding-bottom: 60px;
+    row-gap: 60px;
+    align-content: flex-end;
+    background-color: #53265d;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+
+
+.dahbtngo {
+    width: 90%;
+    height: 45px;
+    border-radius: 30px;
+    justify-self: center;
+    display: grid;
+    grid-auto-flow: column;
+    align-content: center;
+    font-size: 13px;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: 80px;
+}
+
+.gdash-main {
+    background-color: #f6f7fb;
+    padding: 30px 30px 0 30px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    align-content: flex-start;
+}
+.nav-pills {
+    border-radius: 16px;
+    background-color: #bdb1ca;
+    width: fit-content;
+}
+
+.whiteC {
+    background-color: white;
+    border-radius: 18px;
+    width: 40px;
+    height: 40px;
+    align-self: center;
+    background-size: 30px 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.blueC {
+    background-color: #333751;
+    border-radius: 18px;
+    width: 40px;
+    height: 40px;
+    align-self: center;
+    background-size: 30px 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.boxes1,
+.boxes2 {
+    top: 196px;
+    /* width: 250px;
+      height: 189px; */
+    display: grid;
+    /* width: 304px; */
+    height: 214px;
+    justify-content: center;
+    align-content: center;
+    background: var(---f49c00) 0% 0% no-repeat padding-box;
+    background: #f49c00 0% 0% no-repeat padding-box;
+    box-shadow: 5px 5px 10px #0000000f;
+    border-radius: 49px;
+    opacity: 1;
+    padding: 20px;
+    color: white;
+    row-gap: 20px;
+}
+
+.boxes1 h6,
+.boxes2 h6 {
+    font-weight: bold;
+    font-size: 22px;
+}
+.boxes2 {
+    background: var(---ffffff) 0% 0% no-repeat padding-box;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    color: black;
+}
+
+.boxes-inner-2 {
+    grid-template-columns: 1fr 1fr;
+    justify-items: start;
+    justify-self: start;
+    row-gap: 7px;
+}
+
+.bi2-icons {
+    padding-left: 10px;
+    justify-items: center;
+}
+
+.sidebox-1 {
+    /* width: 410px; */
+    /* height: 124px; */
+    background: var(---ffffff) 0% 0% no-repeat padding-box;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 1px 4px #15223214;
+    border-radius: 6px;
+    opacity: 1;
+    display: grid;
+    padding: 10px;
+    align-content: center;
+    row-gap: 5px;
+}
+
+.sideb1-1 {
+    font: var(--unnamed-font-style-normal) normal normal 13px/20px Poppins;
+    text-align: left;
+    font: normal normal normal 13px/20px Poppins;
+    color: #7e84a3;
+    opacity: 1;
+}
+
+.sideb1-2 {
+    text-align: left;
+    color: #131523;
+    opacity: 1;
+}
+
+.sideb1-4 span:nth-child(1) {
+    text-align: left;
+    letter-spacing: 0.08px;
+    color: #f0142f;
+    opacity: 1;
+    font-size: 10px;
+    font-weight: bold;
+}
+.sideb1-4 span:nth-child(2) svg {
+    color: red;
+}
+.sideb1-4 span:nth-child(3) {
+    font: var(--unnamed-font-style-normal) normal normal 9px/15px Poppins;
+    letter-spacing: var(--unnamed-character-spacing-0);
+    text-align: left;
+    font: normal normal normal 9px/15px Poppins;
+    letter-spacing: 0px;
+    color: #7e84a3;
+    opacity: 1;
+}
+
+.nav-pills .nav-link {
+    background: #54265e2e 0% 0% no-repeat padding-box;
+    background: #54265e2e 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #54265e2e;
+    border-radius: 30px;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background: #54265e 0% 0% no-repeat padding-box;
+    background: #54265e 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #54265e2e;
+    border-radius: 30px;
+    opacity: 1;
+}
+
+.notification-thumbnail {
+    top: 535px;
+    left: 340px;
+    width: 35px;
+    height: 35px;
+    background: var(--unnamed-color-ffeed7) 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    opacity: 1;
+}
+.noti-yellow {
+    background: #ffeed7 0% 0% no-repeat padding-box !important;
+}
+.noti-green {
+    background: #eaffe2 0% 0% no-repeat padding-box !important;
+}
+.noti-red {
+    background: #ffe6e6 0% 0% no-repeat padding-box !important;
+}
+.notification-thumbnail-img {
+    padding-left: 10px;
+    padding-top: 10px;
+    top: 419px;
+    left: 353px;
+    width: 31px;
+    height: 25px;
+}
+.notification-thumbnail-attach {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 1px;
+    top: 419px;
+    left: 353px;
+    width: 20px;
+    height: 20px;
+}
+.notification-title {
+    color: #000000;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+}
+.notification-title-sub {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0px;
+    color: #414141;
+    opacity: 1;
+}
+
+.notification-count {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    color: #414141;
+    opacity: 1;
+}
+.notification-date {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    color: #414141;
+    opacity: 1;
+}
+.dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.bg-yellow {
+    background-color: #fdab0f;
+}
+.bg-green {
+    background-color: #3cb76c;
+}
+.bg-red {
+    background-color: #ff6a6a;
+}
+.orange-bg {
+    background-color: #f59c00;
+}
+.white-bg {
+    background-color: #ffffff;
+}
+.purple-bg {
+    background-color: #9300FF;
+}
+.progressContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.progress {
+    height: 6px !important;
+    background-color: #C9C9C9;
+}
+.white {
+    border-radius: 20px;
+    padding: 10px;
+    border: 0;
+    max-width: 18rem;
+    background-color: #FFFFFF !important
+}
+.selectState{
+    margin-right: 10px;
+}
+.sidebar{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+}
+.padding0{
+    padding:0rem;
+}
+.foodledgerLogo{
+    padding: 0px 28px 66px;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    .logo1{
+      letter-spacing: 3px;
+      color: #FFFFFF;
+    }
+    .logo2{
+      letter-spacing: 3px;
+      color: #000000;  
+    }
+}
+.mainContainer{
+    min-height: 100vh;
+    background: $softGrey;
+    border-radius: 0px 36px 36px 0px;
+}
+.rightSideMenu{
+    background: $white;
+}
+.greyBG{
+    background: $softGrey;
+}
+.progressBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .progressarea{
+        width:80%;
+        float:left;
+    }
+    span{
+        float:right;
+        width:20%;
+        text-align:center;    
+        font-size: 10px;        
+    }
+}
+.analyticsCard{
+    position: relative;
+    height: 248px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #54265E26;
+    border-radius: 25px;
+    overflow: hidden;
+    .analyticsTitle{
+        font: 12px;
+        letter-spacing: 0.47px;
+        color: #707070;
+        padding: 30px 25px 10px;
+        display: flex;
+    }
+    .chartAnalytics{
+        bottom: 0;
+        margin-top: 80px;
+    }
+    .analyticsPercentage{
+        font-size: 20px;
+        font-weight: 600;
+        padding: 0px 25px;
+    }
+    .arrowIcon{
+        width:20px;
+        height: 16px;
+    }
+    .yellow{
+        color:#FDAB0F;
+    }
+    .blue{
+        color:#20BECB;
+    }
+    .pink{
+        color: #F85566;
+    }
+}
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    margin: 20px 10px;
+    background: #E3E0E0; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #B5B5B5; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+.tableDetals{
+    height: 50vh;
+    margin-top: 20px;
+    overflow: auto;
+    
+    table{
+        background: #FFFFFF;
+        border-radius: 15px;
+        tbody{
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        tr{
+            border-bottom: 1px solid #E5E0E9; 
+        }
+        tr:last-child{
+            border: none;
+        }
+        td{
+            vertical-align: middle;
+            text-align: center;
+
+        }
+    }
+    .tableProfileIconCard{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .profileName{
+        .profileTitle{
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .profileTitle:hover {
+            cursor: pointer;
+        }
+        span{
+            display: flex;
+            align-items: baseline;
+            padding-bottom: 5px;
+        }
+    }
+}
+.white-box{
+    box-shadow: 0px 1px 4px #15223214;
+    border-radius: 6px;
+    padding: 10px 5px;
+    margin-bottom: 25px;
+    .box-title{
+        font-size: 13px/20px Poppins;
+        text-align: left;
+        letter-spacing: 0.08px;
+        color: #7E84A3;
+        opacity: 1;
+    }
+    .quantity{
+        font-weight: 700;
+        font-size: 18px;
+    }
+    .quantityDesc{
+        b{
+          color: #F0142F;  
+          font-size: 12px;  
+        }
+        color: #7E84A3;    
+        font-size: 10px;
+    }
+}
+
+.radioButton {
+    .radioInput{
+        margin-right:5px;
+        /* remove standard background appearance */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        /* create custom radiobutton appearance */
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        padding: 6px;
+        /* background-color only for content */
+        background-clip: content-box;
+        border: 1px solid #000000;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+    }
+    .radioInput:checked {
+        outline:none;
+        background-color: #000000;
+        padding: 2px;
+    }
+    display: flex;
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: #707070;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+
+  .breweryCard{
+    width:100%;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #54265E26;
+    border-radius: 15px;
+    padding:0px 30px 10px 30px;
+    margin: 20px 10px;
+    min-height: 340px;
+    .breweryTitle{
+        font-weight: 600;
+        font-size: 16px;
+        padding:30px 0px 10px 0px;
+    }
+    .brewerySubtitle{
+        font-weight: 500;
+        font-size: 12px !important;
+        padding:0px 0px 10px 0px;  
+    }
+    .breweryLocationText{
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 5px;
+        .breweryLoc{
+            font-size: 20px;
+            color:#A20134;
+        }         
+    }
+    .breweryPropertyText{
+        display: block;
+        font-size: 14px;
+        padding:15px 0px;
+    }
+    .breweryPropertyValue{
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+  }
+
+.progress {
+    height: 4px;
+    border-radius: 0;
+    background: #DDD;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.progress.progress-line-primary {
+    background: rgba(156,39,176,.2);
+}
+
+.progress .progress-bar.progress-bar-primary {
+    background: #9c27b0!important;
+}
+
+.progress.progress-line-danger {
+    background: rgba(244,67,54,.2);
+}
+
+.progress .progress-bar.progress-bar-danger {
+    background: #f44336;
+}
+
+.progress.progress-line-warning {
+    background: rgba(255,152,0,.2);
+}
+.progress .progress-bar.progress-bar-warning {
+    background: #ff9800;
+}
+
+
+.productGrid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 253px;
+    height: 185px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #54265E26;
+    border-radius: 15px;
+    margin: 20px 10px;
+    .productImage{
+        width:50%;
+    }
+}
+.productGrid:hover{
+    cursor: pointer;
+}
+
+.card-container {
+    min-width: 1100px;
+    overflow-x: auto;
+    display: flex;
+    padding: 3rem 0rem;
+    margin-bottom: 20px;
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { 
+    .card-container {
+        min-width: 400px;
+        overflow-x: auto;  
+    }
+ }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { 
+    .card-container {
+        min-width: 500px;
+        overflow-x: auto;  
+    }
+ }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { 
+    .card-container {
+        min-width: 600px;
+        overflow-x: auto;  
+    }
+ }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { 
+    .card-container {
+        min-width: 1100px;
+        overflow-x: auto;  
+    }    
+ }
+
+
+.card {
+    margin-right: 20px;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    min-width: 334px;
+    width: 334px;
+    height: 211px;
+    padding: 1.5rem;
+    transition: 0.2s;
+    .captionSubtitle{
+        font-size: 12px;
+        font-weight: 400;
+        color:#737373;     
+    }
+    .breweryPropertyText{
+        font-size: 18px;
+        font-weight: 600;
+        padding: 10px 0px;        
+    }
+    .breweryPropertyValue{
+        color: #FDAB0F;
+    }
+}
+
+.card .author {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .info{
+        .name{
+            font-size: 18px;
+            font-weight: 600;
+            padding: 10px 0px;    
+        }
+        .caption{
+            font-size: 12px;
+            font-weight: 400;
+            padding: 3px 0px;
+            color:#737373;        
+        }
+    }
+    
+}
+
+
+.productDetailedView{
+    .progress.progress-line-default {
+        background: #F7F6F4 ;
+    }
+    
+    .progress .progress-bar.progress-bar-default {
+        background: #54265E;
+    }
+    .productDetailCard{
+        width:100%;
+        background: #FFFFFF;
+        box-shadow: 0px 3px 6px #54265E26;
+        border-radius: 15px;  
+        margin:20px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;  
+    }
+    .productGrid{
+        width: 210px;
+        height: 120px;   
+        margin: 0px; 
+    }
+    .productcard {
+        width: 100%;
+        padding: 0px 30px; 
+        .productText{
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            padding-top:15px;
+        }
+        .breweryPropertyValue{
+            font-size: 16px;
+            font-weight: 600;
+            color:#FDAB0F;
+            display:block;
+            padding:5px 0px;
+        } 
+        .captionSubtitle{
+            font-size: 12px;
+            font-weight: 400;
+            color:#737373;
+            padding-bottom: 10px;     
+        }          
+    }
+    .productSection{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;   
+        .info{
+            .name{
+                font-size: 18px;
+                font-weight: 600;
+                padding: 10px 0px;    
+            }
+            .caption{
+                font-size: 12px;
+                font-weight: 400;
+                padding: 3px 0px;
+                color:#737373;        
+            }
+        } 
+    }
+    .productsChart{
+        background: #FFFFFF;
+        box-shadow: 0px 3px 6px #54265E26;
+        border-radius: 15px;
+        padding:20px;
+        margin-bottom: 20px;
+        .productsChartTitle{
+            color: #A20134;
+            font-size: 16px;
+            font-weight: 600;
+            padding:10px 20px;
+            margin-bottom: 20px;
+        }
+    }
+    .stateLink{
+        text-decoration: underline;
+        color: #000;
+        font-weight: 600;
+    }
+}

@@ -1,0 +1,26 @@
+@import "../../assets/styles/global.scss";
+
+.spacingbutton {
+  padding-right: 0px;
+  padding-left: 90px;
+}
+
+.form-control1 {
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid #d6d6d6;
+  border-radius: 0;
+  color: #000000;
+  flex-basis: 120%;
+  flex-grow: inherit;
+  font-size: 14px;
+  margin-right: 200px;
+}
+.add-btn-orange {
+  background: #eee;
+  color: #333;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+}

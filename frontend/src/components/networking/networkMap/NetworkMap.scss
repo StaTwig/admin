@@ -1,0 +1,19 @@
+.info-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.info-icon {
+  font-size: 1.2rem;
+  color: #4e6af1;
+}
+.info-header {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #ddd;
+}
+.info-body {
+  padding: 0.6rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}

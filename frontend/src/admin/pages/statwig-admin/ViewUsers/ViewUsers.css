@@ -1,0 +1,9 @@
+.admin-users-container {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 2rem;
+}
+
+.table-action-space {
+  margin-right: 2rem;
+}

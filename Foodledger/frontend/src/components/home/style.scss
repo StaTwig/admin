@@ -1,0 +1,121 @@
+@import "../../assets/styles/global.scss";
+
+.home {
+  .centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .titleHeading{
+    font-size: 30px;
+    font-weight: 600; 
+    line-height: 2rem; 
+  }
+  .align-center{
+    text-align: center;
+  }
+  .titleSubHeading{
+    font-size: 22px;
+    line-height: 3rem;
+  }
+  .selectionUserContainer {
+    border-radius: 0.938rem;
+    width: 240px;
+    height: 213px;
+    background-color: $white;
+    text-align: center;
+    border: 0;
+  }
+  .mr-selectUser{
+    margin-right: 3.75rem;
+  }
+  .ml-selectUser{
+    margin-left: 3.75rem;
+  }
+  .approve{
+    padding: 1rem;
+    font-size: larger;
+  }
+  .selectUser {
+    width: 100%;
+    border-radius: 35px;
+    opacity: 1;
+    backdrop-filter: blur(55px);
+    min-height: 85vh;
+
+    .btn-active {
+      background-color: #fdbd0f;
+    }
+    .btn {
+      background: #FFAC00 0% 0% no-repeat padding-box;
+      border-radius: 27px;
+      color: $white;
+      padding: 0 3rem;
+    }
+    .btn-red {
+      background: #FFAC00 0% 0% no-repeat padding-box;
+    }
+    .width100{
+      width:100%;
+    }
+    .footer-logo {
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .userNameLabel{
+    padding-bottom: 5px;
+  }
+  .loginUserBlock{
+    min-height: 213px;
+    .error-messages{
+      list-style: square;
+      margin-left: 20px;
+      padding: 10px;
+      color: #9c0333;
+    }
+  }
+  .signUpDesc{
+    font-size: 12px;
+  }
+  .signUpLink{
+    text-decoration: none;
+    font-weight: bold;
+    color:#FFFFFF;
+  }
+  
+  .loginScreen{
+    .username{
+      width:330px;
+      border-radius: 0.938rem;
+    }
+    .error-message{
+      color:#FFFFFF;
+    }
+  }
+  .verifyPasswordScreen{
+    .verifyUserBlock{
+      min-height: 213px;
+    }
+    .verifyTitle{
+      font-size: 22px;
+      line-height: 34px;    
+    }
+    .verifyTitleSubHeading{
+      font-size: 14px;
+      line-height: 18px;
+    }
+    .form-groupverify{
+      display: flex;
+    }
+    .otpInput{
+      width: 60px;
+      height: 54px;
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      box-shadow: 0px 9px 17px #54265e26;
+      border-radius: 15px;
+      opacity: 1;
+      text-align: center;
+    }
+  }
+}

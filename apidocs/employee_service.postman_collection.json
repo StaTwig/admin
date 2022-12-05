@@ -1,0 +1,564 @@
+{
+  "info": {
+    "_postman_id": "b5e2a807-5d85-4a91-ab1a-113b708ec6e9",
+    "name": "employee_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "check",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "firstName",
+              "value": "Sourav",
+              "type": "text"
+            },
+            {
+              "key": "lastName",
+              "value": "Dey",
+              "type": "text"
+            },
+            {
+              "key": "organisationId",
+              "value": "AP1001",
+              "type": "text"
+            },
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/check",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "check"],
+          "query": [
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "firstName",
+              "value": "SOurav",
+              "type": "text"
+            },
+            {
+              "key": "lastName",
+              "value": "Dey",
+              "type": "text"
+            },
+            {
+              "key": "emailId",
+              "value": "sourav.lko15@gmail.com",
+              "type": "text"
+            },
+            {
+              "key": "organisationId",
+              "value": "org-12345",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/register",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "register"],
+          "query": [
+            {
+              "key": "Name",
+              "value": "Sourav",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sendOtp",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/sendOtp",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "sendOtp"],
+          "query": [
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "verifyOtp",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "type": "text"
+            },
+            {
+              "key": "otp",
+              "value": "8083",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/verifyOtp",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "verifyOtp"],
+          "query": [
+            {
+              "key": "emailId",
+              "value": "sourav.lko@gmail.com",
+              "disabled": true
+            },
+            {
+              "key": "otp",
+              "value": "1615",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "userInfo",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/userInfo",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "userInfo"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsers",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/getAllUsers",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "getAllUsers"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updateProfile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "firstName",
+              "value": "Sourav",
+              "type": "text"
+            },
+            {
+              "key": "lastName",
+              "value": "Dey",
+              "type": "text"
+            },
+            {
+              "key": "warehouseId",
+              "value": "AP002",
+              "type": "text"
+            },
+            {
+              "key": "organisationId",
+              "value": "AP1001",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/updateProfile",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "updateProfile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updatePassword",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/updatePassword",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "updatePassword"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "upload",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/upload",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "upload"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createAddress",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/createAddress",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "createAddress"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "assignProductConsumer",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/assignProductConsumer",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "assignProductConsumer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addWarehouse",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/addWarehouse?warehouseAddress=Apollo Shivaji Nagar, Bengaluru",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "addWarehouse"],
+          "query": [
+            {
+              "key": "warehouseAddress",
+              "value": "Apollo Shivaji Nagar, Bengaluru"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllRegisteredUsers",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/getAllRegisteredUsers",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "getAllRegisteredUsers"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsersByOrganisation",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "organisationId",
+              "value": "AP1001",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/getAllUsersByOrganisation",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "getAllUsersByOrganisation"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsersByWarehouse",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/getAllUsersByWarehouse",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "getAllUsersByWarehouse"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "uploadImage",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/uploadImage?action=STOREID",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "uploadImage"],
+          "query": [
+            {
+              "key": "action",
+              "value": "STOREID"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetchImage",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/usermanagement/api/auth/fetchImage?type=STOREID",
+          "host": ["{{url}}"],
+          "path": ["usermanagement", "api", "auth", "fetchImage"],
+          "query": [
+            {
+              "key": "type",
+              "value": "STOREID"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

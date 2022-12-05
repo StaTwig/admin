@@ -1,0 +1,257 @@
+.viewTargets {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.targetsBtn {
+  padding: 7px;
+  border-radius: 10px;
+  width: 22%;
+  border: 2px solid #a20134;
+  font-family: open sans;
+  font-weight: bold;
+  color: #a20134;
+}
+
+.editTargetsContainer {
+  position: absolute;
+  bottom: 0;
+  right: 1rem;
+  width: 6rem;
+}
+
+.editTarBtn {
+  padding: 7px;
+  border-radius: 7px;
+  background-color: #a20134;
+  color: #ffffff;
+  border: 0;
+}
+.editTargetsContainer1 {
+  width: 64rem;
+  height: 48rem;
+  background-color: #e5e0e9;
+  /* display: flex; */
+  /* justify-content: center; */
+  align-content: center;
+  top: 1%;
+  position: absolute;
+  right: 10%;
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 10;
+}
+
+.editTitle {
+  margin-bottom: 20px;
+}
+
+.edittargetName {
+  font-weight: bold;
+  font-family: open sans;
+  font-size: 1.8rem;
+}
+.filterSelect-1 {
+  padding: 9px 10px;
+  border: none;
+  box-shadow: 0px 4px 8px #54265e26;
+  border-radius: 10px;
+  width: 45%;
+}
+
+.buttons {
+  width: 100%;
+  height: 12%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  align-items: center;
+}
+.backBtn {
+  padding: 7px;
+  border-radius: 5px;
+  width: 10%;
+  border: 1px solid #4e2a5b;
+  font-family: open sans;
+  font-weight: bold;
+  color: #54265e;
+}
+.saveBtn {
+  padding: 9px;
+  border-radius: 5px;
+  width: 10%;
+  // border: 2px solid #4E2A5B;
+  font-family: open sans;
+  font-weight: bold;
+  color: #ffffff;
+  margin-left: 20px;
+  background-color: #ffa83b;
+  border: 0;
+}
+
+.setTargetsContainer {
+  width: 64rem;
+  height: 35rem;
+  background-color: #e5e0e9;
+  /* display: flex; */
+  /* justify-content: center; */
+  align-content: center;
+  top: 8%;
+  position: absolute;
+  right: 10%;
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 10;
+}
+.filterSubHeading {
+  margin: 10px 0px;
+  font-size: 14px;
+  font: normal normal bold 16px/27px Open Sans;
+  letter-spacing: 0px;
+  color: #707070;
+  display: flex;
+}
+
+.vonderType {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #f49c00;
+  border-radius: 24px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.editSelectSuplier {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.filterSection-1 {
+  .filterHeader {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    color: #707070;
+    .filterIcon {
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  .filterSubHeading-1 {
+    margin: 10px 0px;
+    font-size: 14px;
+    font: normal normal bold 16px/27px Open Sans;
+    letter-spacing: 0px;
+    color: #707070;
+    display: flex;
+  }
+  .SearchButton {
+    background: #54265e 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 8px #54265e26;
+    border-radius: 24px;
+    color: #ffffff;
+    margin: 20px auto;
+    display: flex;
+    padding: 10px 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .filterSelect {
+    padding: 9px 17px;
+    border: none;
+    box-shadow: 0px 4px 8px #54265e26;
+    border-radius: 10px;
+    width: 100%;
+  }
+  .filterButton-1 {
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid #f49c00;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    width: 15rem;
+    .active {
+      background: #f49c00;
+      border-radius: 24px !important;
+      color: #ffffff;
+      font-weight: 500;
+      outline: none !important;
+    }
+    a {
+      font-size: 0.8vw;
+      outline: none;
+      padding: 14px 11px;
+    }
+    a:focus {
+      outline: none !important;
+    }
+  }
+}
+
+.dealer_container {
+  width: 100%;
+  height: 55%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.supplierName {
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.index {
+  font-family: open sans;
+  font-weight: bold;
+  font-size: 15px;
+  margin-right: 25px;
+}
+.suplier,
+.suppplierType,
+.postalAddress {
+  font-family: open sans;
+  font-weight: bold;
+}
+
+.suppplierType {
+  background-color: #a344b7;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 12px;
+}
+.subTitle {
+  // font-family: unset;
+  // font-weight: unset;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  right: 5.8rem;
+}
+.middleTextField {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  right: 6rem;
+}
+
+.filterSelect-2 {
+  padding: 9px 10px;
+  border: none;
+  box-shadow: 0px 4px 8px #54265e26;
+  border-radius: 10px;
+  width: 25%;
+}

@@ -1,0 +1,200 @@
+/* Vl Common Fonts */
+
+.vl-heading-bdr {
+  padding: 0;
+  border-radius: 0;
+  display: inline-block;
+  text-transform: uppercase;
+  border-bottom: 3px solid #89d1f0;
+  font-size: 24px;
+}
+.vl-heading {
+  font-size: 1.5rem;
+}
+.card-text {
+  font-size: 1.2rem;
+}
+.table-heading {
+  font-size: 0.9rem;
+}
+.number-text {
+  font-size: 2.5rem;
+}
+.table-data {
+  font-size: 0.85rem;
+}
+.text-sm-1 {
+  font-size: 1rem;
+}
+.text-sm-2 {
+  font-size: 0.75rem;
+}
+.text-sm-3 {
+  font-size: 0.65rem;
+}
+
+/* Heading */
+.mi-title-lg {
+  font-size: 3.5rem;
+}
+.mi-title-xl {
+  font-size: 3rem;
+}
+.mi-title-md {
+  font-size: 2.5rem;
+}
+.mi-title-sm {
+  font-size: 2.2rem;
+}
+.mi-title-xs {
+  font-size: 2rem;
+}
+
+/* Subtitles */
+.mi-subtitle-lg {
+  font-size: 3rem;
+}
+.mi-subtitle-xl {
+  font-size: 2.6rem;
+}
+.mi-subtitle-md {
+  font-size: 2.1rem;
+}
+.mi-subtitle-sm {
+  font-size: 1.8rem;
+}
+.mi-subtitle-xs {
+  font-size: 1.5rem;
+}
+
+/* Body */
+.mi-body-lg {
+  font-size: 1.6rem;
+}
+.mi-body-sl {
+  font-size: 1.4rem;
+}
+.mi-body-xl {
+  font-size: 1.2rem;
+}
+.mi-body-md {
+  font-size: 1rem;
+}
+.mi-body-sm {
+  font-size: 0.9rem;
+}
+.mi-body-xs {
+  font-size: 0.75rem;
+}
+
+/* Body */
+.mi-input-lg {
+  font-size: 2rem;
+}
+.mi-input-xl {
+  font-size: 1.5rem;
+}
+.mi-input-md {
+  font-size: 1.125rem;
+}
+.mi-input-sm {
+  font-size: 1rem;
+}
+.mi-input-xs {
+  font-size: 0.875rem;
+}
+
+/* Font Weight */
+.f-300 {
+  font-weight: 300;
+}
+.f-400 {
+  font-weight: 400;
+}
+.f-500 {
+  font-weight: 500;
+}
+.f-700 {
+  font-weight: 700;
+}
+.f-900 {
+  font-weight: 900;
+}
+
+/* Line height */
+.mi-line-lg {
+  line-height: 2rem;
+}
+.mi-line-xl {
+  line-height: 1.6rem;
+}
+.mi-line-md {
+  line-height: 1.4rem;
+}
+.mi-line-sm {
+  line-height: 1rem;
+}
+
+@media screen and (max-width: 586px) {
+  /* Heading */
+  .mi-title-lg {
+    font-size: 3rem;
+  }
+  .mi-title-xl {
+    font-size: 2.2rem;
+  }
+  .mi-title-md {
+    font-size: 1.85rem;
+  }
+  .mi-title-sm {
+    font-size: 1.7rem;
+  }
+  .mi-title-xs {
+    font-size: 1.4rem;
+  }
+
+  /* Subtitles */
+  .mi-subtitle-lg {
+    font-size: 2rem;
+  }
+  .mi-subtitle-xl {
+    font-size: 1.9rem;
+  }
+  .mi-subtitle-md {
+    font-size: 1.6rem;
+  }
+  .mi-subtitle-sm {
+    font-size: 1.35rem;
+  }
+  .mi-subtitle-xs {
+    font-size: 1.2rem;
+  }
+
+  /* Body */
+  .mi-body-lg {
+    font-size: 1.5rem;
+  }
+  .mi-body-xl {
+    font-size: 1.25rem;
+  }
+  .mi-body-md {
+    font-size: 1rem;
+  }
+  .mi-body-sm {
+    font-size: 0.9rem;
+  }
+
+  /* Body */
+  .mi-input-lg {
+    font-size: 1.6rem;
+  }
+  .mi-input-xl {
+    font-size: 1.25rem;
+  }
+  .mi-input-md {
+    font-size: 1rem;
+  }
+  .mi-input-sm {
+    font-size: 0.9rem;
+  }
+}

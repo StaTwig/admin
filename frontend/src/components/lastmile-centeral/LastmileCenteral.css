@@ -1,0 +1,88 @@
+.Lastmile--pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.LastmileCenteral--Grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 26rem;
+  grid-template-areas: "TableWrapper Filterbar";
+  gap: 1.25rem;
+}
+.LastmileCenteral--table-wrapper {
+  grid-area: TableWrapper;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+.LastmileCenteral--filter-wrapper {
+  grid-area: Filterbar;
+  width: 25rem;
+  position: fixed;
+  top: 85px;
+  right: 0;
+  height: calc(100vh - 85px);
+  overflow-y: scroll;
+  background-color: #fff;
+}
+
+.LastmileCenteral--Stats-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 1.25rem;
+}
+
+.export-collapse-btn {
+  position: relative !important;
+}
+
+.export-button-dropdown {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  width: 12rem;
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  z-index: 1;
+  border-radius: 0.3rem;
+}
+.export-button-dropdown.active {
+  position: absolute;
+  top: 2.8rem;
+  right: 0;
+  width: 12rem;
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+  border-radius: 0.3rem;
+}
+.export-btn-dropdown-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.export-button-dropdown > .export-btn-dropdown-card:nth-child(1) {
+  border-bottom: 1px solid #eee;
+}
+
+.export-button-dropdown > .export-btn-dropdown-card:hover {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.vl-excel {
+  color: #1d6f42;
+}
+
+.vl-pdf {
+  color: #f40f02;
+}
