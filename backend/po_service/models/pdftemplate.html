@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table { 
+    table-layout:fixed;
+}
+      td { 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+    text-size-adjust: inherit;
+}
+th { 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+    text-size-adjust: inherit;
+    font-size: 12px;
+}
+body{
+  font-size:xx-small;
+}
+    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>    
+<mate charest="utf-8" />
+    <title>Orders Export</title>
+  </head>
+  <body>
+    <h1 class="display-1">Purchase Orders Export</h1>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Order ID</td>
+            <th scope="col">Order Created By</td>
+            <th scope="col">ORG ID - Creator</td>
+            <th scope="col">Order Received From</td>
+            <th scope="col">ORG ID - Receiver</td>
+            <th scope="col">Product Category</td>
+            <th scope="col">Product Name</td>
+            <th scope="col">Product ID</td>
+            <th scope="col">Quantity</td>
+            <th scope="col">Manufacturer</td>
+            <th scope="col"><span>Delivery</span> Organization Name</td>
+            <th scope="col"><span>Delivery</span> Organization ID</td>
+            <th scope="col"><span>Delivery</span> Organization Location Details</td>
+            <th scope="col" >Status</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orders}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.createdBy}}</td>
+            <td>{{this.supplierOrgId}}</td>
+            <td>{{this.orderReceiveIncharge}}</td>
+            <td>{{this.orderReceiverOrg}}</td>
+            <td>{{this.productCategory}}</td>
+            <td>{{this.productName}}</td>
+            <td>{{this.productId}}</td>
+            <td>{{this.productQuantity}}</td>
+            <td>{{this.manufacturer}}</td>
+            <td>{{this.recieverOrgName}}</td>
+            <td>{{this.recieverOrgId}}</td>
+            <td>{{this.recieverOrgLocation}}</td>
+            <td>{{this.status}}</td>
+        </tr>
+    </tbody>
+      {{/each}}
+    </table>
+  </body>
+</html>

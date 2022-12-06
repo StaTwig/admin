@@ -1,0 +1,18 @@
+.error-message{
+    list-style: square;
+    margin-left: 20px;
+    padding: 10px;
+    color: #9c0333;
+  }
+  .success-message{
+    list-style: square;
+    margin-left: 20px;
+    padding: 10px;
+    color: #036600;
+  }
+  .orgType{
+    text-transform: lowercase;
+    &:first-letter{
+      text-transform: uppercase;
+    }
+  }

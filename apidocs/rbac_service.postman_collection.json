@@ -1,0 +1,55 @@
+{
+  "info": {
+    "_postman_id": "db7658bf-e960-4d03-ab3c-7d8121077f7a",
+    "name": "rbac_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "getPermissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDAxMjY3NiwiZXhwIjoxNjIwMDE5ODc2fQ.vq_mJwgo0oUklJBQyUZLsKBxltGiiS12NkGsAjrHEwo",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/rbacmanagement/getPermissions",
+          "host": ["{{url}}"],
+          "path": ["rbacmanagement", "getPermissions"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addPermissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDAxMjY3NiwiZXhwIjoxNjIwMDE5ODc2fQ.vq_mJwgo0oUklJBQyUZLsKBxltGiiS12NkGsAjrHEwo",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/rbacmanagement/addPermissions",
+          "host": ["{{url}}"],
+          "path": ["rbacmanagement", "addPermissions"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

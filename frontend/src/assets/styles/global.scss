@@ -1,0 +1,171 @@
+@import "./colors.scss";
+@import "./fonts.scss";
+@import "./breakpoints.scss";
+
+body {
+  background-color: $softGrey;
+  font-family: $roboto;
+}
+.link-button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.breadcrumb {
+  background: transparent;
+  border-bottom: 3px solid $lightBlue;
+  padding: 0;
+  border-radius: 0;
+  display: inline-block;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+  border-bottom: 3px solid $lightBlue;
+  font-size: 24px;
+  color: $darkGrey;
+  font-weight: bold;
+  @media (min-width: $xl) {
+    font-size: 30px;
+  }
+}
+
+.shadow-radius {
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px $grey;
+}
+
+.btn {
+  padding: 5px 20px;
+  height: 45px;
+  text-transform: capitalize !important;
+  text-decoration: none;
+}
+
+.btn-white {
+  color: $primaryBlue;
+  text-transform: capitalize !important;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: transparent
+    linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+    padding-box;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+  text-transform: capitalize !important;
+  text-decoration: none;
+}
+
+.btn-main-blue {
+  background: $primaryBlue;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+  color: $white;
+  text-transform: capitalize !important;
+  text-decoration: none;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-blue {
+  background: $skyBlue;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+  text-transform: capitalize !important;
+  text-decoration: none;
+}
+
+.btn-orange {
+  background-color: var(--orange);
+  color: $white;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+  transition: 0.2s ease-in-out;
+  text-transform: capitalize !important;
+  text-decoration: none;
+}
+.btn-orange:hover {
+  background-color: #fc9551;
+  color: #fff;
+}
+
+.btn-yellow {
+  background-color: #ffab1d;
+  color: $white;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #fcb842;
+    color: $white;
+  }
+  a {
+    color: $white;
+  }
+}
+
+.btn-outline-primary {
+  border-width: 1px !important;
+  border-radius: 10px !important;
+  text-transform: capitalize !important;
+}
+
+.custom-card {
+  box-shadow: 0px 3px 10px $grey;
+  border-radius: 15px;
+  background-color: $white;
+  margin-right: 1rem;
+  padding: 1rem;
+}
+
+table.table th,
+table.table td {
+  padding-top: 1.1rem;
+  padding-bottom: 0.5rem;
+}
+
+.form-control:focus,
+.form-field:focus {
+  box-shadow: none;
+}
+
+.form-control::placeholder {
+  opacity: 0.5;
+}
+
+// .no-border, .no-border:focus-visible, .no-border:focus{
+//   border-radius: 0 !important;
+//       border: none;
+//       outline: white;
+// }
+//   .no-border div:nth-child(2){
+
+//   border: none;
+// border-radius: 0 !important;
+//   border-bottom: 2px solid #d6d6d6;
+//   div:hover{
+//     border: none !important;
+//     border-color: transparent !important;
+//   }
+//   span:first-child {
+//       display: none;
+//   }
+// }

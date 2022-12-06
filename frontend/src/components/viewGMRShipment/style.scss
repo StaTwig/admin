@@ -1,0 +1,281 @@
+@import "../../assets/styles/global.scss";
+.tracing {
+  position: relative;
+  top: -22px;
+  left: 90px;
+  margin-right: 150px;
+  margin-left: -30px;
+  //overflow: hidden;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .breadcrumb {
+    margin-left: 15px;
+    overflow: hidden;
+  }
+  .heading {
+    text-align: left;
+    font: normal bold 15px/7.5px Arial;
+    letter-spacing: 1px;
+    color: #01ceea;
+  }
+
+  .highlight {
+    border-style: solid;
+    border-color: #01ceea;
+  }
+
+  .commonpanle {
+    box-shadow: 0px 3px 10px #00000029;
+    border-radius: 10px;
+    padding: 17px 10px 10px 10px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+  }
+
+  .enlargeTemperature {
+    height: 30px;
+    width: 70px;
+    border: 1px solid #ff8c00;
+    border-radius: 7px;
+    font-size: 10px;
+    padding: 2px 2px;
+    color: #ff8c00;
+  }
+
+  .panel {
+    .elemens {
+      margin-bottom: 0;
+    }
+    .potext {
+      font: 13px/3px $roboto;
+    }
+    .potexttable {
+      font: 11px/13px $roboto;
+      padding-right: 20px;
+    }
+    .poheads {
+      color: black;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      border-color: #d6f2f5;
+      border-radius: 8px;
+    }
+    .column {
+      float: left;
+      width: 50%;
+      padding: 10px;
+      /* Should be removed. Only for demonstration */
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:active {
+      background-color: transparent !important;
+    }
+    ul {
+      padding: 0;
+      color: black;
+
+      .txn {
+        font: 13px/3px $roboto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 160px;
+        @media (max-width: 1346px) {
+          font-size: 11px;
+          width: 110px;
+        }
+      }
+      .vendor {
+        font: 12px/3px $roboto;
+      }
+      li {
+        font: 13px/3px $roboto;
+        text-align: left;
+        letter-spacing: 0px;
+        padding: 0.5rem;
+        list-style: none;
+        white-space: nowrap;
+      }
+    }
+  }
+  .dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .emp {
+    margin-bottom: 19px;
+  }
+
+  .big-dot {
+    height: 11px;
+    width: 11px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .arrow {
+    width: 25px;
+    height: 25px;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background: white;
+    cursor: pointer;
+  }
+
+  .picture {
+    width: 35px;
+    height: 35px;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin-right: 13px;
+    display: flex;
+    background: #d4ebf2;
+  }
+
+  .chain {
+    font: 13px/20px $roboto;
+  }
+  .tracing.series {
+    background: #ffffff 0% 0% no-repeat padding-box;
+  }
+  .chainpanle {
+    box-shadow: 0px 3px 10px #00000029;
+    border-radius: 8px;
+    padding: 12px 10px 10px 12px;
+  }
+  .chainhead {
+    font: 10px/10px $roboto;
+  }
+
+  .info {
+    font: 15px $roboto;
+    font-weight: 400;
+  }
+
+  .dir {
+    height: 30px;
+  }
+
+  .color {
+    text-align: left;
+    font: normal bold 12px/5px Arial;
+    letter-spacing: 1px;
+    color: #01ceea;
+  }
+}
+.temp {
+  font-size: 30px;
+  color: #ff8c00;
+  text-decoration: underline;
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+}
+.temperature {
+  #chart-1 {
+    height: 20px;
+  }
+}
+
+.current-info-container {
+  display: flex;
+}
+
+.current-info {
+  align-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.zoom-in-icon {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 10px;
+  border: 0px solid;
+  padding: 5px;
+  background-color: #c2e6fa;
+  cursor: pointer;
+}
+.zoom-out-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 10px;
+  border: 0px solid;
+  padding: 5px;
+  background-color: #c2e6fa;
+  cursor: pointer;
+  margin-right: 15px;
+}
+.temperature-icon-container {
+  width: 56px;
+  height: 58px;
+}
+
+.temperature-icon {
+  width: 15px;
+  height: 31px;
+}
+.icon-container {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
+  .icon-gmr {
+    width: 3rem;
+    color: #707070;
+  }
+  &:hover {
+    background: #eee;
+  }
+}
+.icon-container-alt {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
+  .icon-gmr {
+    width: 3rem;
+    color: #707070;
+  }
+  &:hover {
+    background: #eee;
+  }
+}
+.p-relative {
+  position: relative;
+}
+.left-arrow {
+  cursor: pointer;
+  position: absolute;
+  left: 1.5rem;
+  bottom: -2rem;
+}
+.right-arrow {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  bottom: -2rem;
+}
+
+.time-filter {
+  margin-top: 1rem;
+  justify-content: space-evenly;
+  color: #fa7923;
+}

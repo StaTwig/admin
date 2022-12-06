@@ -1,0 +1,126 @@
+@import "../../assets/styles/global.scss";
+
+.settings {
+  position: relative;
+  top: -22px;
+  padding-right: 25px;
+  padding-left: 55px;
+
+  .tabs {
+    margin-left: 0rem;
+    padding-left: 0rem;
+  }
+
+  .subscription-type {
+    margin-top: 40px;
+  }
+
+  .alert-type {
+    margin-top: 40px;
+  }
+
+  .subscription-alert-header-text {
+    text-align: left;
+    font: normal normal normal 18px/13px Roboto;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+  }
+
+  .subscription-alert-section {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .subscription-alert-checkbox {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+  }
+  .subscription-alert :checked ~ .subscription-alert-checkbox {
+    background-color: red;
+  }
+
+  .subscription-alert-label {
+    text-align: left;
+    color: #000000;
+    font-size: 16px;
+    line-height: 13px;
+  }
+  .register-mobile-alert{
+    display: inline;
+    color: #707070;
+    font-size: 14px;
+  }
+  .ques-mark{
+    color:#d80000;
+  }
+
+  label {
+    margin-bottom: 0rem;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0rem;
+  }
+}
+
+.tooltip-ex {
+  /* Container for our tooltip */
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: #8512d5;
+  margin-right: 20px;
+  display: inline-block;
+  //float: left;
+}
+
+.tooltip-ex-right {
+  top: -5px;
+  left: 125%;
+}
+
+.tooltip-ex-text {
+  position: absolute;
+  color: #707070;
+  text-align: left;
+  padding: 5px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.6s;
+  width: 200px;
+  height: 188px;
+  background: #eaeaea 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+}
+
+.tooltip-ex-text {
+  /* Makes tooltip visible when hovered on */
+  visibility: visible;
+  opacity: 1;
+}
+
+.alert-save {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.infoIcon {
+  width: 12px;
+  height: 12px;
+}

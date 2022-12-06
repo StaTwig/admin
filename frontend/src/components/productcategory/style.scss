@@ -1,0 +1,167 @@
+@import "../../assets/styles/global.scss";
+
+.productcategory {
+  position: relative;
+  top: -10px;
+  padding-left: 4rem;
+  overflow: hidden;
+  .breadcrumb {
+    margin-left: -0.5rem;
+  }
+  .bg-grey {
+    background-color: #d6d6d6 !important;
+  }
+  .product-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap:1rem;
+  }
+
+  .panel {
+    box-shadow: 0px 3px 6px $grey;
+    border-radius: 15px;
+    background-color: $white;
+    cursor: pointer;
+    padding: 20px 20px 5px 22px;
+    margin-top: 20px;
+    height: 35vh;
+    overflow: hidden;
+
+    .rounded {
+      border-radius: 15px !important;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    & > .d-flex {
+      margin-top: 5px;
+    }
+
+
+    @media screen and (max-width: 768px) {
+      border-right: none;
+      justify-content: flex-start;
+    }
+
+    @media (max-width: $lg) {
+      &:nth-child(2) {
+        margin-right: 0;
+      }
+    }
+
+    .txt-line {
+      border: 1px solid;
+      border-radius: 10px;
+      padding: 0.2rem;
+      margin: 0.2rem;
+      font-size: small;
+      text-align: center;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    .picture {
+      width: 50px;
+      height: 50px;
+      box-shadow: 0px 3px 6px #00000029;
+      // border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      display: flex;
+
+      @media (min-width: $xl) {
+        width: 60px;
+        height: 60px;
+      }
+
+      img {
+        width: 40px;
+        height: 25px;
+      }
+
+      &.truck-bg {
+        background: #e8f4f8;
+      }
+
+      &.sent-bg {
+        background: #d4ebf2;
+      }
+
+      &.recived-bg {
+        background: #fff2e5;
+      }
+
+      &.transit-bg {
+        background: $C0Blue;
+      }
+    }
+
+    .tab-container {
+      display: flex;
+      justify-content: space-between;
+      .tab-item {
+        font-size: 8px;
+        color: #707070;
+        margin-right: 3px;
+        cursor: pointer;
+      }
+      .tab-item:hover {
+        border-bottom: 2px solid black;
+        color: rgb(0, 0, 0);
+        font-size: 10px;
+      }
+    }
+
+    .title {
+      font-size: 13px;
+      line-height: 8px;
+      font-weight: bold;
+      color: #707070;
+      margin-bottom: 8px;
+      @media (min-width: $xl) {
+        font-size: 14px;
+      }
+    }
+
+    .count {
+      font-size: 26px;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #2ba3ae;
+    }
+
+    .dayStatus {
+      font-size: 9px;
+      align-self: flex-end;
+      color: $black;
+    }
+
+    &:after {
+      border: 1px solid $lightGrey;
+      height: 50px;
+    }
+
+    .truck-text {
+      color: #2ba3ae;
+    }
+
+    .sent-text {
+      color: #0093e9;
+    }
+
+    .recived-text {
+      color: $darkYellow;
+    }
+
+    .transit-text {
+      color: $deepBlue;
+    }
+  }
+}
+
+

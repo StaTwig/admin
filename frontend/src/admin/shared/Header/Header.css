@@ -1,0 +1,221 @@
+:root {
+  --header-height: 70px;
+}
+
+.admin-header {
+  position: sticky;
+  inset: 0 0 0 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--admin-brand-primary);
+  display: flex;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  z-index: 1000;
+}
+.admin-nav {
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+}
+.admin-nav-left {
+  display: flex;
+  gap: 3.5rem;
+}
+.admin-nav-right {
+  display: flex;
+  gap: 2rem;
+}
+.admin-nav-list {
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+}
+.admin-logo > img {
+  width: 16.5rem;
+  object-fit: contain;
+  cursor: pointer;
+}
+.admin-logo {
+  display: flex;
+  align-items: center;
+}
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.admin-nav-link {
+  width: 100%;
+  height: 35px;
+  padding: 0 1rem;
+  display: grid;
+  place-content: center;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--admin-brand-primary);
+  color: var(--light);
+  transition: all 0.3s ease-in-out;
+}
+.admin-nav-link.active,
+.admin-nav-link:hover {
+  background-color: var(--admin-brand-secondary);
+  color: var(--light);
+}
+
+.admin-mini-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-space {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.4rem;
+}
+.profile-space > img {
+  width: 2.6rem;
+  height: 2.6rem;
+  object-fit: cover;
+  border-radius: 0.4rem;
+}
+.profile-name-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.profile-name-card > h1,
+.profile-name-card > h2 {
+  width: 6.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-menu-icon {
+  display: none;
+}
+
+.configure-link {
+  position: relative;
+}
+.configure-list {
+  position: absolute;
+  top: 3.5rem;
+  left: 0;
+  width: 10rem;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.4rem;
+}
+.configure-link:hover > .configure-list {
+  position: absolute;
+  top: 3.5rem;
+  left: 0;
+  width: 10rem;
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+  visibility: visible;
+  opacity: 1;
+}
+.configure-list > .btn-dropdown-card:nth-child(1) {
+  border-bottom: 1px solid var(--disabled);
+}
+.configure-list > .btn-dropdown-card:hover {
+  color: var(--blue) !important;
+  box-shadow: var(--shadow);
+}
+
+.switch-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--analytic-active-1);
+  color: var(--white);
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.link-right-space {
+  margin-right: 0.65rem;
+}
+
+.switch-button-container {
+  display: flex;
+}
+
+@media screen and (max-width: 1168px) {
+  .admin-nav-left {
+    display: flex;
+    gap: 3rem !important;
+  }
+  .admin-nav-right {
+    display: flex;
+    gap: 1.6rem !important;
+  }
+  .admin-nav-list {
+    display: flex;
+    align-items: stretch;
+    gap: 1.6rem !important;
+  }
+  .switch-button-container {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .profile-name-card {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 886px) {
+  .admin-nav-list {
+    display: none;
+  }
+  .mobile-menu-icon {
+    display: flex;
+    align-items: center;
+  }
+  .mobile-menu-icon > i {
+    font-size: 1.5rem;
+  }
+  .profile-space {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.4rem;
+  }
+  .profile-space > img {
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: contain;
+    border-radius: 0.4rem;
+  }
+  .admin-logo > img {
+    width: 12.5rem;
+    object-fit: contain;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 586px) {
+  .admin-logo > img {
+    width: 10.5rem;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .admin-mini-profile {
+    display: none;
+  }
+  .mobile-menu-icon > i {
+    font-size: 1.2rem;
+  }
+}

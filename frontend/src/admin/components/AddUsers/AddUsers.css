@@ -1,0 +1,57 @@
+.addorganization-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--disabled);
+}
+
+.addorganization-header > p {
+  cursor: default;
+}
+
+.addorganization-header > i {
+  font-size: 1.2rem;
+  color: var(--grey-medium);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.addorganization-header > i:hover {
+  color: var(--blue);
+}
+.addorganization-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1.25rem;
+  border-top: 1px solid var(--disabled);
+}
+
+.addorganization-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.input-set {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.input-two-column-space {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.input-three-column-space {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+}
+.input-add-column-space {
+  display: grid;
+  grid-template-columns: 1fr 2.1fr;
+  gap: 1.25rem;
+}

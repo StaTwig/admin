@@ -1,0 +1,549 @@
+{
+  "info": {
+    "_postman_id": "821cae5b-4773-498c-aff6-3e52863e7891",
+    "name": "ledger4.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "productservice",
+      "item": [
+        {
+          "name": "http://localhost:3010/productmanagement/api/products/getProducts",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTg3NjEyLCJleHAiOjE2MTA5OTQ4MTJ9.k1OAbJ750DvahfUu19fw1_tCuDwk0NGuCVTVhL_tlYs",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"text\" : \"Test\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3010/productmanagement/api/products/getProducts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3010",
+              "path": ["productmanagement", "api", "products", "getProducts"]
+            },
+            "description": "GetProducts"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3010/productmanagement/api/products/addProduct",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"externalId\": \"prod123456\",\n\t\"name\": \"OPV\",\n\t\"shortName\": \"OPV\",\n\t\"type\": \"Vaccine\",\n\t\"manufacturer\": \"Bharath Biotech\",\n    \"characteristicSet\" : {\n    \t \"temperature_max\": 97.8,\n          \"temperature_min\": -4.5,\n          \"humidity_max\": 56.3,\n         \"humidity_min\": 23.1,\n          \"pressure_max\": 2,\n          \"pressure_min\": 1\n    }\n\t\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3010/productmanagement/api/products/addProduct",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3010",
+              "path": ["productmanagement", "api", "products", "addProduct"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "employeeService",
+      "item": [
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjA3NTM2OTI0LCJleHAiOjE2MDc1NDQxMjR9.eXiDCqUwv5mYkfYFaqGyujvP3vgpmko1nMCs80JfOoo",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"firstName\": \"Thrinethra\",\n\t\"lastName\": \"Siddani\",\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "register"]
+            },
+            "description": "Register"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3ZThjNzFlNDQ4YzJhZWUzZWQ2ZTciLCJlbWFpbCI6Im1hbnNpQHN0YXR3aWcuY29tIiwiYWRkcmVzcyI6IjFKeFE5MlJYelBzRno3VjhYSzVNNG5OZ010c3FQSzNnUWlYZUI1Iiwicm9sZSI6IkVSUCBTcGVjaWFsaXN0IiwiaWF0IjoxNjEwNDY5Nzg2LCJleHAiOjE2MTA0NzY5ODZ9.N02-aJE1Q8i9nk3LHCLpVb4xT2csoHIRhiYM-k-n4ZY\n",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"otp\": \"5742\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "verify-otp"]
+            },
+            "description": "verify otp"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEwNTE0MjA4LCJleHAiOjE2MTA1MjE0MDh9.3NUYb20yuS75KGonB32HEJ8GgI6v6as81HN16YyIOSc",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"emailId\":\"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\t\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "login"]
+            },
+            "description": "login"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/userInfo",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "type": "text",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTE2NTAwLCJleHAiOjE2MTA5MjM3MDB9.7dFVW_hDFbtr-Q65jzgqPJRIjhbrS_3kNTrqVRMBGXw"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/userInfo",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "userInfo"]
+            },
+            "description": "UserInfo"
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/updateProfile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEzMTI4MzksImV4cCI6MTYxMTMyMDAzOX0.PGYZUAn8jGTii2N9XYzA4YZeUdqDfGuHIe1EZua5Ccc",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"firstName\": \"Thri\",\n\t\"lastName\": \"Sidd\",\n\t\"phoneNumber\": \"9966962396\",\n\t\"organisationId\": \"org1234\",\n\t\"warehouseId\": \"war1234\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/updateProfile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "updateProfile"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "inventoryService",
+      "item": [
+        {
+          "name": "http://localhost:3007/inventorymanagement/api/inventory/addProductsToInventory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"products\": [\n\t{ \n\t  \"productId\": \"prod-9bhkk6yiutx\",\n\t  \"batchNumber\": \"BB1234\",\n\t  \"mfgDate\": \"2020-12-31T18:30:00.000Z\",\n\t  \"expDate\": \"2021-12-30T18:30:00.000Z\",\n\t  \"quantity\": 1000,\n\t  \"serialNumbersRange\": \"SL1-SL1000\"\n\t}\n\n]}"
+            },
+            "url": {
+              "raw": "http://localhost:3007/inventorymanagement/api/inventory/addProductsToInventory",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3007",
+              "path": [
+                "inventorymanagement",
+                "api",
+                "inventory",
+                "addProductsToInventory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3001/usermanagement/api/auth/addWarehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDhhZTlmZTdjMzE0MTc3NjU3MmQyMiIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjExMTgxODM4LCJleHAiOjE2MTExODkwMzh9.UUmugYCKsbvZGtc7V96akLaAHqHgy62bk9z21z-jd3c",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"war12345\",\n    \"organisationId\": \"org1234\",\n    \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n    \"region\": {\n      \"id\": \"reg123\",\n      \"name\": \"Earth Prime\"\n    },\n    \"country\": {\n      \"id\": \"001\",\n      \"name\": \"India\"\n    },\n    \"location\": {\n      \"longitude\": 12.12323453534,\n      \"latitude\": 13.123435345435,\n      \"geohash\": \"1231nejf923453\"\n    },\n    \"supervisors\": [\n      \"user_id 1\",\n      \"user_id 2\"\n    ],\n    \"employeess\": [\n      \"em12345\",\n      \"em12346\",\n      \"em12347\"\n    ]\n   \n  }"
+            },
+            "url": {
+              "raw": "http://localhost:3001/usermanagement/api/auth/addWarehouse",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["usermanagement", "api", "auth", "addWarehouse"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3007/inventorymanagement/api/inventory/getInventoryDetails",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3007/inventorymanagement/api/inventory/getInventoryDetails",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3007",
+              "path": [
+                "inventorymanagement",
+                "api",
+                "inventory",
+                "getInventoryDetails"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "poService",
+      "item": [
+        {
+          "name": "createPurchaseOrder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjExNzgxMTg4LCJleHAiOjE2MTE3ODgzODh9.MQEJQM7MQ526uZCB0JJliRqawrfncuQ2hV6eYUX0fiY",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": " {\n         \"externalId\": \"po1234\", \n         \"creationDate\": \"2021-01-28T18:30:00.000Z\",\n         \"lastUpdatedOn\": \"2021-01-28T18:30:00.000Z\",\n         \"supplier\": {\n           \"supplierOrganisation\": \"organx12345\",\n           \"supplierIncharge\": \"emp-1f8ukke4uhhy\"\n         },\n         \"customer\": {\n           \"customerOrganisation\": \"org-11111\",\n           \"customerIncharge\": \"emp-18gpp20egkkf54n59\", \n           \"shippingAddress\": {\n            \"shippingAddressId\": \"war-1234\", \n            \"shipmentReceiverId\": \"emp-18gpp1kcckke7vrwh\"\n\n           }\n         },\n         \"products\": [\n            {\n              \"productId\": \"prod-9bhkk6yiutx\",\n              \"productQuantity\": 1000\n            }\n          ]\n       }"
+            },
+            "url": {
+              "raw": "http://localhost:3012/pomanagement/api/po/createPurchaseOrder",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3012",
+              "path": ["pomanagement", "api", "po", "createPurchaseOrder"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "shippingOrderService",
+      "item": [
+        {
+          "name": "http://localhost:3022/shippingordermanagement/api/shipping/viewShippingOrder?shippingOrderId=so-5omx18ktkktckrfj",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"poId\": \"po-3kn7pab72kkl1uzai\",\n    \"soId\": \"SO1234865790\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3022/shippingordermanagement/api/shipping/viewShippingOrder?shippingOrderId=so-5omx18ktkktckrfj",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3022",
+              "path": [
+                "shippingordermanagement",
+                "api",
+                "shipping",
+                "viewShippingOrder"
+              ],
+              "query": [
+                {
+                  "key": "shippingOrderId",
+                  "value": "so-5omx18ktkktckrfj"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3022/shippingordermanagement/api/shipping/fetchAllShippingOrders",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3022/shippingordermanagement/api/shipping/fetchAllShippingOrders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3022",
+              "path": [
+                "shippingordermanagement",
+                "api",
+                "shipping",
+                "fetchAllShippingOrders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "http://localhost:3022/shippingordermanagement/api/shipping/createShippingOrder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"soPurchaseOrderId\": \"po-debkkm4hu1l\",\n    \"soAssignedTo\": \"warehouse_id 12\",\n    \"soUpdatedOn\": \"2020-01-01T18:30:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3022/shippingordermanagement/api/shipping/createShippingOrder",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3022",
+              "path": [
+                "shippingordermanagement",
+                "api",
+                "shipping",
+                "createShippingOrder"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "analyticsService",
+      "item": [
+        {
+          "name": "http://localhost:3015/analyticsmanagement/api/analytics/getAnalytics",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MjN4dGtsejh0N25qIiwiZmlyc3ROYW1lIjoiTW9oaXQiLCJlbWFpbElkIjoibW9oaXRAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsImlhdCI6MTYxNjAxMjM3NCwiZXhwIjoxNjE2MDE5NTc0fQ.CPw60THUm9JgYufQohLqD0pX-9ZUBK9wmtwbCc2yFkM",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3015/analyticsmanagement/api/analytics/getAnalytics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3015",
+              "path": [
+                "analyticsmanagement",
+                "api",
+                "analytics",
+                "getAnalytics"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

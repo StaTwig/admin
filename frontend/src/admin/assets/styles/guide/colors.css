@@ -1,0 +1,62 @@
+.vl-black {
+  color: var(--black) !important;
+}
+
+.vl-white {
+  color: var(--white) !important;
+}
+
+.vl-blue {
+  color: var(--blue) !important;
+}
+.vl-royal {
+  color: #00203fff !important;
+}
+.vl-light {
+  color: var(--light) !important;
+}
+.vl-grey-md {
+  color: var(--grey-bold) !important;
+}
+
+.vl-grey-sm {
+  color: var(--grey-medium) !important;
+}
+
+.vl-grey-xs {
+  color: var(--grey-light) !important;
+}
+
+.analytic-text-1 {
+  color: var(--analytic-active-1);
+}
+
+.analytic-text-2 {
+  color: var(--analytic-active-2);
+}
+
+.analytic-text-3 {
+  color: var(--analytic-active-3);
+}
+
+.analytic-bg-1 {
+  background-color: var(--analytic-base-1);
+}
+
+.analytic-bg-2 {
+  background-color: var(--analytic-base-2);
+}
+
+.analytic-bg-3 {
+  background-color: var(--analytic-base-3);
+}
+.vl-accept {
+  color: var(--btn-accept);
+}
+.vl-reject {
+  color: var(--btn-reject);
+}
+
+.vl-disabled {
+  color: var(--disabled);
+}

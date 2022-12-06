@@ -1,0 +1,412 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Employee Service",
+    "description": "Employee Service API Documentations"
+  },
+  "host": "vaccineledger.com",
+  "basePath": "/usermanagement/api",
+  "paths": {
+    "/check": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Check Validity of Email provided by User",
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "lastName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "organisationId",
+            "in": "body",
+            "description": "OrganisationId of the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Email is valid"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Register an user corresponding to an organisation",
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "lastName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "organisationId",
+            "in": "body",
+            "description": "OrganisationId of the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "User Registered Success"
+          }
+        }
+      }
+    },
+    "/sendOtp": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Send OTP to the registered emailId of user",
+        "parameters": [
+          {
+            "name": "emailId",
+            "in": "body",
+            "description": "emailId of the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OTP sent successfully"
+          }
+        }
+      }
+    },
+    "/verifyOtp": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Verify OTP entered by user while login",
+        "parameters": [
+          {
+            "name": "emailId",
+            "in": "body",
+            "description": "emailId of the user"
+          },
+          {
+            "name": "otp",
+            "in": "body",
+            "description": "OTP entered by the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Login Successfully"
+          }
+        }
+      }
+    },
+    "/userInfo": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch user info corresponding to logged in user.",
+        "responses": {
+          "200": {
+            "description": "User Information"
+          }
+        }
+      }
+    },
+    "/getAllUsers": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch firstName, walletAddress and emailId corresponding to logged in user",
+        "responses": {
+          "200": {
+            "description": "All Users"
+          }
+        }
+      }
+    },
+    "/updateProfile": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Update profile of logged in user",
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "lastName",
+            "in": "body",
+            "description": "first name of the user"
+          },
+          {
+            "name": "organisationId",
+            "in": "body",
+            "description": "OrganisationId of the user"
+          },
+          {
+            "name": "warehouseId",
+            "in": "body",
+            "description": "WarehouseId of the user"
+          },
+          {
+            "name": "emailId",
+            "in": "body",
+            "description": "emailId of the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Login Successfully"
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Update profile photo corresponding to logged-in user",
+        "parameters": [
+          {
+            "name": "file",
+            "description": "New profile photo of the user"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Image Uploaded Successfully"
+          }
+        }
+      }
+    },
+    "/createAddress": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Create new blockchain address corresponding to logged in user",
+        "responses": {
+          "200": {
+            "description": "User Address Created"
+          }
+        }
+      }
+    },
+    "/assignProductConsumer": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Publish product to blockchain corresponding to logged-in user ",
+        "parameters": [
+          {
+            "name": "shipmentId",
+            "in": "body",
+            "description": "shipmentId of the consumer"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "description": "name of the consumer"
+          },
+          {
+            "name": "gender",
+            "in": "body",
+            "description": "gender of the consumer"
+          },
+          {
+            "name": "age",
+            "in": "body",
+            "description": "age of the consumer"
+          },
+          {
+            "name": "aadhar",
+            "in": "body",
+            "description": "aadhar card number of the consumer"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Image Uploaded Successfully"
+          }
+        }
+      }
+    },
+    "/addWarehouse": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Add warehouse corresponding to logged-in user ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "id of the warehouse to be added"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Warehouse Added Successfully"
+          }
+        }
+      }
+    },
+    "/pushWarehouse": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Add pending warehouse corresponding to logged-in user ",
+        "parameters": [
+          {
+            "name": "warehouseId",
+            "in": "body",
+            "description": "id of the pending warehouse to be added"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Warehouse Added Successfully"
+          }
+        }
+      }
+    },
+    "/switchLocation": {
+      "post": {
+        "tags": ["Employee Service"],
+        "description": "Add pending warehouse corresponding to logged-in user ",
+        "parameters": [
+          {
+            "name": "warehouseId",
+            "in": "body",
+            "description": "Updated Address of warehouse in JSON format"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Location Changed Successfully"
+          }
+        }
+      }
+    },
+    "/getAllRegisteredUsers": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch all the registered users",
+        "responses": {
+          "200": {
+            "description": "All Users"
+          }
+        }
+      }
+    },
+    "/getAllUsersByOrganisation/:organisationId": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch all the registered users corresponding to organisationId",
+        "responses": {
+          "200": {
+            "description": "All Users"
+          }
+        }
+      }
+    },
+    "/getAllUsersByWarehouse/:warehouseId": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch all the registered users corresponding to warehouseId",
+        "responses": {
+          "200": {
+            "description": "All Users"
+          }
+        }
+      }
+    },
+    "/fetchImage": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch profile image of logged-in user",
+        "responses": {
+          "200": {
+            "description": "Image"
+          }
+        }
+      }
+    },
+    "/getUserWarehouses": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch warehouse of logged-in user",
+        "responses": {
+          "200": {
+            "description": "User Warehouse Details"
+          }
+        }
+      }
+    },
+    "/abinbev/getOrganizationsByType": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch organisation of user by type for abinbev",
+        "responses": {
+          "200": {
+            "description": "Organization by Type"
+          }
+        }
+      }
+    },
+    "/getOrganizationsByType": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch organisation of user by type",
+        "responses": {
+          "200": {
+            "description": "Organization by Type"
+          }
+        }
+      }
+    },
+    "/getwarehouseByType": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch warehouses of user by type",
+        "responses": {
+          "200": {
+            "description": "List of Warehouse Types"
+          }
+        }
+      }
+    },
+    "/getwarehouseinfo": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch warehouse info of user corresponding to warehouseId given in query",
+        "responses": {
+          "200": {
+            "description": "Warehouse Information"
+          }
+        }
+      }
+    },
+    "/getOrganizationsTypewithauth": {
+      "get": {
+        "tags": ["Employee Service"],
+        "description": "Fetch organisation of user corresponding to organisationId given in query",
+        "responses": {
+          "200": {
+            "description": "List of Organization Types"
+          }
+        }
+      }
+    }
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"]
+}

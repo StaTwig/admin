@@ -1,0 +1,163 @@
+.content-icon-space{
+    width: 2rem;
+    height: 1.8rem;
+    display: grid;
+    place-content: center;
+    // background-color: #eee;
+    border-radius: 0.25rem;
+}
+.content-icon-space > i{
+    color: #0BC6A7;
+}
+.content-info-card{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.accordion-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.accordion-info{
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.collapse-icon{
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-content: center;
+    background-color: #fff;
+    border-radius: 2rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.accordion-status{
+    display: flex;
+    gap: 1rem;
+}
+
+.product-list-card{
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 0.5rem;
+}
+.accordian-body{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+.product-details-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.location-text-heading-color{
+    color: #2585F3;
+}
+
+.chain-group{
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+}
+.mark-space{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.marker-circle{
+    width: 1rem;
+    height: 1rem;
+    background: #fff;
+    border: 4px solid #2585F3;
+    border-radius: 50%;
+    margin-top: 0.175rem;
+    z-index: 10;
+}
+
+.line-straight{
+    position: absolute;
+    left: 0.45rem;
+    top: 1rem;
+    width: 1.2rem;
+    height: 4rem;
+    border-left: 2px dashed #b0b0b0;
+}
+.line-cross{
+    position: absolute;
+    left: 0.45rem;
+    top: 5rem;
+    width: 1.2rem;
+    border-bottom: 2px dashed #b0b0b0;
+}
+.line-straight.bar-none{
+    position: absolute;
+    left: 0.45rem;
+    top: -5rem;
+    width: 1.2rem;
+    height: 10rem;
+    border-left: 2px dashed #b0b0b0;
+}
+.line-straight.bar-extra{
+    position: absolute;
+    left: 0.45rem;
+    top: -5rem;
+    width: 1.2rem;
+    height: 100%;
+    border-left: 2px dashed #b0b0b0;
+}
+.line-straight.bar-top{
+    height: calc(100% - 6.2rem);
+    border-left: 2px dashed #b0b0b0;
+}
+
+// Chain Levels
+
+.chain-level-1{
+    display: grid;
+    grid-template-columns: 0rem 1fr;
+}
+.chain-level-2{
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+}
+.chain-level-3{
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+}
+.chain-level-4{
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+}
+
+
+
+.ratio-bar{
+    background-color: #fff;
+    padding: 2rem;
+}
+
+.status-button{
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    
+}
+.status-chip{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.status-dot{
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.6rem;
+} .recieved-dot{
+    background-color: #0BC6A7;
+}

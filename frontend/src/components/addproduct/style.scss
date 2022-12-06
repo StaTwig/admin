@@ -1,0 +1,137 @@
+@import "../../assets/styles/global.scss";
+
+.addproduct {
+  position: relative;
+  top: -22px;
+  padding-right: 1.5rem;
+  padding-left: 3.5rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .product {
+    background: transparent linear-gradient(90deg, #fa7923 0%, #ffab1d 100%) 0%
+      0% no-repeat padding-box;
+  }
+
+  .text-danger {
+    left: 193px;
+    margin-top: -10px;
+  }
+  .custom-dropdown .btn-custom-dropdown {
+    font-size: 14px;
+    align-items: center;
+    padding-left: 0;
+    @media (min-width: $xl) {
+      font-size: 15px;
+    }
+  }
+  .browse {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    margin-top: 1rem;
+  }
+  .upload {
+    height: 9rem;
+    width: 12rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed #707070;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    padding: 1rem;
+
+    .select {
+      display: none;
+    }
+  }
+  .form-group,
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    label {
+      color: #707070;
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 0px;
+    }
+    .date {
+      border: none;
+      background: none;
+    }
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: #000000;
+      flex-basis: 55%;
+      flex-grow: inherit;
+      font-size: 14px;
+    }
+
+    @media (min-width: $xl) {
+      label {
+        font-size: 15px;
+        flex-basis: 100%;
+        flex-grow: inherit;
+        text-align: left;
+        margin-bottom: 0px;
+      }
+
+      .form-control {
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #d6d6d6;
+        border-radius: 0;
+        color: $black;
+        flex-basis: 100%;
+        flex-grow: inherit;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 1rem;
+
+    .input-group-append {
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+    }
+  }
+}
+.line {
+  padding: 0;
+  color: #333 !important;
+  flex-basis: 65%;
+
+  font-size: 14px;
+}
+
+.addNewBtn {
+  position: relative;
+  top: 6.5rem;
+  right: 10rem;
+  background-color: #fa7923;
+  color: #ffffff;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+  padding: 6px 20px;
+}
+.addNewBtn-padding{
+  padding: 11px 20px !important;
+}
+
+.addNewBtn:hover {
+  color: #ffffff;
+}

@@ -1,0 +1,287 @@
+@import "../../assets/styles/colors.scss";
+
+.mainButtonFilter{
+  background: #E5E0E9 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #54265E2E;
+  border-radius: 30px;
+  color: #707070;
+  opacity: 1;
+  margin-bottom: 50px;
+  .active{
+    background: #F49C00 0% 0% no-repeat padding-box;
+    border-radius: 30px !important;
+    color: $white;
+    font-weight: 500;
+    min-width: 80px;
+    outline:none !important;
+  }
+  a{
+    outline:none; 
+    padding: 8px 20px;
+  }
+  a:focus{
+    outline:none !important;
+  }
+}
+.dateInput{
+  width: 115%;
+    font-size: 8pt;
+    padding: 5px;
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+    letter-spacing: 0px;
+    color: #707070;
+    display: flex;
+}
+.dontshow{
+  display: none;
+}
+.padLeft40{
+  padding-left: 40px;
+}
+.padLeft20{
+  padding-left:20px;
+}
+.productListHeader{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 10px 0px;
+  margin-bottom: 15px;
+  font-weight: bolder;
+  border-bottom: 2px solid;
+  color: #54265E;
+  font-weight: bolder;
+  font-size: 16px;
+}
+.supplierOrgName{
+  padding:15px;
+  font-weight: bold;
+}
+.challanImage{
+  width:200px;
+  height:200px;
+  margin: 10px 0px;
+}
+.textRight{
+  text-align: right;
+}
+.productDetailActive{
+  border-radius: 15px;
+  padding:10px
+}
+.productDetail{
+  padding:25px;
+  // background-color: #eee6e6;
+  // border:1px solid #53265d;
+  // border-radius: 15px;
+}
+.rejectionRateRow{
+  background-color:orange;
+  border-radius: 15px;
+  font-weight: bold;
+  text-align: right;
+  padding: 10px;
+}
+
+.transactionProducts{
+ margin-top: 20px;
+ margin-bottom: 20px;
+ padding: 0px 15px;
+ table, tbody, tr {
+  line-height:2;
+ }
+ tr:nth-child(even) {background-color: #f0f0f0;}
+}
+.productHeader{
+  font-weight: bold;
+    margin-top: 20px;
+}
+
+.productList{
+  color: #707070;
+  .transactionListDate{
+        font-weight: bold;
+        margin-bottom: 28px;
+        display: flex;
+        margin-top: 25px;
+        font-size: 15px;
+  }
+  .activeTxnContainer{
+    background-color: #ffc40570;
+      border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
+      margin-bottom:10px;
+      font-size: 14px;
+      font-weight: bolder;
+      color: black;
+  }
+  .transactionListContainer{
+    margin-top: 15px;
+    padding:5px 0px 0px 5px;
+    &:hover{
+      background-color: #ffc40570;
+      border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
+    }
+    // padding-left: 32px;
+  }
+  .productContainer{
+    // display: flex;
+    // cursor:pointer;
+    background-color: #53265d;
+    // &:hover{
+    //   border:1px solid #53265d;
+    //   border-radius: 15px;
+    //   padding:5px;
+    // }
+  }
+  .productContainerListItem{
+    display: flex;
+    cursor:pointer;
+    // &:hover{
+    //   // border:1px solid #53265d;
+    //   // border-radius: 15px;
+    //   padding:5px;
+    // }
+  }  
+  .productItem{
+    flex-grow: 1;
+    height: 65px;
+  }
+  .productItem + .productItem{
+    margin-left: 2%;
+  }
+  .productIcon{
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productStatus{
+    font-weight: bold;
+    color: #000;
+  }
+  .productQuantity{
+    font-weight: bold;
+    color: #000;
+  }
+  .statusbadge{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;   
+  }
+  .transitBadge{
+    background: #FDAB0F;
+  }
+  .sentBadge{
+    background: #FF6A6A;
+  }
+  .addedBadge{
+    background: #20BECB;
+  }
+  .receivedBadge{
+    background: #3CB76C;
+  }
+  .inTransit{
+    background: #FFEED7 0% 0% no-repeat padding-box;   
+  }
+  .sent{
+    background: #FFE6E6 0% 0% no-repeat padding-box;    
+  }
+  .received{
+    background: #EAFFE2 0% 0% no-repeat padding-box;
+  }
+  .added{
+    background: #C9FBFF 0% 0% no-repeat padding-box;
+  }
+  .iconGroup{
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    line-height: 20px;
+    .transactionTitle{
+      font-size: 14px;
+      color: #000;
+      font-weight: bold;
+    }
+    .transactionDate{
+      color: #000!important;
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .icon-thumbnail-img {
+      width: 27px;
+      height: 20px;
+  }
+  }
+}
+
+.filterSection{
+  .filterHeader{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size:  20px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    color: #707070;
+    .filterIcon{
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  .filterSubHeading{
+    font: normal normal bold 16px/27px Open Sans;
+    letter-spacing: 0px;
+    color: #707070;
+    display: flex;
+  }
+  .SearchButton{
+    background: #54265E 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 8px #54265E26;
+    border-radius: 24px;
+    color: $white;
+    margin: 20px auto;
+    display: flex;
+    padding: 10px 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .filterSelect{
+    padding: 9px 17px;
+    border: none;
+    box-shadow: 0px 4px 8px #54265e26;
+    border-radius: 10px;
+    width:100%;
+  }
+  .filterButton{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #F49C00;
+    border-radius: 24px;
+    margin-bottom: 20px;
+    width: 100%;
+    .active{
+      background: #F49C00;
+      border-radius: 24px !important;
+      color: $white;
+      font-weight: 500;
+      outline:none !important;
+    }
+    a{
+      font-size: 0.8vw;
+      outline:none; 
+      padding: 14px 11px;
+    }
+    a:focus{
+      outline:none !important;
+    }
+  }
+}
+

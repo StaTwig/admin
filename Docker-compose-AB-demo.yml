@@ -1,0 +1,311 @@
+version: "3.7"
+services:
+  traefik:
+    image: "traefik"
+    container_name: "traefik"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./acme.json:/acme.json"
+      - "./traefik.toml:/traefik.toml"
+      - "./traefik_dynamic.toml:/traefik_dynamic.toml"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.tcp.routers.cache.entrypoints=redis
+      - traefik.tcp.routers.cache.rule=HostSNI(`demo.abinbev.statledger.io`)
+      - traefik.tcp.routers.cache.tls=true
+      - traefik.tcp.routers.cache.tls.certresolver=lets-encrypt
+    volumes:
+      - ./cache-data:/data
+    command: ["redis-server", "--requirepass", "StaTwig2021"]
+
+  advancedanalytics:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_advanced_analytics:demo"
+    container_name: "advanced_analytics_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    environment:
+      - REDIS_URL=redis://cache
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.advancedanalytics.entrypoints=websecure"
+      - "traefik.http.routers.advancedanalytics.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/advancedanalytics/`)"
+      - "traefik.http.routers.advancedanalytics.tls=true"
+      - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
+  alert:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_alert:demo"
+    container_name: "alert_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.alert.entrypoints=websecure"
+      - "traefik.http.routers.alert.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/alertmanagement/`)"
+      - "traefik.http.routers.alert.tls=true"
+      - "traefik.http.routers.alert.tls.certresolver=lets-encrypt"
+
+  analytics:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_analytics:demo"
+    container_name: "analytics_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.analytics.entrypoints=websecure"
+      - "traefik.http.routers.analytics.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/analyticsmanagement/`)"
+      - "traefik.http.routers.analytics.tls=true"
+      - "traefik.http.routers.analytics.tls.certresolver=lets-encrypt"
+  event:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_event:demo"
+    container_name: "event_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.event.entrypoints=websecure"
+      - "traefik.http.routers.event.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/eventmanagement/`)"
+      - "traefik.http.routers.event.tls=true"
+      - "traefik.http.routers.event.tls.certresolver=lets-encrypt"
+
+  inventory:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_inventory:demo"
+    container_name: "inventory_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.inventory.entrypoints=websecure"
+      - "traefik.http.routers.inventory.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/inventorymanagement/`)"
+      - "traefik.http.routers.inventory.tls=true"
+      - "traefik.http.routers.inventory.tls.certresolver=lets-encrypt"
+
+  lastmile:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_last_mile:demo"
+    container_name: "last_mile_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.lastmile.entrypoints=websecure"
+      - "traefik.http.routers.lastmile.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/lastmilemanagement/`)"
+      - "traefik.http.routers.lastmile.tls=true"
+      - "traefik.http.routers.lastmile.tls.certresolver=lets-encrypt"
+
+  notification:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_notification:demo"
+    container_name: "notification_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.notification.entrypoints=websecure"
+      - "traefik.http.routers.notification.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/notificationmanagement/`)"
+      - "traefik.http.routers.notification.tls=true"
+      - "traefik.http.routers.notification.tls.certresolver=lets-encrypt"
+
+  po:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_po:demo"
+    container_name: "po_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.po.entrypoints=websecure"
+      - "traefik.http.routers.po.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/pomanagement/`)"
+      - "traefik.http.routers.po.tls=true"
+      - "traefik.http.routers.po.tls.certresolver=lets-encrypt"
+
+  product:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_product:demo"
+    container_name: "products_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.product.entrypoints=websecure"
+      - "traefik.http.routers.product.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/productmanagement/`)"
+      - "traefik.http.routers.product.tls=true"
+      - "traefik.http.routers.product.tls.certresolver=lets-encrypt"
+
+  shipment:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_shipment:demo"
+    container_name: "shipment_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.shipment.entrypoints=websecure"
+      - "traefik.http.routers.shipment.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/shipmentmanagement/`)"
+      - "traefik.http.routers.shipment.tls=true"
+      - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
+
+  rbac:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_rbac:demo"
+    container_name: "rbac_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.rbac.entrypoints=websecure"
+      - "traefik.http.routers.rbac.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/rbacmanagement/`)"
+      - "traefik.http.routers.rbac.tls=true"
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
+
+  employee:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_employee:demo"
+    container_name: "employee_service1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee.entrypoints=websecure"
+      - "traefik.http.routers.employee.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/usermanagement/`)"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
+  track:
+    image: "registry.gitlab.com/statwig-public/theledger/abinbev_track:demo"
+    container_name: "track_trace1.0"
+    restart: always
+    env_file:
+      - ./env/ledger.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.track.entrypoints=websecure"
+      - "traefik.http.routers.track.rule=Host(`demo.abinbev.statledger.io`) && PathPrefix(`/tracktracemanagement/`)"
+      - "traefik.http.routers.track.tls=true"
+      - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
+
+  admin_employee:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_employee:demo"
+    container_name: "admin_employee1.0"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_employee.entrypoints=websecure"
+      - "traefik.http.routers.admin_employee.rule=Host(`demo.admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.admin_employee.tls=true"
+      - "traefik.http.routers.admin_employee.tls.certresolver=lets-encrypt"
+
+  admin_address:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_address:demo"
+    container_name: "admin_address1.0"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_address.entrypoints=websecure"
+      - "traefik.http.routers.admin_address.rule=Host(`demo.admin.abinbev.statledger.io`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.admin_address.tls=true"
+      - "traefik.http.routers.admin_address.tls.certresolver=lets-encrypt"
+
+  admin_affliate:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_affliation:demo"
+    container_name: "admin_affliate1.0"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_affliate.entrypoints=websecure"
+      - "traefik.http.routers.admin_affliate.rule=Host(`demo.admin.abinbev.statledger.io`) && PathPrefix(`/api/affliation_service`)"
+      - "traefik.http.routers.admin_affliate.tls=true"
+      - "traefik.http.routers.admin_affliate.tls.certresolver=lets-encrypt"
+
+  admin_rbac:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_rbac:demo"
+    container_name: "admin_rbac1.0"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_rbac.entrypoints=websecure"
+      - "traefik.http.routers.admin_rbac.rule=Host(`demo.admin.abinbev.statledger.io`) && PathPrefix(`/api/rbac_service`)"
+      - "traefik.http.routers.admin_rbac.tls=true"
+      - "traefik.http.routers.admin_rbac.tls.certresolver=lets-encrypt"
+
+  admin_configuration:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_configuration:demo"
+    container_name: "admin_configuration1.0"
+    restart: always
+    env_file:
+      - ./env/admin.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_configuration.entrypoints=websecure"
+      - "traefik.http.routers.admin_configuration.rule=Host(`demo.admin.abinbev.statledger.io`) && PathPrefix(`/api/configuration_service`)"
+      - "traefik.http.routers.admin_configuration.tls=true"
+      - "traefik.http.routers.admin_configuration.tls.certresolver=lets-encrypt"
+
+  admin_frontend:
+    image: "registry.gitlab.com/statwig-public/theledger/admin/abinbev_frontend:demo"
+    container_name: "admin_frontend1.0"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.admin_frontend.entrypoints=websecure"
+      - "traefik.http.routers.admin_frontend.rule=Host(`demo.admin.abinbev.statledger.io`)"
+      - "traefik.http.routers.admin_frontend.tls=true"
+      - "traefik.http.routers.admin_frontend.tls.certresolver=lets-encrypt"
+
+  frontend:
+    image: "registry.gitlab.com/statwig-public/theledger/test_abinbev_frontend:latest"
+    container_name: "frontend"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.rule=Host(`demo.abinbev.statledger.io`)"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"
+
+networks:
+  default:
+    name: proxy
+    external: true

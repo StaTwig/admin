@@ -1,0 +1,18 @@
+{
+  "info": {
+    "_postman_id": "992e0be9-3912-40ac-91aa-5d04735e16ab",
+    "name": "alert_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "getShipmentReceived",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": null
+      },
+      "response": []
+    }
+  ]
+}

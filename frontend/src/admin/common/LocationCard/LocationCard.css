@@ -1,0 +1,30 @@
+.admin-location-card-container {
+  background-color: var(--white);
+  border-radius: 0.4rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-location-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--disabled);
+}
+.admin-location-body {
+  padding: 1.5rem;
+}
+.admin-location-card-grid {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  gap: 1rem;
+  padding: 0.6rem;
+}
+
+.location-avatar {
+  background-color: #ffe8d8 !important;
+  color: #0d09a6 !important;
+  font-weight: 700 !important;
+}

@@ -1,0 +1,71 @@
+@import "../../../assets/styles/global.scss";
+
+.grid-tile-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+  margin-top: 1rem;
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 786px) {
+    grid-template-columns: 1fr;
+  }
+}
+.grid-tiles {
+  display: flex;
+  background: #fff;
+  padding: 15px;
+  box-shadow: 0px 3px 10px #e4e4e4;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.picture {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  display: flex;
+}
+.picture img {
+  width: 30px;
+  height: 30px;
+}
+.tile-content h1 {
+  margin-top: -10px;
+}
+.truck-text {
+  color: #2ba3ae;
+}
+
+.sent-text {
+  color: #fa7923;
+}
+
+.recived-text-cards {
+  color: #0093e9;
+}
+
+.outbound-text {
+  color: #2ba3ae;
+}
+
+.inbound-text {
+  color: #0159ea;
+}
+
+.transit-text {
+  color: $deepBlue;
+}
+.tile-content p {
+  font-size: 16px;
+  @media (max-width: 1280px) {
+    font-size: 12px;
+  }
+  @media (max-width: 992px) {
+    font-size: 16px;
+  }
+}

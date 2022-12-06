@@ -1,0 +1,392 @@
+{
+  "info": {
+    "_postman_id": "b31e241d-83c7-47c8-9c6f-b5637a0bce1b",
+    "name": "advanced_analytics",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "getAllStats",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getAllstats",
+          "host": ["{{url}}"],
+          "path": ["advancedanalytics", "api", "analytics", "getAllstats"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllStatsBYBrand",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsByBrand?date_filter_type=by_yearly&year=2021&month=undefined&quarter=undefined&&orgType=ALL_VENDORS",
+          "protocol": "https",
+          "host": ["test", "abinbev", "statledger", "io"],
+          "path": ["advancedanalytics", "api", "analytics", "getStatsByBrand"],
+          "query": [
+            {
+              "key": "date_filter_type",
+              "value": "by_yearly"
+            },
+            {
+              "key": "year",
+              "value": "2021"
+            },
+            {
+              "key": "month",
+              "value": "undefined"
+            },
+            {
+              "key": "quarter",
+              "value": "undefined"
+            },
+            {
+              "key": null,
+              "value": null
+            },
+            {
+              "key": "orgType",
+              "value": "ALL_VENDORS"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getStatsByOrg",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsByOrg",
+          "protocol": "https",
+          "host": ["test", "abinbev", "statledger", "io"],
+          "path": ["advancedanalytics", "api", "analytics", "getStatsByOrg"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getStatsBySKU",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsBySKU/",
+          "protocol": "https",
+          "host": ["test", "abinbev", "statledger", "io"],
+          "path": ["advancedanalytics", "api", "analytics", "getStatsBySKU", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getStatsByBrewery",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getStatsByBrewery/:warehouseId",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getStatsByBrewery",
+            ":warehouseId"
+          ],
+          "variable": [
+            {
+              "key": "warehouseId",
+              "value": "AP001"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getSalesByState",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getSales/:state/:tenure",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getSales",
+            ":state",
+            ":tenure"
+          ],
+          "variable": [
+            {
+              "key": "state",
+              "value": "India"
+            },
+            {
+              "key": "tenure",
+              "value": "2021"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getReturnedRate",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getReturnedRate/:state/:tenure",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getReturnedRate",
+            ":state",
+            ":tenure"
+          ],
+          "variable": [
+            {
+              "key": "state",
+              "value": "India"
+            },
+            {
+              "key": "tenure",
+              "value": "2021"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getTarget",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getTarget/:state/:tenure",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getTarget",
+            ":state",
+            ":tenure"
+          ],
+          "variable": [
+            {
+              "key": "state",
+              "value": "India"
+            },
+            {
+              "key": "tenure",
+              "value": "2021"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getInventoryBySku",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getInventoryBySku/:sku/:state",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getInventoryBySku",
+            ":sku",
+            ":state"
+          ],
+          "variable": [
+            {
+              "key": "sku",
+              "value": ""
+            },
+            {
+              "key": "state",
+              "value": "India"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getInventoryByBrand",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/advancedanalytics/api/analytics/getInventoryByBrand/:brand/:state/",
+          "host": ["{{url}}"],
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getInventoryByBrand",
+            ":brand",
+            ":state",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "brand",
+              "value": "Biohib"
+            },
+            {
+              "key": "state",
+              "value": "Telangana"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getSupplierPerfomance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3016/advancedanalytics/api/analytics/getSupplierPerfomance?supplierType=ALL",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3016",
+          "path": [
+            "advancedanalytics",
+            "api",
+            "analytics",
+            "getSupplierPerfomance"
+          ],
+          "query": [
+            {
+              "key": "supplierType",
+              "value": "ALL"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

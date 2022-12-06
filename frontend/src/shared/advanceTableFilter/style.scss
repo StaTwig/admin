@@ -1,0 +1,162 @@
+@import "../../assets/styles/global.scss";
+
+.filter {
+  .filter-item {
+    flex: 1;
+    justify-content: center;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    cursor: pointer;
+
+    .filterTitle {
+      font-size: 15px !important;
+      font-weight: bold;
+      color: #000;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .filterAction {
+      cursor: pointer;
+    }
+  }
+
+  .text {
+    color: white;
+  }
+
+  .divider {
+    height: 40px;
+    border: 0.5px solid $d6Grey;
+    display: flex;
+    align-self: center;
+  }
+
+  .box {
+    //background: $eeGrey;
+    padding: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.filter-dropdown {
+  width: 180%;
+  margin-left: 40px;
+  margin-top: 18px;
+}
+.btn-filter-info {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #36c2cf;
+  color: white;
+  padding: 10.5px 10.5px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-filter-blue {
+  border: 0px solid black;
+  border-radius: 10px;
+  background-color: #0093e9;
+  color: white;
+  padding: 10px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: 0px;
+}
+.btn-outline-warning:hover {
+  color: #fff;
+}
+
+#customized-menu {
+  width: 150rem;
+}
+.table-text-filter {
+  font-size: 14px;
+  color: #4d4f5c !important;
+}
+.circle-border {
+  border-radius: 10px !important;
+}
+.circle-border th:first-child {
+  border-radius: 10px 0 0 10px !important;
+}
+.circle-border th:last-child {
+  border-radius: 0 10px 10px 0 !important;
+}
+.table-border-right {
+  border-right: 1px solid rgb(218, 218, 218) !important;
+}
+.Export-fil {
+  position: relative;
+}
+.bodr {
+  border: 1px solid #0093e9;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+.bodr .MuiInput-underline:before {
+  border-bottom: none !important;
+}
+
+// Date filters
+.valueDisplay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.groupFlex {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 12px;
+    color: #0093e9;
+    font-weight: 500;
+  }
+  input[type="text"] {
+    font-size: 12px;
+    width: 7.5rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #0093e9;
+    border-radius: 10px;
+    outline: none;
+  }
+  input[type="text"]:focus {
+    outline: none;
+  }
+}
+
+.calenderHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+  .tabs-cal {
+    .tab-text {
+      font-size: 14px;
+      color: #777;
+      padding: 0.3rem;
+      cursor: pointer;
+    }
+    .tab-text-active {
+      font-size: 14px;
+      background: #0093e9;
+      padding: 0.3rem;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+}
+
+.rmdp-range {
+  background-color: none !important;
+  box-shadow: none !important;
+}

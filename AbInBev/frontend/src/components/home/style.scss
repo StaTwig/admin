@@ -1,0 +1,184 @@
+@import "../../assets/styles/global.scss";
+
+.scroll-y{
+  overflow-y: auto;  
+}
+
+.home {
+  .centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .titleHeading{
+    font-size: 30px;
+    font-weight: 600; 
+    line-height: 2rem; 
+  }
+  .align-center{
+    text-align: center;
+  }
+  .titleSubHeading{
+    font-size: 22px;
+    line-height: 3rem;
+  }
+  .selectionUserContainer {
+    border-radius: 0.938rem;
+    width: 240px;
+    height: 213px;
+    background-color: $white;
+    text-align: center;
+    border: 0;
+  }
+  .mr-selectUser{
+    margin-right: 3.75rem;
+  }
+  .ml-selectUser{
+    margin-left: 3.75rem;
+  }
+  .approve{
+    padding: 1rem;
+    font-size: larger;
+  }
+  .selectUser {
+    width: 100%;
+    background: var(---000000) 0% 0% no-repeat padding-box;
+    border-radius: 35px;
+    opacity: 0.95;
+    backdrop-filter: blur(10px);
+    min-height: 85vh;
+
+    .btn-active {
+      background-color: #fdbd0f;
+    }
+    .btn {
+      background: #A20134 0% 0% no-repeat padding-box;
+      border-radius: 27px;
+      color: $white;
+      padding: 0 3rem;
+    }
+    .btn-red {
+      background: #A20134 0% 0% no-repeat padding-box;
+    }
+    .width100{
+      width:100%;
+    }
+    .footer-logo {
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .userNameLabel{
+    padding-bottom: 5px;
+  }
+  .loginUserBlock{
+    min-height: 213px;
+    .error-messages{
+      list-style: square;
+      margin-left: 20px;
+      padding: 10px;
+      color: #9c0333;
+    }
+  }
+  .signUpDesc{
+    font-size: 12px;
+  }
+  .signUpLink{
+    text-decoration: none;
+    font-weight: bold;
+    color:#FFFFFF;
+  }
+  
+  .loginScreen{
+    .username{
+      width:330px;
+      border-radius: 0.938rem;
+    }
+    .error-message{
+      color:#FFFFFF;
+    }
+  }
+  .verifyPasswordScreen{
+    .verifyUserBlock{
+      min-height: 213px;
+    }
+    .verifyTitle{
+      font-size: 22px;
+      line-height: 34px;    
+    }
+    .verifyTitleSubHeading{
+      font-size: 14px;
+      line-height: 18px;
+    }
+    .form-groupverify{
+      display: flex;
+    }
+    .otpInput{
+      width: 60px;
+      height: 54px;
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      box-shadow: 0px 9px 17px #54265e26;
+      border-radius: 15px;
+      opacity: 1;
+      text-align: center;
+    }
+  }
+  .form-content
+  {
+      padding: 5%;
+      margin-bottom: 2%;
+  }
+  .form-control{
+      border-radius:1.5rem;
+  }
+  .signUpScreen{
+    width:60%;
+  }
+  .errorDisplay{
+    display: inline-block;
+  }
+  .btnSubmit
+  {
+      border:none;
+      border-radius:1.5rem;
+      padding: 1%;
+      width: 20%;
+      cursor: pointer;
+      background: #0062cc;
+      color: #fff;
+  }
+}
+
+.back-button {
+	position: absolute;
+  text-indent: -15px;
+  width:50px !important;
+  height:50px !important;
+  top: 30px;
+  left: 30px;
+  border-radius: 50%;
+  padding: 5px 0 5px 25px !important;
+  background-color: #A20134;
+  border: 1px solid #A20134;
+	overflow: auto;
+  .label {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+  }
+  
+}
+
+.loginButton{
+  padding: 3px 25px !important;
+    vertical-align: initial;
+    height: auto !important;
+    border-color: #A20134;
+     
+}
+.loginButton:hover{
+  border-color: #c70140; 
+  background: #c70140; 
+} 
+

@@ -1,0 +1,124 @@
+@import "../../assets/styles/global.scss";
+.custom-dropdown {
+  position: relative;
+  right: 0rem;
+  flex-basis: 100%;
+  display: flex;
+  outline: none;
+  position: relative;
+  small {
+    color: $a8Grey;
+  }
+  .btn-custom-dropdown {
+    border: none;
+    display: flex;
+    width: 100%;
+    color: #3b2222;
+    gap: 1.5rem;
+    outline: none;
+    align-items: center;
+    font-size: 12px;
+
+    position: absolute;
+    background: transparent;
+    &.active {
+      color: $primaryBlue;
+    }
+    .textNeg {
+      margin-top: 0rem !important;
+    }
+  }
+  // .textNeg-title{
+  //   margin-left: 45px;
+  //   margin-top: -1.35rem;
+  // }
+  .location-add {
+    min-width: 0rem;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+  }
+  .btn-custom-dropdown img {
+    position: absolute;
+    right: 0;
+  }
+  .btn-custom-dropdown1 {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    color: #0b65c1;
+    gap: 1.5rem;
+    outline: none;
+    align-items: center;
+    font-size: 12px;
+    background: transparent;
+    &.active {
+      color: $primaryBlue;
+    }
+    .textNeg {
+      font-weight: 700;
+    }
+  }
+  .dropdown-menu {
+    overflow: auto;
+    box-shadow: 0px 3px 10px $grey;
+    border-radius: 8px;
+    border: none;
+    padding: 0.5rem;
+    .dropdown-item {
+      padding: 0;
+      clear: both;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    hr {
+      border-width: 0.5px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+  .transform-group {
+    position: absolute;
+    transform: translate3d(0px, 38px, 0px);
+    top: 0;
+    left: -16px;
+    right: -15px;
+    will-change: transform;
+  }
+  .customwh {
+    height: 9px;
+    width: 14px;
+    display: block;
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
+}
+.lastmile-drop-img {
+  position: absolute;
+  left: 165px;
+  height: 9px;
+  width: 14px;
+  @media screen and (min-width: "1266px") {
+    left: 180px;
+  }
+  @media screen and (min-width: "1366px") {
+    left: 200px;
+  }
+  @media screen and (min-width: "1566px") {
+    left: 225px;
+  }
+  @media screen and (min-width: "1766px") {
+    left: 245px;
+  }
+}
+.dropdown-menu {
+  right: 0 !important;
+  max-height: 30rem !important;
+}
+.dropdown-menu-sm {
+  right: 0 !important;
+  left: unset !important;
+  top: 0.6rem !important;
+  max-height: 30rem !important;
+}

@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "bfee2dba-b3c3-4df7-9665-30ee07777ea8",
+    "name": "po_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "fetchPurchaseOrderById",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=po-1jpv3yrikmbsu749",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "fetchPurchaseOrders"],
+          "query": [
+            {
+              "key": "skip",
+              "value": "0"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            },
+            {
+              "key": "poId",
+              "value": "po-1jpv3yrikmbsu749"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreatePurchaseOrder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc1MzQ0MCwiZXhwIjoxNjE5NzYwNjQwfQ.a_9f2YJxMeyrbO7BGYKvgorZes41998wZzhMVnmddqs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/createOrder?orderID=P100112023&status=Acc",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "createOrder"],
+          "query": [
+            {
+              "key": "orderID",
+              "value": "P100112023"
+            },
+            {
+              "key": "status",
+              "value": "Acc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "changePOStatus",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY4OTAxNCwiZXhwIjoxNjE5Njk2MjE0fQ.G7UHsxrjDyiAxP6M52HGg1VfEwuhxXGfsBEZCycoobw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/changePOStatus",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "changePOStatus"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createOrderUrl",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/createOrder",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "createOrder"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getOrderIds",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY4OTAxNCwiZXhwIjoxNjE5Njk2MjE0fQ.G7UHsxrjDyiAxP6M52HGg1VfEwuhxXGfsBEZCycoobw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/getOrderIds",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "getOrderIds"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addPOsFromExcelUrl",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY4OTAxNCwiZXhwIjoxNjE5Njk2MjE0fQ.G7UHsxrjDyiAxP6M52HGg1VfEwuhxXGfsBEZCycoobw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/addPOsFromExcel",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "addPOsFromExcel"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "success",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY4OTAxNCwiZXhwIjoxNjE5Njk2MjE0fQ.G7UHsxrjDyiAxP6M52HGg1VfEwuhxXGfsBEZCycoobw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/pomanagement/api/po/success",
+          "host": ["{{url}}"],
+          "path": ["pomanagement", "api", "po", "success"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

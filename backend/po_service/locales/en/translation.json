@@ -1,0 +1,20 @@
+{
+    "Order_ID": "Order ID",
+    "Order_Created_By": "Order Created By",
+    "ORG_ID_-_Creator": "ORG ID - Creator",
+    "Creator_Org_Id": "Creator Org Id",
+    "Creator_Org_Name": "Creator Org Name",
+    "Order_Receive_Incharge": "Order Receive Incharge",
+    "ORG_ID_-_Receiver": "ORG ID - Receiver",
+    "Product_Category": "Product Category",
+    "Product_Name": "Product Name",
+    "Product_ID": "Product ID",
+    "Quantity": "Quantity",
+    "Manufacturer": "Manufacturer",
+    "Delivery_Organization_Name": "Delivery Organization Name",
+    "Delivery_Organization_ID": "Delivery Organization ID",
+    "Delivery_Organization_Location_Details": "Delivery Organization Location Details",
+    "Status": "Status",
+    "Inbound_Purchase_order": "Inbound Purchase order",
+    "Outbound_Purchase_order": "Outbound Purchase order"
+}

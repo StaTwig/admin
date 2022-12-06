@@ -1,0 +1,147 @@
+.mi-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  outline: none;
+  border-radius: 0.4rem;
+  font-weight: 500 !important;
+  transition: all 0.3s ease 0s;
+  text-decoration: none !important;
+  opacity: 1;
+  cursor: pointer;
+}
+.mi-btn:hover {
+  opacity: 0.8;
+  text-decoration: none !important;
+  box-shadow: rgb(0 0 0 / 10%) 0px 2px 14px 0px;
+}
+.mi-btn-xl {
+  font-size: 1rem;
+  padding: 0.85rem 2.2rem;
+}
+.mi-btn-md {
+  font-size: 0.95rem;
+  padding: 0.75rem 2.15rem;
+}
+.mi-btn-sm {
+  font-size: 0.875rem;
+  padding: 0.45rem 0.9rem;
+}
+
+/* Basic Button Class */
+.mi-btn-primary {
+  background: var(--btn-primary);
+  border: 1px solid var(--btn-primary);
+  color: var(--light) !important;
+}
+
+.mi-btn-secondary {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--white) !important;
+}
+
+.mi-btn-secondary-outline {
+  background-color: var(--white);
+  border: 1px solid var(--primary);
+  color: var(--primary) !important;
+}
+.mi-btn-secondary-outline:hover {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--white) !important;
+}
+
+.mi-btn-orange {
+  background-color: var(--orange);
+  border: 1px solid var(--orange);
+  color: var(--white) !important;
+}
+
+.mi-btn-yellow {
+  background-color: var(--yellow);
+  border: 1px solid var(--yellow);
+  color: var(--white) !important;
+}
+
+.mi-btn-tale {
+  background-color: var(--tale);
+  border: 1px solid var(--tale);
+  color: var(--white) !important;
+}
+
+.mi-btn-white {
+  background-color: transparent;
+  border: 1px solid var(--light);
+  color: var(--light) !important;
+}
+
+.mi-btn-white:hover {
+  background-color: var(--light);
+  border: 1px solid var(--light);
+  color: var(--black-500) !important;
+}
+.mi-btn-light {
+  background-color: transparent;
+  border: 1px solid var(--light);
+  color: var(--blue);
+}
+.mi-btn-blue {
+  background-color: var(--white);
+  color: var(--darkblue);
+  border: 1px solid var(--darkblue);
+}
+.mi-btn-blue:hover {
+  background-color: var(--darkblue);
+  border: 1px solid var(--darkblue);
+  color: var(--white);
+}
+.mi-btn-red {
+  background-color: var(--btn-red);
+  border: 1px solid var(--btn-red);
+  color: var(--light) !important;
+}
+.mi-btn-red:hover {
+  background-color: var(--btn-red-hover);
+  border: 1px solid var(--btn-red-hover);
+  color: var(--light) !important;
+}
+/* Basic Other button Class */
+.mi-btn-disable {
+  cursor: default;
+  box-shadow: none;
+  background-color: var(--grey-200);
+  border: 1px solid var(--grey-200);
+  color: var(--grey-400) !important;
+}
+.status-lable {
+  display: flex;
+  width: 8rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  outline: none;
+  border-radius: 0.8rem;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  border: none !important;
+  opacity: 1;
+  font-size: 0.8rem;
+  padding: 0.6rem 0.6rem;
+  text-transform: capitalize !important;
+}
+@media screen and (max-width: 586px) {
+  .mi-btn-xl {
+    font-size: 1rem;
+    padding: 0.75rem 2.1rem;
+  }
+  .mi-btn-md {
+    font-size: 0.95rem;
+    padding: 0.6rem 2rem;
+  }
+  .mi-btn-sm {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+  }
+}
